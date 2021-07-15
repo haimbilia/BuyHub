@@ -142,7 +142,7 @@
     productOptionsForm = function (id) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('Seller', 'customProductOptionsForm', [id]), '', function (t) {
-                fcom.updateFaceboxContent(t, 'faceboxWidth');
+                fcom.updateFaceboxContent(t);
                 reloadProductOptions(id);
             });
         });
@@ -153,9 +153,9 @@
             fcom.ajax(fcom.makeUrl('Seller', 'optionForm', [optionId]), '', function (t) {
                 try {
                     res = jQuery.parseJSON(t);
-                    $.facebox(res.msg, 'faceboxWidth');
+                    $.facebox(res.msg);
                 } catch (e) {
-                    $.facebox(t, 'faceboxWidth');
+                    $.facebox(t);
                     addOptionForm(optionId);
                     optionValueListing(optionId);
                 }
@@ -308,7 +308,7 @@
         fcom.ajax(fcom.makeUrl('seller','getShippingTab'),'product_id='+id,function(t){
             try{
                     res= jQuery.parseJSON(t);
-                    $.facebox(res.msg,'faceboxWidth');
+                    $.facebox(res.msg );
                 }catch (e){
 
                     $(ShipDiv).html(t);
@@ -503,7 +503,7 @@
     }
     addProdSpec = function (productId, prodSpecId) {
         fcom.ajax(fcom.makeUrl('seller', 'prodSpecForm', [productId]), 'prodSpecId=' + prodSpecId, function (t) {
-            $.facebox(t, 'faceboxWidth');
+            $.facebox(t);
 
         });
     }
@@ -576,7 +576,7 @@
     addTagForm = function (id) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('seller', 'addTagsForm', [id]), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t );
             });
         });
     };
@@ -622,7 +622,7 @@
     addBrandReqForm = function (id) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('sellerRequests', 'addBrandReqForm', [id]), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t );
             });
         });
     };
@@ -708,7 +708,7 @@
     addCategoryReqForm = function (id) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('sellerRequests', 'categoryReqForm', [id]), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t );
             });
         });
     };
@@ -933,7 +933,7 @@
     popupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
             fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
-                $.facebox(t, 'faceboxWidth');
+                $.facebox(t);
                 var file = inputBtn.files[0];
                 var minWidth = document.imageFrm.min_width.value;
                 var minHeight = document.imageFrm.min_height.value;
@@ -1276,7 +1276,7 @@
         }
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('shippingPackages', 'search'), data, function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t );
             });
         });
     };

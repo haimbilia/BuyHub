@@ -285,7 +285,7 @@ function brandFilters() {
     $('body').removeClass('collection-sidebar--on');
     $.facebox(function() {
         fcom.ajax(url, data, function(ans) {
-            $.facebox(ans, 'faceboxWidth');
+            $.facebox(ans );
 
         });
     });
@@ -736,7 +736,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         }
         $.facebox(function() {
             fcom.ajax(fcom.makeUrl('SavedProductsSearch', 'form'), '', function(ans) {
-                $.facebox(ans, 'faceboxWidth small-fb-width collection-ui-popup');
+                $.facebox(ans);
                 if (ans.status) {
                     $(document).trigger('close.facebox');
                 }

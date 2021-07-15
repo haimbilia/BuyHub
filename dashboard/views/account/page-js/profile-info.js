@@ -107,7 +107,7 @@ $(document).ready(function(){
 		if (inputBtn) {
 			if(inputBtn.files && inputBtn.files[0]){
 				fcom.ajax(fcom.makeUrl('Account', 'imgCropper'), '', function(t) {
-					$.facebox(t,'faceboxWidth fbminwidth');
+					$.facebox(t);
 					var file = inputBtn.files[0];
 					var options = {
 					aspectRatio: 1 / 1,
@@ -124,7 +124,7 @@ $(document).ready(function(){
 			}
 		} else {
 			fcom.ajax(fcom.makeUrl('Account', 'imgCropper'), '', function(t) {
-				$.facebox(t,'faceboxWidth fbminwidth');
+				$.facebox(t);
 				var container = document.querySelector('.img-container');
 				var image = container.getElementsByTagName('img').item(0);
 				var options = {
@@ -170,7 +170,7 @@ $(document).ready(function(){
 	truncateDataRequestPopup = function(){
 		$.facebox(function() {
 			fcom.ajax(fcom.makeUrl('Account', 'truncateDataRequestPopup'), '', function(t) {
-				$.facebox( t,'faceboxWidth');
+				$.facebox( t );
 			});
 		});
 	};
@@ -193,7 +193,7 @@ $(document).ready(function(){
 	requestData = function(){
 		$.facebox(function() {
 			fcom.ajax(fcom.makeUrl('Account', 'requestDataForm'), '', function(t) {
-				$.facebox( t,'faceboxWidth');
+				$.facebox( t );
 			});
 		});
 	};

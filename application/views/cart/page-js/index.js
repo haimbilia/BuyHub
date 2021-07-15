@@ -62,7 +62,7 @@ $(document).ready(function(){
                     }
                 }
                 catch(exc){}
-                $.facebox(t,'faceboxWidth medium-fb-width');
+                $.facebox(t);
 				$("input[name='coupon_code']").focus();
 			});
 		});

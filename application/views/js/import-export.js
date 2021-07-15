@@ -2,7 +2,7 @@
 	exportForm = function(actionType){
 		$.facebox(function() {
 			fcom.ajax(fcom.makeUrl('ImportExport', 'exportForm',[actionType]), '', function(t) {
-				$.facebox(t,'faceboxWidth');
+				$.facebox(t);
 			});
 		});
 	};
@@ -16,7 +16,7 @@
 	exportMediaForm = function(actionType){
 		$.facebox(function() {
 			fcom.ajax(fcom.makeUrl('ImportExport', 'exportMediaForm',[actionType]), '', function(t) {
-				$.facebox(t,'faceboxWidth');
+				$.facebox(t);
 			});
 		});
 	};
@@ -30,7 +30,7 @@
 	importForm = function(actionType){
 		$.facebox(function() {
 			fcom.ajax(fcom.makeUrl('ImportExport', 'importForm',[actionType]), '', function(t) {
-				$.facebox(t,'faceboxWidth');
+				$.facebox(t);
 			});
 		});
 	};
@@ -39,7 +39,7 @@
 		console.log('called');
 		$.facebox(function() {
 			fcom.ajax(fcom.makeUrl('ImportExport', 'importInstructions',[actionType]), '', function(t) {
-				$.facebox(t,'faceboxWidth');
+				$.facebox(t);
 			});
 		});
 	};
@@ -47,7 +47,7 @@
 	importMediaForm = function(actionType){
 		$.facebox(function() {
 			fcom.ajax(fcom.makeUrl('ImportExport', 'importMediaForm',[actionType]), '', function(t) {
-				$.facebox(t,'faceboxWidth');
+				$.facebox(t);
 			});
 		});
 	};

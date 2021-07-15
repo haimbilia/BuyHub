@@ -620,7 +620,7 @@ function accessLocation(force = false) {
                     $(document).trigger('close.facebox');
                     return false;
                 } catch (exc) {
-                    $.facebox(t, 'location-popup-width');
+                    $.facebox(t);
                     googleAddressAutocomplete();
                 }
             });

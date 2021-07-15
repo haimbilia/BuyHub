@@ -65,7 +65,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 	productInstructions = function (type) {
 		$.facebox(function () {
 			fcom.ajax(fcom.makeUrl('Seller', 'productTooltipInstruction', [type]), '', function (t) {
-				$.facebox(t, 'medium-fb-width catalog-bg');
+				$.facebox(t);
 			});
 		});
 	};
@@ -93,7 +93,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 	sellerProductCloneForm = function (product_id, selprod_id) {
 		$.facebox(function () {
 			fcom.ajax(fcom.makeUrl('Seller', 'sellerProductCloneForm', [product_id, selprod_id]), '', function (t) {
-				$.facebox(t, 'faceboxWidth');
+				$.facebox(t );
 			});
 		});
 	};

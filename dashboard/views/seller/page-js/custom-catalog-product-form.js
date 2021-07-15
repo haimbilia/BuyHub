@@ -262,7 +262,7 @@ $(document).on('change', '.language-js', function () {
     popupImage = function(inputBtn){
 		if (inputBtn.files && inputBtn.files[0]) {
 	        fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function(t) {
-				$.facebox(t,'faceboxWidth');
+				$.facebox(t );
                 var file = inputBtn.files[0];
 	            var minWidth = document.imageFrm.min_width.value;
 	            var minHeight = document.imageFrm.min_height.value;
@@ -431,7 +431,7 @@ $(document).on('change', '.language-js', function () {
     addBrandReqForm = function (id) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('sellerRequests', 'addBrandReqForm', [id]), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t );
             });
         });
     };
@@ -519,7 +519,7 @@ $(document).on('change', '.language-js', function () {
     addCategoryReqForm = function (id) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('sellerRequests', 'categoryReqForm', [id]), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t );
             });
         });
     };
@@ -559,9 +559,9 @@ $(document).on('change', '.language-js', function () {
             fcom.ajax(fcom.makeUrl('Seller', 'optionForm', [optionId]), '', function (t) {
                 try {
                     res = jQuery.parseJSON(t);
-                    $.facebox(res.msg, 'faceboxWidth');
+                    $.facebox(res.msg );
                 } catch (e) {
-                    $.facebox(t, 'faceboxWidth');
+                    $.facebox(t );
                     addOptionForm(optionId);
                     optionValueListing(optionId, false);
                 }
@@ -652,7 +652,7 @@ $(document).on('change', '.language-js', function () {
     addTagForm = function (id) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('seller', 'addTagsForm', [id]), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t );
             });
         });
     };
@@ -710,7 +710,7 @@ $(document).on('change', '.language-js', function () {
         fcom.ajax(fcom.makeUrl('seller', 'getCustomCatalogShippingTab'), 'preq_id=' + id, function (t) {
             try {
                 res = jQuery.parseJSON(t);
-                $.facebox(res.msg, 'faceboxWidth');
+                $.facebox(res.msg );
             } catch (e) {
                 $(ShipDiv).html(t);
             }
@@ -1096,7 +1096,7 @@ $(document).on('change', '.language-js', function () {
         }
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('shippingPackages', 'search'), data, function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t );
             });
         });
     };

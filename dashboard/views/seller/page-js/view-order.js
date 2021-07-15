@@ -32,7 +32,7 @@ $(document).ready(function () {
     trackOrder = function (trackingNumber, courier, orderNumber) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('Seller', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function (res) {
-                $.facebox(res, 'medium-fb-width');
+                $.facebox(res );
             });
         });
     };
@@ -92,7 +92,7 @@ $(document).ready(function () {
     fetchTrackingDetail = function (trackingId, opInvoiceId) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {
-                $.facebox(res, 'medium-fb-width');
+                $.facebox(res );
             });
         });
     }
@@ -138,7 +138,7 @@ $(document).ready(function () {
     getPickupForm = function (opId) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('ShippingServices', 'pickupForm', [opId]), '', function (res) {
-                $.facebox(res, 'medium-fb-width');
+                $.facebox(res );
                 if (0 < $('.date--js').length) {
                     $('.date--js').datepicker({
                         minDate: new Date(),
@@ -187,7 +187,7 @@ $(document).ready(function () {
     shippingRatesForm = function (opId) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (res) {
-                $.facebox(res, 'small-fb-width');               
+                $.facebox(res);               
             });
         });
     }

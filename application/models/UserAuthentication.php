@@ -16,7 +16,7 @@ class UserAuthentication extends FatModel
     public const TOKEN_LENGTH = 32;
 
     private $commonLangId;
-    private $loginWithOtp = false;
+    public $loginWithOtp = false;
     private $loginDcode = '';
     private $loginPhone = '';
 
@@ -323,18 +323,13 @@ class UserAuthentication extends FatModel
             $this->error = Labels::getLabel('ERR_LOGIN_ATTEMPT_LIMIT_EXCEEDED_PLEASE_TRY_LATER', $this->commonLangId);
             return false;
         }
-
-        /*if ($encryptPassword) {
-            $password = UserAuthentication::encryptPassword($password);
-        }*/
-
+        
         $srch = User::getSearchObject(true, 0, false);
         $condition = $srch->addCondition('credential_username', '=', $username);
         $condition->attachCondition('credential_email', '=', $username, 'OR');
         $condition->attachCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $username, 'OR', true);
-        //$srch->addCondition('credential_password', '=', $password);
 
-        if (true === $this->loginWithOtp) {
+        if (true === $this->loginWithOtp && !empty($password)) {
             $loginPhone = CommonHelper::replaceStringData($username, [$this->loginDcode => ValidateElement::formatDialCode($this->loginDcode)]);
             $srch->joinTable(User::DB_TBL_USER_PHONE_VER, 'INNER JOIN', 'upv_user_id = user_id', 'upv');
             $srch->addCondition('mysql_func_CONCAT(upv_phone_dcode, upv_phone)', '=', $loginPhone, 'AND', true);
@@ -370,7 +365,6 @@ class UserAuthentication extends FatModel
             }
             return false;
         }
-
 
         /* [To Do - need to remove credential_password_old in next release */
         if (false === $this->loginWithOtp) {
@@ -408,15 +402,6 @@ class UserAuthentication extends FatModel
         }
         /* [To Do - need to remove credential_password_old in next release */
 
-
-        /*
-        if ((true == $encryptPassword) && false == password_verify($password , $row['credential_password'])) {
-            $this->error = Labels::getLabel('ERR_INVALID_PASSWORD', $this->commonLangId);
-            return false;
-        }
-         * 
-         */
-
         if ($row && $row['user_deleted'] == applicationConstants::YES) {
             $this->logFailedAttempt($ip, $username);
             $this->error = Labels::getLabel('ERR_USER_INACTIVE_OR_DELETED', $this->commonLangId);
@@ -428,25 +413,6 @@ class UserAuthentication extends FatModel
             $this->error = Labels::getLabel('ERR_Shipping_user_are_not_allowed_to_login', $this->commonLangId);
             return false;
         }
-
-
-        /*if ((!(strtolower($row['credential_username']) === strtolower($username) || strtolower($row['credential_email']) === strtolower($username) || $row['user_phone_dcode'] . $row['user_phone'] === $username)) || $row['credential_password'] !== $password) {
-            $this->logFailedAttempt($ip, $username);
-            $this->error = Labels::getLabel('ERR_INVALID_USERNAME_OR_PASSWORD', $this->commonLangId);
-            if ($withPhone) {
-                $lbl = (false === $this->loginWithOtp) ? 'PASSWORD' : 'OTP';
-                $this->error = Labels::getLabel('ERR_INVALID_PHONE_NUMBER_OR_' . $lbl, $this->commonLangId);
-            }
-            return false;
-        }*/
-        /*
-        if(false == $encryptPassword && $row['credential_password'] !== $password){
-                $this->logFailedAttempt($ip, $username);
-                $this->error = Labels::getLabel('ERR_INVALID_USERNAME_OR_PASSWORD', $this->commonLangId);
-                return false;
-        }
-         * 
-         */
 
         if (!$isAdmin) {
             if ($row['credential_verified'] != applicationConstants::YES) {

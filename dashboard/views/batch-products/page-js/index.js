@@ -15,7 +15,7 @@ $(document).ready(function() {
     batchForm = function(prodgroup_id) {
         $.facebox(function() {
             fcom.ajax(fcom.makeUrl('BatchProducts', 'form', [prodgroup_id]), '', function(t) {
-                $.facebox(t, 'faceboxWidth');
+                $.facebox(t);
             });
         });
     }
@@ -23,7 +23,7 @@ $(document).ready(function() {
     batchLangForm = function(prodgroup_id, lang_id, autoFillLangData = 0) {
         $.facebox(function() {
             fcom.ajax(fcom.makeUrl('BatchProducts', 'langForm', [prodgroup_id, lang_id, autoFillLangData]), '', function(t) {
-                $.facebox(t, 'faceboxWidth');
+                $.facebox(t);
             });
         });
     }
@@ -81,7 +81,7 @@ $(document).ready(function() {
     batchProductsForm = function(prodgroup_id) {
         $.facebox(function() {
             fcom.ajax(fcom.makeUrl('BatchProducts', 'batchProductsForm', [prodgroup_id]), '', function(t) {
-                $.facebox(t, 'faceboxWidth');
+                $.facebox(t);
                 reloadBatchProducts(prodgroup_id);
             });
         });
@@ -122,7 +122,7 @@ $(document).ready(function() {
     batchMediaForm = function(prodgroup_id) {
         $.facebox(function() {
             fcom.ajax(fcom.makeUrl('BatchProducts', 'batchMediaForm', [prodgroup_id]), '', function(t) {
-                $.facebox(t, 'faceboxWidth');
+                $.facebox(t);
                 //reloadBatchProducts( prodgroup_id );
             });
         });

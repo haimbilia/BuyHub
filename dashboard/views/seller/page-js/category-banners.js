@@ -32,7 +32,7 @@ $(document).ready(function(){
 	addCategoryBanner = function(prodCatId){
 		$.facebox(function() {
 			fcom.ajax(fcom.makeUrl('Seller', 'addCategoryBanner',[prodCatId]), '', function(t) {
-				$.facebox(t,'faceboxWidth');
+				$.facebox(t );
 			});
 		});
 	};	

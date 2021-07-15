@@ -144,7 +144,7 @@ checkEmpty = function (element) {
     }
 }
 
-var otpIntervalObj;
+/* var otpIntervalObj;
 startOtpInterval = function (parent = '', callback = '', params = []) {
     if ('undefined' != typeof otpIntervalObj) {
         clearInterval(otpIntervalObj);
@@ -185,7 +185,7 @@ loginPopupOtp = function (userId, getOtpOnly = 0) {
         $.mbsmessage.close();
         var parent = '';
         if (0 < $('#facebox .loginpopup').length) {
-            fcom.updateFaceboxContent(t.html, 'faceboxWidth loginpopup');
+            fcom.updateFaceboxContent(t.html);
             var parent = '.loginpopup';
         } else {
             $('#sign-in').html(t.html);
@@ -193,7 +193,7 @@ loginPopupOtp = function (userId, getOtpOnly = 0) {
         startOtpInterval(parent);
     });
     return false;
-};
+}; */
 
 function setCurrDateFordatePicker() {
     $('.start_date_js').datepicker('option', {
@@ -354,7 +354,7 @@ viewWishList = function (selprod_id, dv, event, excludeWishList = 0) {
 
     $.facebox(function () {
         fcom.ajax(fcom.makeUrl('Account', 'viewWishList', [selprod_id, excludeWishList]), '', function (ans) {
-            fcom.updateFaceboxContent(ans, 'faceboxWidth collection-ui-popup small-fb-width');
+            fcom.updateFaceboxContent(ans);
             //$(dv).next().html(ans);
             $("input[name=uwlist_title]").bind('focus', function (e) {
                 e.stopPropagation();
@@ -786,7 +786,7 @@ function defaultSetUpLogin(frm, v) {
             }
             $.facebox(t, cls);
             $.systemMessage.close();
-            fcom.resetFaceboxHeight();
+            // fcom.resetFaceboxHeight();
         },
 
         displayProcessing: function (msg, cls, autoclose) {
@@ -841,17 +841,23 @@ function defaultSetUpLogin(frm, v) {
     });
 
     $.systemMessage = function (data, cls, autoClose = true) {
-        if ("" == data) {
-            return;
-        }
+        $.mbsmessage(data, autoClose, cls);
 
-        if (typeof autoClose == 'undefined' || autoClose == 'undefined') {
-            autoClose = false;
-        }
+        /* Just to retain single error msg popup. */
 
-        initialize();
-        $.systemMessage.loading();
-        $.systemMessage.fillSysMessage(data, cls, autoClose);
+            /* if ("" == data) {
+                return;
+            }
+
+            if (typeof autoClose == 'undefined' || autoClose == 'undefined') {
+                autoClose = false;
+            }
+
+            initialize();
+            $.systemMessage.loading();
+            $.systemMessage.fillSysMessage(data, cls, autoClose); */
+            
+        /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
     };
 
     $.extend($.systemMessage, {
@@ -1064,7 +1070,7 @@ $(document).ready(function () {
     addCatalogPopup = function () {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('Seller', 'addCatalogPopup'), '', function (t) {
-                fcom.updateFaceboxContent(t, 'faceboxWidth loginpopup');
+                fcom.updateFaceboxContent(t);
 
             });
         });
@@ -1105,7 +1111,7 @@ $(document).ready(function () {
 
     guestUserFrm = function () {
         fcom.ajax(fcom.makeUrl('GuestUser', 'form'), '', function (t) {
-            fcom.updateFaceboxContent(t, 'faceboxWidth loginpopup');
+            fcom.updateFaceboxContent(t);
         });
     };
 
@@ -1126,7 +1132,7 @@ $(document).ready(function () {
                 }
                 $.mbsmessage(ans.msg, true, 'alert--danger');
             } catch (err) {
-                fcom.updateFaceboxContent(t, 'faceboxWidth loginpopup');
+                fcom.updateFaceboxContent(t);
             }
         });
     };
@@ -1273,7 +1279,7 @@ $(document).ready(function () {
     $(".cookie-preferences-js").click(function () {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('Custom', 'cookiePreferencesData'), '', function (t) {
-                fcom.updateFaceboxContent(t, 'faceboxWidth');
+                fcom.updateFaceboxContent(t);
             });
 
         });
@@ -1475,7 +1481,7 @@ function setSiteDefaultCurrency(currencyId) {
 function quickDetail(selprod_id) {
     $.facebox(function () {
         fcom.ajax(fcom.makeUrl('Products', 'productQuickDetail', [selprod_id]), '', function (t) {
-            fcom.updateFaceboxContent(t, 'faceboxWidth productQuickView ');
+            fcom.updateFaceboxContent(t);
         });
     });
 }
@@ -1571,149 +1577,11 @@ $(document).on('click', '#btn-demo', function () {
     /* $(document).delegate('#btn-demo' ,'click' , function(){ */
     $.facebox(function () {
         fcom.ajax(fcom.makeUrl('Custom', 'requestDemo'), '', function (t) {
-            fcom.updateFaceboxContent(t, 'faceboxWidth requestdemo');
+            fcom.updateFaceboxContent(t);
         });
     });
 });
 /* ] */
-
-// Autocomplete */
-/*(function ($) {
-    $.fn.autocomplete = function (option) {
-        return this.each(function () {
-            this.timer = null;
-            this.items = new Array();
-
-            $.extend(this, option);
-
-            $(this).attr('autocomplete', 'off');
-
-            // Focus
-            $(this).on('focus', function () {
-                this.request();
-            });
-
-            // Blur
-            $(this).on('blur', function () {
-
-                setTimeout(function (object) {
-                    object.hide();
-                }, 200, this);
-            });
-
-            // Keydown
-            $(this).on('keydown', function (event) {
-                switch (event.keyCode) {
-                    case 27: // escape
-                    case 9: // tab
-                        this.hide();
-                        break;
-                    default:
-                        this.request();
-                        break;
-                }
-            });
-
-            // Click
-            this.click = function (event) {
-                event.preventDefault();
-                value = $(event.target).parent().attr('data-value');
-                if (value && this.items[value]) {
-                    $(this).siblings('ul.dropdown-menu').hide();
-                    this.select(this.items[value]);
-                }
-            }
-
-            // Show
-            this.show = function () {
-                var pos = $(this).position();
-
-                $(this).siblings('ul.dropdown-menu').css({
-                    top: pos.top + $(this).outerHeight(),
-                    left: pos.left
-                });
-
-                $(this).siblings('ul.dropdown-menu').show();
-            }
-
-            // Hide
-            this.hide = function () {
-                $(this).siblings('ul.dropdown-menu').hide();
-            }
-
-            // Request
-            this.request = function () {
-                clearTimeout(this.timer);
-                this.timer = setTimeout(function (object) {
-
-                    var txt_box_width = $(object).outerWidth();
-                    $(object).siblings('ul.dropdown-menu').width(txt_box_width + 'px');
-
-                    if ($(object).attr('name') == 'keyword') {
-                        // i.e header search form will enable autocomplete, if minimum characters are 3
-                        if ($(object).val().length < 3) {
-                            return;
-                        }
-                    }
-
-                    object.source($(object).val(), $.proxy(object.response, object));
-                }, 200, this);
-            }
-
-            // Response
-            this.response = function (json) {
-                html = '';
-
-                if (json.length) {
-                    for (i = 0; i < json.length; i++) {
-                        this.items[json[i]['value']] = json[i];
-                    }
-
-                    for (i = 0; i < json.length; i++) {
-                        if (!json[i]['category']) {
-                            html += '<li data-value="' + json[i]['value'] + '"><a href="#">' + json[i]['label'] + '</a></li>';
-                        }
-                    }
-
-                    // Get all the ones with a categories
-                    var category = new Array();
-
-                    for (i = 0; i < json.length; i++) {
-                        if (json[i]['category']) {
-                            if (!category[json[i]['category']]) {
-                                category[json[i]['category']] = new Array();
-                                category[json[i]['category']]['name'] = json[i]['category'];
-                                category[json[i]['category']]['item'] = new Array();
-                            }
-
-                            category[json[i]['category']]['item'].push(json[i]);
-                        }
-                    }
-
-                    for (i in category) {
-                        html += '<li class="dropdown-header">' + category[i]['name'] + '</li>';
-
-                        for (j = 0; j < category[i]['item'].length; j++) {
-                            html += '<li data-value="' + category[i]['item'][j]['value'] + '"><a href="#">&nbsp;&nbsp;&nbsp;' + category[i]['item'][j]['label'] + '</a></li>';
-                        }
-                    }
-                }
-
-                if (html) {
-                    this.show();
-                } else {
-                    this.hide();
-                }
-
-                $(this).siblings('ul.dropdown-menu').html(html);
-            }
-
-            $(this).after('<ul class="dropdown-menu box--scroller"></ul>');
-            $(this).siblings('ul.dropdown-menu').on('click', 'a', $.proxy(this.click, this));
-        });
-    }
-})(window.jQuery);*/
-
 
 $("document").ready(function () {
     $(document).on('click', '.add-to-cart--js', function (event) {
@@ -1888,7 +1756,7 @@ $('.dropdown-menu').on('click', function (e) {
 
 function awebersignup() {
     var content = $('.aweber-js').html();
-    fcom.updateFaceboxContent(content, 'faceboxWidth loginpopup aweberform-js');
+    fcom.updateFaceboxContent(content);
     var weberformload = setInterval(function () {
         if (0 < $(".aweberform-js form").length) {
             var myForm = $(".aweberform-js form")[0];

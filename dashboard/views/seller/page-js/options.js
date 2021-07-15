@@ -25,10 +25,10 @@ $(document).ready(function(){
 			fcom.ajax(fcom.makeUrl('Seller', 'optionForm', [optionId]), '', function(t) {
 				try{
 					res= jQuery.parseJSON(t);
-					$.facebox(res.msg,'faceboxWidth');
+					$.facebox(res.msg );
 				}catch (e){
 
-					$.facebox(t,'faceboxWidth');
+					$.facebox(t );
 					addOptionForm(optionId);
 					optionValueListing(optionId);
 				}

@@ -51,7 +51,7 @@ $(document).on('change', '.language-js', function () {
 	productInstructions = function (type) {
 		$.facebox(function () {
 			fcom.ajax(fcom.makeUrl('Seller', 'productTooltipInstruction', [type]), '', function (t) {
-				$.facebox(t, 'medium-fb-width catalog-bg');
+				$.facebox(t);
 			});
 		});
 	};
@@ -88,7 +88,7 @@ $(document).on('change', '.language-js', function () {
 		fcom.ajax(fcom.makeUrl('seller', 'getShippingTab'), 'product_id=' + id, function (t) {
 			try {
 				res = jQuery.parseJSON(t);
-				$.facebox(res.msg, 'faceboxWidth');
+				$.facebox(res.msg );
 			} catch (e) {
 
 				$(ShipDiv).html(t);
@@ -122,7 +122,7 @@ $(document).on('change', '.language-js', function () {
 		var data = "hideButtons=1";
 		fcom.ajax(fcom.makeUrl('Seller', 'customProductImages', [productId]), data, function (t) {
 			productImages(productId);
-			$.facebox(t, 'faceboxWidth');
+			$.facebox(t );
 			fcom.resetFaceboxHeight();
 		});
 	};
@@ -195,7 +195,7 @@ $(document).on('change', '.language-js', function () {
 	catalogInfo = function (product_id) {
 		$.facebox(function () {
 			fcom.ajax(fcom.makeUrl('Seller', 'catalogInfo', [product_id]), '', function (t) {
-				$.facebox(t, 'faceboxWidth catalogInfo');
+				$.facebox(t);
 			});
 		});
 	}
@@ -301,7 +301,7 @@ $(document).on('change', '.language-js', function () {
 	popupImage = function (inputBtn) {
 		if (inputBtn.files && inputBtn.files[0]) {
 			fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
-				//$.facebox(t,'faceboxWidth');
+				//$.facebox(t );
 				$('#cropperBox-js').html(t);
 				$('#cropperBox-js').css("display", "block");
 				$("#mediaForm-js").css("display", "none");

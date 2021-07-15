@@ -56,7 +56,7 @@ $(document).on('change','.option-js',function(){
 	customCatalogProductImages = function(preqId){
 		fcom.ajax(fcom.makeUrl('Seller', 'customCatalogProductImages', [preqId]), '', function(t) {
 			productImages(preqId);
-			$.facebox(t, 'faceboxWidth');
+			$.facebox(t );
 		});
 	};
 

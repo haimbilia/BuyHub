@@ -2,7 +2,7 @@ function reviewAbuse(reviewId){
 	if(reviewId){
 		$.facebox(function() {
 			fcom.ajax(fcom.makeUrl('Reviews', 'reviewAbuse', [reviewId]), '', function(t) {
-				$.facebox(t,'faceboxWidth');
+				$.facebox(t);
 			});
 		});
 	}
