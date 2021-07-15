@@ -2,7 +2,7 @@
 	systemImgCropper = function (url, aspectRatio, callback, inputBtn) {
 		if (inputBtn.files && inputBtn.files[0]) {
 			fcom.ajax(url, '', function (t) {
-				$.facebox(t, 'faceboxWidth fbminwidth');
+				$.facebox(t);
 				var container = document.querySelector('.img-container');
 				var file = inputBtn.files[0];
 				$('#new-img').attr('src', URL.createObjectURL(file));
