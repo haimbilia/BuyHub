@@ -47,12 +47,7 @@ $(document).ready(function () {
             addFilter(id, this);
             addToSearchQueryString(id, this);
         } else {
-            /*  $("input:checkbox[name=brands]").each(function () {
-                 if ($(this).attr('data-id') == id) {
-                     $(this).prop("checked", false);
-                 }
-             }); */
-            removeFilter(id, this);
+            removeFilter(id, false);
         }
         removePaginationFromLink();
         reloadProductListing(frm);
@@ -64,7 +59,7 @@ $(document).ready(function () {
             addFilter(id, this);
             addToSearchQueryString(id, this);
         } else {
-            removeFilter(id, this);
+            removeFilter(id, false);
         }
         removePaginationFromLink();
         reloadProductListing(frm);
@@ -77,7 +72,7 @@ $(document).ready(function () {
             addFilter(id, this);
             addToSearchQueryString(id, this);
         } else {
-            removeFilter(id, this);
+            removeFilter(id, false);
         }
         removePaginationFromLink();
         reloadProductListing(frm);
@@ -90,7 +85,7 @@ $(document).ready(function () {
             addFilter(id, this);
             addToSearchQueryString(id, this);
         } else {
-            removeFilter(id, this);
+            removeFilter(id, false);
         }
         removePaginationFromLink();
         reloadProductListing(frm);
@@ -119,7 +114,7 @@ $(document).ready(function () {
             addFilter(id, this);
             addToSearchQueryString(id, this);
         } else {
-            removeFilter(id, this);
+            removeFilter(id, false);
         }
         removePaginationFromLink();
         reloadProductListing(frm);
@@ -324,7 +319,7 @@ function addFilter(id, obj) {
         return;
     }
     removePaginationFromLink();
-    var click = "onclick=removeFilter('" + id + "',this)";
+    var click = "onclick=removeFilter('" + id + "')";
     $filter = $(obj).parent().text();
     $filterVal = htmlEncode($(obj).parent().text());
     if (!$('#filters').find('a').hasClass(id)) {
@@ -389,18 +384,20 @@ function showSelectedFilters() {
     }
 }
 
-function removeFilter(id, obj) {
+function removeFilter(id, reload) {
     $('.' + id).parent().remove();
     $('#' + id).find('input[type=\'checkbox\']').prop('checked', false);
     $("input:checkbox[name=brands]").each(function () {
         if ($(this).attr('data-id') == id) {
             $(this).prop("checked", false);
         }
-    });    
+    });
     var frm = document.frmProductSearch;
     /* form submit upon onchange of form elements select box[ */
     removeFromSearchQueryString(id);
-    // reloadProductListing(frm);
+    if (typeof reload == 'undefined' || reload == true) {
+        reloadProductListing(frm);
+    }
     showSelectedFilters();
 }
 
