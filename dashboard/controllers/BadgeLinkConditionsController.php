@@ -25,7 +25,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         $this->set("badgeId", $badgeId);
         $this->set("badgeType", $badgeType);
         $this->_template->addJs(array('js/select2.js'));
-        $this->_template->addCss(array('custom/page-css/select2.min.css'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
     }
 
@@ -322,7 +322,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         $this->set('frmSearch', $frmSearch);
 
         $this->_template->addJs(array('js/select2.js'));
-        $this->_template->addCss(array('custom/page-css/select2.min.css'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->includeDateTimeFiles();
         $this->_template->render();
     }

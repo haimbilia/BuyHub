@@ -132,14 +132,14 @@ function initialize() {
 }
 
 function getCountryStates(countryId, stateId, dv) {
-    fcom.ajax(fcom.makeUrl('GuestUser', 'getStates', [countryId, stateId], siteConstants.webrootfront), function (res) {
+    fcom.ajax(fcom.makeUrl('GuestUser', 'getStates', [countryId, stateId], siteConstants.webrootfront), '', function (res) {
         $(dv).empty();
         $(dv).append(res);
     });
 };
 
 function getStatesByCountryCode(countryCode, stateCode, dv, idCol = 'state_id') {
-    fcom.ajax(fcom.makeUrl('GuestUser', 'getStatesByCountryCode', [countryCode, stateCode, idCol], siteConstants.webrootfront), function (res) {
+    fcom.ajax(fcom.makeUrl('GuestUser', 'getStatesByCountryCode', [countryCode, stateCode, idCol], siteConstants.webrootfront), '', function (res) {
         $(dv).empty();
         $(dv).append(res).change();
     });
@@ -821,7 +821,7 @@ function isUserLogged() {
     return isUserLogged;
 }
 
-function loginPopUpBox(includeGuestLogin) {   
+function loginPopUpBox(includeGuestLogin) {
     openSignInForm(includeGuestLogin);
 }
 
@@ -939,7 +939,7 @@ $(document).on('click', '.readMore', function () {
 /* ] */
 
 /* Request a demo button [ */
-$(document).on('click', '#btn-demo', function () {    
+$(document).on('click', '#btn-demo', function () {
     $.facebox(function () {
         fcom.ajax(fcom.makeUrl('Custom', 'requestDemo', [], siteConstants.webrootfront), '', function (t) {
             fcom.updateFaceboxContent(t);

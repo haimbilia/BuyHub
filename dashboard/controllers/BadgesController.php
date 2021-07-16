@@ -21,7 +21,7 @@ class BadgesController extends SellerBaseController
         $this->set("badgeType", $badgeType);
 
         $this->_template->addJs(array('js/jscolor.js', 'js/select2.js'));
-        $this->_template->addCss(array('custom/page-css/select2.min.css'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
     }
 
