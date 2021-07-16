@@ -122,7 +122,7 @@ Updates/Fixes :
     => 055832 - when admin creates badges (automatically) for completed orders then it's not listing on product detail page
     => 055840 - Google Shopping Feed Enhancement Changes
     => 055850 - Warning : Creating default object from empty value
-==============================TV-9.3.1.20210716=====================================
+==============================TV-9.3.2.20210716=====================================
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
