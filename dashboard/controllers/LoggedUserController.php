@@ -9,17 +9,14 @@ class LoggedUserController extends DashboardBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-
-        UserAuthentication::checkLogin();
-        $this->userId = UserAuthentication::getLoggedUserId();
+        $redirectNonLoggedUser = (false == MOBILE_APP_API_CALL) ? true : false;
+        UserAuthentication::checkLogin($redirectNonLoggedUser);
+        $this->userId = UserAuthentication::getLoggedUserId(true);
         $userObj = new User($this->userId);
         $this->userInfo = $userObj->getUserInfo(array(), false, false);
 
         if (false == $this->userInfo || (!UserAuthentication::isGuestUserLogged() && $this->userInfo['credential_active'] != applicationConstants::ACTIVE)) {
-            if (FatUtility::isAjaxCall()) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Session_seems_to_be_expired', CommonHelper::getLangId()));
-                FatUtility::dieWithError(Message::getHtml());
-            }
+            LibHelper::exitWithError(Labels::getLabel('MSG_Session_seems_to_be_expired', CommonHelper::getLangId()), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
         }
 
@@ -27,10 +24,7 @@ class LoggedUserController extends DashboardBaseController
             $parentUser = new User($this->userInfo['user_parent']);
             $parentUserInfo = $parentUser->getUserInfo(array(), true, true);
             if (false == $parentUserInfo || $parentUserInfo['credential_active'] != applicationConstants::ACTIVE) {
-                if (FatUtility::isAjaxCall()) {
-                    Message::addErrorMessage(Labels::getLabel('MSG_Session_seems_to_be_expired', CommonHelper::getLangId()));
-                    FatUtility::dieWithError(Message::getHtml());
-                }
+                LibHelper::exitWithError(Labels::getLabel('MSG_Session_seems_to_be_expired', CommonHelper::getLangId()), false, true);
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
             }
         }
@@ -64,10 +58,10 @@ class LoggedUserController extends DashboardBaseController
 
         /* Thease actions are used while configuring Phone from "Configure Email/Phone Page". */
         $allowedActions = ['getotp', 'resendotp', 'validateotp'];
-        $addPhoneValidaion = true;
+        /* $addPhoneValidaion = true;
         if (true == SmsArchive::canSendSms()) {
             $addPhoneValidaion = empty($this->userInfo['user_phone']) ? true : false;
-        }
+        } */
         if (!in_array(strtolower($action), $allowedActions) && empty($this->userInfo['user_phone']) && empty($this->userInfo['credential_email'])) {
             if (true == SmsArchive::canSendSms()) {
                 $message = Labels::getLabel('MSG_PLEASE_CONFIGURE_YOUR_EMAIL_OR_PHONE', $this->siteLangId);
@@ -75,10 +69,7 @@ class LoggedUserController extends DashboardBaseController
                 $message = Labels::getLabel('MSG_PLEASE_CONFIGURE_YOUR_EMAIL', $this->siteLangId);
             }
 
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
+            LibHelper::exitWithError($message, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'configureEmail', [], CONF_WEBROOT_FRONTEND));
         }
 
@@ -102,8 +93,8 @@ class LoggedUserController extends DashboardBaseController
         $frm->addDateField('', 'ocrequest_date_from', '', array('readonly' => 'readonly'));
         $frm->addDateField('', 'ocrequest_date_to', '', array('readonly' => 'readonly'));
 
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearOrderCancelRequestSearch();'));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
+        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearOrderCancelRequestSearch();'));
         $frm->addHiddenField('', 'page');
         return $frm;
     }
@@ -121,8 +112,8 @@ class LoggedUserController extends DashboardBaseController
         }
         $frm->addDateField('', 'orrequest_date_from', '', array('readonly' => 'readonly'));
         $frm->addDateField('', 'orrequest_date_to', '', array('readonly' => 'readonly'));
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearOrderReturnRequestSearch();'));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $langId));
+        $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $langId), array('onclick' => 'clearOrderReturnRequestSearch();'));
         $frm->addHiddenField('', 'page');
         return $frm;
     }
