@@ -8,12 +8,11 @@ class LoggedUserController extends DashboardBaseController
 
     public function __construct($action)
     {
-        parent::__construct($action);
-        $redirectNonLoggedUser = (false == MOBILE_APP_API_CALL) ? true : false;
-        UserAuthentication::checkLogin($redirectNonLoggedUser);
+        parent::__construct($action);       
+        UserAuthentication::checkLogin();
         $this->userId = UserAuthentication::getLoggedUserId(true);
-        $userObj = new User($this->userId);
-        $this->userInfo = $userObj->getUserInfo(array(), false, false);
+        $user = new User($this->userId);
+        $this->userInfo = $user->getUserInfo(array(), false, false);
 
         if (false == $this->userInfo || (!UserAuthentication::isGuestUserLogged() && $this->userInfo['credential_active'] != applicationConstants::ACTIVE)) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Session_seems_to_be_expired', CommonHelper::getLangId()), false, true);
@@ -21,8 +20,8 @@ class LoggedUserController extends DashboardBaseController
         }
 
         if (0 < $this->userInfo['user_parent']) {
-            $parentUser = new User($this->userInfo['user_parent']);
-            $parentUserInfo = $parentUser->getUserInfo(array(), true, true);
+            $user = new User($this->userInfo['user_parent']);
+            $parentUserInfo = $user->getUserInfo(array(), true, true);
             if (false == $parentUserInfo || $parentUserInfo['credential_active'] != applicationConstants::ACTIVE) {
                 LibHelper::exitWithError(Labels::getLabel('MSG_Session_seems_to_be_expired', CommonHelper::getLangId()), false, true);
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
@@ -74,7 +73,6 @@ class LoggedUserController extends DashboardBaseController
         }
 
         $this->userParentId = (0 < $this->userInfo['user_parent']) ? $this->userInfo['user_parent'] : $this->userId;
-
         $this->initCommonValues();
     }
 
