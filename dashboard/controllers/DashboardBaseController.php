@@ -6,7 +6,7 @@ class DashboardBaseController extends FatController
     public $appToken = '';
 
     public function __construct($action)
-    { 
+    {
         parent::__construct($action);
         $this->action = $action;
 
@@ -14,7 +14,7 @@ class DashboardBaseController extends FatController
             if (true === MOBILE_APP_API_CALL || FatUtility::isAjaxCall()) {
                 FatUtility::dieJsonError(Labels::getLabel('MSG_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()));
             }
-            FatApp::redirectUser(UrlHelper::generateUrl('maintenance'));
+            FatApp::redirectUser(UrlHelper::generateUrl('maintenance', '', [], CONF_WEBROOT_FRONTEND));
         }
 
         CommonHelper::initCommonVariables();
@@ -266,9 +266,6 @@ class DashboardBaseController extends FatController
         $srch->addMultipleFields(array('u.*'));
         $rs = $srch->getResultSet();
         $this->user_details = $this->db->fetch($rs, 'user_id');
-        /*$cObj = new Cart($user_id, 0, $this->app_user['temp_user_id']);
-        $this->cartItemsCount = $cObj->countProducts();
-        $this->set('cartItemsCount', $this->cartItemsCount);*/
 
         $this->totalFavouriteItems = UserFavorite::getUserFavouriteItemCount($user_id);
         $this->set('totalFavouriteItems', $this->totalFavouriteItems);
