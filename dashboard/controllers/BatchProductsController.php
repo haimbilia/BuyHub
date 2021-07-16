@@ -22,7 +22,6 @@ class BatchProductsController extends LoggedUserController
 
     public function search()
     {
-        $userId = UserAuthentication::getLoggedUserId();
         $db = FatApp::getDb();
         $srchFrm = $this->getBatchSearchForm();
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
@@ -33,7 +32,7 @@ class BatchProductsController extends LoggedUserController
         $srch = new ProductGroupSearch($this->siteLangId);
         $srch->addOrder('prodgroup_name');
         $srch->addMultipleFields(array('prodgroup_id', 'IFNULL(prodgroup_name, prodgroup_identifier) as prodgroup_name', 'prodgroup_active'));
-        $srch->addCondition('prodgroup_user_id', '=', $userId);
+        $srch->addCondition('prodgroup_user_id', '=', $this->userId);
         $pageSize = FatApp::getConfig('CONF_PAGE_SIZE');
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -56,12 +55,11 @@ class BatchProductsController extends LoggedUserController
 
     public function form($prodgroup_id = 0)
     {
-        $userId = UserAuthentication::getLoggedUserId();
         $prodgroup_id = FatUtility::int($prodgroup_id);
         $frm = $this->getBatchForm($this->siteLangId);
         if ($prodgroup_id > 0) {
             $data = ProductGroup::getAttributesById($prodgroup_id);
-            if (!$data || $data['prodgroup_user_id'] != $userId) {
+            if (!$data || $data['prodgroup_user_id'] != $this->userId) {
                 Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Access!', $this->siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
             }
@@ -74,8 +72,7 @@ class BatchProductsController extends LoggedUserController
     }
 
     public function setUpBatch()
-    {
-        $userId = UserAuthentication::getLoggedUserId();
+    {       
         $frm = $this->getBatchForm($this->siteLangId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
@@ -89,7 +86,7 @@ class BatchProductsController extends LoggedUserController
         /* validate batch belongs to current logged in user[ */
         if ($prodgroup_id > 0) {
             $row = ProductGroup::getAttributesById($prodgroup_id);
-            if (!$row || $row['prodgroup_user_id'] != $userId) {
+            if (!$row || $row['prodgroup_user_id'] != $this->userId) {
                 Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Access!', $this->siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
             }
@@ -101,7 +98,7 @@ class BatchProductsController extends LoggedUserController
             'prodgroup_identifier' => $post['prodgroup_identifier'],
             'prodgroup_price' => $post['prodgroup_price'],
             'prodgroup_active' => $post['prodgroup_active'],
-            'prodgroup_user_id' => $userId
+            'prodgroup_user_id' => $this->userId
         );
         $prodGroupObj->assignValues($dataToSaveArr);
 
@@ -143,8 +140,7 @@ class BatchProductsController extends LoggedUserController
     }
 
     public function setUpLangBatch()
-    {
-        $userId = UserAuthentication::getLoggedUserId();
+    {        
         $prodgroup_id = FatApp::getPostedData('prodgroup_id', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
@@ -163,7 +159,7 @@ class BatchProductsController extends LoggedUserController
 
         /* check product group belongs to current user[ */
         $row = ProductGroup::getAttributesById($prodgroup_id);
-        if (!$row || $row['prodgroup_user_id'] != $userId) {
+        if (!$row || $row['prodgroup_user_id'] != $this->userId) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Access!', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -210,8 +206,7 @@ class BatchProductsController extends LoggedUserController
     }
 
     public function langForm($prodgroup_id, $lang_id = 0, $autoFillLangData = 0)
-    {
-        $userId = UserAuthentication::getLoggedUserId();
+    {       
         $prodgroup_id = FatUtility::int($prodgroup_id);
         $lang_id = FatUtility::int($lang_id);
         if ($prodgroup_id <= 0 || $lang_id <= 0) {
@@ -221,7 +216,7 @@ class BatchProductsController extends LoggedUserController
 
         /* check product group belongs to current user[ */
         $row = ProductGroup::getAttributesById($prodgroup_id);
-        if (!$row || $row['prodgroup_user_id'] != $userId) {
+        if (!$row || $row['prodgroup_user_id'] != $this->userId) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Access!', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -267,14 +262,11 @@ class BatchProductsController extends LoggedUserController
     public function loadBatchProducts($prodgroup_id)
     {
         $prodgroup_id = FatUtility::int($prodgroup_id);
-
-        $userId = UserAuthentication::getLoggedUserId();
-        $db = FatApp::getDb();
-
+       
         /* check product group belongs to current user[ */
         $row = ProductGroup::getAttributesById($prodgroup_id);
 
-        if (!$row || $row['prodgroup_user_id'] != $userId) {
+        if (!$row || $row['prodgroup_user_id'] != $this->userId) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Access!', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -299,7 +291,7 @@ class BatchProductsController extends LoggedUserController
     {
         $prodgroup_id = FatApp::getPostedData('prodgroup_id', FatUtility::VAR_INT, 0);
         $selprod_id = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
-        $userId = UserAuthentication::getLoggedUserId();
+       
         if ($prodgroup_id <= 0 || $selprod_id <= 0) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
@@ -307,7 +299,7 @@ class BatchProductsController extends LoggedUserController
 
         /* check product group belongs to current user[ */
         $row = ProductGroup::getAttributesById($prodgroup_id);
-        if (!$row || $row['prodgroup_user_id'] != $userId) {
+        if (!$row || $row['prodgroup_user_id'] != $this->userId) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Access!', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -327,7 +319,7 @@ class BatchProductsController extends LoggedUserController
     {
         $prodgroup_id = FatApp::getPostedData('prodgroup_id', FatUtility::VAR_INT, 0);
         $selprod_id = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
-        $userId = UserAuthentication::getLoggedUserId();
+       
         if ($prodgroup_id <= 0 || $selprod_id <= 0) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
@@ -335,7 +327,7 @@ class BatchProductsController extends LoggedUserController
 
         /* check product group belongs to current user[ */
         $row = ProductGroup::getAttributesById($prodgroup_id);
-        if (!$row || $row['prodgroup_user_id'] != $userId) {
+        if (!$row || $row['prodgroup_user_id'] != $this->userId) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Access!', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -355,7 +347,7 @@ class BatchProductsController extends LoggedUserController
     {
         $prodgroup_id = FatApp::getPostedData('prodgroup_id', FatUtility::VAR_INT, 0);
         $selprod_id = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
-        $userId = UserAuthentication::getLoggedUserId();
+       
         if ($prodgroup_id <= 0 || $selprod_id <= 0) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
@@ -363,7 +355,7 @@ class BatchProductsController extends LoggedUserController
 
         /* check product group belongs to current user[ */
         $row = ProductGroup::getAttributesById($prodgroup_id);
-        if (!$row || $row['prodgroup_user_id'] != $userId) {
+        if (!$row || $row['prodgroup_user_id'] != $this->userId) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Access!', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -382,12 +374,11 @@ class BatchProductsController extends LoggedUserController
     public function batchMediaForm($prodgroup_id)
     {
         $prodgroup_id = FatUtility::int($prodgroup_id);
-        $userId = UserAuthentication::getLoggedUserId();
-
+       
         /* check product group belongs to current user[ */
         $row = ProductGroup::getAttributesById($prodgroup_id);
 
-        if (!$row || $row['prodgroup_user_id'] != $userId) {
+        if (!$row || $row['prodgroup_user_id'] != $this->userId) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Access!', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -405,8 +396,7 @@ class BatchProductsController extends LoggedUserController
     }
 
     public function uploadBatchImage()
-    {
-        $userId = UserAuthentication::getLoggedUserId();
+    {       
         $post = FatApp::getPostedData();
         if (empty($post)) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
@@ -423,7 +413,7 @@ class BatchProductsController extends LoggedUserController
         /* Check product group belongs to current user[ */
         $row = ProductGroup::getAttributesById($prodgroup_id);
 
-        if (!$row || $row['prodgroup_user_id'] != $userId) {
+        if (!$row || $row['prodgroup_user_id'] != $this->userId) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Access!', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
@@ -456,37 +446,8 @@ class BatchProductsController extends LoggedUserController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    /* public function image( $prodgroup_id, $lang_id, $sizeType = '' ){
-    $prodgroup_id = FatUtility::int( $prodgroup_id );
-    $lang_id = FatUtility::int( $lang_id );
-    $default_image = '';
-
-    $file_row = AttachedFile::getAttachment( AttachedFile::FILETYPE_BATCH_IMAGE, $prodgroup_id, 0, $lang_id );
-
-    $image_name = isset($file_row['afile_physical_path']) ?  $file_row['afile_physical_path'] : '';
-
-    switch( strtoupper($sizeType) ){
-    case 'THUMB':
-                $w = 100;
-                $h = 100;
-                AttachedFile::displayImage( $image_name, $w, $h, $default_image );
-    break;
-    case 'SMALL':
-                $w = 200;
-                $h = 200;
-                AttachedFile::displayImage( $image_name, $w, $h, $default_image );
-    break;
-    default:
-                $h = 400;
-                $w = 400;
-                AttachedFile::displayImage( $image_name, $w, $h, $default_image );
-    break;
-    }
-    } */
-
     public function removeBatchImage()
-    {
-        $userId = UserAuthentication::getLoggedUserId();
+    {       
         $prodgroup_id = FatApp::getPostedData('prodgroup_id', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         if ($prodgroup_id <= 0 || $lang_id <= 0) {
@@ -497,7 +458,7 @@ class BatchProductsController extends LoggedUserController
         /* Check product group belongs to current user[ */
         $row = ProductGroup::getAttributesById($prodgroup_id);
 
-        if (!$row || $row['prodgroup_user_id'] != $userId) {
+        if (!$row || $row['prodgroup_user_id'] != $this->userId) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Access!', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }

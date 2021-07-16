@@ -47,8 +47,7 @@
                             href="<?php echo UrlHelper::generateUrl('Buyer', 'Orders'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-order"
-                                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-order">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-order">
                                     </use>
                                 </svg>
                             </i>
@@ -64,8 +63,7 @@
                             href="<?php echo UrlHelper::generateUrl('Buyer', 'MyDownloads'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-downloads"
-                                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-downloads">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-downloads">
                                     </use>
                                 </svg>
                             </i>
@@ -81,8 +79,7 @@
                             href="<?php echo UrlHelper::generateUrl('Buyer', 'orderCancellationRequests'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-cancellation-request"
-                                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-cancellation-request">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-cancellation-request">
                                     </use>
                                 </svg>
                             </i>
@@ -98,8 +95,7 @@
                             href="<?php echo UrlHelper::generateUrl('Buyer', 'orderReturnRequests'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-return-request"
-                                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-return-request">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-return-request">
                                     </use>
                                 </svg>
                             </i>
@@ -122,8 +118,7 @@
                             href="<?php echo UrlHelper::generateUrl('Buyer', 'offers'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-offers"
-                                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-offers">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-offers">
                                     </use>
                                 </svg>
                             </i>
@@ -139,8 +134,7 @@
                             href="<?php echo UrlHelper::generateUrl('Buyer', 'rewardPoints'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-reward-points"
-                                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-reward-points">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-reward-points">
                                     </use>
                                 </svg>
                             </i>
@@ -157,8 +151,7 @@
                             href="<?php echo UrlHelper::generateUrl('Buyer', 'shareEarn'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-share-earn"
-                                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-share-earn">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-share-earn">
                                     </use>
                                 </svg>
                             </i>
@@ -181,8 +174,7 @@
                             href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-messages"
-                                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-messages">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-messages">
                                     </use>
                                 </svg>
                             </i>
@@ -201,8 +193,7 @@
                             href="<?php echo UrlHelper::generateUrl('Account', 'credits');?>">
                             <i class="icn shop">
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-credits"
-                                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-credits">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-credits">
                                     </use>
                                 </svg>
                             </i>
@@ -224,8 +215,7 @@
                             href="<?php echo UrlHelper::generateUrl('Account', 'wishlist');?>">
                             <i class="icn shop">
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-wishlist-favorite"
-                                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-wishlist-favorite">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-wishlist-favorite">
                                     </use>
                                 </svg>
                             </i>
@@ -240,8 +230,7 @@
                             href="<?php echo UrlHelper::generateUrl('SavedProductsSearch', 'listing');?>">
                             <i class="icn shop">
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-saved-searches"
-                                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-saved-searches">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-saved-searches">
                                     </use>
                                 </svg>
                             </i>
@@ -262,8 +251,7 @@
                             href="<?php echo UrlHelper::generateUrl('Account', 'ProfileInfo'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-account"
-                                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-account">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-account">
                                     </use>
                                 </svg>
                             </i>
@@ -279,8 +267,7 @@
                             href="<?php echo UrlHelper::generateUrl('Account', 'myAddresses'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-my-address"
-                                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-my-address">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-my-address">
                                     </use>
                                 </svg>
                             </i>
@@ -296,8 +283,7 @@
                             href="<?php echo UrlHelper::generateUrl('Account', 'changeEmailPassword');?>">
                             <i class="icn shop">
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-change-email"
-                                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-change-password">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-change-email">
                                     </use>
                                 </svg>
                             </i>

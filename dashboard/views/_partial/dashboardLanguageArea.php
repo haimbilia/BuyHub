@@ -10,8 +10,7 @@
     <div class="menu__item__inner">
         <a href="" class="accordianheader">
             <i class="icn "><svg class="svg">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#language"
-                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#language"></use>
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#language"></use>
                 </svg>
             </i><span class="menu-item__title"><?php echo $languages[$siteLangId]['language_name']; ?></span></a>
         <ul class="accordianbody">
@@ -28,8 +27,7 @@
 <li class="menu__item">
     <div class="menu__item__inner"><a title="" href="" class="accordianheader">
             <i class="icn "><svg class="svg">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#currency"
-                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#currency"></use>
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#currency"></use>
                 </svg>
             </i><span class="menu-item__title"> <?php echo Labels::getLabel('LBL_Currency', $siteLangId);?></span></a>
         <ul class="accordianbody">

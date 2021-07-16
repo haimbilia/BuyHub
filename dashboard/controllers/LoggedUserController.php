@@ -4,6 +4,8 @@ class LoggedUserController extends DashboardBaseController
 {
     public $userParentId = 0;
     public $userId = 0;
+    public $userInfo = [];
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -11,9 +13,9 @@ class LoggedUserController extends DashboardBaseController
         UserAuthentication::checkLogin();
         $this->userId = UserAuthentication::getLoggedUserId();
         $userObj = new User($this->userId);
-        $userInfo = $userObj->getUserInfo(array(), false, false);
+        $this->userInfo = $userObj->getUserInfo(array(), false, false);
 
-        if (false == $userInfo || (!UserAuthentication::isGuestUserLogged() && $userInfo['credential_active'] != applicationConstants::ACTIVE)) {
+        if (false == $this->userInfo || (!UserAuthentication::isGuestUserLogged() && $this->userInfo['credential_active'] != applicationConstants::ACTIVE)) {
             if (FatUtility::isAjaxCall()) {
                 Message::addErrorMessage(Labels::getLabel('MSG_Session_seems_to_be_expired', CommonHelper::getLangId()));
                 FatUtility::dieWithError(Message::getHtml());
@@ -21,20 +23,20 @@ class LoggedUserController extends DashboardBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
         }
 
-        if (0 < $userInfo['user_parent']) {
-            $parentUser = new User($userInfo['user_parent']);
+        if (0 < $this->userInfo['user_parent']) {
+            $parentUser = new User($this->userInfo['user_parent']);
             $parentUserInfo = $parentUser->getUserInfo(array(), true, true);
             if (false == $parentUserInfo || $parentUserInfo['credential_active'] != applicationConstants::ACTIVE) {
                 if (FatUtility::isAjaxCall()) {
                     Message::addErrorMessage(Labels::getLabel('MSG_Session_seems_to_be_expired', CommonHelper::getLangId()));
                     FatUtility::dieWithError(Message::getHtml());
                 }
-                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout',[],CONF_WEBROOT_FRONTEND));
+                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
             }
         }
 
         if (!isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'])) {
-            $userPreferedDashboardType = ($userInfo['user_preferred_dashboard']) ? $userInfo['user_preferred_dashboard'] : $userInfo['user_registered_initially_for'];
+            $userPreferedDashboardType = ($this->userInfo['user_preferred_dashboard']) ? $this->userInfo['user_preferred_dashboard'] : $this->userInfo['user_registered_initially_for'];
 
             switch ($userPreferedDashboardType) {
                 case User::USER_TYPE_BUYER:
@@ -52,21 +54,21 @@ class LoggedUserController extends DashboardBaseController
             }
         }
 
-        if ((!UserAuthentication::isGuestUserLogged() && $userInfo['credential_verified'] != 1) && !($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME] && $_SESSION[User::ADMIN_SESSION_ELEMENT_NAME] > 0)) {
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout',[],CONF_WEBROOT_FRONTEND));
+        if ((!UserAuthentication::isGuestUserLogged() && $this->userInfo['credential_verified'] != 1) && !($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME] && $_SESSION[User::ADMIN_SESSION_ELEMENT_NAME] > 0)) {
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
         }
 
         if ($this->userId < 1) {
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout',[],CONF_WEBROOT_FRONTEND));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
         }
 
         /* Thease actions are used while configuring Phone from "Configure Email/Phone Page". */
         $allowedActions = ['getotp', 'resendotp', 'validateotp'];
         $addPhoneValidaion = true;
         if (true == SmsArchive::canSendSms()) {
-            $addPhoneValidaion = empty($userInfo['user_phone']) ? true : false;
+            $addPhoneValidaion = empty($this->userInfo['user_phone']) ? true : false;
         }
-        if (!in_array(strtolower($action), $allowedActions) && empty($userInfo['user_phone']) && empty($userInfo['credential_email'])) {
+        if (!in_array(strtolower($action), $allowedActions) && empty($this->userInfo['user_phone']) && empty($this->userInfo['credential_email'])) {
             if (true == SmsArchive::canSendSms()) {
                 $message = Labels::getLabel('MSG_PLEASE_CONFIGURE_YOUR_EMAIL_OR_PHONE', $this->siteLangId);
             } else {
@@ -77,10 +79,10 @@ class LoggedUserController extends DashboardBaseController
                 LibHelper::dieJsonError($message);
             }
             Message::addErrorMessage($message);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'configureEmail',[],CONF_WEBROOT_FRONTEND));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'configureEmail', [], CONF_WEBROOT_FRONTEND));
         }
 
-        $this->userParentId = (0 < $userInfo['user_parent']) ? $userInfo['user_parent'] : UserAuthentication::getLoggedUserId();
+        $this->userParentId = (0 < $this->userInfo['user_parent']) ? $this->userInfo['user_parent'] : $this->userId;
 
         $this->initCommonValues();
     }
