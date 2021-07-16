@@ -1,10 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="cookie-alert cms">
-    <h4> <strong> <?php echo Labels::getLabel('LBL_Your_Cookie_Preferences', $siteLangId); ?> </strong><br><br></h4>
-
+<div class="modal-header">
+	<h5 class="modal-title"><?php echo Labels::getLabel('LBL_Your_Cookie_Preferences', $siteLangId); ?></h5>
+</div>
+<div class="modal-body cookie-alert cms">
     <div>
         <h5> <?php echo Labels::getLabel('LBL_What_is_a_cookie?', $siteLangId); ?> </h5>
     </div>
+    
     <div>
         <p> <?php echo Labels::getLabel('LBL_What_is_a_cookie_Information', $siteLangId); ?></p>
     </div>
@@ -38,8 +40,7 @@
             <p> <?php echo Labels::getLabel('LBL_Personalise_Cookies_Information', $siteLangId); ?></p>
         </div>
     </div>
-
-    <div>
-        <button class="btn btn-primary" type="button" onClick="setUserCookiePreferences()"><?php echo Labels::getLabel('LBL_Save', $siteLangId); ?></button>
-    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" onClick="setUserCookiePreferences()"><?php echo Labels::getLabel('LBL_Save', $siteLangId); ?></button>
 </div>

@@ -1228,7 +1228,7 @@ $(document).ready(function () {
             } else {
                 $(".cookie-alert").hide('slow');
                 $(".cookie-alert").remove();
-                $(document).trigger('close.facebox');
+               $.facebox.close();
             }
         });
     }
@@ -1568,7 +1568,7 @@ $("document").ready(function () {
                 return false;
             }
             if ($btn.hasClass("quickView") == true) {
-                $(document).trigger('close.facebox');
+                $.facebox.close();
                 $('body').addClass('side-cart--on');
             }
             if (9 < ans.total) {

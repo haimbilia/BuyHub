@@ -41,7 +41,7 @@ if (!empty($orderShippingData)) {
 
 <script>
 	ShippingSummaryData = function() {
-		$(".modal").modal('hide');
+		$.facebox.close();
 		loadShippingSummaryDiv();
 	}
 </script>

@@ -53,7 +53,7 @@ if (!empty($orderPickUpData)) {
 
 <script>
 	ShippingSummaryData = function() {
-		$(".modal").modal('hide');
+		$.facebox.close();
 		loadShippingSummaryDiv();
 	}
 </script>

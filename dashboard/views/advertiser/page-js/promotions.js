@@ -163,7 +163,7 @@ $(document).on('change',"select[name='banner_blocation_id']",function(){
     popupImage = function(inputBtn){
 		if (inputBtn.files && inputBtn.files[0]) {
 	        fcom.ajax(fcom.makeUrl('Advertiser', 'imgCropper'), '', function(t) {
-	    		$.facebox(t');
+	    		$.facebox(t);
                 var file = inputBtn.files[0];
 	            var minWidth = document.frmPromotionMedia.banner_min_width.value;
 	            var minHeight = document.frmPromotionMedia.banner_min_height.value;

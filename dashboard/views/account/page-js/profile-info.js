@@ -182,12 +182,12 @@ $(document).ready(function(){
 		} */
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'sendTruncateRequest'), '', function(t) {
 			profileInfoForm();
-			$(document).trigger('close.facebox');
+			$.facebox.close();
 		});
 	};
 
 	cancelTruncateRequest = function(){
-		$(document).trigger('close.facebox');
+		$.facebox.close();
 	};
 
 	requestData = function(){
@@ -202,7 +202,7 @@ $(document).ready(function(){
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'setupRequestData'), data, function(t) {
-			$("#facebox .close").trigger('click');
+			$.facebox.close();
 		});
     };
     
