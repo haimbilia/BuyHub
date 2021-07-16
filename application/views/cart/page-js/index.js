@@ -82,7 +82,7 @@ $(document).ready(function(){
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Cart','applyPromoCode'),data,function(res){
-			$("#facebox .close").trigger('click');
+			$.facebox.close();
 			$.systemMessage.close();
 			listCartProducts();
 		});

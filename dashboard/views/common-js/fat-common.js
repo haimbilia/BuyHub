@@ -292,8 +292,9 @@ $.fn.selectRange = function (start, end) {
 			$('.' + $.facebox.element).modal('show');
 		},
 
-		close: function () {
-			$('.' + $.facebox.element).remove();
+		close: function () {		
+			//$('.' + $.facebox.element).remove();
+			$("."+$.facebox.element).modal('hide');
 			return false
 		}
 	});
@@ -308,10 +309,10 @@ $.fn.selectRange = function (start, end) {
 			$('body .' + $.facebox.element).html(htm);
 		}
 
-		/* On Close Event. */
-		$('.' + $.facebox.element).on("hidden.bs.modal", function () {
-			$('.' + $.facebox.element + ', .modal-backdrop').remove();
-		});
+		// /* On Close Event. */
+		// $('.' + $.facebox.element).on("hidden.bs.modal", function () {
+		// 	$('.' + $.facebox.element + ', .modal-backdrop').remove();
+		// });
 	}
 	
 	/* Figures out what you want to display and displays it formats are:
