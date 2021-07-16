@@ -1457,7 +1457,7 @@ trait CustomProducts
         $this->_template->addJs(array('js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js', 'js/select2.js'));
         $this->set("includeEditor", true);
         $this->set('displayInventoryTab', $displayInventoryTab);
-        $this->_template->addCss(array('custom/page-css/select2.min.css'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
     }
 

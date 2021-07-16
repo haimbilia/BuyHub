@@ -1039,7 +1039,7 @@ class SellerController extends SellerBaseController
         $this->set('canAddCustomProductAvailableToAllSellers', User::canAddCustomProductAvailableToAllSellers());
         $this->set('type', $type);
         $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/slick.min.js', 'js/select2.js'));
-        $this->_template->addCss(array('custom/page-css/select2.min.css'));
+        $this->_template->addCss(array('css/select2.min.css'));
 
         $this->_template->render(true, true);
     }
@@ -2012,7 +2012,7 @@ class SellerController extends SellerBaseController
         $this->set('language', Language::getAllNames());
         $this->set('siteLangId', $this->siteLangId);
         $this->_template->addJs(array('js/select2.js'));
-        $this->_template->addCss(array('custom/page-css/select2.min.css'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render(true, true);
     }
 
@@ -4993,7 +4993,7 @@ class SellerController extends SellerBaseController
         $this->set("frmSearch", $srchFrm);
         $this->set("selProd_id", $selProd_id);
         $this->_template->addJs(array('js/select2.js'));
-        $this->_template->addCss(array('custom/page-css/select2.min.css'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
     }
 

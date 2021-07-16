@@ -37,7 +37,7 @@ class SellerRequestsController extends SellerBaseController
         $this->set('canRequestBadge', $this->userPrivilege->canEditBadges(UserAuthentication::getLoggedUserId(), true));
         $this->set('noRecordFound', $noRecordFound);
         $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js'));
-        $this->_template->addCss(array('custom/page-css/select2.min.css'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
     }
 

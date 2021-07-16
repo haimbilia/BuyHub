@@ -51,7 +51,7 @@ trait SellerProducts
         $adminCatalogs = $srch->recordCount();
         $this->set('adminCatalogs', $adminCatalogs);
         $this->_template->addJs(['js/select2.js']);
-        $this->_template->addCss(['custom/page-css/select2.min.css']);
+        $this->_template->addCss(['css/select2.min.css']);
         $this->_template->render(true, true);
     }
 
@@ -234,7 +234,7 @@ trait SellerProducts
 
         /* $this->_template->addJs(array('js/jquery.datetimepicker.js'), false); */
         $this->_template->addJs(['js/select2.js']);
-        $this->_template->addCss(['custom/page-css/select2.min.css']);
+        $this->_template->addCss(['css/select2.min.css']);
         $this->set('product_type', $productRow['product_type']);
         $this->set('product_id', $product_id);
         $this->set('selprod_id', $selprod_id);
@@ -2692,7 +2692,7 @@ trait SellerProducts
         $this->set("frmSearch", $srchFrm);
         $this->set("selProd_id", $selProd_id);
         $this->_template->addJs(array('js/select2.js'));
-        $this->_template->addCss(array('custom/page-css/select2.min.css'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
     }
 
@@ -2893,7 +2893,7 @@ trait SellerProducts
         $this->set("relProdFrm", $relProdFrm);
         $this->set("selProd_id", $selProd_id);
         $this->_template->addJs(array('js/select2.js'));
-        $this->_template->addCss(array('custom/page-css/select2.min.css'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
     }
 
@@ -3077,7 +3077,7 @@ trait SellerProducts
         $this->set("relProdFrm", $relProdFrm);
         $this->set("selProd_id", $selProd_id);
         $this->_template->addJs(array('js/select2.js'));
-        $this->_template->addCss(array('custom/page-css/select2.min.css'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
     }
 
