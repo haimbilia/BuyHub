@@ -769,7 +769,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
             fcom.ajax(fcom.makeUrl('SavedProductsSearch', 'form'), '', function (ans) {
                 $.facebox(ans);
                 if (ans.status) {
-                    $(document).trigger('close.facebox');
+                    $.facebox.close();
                 }
             });
         });
@@ -784,7 +784,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         data = data + "&curr_page=" + $currentPageUrl;
         fcom.updateWithAjax(fcom.makeUrl('SavedProductsSearch', 'setup'), data, function (ans) {
             if (ans.status) {
-                $(document).trigger('close.facebox');
+                $.facebox.close();
             }
         });
     };

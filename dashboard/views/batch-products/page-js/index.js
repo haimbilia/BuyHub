@@ -46,7 +46,7 @@ $(document).ready(function() {
                 batchMediaForm(t.prodgroup_id);
                 return;
             }
-            $(document).trigger('close.facebox');
+            $.facebox.close();
 
             return;
 
@@ -71,7 +71,7 @@ $(document).ready(function() {
                 batchMediaForm(t.prodgroup_id);
                 return;
             }
-            $(document).trigger('close.facebox');
+            $.facebox.close();
             searchBatches(frm);
             return;
         });

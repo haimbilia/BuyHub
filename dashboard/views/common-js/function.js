@@ -487,7 +487,7 @@ function accessLocation(force = false) {
                     if (1 > json.status) {
                         $.mbsmessage(json.msg, false, 'alert--danger');
                     }
-                    $(document).trigger('close.facebox');
+                    $.facebox.close();
                     return false;
                 } catch (exc) {
                     $.facebox(t);

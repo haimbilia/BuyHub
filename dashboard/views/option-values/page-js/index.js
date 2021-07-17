@@ -47,7 +47,7 @@ $(document).ready(function(){
 				optionValueLangForm(t.optionValueId, t.langId);
 				return ;
 			}
-			$(document).trigger('close.facebox');
+			$.facebox.close();
 		});
 	};
 
@@ -69,7 +69,7 @@ $(document).ready(function(){
 				optionValueLangForm(t.optionValueId, t.langId);
 				return ;
 			}
-			$(document).trigger('close.facebox');
+			$.facebox.close();
 		});
 	};
 

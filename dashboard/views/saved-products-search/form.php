@@ -8,14 +8,15 @@ $search_title_fld->addFieldTagAttribute('placeholder',Labels::getLabel('LBL_Sear
 $btn = $frm->getField('btn_submit');
 $btn->addFieldTagAttribute('class', "btn btn-brand");
 ?>
-
-<div class="pop-up-title"><?php echo Labels::getLabel('LBL_Save_Search', $siteLangId); ?></div>
-<div class="collection__form form">
-  <?php
+<div class="modal-header">
+	<h5 class="modal-title"><?php echo Labels::getLabel('LBL_Save_Search', $siteLangId); ?></h5>
+</div>
+<div class="modal-body">
+	<?php
 		echo $frm->getFormTag();
 		echo $frm->getFieldHtml('pssearch_name');
 		echo $frm->getFieldHtml('btn_submit');
 	?>
-  </form>
-  <?php echo $frm->getExternalJs(); ?>
+	</form>
+  	<?php echo $frm->getExternalJs(); ?>
 </div>
