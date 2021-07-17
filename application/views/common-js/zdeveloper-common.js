@@ -993,14 +993,6 @@ $(document).ready(function () {
     $('.close').click(function () {
         $('.system_message').hide();
     });
-    addCatalogPopup = function () {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Seller', 'addCatalogPopup'), '', function (t) {
-                fcom.updateFaceboxContent(t);
-
-            });
-        });
-    }
 
     markAsFavorite = function (selProdId) {
         if (isUserLogged() == 0) {
