@@ -354,6 +354,16 @@ class CommonHelper extends FatUtility
             case 'SHIPPING':
                 $amount = $shippingAmount;
                 break;
+            case 'SHIPPING_API': 
+                /* Charges If seller using admin api to ship*/
+                $amount = 0;
+                if (CommonHelper::canAvailShippingChargesBySeller($opArr['op_selprod_user_id'], $opArr['opshipping_by_seller_user_id']) && 0 < $opArr['opshipping_plugin_id'] && 1 > $opArr['opshipping_is_seller_plugin'] && 0 < $opArr['opshipping_plugin_charges']) {
+                    $shippingResp = OrderProduct::getShippingResponse($opArr['op_id'], OrderProduct::RESPONSE_TYPE_SHIPMENT);                   
+                    if (!empty($shippingResp) && !empty($shippingResp['opr_response'])) {
+                        $amount = $opArr['opshipping_plugin_charges'];
+                    }
+                }              
+                break;
             case 'REWARDPOINT':
                 $amount = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT]['opcharge_amount'] : 0;
                 break;

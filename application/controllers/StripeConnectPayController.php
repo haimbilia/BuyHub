@@ -428,7 +428,8 @@ class StripeConnectPayController extends PaymentController
                 $totalDiscount = abs($discount) + abs($rewardPoint);
 
                 $firstTransferAmount = $netSellerAmount - $totalDiscount;
-                $pendingTransferAmount = $totalDiscount;
+                $pendingTransferAmount = $totalDiscount;                
+                $sellerShippingApiCharges = CommonHelper::orderProductAmount($op,'SHIPPING_API');
 
                 if (0 == $pendingTransferAmount) {
                     $firstTransferAmount = $firstTransferAmount - $op['op_commission_charged'];
@@ -453,8 +454,17 @@ class StripeConnectPayController extends PaymentController
                 $commComments = Labels::getLabel('MSG_COMMISSION_CHARGED._#{invoice-no}', $this->siteLangId);
                 $commComments = CommonHelper::replaceStringData($commComments, ['{invoice-no}' => $op['op_invoice_number']]);
                 Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_ADMIN_COMMISSION, $op['op_commission_charged'], $this->siteLangId, $commComments, $op['op_id']);
+                
+                if (0 < $sellerShippingApiCharges) {
+                    $firstTransferAmount = $firstTransferAmount - $sellerShippingApiCharges;
+                    $apiComments = commonHelper::replaceStringData(Labels::getLabel('LBL_DEDUCTED_ADMIN_SHIPPING_API_CHARGES_{invoice}', $langId), ['{invoice}' => $op['op_invoice_number']]);
+                    Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_ADMIN_SHIPPING_API_CHARGES, $sellerShippingApiCharges, $this->siteLangId, $apiComments, $op['op_id']);
+                    if (1 > $firstTransferAmount) {
+                        return;
+                    }
+                }
 
-                if (!empty($accountId)) {
+                if (!empty($accountId) &&  0 < $firstTransferAmount) {
                     $charge = [
                         'amount' => $this->convertInPaisa($firstTransferAmount),
                         'currency' => $this->orderInf['order_currency_code'],
