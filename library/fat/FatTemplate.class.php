@@ -108,7 +108,11 @@ class FatTemplate
 
         /* Include JS */
         $str .= '<script>
+<<<<<<< HEAD
 				var siteConstants = ' . json_encode(array(
+=======
+                    var siteConstants = ' . json_encode(array(
+>>>>>>> 55a313e36c55fb5516891e15611505c1f5c100cd
                     'webroot' => CONF_WEBROOT_URL . $langCode,
                     'webrootfront' => CONF_WEBROOT_FRONTEND . $langCode,
                     'webroot_dashboard' => CONF_WEBROOT_URL . 'dashboard/' . $langCode,

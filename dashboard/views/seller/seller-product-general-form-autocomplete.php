@@ -328,9 +328,9 @@ $fld->setFieldTagAttribute('onClick', 'clearInvOptionForm()');
             <?php echo $frmSellerProduct->getFieldHtml('selprod_product_id');
             echo $frmSellerProduct->getFieldHtml('selprod_urlrewrite_id');
             echo $frmSellerProduct->getFieldHtml('selprod_id');
-            
+
             /* Close form if adding new Inventory. */
-            if ($selprod_id == 0) { ?> 
+            if ($selprod_id == 0) { ?>
                 </form>
             <?php }
             echo $frmSellerProduct->getExternalJS(); ?>
@@ -342,9 +342,6 @@ $fld->setFieldTagAttribute('onClick', 'clearInvOptionForm()');
                     <div class="col-md-12">
                         <h4>
                             <?php echo Labels::getLabel('LBL_INVENTORY_OPTIONS', $siteLangId); ?>
-                            <a href="javascript:void(0);" onclick="viewProdOptions(<?php echo $product_id; ?>)">
-                                <i class="fa fa-info-circle" data-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_CLICK_TO_VIEW_INVENTORY_OPTIONS', $siteLangId) ?>" style="font-size: 15px;"></i>
-                            </a>
                         </h4>
                     </div>
                 </div>
@@ -510,9 +507,8 @@ $fld->setFieldTagAttribute('onClick', 'clearInvOptionForm()');
 
         });
 
-
         var productId = $("input[name='selprod_product_id']").val();
-
+        var optionNamesHtm = '<a href="javascript:void(0);" onclick="viewProdOptions(<?php echo $product_id; ?>)" title="<?php echo  Labels::getLabel('LBL_CLICK_TO_VIEW_INVENTORY_OPTIONS', $siteLangId) ?>"><i class="fa fa-info-circle" style="font-size: 15px;"></i></a>';
         var selectedOptions = [];
         bindOptionAutoComplete = function() {
             if (1 > $(".optionname--js").length) {
@@ -561,9 +557,13 @@ $fld->setFieldTagAttribute('onClick', 'clearInvOptionForm()');
                 },
                 language: {
                     noResults: function(params) {
-                        return langLbl.typeToSearch;
+                        return langLbl.typeToSearch + " " + optionNamesHtm;
                     }
+                },
+                escapeMarkup: function(markup) {
+                    return markup;
                 }
+
             }).on('select2:selecting', function(e) {
                 var item = e.params.args.data;
                 if (0 < $('table#optionsTable-js tbody tr#' + item.id).length) {
@@ -636,7 +636,7 @@ $fld->setFieldTagAttribute('onClick', 'clearInvOptionForm()');
                     if (0 < $("table#optionsTable-js tbody tr").length) {
                         $("table#optionsTable-js").removeClass('d-none');
                     }
-                    
+
                     if (0 < selectedOptions.length) {
                         if (-1 == selectedOptions.indexOf(invOptionId)) {
                             $.merge(selectedOptions, [invOptionId]);
@@ -729,11 +729,11 @@ $fld->setFieldTagAttribute('onClick', 'clearInvOptionForm()');
             fcom.updateWithAjax(fcom.makeUrl('Seller', 'sellerProductDelete'), data, function(res) {
                 var actionTr = $(btn).closest('tr');
                 var optionValuePos = selectedOptions.indexOf(actionTr.attr('id'));
-                
+
                 if (-1 < optionValuePos) {
-                    selectedOptions.splice(optionValuePos, 1);   
+                    selectedOptions.splice(optionValuePos, 1);
                 }
-                
+
                 $(btn).closest('tr').remove();
                 if (1 > $("table#optionsTable-js tbody tr").length) {
                     $("table#optionsTable-js").addClass('d-none');

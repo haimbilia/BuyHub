@@ -1658,8 +1658,8 @@ class Orders extends MyAppModel
                     }
                 }
                 /*]*/
-
-                /*Deduct Shipping Amount[*/
+                /*
+                /*Deduct Shipping Amount[                
                 if (0 < $childOrderInfo["op_free_ship_upto"] && array_key_exists(OrderProduct::CHARGE_TYPE_SHIPPING, $childOrderInfo['charges']) && $childOrderInfo["op_actual_shipping_charges"] != $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_SHIPPING]['opcharge_amount']) {
                     $sellerProdTotalPrice = 0;
                     $rows = Orderproduct::getOpArrByOrderId($childOrderInfo["op_order_id"]);
@@ -1712,7 +1712,7 @@ class Orders extends MyAppModel
                         }
                     }
                 }
-
+                */
                 $opRefundArr = array(
                     'op_refund_qty' => $childOrderInfo["op_qty"],
                     'op_refund_amount' => $txnAmount,
@@ -1754,8 +1754,8 @@ class Orders extends MyAppModel
                     }
                 }
                 /* ] */
-
-                /*Deduct Shipping Amount[*/
+                /*
+                /*Deduct Shipping Amount
                 if (0 < $childOrderInfo["op_free_ship_upto"] && array_key_exists(OrderProduct::CHARGE_TYPE_SHIPPING, $childOrderInfo['charges']) && $childOrderInfo["op_actual_shipping_charges"] != $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_SHIPPING]['opcharge_amount']) {
                     $actualShipCharges = 0;
                     $sellerProdTotalPrice = 0;
@@ -1812,7 +1812,8 @@ class Orders extends MyAppModel
                         }
                     }
                 }
-                /* ]*/
+                /* ]
+                */
             }
             $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
             if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
@@ -1909,9 +1910,10 @@ class Orders extends MyAppModel
 
             $shipCharges = isset($childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_SHIPPING][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount']) ? $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_SHIPPING][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'] : 0;
             $unitShipCharges = round(($shipCharges / $childOrderInfo['op_qty']), 2);
-
+            $shippedBySeller = false;
             if (CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
                 $shipCharges = $shipCharges - $childOrderInfo['op_refund_shipping'];
+                $shippedBySeller = true;
             } else {
                 $shipCharges = 0;
             }
@@ -1948,6 +1950,23 @@ class Orders extends MyAppModel
                 $transObj = new Transactions();
                 if ($txnId = $transObj->addTransaction($txnArray)) {
                     $emailNotificationObj->sendTxnNotification($txnId, $langId);
+                }
+                
+                
+                /*deduct shipping charges from seller if seller using admin shipping API */
+                $sellerShippingApiCharges = CommonHelper::orderProductAmount($childOrderInfo,'SHIPPING_API');
+                if (0 < $sellerShippingApiCharges) {                    
+                    $txnArray["utxn_user_id"] = $childOrderInfo['op_selprod_user_id'];
+                    $txnArray["utxn_credit"] = 0;
+                    $txnArray["utxn_debit"] = $sellerShippingApiCharges;
+                    $txnArray["utxn_status"] = Transactions::STATUS_COMPLETED;
+                    $txnArray["utxn_op_id"] = $childOrderInfo['op_id'];
+                    $txnArray["utxn_comments"] = commonHelper::replaceStringData(Labels::getLabel('LBL_DEDUCTED_ADMIN_SHIPPING_API_CHARGES_{invoice}', $langId), ['{invoice}' => $formattedInvoiceNumber]);
+                    $txnArray["utxn_type"] = Transactions::TYPE_ADMIN_SHIPPING_API_CHARGES;
+                    $transObj = new Transactions();
+                    if ($txnId = $transObj->addTransaction($txnArray)) {
+                        $emailNotificationObj->sendTxnNotification($txnId, $langId);
+                    }
                 }
             }
             /* ] */
@@ -2166,8 +2185,8 @@ class Orders extends MyAppModel
         //$srch->joinTable(Orders::DB_TBL,'LEFT OUTER JOIN','o.order_id = op.op_order_id','o');
         $srch->joinTable(OrderProduct::DB_TBL_CHARGES, 'LEFT OUTER JOIN', 'opc.' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'op_id = op.op_id', 'opc');
         $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
-
-        $srch->addMultipleFields(array('op.*', 'opst.*', 'op_l.*', 'o.order_id', 'o.order_payment_status', 'o.order_date_added', 'o.order_language_id', 'o.order_user_id', 'sum(' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount) as op_other_charges', 'o.order_affiliate_user_id', 'plugin_code', 'optsu_user_id', 'ops.opshipping_by_seller_user_id', 'o.order_pmethod_id'));
+      
+        $srch->addMultipleFields(array('op.*', 'opst.*', 'op_l.*', 'o.order_id', 'o.order_payment_status', 'o.order_date_added', 'o.order_language_id', 'o.order_user_id', 'sum(' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount) as op_other_charges', 'o.order_affiliate_user_id', 'plugin_code', 'optsu_user_id', 'ops.opshipping_by_seller_user_id', 'o.order_pmethod_id','opshipping_is_seller_plugin','opshipping_plugin_id','opshipping_plugin_charges'));
         $srch->addCondition('op_id', '=', $op_id);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();

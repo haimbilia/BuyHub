@@ -179,7 +179,7 @@ $("document").ready(function () {
         }
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Addresses', 'setUpAddress'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Addresses', 'setUpAddress','',siteConstants.webroot_dashboard), data, function (t) {
             if (t.status == 1) {
                 if ($("#hasAddress").length > 0) {
                     $("#hasAddress").val(1);
