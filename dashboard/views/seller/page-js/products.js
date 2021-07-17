@@ -104,7 +104,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'setUpSellerProductClone'), data, function (t) {
 			runningAjaxReq = false;
-			$("#facebox .close").trigger('click');
+			$.facebox.close();
 			loadSellerProducts(document.frmSearchSellerProducts);
 			/* if(t.selprod_id > 0){
 				$(frm.splprice_selprod_id).val(t.selprod_id);

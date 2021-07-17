@@ -1,5 +1,8 @@
-<div class="popup__body">
-	<h2><?php echo $data['scatrequest_title'];?></h2>
+
+<div class="modal-header">
+	<h5 class="modal-title"><?php echo $data['scatrequest_title'];?></h5>
+</div>
+<div class="modal-body">
 	<div class="col-md-12">
 		<div class="row">
 			<div class="col-md-12">

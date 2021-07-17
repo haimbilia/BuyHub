@@ -8,69 +8,71 @@ $frm->setFormTagAttribute('onsubmit', 'updateTaxRule(this); return(false);');
 $btnSubmit = $frm->getField('btn_submit');
 $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
 ?>
-<?php echo $frm->getFormTag(); ?>
-<div class="row">
-    <?php
-    echo $frm->getFieldHtml('taxrule_id');
+<div class="modal-header">
+	<h5 class="modal-title"><?php echo Labels::getLabel('LBL_Edit_tax_rule',$siteLangId) ;?></h5>
+</div>
+<div class="modal-body">
+    <?php echo $frm->getFormTag(); ?>
+    <div class="row">
+        <?php
+        echo $frm->getFieldHtml('taxrule_id');
 
-    $fld = $frm->getField('trr_rate');
-    ?>
-    <div class="col-md-12">
-        <div class="field-set">
-            <div class="caption-wraper">
-                <label class="field_label"><?php echo $fld->getCaption() ?><span class="spn_must_field">*</span></label>
-            </div>
-            <div class="field-wraper">
-                <div class="field_cover">
-                    <?php echo $fld->getHTML('trr_rate'); ?>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <?php      
-    foreach ($combinedTaxData as $key => $tax) { ?>
+        $fld = $frm->getField('trr_rate');
+        ?>
         <div class="col-md-12">
             <div class="field-set">
                 <div class="caption-wraper">
-                    <label class="field_label"><?php echo $tax['taxstr_name'] ?><span class="spn_must_field">*</span></label>
+                    <label class="field_label"><?php echo $fld->getCaption() ?><span class="spn_must_field">*</span></label>
                 </div>
                 <div class="field-wraper">
                     <div class="field_cover">
-                        <input type="text" data-field-caption="<?php echo $tax['taxstr_name'] ?>" name="combinedTaxDetails[<?php echo $key; ?>][taxruledet_rate]" class='combinationInput--js' value="<?php echo $tax['taxruledet_rate']; ?>">
-                        <input type="hidden" name="combinedTaxDetails[<?php echo $key; ?>][taxruledet_taxstr_id]"  value="<?php echo $tax['taxruledet_taxstr_id']; ?>">          
+                        <?php echo $fld->getHTML('trr_rate'); ?>
                     </div>
                 </div>
             </div>
-        </div> 
-    <?php } ?>
-    <div class="col-md-12">
-        <div class="field-set">
-            <div class="caption-wraper"><label class="field_label">
+        </div>
 
-                </label>
-            </div>
-            <div class="field-wraper">
-                <div class="field_cover">
-                    <?php echo $frm->getFieldHtml('btn_submit'); ?>
+        <?php      
+        foreach ($combinedTaxData as $key => $tax) { ?>
+            <div class="col-md-12">
+                <div class="field-set">
+                    <div class="caption-wraper">
+                        <label class="field_label"><?php echo $tax['taxstr_name'] ?><span class="spn_must_field">*</span></label>
+                    </div>
+                    <div class="field-wraper">
+                        <div class="field_cover">
+                            <input type="text" data-field-caption="<?php echo $tax['taxstr_name'] ?>" name="combinedTaxDetails[<?php echo $key; ?>][taxruledet_rate]" class='combinationInput--js' value="<?php echo $tax['taxruledet_rate']; ?>">
+                            <input type="hidden" name="combinedTaxDetails[<?php echo $key; ?>][taxruledet_taxstr_id]"  value="<?php echo $tax['taxruledet_taxstr_id']; ?>">          
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        <?php } ?>
+        <div class="col-md-12">
+            <div class="field-set">
+                <div class="caption-wraper"><label class="field_label">
+
+                    </label>
+                </div>
+                <div class="field-wraper">
+                    <div class="field_cover">
+                        <?php echo $frm->getFieldHtml('btn_submit'); ?>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    </form>
+    <?php echo $frm->getExternalJs(); ?>
 </div>
-</form>
-<?php echo $frm->getExternalJs(); ?>
 
 <script>
-$(function() {
-    var reqValidstr = $('form[name="frmTaxRule"] input[name="trr_rate"]').attr('data-fatreq');
+    $(function() {
+        var reqValidstr = $('form[name="frmTaxRule"] input[name="trr_rate"]').attr('data-fatreq');
 
-    $('.combinationInput--js').each(function(){ 
-        $(this).attr('data-fatreq',reqValidstr);
-    })
-});
-
-
-
+        $('.combinationInput--js').each(function(){ 
+            $(this).attr('data-fatreq',reqValidstr);
+        })
+    });
 </script>
 

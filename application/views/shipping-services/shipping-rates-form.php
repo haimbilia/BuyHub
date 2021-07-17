@@ -9,11 +9,9 @@ $fld->developerTags['noCaptionTag'] = true;
 $fld->setFieldTagAttribute('class', 'btn btn-brand');
 ?>
 
-<div class="box__head">
-    <h4>
-        <?php echo Labels::getLabel('LBL_SHIPPING_RATES', $siteLangId); ?>
-    </h4>
+<div class="modal-header">
+	<h5 class="modal-title"><?php echo Labels::getLabel('LBL_SHIPPING_RATES', $siteLangId); ?></h5>
 </div>
-<div class="box__body">
+<div class="modal-body">
     <?php echo $frm->getFormHtml(); ?>
 </div>
