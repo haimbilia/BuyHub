@@ -50,14 +50,14 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'seller' && $action == 'shop') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Manage_Shop', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'shop'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#manage-shop" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#manage-shop">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#manage-shop">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Manage_Shop', $siteLangId); ?></span></a>
                             </div>
                         </li>
                     <?php } ?>
-                    <!-- <li class="menu__item"><div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_View_Shop', $siteLangId); ?>" target="_blank" href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id)); ?>"><i class="icn shop"><svg class="svg"><use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-view-shop" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-view-shop"></use></svg>
+                    <!-- <li class="menu__item"><div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_View_Shop', $siteLangId); ?>" target="_blank" href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id)); ?>"><i class="icn shop"><svg class="svg"><use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-view-shop"></use></svg>
                    </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_View_Shop', $siteLangId); ?></span></a></    div></li> -->
                     <?php if ($userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true)) { ?>
                         <li class="menu__item <?php echo ($controller == 'seller' && ($action == 'customcatalogproductform' || $action == 'customproductform' || $action == 'catalog' || $action == 'products' || $action == 'customcatalogproducts')) ? 'is-active' : ''; ?>">
@@ -66,7 +66,7 @@ $plugin = new Plugin();
                                                                                                                 ?>">
                                     <i class="icn shop">
                                         <svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-products" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-products">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-products">
                                             </use>
                                         </svg>
                                     </i>
@@ -79,7 +79,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'seller' && $action == 'producttags') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Product_Tags', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'productTags'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#product-tags" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#product-tags">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#product-tags" >
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Product_Tags', $siteLangId); ?></span></a>
@@ -91,7 +91,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'seller' && $action == 'options') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Product_Options', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'options'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-options" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-options">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-options">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Product_Options', $siteLangId); ?></span></a>
@@ -102,7 +102,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'seller' && ($action == 'taxcategories' || $action == 'taxrules')) ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Tax_Categories', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'taxCategories'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-tax-category" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-tax-category">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-tax-category">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Tax_Categories', $siteLangId); ?></span></a>
@@ -113,7 +113,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'sellerrequests' && $action == 'index') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Requests', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('SellerRequests'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#requests" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#requests">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#requests" >
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Requests', $siteLangId); ?></span></a>
@@ -139,7 +139,7 @@ $plugin = new Plugin();
                                 <a title="<?php echo Labels::getLabel('LBL_Shipping_Profiles', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('shippingProfile'); ?>">
                                     <i class="icn shop">
                                         <svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#shipping-profile" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#shipping-profile">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#shipping-profile">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Shipping_Profiles', $siteLangId); ?></span></a>
@@ -152,7 +152,7 @@ $plugin = new Plugin();
                                 <a title="<?php echo Labels::getLabel('LBL_Shipping_Packages', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('shippingPackages'); ?>">
                                     <i class="icn shop">
                                         <svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#shipping-package" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#shipping-package">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#shipping-package">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Shipping_Packages', $siteLangId); ?></span></a>
@@ -174,7 +174,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'seller' && $action == 'sales') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Orders', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'Sales'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Orders', $siteLangId); ?></span></a>
@@ -185,7 +185,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'seller' && $action == 'ordercancellationrequests') ? 'is-active' : '' ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Order_Cancellation_Requests', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'orderCancellationRequests'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-cancellation-request" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-cancellation-request">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-cancellation-request">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel("LBL_Order_Cancellation_Requests", $siteLangId); ?></span></a>
@@ -196,7 +196,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'seller' && ($action == 'orderreturnrequests' || $action == 'vieworderreturnrequest')) ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Order_Return_Requests', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'orderReturnRequests'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-return-request" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-return-request">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-return-request">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel("LBL_Order_Return_Requests", $siteLangId); ?></span></a>
@@ -222,7 +222,7 @@ $plugin = new Plugin();
                             <div class="menu__item__inner">
                                 <a title="<?php echo Labels::getLabel('LBL_Special_Price', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'specialPrice'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#special-price" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#special-price">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#special-price">
                                             </use>
                                         </svg>
                                     </i>
@@ -235,7 +235,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'seller' && $action == 'volumediscount') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Volume_Discount', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'volumeDiscount'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#volume-discount" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#volume-discount">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#volume-discount">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Volume_Discount', $siteLangId); ?></span></a>
@@ -246,7 +246,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'seller' && $action == 'upsellproducts') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Buy_Together_Products', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'upsellProducts'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#buy-together-products" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#buy-together-products">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#buy-together-products">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Buy_Together_Products', $siteLangId); ?></span></a>
@@ -257,7 +257,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'seller' && $action == 'relatedproducts') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Related_Products', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'RelatedProducts'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#related-products" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#related-products">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#related-products">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Related_Products', $siteLangId); ?></span></a>
@@ -273,7 +273,7 @@ $plugin = new Plugin();
                                 <a title="<?php echo $pluginData['plugin_name']; ?>" href="<?php echo UrlHelper::generateUrl($pluginData['plugin_code']); ?>">
                                     <i class="icn shop">
                                         <svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-promotions" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-promotions">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-promotions">
                                             </use>
                                         </svg>
                                     </i>
@@ -322,7 +322,7 @@ $plugin = new Plugin();
                             <div class="menu__item__inner">
                                 <a title="<?php echo $channel['plugin_name'];?>" href="<?php echo UrlHelper::generateUrl($channel['plugin_code']); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#<?php echo strtolower($channel['plugin_code']); ?>" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#<?php echo strtolower($channel['plugin_code']); ?>"></use>
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#<?php echo strtolower($channel['plugin_code']); ?>"></use>
                                         </svg>
                                     </i>
                                     <span class="menu-item__title"><?php echo $channel['plugin_name'];?></span>
@@ -344,7 +344,7 @@ $plugin = new Plugin();
                             <div class="menu__item__inner">
                                 <a title="<?php echo Labels::getLabel('LBL_Meta_Tags', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'productSeo'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#meta-tags" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#meta-tags">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#meta-tags" >
                                             </use>
                                         </svg>
                                     </i>
@@ -357,7 +357,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'seller' && $action == 'producturlrewriting') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_URL_Rewriting', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'productUrlRewriting'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#url-rewriting" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#url-rewriting">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#url-rewriting" >
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_URL_Rewriting', $siteLangId); ?></span></a>
@@ -374,7 +374,7 @@ $plugin = new Plugin();
                     <li class="menu__item <?php echo ($controller == 'seller' && ($action == 'subscriptions' || $action == 'viewsubscriptionorder')) ? 'is-active' : ''; ?>">
                         <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_My_Subscriptions', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'subscriptions'); ?>">
                                 <i class="icn shop"><svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-my-subscriptions" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-my-subscriptions">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-my-subscriptions">
                                         </use>
                                     </svg>
                                 </i><span class="menu-item__title"><?php echo Labels::getLabel("LBL_My_Subscriptions", $siteLangId); ?></span></a>
@@ -383,7 +383,7 @@ $plugin = new Plugin();
                     <li class="menu__item <?php echo ($controller == 'seller' && ($action == 'packages')) ? 'is-active' : ''; ?>">
                         <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Subscription_Packages', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('seller', 'Packages'); ?>">
                                 <i class="icn shop"><svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-subscription-packages" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-subscription-packages">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-subscription-packages">
                                         </use>
                                     </svg>
                                 </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Subscription_Packages', $siteLangId); ?></span></a>
@@ -392,7 +392,7 @@ $plugin = new Plugin();
                     <li class="menu__item <?php echo ($controller == 'seller' && ($action == 'selleroffers')) ? 'is-active' : ''; ?>">
                         <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Subscription_Offers', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('seller', 'SellerOffers'); ?>">
                                 <i class="icn shop"><svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-offers" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-offers">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-offers">
                                         </use>
                                     </svg>
                                 </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Subscription_Offers', $siteLangId); ?></span></a>
@@ -414,7 +414,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'reports' && $action == 'salesreport') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Sales_Over_Time', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Reports', 'SalesReport'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales-report" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales-report">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales-report">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Sales_Over_Time', $siteLangId); ?></span></a>
@@ -425,7 +425,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'catalogreport' && $action == 'index') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Products', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('CatalogReport', 'index'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales-report" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales-report">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales-report">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Products', $siteLangId); ?></span></a>
@@ -440,7 +440,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'productprofitreport' && $action == 'index') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Profit_by_products', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('ProductProfitReport'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales-report" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales-report">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales-report">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Profit_by_products', $siteLangId); ?></span></a>
@@ -449,7 +449,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'payoutreport' && $action == 'index') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Payout', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('PayoutReport'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales-report" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales-report">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales-report">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Payout', $siteLangId); ?></span></a>
@@ -458,7 +458,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'transactionreport' && $action == 'index') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Transaction_Report', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('TransactionReport'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales-report" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales-report">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-sales-report">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Transaction_Report', $siteLangId); ?></span></a>
@@ -474,7 +474,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'reports' && $action == 'productsinventory') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Products_Inventory', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Reports', 'productsInventory'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-product-inventory" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-product-inventory">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-product-inventory">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Products_Inventory', $siteLangId); ?></span></a>
@@ -483,7 +483,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'reports' && $action == 'productsinventorystockstatus') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Products_Inventory_Stock_Status', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Reports', 'productsInventoryStockStatus'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-product-inventory-stock" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-product-inventory-stock">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-product-inventory-stock">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Products_Inventory_Stock_Status', $siteLangId); ?></span></a>
@@ -495,7 +495,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'reports' && $action == 'productsperformance') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Products_Performance', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Reports', 'ProductsPerformance'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-product-performance" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-product-performance">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-product-performance">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Products_Performance', $siteLangId); ?></span></a>
@@ -511,7 +511,7 @@ $plugin = new Plugin();
                 <li class="menu__item <?php echo ($controller == 'account' && $action == 'profileinfo') ? 'is-active' : ''; ?>">
                     <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_My_Account', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'ProfileInfo'); ?>">
                             <i class="icn shop"><svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-account" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-account">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-account" >
                                     </use>
                                 </svg>
                             </i><span class="menu-item__title"><?php echo Labels::getLabel("LBL_My_Account", $siteLangId); ?></span></a>
@@ -521,7 +521,7 @@ $plugin = new Plugin();
                     <li class="menu__item <?php echo ($controller == 'seller' && ($action == 'users' || $action == 'userpermissions')) ? 'is-active' : ''; ?>">
                         <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Sub_Users', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'Users'); ?>">
                                 <i class="icn shop"><svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-account" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-account">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-account">
                                         </use>
                                     </svg>
                                 </i><span class="menu-item__title"><?php echo Labels::getLabel("LBL_Sub_Users", $siteLangId); ?></span></a>
@@ -532,7 +532,7 @@ $plugin = new Plugin();
                     <li class="menu__item <?php echo ($controller == 'account' && ($action == 'messages' || strtolower($action) == 'viewmessages')) ? 'is-active' : ''; ?>">
                         <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>">
                                 <i class="icn shop"><svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-messages" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-messages">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-messages">
                                         </use>
                                     </svg>
                                 </i><span class="menu-item__title"><?php echo Labels::getLabel("LBL_Messages", $siteLangId); ?>
@@ -545,7 +545,7 @@ $plugin = new Plugin();
                     <li class="menu__item <?php echo ($controller == 'account' && $action == 'credits') ? 'is-active' : ''; ?>">
                         <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_My_Credits', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
                                 <i class="icn shop"><svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-credits" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-credits">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-credits">
                                         </use>
                                     </svg>
                                 </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_My_Credits', $siteLangId); ?></span></a>
@@ -555,7 +555,7 @@ $plugin = new Plugin();
                 <li class="menu__item <?php echo ($controller == 'account' && $action == 'changeemailpassword') ? 'is-active' : ''; ?>">
                     <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_UPDATE_CREDENTIALS', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'changeEmailPassword'); ?>">
                             <i class="icn shop"><svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-change-email" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-change-password">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-change-email">
                                     </use>
                                 </svg>
                             </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_UPDATE_CREDENTIALS', $siteLangId); ?></span></a>
@@ -572,7 +572,7 @@ $plugin = new Plugin();
                             <div class="menu__item__inner">
                                 <a title="<?php echo $name; ?>" href="<?php echo UrlHelper::generateUrl('sellerPlugins', 'index', [$type]); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#requests" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#requests"></use>
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#requests"></use>
                                         </svg>
                                     </i>
                                     <span class="menu-item__title"><?php echo $name; ?></span>
@@ -591,7 +591,7 @@ $plugin = new Plugin();
                     <?php if (FatApp::getConfig('CONF_ENABLE_IMPORT_EXPORT', FatUtility::VAR_INT, 0)) { ?>
                         <li class="menu__item <?php echo ($controller == 'importexport' && ($action == 'index')) ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Import_Export', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('ImportExport', 'index'); ?>"><i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-import-export" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-import-export">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#dash-import-export">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Import_Export', $siteLangId); ?></span></a>

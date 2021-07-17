@@ -47,11 +47,7 @@ $(document).ready(function () {
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'setup'), data, function (t) {
 			if (t.status == 1) {
-				searchProductCategories();
-				getTotalBlock();
-				setTimeout(function(){
-					goToCategory(frm.find('[name="prodcat_id"]').val());
-				}, 1000);
+				categoryForm(t.categoryId);
 			}
 		});
 	};

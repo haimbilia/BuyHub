@@ -154,7 +154,11 @@ class ProductCategoriesController extends AdminBaseController
             $frm->addRadioButtons(Labels::getLabel('LBL_STATUS', $this->adminLangId), 'prodcat_status', $yesNoArr, '1', array());
         }
 
-        $frm->addTextBox(Labels::getLabel('LBL_RATING_TYPES', $this->adminLangId), 'rating_type');
+        $attr = [];
+        if (1 > $prodCatId) {
+            $attr = ['disabled' => 'disabled'];
+        }
+        $frm->addTextBox(Labels::getLabel('LBL_RATING_TYPES', $this->adminLangId), 'rating_type', '', $attr);
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         $langData = Language::getAllNames();
@@ -214,6 +218,7 @@ class ProductCategoriesController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
         $productCategory->updateCatCode();
+        $this->set('categoryId', $productCategory->getMainTableRecordId());
         $this->set('msg', Labels::getLabel('LBL_SETUP_SUCCESSFUL', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
     }

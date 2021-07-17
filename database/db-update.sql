@@ -824,4 +824,4 @@ ALTER TABLE `tbl_order_product_plugin_specifics`
   ADD UNIQUE KEY `opps_op_id` (`opps_op_id`,`opps_plugin_id`);
 
 /* TaxJar Enhancements */
-
+-- ---------------------------------TV-9.3.2.20210716---------------------
