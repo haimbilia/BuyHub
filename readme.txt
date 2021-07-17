@@ -123,6 +123,9 @@ Updates/Fixes :
     => 055840 - Google Shopping Feed Enhancement Changes
     => 055850 - Warning : Creating default object from empty value
 ==============================TV-9.3.2.20210716=====================================
+    => 055874 - getting invalid request on linking rating type with new category
+
+
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files

@@ -430,6 +430,9 @@ foreach ($categories as $catId => $catName) {
 
     tagifyRatingTypes = function() {
         var element = 'input[name=rating_type]';
+        if ('undefined' !== typeof $(element).attr('disabled')) {
+            return;
+        }
         $(element).siblings( ".tagify" ).remove();
         tagify = new Tagify(document.querySelector('input[name=rating_type]'), {
            whitelist : [],
