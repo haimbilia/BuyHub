@@ -328,7 +328,12 @@ class Orders extends MyAppModel
             $prodCharges = $data['prodCharges'];
             unset($data['prodCharges']);
         }
-
+        
+        if (!empty($data['order_id'])) {
+            if (Orders::ORDER_PAYMENT_PENDING != Orders::getAttributesById($data['order_id'], 'order_payment_status')) {
+                $data['order_id'] = false;
+            }
+        }        
         if (!$data['order_id']) {
             $order_id = $this->generateOrderId();
             $data['order_id'] = $order_id;
