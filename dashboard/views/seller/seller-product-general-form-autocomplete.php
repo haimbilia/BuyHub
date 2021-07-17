@@ -712,7 +712,7 @@ $fld->setFieldTagAttribute('onClick', 'clearInvOptionForm()');
             $(selector).parent().parent().next().children().children().first().focus();
         }
 
-        viewProdOptions = function(productId) {
+        viewProdOptions = function(productId) {alert('a');
             $.facebox(function() {
                 fcom.ajax(fcom.makeUrl('Seller', 'viewProdOptions', [productId]), '', function(t) {
                     var res = $.parseJSON(t);
