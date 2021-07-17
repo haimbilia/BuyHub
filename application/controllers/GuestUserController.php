@@ -212,7 +212,7 @@ class GuestUserController extends MyAppController
         }
 
         if ($redirectUrl == '') {
-            $redirectUrl = UrlHelper::generateUrl('Account');
+            $redirectUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD);
         }
         $this->set('redirectUrl', $redirectUrl);
         $this->set('msg', Labels::getLabel("MSG_LOGIN_SUCCESSFULL", $this->siteLangId));
