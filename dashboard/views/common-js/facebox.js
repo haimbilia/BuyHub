@@ -83,7 +83,7 @@
 	 * Bindings
 	 */
 	$(document).bind('close.facebox', function () {
-		$("."+$.facebox.element).modal('hide');
+		$.facebox.close();
 	})
 
 })(jQuery);
