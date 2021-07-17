@@ -375,5 +375,13 @@ class OrderProduct extends MyAppModel
         $srch->addCondition('opsp_op_id', '=', $op_id);
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
+    
+    public static function getShippingResponse(int $op_id , int $type)
+    {
+        $srch = new SearchBase(static::DB_TBL_RESPONSE);
+        $srch->addCondition('opr_op_id', '=', $op_id);
+        $srch->addCondition('opr_type', '=', $type); 
+        return FatApp::getDb()->fetch($srch->getResultSet());
+    }
 
 }

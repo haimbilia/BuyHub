@@ -30,6 +30,7 @@ class Transactions extends MyAppModel
     public const TYPE_ORDER_SHIPPING = 11;
     public const TYPE_TRANSFER_TO_THIRD_PARTY_ACCOUNT = 12; //Direct transfer to third party account like Stripe Connect.
     public const TYPE_ADMIN_COMMISSION = 13;
+    public const TYPE_ADMIN_SHIPPING_API_CHARGES = 14;
 
 
     public const CREDIT_TYPE = 1;
