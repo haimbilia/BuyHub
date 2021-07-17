@@ -101,19 +101,20 @@ class FatTemplate
             }
         }
         /* Include CSS Ends */
-        $landCode = '';
+        $langCode = '';
         if (FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && count(LANG_CODES_ARR) > 0 && SYSTEM_LANG_ID  != FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)) {
-            $landCode = strtolower(LANG_CODES_ARR[SYSTEM_LANG_ID]) . '/';
+            $langCode = strtolower(LANG_CODES_ARR[SYSTEM_LANG_ID]) . '/';
         }
 
         /* Include JS */
         $str .= '<script>
-				var siteConstants = ' . json_encode(array(
-            'webroot' => CONF_WEBROOT_URL . $landCode,
-            'webrootfront' => CONF_WEBROOT_FRONTEND . $landCode,
-            'webroot_traditional' => CONF_WEBROOT_URL_TRADITIONAL,
-            'rewritingEnabled' => (CONF_URL_REWRITING_ENABLED ? '1' : '0'),
-        )) . ';
+                    var siteConstants = ' . json_encode(array(
+                    'webroot' => CONF_WEBROOT_URL . $langCode,
+                    'webrootfront' => CONF_WEBROOT_FRONTEND . $langCode,
+                    'webroot_dashboard' => CONF_WEBROOT_URL . 'dashboard/' . $langCode,
+                    'webroot_traditional' => CONF_WEBROOT_URL_TRADITIONAL,
+                    'rewritingEnabled' => (CONF_URL_REWRITING_ENABLED ? '1' : '0'),
+                )) . ';
 	    	</script>' . "\r\n";
 
         $pth = CONF_THEME_PATH . 'common-js';
