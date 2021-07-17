@@ -145,7 +145,12 @@ loginPopupOtp = function (userId, getOtpOnly = 0) {
         if (0 < $('.loginpopup--js').length) {
             var parent = '.loginpopup--js';
         }
-
+        var formClass = '';
+        if ($('.contentBody--js form').hasClass('loginpopup--js')) {
+            formClass = 'form.loginpopup--js';
+        }
+        $(formClass + ' .countdownFld--js, ' + formClass + ' .resendOtp-js').parent().removeClass('d-none');
+        $(formClass + '.otpFieldBlock--js,' + formClass + ' .countdownFld--js').removeClass('d-none');
         startOtpInterval(parent);
     });
     return false;
@@ -309,7 +314,7 @@ viewWishList = function (selprod_id, dv, event, excludeWishList = 0) {
     }
 
     $.facebox(function () {
-        fcom.ajax(fcom.makeUrl('Account', 'viewWishList', [selprod_id, excludeWishList]), '', function (ans) {
+        fcom.ajax(fcom.makeUrl('Account', 'viewWishList', [selprod_id, excludeWishList], siteConstants.webroot_dashboard), '', function (ans) {
             fcom.updateFaceboxContent(ans);
             /* $(dv).next().html(ans); */
             $("input[name=uwlist_title]").bind('focus', function (e) {
@@ -988,14 +993,6 @@ $(document).ready(function () {
     $('.close').click(function () {
         $('.system_message').hide();
     });
-    addCatalogPopup = function () {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Seller', 'addCatalogPopup'), '', function (t) {
-                fcom.updateFaceboxContent(t);
-
-            });
-        });
-    }
 
     markAsFavorite = function (selProdId) {
         if (isUserLogged() == 0) {
