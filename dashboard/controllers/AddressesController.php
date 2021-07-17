@@ -43,7 +43,7 @@ class AddressesController extends LoggedUserController
         $addressObj = new Address($addr_id);
 
         $data_to_be_save = $post;
-        $data_to_be_save['addr_record_id'] = UserAuthentication::getLoggedUserId();
+        $data_to_be_save['addr_record_id'] = $this->userId;
         $data_to_be_save['addr_type'] = Address::TYPE_USER;
         $data_to_be_save['addr_lang_id'] = $this->siteLangId;
         $addressObj->assignValues($data_to_be_save, true);
@@ -104,7 +104,7 @@ class AddressesController extends LoggedUserController
         }
 
         $address = new Address($addr_id);
-        $addressDetail = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
+        $addressDetail = $address->getData(Address::TYPE_USER, $this->userId);
 
         if (empty($addressDetail)) {
             $message = Labels::getLabel('MSG_Invalid_request', $this->siteLangId);
@@ -116,7 +116,7 @@ class AddressesController extends LoggedUserController
         }
 
         $updateArray = array('addr_is_default' => 0);
-        $whr = array('smt' => 'addr_type = ? and addr_record_id = ?', 'vals' => array(Address::TYPE_USER, UserAuthentication::getLoggedUserId()));
+        $whr = array('smt' => 'addr_type = ? and addr_record_id = ?', 'vals' => array(Address::TYPE_USER, $this->userId));
 
         if (!FatApp::getDb()->updateFromArray(Address::DB_TBL, $updateArray, $whr)) {
             $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
@@ -131,7 +131,7 @@ class AddressesController extends LoggedUserController
         $data = array(
             'addr_is_default' => 1,
             'addr_type' => Address::TYPE_USER,
-            'addr_record_id' => UserAuthentication::getLoggedUserId(),
+            'addr_record_id' => $this->userId,
         );
 
         $addressObj->assignValues($data, true);
@@ -166,7 +166,7 @@ class AddressesController extends LoggedUserController
             }
             $recordId = $shopDetails['shop_id'];
         } else {
-            $userId = UserAuthentication::getLoggedUserId();
+            $userId = $this->userId;
             $userDefaultAddress = Address::getDefaultByRecordId(Address::TYPE_USER, $userId);
             if ($userDefaultAddress['addr_id'] == $addrId) {
                 $message = Labels::getLabel('MSG_Select_another_address', $this->siteLangId);

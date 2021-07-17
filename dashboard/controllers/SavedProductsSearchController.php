@@ -21,7 +21,7 @@ class SavedProductsSearchController extends LoggedUserController
 
         $srch = SavedSearchProduct::getSearchObject();
         $srch->addOrder('pssearch_added_on', 'DESC');
-        $srch->addCondition('pssearch_user_id', '=', UserAuthentication::getLoggedUserId());
+        $srch->addCondition('pssearch_user_id', '=', $this->userId);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
@@ -45,10 +45,9 @@ class SavedProductsSearchController extends LoggedUserController
     }
 
     public function form()
-    {
-        $loggedUserId = UserAuthentication::getLoggedUserId();
+    {      
         $frm = $this->getForm();
-        $frm->fill(array('user_id' => $loggedUserId));
+        $frm->fill(array('user_id' => $this->userId));
         $this->set('frm', $frm);
         $this->_template->render(false, false);
     }
@@ -68,7 +67,7 @@ class SavedProductsSearchController extends LoggedUserController
 
         $post['pssearch_type'] = FatApp::getPostedData('pssearch_type', FatUtility::VAR_INT, 0);
         $post['pssearch_record_id'] = FatApp::getPostedData('pssearch_record_id', FatUtility::VAR_INT, 0);
-        $post['pssearch_user_id'] = UserAuthentication::getLoggedUserId();
+        $post['pssearch_user_id'] = $this->userId;
         $post['pssearch_added_on'] = date('Y-m-d H:i:s');
         $post['pssearch_updated_on'] = date('Y-m-d H:i:s');
         $post['pssearch_url'] = ltrim(ltrim($searchedUrlString, '/'), '?');
