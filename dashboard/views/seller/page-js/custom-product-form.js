@@ -293,29 +293,6 @@
     };
 
     /* Product shipping  */
-    /* addShippingTab = function(id){
-        var ShipDiv = "#tab_shipping";
-        var e = document.getElementById("product_type");
-        var type = e.options[e.selectedIndex].value;
-
-        if(type == prodTypeDigital){
-            $(ShipDiv).html('');
-            $('.not-digital-js').hide();
-            return;
-        }else{
-            $('.not-digital-js').show();
-        }
-        fcom.ajax(fcom.makeUrl('seller','getShippingTab'),'product_id='+id,function(t){
-            try{
-                    res= jQuery.parseJSON(t);
-                    $.facebox(res.msg,'faceboxWidth');
-                }catch (e){
-
-                    $(ShipDiv).html(t);
-                }
-
-        });
-    } */
 
     addShippingTab = function (productId) {
         var ShipDiv = "#tab_shipping";
