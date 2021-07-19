@@ -41,10 +41,10 @@ $cancelBtnFld->setWrapperAttribute('class', 'text-right');
  */
 
 ?>
-<div class="card-header">
-	<h5 class="card-title"><?php echo Labels::getLabel('LBL_Manage_Rates', $siteLangId); ?></h5>
+<div class="modal-header">
+	<h5 class="modal-title"><?php echo Labels::getLabel('LBL_Manage_Rates', $siteLangId); ?></h5>
 </div>
-<div class="card-body">
+<div class="modal-body">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="tabs">
@@ -67,12 +67,12 @@ $cancelBtnFld->setWrapperAttribute('class', 'text-right');
 		</div>
 	</div>
 </div>
-<?php
+<?php 
 if (!empty($rateData) && $rateData['shiprate_condition_type'] > 0) { ?>
-<script>
-	$(document).ready(function() {
-		$('.add-condition--js').hide();
-		$('.remove-condition--js').show();
-	});
-</script>
+	<script>
+		$(document).ready(function() {
+			$('.add-condition--js').hide();
+			$('.remove-condition--js').show();
+		});
+	</script>
 <?php }
