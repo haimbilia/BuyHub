@@ -37,7 +37,7 @@
     customCatalogInfo = function (prodreq_id) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('SellerRequests', 'customCatalogInfo', [prodreq_id]), '', function (t) {
-                $.facebox(t, 'faceboxWidth catalogInfo');
+                $.facebox(t);
             });
         });
     }
@@ -85,7 +85,7 @@
     addBrandReqForm = function (id) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('SellerRequests', 'addBrandReqForm', [id]), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t );
             });
         });
     };
@@ -237,7 +237,7 @@
     addCategoryReqForm = function (id) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('SellerRequests', 'categoryReqForm', [id]), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t );
             });
         });
     };
@@ -280,7 +280,7 @@
     productInstructions = function (type) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('Seller', 'productTooltipInstruction', [type]), '', function (t) {
-                $.facebox(t, 'medium-fb-width catalog-bg');
+                $.facebox(t);
             });
         });
     };

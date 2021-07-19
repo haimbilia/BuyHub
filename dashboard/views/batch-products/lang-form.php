@@ -7,19 +7,17 @@ $frm->developerTags['fld_default_col'] = 12;
 $langFld = $frm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "batchLangForm(" . $prodgroup_id . ",this.value);");
  ?>
-<div class="popup__body">
-	<h2><?php echo Labels::getLabel("LBL_Manage_Batch_Products", $siteLangId); ?></h2>
-	<ul class="tabs tabs--small    -js clearfix setactive-js">
+ <div class="modal-header">
+	<h5 class="modal-title"><?php echo Labels::getLabel("LBL_Manage_Batch_Products", $siteLangId); ?></h5>
+</div>
+<div class="modal-body">
+    <ul class="tabs tabs--small    -js clearfix setactive-js">
 		<li><a href="javascript:void(0)" onclick="batchForm(<?php echo $prodgroup_id; ?>)"><?php echo Labels::getLabel( 'LBL_General', $siteLangId ); ?></a></li>
         <li class="<?php echo (0 < $prodgroup_lang_id) ? 'is-active' : ''; ?>">
             <a href="javascript:void(0);">
                 <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
             </a>
         </li>
-		<?php 
-		/* foreach( $language as $lang_id => $lang_name ){ ?>
-		<li class="<?php echo ( $lang_id == $prodgroup_lang_id ) ? 'is-active' : ''; ?>"><a href="javascript:void(0)" <?php if( $prodgroup_id >0){ ?>onclick="batchLangForm(<?php echo $prodgroup_id; ?>, <?php echo $lang_id; ?>)" <?php } ?>><?php echo $lang_name; ?></a></li>
-		<?php } */ ?>
 		<li><a href="javascript:void(0)" onClick="batchMediaForm(<?php echo $prodgroup_id; ?>)"><?php echo Labels::getLabel('LBL_Media',$siteLangId); ?></a></li>
 	</ul>
     <?php

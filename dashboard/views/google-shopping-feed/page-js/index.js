@@ -35,7 +35,7 @@ $(document).ready(function() {
 	serviceAccountForm = function(){
         $.facebox(function() {
             fcom.ajax(fcom.makeUrl(keyName, 'serviceAccountForm'),'',function(res){
-                $.facebox(res,'faceboxWidth');
+                $.facebox(res );
             });
 		});
     };

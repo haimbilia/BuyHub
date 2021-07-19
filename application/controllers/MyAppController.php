@@ -173,6 +173,7 @@ class MyAppController extends FatController
                 'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->siteLangId),
                 'searchAsIMoveTheMap' => Labels::getLabel('MSG_SEARCH_AS_I_MOVE_THE_MAP', $this->siteLangId),
                 'currentSearchLocation' => Labels::getLabel('LBL_CURRENT_SEARCH_LOCATION', $this->siteLangId),
+                'close' => Labels::getLabel('LBL_CLOSE', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);
@@ -824,7 +825,6 @@ class MyAppController extends FatController
         if (false == $resp) {
             LibHelper::dieJsonError($obj->getError());
         }
-
         $this->set('msg', Labels::getLabel('MSG_OTP_MATCHED.', $this->siteLangId));
 
         if (0 < $recoverPwd && true === MOBILE_APP_API_CALL) {

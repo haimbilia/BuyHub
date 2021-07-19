@@ -141,12 +141,16 @@ loginPopupOtp = function (userId, getOtpOnly = 0) {
         }
         $.mbsmessage.close();
         var parent = '';
-        if (0 < $('#facebox .loginpopup').length) {
-            fcom.updateFaceboxContent(t.html, 'faceboxWidth loginpopup');
-            var parent = '.loginpopup';
-        } else {
-            $('#sign-in').html(t.html);
+        fcom.updateFaceboxContent(t.html);
+        if (0 < $('.loginpopup--js').length) {
+            var parent = '.loginpopup--js';
         }
+        var formClass = '';
+        if ($('.contentBody--js form').hasClass('loginpopup--js')) {
+            formClass = 'form.loginpopup--js';
+        }
+        $(formClass + ' .countdownFld--js, ' + formClass + ' .resendOtp-js').parent().removeClass('d-none');
+        $(formClass + '.otpFieldBlock--js,' + formClass + ' .countdownFld--js').removeClass('d-none');
         startOtpInterval(parent);
     });
     return false;
@@ -310,8 +314,8 @@ viewWishList = function (selprod_id, dv, event, excludeWishList = 0) {
     }
 
     $.facebox(function () {
-        fcom.ajax(fcom.makeUrl('Account', 'viewWishList', [selprod_id, excludeWishList]), '', function (ans) {
-            fcom.updateFaceboxContent(ans, 'faceboxWidth collection-ui-popup small-fb-width');
+        fcom.ajax(fcom.makeUrl('Account', 'viewWishList', [selprod_id, excludeWishList], siteConstants.webroot_dashboard), '', function (ans) {
+            fcom.updateFaceboxContent(ans);
             /* $(dv).next().html(ans); */
             $("input[name=uwlist_title]").bind('focus', function (e) {
                 e.stopPropagation();
@@ -989,14 +993,6 @@ $(document).ready(function () {
     $('.close').click(function () {
         $('.system_message').hide();
     });
-    addCatalogPopup = function () {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Seller', 'addCatalogPopup'), '', function (t) {
-                fcom.updateFaceboxContent(t, 'faceboxWidth loginpopup');
-
-            });
-        });
-    }
 
     markAsFavorite = function (selProdId) {
         if (isUserLogged() == 0) {
@@ -1033,7 +1029,7 @@ $(document).ready(function () {
 
     guestUserFrm = function () {
         fcom.ajax(fcom.makeUrl('GuestUser', 'form'), '', function (t) {
-            fcom.updateFaceboxContent(t, 'faceboxWidth loginpopup');
+            fcom.updateFaceboxContent(t);
         });
     };
 
@@ -1054,7 +1050,7 @@ $(document).ready(function () {
                 }
                 $.mbsmessage(ans.msg, true, 'alert--danger');
             } catch (err) {
-                fcom.updateFaceboxContent(t, 'faceboxWidth loginpopup');
+                fcom.updateFaceboxContent(t);
             }
         });
     };
@@ -1201,7 +1197,7 @@ $(document).ready(function () {
     $(".cookie-preferences-js").click(function () {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('Custom', 'cookiePreferencesData'), '', function (t) {
-                fcom.updateFaceboxContent(t, 'faceboxWidth');
+                fcom.updateFaceboxContent(t);
             });
 
         });
@@ -1229,7 +1225,7 @@ $(document).ready(function () {
             } else {
                 $(".cookie-alert").hide('slow');
                 $(".cookie-alert").remove();
-                $(document).trigger('close.facebox');
+               $.facebox.close();
             }
         });
     }
@@ -1400,7 +1396,7 @@ function setSiteDefaultCurrency(currencyId) {
 function quickDetail(selprod_id) {
     $.facebox(function () {
         fcom.ajax(fcom.makeUrl('Products', 'productQuickDetail', [selprod_id]), '', function (t) {
-            fcom.updateFaceboxContent(t, 'faceboxWidth productQuickView ');
+            fcom.updateFaceboxContent(t);
         });
     });
 }
@@ -1534,7 +1530,7 @@ $(document).on('click', '#btn-demo', function () {
     /* $(document).delegate('#btn-demo' ,'click' , function(){ */
     $.facebox(function () {
         fcom.ajax(fcom.makeUrl('Custom', 'requestDemo'), '', function (t) {
-            fcom.updateFaceboxContent(t, 'faceboxWidth requestdemo');
+            fcom.updateFaceboxContent(t);
         });
     });
 });
@@ -1569,7 +1565,7 @@ $("document").ready(function () {
                 return false;
             }
             if ($btn.hasClass("quickView") == true) {
-                $(document).trigger('close.facebox');
+                $.facebox.close();
                 $('body').addClass('side-cart--on');
             }
             if (9 < ans.total) {
@@ -1713,7 +1709,7 @@ $('.dropdown-menu').on('click', function (e) {
 
 function awebersignup() {
     var content = $('.aweber-js').html();
-    fcom.updateFaceboxContent(content, 'faceboxWidth loginpopup aweberform-js');
+    fcom.updateFaceboxContent(content);
     var weberformload = setInterval(function () {
         if (0 < $(".aweberform-js form").length) {
             var myForm = $(".aweberform-js form")[0];

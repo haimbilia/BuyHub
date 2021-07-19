@@ -25,11 +25,13 @@ if (!empty($brandImages)) {
 }
 $fld->htmlAfterField = $htmlAfterField;
 ?>
-<div id="cropperBox-js"></div>
-<div id="brandMediaForm-js">
-  <div class="box__head">
-    <h4><?php echo (FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_Request_New_Brand', $siteLangId) : Labels::getLabel('LBL_New_Brand', $siteLangId) ?></h4>
-  </div>
+<div class="modal-header">
+	<h5 class="modal-title"><?php echo (FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_Request_New_Brand', $siteLangId) : Labels::getLabel('LBL_New_Brand', $siteLangId) ?></h5>
+</div>
+
+<div class="modal-body">
+  <div id="cropperBox-js"></div>
+  <div id="brandMediaForm-js">
   <div class="box__body">
     <div class="tabs ">
       <ul>
@@ -66,6 +68,7 @@ $fld->htmlAfterField = $htmlAfterField;
     <?php } ?>
   </div>
 </div>
+
 <script>
   var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
   $(document).on('change', '.prefRatio-js', function() {

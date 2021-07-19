@@ -25,10 +25,10 @@ $(document).ready(function(){
 			fcom.ajax(fcom.makeUrl('OptionValues', 'form', [optionId,id]), '', function(t) {
 				try{
 					res= jQuery.parseJSON(t);
-					$.facebox(res.msg,'faceboxWidth');
+					$.facebox(res.msg );
 				}catch (e){
 					
-					$.facebox(t,'faceboxWidth');
+					$.facebox(t );
 					
 				}
 					
@@ -47,7 +47,7 @@ $(document).ready(function(){
 				optionValueLangForm(t.optionValueId, t.langId);
 				return ;
 			}
-			$(document).trigger('close.facebox');
+			$.facebox.close();
 		});
 	};
 
@@ -69,7 +69,7 @@ $(document).ready(function(){
 				optionValueLangForm(t.optionValueId, t.langId);
 				return ;
 			}
-			$(document).trigger('close.facebox');
+			$.facebox.close();
 		});
 	};
 

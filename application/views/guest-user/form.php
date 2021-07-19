@@ -1,12 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div id="sign-in">
+
+<div class="modal-header">
+    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Guest_User', $siteLangId);?></h5>
+</div>
+<div class="modal-body">
     <div class="login-wrapper">
         <div class="form-side">
-            <div class="section-head  section--head--center">
-                <div class="section__heading">
-                    <h2><?php echo Labels::getLabel('LBL_Guest_User', $siteLangId);?></h2>
-                </div>
-            </div>
             <?php
             $frm->setFormTagAttribute('class', 'form form-checkout-login');
             $frm->setFormTagAttribute('name', 'frmGuestLogin');

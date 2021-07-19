@@ -1193,7 +1193,7 @@ if (!$print) { ?>
     trackOrder = function(trackingNumber, courier, orderNumber) {
         $.facebox(function() {
             fcom.ajax(fcom.makeUrl('Buyer', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function(res) {
-                $.facebox(res, 'medium-fb-width');
+                $.facebox(res );
             });
         });
     };

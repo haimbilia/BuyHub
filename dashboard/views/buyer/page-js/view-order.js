@@ -15,7 +15,7 @@ $(document).ready(function () {
     fetchTrackingDetail = function (trackingId, opInvoiceId) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {
-                $.facebox(res, 'medium-fb-width');
+                $.facebox(res );
             });
         });
     }

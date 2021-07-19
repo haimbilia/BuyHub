@@ -433,7 +433,7 @@ $("document").ready(function () {
 
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('Checkout', 'getCouponForm'), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t);
                 $("input[name='coupon_code']").focus();
             });
         });
@@ -660,7 +660,7 @@ $("document").ready(function () {
     orderPickUpData = function (order_id) {
         var data = 'order_id=' + order_id;
         fcom.ajax(fcom.makeUrl('Checkout', 'orderPickUpData'), data, function (rsp) {
-            $.facebox(rsp, 'faceboxWidth medium-fb-width');
+            $.facebox(rsp);
         });
     }
 
@@ -675,7 +675,7 @@ $("document").ready(function () {
     orderShippingData = function (order_id) {
         var data = 'order_id=' + order_id;
         fcom.ajax(fcom.makeUrl('Checkout', 'orderShippingData'), data, function (rsp) {
-            $.facebox(rsp, 'faceboxWidth medium-fb-width');
+            $.facebox(rsp);
         });
     }
 

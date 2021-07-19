@@ -4,8 +4,11 @@ $frm->setFormTagAttribute( 'onSubmit', 'setUpBatch(this); return false;' );
 $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
 $frm->developerTags['fld_default_col'] = 12;
  ?>
-<div class="popup__body">
-	<h2><?php echo Labels::getLabel('LBL_MANAGE_BATCH_PRODUCT', $siteLangId); ?></h2>
+
+<div class="modal-header">
+	<h5 class="modal-title"><?php echo Labels::getLabel('LBL_MANAGE_BATCH_PRODUCT', $siteLangId); ?></h5>
+</div>
+<div class="modal-body">
 	<ul class="tabs tabs--small-js clearfix setactive-js">
 		<li class="is-active"><a href="javascript:void(0)" onclick="batchForm()"><?php echo Labels::getLabel( 'LBL_General', $siteLangId ); ?></a></li>
         <li class="<?php echo (0 == $prodgroup_id) ? 'fat-inactive' : ''; ?>">
@@ -17,7 +20,6 @@ $frm->developerTags['fld_default_col'] = 12;
 		
 		<li class="<?php echo $inactive;?>"><a href="javascript:void(0)" <?php if( $prodgroup_id >0){ ?> onClick="batchMediaForm(<?php echo $prodgroup_id; ?>)" <?php } ?>><?php echo Labels::getLabel('LBL_Media',$siteLangId); ?></a></li>
 	</ul>
-	
 	<div class="col-md-12">
 		<?php echo $frm->getFormHtml(); ?>
 	</div>

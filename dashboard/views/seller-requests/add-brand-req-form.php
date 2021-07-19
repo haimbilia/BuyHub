@@ -8,28 +8,29 @@ $identifierFld->setFieldTagAttribute('id', Brand::DB_TBL_PREFIX.'id');
 $submitFld = $frmBrandReq->getField('btn_submit');
 $submitFld->setFieldTagAttribute('class', 'btn btn-brand');
 ?>
-
-<div class="box__head">
-<h4><?php echo (FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_Request_New_Brand', $siteLangId) : Labels::getLabel('LBL_New_Brand', $siteLangId) ?></h4>
+<div class="modal-header">
+	<h5 class="modal-title"><?php echo (FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_Request_New_Brand', $siteLangId) : Labels::getLabel('LBL_New_Brand', $siteLangId) ?></h5>
 </div>
-<div class="box__body">
-    <div class="tabs tabs--small tabs--scroll">
-        <ul>
-            <li class="is-active"><a href="javascript:void(0)" onclick="addBrandReqForm(<?php echo $brandReqId; ?>);"><?php echo Labels::getLabel('LBL_Basic', $siteLangId);?></a></li>
-            <li class="<?php echo (0 == $brandReqId) ? 'fat-inactive' : ''; ?>">
-                <a href="javascript:void(0);" <?php echo (0 < $brandReqId) ? "onclick='addBrandReqLangForm(" . $brandReqId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                    <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
-                </a>
-            </li>
-            <?php $inactive=($brandReqId==0)?'fat-inactive':''; ?>
-            <li class="<?php echo $inactive;?>"><a href="javascript:void(0)"
-                <?php if ($brandReqId > 0) { ?>
-                    onclick="brandMediaForm(<?php echo $brandReqId ?>);"
-                <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a>
-            </li>
-        </ul>
+<div class="modal-body">
+    <div class="box__body">
+        <div class="tabs tabs--small tabs--scroll">
+            <ul>
+                <li class="is-active"><a href="javascript:void(0)" onclick="addBrandReqForm(<?php echo $brandReqId; ?>);"><?php echo Labels::getLabel('LBL_Basic', $siteLangId);?></a></li>
+                <li class="<?php echo (0 == $brandReqId) ? 'fat-inactive' : ''; ?>">
+                    <a href="javascript:void(0);" <?php echo (0 < $brandReqId) ? "onclick='addBrandReqLangForm(" . $brandReqId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
+                        <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
+                    </a>
+                </li>
+                <?php $inactive=($brandReqId==0)?'fat-inactive':''; ?>
+                <li class="<?php echo $inactive;?>"><a href="javascript:void(0)"
+                    <?php if ($brandReqId > 0) { ?>
+                        onclick="brandMediaForm(<?php echo $brandReqId ?>);"
+                    <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a>
+                </li>
+            </ul>
+        </div>
+        <?php
+            echo $frmBrandReq->getFormHtml();
+        ?>
     </div>
-    <?php
-        echo $frmBrandReq->getFormHtml();
-    ?>
 </div>

@@ -1,16 +1,13 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>	
-<div class="popup__body">
-	<div class="row">
-		<h2><?php echo Labels::getLabel('LBL_Manage_Batch_Products', $siteLangId); ?></h2>
-		<div class="col-md-12">
-			<?php echo $frm->getFormHtml(); ?>
-		</div>
-	</div>
-	
-	<div id="productsList" class="product-listing" data-view="4">
-	</div>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<div class="modal-header">
+	<h5 class="modal-title"><?php echo Labels::getLabel('LBL_Manage_Batch_Products', $siteLangId); ?></h5>
 </div>
-
+<div class="modal-body">
+	<div class="col-md-12">
+		<?php echo $frm->getFormHtml(); ?>
+	</div>
+	<div id="productsList" class="product-listing" data-view="4">
+</div>
 <script type="text/javascript">
 $("document").ready(function(){
 	$('input[name=\'product_name\']').autocomplete_advanced({

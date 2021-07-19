@@ -317,14 +317,11 @@ class GuestUserController extends MyAppController
         $includeGuestLogin = FatApp::getPostedData('includeGuestLogin', FatUtility::VAR_STRING, false);
         $frm = $this->getLoginForm($includeGuestLogin);
         $socialLoginApis = Plugin::getDataByType(Plugin::TYPE_SOCIAL_LOGIN, $this->siteLangId);
-        $data = array(
-            'loginFrm' => $frm,
-            'siteLangId' => $this->siteLangId,
-            'socialLoginApis' => $socialLoginApis,
-            'includeGuestLogin' => $includeGuestLogin,
-            'smsPluginStatus' => SmsArchive::canSendSms(SmsTemplate::LOGIN),
-        );
-        $this->set('data', $data);
+        $this->set('loginFrm', $frm);
+        $this->set('siteLangId', $this->siteLangId);
+        $this->set('socialLoginApis', $socialLoginApis);
+        $this->set('includeGuestLogin', $includeGuestLogin);
+        $this->set('smsPluginStatus', SmsArchive::canSendSms(SmsTemplate::LOGIN));
         $this->_template->render(false, false);
     }
 
@@ -1105,6 +1102,17 @@ class GuestUserController extends MyAppController
                 $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('MSG_INVALID_USER', $this->siteLangId), [], LibHelper::RC_NOT_FOUND);
                 LibHelper::dieJsonResponse($resp);
             }
+
+            if (1 > $row['credential_verified']) {
+                $message = Labels::getLabel('MSG_THIS_PHONE_NUMBER_IS_NOT_VERIFIED_YET._DO_YOU_WANT_TO_CONTINUE?_{CONTINUE-BTN}', $this->siteLangId);
+                $replacements = [
+                    '{CONTINUE-BTN}' => '<a class="btn btn-outline-white" href="javascript:void(0);" onclick="loginPopupOtp(' . $row['user_id'] . ', ' . applicationConstants::NO . ')">' . Labels::getLabel('MSG_PROCEED', $this->siteLangId) . '</a>'
+                ];
+                $msg = CommonHelper::replaceStringData($message, $replacements);
+                $resp = LibHelper::formatResponse(applicationConstants::FAILURE, $msg, [], LibHelper::RC_UNAUTHORIZED);
+                LibHelper::dieJsonResponse($resp);
+            }
+
             $userId = $row['user_id'];
             $this->resendOtp($userId, 1);
         }

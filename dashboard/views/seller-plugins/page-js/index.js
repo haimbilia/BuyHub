@@ -36,9 +36,9 @@
             fcom.ajax(fcom.makeUrl(keyName + 'Settings'), data, function (t) {
                 try {
                     res = jQuery.parseJSON(t);
-                    $.facebox(res.msg, 'faceboxWidth');
+                    $.facebox(res.msg );
                 } catch (e) {
-                    $.facebox(t, 'faceboxWidth');
+                    $.facebox(t );
                 }
                 fcom.resetFaceboxHeight();
             });
