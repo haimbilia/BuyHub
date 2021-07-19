@@ -27,8 +27,7 @@ $(document).ready(function(){
 					res= jQuery.parseJSON(t);
 					$.facebox(res.msg );
 				}catch (e){
-
-					$.facebox(t );
+					$.facebox(t, 'modal-lg');
 					addOptionForm(optionId);
 					optionValueListing(optionId);
 				}

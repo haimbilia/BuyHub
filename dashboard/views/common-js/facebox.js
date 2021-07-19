@@ -11,7 +11,7 @@
 
 
 	$.extend($.facebox, {
-		element : Date.now(),
+		element: Date.now(),
 		reveal: function (data) {
 			$('body .' + $.facebox.element + ' .contentBody--js').html(data);
 
@@ -20,29 +20,33 @@
 			if (1 > $('body .' + $.facebox.element + ' .contentBody--js').find('.modal-header').length) {
 				$('body .' + $.facebox.element + ' .contentBody--js').prepend(headerHtm + closeBtnHtm + '</div>');
 			} else if (0 < $('body .' + $.facebox.element + ' .contentBody--js').find('.modal-header').length && 1 > $('body .' + $.facebox.element + ' .contentBody--js .modal-header').find('.close').length) {
-				$('body .' + $.facebox.element + ' .contentBody--js').append(closeBtnHtm);
+				$('body .' + $.facebox.element + ' .contentBody--js .modal-header').append(closeBtnHtm);
 			}
 
 			$('.' + $.facebox.element).modal('show');
 		},
 
-		close: function () {		
-			$("."+$.facebox.element).modal('hide');
-			return false
+		close: function () {
+			$("." + $.facebox.element).remove();
+			// $("." + $.facebox.element).modal('hide');
+			return false;
 		}
 	});
 
 	/* called one time to setup facebox on this page */
 	function init(klass) {
-		var content = '<div class="modal-dialog modal-dialog-centered" role="document"><div class="modal-content ' + klass + ' contentBody--js"></div></div>';
+		klass = ('undefined' == typeof klass ? '' : klass);
 		if (1 > $("body").find('.' + $.facebox.element).length) {
+			var content = '<div class="modal-dialog modal-dialog-centered ' + klass + ' " role="document"><div class="modal-content contentBody--js"></div></div>';
 			var htm = '<div class="modal fade ' + $.facebox.element + '" tabindex="-1" role="dialog">' + content + '</div>';
 			$('body').append(htm);
-		} else {
-			$('body .' + $.facebox.element).html(htm);
+		}
+		
+		if (!$('body .' + $.facebox.element + ' .modal-dialog').hasClass(klass)) {
+			$('body .' + $.facebox.element + ' .modal-dialog').addClass(klass);
 		}
 	}
-	
+
 	/* Figures out what you want to display and displays it formats are:
 		div: #id
 	  image: blah.extension
@@ -85,5 +89,9 @@
 	$(document).bind('close.facebox', function () {
 		$.facebox.close();
 	})
+
+	$(document).on('hidden.bs.modal', '.' + $.facebox.element, function(){
+		$.facebox.close();
+	});
 
 })(jQuery);

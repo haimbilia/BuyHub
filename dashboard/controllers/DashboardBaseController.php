@@ -171,6 +171,7 @@ class DashboardBaseController extends FatController
                 'deleteAccount' => Labels::getLabel('MSG_ARE_YOU_SURE_?_DELETING_ACCOUNT_WILL_UNLINK_ALL_TRANSACTIONS_RELATED_TO_THIS_ACCOUNT.', $this->siteLangId),
                 'unlinkAccount' => Labels::getLabel('MSG_ARE_YOU_SURE_?_UNLINKING_ACCOUNT_WILL_UNLINK_ALL_TRANSACTIONS_RELATED_TO_THIS_ACCOUNT.', $this->siteLangId),
                 'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->siteLangId),
+                'close' => Labels::getLabel('LBL_CLOSE', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);

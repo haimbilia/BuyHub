@@ -31,11 +31,11 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
 }
 ?>
 
-<div class="loginpopup--js">
-    <div class="modal-header">
-        <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Sign_In', $siteLangId); ?></h5>
-    </div>
-    <div class="modal-body">
+<div class="modal-header">
+    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Sign_In', $siteLangId); ?></h5>
+</div>
+<div class="modal-body">
+    <div class="loginpopup--js">
         <?php
         $fldSubmit = $loginFrm->getField('btn_submit');
         $fldSubmit->addFieldTagAttribute('class', 'btn btn-brand btn-wide btn-block');
@@ -127,7 +127,7 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
                         echo CommonHelper::replaceStringData($msg, $replace);
                         ?>
                     </p>
-                </div>  
+                </div>
             </div>
         <?php } ?>
         <div class="row submitBtn--js">
@@ -165,9 +165,9 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
             <div class="col-md-12 text-center more-links">
                 <?php echo $loginFrm->getFieldHtml('forgot'); ?>
                 <span class="pipe">|</span>
-                    <a class="link" href="<?php echo UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES)); ?>">
-                        <?php echo sprintf(Labels::getLabel('LBL_REGISTER_NOW', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?>
-                    </a>
+                <a class="link" href="<?php echo UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES)); ?>">
+                    <?php echo sprintf(Labels::getLabel('LBL_REGISTER_NOW', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?>
+                </a>
                 <?php if (isset($includeGuestLogin) && 'true' == $includeGuestLogin) { ?>
                     <span class="pipe">|</span>
                     <a class="link" href="javascript:void(0)" onclick="guestUserFrm()"><?php echo sprintf(Labels::getLabel('LBL_GUEST_CHECKOUT?', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?></a>
