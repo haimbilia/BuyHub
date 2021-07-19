@@ -12,7 +12,7 @@ abstract class PaymentController extends MyAppController
     public function __construct($action)
     {
         parent::__construct($action);
-
+        
         $currency = Currency::getDefault();
         if (empty($currency)) {
             $this->setErrorAndRedirect(Labels::getLabel('MSG_DEFAULT_CURRENCY_NOT_SET', $this->siteLangId), FatUtility::isAjaxCall());
@@ -30,6 +30,9 @@ abstract class PaymentController extends MyAppController
             $msg = Labels::getLabel('MSG_INVALID_ORDER_CURRENCY_({CURRENCY})_PASSED_TO_GATEWAY', $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{CURRENCY}' => $this->systemCurrencyCode]);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
+        }     
+        if ($action == 'charge') {
+            unset($_SESSION['shopping_cart']["order_id"]);
         }
         $this->set('systemCurrencyCode', $this->systemCurrencyCode);
         $this->loadPaymenMethod();
