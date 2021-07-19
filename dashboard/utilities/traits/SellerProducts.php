@@ -668,7 +668,11 @@ trait SellerProducts
         $sellerProdObj = new SellerProduct($selprod_id);
         $sellerProdObj->assignValues($data_to_be_save);
         if (!$sellerProdObj->save()) {
-            FatUtility::dieJsonError($sellerProdObj->getError());
+            $msg = $sellerProdObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('MSG_DUPLICATE_RECORD', $this->siteLangId);
+            }
+            FatUtility::dieJsonError($msg);
         }
 
         $this->selProdRecordId = $sellerProdObj->getMainTableRecordId();
