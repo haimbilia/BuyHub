@@ -915,12 +915,13 @@ function loadScript(src, callback = '', params = []) {
     document.head.append(script);
 }
 
-function HTMLMarker(lat, lng, pointerText, content) {
+function HTMLMarker(lat, lng, pointerText, content, isDefault) {
     this.lat = lat;
     this.lng = lng;
     this.pos = new google.maps.LatLng(lat, lng);
     this.content = content;
     this.pointerText = pointerText;
+    this.isDefault = isDefault;
 }
 
 var map;
@@ -962,7 +963,7 @@ function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, drag
         position: new google.maps.LatLng(centeredLat, centeredLng),
         map: map,
         title: langLbl.currentSearchLocation,
-        icon: fcom.makeUrl() + 'images/pin.png',
+        icon: fcom.makeUrl() + 'images/pin3.png',
     });
     infowindow = new google.maps.InfoWindow();
     createMarkers(markers);
@@ -1022,15 +1023,14 @@ function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, drag
     }
     HTMLMarker.prototype.onAdd = function () {
         this.div = document.createElement('DIV');
-        this.div.className = "htmlMarker";
-        this.div.style.position = 'absolute';
-        this.div.style.background = '#fff';
+        this.div.className = "float-price " + (this.isDefault == 1?'float-brand':'') ;
+        this.div.style.position = 'absolute';      
         this.div.innerHTML = this.pointerText;
         var panes = this.getPanes();
         panes.overlayImage.appendChild(this.div);
         var me = this;
         google.maps.event.addDomListener(this.div, 'click', function () {
-            infowindow.setContent(me.content);
+            infowindow.setContent(me.content);          
             infowindow.setPosition(new google.maps.LatLng(me.lat, me.lng));
             infowindow.open(map);
         });
@@ -1099,7 +1099,7 @@ function clearMarkers() {
 
 function createCustomMarkers(customMarkers) {
     $.each(customMarkers, function (index, marker) {
-        customMarker[index] = new HTMLMarker(marker.lat, marker.lng, marker.amount, marker.content);
+        customMarker[index] = new HTMLMarker(marker.lat, marker.lng, marker.amount, marker.content , marker.isDefault);
         customMarker[index].setMap(map);
     });
 }

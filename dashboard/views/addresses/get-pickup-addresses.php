@@ -72,8 +72,7 @@ $displayDateformat = FatDate::convertDateFormatFromPhp(
 
     displayCalendar = function() {
         var checkedAddrId = $('input[name="pickup_address"]:checked').val();
-        //fcom.updateWithAjax(fcom.makeUrl('Addresses', 'slotDaysByAddr', [checkedAddrId]), '', function (rsp) {
-        fcom.ajax(fcom.makeUrl('Addresses', 'slotDaysByAddr', [checkedAddrId]), '', function(rslt) {
+        fcom.ajax(fcom.makeUrl('Addresses', 'slotDaysByAddr', [checkedAddrId], siteConstants.webroot_dashboard), '', function(rslt) {
             var rsp = JSON.parse(rslt);
             if (rsp.status == 1) {
                 needToSeeDaysOfWeek.splice(0, needToSeeDaysOfWeek.length);
@@ -110,7 +109,7 @@ $displayDateformat = FatDate::convertDateFormatFromPhp(
             if (displaySlotSelected == true) {
                 data = data + '&selectedSlot=<?php echo $slotId; ?>';
             }
-            fcom.ajax(fcom.makeUrl('Addresses', 'getTimeSlotsByAddressAndDate'), data, function(rsp) {
+            fcom.ajax(fcom.makeUrl('Addresses', 'getTimeSlotsByAddressAndDate', [], siteConstants.webroot_dashboard), data, function(rsp) {
                 $(".js-time-slots").html(rsp);
             });
         }
