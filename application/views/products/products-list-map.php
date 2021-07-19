@@ -22,7 +22,14 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                         $img = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "PRODUCT_LAYOUT_1", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         $productsByShop[$product['shop_id']]['lat'] = $product['shop_lat'];
                         $productsByShop[$product['shop_id']]['lng'] = $product['shop_lng'];
-                        $productsByShop[$product['shop_id']]['products'][$product['selprod_id']] = ['url' => $productUrl, 'name' => ((mb_strlen($product['selprod_title']) > 30) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']), 'img' => $img];
+                        $productsByShop[$product['shop_id']]['shop_name'] = $product['shop_name'];
+                        $productsByShop[$product['shop_id']]['products'][$product['selprod_id']] = [
+                            'url' => $productUrl,
+                            'name' => ((mb_strlen($product['selprod_title']) > 30) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']),
+                            'img' => $img,
+                            'theprice' => $product['theprice'],
+                            'shop_id' => $product['shop_id'],                            
+                        ];
                         $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']);
                         ?>
 
@@ -46,7 +53,8 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                         
                     </div>
                 </a>
-                <button type="button" onclick="viewMoreSeller('<?php echo $product['selprod_code']; ?>')">More Sellers</button>
+                <a href="javascript:void(0);" class="link" onclick="viewMoreSeller('<?php echo $product['selprod_code']; ?>','<?php echo $product['selprod_id']; ?>')"><?php echo Labels::getLabel('LBL_MORE_SELLERS', $siteLangId);?></a>
+             
             </li>
             <?php } ?>
         </ul>
@@ -75,6 +83,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
     ?>
 
 <?php
+
 foreach ($moreSellersProductsArr as $product) {
     $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
     $productUrl = !isset($product['promotion_id']) ? UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateFullUrl('Products', 'track', array($product['promotion_record_id']));
@@ -83,6 +92,7 @@ foreach ($moreSellersProductsArr as $product) {
         'lat' => $product['shop_lat'],
         'lng' => $product['shop_lng'],
         'shop_id' => $product['shop_id'],
+        'selprod_id' => $product['selprod_id'],
         'content' => '<ul class="gmap-list">
                 <li>
                     <div class="product-profile">
@@ -91,19 +101,30 @@ foreach ($moreSellersProductsArr as $product) {
                     </div>
                 </li>
             </ul>',
-        'amount' =>  CommonHelper::displayMoneyFormat($product['selprod_price']),        
+        'amount' =>  CommonHelper::displayMoneyFormat($product['theprice']),        
     ];
 }
 
 foreach ($productsByShop as &$marker) {
-    $contentString = '<ul class="gmap-list">';
-    foreach ($marker['products'] as $product) {
-        $contentString .= '<li>
-            <div class="product-profile">
-                <div class="product-profile__thumbnail"><img class="product-img" src="' . $product['img'] . '" alt=""></div>
-                <div class="product-profile__data"><div class="title"><a href="' . $product['url'] . '"><strong>' . $product['name'] . '</strong></a></div></div>
+    $contentString = '<div class="seller-card">
+                <div class="seller_logo">
+                    <img src="' . UrlHelper::generateFullUrl('image', 'shopLogo', [$product['shop_id'], $siteLangId, 'SMALL']) . '">
+                </div>
+                <div class="seller_detail">
+                <div class="seller_title">' . $marker['shop_name'] . '</div>                
+                </div> 
             </div>
-            </li>';
+            <ul class="gmap-list">';
+    foreach ($marker['products'] as $product) {        
+        $amount = CommonHelper::displayMoneyFormat($product['theprice']);
+        $contentString .= '<li>
+            <figure class="product-profile">
+            <div class="product-profile__thumbnail"><img class="product-img" src="' . $product['img'] . '" alt="' . $product['name'] . '"></div>
+            <div class="product-profile__data"><div class="title"><a href="' . $product['url'] . '">' . $product['name'] . '</a></div>
+                <div class="price">' . $amount . '</div>
+            </div>
+            </figure>
+            </li>';        
     }
     $contentString .= '</ul>';
     unset($marker['products']);
@@ -122,13 +143,18 @@ $(document).ready(function() {
         createMarkers(markers);
         clearMoreSellerMarkers(); 
     }
-});
-var markersHtml = [];   
-function viewMoreSeller(selprodCode){
+});  
+function viewMoreSeller(selprodCode,selprod_id){
     if(!realtedMarkers.hasOwnProperty(selprodCode)){
         return;
     }    
     let relMarkers = realtedMarkers[selprodCode]; 
+    
+    if(relMarkers.length){
+        $.each(relMarkers, function (index, marker) {
+           relMarkers[index]['isDefault'] = (marker.selprod_id == selprod_id ? 1 : 0);
+        });
+    }
     clearMoreSellerMarkers();
     clearMarkers();
     createCustomMarkers(relMarkers);   
