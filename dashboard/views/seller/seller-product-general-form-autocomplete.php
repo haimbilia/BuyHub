@@ -631,6 +631,11 @@ $fld->setFieldTagAttribute('onClick', 'clearInvOptionForm()');
                 type: 'post',
                 success: function(json) {
                     $.systemMessage.close();
+                    if (1 > json.status) {
+                        $.systemMessage(json.msg, 'alert--danger');
+                        return false;
+                    }
+                    
                     $("table#optionsTable-js tbody").prepend(json.html);
 
                     if (0 < $("table#optionsTable-js tbody tr").length) {

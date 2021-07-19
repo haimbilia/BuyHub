@@ -19,6 +19,10 @@
                                                 ?></span></h2>
                                 </div>
                             </div>
+                            <div class="block--empty text-center">
+                            <img class="block__img"
+                                src="<?php echo CONF_WEBROOT_URL; ?>images/retina/supplier-request.svg" alt="">
+                            </div>
 
                             <h4><?php echo Labels::getLabel('LBL_Hello', $siteLangId), ' ', $supplierRequest["user_name"] ?> , <?php echo Labels::getLabel('LBL_Thank_you_for_submitting_your_application', $siteLangId) ?></h4>
                             <p><?php echo Labels::getLabel('LBL_application_awaiting_approval', $siteLangId) ?></p>
