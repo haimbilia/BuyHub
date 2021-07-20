@@ -132,7 +132,7 @@ $(document).on('change', '.icon-language-js', function () {
         $("#" + searchSelector).html("");
         var recordType = $('[name="breq_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
-            return fcom.makeUrl('Products', 'autoComplete');
+            return fcom.makeUrl('Products', 'autoComplete',[],siteConstants.webrootfront);
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
             return fcom.makeUrl('Seller', 'sellerProductsAutoComplete');
         } else if (RECORD_TYPE_SHOP == recordType) {

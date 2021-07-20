@@ -11,7 +11,7 @@
                         <h2><?php echo $blogPost['post_title']; ?>
                         </h2>
                     </div>
-                    <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>" class="links"><?php echo Labels::getLabel('Lbl_Read_More', $siteLangId); ?></a>
+                    <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id']), CONF_WEBROOT_FRONTEND); ?>" class="links"><?php echo Labels::getLabel('Lbl_Read_More', $siteLangId); ?></a>
                 </div>
             </div>
         <?php } ?>

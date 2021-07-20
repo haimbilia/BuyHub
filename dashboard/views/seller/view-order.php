@@ -254,11 +254,11 @@ $daysSpent = round($datediff / (60 * 60 * 24));
                                                 <?php
                                                 $prodOrBatchUrl = 'javascript:void(0)';
                                                 if ($orderDetail['op_is_batch']) {
-                                                    $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($orderDetail['op_selprod_id']));
+                                                    $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($orderDetail['op_selprod_id']), CONF_WEBROOT_FRONTEND);
                                                     $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($orderDetail['op_selprod_id'], $siteLangId, "SMALL"), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                                 } else {
                                                     if (Product::verifyProductIsValid($orderDetail['op_selprod_id']) == true) {
-                                                        $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($orderDetail['op_selprod_id']));
+                                                        $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($orderDetail['op_selprod_id']), CONF_WEBROOT_FRONTEND);
                                                     }
                                                     $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($orderDetail['selprod_product_id'], "SMALL", $orderDetail['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                                 }  ?>

@@ -18,7 +18,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
             <?php
                     foreach ($products as $product) {
                         $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-                        $productUrl = !isset($product['promotion_id']) ? UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateFullUrl('Products', 'track', array($product['promotion_record_id']));
+                        $productUrl = !isset($product['promotion_id']) ? UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND) : UrlHelper::generateFullUrl('Products', 'track', array($product['promotion_record_id']), CONF_WEBROOT_FRONTEND);
                         $img = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "PRODUCT_LAYOUT_1", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         $productsByShop[$product['shop_id']]['lat'] = $product['shop_lat'];
                         $productsByShop[$product['shop_id']]['lng'] = $product['shop_lng'];
@@ -79,7 +79,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
 
  foreach($moreSellersProductsArr as $product){
     $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-    $productUrl = !isset($product['promotion_id']) ? UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateFullUrl('Products', 'track', array($product['promotion_record_id']));
+    $productUrl = !isset($product['promotion_id']) ? UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND) : UrlHelper::generateFullUrl('Products', 'track', array($product['promotion_record_id']), CONF_WEBROOT_FRONTEND);
     $img = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "PRODUCT_LAYOUT_1", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); 
     $productsByShop[$product['shop_id']]['lat'] = $product['shop_lat'];
     $productsByShop[$product['shop_id']]['lng'] = $product['shop_lng'];

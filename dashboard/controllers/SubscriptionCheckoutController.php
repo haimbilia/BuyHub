@@ -86,7 +86,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
         $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
         if (!empty($cpage) && is_array($cpage)) {
-            $termsAndConditionsLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
+            $termsAndConditionsLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']),CONF_WEBROOT_FRONTEND);
         } else {
             $termsAndConditionsLinkHref = 'javascript:void(0)';
         }

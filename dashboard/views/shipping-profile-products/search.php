@@ -7,7 +7,7 @@ if (!empty($productsData)) { ?>
             <div class="item">
                 <figure class="item__pic">
                     <a href="javascript:void(0)"><img class="" src="<?php echo  UrlHelper::generateUrl(" Image", "product" ,
-                            array($row['product_id'], "SMALL" , 0, 0, 1)); ?>" alt="" width="50"></a>
+                            array($row['product_id'], "SMALL" , 0, 0, 1),CONF_WEBROOT_FRONTEND); ?>" alt="" width="50"></a>
                 </figure>
                 <div class="item__description">
                     <div class="item__title">
