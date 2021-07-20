@@ -13,12 +13,11 @@ $btnFld = $frm->getField('btn_submit');
 $btnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
 ?>
 
-<?php echo $frm->getFormTag(); ?>
 <div class="modal-header">
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_VERIFY_YOUR_PHONE_NUMBER', $siteLangId); ?></h5>
 </div>
 <div class="modal-body">
-
+    <?php echo $frm->getFormTag(); ?>
     <div class="row">
         <div class="col-md-12">
             <div class="otp-row">
@@ -57,14 +56,13 @@ $btnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
             <a class="link resendOtp-js disabled" href="javascript:void(0);" onClick="resendOtp(<?php echo $userId; ?>, <?php echo applicationConstants::YES; ?>)"><?php echo Labels::getLabel('LBL_RESEND_OTP?', $siteLangId); ?></a>
         </div>
     </div>
-    <?php echo $frm->getFieldHtml('user_id'); ?>
-</div>
-<div class="modal-footer">
     <div class="row">
         <div class="col">
             <?php echo $frm->getFieldHtml('btn_submit'); ?>
         </div>
     </div>
+    <?php echo $frm->getFieldHtml('user_id'); ?>
+
+    </form>
+    <?php echo $frm->getExternalJs(); ?>
 </div>
-</form>
-<?php echo $frm->getExternalJs(); ?>

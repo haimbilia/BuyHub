@@ -1197,7 +1197,7 @@ $(document).ready(function () {
     $(".cookie-preferences-js").click(function () {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('Custom', 'cookiePreferencesData'), '', function (t) {
-                fcom.updateFaceboxContent(t);
+                fcom.updateFaceboxContent(t, 'modal-lg');
             });
 
         });

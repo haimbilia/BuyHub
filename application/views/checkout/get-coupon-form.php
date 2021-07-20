@@ -1,5 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php if (!empty($cartSummary['cartDiscounts']['coupon_code'])) { ?>
+<?php
+if (!empty($cartSummary['cartDiscounts']['coupon_code'])) { ?>
 	<div class="alert alert--success">
 		<a href="javascript:void(0)" class="close" onClick="removePromoCode()"></a>
 		<p><?php echo Labels::getLabel('LBL_Promo_Code', $siteLangId); ?> <strong><?php echo $cartSummary['cartDiscounts']['coupon_code']; ?></strong> <?php echo Labels::getLabel('LBL_Successfully_Applied', $siteLangId); ?></p>
