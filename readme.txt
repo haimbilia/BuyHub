@@ -131,6 +131,7 @@ Updates/Fixes :
     => 056029 - when ship by admin only is enabled then on seller end> shipping plugins are listing
     => 056166 - Warning: strtolower() expects parameter 1 to be string, array given in /library/core/FatUtility.class.php on line 0
     => 056027 - getting crash on approving return request when tax is incl price and and avalara is enabled
+    => 056025 - when taxjar is enabled then on cart page> getting error
 
 New Features:  
     => Admin shipped products listing page
