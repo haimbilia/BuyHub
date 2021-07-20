@@ -74,15 +74,7 @@
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'total':
-                    $txt = '';
-                    /* if( $order['totOrders'] == 1 ){
-                    $txt .= CommonHelper::displayMoneyFormat($order['order_net_amount'], true, true);
-                } else {
-                    $txt .= '-';
-                } */
-                    // var_dump($order['totOrders']);
-                    // CommonHelper::displayMoneyFormat($order['order_net_amount'], true, true);
-                    $txt .= CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($order));
+                    $txt = CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($order));
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'status':
@@ -93,12 +85,6 @@
                     } else {
                         $pMethod = '';
                         $paymentMethodCode = Plugin::getAttributesById($order['order_pmethod_id'], 'plugin_code');
-
-                        /* if (strtolower($paymentMethodCode) == 'cashondelivery' && $order['opshipping_fulfillment_type'] == Shipping::FULFILMENT_PICKUP && $order['op_status_id'] != FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS")) {
-                            $orderStatus = Labels::getLabel('LBL_PAY_ON_PICKUP', $siteLangId);
-                        } else if (strtolower($paymentMethodCode) == 'cashondelivery' && $order['order_status'] == FatApp::getConfig('CONF_DEFAULT_ORDER_STATUS')) {
-                            $pMethod = " - " . $order['plugin_name'];
-                        } */
                         if (in_array(strtolower($paymentMethodCode), ['cashondelivery', 'payatstore'])) {
                             if ($orderStatus != $order['plugin_name']) {
                                 $orderStatus .= " - " . $order['plugin_name'];
@@ -172,7 +158,6 @@
                         );
                     }
 
-                    $cartUrl = UrlHelper::generateUrl('cart',[], CONF_WEBROOT_FRONTEND);
                     $li = $ul->appendElement("li");
                     $li->appendElement(
                         'a',

@@ -49,7 +49,12 @@ class ShipStationShipping extends ShippingServicesBase
     {
         return $this->validateSettings($this->langId);
     }
-    
+        
+    /**
+     * getCarriers
+     *
+     * @return array
+     */
     public function getCarriers(): array
     {
         if (false === $this->doRequest(self::REQUEST_CARRIER_LIST)) {

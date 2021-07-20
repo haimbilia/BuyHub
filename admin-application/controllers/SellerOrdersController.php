@@ -832,9 +832,7 @@ class SellerOrdersController extends AdminBaseController
         /* Update To Shipping Service */
         if (OrderStatus::ORDER_SHIPPED == $orderDetail["op_status_id"]) {
             $this->langId = $this->adminLangId;
-            if (false !== $this->init(true)) {
-                $this->refundShipment($op_id);
-            }
+            $this->refundShipment($op_id);
         }
         /* Update To Shipping Service */
 

@@ -129,6 +129,8 @@ Updates/Fixes :
     => 056021 - when multiple items are ordered together then on packing slip> getting wrong data listed
     => 056034 - when order is canceled still then seller having option to generate shipping label for the same
     => 056029 - when ship by admin only is enabled then on seller end> shipping plugins are listing
+    => 056166 - Warning: strtolower() expects parameter 1 to be string, array given in /library/core/FatUtility.class.php on line 0
+    => 056027 - getting crash on approving return request when tax is incl price and and avalara is enabled
 
 New Features:  
     => Admin shipped products listing page
