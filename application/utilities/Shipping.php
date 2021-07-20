@@ -285,10 +285,11 @@ class Shipping
                     FatCache::set($cacheKey, serialize($carriers), '.txt');
                 }
             }
-           
+
             if (empty($carriers)) {
                 continue;
             } 
+            
             $shippingApiObj->setAddress($shippingAddressDetail['addr_name'], $shippingAddressDetail['addr_address1'], $shippingAddressDetail['addr_address2'], $shippingAddressDetail['addr_city'], $shippingAddressDetail['state_name'], $shippingAddressDetail['addr_zip'], $shippingAddressDetail['country_code'], $shippingAddressDetail['addr_phone']);
             
             if (empty($product['shippack_length']) || empty($product['shippack_width']) || empty($product['shippack_height']) || empty($product['shippack_units'])) {

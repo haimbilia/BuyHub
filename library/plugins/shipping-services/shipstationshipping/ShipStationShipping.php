@@ -134,7 +134,7 @@ class ShipStationShipping extends ShippingServicesBase
 
         $taxOptions = json_decode($orderDetail['op_product_tax_options'], true);
 
-        $shippingTotal = CommonHelper::orderProductAmount($orderDetail, 'shipping');
+        $shippingTotal = CommonHelper::orderProductAmount($orderDetail, 'SHIPPING');
         if (!empty($taxOptions)) {
             foreach ($taxOptions as $key => $val) {
                 $taxCharged += $val['value'];
