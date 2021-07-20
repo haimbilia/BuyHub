@@ -1109,7 +1109,7 @@ class GuestUserController extends MyAppController
                     '{CONTINUE-BTN}' => '<a class="btn btn-outline-white" href="javascript:void(0);" onclick="loginPopupOtp(' . $row['user_id'] . ', ' . applicationConstants::NO . ')">' . Labels::getLabel('MSG_PROCEED', $this->siteLangId) . '</a>'
                 ];
                 $msg = CommonHelper::replaceStringData($message, $replacements);
-                $resp = LibHelper::formatResponse(applicationConstants::FAILURE, $msg, ['userId' => $row['user_id']], LibHelper::RC_UNAUTHORIZED);
+                $resp = LibHelper::formatResponse(applicationConstants::FAILURE, $msg, ['user_id' => $row['user_id']], LibHelper::RC_UNAUTHORIZED);
                 LibHelper::dieJsonResponse($resp);
             }
 
@@ -1493,7 +1493,7 @@ class GuestUserController extends MyAppController
             }
             
             if (0 < $userId) {
-                $this->set('data', ['userId' => $userId]);
+                $this->set('data', ['user_id' => $userId]);
                 $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
                 if (true === MOBILE_APP_API_CALL) {
                     $this->_template->render();
