@@ -826,4 +826,13 @@ ALTER TABLE `tbl_order_product_plugin_specifics`
 /* TaxJar Enhancements */
 -- ---------------------------------TV-9.3.2.20210716---------------------
 
+/* Remove Duplicate Rows. */
+DELETE t1 FROM tbl_seller_products t1
+INNER JOIN tbl_seller_products t2 
+WHERE 
+    t1.selprod_id > t2.selprod_id AND 
+    t1.selprod_user_id = t2.selprod_user_id AND
+    t1.selprod_code = t2.selprod_code;
+/* Remove Duplicate Rows. */
+
 ALTER TABLE tbl_seller_products ADD UNIQUE( selprod_user_id, selprod_code);
