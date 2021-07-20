@@ -18,6 +18,11 @@ if (isset($orderDetail["thirdPartyorderInfo"]['orderStatus'])) {
     $orderStatusLbl = strpos($orderStatus, "_") ? str_replace('_', ' ', $orderStatus) : $orderStatus;
 }
 $pickUpDetails = NULL;
+
+$now = time(); // or your date as well
+$orderDate = strtotime($orderDetail['order_date_added']);
+$datediff = $now - $orderDate;
+$daysSpent = round($datediff / (60 * 60 * 24));
 ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
@@ -29,11 +34,12 @@ $pickUpDetails = NULL;
                         <?php echo Labels::getLabel('LBL_View_Sale_Order', $siteLangId); ?>
                     </h2>
                 </div>
-                <?php
+                <?php                 
                 $orderObj = new Orders();
                 $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses();
                 $processingStatuses = array_diff($processingStatuses, [OrderStatus::ORDER_DELIVERED]);
-                if (in_array($orderDetail['orderstatus_id'], $processingStatuses) && $canEdit) { ?>
+                $canCancelOrder = in_array($orderDetail['orderstatus_id'], $processingStatuses);
+                if ($canCancelOrder && $canEdit) { ?>
                     <div class="col-auto">
                         <div class="btn-group">
                             <ul class="actions">
@@ -65,7 +71,7 @@ $pickUpDetails = NULL;
                                 <i class="fas fa-print"></i>
                             </a>
                             <?php
-                            if ($orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && $shippedBySeller && is_object($shippingApiObj) && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status'])) {
+                            if ($orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && $shippedBySeller && is_object($shippingApiObj) && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status']) && false === OrderCancelRequest::getCancelRequestById($orderDetail['op_id'])) {
                                     $opId = $orderDetail['op_id'];
                                     $allowedForPlugin = in_array($shippingApiObj->keyName, ['EasyPost', 'Aramex']);
                                     if (1 < $orderDetail['opshipping_rate_id'] && ( empty($orderDetail['opshipping_plugin_id']) || ( $shippingApiObj->getKey('plugin_id') != $orderDetail['opshipping_plugin_id'] && empty($orderDetail['opr_response'])))) {

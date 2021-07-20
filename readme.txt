@@ -127,6 +127,7 @@ Updates/Fixes :
     => 056100 - Notice: Undefined index: op_special_price
     => 056031 - on order when tax is bifurcated in 3 types then on invoice listing 2 only
     => 056021 - when multiple items are ordered together then on packing slip> getting wrong data listed
+    => 056034 - when order is canceled still then seller having option to generate shipping label for the same
 
 
 New Features:  
