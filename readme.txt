@@ -125,6 +125,7 @@ Updates/Fixes :
 ==============================TV-9.3.2.20210716=====================================
     => 055874 - getting invalid request on linking rating type with new category
     => 056030 - when tax is enabled (avalara) then on bifurcation tax value is not listing properly
+    => 056134 - getting error on marking order as completed from admin when tax is alavara and order cancellation request is declined
 
 
 New Features:  
