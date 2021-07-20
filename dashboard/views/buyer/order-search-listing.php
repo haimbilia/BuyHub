@@ -172,7 +172,7 @@
                         );
                     }
 
-                    $cartUrl = UrlHelper::generateUrl('cart',[], CONF_WEBROOT_FRONTEND);
+                    $cartUrl = UrlHelper::generateUrl('cart','',[], CONF_WEBROOT_FRONTEND);
                     $li = $ul->appendElement("li");
                     $li->appendElement(
                         'a',
