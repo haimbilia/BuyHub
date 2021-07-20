@@ -309,11 +309,11 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     $orderDetailUrl = UrlHelper::generateUrl('seller', 'viewOrder', array($row['op_id']));
                                                     $prodOrBatchUrl = 'javascript:void(0)';
                                                     if ($row['op_is_batch']) {
-                                                        $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($row['op_selprod_id']));
+                                                        $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($row['op_selprod_id']), CONF_WEBROOT_FRONTEND);
                                                         $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($row['op_selprod_id'], $siteLangId, "SMALL"), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                                     } else {
                                                         if (Product::verifyProductIsValid($row['op_selprod_id']) == true) {
-                                                            $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($row['op_selprod_id']));
+                                                            $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($row['op_selprod_id']), CONF_WEBROOT_FRONTEND);
                                                         }
                                                         $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($row['selprod_product_id'], "SMALL", $row['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                                     }
@@ -508,10 +508,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     $orderDetailUrl = UrlHelper::generateUrl('seller', 'viewOrder', array($row['op_id']));
                                                     $prodOrBatchUrl = 'javascript:void(0)';
                                                     if ($row['op_is_batch']) {
-                                                        $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($row['op_selprod_id']));
+                                                        $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($row['op_selprod_id']), CONF_WEBROOT_FRONTEND);
                                                     } else {
                                                         if (Product::verifyProductIsValid($row['op_selprod_id']) == true) {
-                                                            $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($row['op_selprod_id']));
+                                                            $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($row['op_selprod_id']), CONF_WEBROOT_FRONTEND);
                                                         }
                                                     } ?>
                                                     <tr>
@@ -602,10 +602,10 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     $orderDetailUrl = UrlHelper::generateUrl('seller', 'viewOrder', array($row['op_id']));
                                                     $prodOrBatchUrl = 'javascript:void(0)';
                                                     if ($row['op_is_batch']) {
-                                                        $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($row['op_selprod_id']));
+                                                        $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($row['op_selprod_id']), CONF_WEBROOT_FRONTEND);
                                                     } else {
                                                         if (Product::verifyProductIsValid($row['op_selprod_id']) == true) {
-                                                            $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($row['op_selprod_id']));
+                                                            $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($row['op_selprod_id']), CONF_WEBROOT_FRONTEND);
                                                         }
                                                     } ?>
                                                     <tr>

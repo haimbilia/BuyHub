@@ -86,7 +86,7 @@ if ($showAddToFavorite) {
                     <ul class="social-sharing">
                         <li class="social-facebook">
                             <a class="st-custom-button" data-network="facebook"
-                                data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id'])); ?>/">
+                                data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id']), CONF_WEBROOT_FRONTEND); ?>/">
                                 <i class="icn"><svg class="svg">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb"
                                             href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">

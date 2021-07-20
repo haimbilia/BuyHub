@@ -40,7 +40,7 @@
 				$out = '<div class="hero-item">';
 				if ($haveUrl) {
 					if ($slide['promotion_id'] > 0) {
-						$slideUrl =  UrlHelper::generateUrl('slides', 'track', array($slide['slide_id']));
+						$slideUrl =  UrlHelper::generateUrl('slides', 'track', array($slide['slide_id']), CONF_WEBROOT_FRONTEND);
 					} else {
 						$slideUrl = CommonHelper::processUrlString($slide['slide_url']);
 					}

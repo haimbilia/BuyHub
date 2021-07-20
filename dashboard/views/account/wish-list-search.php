@@ -25,7 +25,7 @@
                                     <ul class="media-wishlist">
 
                                         <?php foreach ($wishlist['products'] as $product) {
-                                            $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>
+                                            $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND); ?>
                                             <li class="item <?php echo (!$product['in_stock']) ? 'item--sold' : ''; ?>">
 
 

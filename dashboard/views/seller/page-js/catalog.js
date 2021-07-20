@@ -201,7 +201,7 @@ $(document).on('change', '.language-js', function () {
 	}
 
 	sellerProducts = function (product_id) {
-		window.location.href = fcom.makeUrl('Seller', 'Products', [product_id]);
+		window.location.href = fcom.makeUrl('Seller', 'Products', [product_id], siteConstants.webrootfront);
 	}
 
 	shippingautocomplete = function (shipping_row) {

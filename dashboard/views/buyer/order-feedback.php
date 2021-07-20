@@ -39,11 +39,11 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             } else {
                                                 $prodImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($selProdCodeArr[0], "MEDIUM", $opDetail['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                             } ?>
-                                            <a href="<?php echo UrlHelper::generateUrl('products', 'view', array($opDetail['op_selprod_id'])) ?>"><img src="<?php echo $prodImg; ?>" alt="<?php echo $prodTitle; ?>" title="<?php echo $prodTitle; ?>"></a>
+                                            <a href="<?php echo UrlHelper::generateUrl('products', 'view', array($opDetail['op_selprod_id']), CONF_WEBROOT_FRONTEND) ?>"><img src="<?php echo $prodImg; ?>" alt="<?php echo $prodTitle; ?>" title="<?php echo $prodTitle; ?>"></a>
                                         </div>
                                         <div class="item__description">
                                             <div class="item__category"><a href="<?php echo UrlHelper::generateUrl('shops', 'view', array($opDetail['op_shop_id'])); ?>"><?php echo $opDetail['op_shop_name']; ?></a></div>
-                                            <div class="item__title"><a title="<?php echo $prodTitle; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($opDetail['op_selprod_id'])) ?>"><?php echo $prodTitle; ?></a>
+                                            <div class="item__title"><a title="<?php echo $prodTitle; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($opDetail['op_selprod_id']), CONF_WEBROOT_FRONTEND) ?>"><?php echo $prodTitle; ?></a>
                                             </div>
                                             <div class="item__specification"> <?php echo $opDetail['op_selprod_options']; ?> </div>
                                         </div>
