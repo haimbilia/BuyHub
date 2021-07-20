@@ -14,7 +14,7 @@ class GuestUserController extends MyAppController
         }
 
         if (UserAuthentication::isUserLogged()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('account', '',[], CONF_WEBROOT_DASHBOARD));
+            FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD));
         }
 
         $socialLoginApis = Plugin::getDataByType(Plugin::TYPE_SOCIAL_LOGIN, $this->siteLangId);
@@ -379,17 +379,23 @@ class GuestUserController extends MyAppController
     {
         $emailAddress = FatApp::getPostedData('email', FatUtility::VAR_STRING, '');
         if (empty($emailAddress)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), [], LibHelper::RC_UNAUTHORIZED);
+            LibHelper::dieJsonResponse($resp);
         }
 
         $uObj = new User();
         $data = (array) $uObj->checkUserByEmailOrUserName('', $emailAddress);
         if (empty($data)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_RESULT_NOT_FOUND', $this->siteLangId));
+            $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('MSG_RESULT_NOT_FOUND', $this->siteLangId), [], LibHelper::RC_NOT_FOUND);
+            LibHelper::dieJsonResponse($resp);
         }
-        $json['msg'] = Labels::getLabel('MSG_RESULT_FOUND', $this->siteLangId);
-        $json['data']['found'] = 1;
-        FatUtility::dieJsonSuccess($json);
+
+        $resp = LibHelper::formatResponse(applicationConstants::SUCCESS, 
+            Labels::getLabel('MSG_RESULT_FOUND', $this->siteLangId), [
+                'found' => 1,
+                'verified' => $data['credential_verified'],
+            ], LibHelper::RC_OK);
+        LibHelper::dieJsonResponse($resp);
     }
 
     public function register()
@@ -1424,7 +1430,7 @@ class GuestUserController extends MyAppController
         $resp = LibHelper::formatResponse(Plugin::RETURN_TRUE, $msg, ['authToken' => $authToken]);
         CommonHelper::jsonEncodeUnicode($resp, true);
     }
-    
+
     /**
      * registerByPhone
      *
@@ -1455,7 +1461,7 @@ class GuestUserController extends MyAppController
             $userPhone = $phoneDialCode . $phone;
             $user = new User();
             $row = $user->checkUserByPhoneOrUserName($userPhone, $userPhone);
-            if (!empty($row)){
+            if (!empty($row)) {
                 if (applicationConstants::NO == $row['user_deleted'] && applicationConstants::YES == $row['credential_verified']) {
                     $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('MSG_DUPLICATE_USER', $this->siteLangId), [], LibHelper::RC_NOT_FOUND);
                     LibHelper::dieJsonResponse($resp);
@@ -1474,10 +1480,10 @@ class GuestUserController extends MyAppController
 
             $post['user_phone'] = $phone;
             $post['user_phone_dcode'] = $phoneDialCode;
-            
+
             $post['user_username'] = $userName;
             $post['user_name'] = $userName;
-            
+
             $post['user_is_buyer'] = User::USER_TYPE_BUYER;
             $post['user_preferred_dashboard'] = User::USER_BUYER_DASHBOARD;
             $post['user_registered_initially_for'] = User::USER_TYPE_BUYER;
@@ -1491,7 +1497,7 @@ class GuestUserController extends MyAppController
                 $resp = LibHelper::formatResponse(applicationConstants::FAILURE, $userObj->getError());
                 LibHelper::dieJsonResponse($resp);
             }
-            
+
             if (0 < $userId) {
                 $this->set('data', ['user_id' => $userId]);
                 $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));

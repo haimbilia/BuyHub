@@ -2570,7 +2570,7 @@ class User extends MyAppModel
 
     public function checkUserByEmailOrUserName($userName, $userEmail)
     {
-        $srch = $this->getUserSearchObj(array('user_id', 'credential_email', 'credential_username'));
+        $srch = $this->getUserSearchObj(array('user_id', 'credential_email', 'credential_username', 'credential_verified', 'user_deleted'));
         $condition = $srch->addCondition('credential_username', '=', $userName);
         $condition->attachCondition('credential_email', '=', $userEmail, 'OR');
         $rs = $srch->getResultSet();
