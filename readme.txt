@@ -125,6 +125,7 @@ Updates/Fixes :
 ==============================TV-9.3.2.20210716=====================================
     => 055874 - getting invalid request on linking rating type with new category
     => 056100 - Notice: Undefined index: op_special_price
+    => 056031 - on order when tax is bifurcated in 3 types then on invoice listing 2 only
 
 
 New Features:  

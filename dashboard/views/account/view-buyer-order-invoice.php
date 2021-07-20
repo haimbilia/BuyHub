@@ -335,21 +335,24 @@
                                     <table width="100%" border="0" cellpadding="0" cellspacing="0">
                                         <tbody>
                                             <tr>
-                                                <td style="padding:15px;vertical-align: top; border:none;">
+                                                <td style="padding:15px;vertical-align: top; border:none;" width="20%">
                                                     <h2 style="font-size: 20px;text-align: center;"><?php echo $childOrder['op_shop_name']; ?></h2>
                                                     <span style="padding-top: 150px;display: block;text-align: center;"><?php echo Labels::getLabel('LBL_Authorized_Signatory', $siteLangId); ?> </span>
                                                 </td>
-                                                <td style="text-align: center;  border:none;">
+                                                <td style="text-align: center;  border:none;" width="80%">
                                                     <table width="100%" border="0" cellpadding="10px" cellspacing="0" style="">
                                                         <tbody>
                                                             <tr>
-                                                                <th style="padding:15px;background-color: #f0f0f0;" colspan="4"><?php echo Labels::getLabel('LBL_Tax_break-up', $siteLangId); ?></th>
+                                                                <?php 
+                                                                    $colspan = array_key_exists('taxOptions', $childOrder) && is_array($childOrder['taxOptions']) ? 2 + count($childOrder['taxOptions']) : 0;
+                                                                ?>
+                                                                <th style="padding:15px;background-color: #f0f0f0;" colspan="<?php echo $colspan?>"><?php echo Labels::getLabel('LBL_Tax_break-up', $siteLangId); ?></th>
                                                             </tr>
                                                             <tr>
                                                                 <th style="padding:10px;border:1px solid #ddd;"><?php echo Labels::getLabel('LBL_Tax', $siteLangId); ?></th>
                                                                 <th style="padding:10px;border:1px solid #ddd;"><?php echo Labels::getLabel('LBL_Taxable_Amount', $siteLangId); ?></th>
                                                                 <?php if (!empty($childOrder['taxOptions'])) {
-                                                                    foreach ($childOrder['taxOptions'] as $key => $val) { ?>
+                                                                    foreach ($childOrder['taxOptions'] as $key => $val) {?>
                                                                         <th style="padding:10px;border:1px solid #ddd;">
                                                                             <?php echo CommonHelper::displayTaxPercantage($val, true) ?>
                                                                         </th>
@@ -384,7 +387,7 @@
                                                                 <td style="padding:10px;border:1px solid #ddd;border-right:none;font-size:16px;"><strong>3.92</strong> </td>                                            
                                                             </tr>-->
                                                             <tr>
-                                                                <td style="padding:10px;text-align: left;border:1px solid #ddd;border-bottom:none;border-right:none;font-size: 12px;background-color: #f0f0f0;" colspan="4">*<?php echo Labels::getLabel('LBL_Appropriated_product-wise_and_Rate_applicable_thereunder', $siteLangId); ?></td>
+                                                                <td style="padding:10px;text-align: left;border:1px solid #ddd;border-bottom:none;border-right:none;font-size: 12px;background-color: #f0f0f0;" colspan="<?php echo $colspan?>">*<?php echo Labels::getLabel('LBL_Appropriated_product-wise_and_Rate_applicable_thereunder', $siteLangId); ?></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>

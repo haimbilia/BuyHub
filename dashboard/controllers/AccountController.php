@@ -3807,6 +3807,8 @@ class AccountController extends LoggedUserController
         $pickUpAddress = $orderObj->getOrderAddresses($orderDetail['order_id'], $opId);
         $orderDetail['pickupAddress'] = (!empty($pickUpAddress[Orders::PICKUP_ADDRESS_TYPE])) ? $pickUpAddress[Orders::PICKUP_ADDRESS_TYPE] : array();
 
+        // CommonHelper::printArray($childOrderDetail, true);
+
         $template = new FatTemplate('', '');
         $template->set('siteLangId', $this->siteLangId);
         $template->set('orderDetail', $orderDetail);
