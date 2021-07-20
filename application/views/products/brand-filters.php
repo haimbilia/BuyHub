@@ -27,33 +27,38 @@ foreach ($brandsArr as $brand) {
             </li>';
 }
 ?>
-<div class="filter-directory">
-  <div class="filter-directory_bar">
-    <input type="text" placeholder="Search brand" class="form-control filter-directory_search_input" onKeyup="autoKeywordSearch(this.value)">
-    <ul class="filter-directory_indices bfilter-js">      
-      <?php
-      foreach (range('A', 'Z') as $char) {
-        $disabled = '';
-        if (!in_array($char, $charArr)) {
-          $disabled = 'class="filter-directory_disabled"';
-        }        
-        ?>
-          <li data-item="<?php echo $char ;?>" <?php echo $disabled; ?>><a href="#<?php echo $char ;?>"><?php echo $char ;?></a>
-     <?php }   ?>
-    </ul>
-  </div>
-  <div>
-    <ul class="filter-directory_list">
-      <?php foreach ($mySelection as $brand) {
-        //$totalProducts = array_key_exists('totalProducts', $brand) ? $brand['totalProducts'] : 0;
-          echo ' <li>
-                <label class="checkbox brand" ><input name="brands" value="' . $brand['brand_id'] . '" data-id="brand_' . $brand['brand_id'] . '" type="checkbox" checked="true" data-title="' . $brand['brand_name'] . '"><i class="input-helper"></i><span class="lb-txt">' . $brand['brand_name'] . '</span></label>
-            </li>';
-            /* echo ' <li>
-            <label class="checkbox brand" ><input name="brands" value="' . $brand['brand_id'] . '" data-id="brand_' . $brand['brand_id'] . '" type="checkbox" checked="true" data-title="' . $brand['brand_name'] . '"><i class="input-helper"></i>' . $brand['brand_name'] . ' <span class="filter-directory_count">(' . $totalProducts . ')</span> </label>
-        </li>'; */
-      }?>
-      <?php echo $brandHtml;?>
-    </ul>
+<div class="modal-header">
+  <h5 class="modal-title"><?php echo Labels::getLabel('LBL_All_brands',$siteLangId);?></h5>
+</div>
+<div class="modal-body">
+  <div class="filter-directory">
+    <div class="filter-directory_bar">
+      <input type="text" placeholder="Search brand" class="form-control filter-directory_search_input" onKeyup="autoKeywordSearch(this.value)">
+      <ul class="filter-directory_indices bfilter-js">      
+        <?php
+        foreach (range('A', 'Z') as $char) {
+          $disabled = '';
+          if (!in_array($char, $charArr)) {
+            $disabled = 'class="filter-directory_disabled"';
+          }        
+          ?>
+            <li data-item="<?php echo $char ;?>" <?php echo $disabled; ?>><a href="#<?php echo $char ;?>"><?php echo $char ;?></a>
+      <?php }   ?>
+      </ul>
+    </div>
+    <div>
+      <ul class="filter-directory_list">
+        <?php foreach ($mySelection as $brand) {
+          //$totalProducts = array_key_exists('totalProducts', $brand) ? $brand['totalProducts'] : 0;
+            echo ' <li>
+                  <label class="checkbox brand" ><input name="brands" value="' . $brand['brand_id'] . '" data-id="brand_' . $brand['brand_id'] . '" type="checkbox" checked="true" data-title="' . $brand['brand_name'] . '"><i class="input-helper"></i><span class="lb-txt">' . $brand['brand_name'] . '</span></label>
+              </li>';
+              /* echo ' <li>
+              <label class="checkbox brand" ><input name="brands" value="' . $brand['brand_id'] . '" data-id="brand_' . $brand['brand_id'] . '" type="checkbox" checked="true" data-title="' . $brand['brand_name'] . '"><i class="input-helper"></i>' . $brand['brand_name'] . ' <span class="filter-directory_count">(' . $totalProducts . ')</span> </label>
+          </li>'; */
+        }?>
+        <?php echo $brandHtml;?>
+      </ul>
+    </div>
   </div>
 </div>

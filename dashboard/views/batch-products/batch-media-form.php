@@ -1,8 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $mediaFrm->setFormTagAttribute("class", "form form--horizontal");
 ?>
-<div class="popup__body">
-	<h2><?php echo Labels::getLabel('LBL_Manage_Batch_Products_Media', $siteLangId); ?></h2>
+<div class="modal-header">
+	<h5 class="modal-title"><?php echo Labels::getLabel('LBL_Manage_Batch_Products_Media', $siteLangId); ?></h5>
+</div>
+<div class="modal-body">
 	<ul class="tabs tabs--small    -js clearfix setactive-js">
 		<li><a href="javascript:void(0)" onclick="batchForm()"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
 		<li class="<?php echo (0 == $prodgroup_id) ? 'fat-inactive' : ''; ?>">
@@ -17,9 +19,7 @@ $mediaFrm->setFormTagAttribute("class", "form form--horizontal");
 		<?php echo $mediaFrm->getFormHtml(); ?>
 	</div>
 
-	<?php if ($batchImgArr) {
-		//CommonHelper::printArray($batchImgArr);
-	?>
+	<?php if ($batchImgArr) { ?>
 		<div class="col-md-12">
 			<ul class="image-listing">
 				<?php foreach ($batchImgArr as $batchImage) { ?>

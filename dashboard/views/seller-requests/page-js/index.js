@@ -37,7 +37,7 @@
     customCatalogInfo = function (prodreq_id) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('SellerRequests', 'customCatalogInfo', [prodreq_id]), '', function (t) {
-                $.facebox(t, 'faceboxWidth catalogInfo');
+                $.facebox(t);
             });
         });
     }
@@ -85,7 +85,7 @@
     addBrandReqForm = function (id) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('SellerRequests', 'addBrandReqForm', [id]), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t);
             });
         });
     };
@@ -237,7 +237,7 @@
     addCategoryReqForm = function (id) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('SellerRequests', 'categoryReqForm', [id]), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t);
             });
         });
     };
@@ -280,7 +280,7 @@
     productInstructions = function (type) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('Seller', 'productTooltipInstruction', [type]), '', function (t) {
-                $.facebox(t, 'medium-fb-width catalog-bg');
+                $.facebox(t);
             });
         });
     };
@@ -334,9 +334,9 @@
         });
     };
 
-    deleteBadgeRequest = function(badgeReqId) {
+    deleteBadgeRequest = function (badgeReqId) {
         if (!confirm(langLbl.confirmDelete)) { return; }
-        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'deleteBadgeRequest', [badgeReqId]), '', function (t) {searchBadgeRequests();});
+        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'deleteBadgeRequest', [badgeReqId]), '', function (t) { searchBadgeRequests(); });
     }
 
     searchBadgeRequests = function () {
@@ -354,10 +354,10 @@
         $("#" + searchSelector).html("");
         var recordType = $('[name="breq_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
-            return fcom.makeUrl('Products', 'autoComplete');
+            return fcom.makeUrl('Products', 'autoComplete', [], siteConstants.webrootfront);
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
             return fcom.makeUrl('Seller', 'sellerProductsAutoComplete');
-        }else if (RECORD_TYPE_SHOP == recordType) {
+        } else if (RECORD_TYPE_SHOP == recordType) {
             return fcom.makeUrl('Seller', 'getShopDetail', [1]);
         } else {
             $.systemMessage(langLbl.invalidRequest, 'alert--danger');
@@ -433,7 +433,7 @@
             setTimeout(function () {
                 selector.val('').trigger('change');
             }, 200);
-            var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="fa fa-times"></i></a></id><td>' +( e.params.args.data.value || e.params.args.data.name) + '</td></tr>';
+            var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="fa fa-times"></i></a></id><td>' + (e.params.args.data.value || e.params.args.data.name) + '</td></tr>';
             var tbl = "";
             if (1 > $('table.recordListing--js').length) {
                 var tbl = '<table class="table table-responsive table--hovered recordListing--js"><tbody></tbody></table>';

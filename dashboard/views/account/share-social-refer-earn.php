@@ -1,4 +1,4 @@
-<div class="popup__body">
+<div class="modal-body">
 <?php
 if($fbLoginUrl !=''){
 	$msg = Labels::getLabel("LBL_Please_authenticate_your_account", $siteLangId);

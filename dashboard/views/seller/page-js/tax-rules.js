@@ -24,7 +24,7 @@ $(document).ready(function(){
     editRule = function (ruleId) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('Seller', 'editTaxRuleForm', [ruleId]), '', function (t) {
-                $.facebox(t, 'faceboxWidth');
+                $.facebox(t );
                 fcom.resetFaceboxHeight();
             });
         });

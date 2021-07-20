@@ -124,6 +124,14 @@ Updates/Fixes :
     => 055850 - Warning : Creating default object from empty value
 ==============================TV-9.3.2.20210716=====================================
     => 055874 - getting invalid request on linking rating type with new category
+    => 056100 - Notice: Undefined index: op_special_price
+    => 056031 - on order when tax is bifurcated in 3 types then on invoice listing 2 only
+    => 056021 - when multiple items are ordered together then on packing slip> getting wrong data listed
+    => 056034 - when order is canceled still then seller having option to generate shipping label for the same
+    => 056029 - when ship by admin only is enabled then on seller end> shipping plugins are listing
+    => 056166 - Warning: strtolower() expects parameter 1 to be string, array given in /library/core/FatUtility.class.php on line 0
+    => 056027 - getting crash on approving return request when tax is incl price and and avalara is enabled
+    => 056025 - when taxjar is enabled then on cart page> getting error
     => 056030 - when tax is enabled (avalara) then on bifurcation tax value is not listing properly
     => 056134 - getting error on marking order as completed from admin when tax is alavara and order cancellation request is declined
     => 055906 - Seller >> tax category >> tax rates >> "0.00" gets displayed along with actual percentage of tax .

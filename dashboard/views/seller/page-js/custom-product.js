@@ -54,7 +54,7 @@ $(document).on('change','.language',function(){
 	customProductImages = function( productId ){
 		fcom.ajax(fcom.makeUrl('Seller', 'customProductImages', [productId]), '', function(t) {
 			productImages(productId);
-			$.facebox(t, 'faceboxWidth');
+			$.facebox(t );
 		});
 	};
 

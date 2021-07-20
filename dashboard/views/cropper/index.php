@@ -1,4 +1,4 @@
-<div class="popup__body">
+<div class="modal-body">
     <div class="img-container">
       <img src="<?php echo (isset($image)) ? $image : ''; ?>" alt="Picture" id="new-img" class="img_responsive cropper-hidden">
       <div class="loader-positon" id="loader-js"></div>

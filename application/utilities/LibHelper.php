@@ -61,7 +61,9 @@ class LibHelper extends FatUtility
         if (true === MOBILE_APP_API_CALL) {
             if (is_array($message)) {
                 array_walk_recursive($message, function (&$item) {
-                    $item = trim(strip_tags($item));
+                    if (is_string($item)) {
+                        $item = trim(strip_tags($item));
+                    }
                 });
             } else {
                 $message = strip_tags($message);

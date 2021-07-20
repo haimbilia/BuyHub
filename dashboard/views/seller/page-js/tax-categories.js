@@ -32,7 +32,7 @@ $(document).ready(function(){
 	changeTaxRates = function(taxcatId){
 		$.facebox(function() {
 			fcom.ajax(fcom.makeUrl('Seller', 'changeTaxRates', [taxcatId]), '', function(t) {
-				$.facebox(t,'faceboxWidth');
+				$.facebox(t );
 			});
 		});
 	};

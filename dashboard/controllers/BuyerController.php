@@ -6,6 +6,9 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 
 class BuyerController extends BuyerBaseController
 {
+    private const DIGITAL_FILES_ZIP = 1;
+    private const DIGITAL_LINKS_FILE = 2;
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -300,6 +303,35 @@ class BuyerController extends BuyerBaseController
 
         $this->_template->render();
     }
+    
+    /**
+     * downloadDigitalFiles : Used for APPs.
+     *
+     * @param  int $type
+     * @param  int $opId
+     * @return void
+     */
+    public function downloadDigitalFiles(int $type, int $opId)
+    {
+        if (1 > $type || 1 > $opId) {
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST.', $this->siteLangId));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+
+        switch ($type) {
+            case self::DIGITAL_FILES_ZIP:
+                $this->downloadDigitalFilesZip($opId);
+                break;
+            case self::DIGITAL_LINKS_FILE:
+                $this->downloadDigitalLinksFile($opId);
+                break;
+            
+            default:
+                Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_TYPE.', $this->siteLangId));
+                FatUtility::dieJsonError(Message::getHtml());
+                break;
+        }
+    }
 
     public function downloadDigitalFilesZip(int $opId)
     {
@@ -330,6 +362,9 @@ class BuyerController extends BuyerBaseController
         $downloads = (array) FatApp::getDb()->fetchAll($srch->getResultSet());
         if (empty($downloads)) {
             Message::addErrorMessage(Labels::getLabel('LBL_LIMIT_REACHED/_FILE_NOT_FOUND_TO_DOWNLOAD.', $this->siteLangId));
+            if (true === MOBILE_APP_API_CALL) {
+                FatUtility::dieJsonError(Message::getHtml());
+            }
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'MyDownloads'));
         }
 
@@ -435,6 +470,9 @@ class BuyerController extends BuyerBaseController
         $downloads = FatApp::getDb()->fetchAll($rs);
         if (empty($downloads)) {
             Message::addErrorMessage(Labels::getLabel('LBL_LIMIT_REACHED/_FILE_NOT_FOUND_TO_DOWNLOAD', $this->siteLangId));
+            if (true === MOBILE_APP_API_CALL) {
+                FatUtility::dieJsonError(Message::getHtml());
+            }
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'MyDownloads'));
         }
         

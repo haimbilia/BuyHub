@@ -43,7 +43,7 @@
                                     </a>
                                     <?php } ?>
                                     <a class="btn btn-light btn-sm download--preview" target="_blank"
-                                        href="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview']; ?>"
+                                        href="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id']), CONF_WEBROOT_FRONTEND) . '/' . $attachment['preview']; ?>"
                                         title="<?php echo $attachment['preview']; ?>">
                                         <i class="fa fa-download icon"></i>
                                     </a>

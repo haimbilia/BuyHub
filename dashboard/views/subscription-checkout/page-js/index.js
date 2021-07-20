@@ -126,7 +126,7 @@ $("document").ready(function() {
         }
         $.facebox(function() {
             fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'getCouponForm'), '', function(t) {
-                $.facebox(t, 'faceboxWidth');
+                $.facebox(t );
                 $("input[name='coupon_code']").focus();
             });
         });
@@ -237,7 +237,7 @@ $("document").ready(function() {
         }
         $.facebox(function() {
             fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'getCouponForm'), '', function(t) {
-                $.facebox(t, 'faceboxWidth');
+                $.facebox(t );
                 $("input[name='coupon_code']").focus();
             });
         });

@@ -39,7 +39,6 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
             <h2 class="title">
                 <?php echo Labels::getLabel('LBL_Sign_In', $siteLangId); ?>
             </h2>
-
         </div>
         <div class="card-sign_body">
             <?php

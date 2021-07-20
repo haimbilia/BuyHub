@@ -32,7 +32,7 @@ $(document).ready(function(){
 	viewRequestedCatalog = function(scatrequest_id){
 		$.facebox(function() {
 			fcom.ajax(fcom.makeUrl('Seller', 'viewRequestedCatalog', [ scatrequest_id ]), '', function(t) {
-				$.facebox(t,'faceboxWidth');
+				$.facebox(t );
 			});
 		});
 	};
@@ -50,7 +50,7 @@ $(document).ready(function(){
 	messageForm = function(scatrequest_id){
 		$.facebox(function() {
 			fcom.ajax(fcom.makeUrl('Seller', 'catalogRequestMsgForm', [ scatrequest_id ]), '', function(t) {
-				$.facebox(t,'faceboxWidth');
+				$.facebox(t );
 				searchCatalogRequestMessages(document.frmCatalogRequestMsgsSrch);
 			});
 		});
@@ -95,7 +95,7 @@ $(document).ready(function(){
 			
 		/* $.facebox(function() { */
 		fcom.ajax(fcom.makeUrl('Seller', 'addCatalogRequest'), '', function(t) {
-			//$.facebox(t,'faceboxWidth');
+			//$.facebox(t );
 			$(dv).html(t);
 			var frm = $(dv+' form')[0];
 			var validator = $(frm).validation({errordisplay: 3});

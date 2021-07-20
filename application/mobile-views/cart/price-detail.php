@@ -50,6 +50,12 @@ $priceDetail['priceDetail'] = array(
     )
 );
 
+if (0 < $cartSummary['totalSaving'] && (!isset($cartPage) || false === $cartPage)) {
+    $priceDetail['priceDetail'][] = array(
+        'key' => Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId),
+        'value' => CommonHelper::displayMoneyFormat($cartSummary['totalSaving'])
+    );
+}
 
 if (0 < $appliedRewardPointsDiscount) {
     $usedRPAmt = CommonHelper::convertRewardPointToCurrency($appliedRewardPointsDiscount);

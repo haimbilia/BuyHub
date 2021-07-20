@@ -26,10 +26,11 @@ if (!empty($excludeLocations)) {
     }
 }
 ?>
-<div class="card-header">
-    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Zone_Setup', $siteLangId); ?></h5>
+
+<div class="modal-header">
+	<h5 class="modal-title"><?php echo Labels::getLabel('LBL_Zone_Setup', $siteLangId); ?></h5>
 </div>
-<div class="card-body">
+<div class="modal-body">
     <div class="row">
         <div class="col-md-12">
             <form onsubmit="setupZone(this); return(false);" method="post" class="form" id="shippingZoneFrm">
@@ -181,6 +182,8 @@ if (!empty($excludeLocations)) {
         </div>
     </div>
 </div>
+
+
 <?php if (0 < $zone_id) { ?>
     <script>
         setTimeout(function(){                
@@ -206,44 +209,3 @@ if (!empty($excludeLocations)) {
             }, 150);
     </script>
 <?php } ?>
-<script>
-    /*  $(document).on('keyup', "input[name='shipzone_name']", function() {
-        var currObj = $(this);
-        var parentForm = currObj.closest('form').attr('id');
-        $("#" + parentForm + " input[name='shipzone_id']").val(0);
-        $('.country--js input[type="checkbox"]').prop('checked', false);
-        $('.zone--js input[type="checkbox"]').prop('checked', false);
-        if ('' != currObj.val()) {
-            currObj.siblings('ul.dropdown-menu').remove();
-            currObj.autocomplete({
-                'source': function(request, response) {
-                    $.ajax({
-                        url: fcom.makeUrl('ShippingZones', 'autoCompleteZone'),
-                        data: {
-                            fIsAjax: 1,
-                            keyword: currObj.val()
-                        },
-                        dataType: 'json',
-                        type: 'post',
-                        success: function(json) {
-                            response($.map(json, function(item) {
-                                return {
-                                    label: item['name'],
-                                    value: item['name'],
-                                    id: item['id']
-                                };
-                            }));
-                        },
-                    });
-                },
-                appendTo: '.zone-main-field--js',
-                select: function(event, ui) {
-                    $("#" + parentForm + " input[name='shipzone_id']").val(ui.item.id);
-                    getZoneLocation(ui.item.id);
-                }
-            });
-        } else {
-            $("#" + parentForm + " input[name='shipzone_id']").val(0);
-        }
-    }); */
-</script>

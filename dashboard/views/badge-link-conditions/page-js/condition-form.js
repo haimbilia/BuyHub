@@ -124,7 +124,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
         $("#" + searchSelector).html("");
         var recordType = $('[name="blinkcond_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
-            return fcom.makeUrl('Products', 'autoComplete');
+            return fcom.makeUrl('Products', 'autoComplete',[], siteConstants.webrootfront);
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
             return fcom.makeUrl('Seller', 'sellerProductsAutoComplete');
         }else if (RECORD_TYPE_SHOP == recordType) {

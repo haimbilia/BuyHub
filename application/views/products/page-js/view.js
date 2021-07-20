@@ -187,7 +187,7 @@ function reviewAbuse(reviewId) {
 	if (reviewId) {
 		$.facebox(function () {
 			fcom.ajax(fcom.makeUrl('Reviews', 'reviewAbuse', [reviewId]), '', function (t) {
-				$.facebox(t, 'faceboxWidth');
+				$.facebox(t);
 			});
 		});
 	}
@@ -299,7 +299,7 @@ function setupReviewAbuse(frm) {
 
 		$.facebox(function () {
 			fcom.ajax(fcom.makeUrl('Account', 'shareSocialReferEarn'), data, function (t) {
-				$.facebox(t, 'faceboxWidth');
+				$.facebox(t);
 			});
 		});
 		return false;

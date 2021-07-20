@@ -44,7 +44,7 @@ class CustomRouter
                     $langId = $langCodes[strtoupper($controller)];
                 }
                 $langId = ($langId > 0) ? $langId : CommonHelper::getLangId();
-                setcookie('defaultSiteLang', SYSTEM_LANG_ID, time() + 3600 * 24 * 10, CONF_WEBROOT_URL);
+                setcookie('defaultSiteLang', $langId, time() + 3600 * 24 * 10, CONF_WEBROOT_URL);
 
                 $controller = ($action == 'index') ? 'Home' : $action;
                 if (!array_key_exists(0, $queryString)) {

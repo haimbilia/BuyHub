@@ -11,7 +11,12 @@ class SellerPluginsController extends SellerPluginBaseController
 
     public function index($type = Plugin::TYPE_DATA_MIGRATION)
     {
-        $this->set("plugins", Plugin::getTypeArr($this->siteLangId));
+        $pluginTypes = SellerPlugin::getAllowedTypeArr($this->siteLangId);
+        if (!array_key_exists($type, $pluginTypes)) {
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
+            CommonHelper::redirectUserReferer();
+        }
+        $this->set("plugins", $pluginTypes);
         $this->set("type", $type);
         $this->_template->render();
     }

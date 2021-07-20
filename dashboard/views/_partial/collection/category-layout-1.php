@@ -6,7 +6,7 @@ if( isset($collection['categories']) && count( $collection['categories'] ) ) { ?
                 <?php echo ($collection['collection_name'] != '') ? ' <div class="section__heading"><h2>' . $collection['collection_name'] .'</h2></div>' : ''; ?>
 
                 <?php if( $collection['totCategories'] > Collections::LIMIT_CATEGORY_LAYOUT1 ){ ?>
-                    <div class="section__action"> <a href="<?php echo UrlHelper::generateUrl('Collections','View',array($collection['collection_id']));?>" class="link"><?php echo Labels::getLabel('LBL_View_More',$siteLangId); ?></a> </div>
+                    <div class="section__action"> <a href="<?php echo UrlHelper::generateUrl('Collections','View',array($collection['collection_id']), CONF_WEBROOT_FRONTEND);?>" class="link"><?php echo Labels::getLabel('LBL_View_More',$siteLangId); ?></a> </div>
                 <?php }  ?>
             </div>
             <?php include('category-layout-product-list.php'); ?>

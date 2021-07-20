@@ -24,7 +24,7 @@ if ('' === $returnAgeFld->value || '' === $cancellationAgeFld->value) {
 $urlFld = $frmSellerProduct->getField('selprod_url_keyword');
 $urlFld->setFieldTagAttribute('id', "urlrewrite_custom");
 $urlFld->setFieldTagAttribute('onkeyup', "getUniqueSlugUrl(this,this.value,$selprod_id)");
-$urlFld->htmlAfterField = "<span class='form-text text-muted'>" . UrlHelper::generateFullUrl('Products', 'View', array($selprod_id), '/') . '</span>';
+$urlFld->htmlAfterField = "<span class='form-text text-muted'>" . UrlHelper::generateFullUrl('Products', 'View', array($selprod_id), CONF_WEBROOT_FRONTEND) . '</span>';
 
 $subtractFld = $frmSellerProduct->getField('selprod_subtract_stock');
 if (null != $subtractFld) {
@@ -721,7 +721,7 @@ $fld->setFieldTagAttribute('onClick', 'clearInvOptionForm()');
             $.facebox(function() {
                 fcom.ajax(fcom.makeUrl('Seller', 'viewProdOptions', [productId]), '', function(t) {
                     var res = $.parseJSON(t);
-                    fcom.updateFaceboxContent(res.html, 'medium-fb-width');
+                    fcom.updateFaceboxContent(res.html);
                 });
             });
         };

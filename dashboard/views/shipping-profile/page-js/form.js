@@ -105,7 +105,7 @@ $(document).ready(function () {
             return;
         }
         fcom.ajax(fcom.makeUrl('ShippingZones', 'form', [profileId, zoneId]), '', function (t) {
-            $.facebox(t,'faceboxWidth');         
+            $.facebox(t );         
         }); 
     };
 

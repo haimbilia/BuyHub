@@ -18,7 +18,7 @@ function reviewAbuse(reviewId){
 	if(reviewId){
 		$.facebox(function() {
 			fcom.ajax(fcom.makeUrl('Reviews', 'reviewAbuse', [reviewId]), '', function(t) {
-				$.facebox(t,'faceboxWidth');
+				$.facebox(t );
 			});
 		});
 	}
@@ -28,7 +28,7 @@ function setupReviewAbuse(frm){
 	if (!$(frm).validate()) return;
 	var data = fcom.frmData(frm);
 	fcom.updateWithAjax(fcom.makeUrl('Reviews', 'setupReviewAbuse'), data, function(t) {
-		$(document).trigger('close.facebox');
+		$.facebox.close();
 	});
 	return false;
 }

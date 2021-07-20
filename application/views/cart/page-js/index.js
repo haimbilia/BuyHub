@@ -62,7 +62,7 @@ $(document).ready(function(){
                     }
                 }
                 catch(exc){}
-                $.facebox(t,'faceboxWidth medium-fb-width');
+                $.facebox(t);
 				$("input[name='coupon_code']").focus();
 			});
 		});
@@ -82,7 +82,7 @@ $(document).ready(function(){
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Cart','applyPromoCode'),data,function(res){
-			$("#facebox .close").trigger('click');
+			$.facebox.close();
 			$.systemMessage.close();
 			listCartProducts();
 		});

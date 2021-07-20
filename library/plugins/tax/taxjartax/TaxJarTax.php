@@ -81,7 +81,7 @@ class TaxJarTax extends TaxBase
             return false;
         }
         
-        $env = $this->settings['env'];
+        $env = array_key_exists('env', $this->settings) ? $this->settings['env'] : Plugin::ENV_SANDBOX;
         $apiToken = Plugin::ENV_SANDBOX == $env ? $this->settings['sandbox_key'] : $this->settings['live_key'];
 
         $this->client = TaxJar\Client::withApiKey($apiToken);

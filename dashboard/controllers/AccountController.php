@@ -3114,10 +3114,10 @@ class AccountController extends LoggedUserController
             Message::addErrorMessage(Labels::getLabel("LBL_Your_referral_code_is_not_generated,_Please_contact_admin.", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
-        $productUrl = UrlHelper::generateUrl('products', 'view', array($selprod_id));
+        $productUrl = UrlHelper::generateUrl('products', 'view', array($selprod_id), CONF_WEBROOT_FRONTEND);
         $productUrl = base64_encode(ltrim($productUrl, '/'));
 
-        $productSharingUrl = UrlHelper::generateFullUrl("custom", "referral", array($user_referral_code, $productUrl));
+        $productSharingUrl = UrlHelper::generateFullUrl("custom", "referral", array($user_referral_code, $productUrl), CONF_WEBROOT_FRONTEND);
 
         $userInfo = User::getAttributesById($this->userId, array('user_fb_access_token'));
         if ($userInfo['user_fb_access_token'] == '') {
@@ -3176,7 +3176,7 @@ class AccountController extends LoggedUserController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['redirect_user'] = UrlHelper::generateUrl('products', 'view', array($selprod_id));
+        $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['redirect_user'] = UrlHelper::generateUrl('products', 'view', array($selprod_id), CONF_WEBROOT_FRONTEND);
 
         /*FB API to share [*/
         include_once CONF_INSTALLATION_PATH . 'library/Fbapi.php';
@@ -3806,6 +3806,8 @@ class AccountController extends LoggedUserController
 
         $pickUpAddress = $orderObj->getOrderAddresses($orderDetail['order_id'], $opId);
         $orderDetail['pickupAddress'] = (!empty($pickUpAddress[Orders::PICKUP_ADDRESS_TYPE])) ? $pickUpAddress[Orders::PICKUP_ADDRESS_TYPE] : array();
+
+        // CommonHelper::printArray($childOrderDetail, true);
 
         $template = new FatTemplate('', '');
         $template->set('siteLangId', $this->siteLangId);

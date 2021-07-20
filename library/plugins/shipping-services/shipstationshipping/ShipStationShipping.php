@@ -49,7 +49,12 @@ class ShipStationShipping extends ShippingServicesBase
     {
         return $this->validateSettings($this->langId);
     }
-    
+        
+    /**
+     * getCarriers
+     *
+     * @return array
+     */
     public function getCarriers(): array
     {
         if (false === $this->doRequest(self::REQUEST_CARRIER_LIST)) {
@@ -134,7 +139,7 @@ class ShipStationShipping extends ShippingServicesBase
 
         $taxOptions = json_decode($orderDetail['op_product_tax_options'], true);
 
-        $shippingTotal = CommonHelper::orderProductAmount($orderDetail, 'shipping');
+        $shippingTotal = CommonHelper::orderProductAmount($orderDetail, 'SHIPPING');
         if (!empty($taxOptions)) {
             foreach ($taxOptions as $key => $val) {
                 $taxCharged += $val['value'];

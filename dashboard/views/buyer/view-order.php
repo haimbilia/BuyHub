@@ -363,11 +363,11 @@ if (!$print) { ?>
                                                 <?php
                                                 $prodOrBatchUrl = 'javascript:void(0)';
                                                 if ($childOrder['op_is_batch']) {
-                                                    $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($childOrder['op_selprod_id']));
+                                                    $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($childOrder['op_selprod_id']), CONF_WEBROOT_FRONTEND);
                                                     $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($childOrder['op_selprod_id'], $siteLangId, "SMALL"), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                                 } else {
                                                     if (Product::verifyProductIsValid($childOrder['op_selprod_id']) == true) {
-                                                        $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($childOrder['op_selprod_id']));
+                                                        $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($childOrder['op_selprod_id']), CONF_WEBROOT_FRONTEND);
                                                     }
                                                     $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($childOrder['selprod_product_id'], "SMALL", $childOrder['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                                 } ?>
@@ -390,7 +390,7 @@ if (!$print) { ?>
                                                         </div>
                                                     <?php } else { ?>
                                                         <div class="item__category">
-                                                            <a title="<?php echo $childOrder['op_product_name']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'view', array($childOrder['op_selprod_id'])); ?>">
+                                                            <a title="<?php echo $childOrder['op_product_name']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'view', array($childOrder['op_selprod_id']), CONF_WEBROOT_FRONTEND); ?>">
                                                                 <?php echo $childOrder['op_product_name']; ?>
                                                             </a>
                                                         </div>
@@ -1193,7 +1193,7 @@ if (!$print) { ?>
     trackOrder = function(trackingNumber, courier, orderNumber) {
         $.facebox(function() {
             fcom.ajax(fcom.makeUrl('Buyer', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function(res) {
-                $.facebox(res, 'medium-fb-width');
+                $.facebox(res );
             });
         });
     };

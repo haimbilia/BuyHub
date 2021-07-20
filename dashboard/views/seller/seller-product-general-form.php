@@ -24,7 +24,7 @@ if ('' === $returnAgeFld->value || '' === $cancellationAgeFld->value) {
 $urlFld = $frmSellerProduct->getField('selprod_url_keyword');
 $urlFld->setFieldTagAttribute('id', "urlrewrite_custom");
 $urlFld->setFieldTagAttribute('onkeyup', "getUniqueSlugUrl(this,this.value,$selprod_id)");
-$urlFld->htmlAfterField = "<span class='form-text text-muted'>" . UrlHelper::generateFullUrl('Products', 'View', array($selprod_id), '/') . '</span>';
+$urlFld->htmlAfterField = "<span class='form-text text-muted'>" . UrlHelper::generateFullUrl('Products', 'View', array($selprod_id), CONF_WEBROOT_FRONTEND) . '</span>';
 
 if (false === Plugin::isActive('EasyEcom')) {
     $fld = $frmSellerProduct->getField('selprod_subtract_stock');

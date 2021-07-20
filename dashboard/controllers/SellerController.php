@@ -10,6 +10,7 @@ class SellerController extends SellerBaseController
     use CustomCatalogProducts;
     use SellerUsers;  
     use ProductDigitalDownloads;
+    use ShippingServices;
   
     private $paymentPlugin;
     private $method = '';
@@ -393,6 +394,7 @@ class SellerController extends SellerBaseController
 
         $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->joinOrderProductShipment();
+        $srch->joinOrderProductSpecifics();
         $srch->joinPaymentMethod();
         $srch->joinSellerProducts();
         $srch->joinOrderUser();
@@ -405,7 +407,7 @@ class SellerController extends SellerBaseController
             array(
                 'ops.*', 'order_id', 'order_payment_status', 'order_pmethod_id', 'order_tax_charged', 'order_date_added', 'op_id', 'op_qty', 'op_order_id', 'orderstatus_id', 'op_unit_price', 'op_selprod_user_id', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'ou.user_name as buyer_user_name', 'op_is_batch', 'op_selprod_id', 'selprod_product_id', 'pm.plugin_code', 'IFNULL(pm_l.plugin_name, IFNULL(pm.plugin_identifier, "Wallet")) as plugin_name', 'op_commission_charged', 'op_qty', 'op_commission_percentage', 'ou.user_name as buyer_name', 'ouc.credential_username as user_name', 'ouc.credential_email as buyer_email', 'ou.user_phone as buyer_phone', 'op.op_shop_owner_name', 'op.op_shop_owner_username', 'op_l.op_shop_name', 'op.op_shop_owner_email', 'op.op_shop_owner_phone',
                 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_product_type',
-                'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off','ops_plugin.plugin_code as opshipping_plugin_code'
+                'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off','ops_plugin.plugin_code as opshipping_plugin_code', 'op_selprod_cancellation_age as cancellation_age'
             )
         );
         $srch->addCondition('op_selprod_user_id', '=', $userId);
@@ -985,9 +987,7 @@ class SellerController extends SellerBaseController
         /* Update To Shipping Service */
         if (OrderStatus::ORDER_SHIPPED == $orderDetail["op_status_id"]) {
             $this->langId = $this->siteLangId;
-            if (false !== $this->init(true)) {
-                $this->refundShipment($op_id);
-            }
+            $this->refundShipment($op_id);
         }
         /* Update To Shipping Service */
 
@@ -3161,9 +3161,7 @@ class SellerController extends SellerBaseController
 
         /* Update To Shipping Service */
         $this->langId = $this->siteLangId;
-        if (false !== $this->init(true)) {
-            $this->returnShipment($requestRow['op_id'], $requestRow['orrequest_qty']);
-        }
+        $this->returnShipment($requestRow['op_id'], $requestRow['orrequest_qty'], UrlHelper::generateUrl('Seller', 'viewOrderReturnRequest', array($requestRow['orrequest_id'])));
         /* Update To Shipping Service */
 
         /* email notification handling[ */

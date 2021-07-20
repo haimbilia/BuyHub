@@ -46,7 +46,7 @@ if (isset($collection['testimonials']) && count($collection['testimonials']) > 0
             </div>
             <!-- /Slider -->
             <div class="section-foot text-center">
-                <a class="btn btn-outline-white btn-wide" href="<?php echo UrlHelper::generateUrl('Testimonials'); ?>"><?php echo Labels::getLabel('LBL_View_all', $siteLangId); ?></a>
+                <a class="btn btn-outline-white btn-wide" href="<?php echo UrlHelper::generateUrl('Testimonials','',[], CONF_WEBROOT_FRONTEND); ?>"><?php echo Labels::getLabel('LBL_View_all', $siteLangId); ?></a>
             </div>
         </div>
     </section>

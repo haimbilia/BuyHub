@@ -75,7 +75,7 @@ $(document).on("change", ".state", function () {
     addCategoryBanner = function (prodCatId) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('Seller', 'addCategoryBanner', [prodCatId]), '', function (t) {
-                $.facebox(t, 'faceboxWidth');
+                $.facebox(t );
             });
         });
     };
@@ -83,7 +83,7 @@ $(document).on("change", ".state", function () {
     /* categoryBannerLangForm = function( prodCatId, langId ){
         $.facebox(function() {
             fcom.ajax(fcom.makeUrl('Seller', 'categoryBannerLangForm',[prodCatId, langId]), '', function(t) {
-                $.facebox(t,'faceboxWidth');
+                $.facebox(t );
             });
         });
     } */
@@ -555,7 +555,7 @@ $(document).on("change", ".state", function () {
     bannerPopupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
             fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t );
                 var file = inputBtn.files[0];
                 var minWidth = document.frmShopBanner.banner_min_width.value;
                 var minHeight = document.frmShopBanner.banner_min_height.value;
@@ -580,7 +580,7 @@ $(document).on("change", ".state", function () {
     logoPopupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
             fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t );
                 var file = inputBtn.files[0];
                 var minWidth = document.frmShopLogo.logo_min_width.value;
                 var minHeight = document.frmShopLogo.logo_min_height.value;
@@ -667,7 +667,7 @@ $(document).on("change", ".state", function () {
     collectionPopupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
             fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t );
                 var file = inputBtn.files[0];
                 var options = {
                     aspectRatio: 16 / 9,

@@ -144,7 +144,7 @@ $("document").ready(function () {
             address_type = 0;
         }
         data = 'id=' + id;
-        fcom.updateWithAjax(fcom.makeUrl('Addresses', 'deleteRecord'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('Addresses', 'deleteRecord', [], siteConstants.webroot_dashboard), data, function (res) {
             loadAddressDiv(address_type);
         });
     };
@@ -179,7 +179,7 @@ $("document").ready(function () {
         }
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Addresses', 'setUpAddress','',siteConstants.webroot_dashboard), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Addresses', 'setUpAddress', [],siteConstants.webroot_dashboard), data, function (t) {
             if (t.status == 1) {
                 if ($("#hasAddress").length > 0) {
                     $("#hasAddress").val(1);
@@ -198,32 +198,10 @@ $("document").ready(function () {
     };
 
     setDefaultAddress = function (id) {
-        /* if( !confirm(langLbl.confirmDefault) ){
-            return false;
-        }
-        data='id='+id;
-        alert(id);*/
-
-        /*$('.address-billing').removeClass("is--selected");
-        $("input[name='billing_address_id']").each(function () {
-            $(this).removeAttr("checked");
-        });
-        $('#address_' + id + ' input[name=billing_address_id]').attr('checked', 'checked');
-        $('#address_' + id).addClass("is--selected");*/
-
         $("input[name='shipping_address_id']").each(function () {
             $(this).removeAttr("checked");
         });
         $('.address-' + id + ' input[name=shipping_address_id]').attr('checked', 'checked');
-
-        /* $("#btn-continue-js").trigger("click"); */
-        /* setUpAddressSelection($('#btn-continue-js')); */
-
-        /* fcom.updateWithAjax(fcom.makeUrl('Addresses','setDefault'),data,function(res){
-            $('.address-billing').removeClass("is--selected");
-            $('.address_'+id).addClass("is--selected");
-            /* $("#btn-continue-js").trigger("click");
-    });*/
     };
 
     setUpAddressSelection = function (addr_id) {
@@ -243,19 +221,12 @@ $("document").ready(function () {
                 if (t.loadAddressDiv) {
                     loadAddressDiv();
                 }
-                /*
-                else if($(".payment-js").hasClass('is-active')){
-                    loadPaymentSummary();
-                    loadFinancialSummary();
-                }
-                */
                 else {
                     if (t.hasPhysicalProduct) {
                         $(shippingSummaryDiv).show();
                     } else {
                         $(shippingSummaryDiv).hide();
                         loadShippingAddress();
-                        /* loadCartReviewDiv();                     */
                     }
                     loadShippingSummaryDiv();
                     loadFinancialSummary();
@@ -462,7 +433,7 @@ $("document").ready(function () {
 
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('Checkout', 'getCouponForm'), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $.facebox(t);
                 $("input[name='coupon_code']").focus();
             });
         });
@@ -596,7 +567,7 @@ $("document").ready(function () {
             var slotId = $("input[name='slot_id[" + pickUpBy + "]']").val();
             var slotDate = $("input[name='slot_date[" + pickUpBy + "]']").val();
             var data = 'pickUpBy=' + pickUpBy + '&recordId=' + recordId + '&addrId=' + addrId + '&slotId=' + slotId + '&slotDate=' + slotDate;
-            fcom.ajax(fcom.makeUrl('Addresses', 'getPickupAddresses'), data, function (rsp) {
+            fcom.ajax(fcom.makeUrl('Addresses', 'getPickupAddresses', [], siteConstants.webroot_dashboard), data, function (rsp) {
                 $.facebox(rsp, 'faceboxWidth medium-fb-width');
                 $("input[name='coupon_code']").focus();
             });
@@ -689,7 +660,7 @@ $("document").ready(function () {
     orderPickUpData = function (order_id) {
         var data = 'order_id=' + order_id;
         fcom.ajax(fcom.makeUrl('Checkout', 'orderPickUpData'), data, function (rsp) {
-            $.facebox(rsp, 'faceboxWidth medium-fb-width');
+            $.facebox(rsp);
         });
     }
 
@@ -704,7 +675,7 @@ $("document").ready(function () {
     orderShippingData = function (order_id) {
         var data = 'order_id=' + order_id;
         fcom.ajax(fcom.makeUrl('Checkout', 'orderShippingData'), data, function (rsp) {
-            $.facebox(rsp, 'faceboxWidth medium-fb-width');
+            $.facebox(rsp);
         });
     }
 

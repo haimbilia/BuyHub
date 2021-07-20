@@ -45,12 +45,12 @@
             $levelNo = 0;
             foreach ($shippingRates as $pickUpBy => $levelItems) { ?>
                 <ul class="list-cart list-cart-page list-shippings">
-                    <?php //if (count($levelItems['products']) > 0 && $pickUpBy == 0) {
+                    <?php
+                    $seletedSlotId = '';
+                    $seletedSlotDate = '';
+                    $seletedAddrId = '';
                     if (isset($levelItems['products']) && count($levelItems['products']) > 0 && $pickUpBy == 0) {
                         $productData = current($levelItems['products']);
-                        $seletedSlotId = '';
-                        $seletedSlotDate = '';
-                        $seletedAddrId = '';
                         if (!empty($levelItems['pickup_address'])) { 
                             $address = $levelItems['pickup_address'];
                             $seletedSlotId = $address['time_slot_id'];
@@ -88,14 +88,7 @@
 
                             </div>
                             <div class="shop-address js-slot-addr_<?php echo $pickUpBy; ?>">
-                                <?php $seletedSlotId = '';
-                                $seletedSlotDate = '';
-                                $seletedAddrId = '';
-                                if (!empty($levelItems['pickup_address'])) {
-                                    $address = $levelItems['pickup_address'];
-                                    $seletedSlotId = $address['time_slot_id'];
-                                    $seletedSlotDate = $address['time_slot_date'];
-                                    $seletedAddrId = $address['addr_id'];
+                                <?php if (!empty($levelItems['pickup_address'])) {
                                     $fromTime = date('H:i', strtotime($address["time_slot_from"]));
                                     $toTime = date('H:i', strtotime($address["time_slot_to"]));
                                 ?>
@@ -123,9 +116,7 @@
                             $shopUrl = !$isAppUser ? UrlHelper::generateUrl('Shops', 'View', array($product['shop_id'])) : 'javascript:void(0)';
                             $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>
                             <?php if ($levelNo != $pickUpBy) {
-                                if (count($levelItems['products']) > 0  && $pickUpBy != 0) {
-                                    //if (count($levelItems['products']) > 0 && $pickUpBy != 0) {
-                            ?>
+                                if (count($levelItems['products']) > 0  && $pickUpBy != 0) { ?>
                                     <li class="shipping-select">
                                         <div class="shop-name">
                                             <h6><i class="icn">

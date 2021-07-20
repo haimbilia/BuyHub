@@ -126,6 +126,7 @@ class User extends MyAppModel
     public const AUTH_TYPE_REGISTERED = 2;
 
     public $parentId = 0;
+    private $loginWithOtp = false;
 
     public function __construct($userId = 0, $parentId = 0)
     {
@@ -1679,16 +1680,18 @@ class User extends MyAppModel
                 return false;
             }
 
-            $this->deletePhoneOtp($this->mainTableRecordId);
+            // $this->deletePhoneOtp($this->mainTableRecordId);
             $this->verifyAccount(applicationConstants::YES);
 
             if (true === $doLogin) {
                 $attr = [
-                    'credential_username',
+                    'user_phone_dcode',
+                    'user_phone',
                     'credential_password'
                 ];
                 $userInfo = $this->getUserInfo($attr);
-                $this->doLogin($userInfo['credential_username'], $userInfo['credential_password']);
+                $this->loginWithOtp = true;
+                $this->doLogin($userInfo['user_phone_dcode'] . $userInfo['user_phone'], $userInfo['credential_password']);
             }
             return (true == $returnRow) ? $row : true;
         } else {
@@ -2567,7 +2570,7 @@ class User extends MyAppModel
 
     public function checkUserByEmailOrUserName($userName, $userEmail)
     {
-        $srch = $this->getUserSearchObj(array('user_id', 'credential_email', 'credential_username'));
+        $srch = $this->getUserSearchObj(array('user_id', 'credential_email', 'credential_username', 'credential_verified', 'user_deleted'));
         $condition = $srch->addCondition('credential_username', '=', $userName);
         $condition->attachCondition('credential_email', '=', $userEmail, 'OR');
         $rs = $srch->getResultSet();
@@ -2866,6 +2869,7 @@ class User extends MyAppModel
     private function doLogin($username, $password)
     {
         $authentication = new UserAuthentication();
+        $authentication->loginWithOtp = $this->loginWithOtp;
         $remoteAddress = $_SERVER['REMOTE_ADDR'];
         if (!$authentication->login($username, $password, $remoteAddress, false)) {
             $this->error = Labels::getLabel($authentication->getError(), $this->commonLangId);
