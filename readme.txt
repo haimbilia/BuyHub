@@ -129,7 +129,7 @@ Updates/Fixes :
     => 056021 - when multiple items are ordered together then on packing slip> getting wrong data listed
     => 056034 - when order is canceled still then seller having option to generate shipping label for the same
 
-
+=========================TV-9.3.2.20210720=====================================
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files

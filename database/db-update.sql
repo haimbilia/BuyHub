@@ -827,3 +827,4 @@ ALTER TABLE `tbl_order_product_plugin_specifics`
 -- ---------------------------------TV-9.3.2.20210716---------------------
 
 ALTER TABLE tbl_seller_products ADD UNIQUE( selprod_user_id, selprod_code);
+-- ------------------------TV-9.3.2.20210720------------------
