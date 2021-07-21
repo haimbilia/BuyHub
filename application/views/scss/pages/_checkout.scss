@@ -1,21 +1,65 @@
-.is-checkout {
-    overflow-x: hidden;
-}
-
 .checkout {
-    height: 100%;
+    --header-height: 90px;
+    --btn-height: 50px;
     @include media-breakpoint-up(xl) {
         .container {
-            max-width: 1000px;
-            padding: inherit;
+            max-width: 1200px;
+            padding: 0;
         }
     }
-    .content {
-        height: calc(100% - 95px);
+}
+
+.checkout-page {
+    //min-height: calc(100vh - (var(--header-height)));
+    display: flex;
+    @include media-breakpoint-down(sm) {
+        padding-bottom: var(--btn-height);
+    }
+    .main {
+        flex: 1;
+        @include media-breakpoint-up(xl) {
+            padding-#{$end-direction}: 60px;
+            flex: 0 0 60%;
+            max-width: 60%;
+        }
+    }
+    .sidebar {
+        //background: $bg-gray;
+        //border-#{$start-direction}: $border;
+        position: relative;
+        flex: 1;
+        background-position: left top;
+        background: $bg-gray;
+        padding: 2rem;
+        border-radius: $radius4;
+        @include media-breakpoint-down(lg) {
+            display: none;
+        }
+        .order-summary--on & {
+            display: block;
+            flex: auto;
+            max-width: inherit;
+            padding: 1rem;
+            padding-bottom: 0;
+            margin: 0;
+            //background: $bg-gray;
+            background: hsla(0, 0%, 100%, .8);
+            backdrop-filter: blur(7px);
+            position: fixed;
+            //top: 0;
+            left: 0;
+            right: 0;
+            bottom: var(--btn-height);
+            z-index: 10;
+            width: 100%;
+            //height: 100%;
+            box-shadow: $shadow1;
+        }
     }
 }
 
 .header-checkout {
+    min-height: var(--header-height);
     background: $bg-white;
     background-size: cover;
     border-bottom: $border;
@@ -37,48 +81,51 @@
             }
         }
     }
-}
-
-.logo-checkout-main {
-    max-width: 150px;
-    display: block;
-    margin: 1rem 0;
-    @include media-breakpoint-down(md) {
-        & {
-            max-width: 100px;
+    .logo-checkout-main {
+        max-width: 150px;
+        display: block;
+        padding: 0.5rem 0;
+        //margin: 1rem 0;
+        @include media-breakpoint-down(md) {
+            & {
+                max-width: 100px;
+            }
         }
-    }
-    @include media-breakpoint-down(lg) {
-        & {
-            margin: 0.5rem auto;
-            max-width: 100px;
+        @include media-breakpoint-down(lg) {
+            & {
+                max-width: 100px;
+            }
         }
-    }
-    img {
-        &[data-ratio="16:9"] {
-            max-width: 120px;
-        }
-        &[data-ratio="1:1"] {
-            max-width: 60px;
+        img {
+            &[data-ratio="16:9"] {
+                max-width: 120px;
+            }
+            &[data-ratio="1:1"] {
+                max-width: 60px;
+            }
         }
     }
 }
 
 .order-summary-toggle {
+    height: var(--btn-height);
     position: fixed;
     bottom: 0;
     z-index: 2;
     background: $brand-color;
     color: $brand-color-inverse;
-    backdrop-filter: blur(7px);
+    //backdrop-filter: blur(7px);
     border: none;
-    border-top: $border;
-    padding: 1.25em 0;
-    flex-shrink: 0;
+    padding: 1rem;
     width: 100%;
+    @include media-breakpoint-up(xl) {
+        display: none;
+    }
     .order-summary-toggle__inner {
         display: flex;
-        width: 100%;
+        justify-content: space-between;
+        //max-width: 400px;
+        margin: 0 auto;
         .order-summary-toggle__text {
             position: relative;
             text-transform: uppercase;
@@ -93,160 +140,38 @@
         }
     }
     .order-summary-toggle__total-recap {
-        text-align: right;
-        flex: 1;
+        margin-#{$start-direction}: auto;
     }
-}
-
-.order-summary--on .order-summary-toggle__text .svg {
-    transform: rotate(-90deg);
-}
-
-@include media-breakpoint-up(xl) {
-    .order-summary-toggle {
-        display: none;
-    }
-}
-
-.content {
-    display: flex;
-    flex-direction: column;
-    flex: 1 0 auto;
-    .container {
-        display: flex;
-        flex: 1 0 auto;
-        flex-direction: column-reverse;
-        @include media-breakpoint-up(xl) {
-            & {
-                flex-direction: row;
-            }
-        }
-        @include media-breakpoint-down(md) {
-            & {
-                padding: 0;
-            }
-        }
-    }
-    .main {
-        @include media-breakpoint-up(xl) {
-            & {
-                display: flex;
-                flex-direction: column;
-                flex: 1 0 auto;
-                background: none;
-                height: auto;
-                padding: 1rem 0;
-                padding-top: 4rem;
-                width: 50%;
-                padding-#{$end-direction}: 5%;
-                float: #{$start-direction};
-                &__content {
-                    position: relative;
-                    overflow: hidden;
-                    display: flex;
-                    align-items: center;
-                    flex-direction: column;
-                }
-            }
-        }
-        @include media-breakpoint-down(lg) {
-            padding: 1rem;
-            flex: 1;
-        }
-    }
-    .sidebar {
-        @include media-breakpoint-down(lg) {
-            padding: 0 1rem;
-            margin: 1.5rem 0;
-            //background: $bg-gray;
-            background: hsla(0, 0%, 100%, .8);
-            backdrop-filter: blur(7px);
-            position: absolute;
-            bottom: 33px;
-            z-index: 10;
-            width: 100%;
-            box-shadow: $shadow1;
-        }
-    }
-    @include media-breakpoint-up(xl) {
-        .sidebar {
-            position: relative;
-            width: 40%;
-            padding-top: 4rem;
-            padding-#{$start-direction}: 4rem;
-            background-position: left top;
-            float: #{$end-direction};
-            &:after {
-                content: "";
-                display: block;
-                width: 300%;
-                position: absolute;
-                top: 0;
-                left: -100%;
-                bottom: 0;
-                background: #fdfdfd;
-                z-index: -1;
-                -webkit-box-shadow: 0 -1px 0 $border-color inset;
-                box-shadow: 0 -1px 0 $border-color inset;
-                #{$start-direction}: 0;
-                background-position: left top;
-                border-#{$start-direction}: $border;
-            }
-        }
-    }
-    .breadcrumb {
-        .breadcrumb__item--current {
-            font-weight: 600;
-        }
-        .breadcrumb__chevron-icon {
-            width: 10px;
-            height: 10px;
-            margin: 0 0.64286rem;
-            fill: currentColor;
-        }
-    }
-}
-
-.steps-wrapper {
-    position: relative;
 }
 
 .step {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    opacity: 0;
-    visibility: hidden;
-    height: 0;
-    overflow: hidden;
-    transform: translateX(-72px);
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    @include media-breakpoint-down(md) {
-        padding-bottom: 60px;
-    }
-    &.active {
-        opacity: 1;
-        visibility: visible;
-        height: auto;
-        overflow: inherit;
-        transform: translateX(0) scale(1);
-        transition-delay: 0.4s;
-    }
-    &__section {
-        &__head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.8rem;
-            &__title {
-                margin: 0;
-                font-weight: 400;
-                small {
-                    display: block;
-                    font-size: 0.8rem;
-                }
-            }
+    &_section {
+        margin-bottom: 2rem;
+        &:last-child {
+            margin: 0;
         }
     }
-    &__footer {
+    &_head {
+        color: $txt-gray;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.8rem;
+    }
+    &_title {
+        text-transform: uppercase;
+        font-size: 1rem;
+        margin: 0;
+        font-weight: 600;
+        color: $txt-body;
+    }
+    &_body {
+        flex: 1;
+    }
+    &_foot {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -272,6 +197,7 @@
     border: $border;
     color: $txt-gray;
     >li {
+        position: relative;
         padding: 1rem;
         display: flex;
         border-bottom: $border;
@@ -293,10 +219,21 @@
     &__content {
         flex: 1;
         overflow: hidden;
+        padding-#{$end-direction}: 100px;
         .selected-slot {
             font-weight: 600;
             padding-top: 0.5rem;
             display: block;
+        }
+    }
+    &__link {
+        position: absolute;
+        top: 1rem;
+        #{$end-direction}: 1rem;
+        .svg {
+            width: 1rem;
+            height: 1rem;
+            margin-#{$end-direction}: 8px;
         }
     }
     .shipping-data {
@@ -312,43 +249,20 @@
     }
 }
 
-@include media-breakpoint-up(xs) {
-    .order-summary {
-        display: none;
-        &--on {
-            .order-summary {
-                display: block;
-                padding-top: 1rem;
-            }
-        }
+.order-summary {
+    h5 {
+        text-transform: uppercase;
+        font-size: 1rem;
+        color: $txt-body;
     }
-}
-
-@include media-breakpoint-up(xl) {
-    .order-summary {
-        height: auto;
-        visibility: visible;
-        display: block;
-    }
-}
-
-.order-summary__sections {
-    .order-summary__section--product-list {
-        display: flex;
-        -webkit-flex: 0 1 auto;
-        -ms-flex: 0 1 auto;
-        flex: 0 1 auto;
-        overflow: hidden;
-        padding: 0;
+    &_list {
+        min-width: 100%;
         position: relative;
-        .order-summary__section__content {
-            min-width: 100%;
-            position: relative;
-            max-height: 300px;
-            @include media-breakpoint-down(sm) {
-                max-height: 150px;
-            }
-        }
+        max-height: 500px;
+        overflow-y: auto;
+    }
+    .cart-summary {
+        margin-top: 2rem;
     }
 }
 
@@ -382,7 +296,7 @@
 
 .pick-section {
     /*border: $border;
-    border-radius: $radius4;*/
+   border-radius: $radius4;*/
     margin-bottom: 1rem;
     .pickup-option {
         padding: 1rem;
@@ -505,14 +419,9 @@
         }
     }
     .tab-content {
-        margin-bottom: 1.5rem;
         border: $border;
         border-radius: $radius4;
-        .tabs-container {
-            padding: 1rem;
-            position: relative;
-            z-index: 0;
-        }
+        padding: 2rem;
     }
     .paypal-data {
         text-align: center;
@@ -583,57 +492,53 @@
     }
 }
 
-.list-addresses { max-height: 318px;
-    >ul {
+.list-addresses {
+    max-height: 400px;
+    overflow-y: auto;
+    li {
+        padding: 1rem;
+        position: relative;
         border: $border;
-        border-radius: $radius4;
-        >li {
-            border-bottom: $border;
-            padding: 1rem;
-            position: relative;
-            &:last-child {
-                border-bottom: none;
-            }
-            .label-block {
-                display: flex;
-                align-items: flex-start;
-            }
-            .checkbox_wrap {
-                margin-top: 3px;
-                margin-#{$end-direction}: 10px;
-            }
-            .delivery-address {
-                font-size: 0.85rem;
-                color: $txt-gray;
+        border-radius: 2px;
+        .delivery-address {
+            font-size: 0.85rem;
+            color: $txt-gray;
+            line-height: 1.5;
+            margin-bottom: 0;
+            h5 {
+                margin-bottom: 10px;
+                font-weight: 500;
+                font-size: 0.9rem;
                 line-height: 1.5;
-                margin: 0;
-                flex: 1;
-                h5 {
-                    font-weight: 500;
-                    font-size: 0.9rem;
-                    margin-bottom: 10px;
-                    display: flex;
-                    align-items: flex-start;
-                }
-                .tag {
-                    margin: 0 5px;
-                    border: solid 1px $success-color;
-                    border-radius: 40px;
-                    color: $success-color;
-                    padding: 2px 0.6rem;
-                    line-height: inherit;
-                    font-size: 0.75rem;
-                    font-weight: 400;
-                    text-transform: uppercase;
-                }
-                .phone-txt {
-                    margin-top: 10px;
-                    font-weight: 600;
-                }
+                color: $body-color;
+                display: flex;
+                align-items: center;
             }
-            .list-actions {
-                margin-#{$start-direction}: auto;
-                padding-#{$start-direction}: 10px;
+            span {
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                display: inline-block;
+                max-width: 50%;
+            }
+            .tag {
+                margin: 0 5px;
+                border: solid 1px $success-color;
+                border-radius: 40px;
+                color: $success-color;
+                padding: 2px 0.6rem;
+                line-height: 1;
+                font-size: 0.75rem;
+                font-weight: 400;
+                text-transform: uppercase;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 42%;
+            }
+            .phone-txt {
+                font-weight: 500;
+                margin-top: 8px;
             }
         }
     }
@@ -746,12 +651,12 @@
     .shipping-select {
         font-size: 0.85rem;
         background-color: $bg-gray;
+        padding: 1rem;
         padding-#{$end-direction}: 5px;
         //align-items: center;
-        flex-direction: initial;
         display: flex;
         justify-content: space-between;
-        flex-direction: column;
+        //flex-direction: column;
     }
     .pickup-select {
         display: flex;
@@ -763,7 +668,7 @@
         justify-content: space-between;
         color: $txt-body;
         /* flex: 0 0 20%;
-        max-width: 20%;*/
+       max-width: 20%;*/
         h6 {
             margin: 0;
             font-size: inherit;
@@ -785,6 +690,7 @@
             font-size: inherit;
         }
         .form-control {
+            font-weight: 600;
             font-size: inherit;
             border: none;
             border-radius: 0px;

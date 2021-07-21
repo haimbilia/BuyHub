@@ -1,12 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div id="body" class="body bg-gray-dark">
-    <section class="section cart-page">
+<div id="body" class="body bg-gray-darkx">
+    <section class="section">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-xl-10" id="js-cart-listing">
                     <?php if($total > 0){ ?>
-                    <div class="row">
-                        <div class="col-xl-8 col-lg-7">
+                    <div class="cart-page">
+                        <main class="cart-page_main">
                             <?php if($hasPhysicalProduct){ ?>
                             <div class="shiporpickup" id="js-shiporpickup">
                                 <ul>
@@ -40,22 +40,20 @@
                             </div>
                             <?php } ?>
                             <div id="cartList"></div>
-                        </div>
-                        <div class="col-xl-4 col-lg-5 mt-5 mt-md-0">
+                        </main>
+                        <aside class="cart-page_aside">
                             <div class="sticky-summary">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="cart-total">
-                                            <div id="js-cartFinancialSummary"></div>
-                                            <div class="buttons-group mt-4">
-                                                <a class="btn btn-outline-brand"
-                                                    href="<?php echo UrlHelper::generateUrl(); ?>"><?php echo Labels::getLabel('LBL_Shop_More', $siteLangId); ?></a>
-                                                <a class="btn btn-brand" href="javascript:void(0)"
-                                                    onclick="goToCheckout()"><?php echo Labels::getLabel('LBL_Checkout', $siteLangId); ?></a>
-                                            </div>
-                                        </div>
+                                <div class="cart-total">
+                                    <div id="js-cartFinancialSummary"></div>
+                                    <div class="buttons-group mt-4">
+                                        <a class="btn btn-outline-brand"
+                                            href="<?php echo UrlHelper::generateUrl(); ?>"><?php echo Labels::getLabel('LBL_Shop_More', $siteLangId); ?></a>
+                                        <a class="btn btn-brand" href="javascript:void(0)"
+                                            onclick="goToCheckout()"><?php echo Labels::getLabel('LBL_Checkout', $siteLangId); ?></a>
                                     </div>
                                 </div>
+
+
                                 <div class="secure">
                                     <p><i
                                             class="fas fa-lock"></i><?php echo Labels::getLabel('LBL_100%_SECURE_PAYMENT', $siteLangId); ?>
@@ -172,7 +170,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </aside>
                     </div>
                     <?php } ?>
                 </div>

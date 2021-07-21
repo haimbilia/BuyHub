@@ -226,7 +226,6 @@
              :after {
                 opacity: 0.4;
                 transform: translate(-50%, -50%) scale(0);
-                transition: -webkit-transform 0s;
                 transition: transform 0s;
                 transition: transform 0s, -webkit-transform 0s;
             }
