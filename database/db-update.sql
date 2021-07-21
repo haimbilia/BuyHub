@@ -841,3 +841,9 @@ ALTER TABLE tbl_seller_products ADD UNIQUE( selprod_user_id, selprod_code);
 
 ALTER TABLE tbl_order_prod_charges_logs CHANGE opchargelog_percentvalue opchargelog_percentvalue DECIMAL(10,4) NOT NULL;
 
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('APP_YOUR_EMAIL_IS_NOT_VERIFIED', 1, 'Your email is not Verified. Do you want to Verify?', 2),
+('APP_YOUR_EMAIL_DOES_NOT_EXIST', 1, 'Your email does not exist. Do you want to Register?', 2),
+('APP_YOUR_PHONE_DOES_NOT_EXIST', 1, 'Your phone does not exist. Do you want to Register?', 2),
+('APP_DOWNLOAD_ALL', 1, 'Download All', 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
