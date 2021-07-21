@@ -10,7 +10,7 @@
                     
                     <h5  class="title"><?php echo Labels::getLabel('LBL_Rule', $siteLangId); ?>:
                         <?php echo $row['taxrule_name']; ?>
-                        <span class=""><?php echo Labels::getLabel('LBL_Tax_Rate(%)', $siteLangId); ?>: <?php echo !empty($row['user_rule_rate']) ? "<del>".CommonHelper::numberFormat($row['trr_rate'])."</del>" : CommonHelper::numberFormat($row['trr_rate']); ?></del>&nbsp; <?php echo CommonHelper::numberFormat($row['user_rule_rate']); ?>
+                        <span class=""><?php echo Labels::getLabel('LBL_Tax_Rate(%)', $siteLangId); ?>: <?php echo !empty($row['user_rule_rate']) ? "<del>".CommonHelper::numberFormat($row['trr_rate'])."</del>" : CommonHelper::numberFormat($row['trr_rate']); ?></del>&nbsp; <?php echo (!empty($row['user_rule_rate']) ? CommonHelper::numberFormat($row['user_rule_rate']) : ''); ?>
                         </span></h5>
                     <ul class="tax-rules__states">   
                         <li>
