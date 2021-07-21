@@ -137,6 +137,7 @@ Updates/Fixes :
     => 055906 - Seller >> tax category >> tax rates >> "0.00" gets displayed along with actual percentage of tax .
     => 056199 - Paypal Payout Not Working : Client Auth Failed
     => 056197 - on adding item to wishlist getting 404
+    => 056195 - admin> promotions> coupon> link> product and brand both tabs are highlighting 
 
 
 New Features:  
