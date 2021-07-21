@@ -237,7 +237,7 @@ addRemoveWishListProduct = function (selprod_id, wish_list_id, event) {
         }
     }
 
-    fcom.updateWithAjax(fcom.makeUrl('Account', action, [selprod_id, wish_list_id]), alternateData, function (ans) {
+    fcom.updateWithAjax(fcom.makeUrl('Account', action, [selprod_id, wish_list_id], siteConstants.webroot_dashboard), alternateData, function (ans) {
         if (ans.status == 1) {
             $(document).trigger('close.facebox');
             $(dv + " .is-active").removeClass("is-active");

@@ -27,8 +27,8 @@
 		},
 
 		close: function () {
-			$("." + $.facebox.element).remove();
 			// $("." + $.facebox.element).modal('hide');
+			$("." + $.facebox.element + ', .modal-backdrop').remove();
 			return false
 		}
 	});
