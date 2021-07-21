@@ -86,7 +86,6 @@
                 max-width: inherit;
                 margin-#{$start-direction}: 0;
             }
-           
         }
         &_action {
             text-align: #{$end-direction};
@@ -103,7 +102,7 @@
                 fill: #a9a9a9;
             }
         }
-        &:last-child { 
+        &:last-child {
             padding-#{$end-direction}: 0;
         }
     }
@@ -339,7 +338,6 @@
             z-index: 1;
         }
     }
-    
     &__data {
         flex: 1;
         min-width: 0px;
@@ -414,23 +412,8 @@
     align-items: center;
     justify-content: space-around;
     .btn {
-        border-radius: $radius3;
-        text-align: center;
-        padding: 0.6rem 1rem;
-        display: block;
-        align-items: center;
-        font-size: 1rem;
         flex: 0 0 48%;
         max-width: 48%;
-        &:first-child {
-            background: $brand-color;
-            color: $brand-color-inverse;
-        }
-        &:last-child {
-            background: #fff;
-            border: $border;
-            margin-#{$start-direction}: 4%;
-        }
     }
 }
 
