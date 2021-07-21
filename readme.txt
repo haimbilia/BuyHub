@@ -139,7 +139,7 @@ Updates/Fixes :
     => 056197 - on adding item to wishlist getting 404
     => 056195 - admin> promotions> coupon> link> product and brand both tabs are highlighting 
     => 056194 - seller> wallet> withdrawal through paypal payout> getting 404
-
+    => 056192 - Showing fatal error while opening settings of split payment method.
 
 New Features:  
     => Admin shipped products listing page
