@@ -582,7 +582,6 @@ class CheckoutController extends MyAppController
         $shipProducts = [];
 
         $basketProducts = $this->cartObj->getBasketProducts($this->siteLangId);
-        
         foreach ($shippingServices as $prodIdCobination => $rateId) {
             if (empty($rateId)) {
                 $message = Labels::getLabel('MSG_Shipping_Method_is_not_selected_on_products_in_cart', $this->siteLangId);

@@ -322,9 +322,11 @@ function setupReviewAbuse(frm) {
 	}
 
 })();
-jQuery(document).ready(function ($) {
+
+/* jQuery(document).ready(function ($) {
 	$('a[rel*=facebox]').facebox()
-});
+}); */
+
 /* for sticky things*/
 if ($(window).width() > 1050) {
 	function sticky_relocate() {
