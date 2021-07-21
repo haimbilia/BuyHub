@@ -140,6 +140,8 @@ Updates/Fixes :
     => 056195 - admin> promotions> coupon> link> product and brand both tabs are highlighting 
     => 056194 - seller> wallet> withdrawal through paypal payout> getting 404
 
+=========================TV-9.3.2.20210720=====================================
+    => 056192 - Showing fatal error while opening settings of split payment method.
 
 New Features:  
     => Admin shipped products listing page

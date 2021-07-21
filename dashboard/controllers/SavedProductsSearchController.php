@@ -45,7 +45,7 @@ class SavedProductsSearchController extends LoggedUserController
     }
 
     public function form()
-    {      
+    {
         $frm = $this->getForm();
         $frm->fill(array('user_id' => $this->userId));
         $this->set('frm', $frm);
@@ -62,7 +62,7 @@ class SavedProductsSearchController extends LoggedUserController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $curr_page = FatApp::getPostedData('curr_page', FatUtility::VAR_STRING, UrlHelper::generateFullUrl());
+        $curr_page = FatApp::getPostedData('curr_page', FatUtility::VAR_STRING, UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_FRONTEND));
         $searchedUrlString = !isset($_SERVER['HTTP_REFERER']) ? $curr_page : str_replace($curr_page, '', $_SERVER['HTTP_REFERER']);
 
         $post['pssearch_type'] = FatApp::getPostedData('pssearch_type', FatUtility::VAR_INT, 0);
@@ -70,8 +70,7 @@ class SavedProductsSearchController extends LoggedUserController
         $post['pssearch_user_id'] = $this->userId;
         $post['pssearch_added_on'] = date('Y-m-d H:i:s');
         $post['pssearch_updated_on'] = date('Y-m-d H:i:s');
-        $post['pssearch_url'] = ltrim(ltrim($searchedUrlString, '/'), '?');
-
+        $post['pssearch_url'] = ltrim(ltrim($searchedUrlString, '/'), '?');        
         $savedSearchProduct = new SavedSearchProduct();
         $savedSearchProduct->assignValues($post);
 

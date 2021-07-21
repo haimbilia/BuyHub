@@ -11,6 +11,11 @@ class StripeConnectSettingsController extends PaymentMethodSettingsController
         $keyName = 'StripeConnect';
 
         $obj = PluginHelper::callPlugin($keyName, [$langId], $error, $langId, false);
+        if (false === $obj && !empty($error)) {
+            Message::addErrorMessage($error);
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_PAYOUT_INTERVAL', $langId), 'payouts_schedule_interval', $obj->getPayoutInterval(), '', ['class' => $keyName . 'PayoutInterval--js'], '');
         $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_STRIPE_CONNECT_PAYOUT_INTERVAL_DESC', $langId) . '</small>';
 

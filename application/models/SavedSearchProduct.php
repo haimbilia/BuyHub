@@ -21,12 +21,12 @@ class SavedSearchProduct extends MyAppModel
     public static function getPageUrl()
     {
         return array(
-        static::PAGE_CATEGORY => 'Category/view/',
-        static::PAGE_PRODUCT => 'Products/search/',
-        static::PAGE_PRODUCT_INDEX => 'Products/index/',
-        static::PAGE_BRAND => 'Brands/view/',
-        static::PAGE_SHOP => 'Shops/view/',
-        static::PAGE_FEATURED_PRODUCT => 'Products/featured/'
+            static::PAGE_CATEGORY => 'Category/view/',
+            static::PAGE_PRODUCT => 'Products/search/',
+            static::PAGE_PRODUCT_INDEX => 'Products/index/',
+            static::PAGE_BRAND => 'Brands/view/',
+            static::PAGE_SHOP => 'Shops/view/',
+            static::PAGE_FEATURED_PRODUCT => 'Products/featured/'
         );
     }
 
@@ -41,22 +41,22 @@ class SavedSearchProduct extends MyAppModel
         $url = '';
         switch ($type) {
             case static::PAGE_CATEGORY:
-                $url = UrlHelper::generateFullUrl('Category', 'view', array($recordId));
+                $url = UrlHelper::generateFullUrl('Category', 'view', array($recordId), CONF_WEBROOT_FRONTEND);
                 break;
             case static::PAGE_PRODUCT:
-                $url = UrlHelper::generateFullUrl('Products', 'search');
+                $url = UrlHelper::generateFullUrl('Products', 'search', [], CONF_WEBROOT_FRONTEND);
                 break;
             case static::PAGE_PRODUCT_INDEX:
-                $url = UrlHelper::generateFullUrl('Products', 'index');
+                $url = UrlHelper::generateFullUrl('Products', 'index', [], CONF_WEBROOT_FRONTEND);
                 break;
             case static::PAGE_BRAND:
-                $url = UrlHelper::generateFullUrl('Brands', 'view', array($recordId));
+                $url = UrlHelper::generateFullUrl('Brands', 'view', array($recordId), CONF_WEBROOT_FRONTEND);
                 break;
             case static::PAGE_SHOP:
-                $url = UrlHelper::generateFullUrl('Shops', 'view', array($recordId));
+                $url = UrlHelper::generateFullUrl('Shops', 'view', array($recordId), CONF_WEBROOT_FRONTEND);
                 break;
             case static::PAGE_FEATURED_PRODUCT:
-                $url = UrlHelper::generateFullUrl('Products', 'featured');
+                $url = UrlHelper::generateFullUrl('Products', 'featured', [], CONF_WEBROOT_FRONTEND);
                 break;
         }
         return $url;
