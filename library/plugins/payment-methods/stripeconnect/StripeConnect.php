@@ -1358,7 +1358,7 @@ class StripeConnect extends PaymentMethodBase
             $paymentMethodsArr = array_merge($paymentMethodsArr, ['sofort', 'ideal', 'giropay', 'bancontact', 'eps']);
         }
 
-        if (in_array(strtoupper($this->systemCurrencyCode), ['pln'])) {
+        if (in_array(strtoupper($this->systemCurrencyCode), ['PLN'])) {
             $paymentMethodsArr = array_merge($paymentMethodsArr, ['p24']);
         }
         return $paymentMethodsArr;

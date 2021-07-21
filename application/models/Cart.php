@@ -1878,12 +1878,10 @@ class Cart extends FatModel
             $address = new Address($this->getCartShippingAddress(), $this->cart_lang_id);
             $shippingAddressDetail =  $address->getData(Address::TYPE_USER, $this->cart_user_id);
             $shipping = new Shipping($this->cart_lang_id);
-            /*
+            
             if (is_array($this->selectedShippingService) && 0 < count($this->selectedShippingService)) {
                 $shipping->setSelectedShipping($this->selectedShippingService);
-            }
-             * 
-             */
+            }            
 
             $response =  $shipping->calculateCharges($physicalSelProdIdArr, $shippingAddressDetail, $productInfo);
             $shippedByArr = $response['data'];
@@ -1897,7 +1895,6 @@ class Cart extends FatModel
                 $shippedByArr[$productInfo[$selProdId]['shop_id']][Shipping::LEVEL_PRODUCT]['rates'][$selProdId] = [];
             }
         }
-
         return $shippedByArr;
     }
 
