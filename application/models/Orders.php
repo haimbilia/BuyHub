@@ -2049,11 +2049,10 @@ class Orders extends MyAppModel
         }
 
         // $buyerAllowCancelStatuses = array_diff($buyerAllowCancelStatuses, (array)FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS", FatUtility::VAR_INT, 0));
-
         $buyerAllowCancelStatuses = array_diff($buyerAllowCancelStatuses, (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_INT, 0));
         $buyerAllowCancelStatuses = array_diff($buyerAllowCancelStatuses, unserialize(FatApp::getConfig("CONF_PROCESSING_ORDER_STATUS")));
         $buyerAllowCancelStatuses = array_diff($buyerAllowCancelStatuses, unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
-        $buyerAllowCancelStatuses = array_merge($buyerAllowCancelStatuses, (array) FatApp::getConfig("CONF_DEFAULT_INPROCESS_ORDER_STATUS"));
+        $buyerAllowCancelStatuses = array_merge($buyerAllowCancelStatuses, (array) FatApp::getConfig("CONF_DEFAULT_INPROCESS_ORDER_STATUS", FatUtility::VAR_INT, 0));
         return $buyerAllowCancelStatuses;
     }
 
