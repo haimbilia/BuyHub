@@ -17,10 +17,15 @@ class SellerPlugin extends PluginCommon
     
     public static function getAllowedTypeArr($langId)
     {
-        return [         
+        $pluginsType = [         
             self::TYPE_SHIPPING_SERVICES => Labels::getLabel('LBL_SHIPPING_SERVICES', $langId),
             self::TYPE_DATA_MIGRATION => Labels::getLabel('LBL_DATA_MIGRATION', $langId),
         ];
+
+        if (0 < FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
+            unset($pluginsType[self::TYPE_SHIPPING_SERVICES]);
+        }
+        return $pluginsType;
     }
 
     public static function getSearchObject(int $userId, int $langId = 0, bool $isActive = true, bool $innerJoinPluginUser = true, bool $joinSettings = false): object

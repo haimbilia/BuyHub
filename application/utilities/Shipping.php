@@ -14,6 +14,7 @@ class Shipping
     public const CARRIER_CACHE_KEY_NAME = "shipCarrierCache_";
 
     private $langId;   
+    private $error = '';   
     private $successMsg = '';
     private $shippedByArr = [];
     private $selProdShipRates = [];
@@ -34,6 +35,16 @@ class Shipping
     public function __construct(int $langId)
     {
         $this->langId = $langId;
+    }
+
+    /**
+     * getError
+     *
+     * @return void
+     */
+    public function getError()
+    {
+        return $this->error;
     }
 
     /**

@@ -399,9 +399,7 @@ class OrderReturnRequestsController extends AdminBaseController
 
                 /* Update To Shipping Service */
                 $this->langId = $this->adminLangId;
-                if (false !== $this->init(true)) {
-                    $this->returnShipment($row['op_id'], $row['orrequest_qty']);
-                }
+                $this->returnShipment($row['op_id'], $row['orrequest_qty']);
                 /* Update To Shipping Service */
 
                 $successMsg = Labels::getLabel('LBL_Return_request_has_been_refunded_successfully.', $this->adminLangId);

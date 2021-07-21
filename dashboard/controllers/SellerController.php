@@ -10,6 +10,7 @@ class SellerController extends SellerBaseController
     use CustomCatalogProducts;
     use SellerUsers;  
     use ProductDigitalDownloads;
+    use ShippingServices;
   
     private $paymentPlugin;
     private $method = '';
@@ -986,9 +987,7 @@ class SellerController extends SellerBaseController
         /* Update To Shipping Service */
         if (OrderStatus::ORDER_SHIPPED == $orderDetail["op_status_id"]) {
             $this->langId = $this->siteLangId;
-            if (false !== $this->init(true)) {
-                $this->refundShipment($op_id);
-            }
+            $this->refundShipment($op_id);
         }
         /* Update To Shipping Service */
 
@@ -3162,9 +3161,7 @@ class SellerController extends SellerBaseController
 
         /* Update To Shipping Service */
         $this->langId = $this->siteLangId;
-        if (false !== $this->init(true)) {
-            $this->returnShipment($requestRow['op_id'], $requestRow['orrequest_qty']);
-        }
+        $this->returnShipment($requestRow['op_id'], $requestRow['orrequest_qty'], UrlHelper::generateUrl('Seller', 'viewOrderReturnRequest', array($requestRow['orrequest_id'])));
         /* Update To Shipping Service */
 
         /* email notification handling[ */

@@ -19,9 +19,7 @@ $mediaFrm->setFormTagAttribute("class", "form form--horizontal");
 		<?php echo $mediaFrm->getFormHtml(); ?>
 	</div>
 
-	<?php if ($batchImgArr) {
-		//CommonHelper::printArray($batchImgArr);
-	?>
+	<?php if ($batchImgArr) { ?>
 		<div class="col-md-12">
 			<ul class="image-listing">
 				<?php foreach ($batchImgArr as $batchImage) { ?>

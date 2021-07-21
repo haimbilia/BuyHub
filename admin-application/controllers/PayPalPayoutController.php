@@ -5,7 +5,7 @@ class PayPalPayoutController extends PayoutBaseController
     public const KEY_NAME = 'PayPalPayout';
     private const PRODUCTION_PAYOUT_SANDBOX_URL = 'https://api.sandbox.paypal.com/v1/payments/payouts';
     private const PRODUCTION_PAYOUT_LIVE_URL = 'https://api.paypal.com/v1/payments/payouts';
-    
+
     private const PRODUCTION_ACCESS_TOKEN_SANDBOX_URL = 'https://api.sandbox.paypal.com/v1/oauth2/token';
     private const PRODUCTION_ACCESS_TOKEN_LIVE_URL = 'https://api.paypal.com/v1/oauth2/token';
 
@@ -51,37 +51,39 @@ class PayPalPayoutController extends PayoutBaseController
 
     private function getAccessTokenUrl()
     {
-        return  (false === $this->envoirment) ? static::PRODUCTION_ACCESS_TOKEN_SANDBOX_URL : static::PRODUCTION_ACCESS_TOKEN_LIVE_URL;
+        return (false === $this->envoirment) ? static::PRODUCTION_ACCESS_TOKEN_SANDBOX_URL : static::PRODUCTION_ACCESS_TOKEN_LIVE_URL;
     }
 
     private function getPayoutUrl()
     {
-        return  (false === $this->envoirment) ? static::PRODUCTION_PAYOUT_SANDBOX_URL : static::PRODUCTION_PAYOUT_LIVE_URL;
+        return (false === $this->envoirment) ? static::PRODUCTION_PAYOUT_SANDBOX_URL : static::PRODUCTION_PAYOUT_LIVE_URL;
     }
 
     private function getAccessToken()
     {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->getAccessTokenUrl());
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=client_credentials");
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_USERPWD, $this->settings['client_id'] . ':' . $this->settings['client_secret']);
-        
-        $headers = array();
-        $headers[] = 'Accept: application/json';
-        $headers[] = 'Accept-Language: en_US';
-        $headers[] = 'Content-Type: application/x-www-form-urlencoded';
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => $this->getAccessTokenUrl(),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => 'grant_type=client_credentials',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Basic ' . base64_encode($this->settings['client_id'] . ':' . $this->settings['client_secret'])
+            ),
+        ));
+
         $response = curl_exec($ch);
         if (curl_errno($ch)) {
             $message = 'Error:' . curl_error($ch);
             LibHelper::dieJsonError($message);
         }
         curl_close($ch);
-        
+
         if (!$response) {
             $message = Labels::getLabel('LBL_INVALID_RESPONSE', CommonHelper::getLangId());
             LibHelper::dieJsonError($message);
@@ -101,7 +103,7 @@ class PayPalPayoutController extends PayoutBaseController
         $currencyCode = strtoupper(Currency::getAttributesById($currencyId, 'currency_code'));
         $amount = FatUtility::float($amount);
         $amount = sprintf('%0.2f', $amount - static::COMMISSION[$currencyCode]);
-        
+
         return [
             "sender_batch_header" => [
                 "sender_batch_id" => $sender_batch_id,
@@ -123,7 +125,7 @@ class PayPalPayoutController extends PayoutBaseController
         ];
     }
 
-    public function release($requestId, $specifics = '')
+    public function release($requestId, $specifics = [])
     {
         if (empty($requestId) || empty($specifics) || (empty($specifics['paypal_id']) && empty($specifics['email']))) {
             $message = Labels::getLabel('LBL_INVALID_REQUEST_PARAMETERS', CommonHelper::getLangId());
@@ -142,12 +144,12 @@ class PayPalPayoutController extends PayoutBaseController
         curl_setopt($ch, CURLOPT_TIMEOUT, 60);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        
+
         $headers = array();
         $headers[] = 'Content-Type: application/json';
         $headers[] = 'Authorization: Bearer ' . $this->getAccessToken();
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        
+
         $response = curl_exec($ch);
         if (curl_errno($ch)) {
             $message = 'Error : ' . curl_error($ch);
@@ -159,7 +161,7 @@ class PayPalPayoutController extends PayoutBaseController
             LibHelper::dieJsonError($message);
         }
         $response = json_decode($response, true);
-        
+
         if (!array_key_exists('batch_header', $response)) {
             if (array_key_exists('message', $response)) {
                 Message::addErrorMessage($response['name'] . ' : ' . $response['message']);

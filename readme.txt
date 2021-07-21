@@ -128,6 +128,17 @@ Updates/Fixes :
     => 056031 - on order when tax is bifurcated in 3 types then on invoice listing 2 only
     => 056021 - when multiple items are ordered together then on packing slip> getting wrong data listed
     => 056034 - when order is canceled still then seller having option to generate shipping label for the same
+    => 056029 - when ship by admin only is enabled then on seller end> shipping plugins are listing
+    => 056166 - Warning: strtolower() expects parameter 1 to be string, array given in /library/core/FatUtility.class.php on line 0
+    => 056027 - getting crash on approving return request when tax is incl price and and avalara is enabled
+    => 056025 - when taxjar is enabled then on cart page> getting error
+    => 056030 - when tax is enabled (avalara) then on bifurcation tax value is not listing properly
+    => 056134 - getting error on marking order as completed from admin when tax is alavara and order cancellation request is declined
+    => 055906 - Seller >> tax category >> tax rates >> "0.00" gets displayed along with actual percentage of tax .
+    => 056199 - Paypal Payout Not Working : Client Auth Failed
+    => 056197 - on adding item to wishlist getting 404
+    => 056195 - admin> promotions> coupon> link> product and brand both tabs are highlighting 
+    => 056194 - seller> wallet> withdrawal through paypal payout> getting 404
 
 =========================TV-9.3.2.20210720=====================================
 New Features:  

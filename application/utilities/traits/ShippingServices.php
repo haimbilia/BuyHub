@@ -2,7 +2,6 @@
 
 trait ShippingServices
 {
-
     private $filename = '';
     private $labelData = '';
     private $trackingNumber = '';
@@ -18,7 +17,7 @@ trait ShippingServices
      */
     public function generateLabel(int $opId)
     {
-        $orderData = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id','opshipping_plugin_id']);
+        $orderData = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id', 'opshipping_plugin_id']);
         if (empty($orderData) || 1 > $orderData['opshipping_plugin_id']) {
             LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_ORDER", $this->langId));
             return false;
@@ -133,13 +132,13 @@ trait ShippingServices
         if (false === $this->loadLabelData($opId)) {
             LibHelper::dieWithError($this->error);
         }
-        $data = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id','opshipping_plugin_id']);
+        $data = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id', 'opshipping_plugin_id']);
         if (empty($data)) {
             $msg = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
             LibHelper::dieWithError($msg);
         }
         $this->loadShippingService($data);
-        if($this->shippingService->getKey('plugin_id') != $data['opshipping_plugin_id']){
+        if ($this->shippingService->getKey('plugin_id') != $data['opshipping_plugin_id']) {
             $msg = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
             LibHelper::dieWithError($msg);
         }
@@ -299,34 +298,53 @@ trait ShippingServices
      * @param  int $qty
      * @return void
      */
-    public function returnShipment(int $opId, int $qty)
+    public function returnShipment(int $opId, int $qty, string $href = '')
     {
         $data = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id']);
 
         if (empty($data)) {
             $msg = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
+            if (!empty($href)) {
+                Message::addErrorMessage($msg);
+                FatApp::redirectUser($href);
+            }
             LibHelper::dieJsonError($msg);
         }
-        $this->loadShippingService($data);
+        $this->loadShippingService($data, $href);
 
         if (1 > $qty) {
             $msg = Labels::getLabel("MSG_INVALID_RETURN_QTY", $this->langId);
+            if (!empty($href)) {
+                Message::addErrorMessage($msg);
+                FatApp::redirectUser($href);
+            }
             LibHelper::dieJsonError($msg);
         }
 
         if ('ShipStationShipping' == $this->shippingService->keyName || !method_exists($this->shippingService, 'returnShipment')) {
             $msg = Labels::getLabel("MSG_RETURN_CASE_NOT_ALLOWED_BY_SERVICE_PROVIDER", $this->langId);
+            if (!empty($href)) {
+                Message::addErrorMessage($msg);
+                FatApp::redirectUser($href);
+            }
             LibHelper::dieJsonError($msg);
         }
 
         if (false === $this->shippingService->returnShipment($data["opshipping_service_code"], $qty)) {
+            if (!empty($href)) {
+                Message::addErrorMessage($this->shippingService->getError());
+                FatApp::redirectUser($href);
+            }
             LibHelper::dieJsonError($this->shippingService->getError());
         }
 
         $opObj = new OrderProduct($opId);
         if (false === $opObj->bindResponse(OrderProduct::RESPONSE_TYPE_RETURN, json_encode($this->shippingService->getResponse()))) {
-            $this->error = $opObj->getError();
-            return false;
+            if (!empty($href)) {
+                Message::addErrorMessage($opObj->getError());
+                FatApp::redirectUser($href);
+            }
+            LibHelper::dieJsonError($opObj->getError());
         }
     }
 
@@ -370,12 +388,12 @@ trait ShippingServices
      */
     public function fetchTrackingDetail(string $trackingId, int $opId)
     {
-        $orderData = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id','op_invoice_number']);
+        $orderData = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id', 'op_invoice_number']);
         if (empty($orderData)) {
             $this->error = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
             return false;
         }
-        $this->loadShippingService($orderData);     
+        $this->loadShippingService($orderData);
         $trackingData = (array) $this->shippingService->fetchTrackingDetail($trackingId, $orderData['op_invoice_number']);
         $this->set('trackingData', $trackingData);
         $this->_template->render(false, false);
@@ -550,7 +568,7 @@ trait ShippingServices
 
     private function getShippingWarehouseList($orderData)
     {
-        $this->loadShippingService($orderData, true);
+        $this->loadShippingService($orderData);
         $wareHouses = [];
         foreach ($this->shippingService->getWareHouses() as $warehouse) {
             $wareHouses[$warehouse['warehouseId']] = $warehouse['warehouseName'];
@@ -559,7 +577,7 @@ trait ShippingServices
 
     private function getShippingRatesFromApi($orderData)
     {
-        $this->loadShippingService($orderData, true);
+        $this->loadShippingService($orderData);
 
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);
         $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
@@ -644,11 +662,11 @@ trait ShippingServices
                 $shippingRates = $this->shippingService->getRates($carrierCode, $shopAddress['postalCode']);
                 if (!empty($shippingRates)) {
                     FatCache::set($cacheKey, serialize($shippingRates), '.txt');
-                }else{
+                } else {
                     SystemLog::system($this->shippingService->getError());
                     continue;
                 }
-            }           
+            }
 
             $keyCounter = 1;
             foreach ($shippingRates as $key => $value) {
@@ -706,25 +724,29 @@ trait ShippingServices
         LibHelper::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
     }
 
-    private function loadShippingService($orderData, $loadPluginSetting = false)
+    private function loadShippingService($orderData, $href = '')
     {
         $shippingBySeller = CommonHelper::canAvailShippingChargesBySeller($orderData['op_selprod_user_id'], $orderData['opshipping_by_seller_user_id']);
-        $this->shippingService = (new Shipping($this->langId))->getShippingApiObj(($shippingBySeller ? $orderData['opshipping_by_seller_user_id'] : 0));
+        $shippingObj = new Shipping($this->langId);
+        $this->shippingService = $shippingObj->getShippingApiObj(($shippingBySeller ? $orderData['opshipping_by_seller_user_id'] : 0));
         if (false === $this->shippingService) {
-            $this->error = $error;
-            if (true === $return) {
-                return false;
+            $msg = $shippingObj->getError();
+            if (!empty($href)) {
+                if (!empty($msg)) {
+                    Message::addErrorMessage($msg);
+                }
+                FatApp::redirectUser($href);
             }
-            FatUtility::dieJsonError($error);
+            FatUtility::dieJsonError($shippingObj->getError());
         }
 
         if (false === $this->shippingService->init()) {
-            $this->error = $this->shippingService->getError();
-            if (true === $return) {
-                return false;
+            $msg = $this->shippingService->getError();
+            if (!empty($href)) {
+                Message::addErrorMessage($msg);
+                FatApp::redirectUser($href);
             }
-            FatUtility::dieJsonError($this->error);
+            FatUtility::dieJsonError($msg);
         }
     }
-
 }

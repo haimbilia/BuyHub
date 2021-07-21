@@ -1891,7 +1891,7 @@ class CommonHelper extends FatUtility
         }
 
         if ($taxVal['inPercentage'] == Tax::TYPE_PERCENTAGE) {
-            return $taxVal['name'] . ' (' . CommonHelper::numberFormat($taxVal['percentageValue']) . '%)';
+            return $taxVal['name'] . ' (' . CommonHelper::numberFormat($taxVal['percentageValue'], true, false, 4) . '%)';
         }
         return $taxVal['name'] . ' (' . CommonHelper::numberFormat($taxVal['percentageValue']) . ')';
     }

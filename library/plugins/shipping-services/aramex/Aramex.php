@@ -46,6 +46,17 @@ class Aramex extends ShippingServicesBase
         $this->clientInfoCols = $this->requiredKeys;
     }
 
+
+    /**
+     * init
+     *
+     * @return bool
+     */
+    public function init(): bool
+    {
+        return $this->validateSettings($this->langId);
+    }
+    
     /**
      * getColsLabelArr
      *

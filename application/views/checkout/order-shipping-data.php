@@ -1,7 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (!empty($orderShippingData)) {
 ?>
-
 	<div class="modal-header">
 		<h5 class="modal-title"><?php echo Labels::getLabel('LBL_Shipping', $siteLangId); ?></h5>
 	</div>
