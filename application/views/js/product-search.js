@@ -766,7 +766,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
             return false;
         }
         $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('SavedProductsSearch', 'form'), '', function (ans) {
+            fcom.ajax(fcom.makeUrl('SavedProductsSearch', 'form', [], siteConstants.webroot_dashboard), '', function (ans) {
                 $.facebox(ans);
                 if (ans.status) {
                     $.facebox.close();
@@ -782,7 +782,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         data = data + "&pssearch_type=" + $productSearchPageType;
         data = data + "&pssearch_record_id=" + $recordId;
         data = data + "&curr_page=" + $currentPageUrl;
-        fcom.updateWithAjax(fcom.makeUrl('SavedProductsSearch', 'setup'), data, function (ans) {
+        fcom.updateWithAjax(fcom.makeUrl('SavedProductsSearch', 'setup', [], siteConstants.webroot_dashboard), data, function (ans) {
             if (ans.status) {
                 $.facebox.close();
             }
