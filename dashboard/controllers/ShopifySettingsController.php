@@ -2,7 +2,6 @@
 
 class ShopifySettingsController extends DataMigrationSettingsController
 {
-       
     public static function form($langId)
     {
         $frm = new Form('frmPaymentMethods');

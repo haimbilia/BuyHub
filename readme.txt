@@ -135,6 +135,7 @@ Updates/Fixes :
     => 056030 - when tax is enabled (avalara) then on bifurcation tax value is not listing properly
     => 056134 - getting error on marking order as completed from admin when tax is alavara and order cancellation request is declined
     => 055906 - Seller >> tax category >> tax rates >> "0.00" gets displayed along with actual percentage of tax .
+    => 056199 - Paypal Payout Not Working : Client Auth Failed
 
 
 New Features:  
