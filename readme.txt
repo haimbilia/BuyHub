@@ -141,6 +141,8 @@ Updates/Fixes :
     => 056194 - seller> wallet> withdrawal through paypal payout> getting 404
 
 =========================TV-9.3.2.20210720=====================================
+    => 056192 - Showing fatal error while opening settings of split payment method.
+
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
