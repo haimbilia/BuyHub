@@ -13,7 +13,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'favicon', array($siteLangId, '32-32'), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.png'); ?>">
 <link rel="icon" type="image/png" sizes="96x96" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'favicon', array($siteLangId, '96-96'), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.png'); ?>">
 <link rel="icon" type="image/png" sizes="16x16" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'favicon', array($siteLangId, '16-16'), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.png'); ?>">
-<link rel="manifest" href="<?php echo UrlHelper::generateUrl('Home', 'pwaManifest'); ?>">
+<link rel="manifest" href="<?php echo UrlHelper::generateUrl('Home', 'pwaManifest',[],siteConstants.webrootfront); ?>">
 <?php
 if ($canonicalUrl == '') {
     if (empty(FatApp::getParameters()) && FatApp::getAction() == 'index') {
