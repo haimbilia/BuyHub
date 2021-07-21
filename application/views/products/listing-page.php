@@ -128,16 +128,9 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
 <div class="section">
     <div class="container">
         <div
-            class="collection-listing <?php echo FatApp::getConfig('CONF_FILTERS_LAYOUT', FatUtility::VAR_INT, 1) == FilterHelper::LAYOUT_TOP || $vtype == 'map' ? 'filter-top' : 'filter-left'; ?>">
+            class="collection-listing <?php echo $vtype == 'map' ? 'filter-top' : 'filter-left'; ?>">
 
-            <?php
-            /*
-                if (FatApp::getConfig('CONF_FILTERS_LAYOUT', FatUtility::VAR_INT, 1) == FilterHelper::LAYOUT_TOP) {
-                    require_once('filters-layout-top.php');
-                } else {
-                    require_once('filters-layout-left.php');
-                } 
-                */
+            <?php            
             require_once('filters-layout.php');
 
             ?>

@@ -848,3 +848,4 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('APP_YOUR_PHONE_DOES_NOT_EXIST', 1, 'Your phone does not exist. Do you want to Register?', 2),
 ('APP_DOWNLOAD_ALL', 1, 'Download All', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+DELETE FROM tbl_configurations WHERE conf_name = "CONF_FILTERS_LAYOUT";
