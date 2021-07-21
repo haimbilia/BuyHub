@@ -145,6 +145,7 @@ Updates/Fixes :
     => 055444 - On order status update email tracking url not coming 
     => 054761 - despite having sku non mandatory it's not adding inventory from seller end
     => 055995 - When user close the browser at payment screen same order is assigned
+    => 056192 - Showing fatal error while opening settings of split payment method.
 
 Enhancements :
    => Make provision to made seller
