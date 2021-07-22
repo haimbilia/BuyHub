@@ -144,6 +144,7 @@ Updates/Fixes :
     => 056192 - Showing fatal error while opening settings of split payment method.
     => 056225 - The settings are not getting saved for the related product settings under Admin dashboard
     => 056228 - Undefined Variable rating types
+    => 056229 - Notice: Undefined index: oua_phone_dcode
 
 New Features:  
     => Admin shipped products listing page
