@@ -146,6 +146,7 @@ Updates/Fixes :
     => 054761 - despite having sku non mandatory it's not adding inventory from seller end
     => 055995 - When user close the browser at payment screen same order is assigned
     => 056192 - Showing fatal error while opening settings of split payment method.
+    => 056225 - The settings are not getting saved for the related product settings under Admin dashboard
 
 Enhancements :
    => Make provision to made seller

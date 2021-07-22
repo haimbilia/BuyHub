@@ -2852,11 +2852,6 @@ class SellerProductsController extends AdminBaseController
         FatUtility::dieJsonSuccess($json);
     }
 
-
-
-
-
-
     public function getRelatedProductsList($selprod_id)
     {
         $selprod_id = FatUtility::int($selprod_id);
@@ -2963,7 +2958,6 @@ class SellerProductsController extends AdminBaseController
         $prodSrch->addGroupBy('related_sellerproduct_id');
         $rs = $prodSrch->getResultSet();
         $relatedProds = $db->fetchAll($rs);
-
         $arrListing = array();
         foreach ($relatedProds as $key => $relatedProd) {
             $productId = $relatedProd['related_sellerproduct_id'];
