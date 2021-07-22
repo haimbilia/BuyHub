@@ -376,9 +376,12 @@ class OrderProduct extends MyAppModel
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
     
-    public static function getShippingResponse(int $op_id , int $type)
+    public static function getShippingResponse(int $op_id , int $type, bool $joinShipment = false)
     {
-        $srch = new SearchBase(static::DB_TBL_RESPONSE);
+        $srch = new SearchBase(static::DB_TBL_RESPONSE, 'opr');
+        if (true === $joinShipment) {
+            $srch->joinTable(OrderProductShipment::DB_TBL, 'LEFT JOIN', 'ops.opship_op_id = opr.opr_op_id', 'ops');
+        }
         $srch->addCondition('opr_op_id', '=', $op_id);
         $srch->addCondition('opr_type', '=', $type); 
         return FatApp::getDb()->fetch($srch->getResultSet());
