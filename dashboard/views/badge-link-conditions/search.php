@@ -36,7 +36,7 @@ $nonPercElements =  [
     BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS
 ];
 
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
 
 $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($arr_flds as $key => $val) {

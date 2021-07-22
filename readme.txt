@@ -145,6 +145,7 @@ Updates/Fixes :
     => 056225 - The settings are not getting saved for the related product settings under Admin dashboard
     => 056228 - Undefined Variable rating types
     => 056229 - Notice: Undefined index: oua_phone_dcode
+    => 055714 - seller> promotions> manage badges> when there is no data then message is not aligned
 
 New Features:  
     => Admin shipped products listing page
