@@ -2113,15 +2113,15 @@ class ProductsController extends MyAppController
             FatUtility::dieJsonError($shippingService->getError());
         }
 
-        $orderProductShipmentDetail = OrderProductShipment::getAttributesById($opId);
-        if (empty($orderProductShipmentDetail) || empty($orderProductShipmentDetail['opship_response'])) {
+        $orderProductShipmentDetail = OrderProduct::getShippingResponse($opId, OrderProduct::RESPONSE_TYPE_SHIPMENT, true);
+        if (empty($orderProductShipmentDetail) || empty($orderProductShipmentDetail['opr_response'])) {
             FatUtility::dieJsonError(Labels::getLabel("MSG_NO_LABEL_DATA_FOUND", $this->siteLangId));
         }
 
-        $shipmentResponse = json_decode($orderProductShipmentDetail['opship_response'], true);
+        $shipmentResponse = json_decode($orderProductShipmentDetail['opr_response'], true);
         $trackingNumber = $orderProductShipmentDetail['opship_tracking_number'];
         $filename = "label-" . $trackingNumber;
-        $labelData = $shipmentResponse['labelData'];
+        $labelData = isset($shipmentResponse['labelData']) ? $shipmentResponse['labelData'] : $shipmentResponse;
         $shippingService->downloadLabel($labelData, $filename);
     }
 

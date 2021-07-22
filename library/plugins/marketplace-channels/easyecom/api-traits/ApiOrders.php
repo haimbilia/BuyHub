@@ -139,9 +139,10 @@ trait ApiOrders
     {
         $opSrch = new OrderProductSearch($this->langId, false, true, true);
      
-        $opSrch->joinTable(Orders::DB_TBL_ORDER_STATUS_HISTORY, 'LEFT OUTER JOIN', 'oph.oshistory_op_id = op.op_id', 'oph');
-        $opSrch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
-        $opSrch->joinTable(OrderProductShipment::DB_TBL, 'LEFT OUTER JOIN', 'opship.opship_op_id = op.op_id', 'opship');
+        $opSrch->joinTable(Orders::DB_TBL_ORDER_STATUS_HISTORY, 'LEFT JOIN', 'oph.oshistory_op_id = op.op_id', 'oph');
+        $opSrch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
+        $opSrch->joinTable(OrderProduct::DB_TBL_RESPONSE, 'LEFT JOIN', 'op.op_id = opr.opr_op_id', 'opr');
+        $opSrch->joinTable(OrderProductShipment::DB_TBL, 'LEFT JOIN', 'opship.opship_op_id = op.op_id', 'opship');
         $opSrch->doNotCalculateRecords();
         $opSrch->doNotLimitRecords();
         $opSrch->addCondition('op.op_id', '=', $opId);
@@ -155,7 +156,8 @@ trait ApiOrders
             'opship_tracking_url',
             'opshipping_label',
             'opshipping_carrier_code',
-            'opshipping_service_code'
+            'opshipping_service_code',
+            'opr_response',
         ]);
         $opRs = $opSrch->getResultSet();
         $carrierDetail = FatApp::getDb()->fetch($opRs);
@@ -166,9 +168,9 @@ trait ApiOrders
         }
 
         $carrierDetail['label'] = '';
-        if (!empty($carrierDetail['opship_tracking_number']) && !empty($carrierDetail['opship_response'])) {
+        if (!empty($carrierDetail['opship_tracking_number']) && !empty($carrierDetail['opr_response'])) {
             $excryptedOpId = LibHelper::encrypt($opId);
-            $carrierDetail['label'] = UrlHelper::generateFullUrl('Products', 'getOrderProductLabel', [$excryptedOpId]);    
+            $carrierDetail['label'] = UrlHelper::generateFullUrl('Products', 'getOrderProductLabel', [$excryptedOpId], CONF_WEBROOT_FRONT_URL);    
         } else if (!empty($carrierDetail['opship_tracking_url'])) {
             $shipBy = FatApp::getConfig('CONF_SITE_OWNER_' . $this->langId, FatUtility::VAR_INT, 1);
             if (0 < $carrierDetail['opshipping_by_seller_user_id']) {
@@ -180,7 +182,7 @@ trait ApiOrders
             $carrierDetail['opshipping_carrier_code'] = '';    
             $carrierDetail['opshipping_service_code'] = '';    
         }
-        unset($carrierDetail['opship_response']);
+        unset($carrierDetail['opr_response']);
 
         return $this->formatOutput(Plugin::RETURN_TRUE, $msg, $carrierDetail);
     }
