@@ -140,6 +140,7 @@ Updates/Fixes :
     => 056195 - admin> promotions> coupon> link> product and brand both tabs are highlighting 
     => 056194 - seller> wallet> withdrawal through paypal payout> getting 404
     => 056192 - Showing fatal error while opening settings of split payment method.
+    => 056225 - The settings are not getting saved for the related product settings under Admin dashboard
 
 New Features:  
     => Admin shipped products listing page
