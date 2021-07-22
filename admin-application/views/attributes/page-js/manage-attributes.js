@@ -3,10 +3,8 @@ $(document).ready(function(){
 });
 (function() {
 	langForm = function( attr_id, lang_id, autoFillLangData = 0){
-		$.facebox(function() {
-			fcom.ajax(fcom.makeUrl('Attributes', 'langForm', [attr_id, lang_id, autoFillLangData]), '', function(t) {
-				$.facebox(t,'faceboxWidth');
-			});
+		fcom.ajax(fcom.makeUrl('Attributes', 'langForm', [attr_id, lang_id, autoFillLangData]), '', function(t) {
+			$.facebox(t,'faceboxWidth');
 		});
 	};
 	

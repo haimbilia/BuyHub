@@ -20,10 +20,8 @@ $(document).ready(function() {
     }
 
     view = function(id) {
-        $.facebox(function() {
-            fcom.ajax(fcom.makeUrl('BlogContributions', 'view', [id]), '', function(t) {
-                $.facebox(t, 'faceboxWidth');
-            });
+        fcom.ajax(fcom.makeUrl('BlogContributions', 'view', [id]), '', function(t) {
+            $.facebox(t, 'faceboxWidth');
         });
     };
     updateStatus = function(frm) {

@@ -55,11 +55,9 @@ $(document).ready(function() {
         });
     }
 
-    changePasswordForm = function(id) {
-        $.facebox(function() {
-            fcom.ajax(fcom.makeUrl('AdminUsers', 'changePassword', [id]), '', function(t) {
-                fcom.updateFaceboxContent(t);
-            });
+    changePasswordForm = function(id) {        
+        fcom.ajax(fcom.makeUrl('AdminUsers', 'changePassword', [id]), '', function(t) {
+            fcom.updateFaceboxContent(t);
         });
     };
 
