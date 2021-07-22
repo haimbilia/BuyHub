@@ -827,6 +827,7 @@ ALTER TABLE `tbl_order_product_plugin_specifics`
 -- ---------------------------------TV-9.3.2.20210716---------------------
 
 ALTER TABLE tbl_seller_products ADD UNIQUE( selprod_user_id, selprod_code);
+-- ------------------------TV-9.3.2.20210720------------------
 
 /* Remove Duplicate Rows. */
 DELETE t1 FROM tbl_seller_products t1
@@ -847,3 +848,4 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('APP_YOUR_PHONE_DOES_NOT_EXIST', 1, 'Your phone does not exist. Do you want to Register?', 2),
 ('APP_DOWNLOAD_ALL', 1, 'Download All', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+DELETE FROM tbl_configurations WHERE conf_name = "CONF_FILTERS_LAYOUT";

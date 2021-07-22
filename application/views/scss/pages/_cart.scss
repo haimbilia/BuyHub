@@ -1,3 +1,41 @@
+.cart-page {
+    display: flex;
+    @include media-breakpoint-down(md) {
+        flex-direction: column;
+    }
+    &_main {
+        flex: 0 0 65%;
+        max-width: 65%;
+        padding-#{$end-direction}: 4rem;
+        @include media-breakpoint-down(md) {
+            flex: 1;
+            max-width: none;
+            padding: 0;
+            padding-bottom: 1rem;
+        }
+    }
+    &_aside {
+        flex: 1;
+        background: $bg-gray;
+        padding: 2rem;
+        border-radius: $radius4;
+    }
+    .cart-title {
+        font-weight: 600;
+        font-size: 1rem;
+    }
+    .list-cart {
+        margin-bottom: 2rem;
+        >li {
+            //padding: 2.5rem;
+        }
+    }
+    .cart-title {
+        font-weight: 300;
+        font-size: 1.3rem;
+    }
+}
+
 .cart-summary {
     font-size: 0.85rem;
     ul {
@@ -86,7 +124,6 @@
                 max-width: inherit;
                 margin-#{$start-direction}: 0;
             }
-           
         }
         &_action {
             text-align: #{$end-direction};
@@ -103,7 +140,7 @@
                 fill: #a9a9a9;
             }
         }
-        &:last-child { 
+        &:last-child {
             padding-#{$end-direction}: 0;
         }
     }
@@ -339,7 +376,6 @@
             z-index: 1;
         }
     }
-    
     &__data {
         flex: 1;
         min-width: 0px;
@@ -414,23 +450,8 @@
     align-items: center;
     justify-content: space-around;
     .btn {
-        border-radius: $radius3;
-        text-align: center;
-        padding: 0.6rem 1rem;
-        display: block;
-        align-items: center;
-        font-size: 1rem;
         flex: 0 0 48%;
         max-width: 48%;
-        &:first-child {
-            background: $brand-color;
-            color: $brand-color-inverse;
-        }
-        &:last-child {
-            background: #fff;
-            border: $border;
-            margin-#{$start-direction}: 4%;
-        }
     }
 }
 
@@ -636,12 +657,5 @@
             border-color: $brand-color;
             color: $brand-color;
         }
-    }
-}
-
-.cart-page {
-    .cart-title {
-        font-weight: 300;
-        font-size: 1.3rem;
     }
 }

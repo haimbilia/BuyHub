@@ -150,9 +150,9 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
             <?php  } ?>
         </ul>
 
-        <div class="step__section">
-            <div class="step__section__head">
-                <h5 class="step__section__head__title"><?php echo Labels::getLabel('LBL_Payment_Summary', $siteLangId); ?></h5>
+        <div class="step_section">
+            <div class="step_head">
+                <h5 class="step_title"><?php echo Labels::getLabel('LBL_Payment_Summary', $siteLangId); ?></h5>
             </div>
             <?php if ($fulfillmentType == Shipping::FULFILMENT_SHIP && $shippingAddressId == $billingAddressId) { ?>
                 <label class="checkbox mb-4"><input onClick="billingAddress(this);" type="checkbox" checked='checked' name="isShippingSameAsBilling" value="1"><?php echo Labels::getLabel('LBL_MY_BILLING_IS_SAME_AS_SHIPPING_ADDRESS', $siteLangId); ?> <i class="input-helper"></i>

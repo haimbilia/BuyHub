@@ -136,7 +136,12 @@ Updates/Fixes :
     => 056134 - getting error on marking order as completed from admin when tax is alavara and order cancellation request is declined
     => 055906 - Seller >> tax category >> tax rates >> "0.00" gets displayed along with actual percentage of tax .
     => 056199 - Paypal Payout Not Working : Client Auth Failed
+    => 056197 - on adding item to wishlist getting 404
+    => 056195 - admin> promotions> coupon> link> product and brand both tabs are highlighting 
+    => 056194 - seller> wallet> withdrawal through paypal payout> getting 404
 
+=========================TV-9.3.2.20210720=====================================
+    => 056192 - Showing fatal error while opening settings of split payment method.
 
 New Features:  
     => Admin shipped products listing page

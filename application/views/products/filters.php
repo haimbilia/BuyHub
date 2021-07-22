@@ -179,7 +179,7 @@ if (isset($prodcat_code)) {
                     <div id="rangeSlider"></div>
                 </div>
                 <div class="clear"></div>
-                <div class="slide__fields form">
+                <div class="slide__fields">
                     <?php $symbol = CommonHelper::getCurrencySymbolRight() ? CommonHelper::getCurrencySymbolRight() : CommonHelper::getCurrencySymbolLeft(); ?>
                     <div class="price-input">
                         <div class="price-text-box input-group">
@@ -366,7 +366,7 @@ if (isset($prodcat_code)) {
 
         $("document").ready(function() {
 
-            <?php if (FatApp::getConfig('CONF_FILTERS_LAYOUT', FatUtility::VAR_INT, 1) == FilterHelper::LAYOUT_TOP ||  $headerFormParamsAssocArr['vtype'] == 'map') { ?>
+            <?php if ($headerFormParamsAssocArr['vtype'] == 'map') { ?>
             $(window).resize(function() {
                 var windowSize = $(window).width();
                 if (windowSize > 992) {
@@ -519,4 +519,3 @@ if (isset($prodcat_code)) {
             e.stopPropagation();
         });
         </script>
-        

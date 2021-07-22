@@ -2,8 +2,8 @@
 <div class="main">
     <main class="main__content">
         <div class="step active">
-            <div class="step__section">
-                <div class="step__section__head"><?php echo Labels::getLabel('LBL_Payment_Summary', $siteLangId); ?>
+            <div class="step_section">
+                <div class="step_head"><?php echo Labels::getLabel('LBL_Payment_Summary', $siteLangId); ?>
                 </div>
                 <?php if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $canUseWalletForPayment) { ?>
                     <div class="wallet-balance">
