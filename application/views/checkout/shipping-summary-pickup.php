@@ -27,9 +27,9 @@
             </li>
         </ul>
 
-        <div class="step__section">
-            <div class="step__section__head">
-                <h5 class="step__section__head__title">
+        <div class="step_section">
+            <div class="step_head">
+                <h5 class="step_title">
                     <?php
                     $cartObj = new Cart();
                     if ($cartObj->hasPhysicalProduct()) {

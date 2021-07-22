@@ -49,15 +49,15 @@ $cancelFld->setFieldTagAttribute('onclick', 'resetAddress(' . $addressType . ')'
 //$cancelFld->developerTags['fieldWrapperRowExtraClass'] = 'form-group-btn'; */
 ?>
 <div class="step active">
-    <div class="step__section">
-        <div class="step__section__head">
-            <h5 class="step__section__head__title"><?php echo Labels::getLabel('LBL_ADDRESS_DETAILS', $siteLangId); ?></h5>
+    <div class="step_section">
+        <div class="step_head">
+            <h5 class="step_title"><?php echo Labels::getLabel('LBL_ADDRESS_DETAILS', $siteLangId); ?></h5>
         </div>
     </div>
     <?php echo $addressFrm->getFormHtml(); ?>
 </div>
 <script language="javascript">
-    $(document).ready(function() {
-        getCountryStates($("#addr_country_id").val(), <?php echo $stateId; ?>, '#addr_state_id');
-    });
+$(document).ready(function() {
+    getCountryStates($("#addr_country_id").val(), <?php echo $stateId; ?>, '#addr_state_id');
+});
 </script>

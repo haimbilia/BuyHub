@@ -105,7 +105,7 @@
     //border-radius: $radius4;
     overflow: hidden;
     //border: $border;
-    outline: $border; 
+    outline: $border;
     transition: all 0.2s linear;
     animation: slideRight 600ms ease both;
     a {
@@ -195,7 +195,7 @@
             position: relative;
             width: 100%;
             overflow: hidden;
-            background-color:#fcfcfc;
+            background-color: #fcfcfc;
             &:before {
                 color: #dadada;
                 //content: "";
@@ -211,7 +211,8 @@
                 top: calc(50% - 10px);
                 width: 20px;
             }
-            img {mix-blend-mode: multiply;
+            img {
+                mix-blend-mode: multiply;
                 object-fit: cover;
                 max-width: 100%;
                 width: 100%;
@@ -271,7 +272,7 @@
         font-weight: 300;
         color: lighten($body-color, 50%);
         line-height: 1;
-        text-decoration: line-through; 
+        text-decoration: line-through;
     }
     .products-head-specification {
         color: lighten($body-color, 50%);

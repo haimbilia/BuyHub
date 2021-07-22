@@ -1,9 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="step active">
     <form class="form ">
-        <div class="step__section">
-            <div class="step__section__head">
-                <h5 class="step__section__head__title">
+        <div class="step_section">
+            <div class="step_head">
+                <h5 class="step_title">
                     <?php if ($fulfillmentType == Shipping::FULFILMENT_PICKUP || $addressType == Address::ADDRESS_TYPE_BILLING || !$cartHasPhysicalProduct) {
                         echo Labels::getLabel('LBL_Billing_Address', $siteLangId);
                     } else {
@@ -17,7 +17,7 @@
                             </use>
                         </svg> </i><?php echo Labels::getLabel('LBL_Add_New_Address', $siteLangId); ?></a>
             </div>
-            <div class="step__section__body">
+            <div class="step_body">
 
                 <?php if ($addresses) { ?>
                     <div class="list-addresses scroll scroll-y">

@@ -298,6 +298,7 @@ class Shipping
             }
 
             if (empty($carriers)) {
+                SystemLog::system(get_class($shippingApiObj)::KEY_NAME."--" .$shippingApiObj->getError());     
                 continue;
             } 
             
