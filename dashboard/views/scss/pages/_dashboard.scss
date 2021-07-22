@@ -452,7 +452,7 @@
 .content-wrapper {
     &.content-space {
         padding: 3.125rem;
-        //min-height: 700px;
+        min-height: 500px;
         @include media-breakpoint-down(lg) {
             & {
                 padding: 2rem;
@@ -1814,7 +1814,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
                 th {
                     color: $txt-gray;
                     text-transform: uppercase;
-                    letter-spacing: 1px;
+                    //letter-spacing: 1px;
                     font-weight: 500;
                     background: $bg-white;
                 }
@@ -1831,4 +1831,101 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
             }
         }
     }
+}
+
+.feedback-block {
+    .card-title {
+        margin-bottom: 1rem;
+    }
+    &_content {
+        background: lighten($bg-gray, $amount: 3);
+        border-radius: $radius4;
+        border: solid 1px lighten($border-color, $amount: 3);
+        //box-shadow: $shadow1; 
+        padding: 1.5rem;
+        .item {
+            .item__pic {
+                max-width: 100px;
+                flex: 0 0 100px;
+            }
+        }
+    }
+    .rating-listing {
+        //border: $border;
+        //border-radius: $radius4;
+        //padding: 10px;
+        //background: $bg-white;
+        .rating {
+            --size: 1.5rem;
+            --space: 0.4rem;
+            &__text {
+                margin-bottom: 0;
+                margin-#{$end-direction}: 1rem;
+            }
+        }
+    }
+}
+
+.shop-card {
+    display: flex;
+    flex-direction: column;
+    &__img {
+        border: $border;
+        border-radius: $radius4;
+        padding: .25rem;
+        background: $bg-white;
+        max-width: 150px;
+    }
+    &__detail {
+        margin: 1rem 0;
+        font-size: 0.8rem;
+    }
+}
+
+//
+.no-after::after {
+    content: normal;
+}
+
+.custom-drag-drop .btn {
+    position: static !important;
+}
+
+.custom-drag-drop .scroll {
+    max-height: 300px;
+}
+
+.custom-drag-drop .list-drag-drop {
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-drag-drop .list-drag-drop li {
+    padding: 0.7rem 1rem;
+    display: flex;
+    align-items: center;
+    border: solid 1px transparent;
+    margin: 5px 10px;
+    border-radius: 4px;
+}
+
+.custom-drag-drop .list-drag-drop li:hover {
+    /*background-color: var(--bg-gray);*/
+    border-color: $border-color;
+}
+
+.custom-drag-drop .checkbox {
+    font-size: 0.75rem;
+    color: $txt-gray;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+    flex: 1;
+    max-width: 256px;
+    overflow: hidden;
+}
+
+.custom-drag-drop .icn {
+    cursor: grab;
+    margin-#{$start-direction}: 10px;
 }

@@ -41,10 +41,12 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 $cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->setWrapperAttribute('class', 'col-6');
 $cancelBtnFld->developerTags['noCaptionTag'] = true;
-?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?> <main id="main-area" class="main"   >
+?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?> <main id="main-area" class="main">
     <div class="content-wrapper content-space">
         <div class="content-header row">
-            <div class="col"> <?php $this->includeTemplate('_partial/dashboardTop.php'); ?> <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_My_Subscriptions', $siteLangId);?></h2>
+            <div class="col"> <?php $this->includeTemplate('_partial/dashboardTop.php'); ?> <h2
+                    class="content-header-title"><?php echo Labels::getLabel('LBL_My_Subscriptions', $siteLangId);?>
+                </h2>
             </div>
         </div>
         <div class="content-body">
@@ -52,7 +54,8 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title"><?php echo Labels::getLabel('LBL_Search_Subscriptions', $siteLangId);?></h5>
+                            <h5 class="card-title">
+                                <?php echo Labels::getLabel('LBL_Search_Subscriptions', $siteLangId);?></h5>
                             <?php if ($currentActivePlan) {
                                 if (strtotime(date("Y-m-d"))>=strtotime('-3 day', strtotime($currentActivePlan[OrderSubscription::DB_TBL_PREFIX.'till_date']))) {
                                     if ($currentActivePlan[OrderSubscription::DB_TBL_PREFIX.'type']==SellerPackages::PAID_TYPE && FatDate::diff(date("Y-m-d"), $currentActivePlan[OrderSubscription::DB_TBL_PREFIX.'till_date'])>0) {
@@ -88,10 +91,10 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
                             </div>
                             <?php } ?>
                         </div>
-                        <?php if (isset($message)) { ?>
-                            <p class="highlighted-note"> <?php  echo $message;?> </p>
-                        <?php }?>
-                        <div class="card-body ">
+
+                        <div class="card-body "> <?php if (isset($message)) { ?>
+                            <p class="highlighted-note mb-4"> <?php  echo $message;?> </p>
+                            <?php }?>
                             <?php echo $frmOrderSrch->getFormHtml(); ?>
                         </div>
                     </div>

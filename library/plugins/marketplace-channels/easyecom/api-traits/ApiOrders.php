@@ -155,8 +155,7 @@ trait ApiOrders
             'opship_tracking_url',
             'opshipping_label',
             'opshipping_carrier_code',
-            'opshipping_service_code',
-            'opship_response',
+            'opshipping_service_code'
         ]);
         $opRs = $opSrch->getResultSet();
         $carrierDetail = FatApp::getDb()->fetch($opRs);

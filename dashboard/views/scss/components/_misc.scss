@@ -209,14 +209,18 @@ a:hover {
 }
 
 .info {
-    flex: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem;
-    background: $bg-gray;
-    border-radius: 4px;
-    font-size: 0.85rem;
+    background: lighten($info-color, 33);
+    color: $info-color;
+    border: solid 1px lighten($info-color, 25);
+    padding: 1rem 2rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    svg {
+        width: 20px;
+        height: 20px;
+        margin-#{$end-direction}: 0.5rem;
+    }
 }
 
 .info-message {

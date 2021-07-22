@@ -192,6 +192,7 @@
 }
 
 .scrollbar-filters {
+    overflow-y: auto;
     max-height: 300px;
     width: auto !important;
     max-width: none !important;

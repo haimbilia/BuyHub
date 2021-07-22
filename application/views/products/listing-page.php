@@ -169,9 +169,10 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                     <?php } ?>
                                 </li>
                                 <li><?php echo $frmProductSearch->getFieldHtml('sortBy'); ?></li>
-                                <li><?php echo $frmProductSearch->getFieldHtml('pageSize'); ?></li>                              
+                                <li><?php echo $frmProductSearch->getFieldHtml('pageSize'); ?></li>
                                 <li class="page-views">
-                                    <a href="javascript:void(0);" data-vtype="grid" class="listing-view-toggle--js <?php echo $vtype == 'grid' ? 'active' : ''; ?>">
+                                    <a href="javascript:void(0);" data-vtype="grid"
+                                        class="listing-view-toggle--js <?php echo $vtype == 'grid' ? 'active' : ''; ?>">
                                         <i class="icn">
                                             <svg class="svg" width="18px" height="18px">
                                                 <use
@@ -182,7 +183,8 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                     </a>
                                 </li>
                                 <li class="page-views">
-                                    <a href="javascript:void(0);" data-vtype="list" class="listing-view-toggle--js <?php echo $vtype == 'list' ? 'active' : ''; ?>">
+                                    <a href="javascript:void(0);" data-vtype="list"
+                                        class="listing-view-toggle--js <?php echo $vtype == 'list' ? 'active' : ''; ?>">
                                         <i class="icn">
                                             <svg class="svg" width="18px" height="18px">
                                                 <use
@@ -194,7 +196,8 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                 </li>
                                 <?php if ($vtype && FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
                                 <li class="page-views">
-                                    <a href="javascript:void(0);" data-vtype="map" class="listing-view-toggle--js <?php echo $vtype == 'map' ? 'active' : ''; ?>">
+                                    <a href="javascript:void(0);" data-vtype="map"
+                                        class="listing-view-toggle--js <?php echo $vtype == 'map' ? 'active' : ''; ?>">
                                         <i class="icn">
                                             <svg class="svg" width="18px" height="18px">
                                                 <use

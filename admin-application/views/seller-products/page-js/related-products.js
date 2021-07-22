@@ -119,9 +119,7 @@ $(document).ready(function(){
         }
     }).on('select2:selecting', function (e)
     {
-        var parentForm = $(this).closest('form').attr('id');
         var item = e.params.args.data;
-        $("#" + parentForm + " input[name='selprod_id']").val(item.id);
         $('input[name=\'products_related\']').val('');
         $('#productRelated' + item.id).remove();
         $('#related-products').append('<li id="productRelated' + item.id + '"><span> ' + item.name + '[' + item.product_identifier + ']' + '<i class="remove_related remove_param fas fa-times"></i><input type="hidden" name="selected_products[]" value="' + item.id + '" /></span></li>');
