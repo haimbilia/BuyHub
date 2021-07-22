@@ -37,6 +37,7 @@ trait ApiOrders
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
+        $srch->addCondition('opshipping_by_seller_user_id', '=', $this->userId);
         $srch->addMultipleFields(
             array('order_id', 'order_payment_status', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_other_charges', 'op_unit_price', 'op_tax_collected_by_seller', 'op_selprod_user_id', 'opshipping_by_seller_user_id', 'op_status_id', 'orderstatus_id', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class', 'plugin_code', 'IFNULL(plugin_name, IFNULL(plugin_identifier, "Wallet")) as plugin_name', 'opship.*', 'opshipping_fulfillment_type', 'op_rounding_off', 'op_product_type', 'opshipping_carrier_code', 'opshipping_service_code', 'order_tax_charged', 'order_date_added as created_date', 'order_date_updated as updated_date', 'buyer.user_name as buyer_user_name', 'order_language_id', 'opshipping_label', 'op_selprod_sku')
         );
@@ -148,6 +149,7 @@ trait ApiOrders
         $opSrch->addCondition('op.op_id', '=', $opId);
         $opSrch->addCondition('op_selprod_user_id', '=', $this->userId);
         $opSrch->addCondition('oshistory_orderstatus_id', '=', OrderStatus::ORDER_SHIPPED);
+        $opSrch->addCondition('opshipping_by_seller_user_id', '=', $this->userId);
 
         $opSrch->addMultipleFields([
             'op_invoice_number',
