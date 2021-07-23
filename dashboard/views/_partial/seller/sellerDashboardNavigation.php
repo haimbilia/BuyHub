@@ -6,7 +6,7 @@ $plugin = new Plugin();
 ?> <sidebar class="sidebar no-print">
     <div class="logo-wrapper">
         <?php
-         $logoUrl = UrlHelper::generateUrl();
+        $logoUrl = UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND);
         ?>
         <?php
         $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);

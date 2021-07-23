@@ -188,16 +188,16 @@ class DashboardBaseController extends FatController
         $jsVariables['siteCurrencyId'] = $this->siteCurrencyId;
 
         if ((!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['_ykGeoLng']) || !isset($_COOKIE['_ykGeoCountryCode'])) && FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
-            setcookie('_ykGeoLat', FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, 40.72), time() + (86400 * 30), CONF_WEBROOT_FRONTEND); // 86400 = 1 day
-            setcookie('_ykGeoLng', FatApp::getConfig('CONF_GEO_DEFAULT_LNG', FatUtility::VAR_INT, -73.96), time() + (86400 * 30), CONF_WEBROOT_FRONTEND); // 86400 = 1 day
-            setcookie('_ykGeoStateCode', FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, ''), time() + (86400 * 30), CONF_WEBROOT_FRONTEND); // 86400 = 1 day
-            setcookie('_ykGeoCountryCode', FatApp::getConfig('CONF_GEO_DEFAULT_COUNTRY', FatUtility::VAR_STRING, ''), time() + (86400 * 30), CONF_WEBROOT_FRONTEND); // 86400 = 1 day
-            setcookie('_ykGeoZip', FatApp::getConfig('CONF_GEO_DEFAULT_ZIPCODE', FatUtility::VAR_INT, 0), time() + (86400 * 30), CONF_WEBROOT_FRONTEND); // 86400 = 1 day
+            setcookie('_ykGeoLat', FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, 40.72), time() + (86400 * 30), CONF_WEBROOT_FRONTEND, $_SERVER['SERVER_NAME']); // 86400 = 1 day
+            setcookie('_ykGeoLng', FatApp::getConfig('CONF_GEO_DEFAULT_LNG', FatUtility::VAR_INT, -73.96), time() + (86400 * 30), CONF_WEBROOT_FRONTEND, $_SERVER['SERVER_NAME']); // 86400 = 1 day
+            setcookie('_ykGeoStateCode', FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, ''), time() + (86400 * 30), CONF_WEBROOT_FRONTEND, $_SERVER['SERVER_NAME']); // 86400 = 1 day
+            setcookie('_ykGeoCountryCode', FatApp::getConfig('CONF_GEO_DEFAULT_COUNTRY', FatUtility::VAR_STRING, ''), time() + (86400 * 30), CONF_WEBROOT_FRONTEND, $_SERVER['SERVER_NAME']); // 86400 = 1 day
+            setcookie('_ykGeoZip', FatApp::getConfig('CONF_GEO_DEFAULT_ZIPCODE', FatUtility::VAR_INT, 0), time() + (86400 * 30), CONF_WEBROOT_FRONTEND, $_SERVER['SERVER_NAME']); // 86400 = 1 day
             $address = FatApp::getConfig('CONF_GEO_DEFAULT_ADDR', FatUtility::VAR_STRING, '');
             if (empty($address)) {
                 $address = FatApp::getConfig('CONF_GEO_DEFAULT_ZIPCODE', FatUtility::VAR_INT, 0) . '-' . FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, '');
-            }
-            setcookie('_ykGeoAddress', $address, time() + (86400 * 30), CONF_WEBROOT_FRONTEND); // 86400 = 1 day
+            }            
+            setcookie('_ykGeoAddress', $address, time() + (86400 * 30), CONF_WEBROOT_FRONTEND, $_SERVER['SERVER_NAME']); // 86400 = 1 day
         }
 
         $currencySymbolLeft = CommonHelper::getCurrencySymbolLeft();
