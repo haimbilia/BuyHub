@@ -632,7 +632,8 @@ if (!$print) { ?>
                                 }
 
                                 if ($orderDetail['billingAddress']['oua_phone'] != '') {
-                                    $billingAddress  .= '<br>' . ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) . $orderDetail['billingAddress']['oua_phone'];
+                                    $dcode = isset($orderDetail['billingAddress']['oua_phone_dcode']) ? ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) : '';
+                                    $billingAddress  .= '<br>' . $dcode . $orderDetail['billingAddress']['oua_phone'];
                                 }
                                 ?>
                                 <div class="info--order">

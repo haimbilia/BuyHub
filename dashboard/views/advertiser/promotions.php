@@ -42,13 +42,13 @@
                                     $keywordFld->developerTags['noCaptionTag'] = true;
 
                                     $statusFld = $frmSearchPromotions->getField('active_promotion');
-                                    $statusFld->setWrapperAttribute('class', 'col-lg-2');
-                                    $statusFld->developerTags['col'] = 2;
+                                    $statusFld->setWrapperAttribute('class', 'col-lg-4');
+                                    $statusFld->developerTags['col'] = 4;
                                     $statusFld->developerTags['noCaptionTag'] = true;
 
                                     $typeFld = $frmSearchPromotions->getField('type');
-                                    $typeFld->setWrapperAttribute('class', 'col-lg-2');
-                                    $typeFld->developerTags['col'] = 2;
+                                    $typeFld->setWrapperAttribute('class', 'col-lg-4');
+                                    $typeFld->developerTags['col'] = 4;
                                     $typeFld->developerTags['noCaptionTag'] = true;
 
                                     $dateFromFld = $frmSearchPromotions->getField('date_from');

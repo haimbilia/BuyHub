@@ -487,7 +487,7 @@ class GuestUserController extends MyAppController
 
         if (true === MOBILE_APP_API_CALL) {
             if (0 < $signUpWithPhone) {
-                $this->set('data', ['userId' => $userId]);
+                $this->set('data', ['user_id' => $userId]);
                 $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
             } else {
                 $this->set('msg', Labels::getLabel('LBL_REGISTERATION_SUCCESSFULL', $this->siteLangId));
@@ -1072,12 +1072,13 @@ class GuestUserController extends MyAppController
         $userId = FatUtility::int($userId);
         $userObj = new User($userId);
         if (false == $userObj->resendOtp()) {
-            $resp = LibHelper::formatResponse(applicationConstants::FAILURE, $userObj->getError(), [], LibHelper::RC_NOT_FOUND);
+            $resp = LibHelper::formatResponse(applicationConstants::FAILURE, $userObj->getError(), [], LibHelper::RC_BAD_REQUEST);
             LibHelper::dieJsonResponse($resp);
         }
 
         $getOtpOnly = (true === MOBILE_APP_API_CALL) ? applicationConstants::YES : $getOtpOnly;
         if (0 < $getOtpOnly) {
+            $this->set('data', ['user_id' => $userId]);
             $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
             if (true === MOBILE_APP_API_CALL) {
                 $this->_template->render();
