@@ -146,7 +146,7 @@ Updates/Fixes :
     => 056228 - Undefined Variable rating types
     => 056229 - Notice: Undefined index: oua_phone_dcode
     => 055714 - seller> promotions> manage badges> when there is no data then message is not aligned
-
+==========================TV-9.3.2.20210723========================================
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files

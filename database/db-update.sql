@@ -849,3 +849,5 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('APP_DOWNLOAD_ALL', 1, 'Download All', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 DELETE FROM tbl_configurations WHERE conf_name = "CONF_FILTERS_LAYOUT";
+
+-- -----------------TV-9.3.2.20210723----------------------------
