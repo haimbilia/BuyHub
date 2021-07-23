@@ -146,7 +146,8 @@ Updates/Fixes :
     => 056228 - Undefined Variable rating types
     => 056229 - Notice: Undefined index: oua_phone_dcode
     => 055714 - seller> promotions> manage badges> when there is no data then message is not aligned
-    => 056222 - buyer/seller dashboard> logo is redirecting to dashboard instead of home page
+==========================TV-9.3.2.20210723========================================
+=> 056222 - buyer/seller dashboard> logo is redirecting to dashboard instead of home page
 
 New Features:  
     => Admin shipped products listing page

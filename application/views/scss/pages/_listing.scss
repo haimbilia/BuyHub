@@ -582,8 +582,14 @@
         position: relative;
         max-width: 610px;
         margin: 0 15px;
+        background: $bg-placeholder;
+        @include placeholder;
+        @include responsive-ratio(2, 1);
+        position: relative;
         img {
+            @include img-absolute;
             border-radius: $radius4;
+            //opacity: 0.2;
         }
     }
     figure {
