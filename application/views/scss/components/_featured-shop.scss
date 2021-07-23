@@ -11,12 +11,8 @@
         text-align: center;
         background: $gray-light;
         position: relative;
-
         display: flex;
-
         align-items: center;
-        
-        
         justify-content: center;
         flex-direction: column;
         border-radius: $radius4;
@@ -24,9 +20,7 @@
         overflow: hidden;
         border: solid 1px transparent;
         height: 100%;
-        
         transition: all 0.2s linear;
-        
         animation: slideRight 600ms ease both;
         border: solid 1px transparent;
         padding: 2rem 0;
@@ -53,14 +47,8 @@
             margin-bottom: 1rem;
             position: relative;
             border: $border;
-            
-            
             display: flex;
-            
-            
             align-items: center;
-            
-            
             justify-content: center;
             padding: 1rem;
             @include media-breakpoint-down(sm) {

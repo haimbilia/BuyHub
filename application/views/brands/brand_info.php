@@ -1,7 +1,7 @@
 <?php //if (array_key_exists('brand_id', $headerFormParamsAssocArr) && $headerFormParamsAssocArr['brand_id'] > 0) {
     ?>
-<div class="shop-information">
-    <div class="shop-logo">
+<div class="brand-information">
+    <div class="brand-logo">
         <?php
                 $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $headerFormParamsAssocArr['brand_id'], 0, 0, false);
                 $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);

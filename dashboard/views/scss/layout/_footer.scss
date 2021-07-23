@@ -15,7 +15,6 @@
         font-size: 1em;
         font-weight: 500;
         padding: 5px 0;
-        
         margin-bottom: 20px;
         @include media-breakpoint-down(sm) {
             & {
@@ -184,7 +183,6 @@
         font-size: 1em;
         font-weight: 500;
         padding: 5px 0;
-        
         margin-bottom: 15px;
         p {
             margin: 0;
@@ -197,14 +195,10 @@
 }
 
 .contact-info {
-    
     display: flex;
-    
     align-items: center;
     li {
-
         display: flex;
-
         align-items: center;
         margin: 10px 0;
         margin-#{$end-direction}: 20px;
@@ -231,18 +225,13 @@
 
 .sub-form {
     margin-bottom: 20px;
-    
     display: flex;
-    
     align-items: center;
-
     justify-content: space-between;
     width: 100%;
 }
 
 .sub-form input[type="text"] {
-    
-   
     flex: 1;
     background: #fff;
     height: 2.5rem;
@@ -356,7 +345,6 @@
 
 .accordion_triger span:after {
     content: "+";
-    
     padding-#{$start-direction}: 5px;
 }
 
@@ -386,7 +374,6 @@
 
 .footerSubCategories li:after {
     content: "|";
-    
     padding-#{$start-direction}: 2px;
 }
 

@@ -1,3 +1,7 @@
+.social-profiles {
+    margin-top: 1rem;
+}
+
 .share-icon {
     color: $brand-color;
     .svg {
@@ -5,6 +9,15 @@
         height: 16px;
         display: block;
         fill: currentColor;
+    }
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    li {
+        margin: 0 5px;
     }
 }
 
@@ -26,14 +39,8 @@
             .icn {
                 height: inherit;
                 width: inherit;
-                
-                
                 display: flex;
-                
-                
                 align-items: center;
-                
-                
                 justify-content: center;
                 svg {
                     fill: #fff;
