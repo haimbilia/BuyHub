@@ -134,7 +134,7 @@ $fld->developerTags['col'] = 12;
                                                             $fld = str_replace("</label>", "", $fld);
                                                             echo $fld;
                                                         ?>
-                                                        <i class="input-helper"></i>
+                                                        
                                                         <?php
                                                         $arr = [
                                                             "{terms-conditions}" => "<a href='".$termsAndConditionsLinkHref."'>".Labels::getLabel('LBL_Terms_Conditions', $siteLangId)."</a>", 

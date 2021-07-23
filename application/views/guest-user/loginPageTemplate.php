@@ -20,7 +20,7 @@ $remembermeField = $loginFrm->getField('remember_me');
 $remembermeField->setWrapperAttribute("class", "rememberme-text");
 $remembermeField->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
 $remembermeField->developerTags['col'] = 6;
-$remembermeField->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+$remembermeField->developerTags['cbHtmlAfterCheckbox'] = '';
 
 $fldforgot = $loginFrm->getField('forgot');
 $fldforgot->value = '<a href="' . UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm') . '"
@@ -83,16 +83,18 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
             <div class="row align-items-center">
                 <!-- Row 1st -->
                 <div class="col remember--js">
-                    <div class="field-wraper">
-                        <div class="field_cover ">
-                            <label class="checkbox">
-                                <?php
+                    <div class="field-set">
+                        <div class="field-wraper">
+                            <div class="field_cover ">
+                                <label class="checkbox">
+                                    <?php
                                 $fld = $loginFrm->getFieldHTML('remember_me');
                                 $fld = str_replace("<label >", "", $fld);
                                 $fld = str_replace("</label>", "", $fld);
                                 echo $fld;
-                                ?> <i class="input-helper"></i>
-                            </label> <?php if ($loginFrm->getField('remember_me')); ?>
+                                ?>
+                                </label> <?php if ($loginFrm->getField('remember_me')); ?>
+                            </div>
                         </div>
                     </div>
 
@@ -178,9 +180,9 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
     <div class="card-sign_foot">
         <p class="more-links">
             <?php echo $loginFrm->getFieldHtml('forgot'); ?>
-            <span class="pipe">|</span>
+
             <?php if (true === $popup) { ?>
-            <a class="link"
+            <a class=""
                 href="<?php echo UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES)); ?>">
                 <?php echo sprintf(Labels::getLabel('LBL_REGISTER_NOW', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?>
             </a>
@@ -190,8 +192,8 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
             </a>
             <?php } ?>
             <?php if (isset($includeGuestLogin) && 'true' == $includeGuestLogin) { ?>
-            <span class="pipe">|</span>
-            <a class="link" href="javascript:void(0)"
+
+            <a class="" href="javascript:void(0)"
                 onclick="guestUserFrm()"><?php echo sprintf(Labels::getLabel('LBL_GUEST_CHECKOUT?', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?></a>
             <?php } ?>
         </p>

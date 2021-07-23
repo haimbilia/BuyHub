@@ -22,7 +22,7 @@
     $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
     foreach ($arr_flds as $column => $lblTitle) {
         if ('select_all' == $column) {
-            $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input title="' . $lblTitle . '" type="checkbox" onclick="selectAll($(this))" class="selectAll-js"><i class="input-helper"></i></label>', true);
+            $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input title="' . $lblTitle . '" type="checkbox" onclick="selectAll($(this))" class="selectAll-js"></label>', true);
         } else {
             $th->appendElement('th', array(), $lblTitle);
         }
@@ -38,7 +38,7 @@
             $td = $tr->appendElement('td');
             switch ($column) {
                 case 'select_all':
-                    $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[' . $splPriceId . ']" value=' . $selProdId . '><i class="input-helper"></i></label>', true);
+                    $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[' . $splPriceId . ']" value=' . $selProdId . '></label>', true);
                     break;
                 case 'product_name':
                     // last Param of getProductDisplayTitle function used to get title in html form.

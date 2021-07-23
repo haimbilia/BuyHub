@@ -10,7 +10,7 @@ $frmSellerProduct->setFormTagAttribute('class', 'form form--horizontal inventory
 $autoUpdateFld = $frmSellerProduct->getField('auto_update_other_langs_data');
 if (null != $autoUpdateFld) {
     $autoUpdateFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-    $autoUpdateFld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+    $autoUpdateFld->developerTags['cbHtmlAfterCheckbox'] = '';
 }
 
 $returnAgeFld = $frmSellerProduct->getField('selprod_return_age');
@@ -29,15 +29,15 @@ $urlFld->htmlAfterField = "<span class='form-text text-muted'>" . UrlHelper::gen
 if (false === Plugin::isActive('EasyEcom')) {
     $fld = $frmSellerProduct->getField('selprod_subtract_stock');
     $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-    $fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+    $fld->developerTags['cbHtmlAfterCheckbox'] = '';
 
     $fld = $frmSellerProduct->getField('selprod_track_inventory');
     $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-    $fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+    $fld->developerTags['cbHtmlAfterCheckbox'] = '';
 }
 $fld = $frmSellerProduct->getField('use_shop_policy');
 $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+$fld->developerTags['cbHtmlAfterCheckbox'] = '';
 
 $submitBtnFld = $frmSellerProduct->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand');

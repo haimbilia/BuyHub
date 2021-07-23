@@ -4,7 +4,7 @@ $productFrm->setFormTagAttribute('onsubmit', 'setUpProductAttributes(this); retu
 
 $fld = $productFrm->getField('product_featured');
 $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+$fld->developerTags['cbHtmlAfterCheckbox'] = '';
 
 $btnBackFld = $productFrm->getField('btn_back');
 $btnBackFld->setFieldTagAttribute('class', "btn btn-outline-brand");

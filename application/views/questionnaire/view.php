@@ -73,12 +73,12 @@ $formFields = $frm->getAllFields();
 											if( $formField->fldType == 'radio'){
 												$fld->setOptionListTagAttribute('class','listing--vertical listing--vertical-chcek');
 												$fld->developerTags['rdLabelAttributes'] = array('class'=>'radio');
-												$fld->developerTags['rdHtmlAfterRadio'] = '<i class="input-helper"></i>';
+												$fld->developerTags['rdHtmlAfterRadio'] = '';
 											}
 											if( $formField->fldType == 'checkboxes'){
 												$fld->setOptionListTagAttribute('class','listing--vertical listing--vertical-chcek');
 												$fld->developerTags['cbLabelAttributes'] = array('class'=>'checkbox');
-												$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+												$fld->developerTags['cbHtmlAfterCheckbox'] = '';
 											}
 										?>
                     <div class="q-group">

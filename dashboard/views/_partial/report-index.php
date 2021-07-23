@@ -17,7 +17,7 @@ if (!empty($fields)) {
         }
         $htmlContent .= '<li class="">
     <label class="checkbox ' . $disabled . '">
-        <input class="filterColumn-js" type="checkbox" name="reportColumns" value="' . $key . '" ' . $checked . $disabled . ' onClick=reloadList(false)><i class="input-helper"></i>
+        <input class="filterColumn-js" type="checkbox" name="reportColumns" value="' . $key . '" ' . $checked . $disabled . ' onClick=reloadList(false)>
         ' . $label . '
     </label>
     <i class="icn fas fa-grip-lines"></i>

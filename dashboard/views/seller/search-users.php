@@ -18,7 +18,7 @@ $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
 foreach ($arr_flds as $key => $val) {
     if ('select_all' == $key) {
         if (count($arrListing) > 0) {
-            $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input type="checkbox" onclick="selectAll( $(this) )" title="' . $val . '" class="selectAll-js"><i class="input-helper"></i></label>', true);
+            $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input type="checkbox" onclick="selectAll( $(this) )" title="' . $val . '" class="selectAll-js"></label>', true);
         }
     } else {
         $e = $th->appendElement('th', array(), $val);
@@ -36,7 +36,7 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="user_ids[]" value=' . $row['user_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="user_ids[]" value=' . $row['user_id'] . '></label>', true);
                 break;
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no, true);

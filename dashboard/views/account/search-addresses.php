@@ -15,7 +15,7 @@ if (!empty($addresses)) {
                             $action = 'return false';
                         }
                         ?>
-                        <input type="radio" <?php echo ($address['addr_is_default'] == 1) ? 'checked=""' : ''; ?> name="1" onClick="<?php echo $action; ?>"><i class="input-helper"></i>
+                        <input type="radio" <?php echo ($address['addr_is_default'] == 1) ? 'checked=""' : ''; ?> name="1" onClick="<?php echo $action; ?>">
                     </span>
                     <address class="delivery-address">
                         <h5><?php echo $address['addr_name']; ?><span class="tag"><?php echo $address['addr_title']; ?></span></h5>

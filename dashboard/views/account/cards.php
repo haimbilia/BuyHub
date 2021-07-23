@@ -59,7 +59,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php');
                                                             value="<?php echo $cardDetail['id']; ?>"
                                                             <?php echo $defaultSource == $cardDetail['id'] ? "checked='checked'" : ""; ?>
                                                             onclick="markAsDefault('<?php echo $cardDetail['id']; ?>')">
-                                                        <i class="input-helper"></i>
+                                                        
                                                     </li>
                                                     <li>
                                                         <a href="javascript:void(0);"

@@ -22,19 +22,20 @@ foreach ($catBannerArr as $slideScreen) {
 
 <?php if (!empty($catBannerArr)) { ?>
 <section class="bg-shop">
-   <div class="shop-banner">
-		<picture>
-			<source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>" media="(max-width: 767px)">
-			<source data-aspect-ratio="4:3" srcset="<?php echo $tablet_url; ?>" media="(max-width: 1024px)">
-			<source data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>">
-			<img data-aspect-ratio="4:1" src="<?php echo $desktop_url; ?>" alt="">
-		</picture>
-   </div>
+    <div class="shop-banner">
+        <picture>
+            <source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>" media="(max-width: 767px)">
+            <source data-aspect-ratio="4:3" srcset="<?php echo $tablet_url; ?>" media="(max-width: 1024px)">
+            <source data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>">
+            <img data-aspect-ratio="4:1" src="<?php echo $desktop_url; ?>" alt="">
+        </picture>
+    </div>
 </section>
 <?php } ?>
 <section class="bg-second">
     <div class="container">
-        <div class="shop-nav">
+        <?php include(CONF_THEME_PATH.'shops/shop_info.php'); ?>
+        <div class="shop-nav dddd">
             <?php
             $variables= array('template_id'=>$template_id, 'shop_id'=>$shop['shop_id'], 'shop_user_id'=>$shop['shop_user_id'], 'collectionData'=>$collectionData,'action'=>$action,'siteLangId'=>$siteLangId);
             $this->includeTemplate('shops/shop-layout-navigation.php', $variables, false); ?>

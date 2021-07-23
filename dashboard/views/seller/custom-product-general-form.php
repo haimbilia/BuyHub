@@ -5,7 +5,7 @@ $productFrm->setFormTagAttribute('onsubmit', 'setupCustomProduct(this); return(f
 $fld = $productFrm->getField('auto_update_other_langs_data');
 if (null != $fld) {
     $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-    $fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+    $fld->developerTags['cbHtmlAfterCheckbox'] = '';
 }
 
 $btnSubmit = $productFrm->getField('btn_submit');

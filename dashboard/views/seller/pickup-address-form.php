@@ -16,7 +16,7 @@ $stateFld->setFieldTagAttribute('id', 'addr_state_id');
 $slotTypeFld = $frm->getField('tslot_availability');
 $slotTypeFld->setOptionListTagAttribute('class', 'list-inline');
 $slotTypeFld->developerTags['rdLabelAttributes'] = array('class' => 'radio');
-$slotTypeFld->developerTags['rdHtmlAfterRadio'] = '<i class="input-helper"></i>';
+$slotTypeFld->developerTags['rdHtmlAfterRadio'] = '';
 $slotTypeFld->setFieldTagAttribute('onClick', 'displaySlotTimings(this);');
 $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
 
@@ -238,7 +238,7 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                     for ($i = 0; $i < count($daysArr); $i++) {
                         $dayFld = $frm->getField('tslot_day[' . $i . ']');
                         $dayFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-                        $dayFld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+                        $dayFld->developerTags['cbHtmlAfterCheckbox'] = '';
                         $dayFld->setFieldTagAttribute('onChange', 'displayFields(' . $i . ', this)');
                         $dayFld->setFieldTagAttribute('class', 'slotDays-js');
 
