@@ -1,4 +1,27 @@
         .filter-top {
+            .collection-sidebar {
+                @include media-breakpoint-down(md) {
+                    background: $bg-white;
+                    border-radius: 0;
+                    position: fixed;
+                    top: 0;
+                    #{$start-direction}: -280px;
+                    bottom: 0;
+                    overflow-y: auto;
+                    backface-visibility: hidden;
+                    -webkit-backface-visibility: hidden;
+                    width: 280px;
+                    -webkit-transition: left 0.3s ease, right 0.3s ease;
+                    transition: left 0.3s ease, right 0.3s ease;
+                    .collection-sidebar--on & {
+                        padding: 1rem;
+                        #{$start-direction}: 0;
+                        visibility: visible;
+                        box-shadow: 0px 0px 0 1500px rgba(0, 0, 0, 0.2);
+                        z-index: 10;
+                    }
+                }
+            }
             .filter-horizontal {
                 >ul {
                     display: flex;
