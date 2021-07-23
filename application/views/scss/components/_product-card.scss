@@ -424,10 +424,15 @@
         }
     }
     .rate {
+        margin: 0 !important;
+        padding: 0;
         line-height: inherit;
         //height: 1rem;
         span {
             color: $txt-gray;
+        }
+        a {
+            color: $brand-color;
         }
     }
     .be-first {

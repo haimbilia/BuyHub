@@ -19,9 +19,9 @@ $fld->developerTags['col'] = 12;
 
 ?>
 <script>
-    events.contactUs();
+events.contactUs();
 </script>
-<div id="body" class="body"   >
+<div id="body" class="body">
     <div class="bg-second pt-3 pb-3">
         <div class="container container--fixed">
             <div class="row align-items-center justify-content-center">
@@ -38,7 +38,7 @@ $fld->developerTags['col'] = 12;
                 <div class="col-md-auto col-sm-auto"></div>
             </div>
         </div>
-    </div> 
+    </div>
     <section class="section">
         <div class="container">
             <div class="row justify-content-center">
@@ -134,7 +134,7 @@ $fld->developerTags['col'] = 12;
                                                             $fld = str_replace("</label>", "", $fld);
                                                             echo $fld;
                                                         ?>
-                                                        
+
                                                         <?php
                                                         $arr = [
                                                             "{terms-conditions}" => "<a href='".$termsAndConditionsLinkHref."'>".Labels::getLabel('LBL_Terms_Conditions', $siteLangId)."</a>", 
@@ -164,7 +164,7 @@ $fld->developerTags['col'] = 12;
                             </div>
                         </div>
                         <div class="col-md-5">
-                            <div class="border rounded p-4 h-100">
+                            <div class="contact-address">
                                 <h6><?php echo Labels::getLabel('LBL_General_Inquiry', $siteLangId);?>
                                 </h6>
                                 <p class="">
@@ -190,7 +190,8 @@ $fld->developerTags['col'] = 12;
 
                                 <h6><?php echo Labels::getLabel('LBL_Address', $siteLangId);?>
                                 </h6>
-                                <p class=""><?php echo nl2br(FatApp::getConfig('CONF_ADDRESS_' . $siteLangId, FatUtility::VAR_STRING, ''));?>
+                                <p class="">
+                                    <?php echo nl2br(FatApp::getConfig('CONF_ADDRESS_' . $siteLangId, FatUtility::VAR_STRING, ''));?>
                                 </p>
 
                                 <?php $this->includeTemplate('_partial/footerSocialMedia.php'); ?>
@@ -203,8 +204,8 @@ $fld->developerTags['col'] = 12;
         </div>
     </section>
     <?php  if (FatApp::getConfig('CONF_MAP_IFRAME_CODE', FatUtility::VAR_STRING, '') != '') { ?>
-    <section class="g-map">        
-    <?php echo FatApp::getConfig('CONF_MAP_IFRAME_CODE', FatUtility::VAR_STRING); ?>
+    <section class="g-map">
+        <?php echo FatApp::getConfig('CONF_MAP_IFRAME_CODE', FatUtility::VAR_STRING); ?>
     </section>
     <?php } ?>
 </div>
@@ -212,5 +213,5 @@ $fld->developerTags['col'] = 12;
 $siteKey = FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '');
 $secretKey = FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '');
 if (!empty($siteKey) && !empty($secretKey)) {?>
-    <script src='https://www.google.com/recaptcha/api.js?onload=googleCaptcha&render=<?php echo $siteKey; ?>'></script>
+<script src='https://www.google.com/recaptcha/api.js?onload=googleCaptcha&render=<?php echo $siteKey; ?>'></script>
 <?php } ?>
