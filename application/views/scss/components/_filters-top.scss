@@ -9,9 +9,7 @@
                     bottom: 0;
                     overflow-y: auto;
                     backface-visibility: hidden;
-                    -webkit-backface-visibility: hidden;
                     width: 280px;
-                    -webkit-transition: left 0.3s ease, right 0.3s ease;
                     transition: left 0.3s ease, right 0.3s ease;
                     .collection-sidebar--on & {
                         padding: 1rem;
@@ -63,8 +61,8 @@
                     max-height: 300px;
                     overflow-y: auto;
                     >li {
-                        padding-top: 1rem;
-                        margin-top: 1rem;
+                        padding-top: 0.5rem;
+                        margin-top: 0.5rem;
                         &:first-child {
                             border: none;
                             margin-top: 0;
