@@ -126,14 +126,19 @@
             <?php } ?>
         </div>
         <?php if ($socialPlatforms) { ?>
-        <div class="social-profiles">
-            <p><strong><?php echo Labels::getLabel('LBL_Follow_Us', $siteLangId); ?></strong> </p>
-            <ul class="social-icons">
+        <div class="contact-social">
+            <h5><strong><?php echo Labels::getLabel('LBL_Follow_Us', $siteLangId); ?></strong> </h5>
+
+            <ul class="">
                 <?php foreach ($socialPlatforms as $row) { ?>
                 <li>
                     <a <?php if ($row['splatform_url'] != '') { ?> target="_blank" <?php } ?>
-                        href="<?php echo ($row['splatform_url'] != '') ? $row['splatform_url'] : 'javascript:void(0)'; ?>"><i
-                            class="fab fa-<?php echo $row['splatform_icon_class']; ?>"></i>
+                        href="<?php echo ($row['splatform_url'] != '') ? $row['splatform_url'] : 'javascript:void(0)'; ?>">
+                        <span class="icon-1">
+                            <i class="fab fa-<?php echo $row['splatform_icon_class']; ?>"></i>
+                        </span><span class="icon-2">
+                            <i class="fab fa-<?php echo $row['splatform_icon_class']; ?>"></i>
+                        </span>
                     </a>
                 </li>
                 <?php } ?>

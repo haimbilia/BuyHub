@@ -348,7 +348,7 @@
         }
         .slick-arrow {
             position: relative;
-            top: auto; 
+            top: auto;
             width: 40px;
             height: 40px;
             padding: 0;
@@ -587,8 +587,6 @@
 }
 
 .yes-no ul {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -600,8 +598,7 @@
 }
 
 .yes-no ul li a {
-    font-size: 0.875em;
-    color: $body-color;
+    font-size: 0.8rem;
 }
 
 .yes-no img {
@@ -1256,10 +1253,14 @@
 .review-container {
     padding-top: 1.25rem;
     p {
-        line-height: 1.4;
+        color: $txt-gray;
+        line-height: 1.6;
+    }
+    .readMore {
+        margin-top: 10px;
+        display: inline-block;
     }
 }
-
 
 .list-services {
     display: flex;
@@ -1320,6 +1321,7 @@
         font-size: 1.5rem !important;
     }
 }
+
 .list-files {
     li {
         list-style: none;

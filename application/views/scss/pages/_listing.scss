@@ -537,18 +537,17 @@
 .product-search {
     margin: 0 auto;
     margin-bottom: 15px;
-    form {
+    .form {
         display: flex;
         align-items: center;
         background: #fff;
         border: $border;
         border-radius: $radius4;
         input[type="text"] {
+            flex: 1;
             background: none;
             border: none;
-            width: calc(100% - 40px);
             &:focus {
-                -webkit-box-shadow: none;
                 box-shadow: none;
             }
         }
@@ -558,9 +557,14 @@
         background-size: 20px auto;
         width: 40px;
         height: 40px;
+        min-width: inherit;
         border: none;
         padding: 0;
         margin: 0;
+        &:hover {
+            box-shadow: none;
+            outline: 0;
+        }
     }
 }
 
@@ -578,8 +582,14 @@
         position: relative;
         max-width: 610px;
         margin: 0 15px;
+        background: $bg-placeholder;
+        @include placeholder;
+        @include responsive-ratio(2, 1);
+        position: relative;
         img {
+            @include img-absolute;
             border-radius: $radius4;
+            //opacity: 0.2;
         }
     }
     figure {
@@ -597,15 +607,6 @@
         h4 {
             font-size: 1rem;
         }
-    }
-}
-
-.social-icons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    li {
-        margin: 0 5px;
     }
 }
 
