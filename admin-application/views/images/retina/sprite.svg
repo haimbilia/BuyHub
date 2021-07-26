@@ -30,5 +30,9 @@ C14.646,24.317,14.086,24.875,13.401,24.875z M19.528,20.607H7.274V3.294h12.254V20
                 c-1.532-1.494-0.687-4.096,1.431-4.403l12.091-1.757c0.841-0.122,1.568-0.65,1.944-1.412l5.407-10.956
                 C22.602,0.567,25.338,0.567,26.285,2.486z" />
         </symbol>
+		<symbol id="plus" viewBox="0 0 50 50">
+			<line fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="4" x1="9" x2="41" y1="25" y2="25"/>
+    <line fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="4" x1="25" x2="25" y1="9" y2="41"/>
+		</symbol>
 	</defs>
 </svg>

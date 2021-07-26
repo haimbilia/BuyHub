@@ -158,12 +158,7 @@
                             <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
                                 <input name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" class="qty-input cartQtyTextBox productQty-js" value="<?php echo $product['quantity']; ?>" type="text" />
                             </div>
-                            <span class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'not-allowed' : ''; ?>"><i class="icn">
-                                    <svg class="svg" width="16px" height="16px">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                        </use>
-                                    </svg>
-                                </i></span>
+                            <span class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'not-allowed' : ''; ?>"><i class="fas fa-plus"></i></span>
                         </div>
                     </div>
 
