@@ -1457,8 +1457,7 @@ class SellerController extends SellerBaseController
 
             if (0 < $badgeId && 0 < $ribbonId) {
                 $condition .= 'badge_type = ' . Badge::TYPE_BADGE . ' OR badge_type = ' . Badge::TYPE_RIBBON;
-                $cnd = $srch->addCondition('badge_id', '=', $badgeId);
-                $cnd->attachCondition('badge_id', '=', $ribbonId, 'OR');
+                $srch->addHaving('badge_id', '=', implode(',', [$badgeId, $ribbonId]));
             } elseif (0 < $badgeId && 1 > $ribbonId) {
                 $condition .= 'badge_type = ' . Badge::TYPE_BADGE;
                 $srch->addCondition('badge_id', '=', $badgeId);
@@ -1542,8 +1541,8 @@ class SellerController extends SellerBaseController
             'product_type',
             'product_active',
             'product_approved',
-            'COALESCE(badge_name, badge_identifier) as badge_name',
-            'blinkcond_badge_id',
+            'GROUP_CONCAT(COALESCE(badge_name, badge_identifier)) as badge_name',
+            'GROUP_CONCAT(badge_id) as badge_id',
             'badge_shape_type',
             'badge_color'
         );

@@ -77,8 +77,9 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     clearForm = function () {
         $(formClass + "input[name='blinkcond_from_date'], " + formClass + "input[name='blinkcond_to_date'], " + formClass + "input[name='blinkcond_condition_from'], " + formClass + "input[name='blinkcond_condition_to']").val("");
         var sellerSelctor = $(formClass + "select[name='seller'], " + formClass + "input[name='blinkcond_user_id']");
-        if (0 < sellerSelctor.length) {
+        if (0 < sellerSelctor.length && '' == $(formClass + "input[name='blinkcond_id']").val()) {
             sellerSelctor.val("").trigger('change');
+            $(formClass + "select[name='seller']").removeAttr('disabled');
         }
     };
 

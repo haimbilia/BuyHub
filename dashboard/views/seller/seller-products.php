@@ -76,8 +76,7 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                     $bdgSize = 20;
                     $bdgExcludeCndType = [BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP];
                     $frontReturn = true;
-
-                    include(CONF_THEME_PATH . '_partial/get-badge.php');
+                    include(CONF_FRONT_END_THEME_PATH . '_partial/get-badge.php');
                     $html = empty($html) ? Labels::getLabel('LBL_N/A', $siteLangId) : $html;
                     $td->appendElement('plaintext', [], $html, true);
                     break;
