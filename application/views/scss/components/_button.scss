@@ -149,8 +149,15 @@
      position: relative;
      font-size: 0.875rem;
      white-space: nowrap;
+     text-rendering: optimizeLegibility;
+     transition: color 0.3s ease-in-out;
+     background-image: linear-gradient(currentColor, currentColor);
+     background-position: 50% 100%;
+     background-repeat: no-repeat;
+     background-size: 0% 1px;
+     transition: background-size 0.3s;
      &:after {
-         content: "";
+         //content: "";
          position: absolute;
          height: 1px;
          bottom: -2px;
@@ -160,11 +167,12 @@
          color: $brand-color-inverse;
          transform-origin: bottom left;
          transform: scaleX(1);
-         transition: -webkit-transform .3s ease-in-out;
          transition: transform .3s ease-in-out;
          transition: transform .3s ease-in-out, -webkit-transform .3s ease-in-out;
      }
      &:hover {
+         text-decoration: none;
+         background-size: 100% 1px;
          &:after {
              transform: scaleX(0);
              transform-origin: bottom right;

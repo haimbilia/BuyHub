@@ -9,7 +9,7 @@
                     <div class="wallet-balance">
                         <label class="checkbox wallet">
                             <input onChange="walletSelection(this)" type="checkbox" <?php echo ($cartSummary["cartWalletSelected"]) ? 'checked="checked"' : ''; ?> name="pay_from_wallet" id="pay_from_wallet" />
-                            <i class="input-helper"></i>
+                            
                             <span class="wallet__txt">
                                 <svg class="svg">
                                     <use xlink:href="/yokart/images/retina/sprite.svg#wallet" href="/yokart/images/retina/sprite.svg#wallet">

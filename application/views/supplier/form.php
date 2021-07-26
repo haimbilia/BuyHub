@@ -84,7 +84,7 @@ $frm->developerTags['fld_default_col'] = 12; */
                 $fld = str_replace("</label>", "", $fld);
                 echo $fld;
                 ?>
-                <i class="input-helper"></i> 
+                 
                 <?php echo sprintf(
                     Labels::getLabel('LBL_I_agree_to_the_terms_conditions', $siteLangId),
                     "<a target='_blank' href='$termsAndConditionsLinkHref'>" . Labels::getLabel('LBL_Terms_Conditions', $siteLangId) . '</a>'
@@ -99,7 +99,7 @@ $frm->developerTags['fld_default_col'] = 12; */
                     $fld = str_replace("</label>", "", $fld);
                     echo $fld;
                     ?>
-                    <i class="input-helper"></i> </label>
+                     </label>
             <?php } ?>
         </div>
     </div>

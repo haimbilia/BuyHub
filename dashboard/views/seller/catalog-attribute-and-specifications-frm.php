@@ -5,15 +5,15 @@ $productFrm->setFormTagAttribute('onsubmit', 'setUpCatalogProductAttributes(this
 
 $featuredFld = $productFrm->getField('product_featured');
 $featuredFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-$featuredFld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+$featuredFld->developerTags['cbHtmlAfterCheckbox'] = '';
 
 /* $freeShopFld = $productFrm->getField('ps_free');
 $freeShopFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-$freeShopFld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>'; */
+$freeShopFld->developerTags['cbHtmlAfterCheckbox'] = ''; */
 
 /* $codFld = $productFrm->getField('product_cod_enabled');
 $codFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-$codFld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>'; */
+$codFld->developerTags['cbHtmlAfterCheckbox'] = ''; */
 
 $btnBackFld = $productFrm->getField('btn_back');
 $btnBackFld->setFieldTagAttribute('onClick', 'customCatalogProductForm('.$preqId.');');

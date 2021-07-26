@@ -24,7 +24,7 @@ $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table '.$ta
 $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($arr_flds as $key => $val) {
     if ('select_all' == $key) {
-        $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
+        $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"></label>', true);
     } else {
         $e = $th->appendElement('th', array(), $val);
     }

@@ -37,6 +37,7 @@ trait ApiOrders
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
+        $srch->addCondition('opshipping_by_seller_user_id', '=', $this->userId);
         $srch->addMultipleFields(
             array('order_id', 'order_payment_status', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_other_charges', 'op_unit_price', 'op_tax_collected_by_seller', 'op_selprod_user_id', 'opshipping_by_seller_user_id', 'op_status_id', 'orderstatus_id', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class', 'plugin_code', 'IFNULL(plugin_name, IFNULL(plugin_identifier, "Wallet")) as plugin_name', 'opship.*', 'opshipping_fulfillment_type', 'op_rounding_off', 'op_product_type', 'opshipping_carrier_code', 'opshipping_service_code', 'order_tax_charged', 'order_date_added as created_date', 'order_date_updated as updated_date', 'buyer.user_name as buyer_user_name', 'order_language_id', 'opshipping_label', 'op_selprod_sku')
         );
@@ -139,14 +140,16 @@ trait ApiOrders
     {
         $opSrch = new OrderProductSearch($this->langId, false, true, true);
      
-        $opSrch->joinTable(Orders::DB_TBL_ORDER_STATUS_HISTORY, 'LEFT OUTER JOIN', 'oph.oshistory_op_id = op.op_id', 'oph');
-        $opSrch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
-        $opSrch->joinTable(OrderProductShipment::DB_TBL, 'LEFT OUTER JOIN', 'opship.opship_op_id = op.op_id', 'opship');
+        $opSrch->joinTable(Orders::DB_TBL_ORDER_STATUS_HISTORY, 'LEFT JOIN', 'oph.oshistory_op_id = op.op_id', 'oph');
+        $opSrch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
+        $opSrch->joinTable(OrderProduct::DB_TBL_RESPONSE, 'LEFT JOIN', 'op.op_id = opr.opr_op_id', 'opr');
+        $opSrch->joinTable(OrderProductShipment::DB_TBL, 'LEFT JOIN', 'opship.opship_op_id = op.op_id', 'opship');
         $opSrch->doNotCalculateRecords();
         $opSrch->doNotLimitRecords();
         $opSrch->addCondition('op.op_id', '=', $opId);
         $opSrch->addCondition('op_selprod_user_id', '=', $this->userId);
         $opSrch->addCondition('oshistory_orderstatus_id', '=', OrderStatus::ORDER_SHIPPED);
+        $opSrch->addCondition('opshipping_by_seller_user_id', '=', $this->userId);
 
         $opSrch->addMultipleFields([
             'op_invoice_number',
@@ -156,7 +159,7 @@ trait ApiOrders
             'opshipping_label',
             'opshipping_carrier_code',
             'opshipping_service_code',
-            'opship_response',
+            'opr_response',
         ]);
         $opRs = $opSrch->getResultSet();
         $carrierDetail = FatApp::getDb()->fetch($opRs);
@@ -167,9 +170,9 @@ trait ApiOrders
         }
 
         $carrierDetail['label'] = '';
-        if (!empty($carrierDetail['opship_tracking_number']) && !empty($carrierDetail['opship_response'])) {
+        if (!empty($carrierDetail['opship_tracking_number']) && !empty($carrierDetail['opr_response'])) {
             $excryptedOpId = LibHelper::encrypt($opId);
-            $carrierDetail['label'] = UrlHelper::generateFullUrl('Products', 'getOrderProductLabel', [$excryptedOpId]);    
+            $carrierDetail['label'] = UrlHelper::generateFullUrl('Products', 'getOrderProductLabel', [$excryptedOpId], CONF_WEBROOT_FRONT_URL);    
         } else if (!empty($carrierDetail['opship_tracking_url'])) {
             $shipBy = FatApp::getConfig('CONF_SITE_OWNER_' . $this->langId, FatUtility::VAR_INT, 1);
             if (0 < $carrierDetail['opshipping_by_seller_user_id']) {
@@ -181,7 +184,7 @@ trait ApiOrders
             $carrierDetail['opshipping_carrier_code'] = '';    
             $carrierDetail['opshipping_service_code'] = '';    
         }
-        unset($carrierDetail['opship_response']);
+        unset($carrierDetail['opr_response']);
 
         return $this->formatOutput(Plugin::RETURN_TRUE, $msg, $carrierDetail);
     }

@@ -25,7 +25,7 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
     foreach ($arr_flds as $key => $val) {
         if ('select_all' == $key) {
             if (count($arrListing) > 0) {
-                $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input type="checkbox" onclick="selectAll( $(this) )" title="' . $val . '" class="selectAll-js"><i class="input-helper"></i></label>', true);
+                $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input type="checkbox" onclick="selectAll( $(this) )" title="' . $val . '" class="selectAll-js"></label>', true);
             }
         } else {
             $e = $th->appendElement('th', array(), $val);
@@ -42,7 +42,7 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
             $td = $tr->appendElement('td');
             switch ($key) {
                 case 'select_all':
-                    $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[]" value=' . $row['selprod_id'] . '><i class="input-helper"></i></label>', true);
+                    $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[]" value=' . $row['selprod_id'] . '></label>', true);
                     break;
                 case 'listserial':
                     $td->appendElement('plaintext', array(), $sr_no, true);

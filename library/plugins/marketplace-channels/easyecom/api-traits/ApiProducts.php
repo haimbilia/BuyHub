@@ -12,7 +12,7 @@ trait ApiProducts
     {
         $srch = SellerProduct::getSearchObject($this->langId);
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
-        $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->langId, 'p_l');
+        $srch->joinTable(Product::DB_TBL_LANG, 'LEFT JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->langId, 'p_l');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addMultipleFields([
@@ -42,9 +42,9 @@ trait ApiProducts
         foreach ($sellerProducts as &$row) {
             $srch = new SearchBase(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'spo');
             $srch->joinTable(OptionValue::DB_TBL, 'INNER JOIN', 'spo.selprodoption_optionvalue_id = ov.optionvalue_id', 'ov');
-            $srch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'ov_lang.optionvaluelang_optionvalue_id = ov.optionvalue_id AND ov_lang.optionvaluelang_lang_id = ' . $this->langId, 'ov_lang');
+            $srch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT JOIN', 'ov_lang.optionvaluelang_optionvalue_id = ov.optionvalue_id AND ov_lang.optionvaluelang_lang_id = ' . $this->langId, 'ov_lang');
             $srch->joinTable(Option::DB_TBL, 'INNER JOIN', 'o.option_id = ov.optionvalue_option_id', 'o');
-            $srch->joinTable(Option::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'o.option_id = o_lang.optionlang_option_id AND o_lang.optionlang_lang_id = ' . $this->langId, 'o_lang');
+            $srch->joinTable(Option::DB_TBL . '_lang', 'LEFT JOIN', 'o.option_id = o_lang.optionlang_option_id AND o_lang.optionlang_lang_id = ' . $this->langId, 'o_lang');
             $srch->addMultipleFields([
                 'COALESCE(option_name, option_identifier) as name',
                 'COALESCE(optionvalue_name, optionvalue_identifier) as value',
@@ -95,15 +95,19 @@ trait ApiProducts
         $pagesize = isset($post['pagesize']) ? $post['pagesize'] : $pagesize;
 
         $srch = Product::getSearchObject($this->langId);
+        $srch->joinTable(Product::DB_PRODUCT_SHIPPED_BY_SELLER, 'LEFT JOIN', 'psbs.psbs_product_id = tp.product_id', 'psbs');
         $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'tp.product_id = sp.selprod_product_id', 'sp');
-        $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT OUTER JOIN', 'tp.product_id = ptc_product_id', 'ptc');
-        $srch->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'ptc.ptc_prodcat_id = pc.prodcat_id', 'pc' );
-        $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT OUTER JOIN', 'pc.prodcat_id = pc_l.prodcatlang_prodcat_id AND pc_l.prodcatlang_lang_id = '. $this->langId, 'pc_l' );
-        $srch->joinTable(Brand::DB_TBL, 'LEFT OUTER JOIN', 'tp.product_brand_id = brand.brand_id', 'brand');
-        $srch->joinTable(Brand::DB_TBL_LANG, 'LEFT OUTER JOIN', 'brand.brand_id = tb_l.brandlang_brand_id AND brandlang_lang_id = ' . $this->langId, 'tb_l');
+        $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT JOIN', 'tp.product_id = ptc_product_id', 'ptc');
+        $srch->joinTable(ProductCategory::DB_TBL, 'LEFT JOIN', 'ptc.ptc_prodcat_id = pc.prodcat_id', 'pc' );
+        $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT JOIN', 'pc.prodcat_id = pc_l.prodcatlang_prodcat_id AND pc_l.prodcatlang_lang_id = '. $this->langId, 'pc_l' );
+        $srch->joinTable(Brand::DB_TBL, 'LEFT JOIN', 'tp.product_brand_id = brand.brand_id', 'brand');
+        $srch->joinTable(Brand::DB_TBL_LANG, 'LEFT JOIN', 'brand.brand_id = tb_l.brandlang_brand_id AND brandlang_lang_id = ' . $this->langId, 'tb_l');
         $srch->addCondition('product_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('product_approved', '=', applicationConstants::YES);
         $srch->addCondition('selprod_user_id', '=', $this->userId);
+        
+        $cnd = $srch->addCondition('psbs_user_id', '=', $this->userId);
+        $cnd->attachCondition('product_seller_id', '=', $this->userId);
 
         $srch->addMultipleFields([
             'product_id',
@@ -120,7 +124,6 @@ trait ApiProducts
         $srch->addGroupBy('product_id');
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-
         $rs = $srch->getResultSet();
         $products = $this->db->fetchAll($rs);
 

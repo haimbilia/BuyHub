@@ -7,12 +7,12 @@ $frm->developerTags['fld_default_col'] = 12;
 $fld = $frm->getField('auto_update_other_langs_data');
 if (null != $fld) {
 	$fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-	$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+	$fld->developerTags['cbHtmlAfterCheckbox'] = '';
 }
 $fld = $frm->getField('badge_display_inside');
 if (null != $fld) {
 	$fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-	$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+	$fld->developerTags['cbHtmlAfterCheckbox'] = '';
 }
 
 $iconLangFld = $frm->getField('icon_lang_id');

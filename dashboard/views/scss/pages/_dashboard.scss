@@ -454,15 +454,11 @@
         padding: 3.125rem;
         min-height: 500px;
         @include media-breakpoint-down(lg) {
-            & {
-                padding: 2rem;
-            }
+            padding: 2rem;
         }
         @include media-breakpoint-down(sm) {
-            & {
-                padding: 1rem;
-                min-height: auto;
-            }
+            padding: 1rem;
+            min-height: auto;
         }
     }
     .content-header {
@@ -471,10 +467,10 @@
         margin-bottom: 1.5rem;
         .content-header-title {
             color: $body-color;
-            font-size: 2rem;
+            font-size: 1.7rem;
             font-weight: 300;
             i {
-                font-size: 1rem;
+                font-size: 0.8rem;
                 margin-#{$start-direction}: 5px;
             }
         }

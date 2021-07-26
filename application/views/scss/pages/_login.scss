@@ -25,7 +25,7 @@
             color: currentColor;
             font-size: 1.5rem;
             font-weight: 300;
-            margin-bottom:1.2rem;
+            margin-bottom: 1.2rem;
         }
     }
 }
@@ -43,8 +43,6 @@
         margin: 5px auto;
     }
 }
-
- 
 
 .container-info {
     background: #000;
@@ -251,6 +249,17 @@
     }
 }
 
+.more-links {
+    margin-top: 2.5rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: $txt-body;
+    font-weight: 500;
+    a {
+        margin: 0 5px;
+    }
+}
+
 .login-wrapper {
     .form-side {
         padding: 2rem;
@@ -381,4 +390,65 @@
             content: normal;
         }
     }
+}
+
+//forgot password
+.full-page-from {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    background: $bg-white;
+    .full-page-from-block {
+        margin: 0 auto;
+        margin-top: 100px;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        &_head {
+            margin-bottom: 2rem;
+        }
+    }
+    .card {
+        border: none;
+        box-shadow: $shadow1;
+        border-radius: $radius4;
+        &-header {
+            flex-direction: column;
+            padding: 2rem 1.5rem;
+            h1 {
+                color: $txt-body;
+                font-size: 1.6rem;
+                margin-bottom: 1rem;
+            }
+            p {
+                color: $txt-gray;
+                font-size: 0.8rem;
+                line-height: 1.5;
+            }
+        }
+        &-body {
+            padding: 2rem;
+        }
+        &-footer {
+            border: none;
+        }
+    }
+}
+
+.other-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    margin-top: 2rem;
+    li {
+        margin: 0 0.5rem;
+        font-weight: 600;
+        color: $txt-gray;
+    }
+}
+
+.forgot {
+    text-align: #{$end-direction};
 }

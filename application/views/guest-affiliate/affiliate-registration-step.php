@@ -35,7 +35,7 @@ switch( $affiliate_register_step_number ){
 		
 		$termsFldHtml = '<div class="field-set"><div class="field-wraper"><div class="field_cover"><label><span class="checkbox">'.$termsFld;
 		
-		$termsFldHtml .= '<i class="input-helper"></i>' . $termsAndConditionsLink . '</span></label></div></div></div>';
+		$termsFldHtml .= '' . $termsAndConditionsLink . '</span></label></div></div></div>';
 		
         $agree_fld_html_div = $registerForm->getField('agree_fld_html_div');
         if (null != $agree_fld_html_div) {

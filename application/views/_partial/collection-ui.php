@@ -28,7 +28,7 @@ if ($showAddToFavorite) {
                         <li>
                             <label class="checkbox">
                                 <input type="checkbox" name='selprod_id[]' class="selectItem--js" value="<?php echo $product['selprod_id']; ?>" />
-                                <i class="input-helper"></i>
+                                
                             </label>
                         </li>
                         <li>

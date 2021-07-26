@@ -64,7 +64,7 @@
                                                     name="packages" <?php if ($currentActivePlanId == $plan[SellerPackagePlans::DB_TBL_PREFIX.'id']) {
                                       echo'checked=checked ';
                                   } ?> type="radio">
-                                                <i class="input-helper"></i>
+                                                
                                                 <?php echo SellerPackagePlans::getPlanPriceWithPeriod($plan, $plan[SellerPackagePlans::DB_TBL_PREFIX.'price']); ?></label>
                                         </li>
                                         <?php

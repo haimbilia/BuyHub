@@ -4,7 +4,7 @@
 <tr id='row-<?php echo $splPriceId; ?>'>
     <td>
         <label class="checkbox">
-            <input class="selectItem--js" type="checkbox" name="selprod_ids[<?php echo $splPriceId; ?>]" value="<?php echo $data['splprice_selprod_id']; ?>"><i class="input-helper"></i></label>
+            <input class="selectItem--js" type="checkbox" name="selprod_ids[<?php echo $splPriceId; ?>]" value="<?php echo $data['splprice_selprod_id']; ?>"></label>
     </td>
     <td>
         <?php echo html_entity_decode($data['product_name']); ?>

@@ -41,7 +41,7 @@
                 $th = $tbl->appendElement('thead')->appendElement('tr');
                 foreach ($arr_flds as $key => $val) {
                     if ('select_all' == $key && $canEdit) {
-                        $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i>'.$val.'</label>', true);
+                        $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js">'.$val.'</label>', true);
                     } else {
                         $th->appendElement('th', array(), $val);
                     }
@@ -56,7 +56,7 @@
                         $td = $tr->appendElement('td');
                         switch ($key) {
                             case 'select_all':
-                                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="scollection_ids[]" value='.$row['scollection_id'].'><i class="input-helper"></i></label>', true);
+                                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="scollection_ids[]" value='.$row['scollection_id'].'></label>', true);
                                 break;
                             case 'listserial':
                                 $td->appendElement('plaintext', array(), $sr_no);

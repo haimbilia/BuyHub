@@ -300,7 +300,7 @@
                                 </div>
                                 <label class="checkbox">
                                     <input <?php echo ($usproduct['selprod_stock'] > 0) ? 'checked="checked"' : ''; ?> type="checkbox" class="cancel <?php echo $uncheckBoxClass; ?>" name="check_addons" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                    <i class="input-helper"></i> </label>
+                                     </label>
 
 
                             </li>

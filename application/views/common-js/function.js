@@ -625,7 +625,7 @@ function loadGeoLocation() {
     });
 }
 
-function setGeoAddress(data) {
+function setGeoAddress(data) {    
     var address = '';
     setCookie('_ykGeoLat', data.lat);
     setCookie('_ykGeoLng', data.lng);
@@ -653,7 +653,7 @@ function setGeoAddress(data) {
     var formatedAddr = ('undefined' == typeof data.formatted_address) ? '' : data.formatted_address;
     address = ('' == address) ? formatedAddr : address;
 
-    setCookie('_ykGeoAddress', address);
+    setCookie('_ykGeoAddress', address);    
 
     return address;
 }
@@ -671,7 +671,7 @@ function setCookie(cname, cvalue, canSetCookie = true, exdays = 365, callback = 
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     var expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";domain=." + window.location.hostname + ";path=/";
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";domain=" + window.location.hostname + ";path=/";
     if ('' != callback) {
         callback();
     }
@@ -706,7 +706,10 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
     }
     var fieldElement = document.getElementById(elementId);
     setTimeout(function () { $("#" + elementId).attr('autocomplete', 'no'); }, 500);
-    var options = { types: ['(regions)'] }
+    var options = { 
+        /* types: ['address'] */
+        fields: ["formatted_address", "geometry", "name","address_components"],
+    }
     var autocomplete = new google.maps.places.Autocomplete(fieldElement, options);
     google.maps.event.addListener(autocomplete, 'place_changed', function () {
         var place = autocomplete.getPlace();
@@ -733,7 +736,7 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
                     data['city'] = value;
                 }
             }
-            address = setGeoAddress(data);
+            address = setGeoAddress(data);           
             if ('' == address) {
                 var msg = (langLbl.fieldNotFound).replace('{field}', field);
                 $.systemMessage(msg, 'alert--danger');

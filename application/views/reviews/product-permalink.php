@@ -122,22 +122,23 @@
 																	$largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($reviewData['spreview_id'], 0, 'LARGE', $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
 																	if (5 > $i || 5 < $i) { ?>
-                                                                    <li class="<?php echo 5 < $i ? 'd-none' : ''; ?>">
-                                                                        <a class="uploaded-file" href="javascript:void(0)"
-                                                                            onclick="previewImage(this);">
-                                                                            <img src="<?php echo $imgUrl; ?>"
-                                                                                data-altimg="<?php echo $largeImgUrl; ?>">
-                                                                        </a>
-                                                                    </li>
-                                                                    <?php } else { ?>
-                                                                            <li class="more-media " onclick="loadMoreImages(this);">
-                                                                                <a class="uploaded-file review-media" href="javascript:void(0)"
-                                                                                    data-count="<?php echo count($images); ?>+">
-                                                                                    <img src="<?php echo $imgUrl; ?>"
-                                                                                        data-altimg="<?php echo $largeImgUrl; ?>">
-                                                                                </a>
-                                                                            </li>
-                                                                    <?php }
+                                                            <li class="<?php echo 5 < $i ? 'd-none' : ''; ?>">
+                                                                <a class="uploaded-file" href="javascript:void(0)"
+                                                                    onclick="previewImage(this);">
+                                                                    <img src="<?php echo $imgUrl; ?>"
+                                                                        data-altimg="<?php echo $largeImgUrl; ?>">
+                                                                </a>
+                                                            </li>
+                                                            <?php } else { ?>
+                                                            <li class="more-media " onclick="loadMoreImages(this);">
+                                                                <a class="uploaded-file review-media"
+                                                                    href="javascript:void(0)"
+                                                                    data-count="<?php echo count($images); ?>+">
+                                                                    <img src="<?php echo $imgUrl; ?>"
+                                                                        data-altimg="<?php echo $largeImgUrl; ?>">
+                                                                </a>
+                                                            </li>
+                                                            <?php }
 																	$i++;
 																} ?>
                                                         </ul>

@@ -156,17 +156,26 @@ class ReviewsController extends MyAppController
         if (UserAuthentication::isUserLogged()) {
             $loggedUserId = UserAuthentication::getLoggedUserId();
         }
+        
+        /* sub query to find out that logged user have marked current shop as favorite or not[ */
+        $favSrchObj = new UserFavoriteShopSearch();
+        $favSrchObj->doNotCalculateRecords();
+        $favSrchObj->doNotLimitRecords();
+        $favSrchObj->addMultipleFields(array('ufs_shop_id', 'ufs_id'));
+        $favSrchObj->addCondition('ufs_user_id', '=', $loggedUserId);
+        $favSrchObj->addCondition('ufs_shop_id', '=', $shop_id);
+        $srch->joinTable('(' . $favSrchObj->getQuery() . ')', 'LEFT OUTER JOIN', 'ufs_shop_id = shop_id', 'ufs');
+          /* ] */
 
         $srch->addMultipleFields(
             array(
                 'shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'shop_name', 'shop_description',
-                'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city'
+                'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city','user_regdate','IFNULL(ufs.ufs_id, 0) as is_favorite'
             )
         );
         $srch->addCondition('shop_id', '=', $shop_id);
         $shopRs = $srch->getResultSet();
         $shop = $db->fetch($shopRs);
-
         if (!$shop) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Home'));
@@ -178,7 +187,6 @@ class ReviewsController extends MyAppController
         $selProdRatingSrch->addCondition('sprating_ratingtype_id', 'in', array(RatingType::RATING_DELIVERY, RatingType::RATING_SELLER_STOCK_AVAILABILITY, RatingType::RATING_SELLER_PACKAGING_QUALITY));
         $selProdRatingSrch->addGroupBy('sprating_spreview_id');
         $spratingQuery = $selProdRatingSrch->getQuery();
-
 
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinProducts($this->siteLangId);
@@ -194,16 +202,25 @@ class ReviewsController extends MyAppController
 
         $frmReviewSearch = $this->getProductReviewSearchForm(FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG'));
         $frmReviewSearch->fill(array('shop_id' => $shop_id));
-        $this->set('frmReviewSearch', $frmReviewSearch);
-        
-        $ratingAspects = SelProdRating::getAvgShopReviewsRating($shop['shop_user_id'], $this->siteLangId);
-        $this->set('ratingAspects', $ratingAspects);
+        $this->set('frmReviewSearch', $frmReviewSearch);    
+        $this->set('ratingAspects', SelProdRating::getAvgShopReviewsRating($shop['shop_user_id'], $this->siteLangId)); 
+       
+        $srchSplat = SocialPlatform::getSearchObject($this->siteLangId);
+        $srchSplat->doNotCalculateRecords();
+        $srchSplat->doNotLimitRecords();
+        $srchSplat->addCondition('splatform_user_id', '=', $shop['shop_user_id']);           
+        $socialPlatforms = FatApp::getDb()->fetchAll($srchSplat->getResultSet());
+        $this->set('socialPlatforms', $socialPlatforms);        
 
         $shop_rating = 0;
         if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
             $shop_rating = SelProdRating::getSellerRating($shop['shop_user_id']);
-        }
-        $this->set('shop_rating', $shop_rating);
+        }  
+        $this->set('shopRating', $shop_rating);
+        $this->set('shopTotalReviews', SelProdReview::getSellerTotalReviews($shop['shop_user_id']));
+        $this->set('collectionData', ShopCollection::getShopCollectionsDetail($shop_id, $this->siteLangId));        
+        $this->set('template_id', SHOP::TEMPLATE_ONE);
+        $this->set('shopId', $shop_id);
         $this->set('shop', $shop);
         $this->_template->render();
     }
