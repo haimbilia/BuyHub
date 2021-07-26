@@ -1,5 +1,4 @@
 <?php
-
 class PayoutBaseController extends PluginBaseController
 {
     protected function validateWithdrawalRequest()
