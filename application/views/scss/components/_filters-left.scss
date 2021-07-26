@@ -1,10 +1,164 @@
-.filters-left {
+.filter-left {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    grid-gap: 60px;
+    @include media-breakpoint-down(md) {
+        display: block;
+    }
+    .collection-sidebar {
+        flex-grow: 0;
+        flex-basis: 0;
+        background: $bg-gray;
+        border-radius: $radius4;
+        display: block;
+        padding: 1.5rem;
+        @include media-breakpoint-down(md) {
+            border-radius: 0;
+            position: fixed;
+            top: 0;
+            #{$start-direction}: -280px;
+            bottom: 0;
+            overflow-y: auto;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            width: 280px;
+            -webkit-transition: left 0.3s ease, right 0.3s ease;
+            transition: left 0.3s ease, right 0.3s ease;
+            .collection-sidebar--on & {
+                padding: 1rem;
+                #{$start-direction}: 0;
+                visibility: visible;
+                box-shadow: 0px 0px 0 1500px rgba(0, 0, 0, 0.2);
+                z-index: 10;
+            }
+        }
+    }
+    .sidebar-widget {
+        &__body {
+            transition: none !important;
+        }
+    }
+}
+
+.aside-head {
+    display: flex;
+    justify-content: space-between;
+    .title {
+        font-size: 1.2rem;
+        text-transform: uppercase;
+    }
+}
+
+.sidebar-widget {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: $border;
+    position: relative;
+    &:after {
+        background: $brand-color;
+        width: 30px;
+        height: 2px;
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        #{$start-direction}: 0;
+    }
+    &:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border: none;
+        &:after {
+            content: normal;
+        }
+    }
+    &_head {
+        font-size: 0.85rem;
+        /*text-transform: uppercase;*/
+        margin: 0;
+        color: $body-color;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-#{$end-direction}: 20px;
+        position: relative;
+        cursor: pointer;
+        &:before {
+            content: "";
+            position: absolute;
+            top: calc(50% - 6px);
+            #{$end-direction}: 0rem;
+            display: inline-block;
+            border-right: 1px solid black;
+            border-bottom: 1px solid black;
+            width: 8px;
+            height: 8px;
+            transform: rotate(45deg);
+            transform-origin: center;
+            transition: all 0.5s ease;
+        }
+        &[aria-expanded='true'] {
+            &:before {
+                top: calc(50% - 1px);
+                transform: rotate(-134deg);
+            }
+        }
+    }
+    &_body {
+        padding: 1rem 0;
+    }
+}
+
+.selected-filters {
     display: flex;
     flex-wrap: wrap;
-    .collection-sidebar {
-        margin-#{$end-direction}: 2rem;
-    }
-    .selected-filters {
-        margin-bottom: 1.5rem;
+    align-items: center;
+    font-size: 0.8rem;
+    margin-top: 0.6rem;
+    margin-bottom: 0.875rem;
+    .chip {
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        border-radius: 30px;
+        border: $border;
+        padding: 5px 5px;
+        margin: 2px 0;
+        padding-#{$start-direction}: 14px;
+        margin-#{$end-direction}: 10px;
+        font-size: inherit;
+        background-color: #fff;
+        height: 28px;
+        &:hover {
+            border-color: $brand-color;
+            .remove {
+                background: $brand-color;
+                color: $brand-color-inverse;
+            }
+        }
+        &:last-child {
+            margin-#{$end-direction}: 0;
+        }
+        &.more {
+            font-weight: 600;
+            padding-#{$end-direction}: 14px;
+        }
+        .remove {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            padding: 0;
+            margin: 0;
+            border-radius: 50%;
+            margin-#{$start-direction}: 5px;
+            font-size: 10px;
+            color: inherit;
+            &:hover {
+                background: $brand-color;
+                color: $brand-color-inverse;
+            }
+        }
     }
 }

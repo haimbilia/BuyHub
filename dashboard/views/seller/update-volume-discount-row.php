@@ -2,7 +2,7 @@
 <tr id="row-<?php echo $volDiscountId; ?>">
     <td>
         <label class="checkbox">
-            <input class="selectItem--js" type="checkbox" name="selprod_ids[<?php echo $volDiscountId; ?>]" value="<?php echo $post['voldiscount_selprod_id']; ?>"><i class="input-helper"></i></label>
+            <input class="selectItem--js" type="checkbox" name="selprod_ids[<?php echo $volDiscountId; ?>]" value="<?php echo $post['voldiscount_selprod_id']; ?>"></label>
     </td>
     <td>
         <?php echo html_entity_decode($post['product_name']); ?>

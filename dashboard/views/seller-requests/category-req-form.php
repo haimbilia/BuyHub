@@ -5,7 +5,7 @@ $frm->setFormTagAttribute('onsubmit', 'setupCategoryReq(this); return(false);');
 if ($auto_update_other_langs_data) {
     $autoUpdateFld = $frm->getField('auto_update_other_langs_data');
     $autoUpdateFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-    $autoUpdateFld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+    $autoUpdateFld->developerTags['cbHtmlAfterCheckbox'] = '';
 }
 $submitFld = $frm->getField('btn_submit');
 $submitFld->setFieldTagAttribute('class', 'btn btn-brand');

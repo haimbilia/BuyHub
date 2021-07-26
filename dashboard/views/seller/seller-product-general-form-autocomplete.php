@@ -10,7 +10,7 @@ $frmSellerProduct->setFormTagAttribute('class', 'form form--horizontal inventory
 $autoUpdateFld = $frmSellerProduct->getField('auto_update_other_langs_data');
 if (null != $autoUpdateFld) {
     $autoUpdateFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-    $autoUpdateFld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+    $autoUpdateFld->developerTags['cbHtmlAfterCheckbox'] = '';
 }
 
 $returnAgeFld = $frmSellerProduct->getField('selprod_return_age');
@@ -29,18 +29,18 @@ $urlFld->htmlAfterField = "<span class='form-text text-muted'>" . UrlHelper::gen
 $subtractFld = $frmSellerProduct->getField('selprod_subtract_stock');
 if (null != $subtractFld) {
     $subtractFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-    $subtractFld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+    $subtractFld->developerTags['cbHtmlAfterCheckbox'] = '';
 }
 
 $trackInvFld = $frmSellerProduct->getField('selprod_track_inventory');
 if (null != $trackInvFld) {
     $trackInvFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-    $trackInvFld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+    $trackInvFld->developerTags['cbHtmlAfterCheckbox'] = '';
 }
 
 $fld = $frmSellerProduct->getField('use_shop_policy');
 $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-$fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
+$fld->developerTags['cbHtmlAfterCheckbox'] = '';
 
 $submitBtnFld = $frmSellerProduct->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand');

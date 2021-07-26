@@ -1,6 +1,5 @@
 .navigation-wrapper {
     margin: 0 auto;
-    
     display: flex;
     vertical-align: top;
     position: relative;
@@ -72,8 +71,8 @@
             -webkit-box-direction: normal;
             -ms-flex-direction: column;
             flex-direction: column;
-            -webkit-box-pack:flex-start !important;
-            -ms-flex-pack:flex-start !important;
+            -webkit-box-pack: flex-start !important;
+            -ms-flex-pack: flex-start !important;
             justify-content: flex-start !important;
         }
     }
@@ -113,6 +112,13 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             font-weight: 500;
+            text-rendering: optimizeLegibility;
+            transition: color 0.3s ease-in-out;
+            background-image: linear-gradient(currentColor, currentColor);
+            background-position: 50% 100%;
+            background-repeat: no-repeat;
+            background-size: 0% 1px;
+            transition: background-size 0.3s;
             @include media-breakpoint-down(lg) {
                 & {
                     color: inherit;
@@ -123,7 +129,10 @@
                     height: auto;
                 }
             }
-            &:hover {
+            &:hover,
+            &:visited {
+                text-decoration: none;
+                background-size: 100% 1px;
                 text-decoration: none;
                 &:after {
                     #{$start-direction}: 0;
@@ -283,7 +292,6 @@
         top: 20px;
         transform: rotate(90deg);
         -moz-transform: rotate(90deg);
-        
         width: 12px;
     }
     &.active {

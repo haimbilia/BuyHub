@@ -125,16 +125,12 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
 </section>
 <?php } ?>
 <?php $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearch' => $frmProductSearch, 'siteLangId' => $siteLangId, 'recordCount' => $recordCount, 'pageTitle' => (isset($pageTitle)) ? $pageTitle : 'Products'), false);  ?>
-<div class="section">
+<section class="section">
     <div class="container">
-        <div
-            class="collection-listing <?php echo $vtype == 'map' ? 'filter-top' : 'filter-left'; ?>">
-
-            <?php            
-            require_once('filters-layout.php');
-
-            ?>
-
+        <div class="collection-listing <?php echo $vtype == 'map' ? 'filter-top' : 'filter-left'; ?>">
+            <aside class="collection-sidebar productFilters-js" id="collection-sidebar"
+                data-close-on-click-outside="collection-sidebar">
+            </aside>
             <main class="collection-content">
                 <button class="btn btn-float link__filter btn--filters-control" data-trigger="collection-sidebar"><i
                         class="icn">
@@ -251,7 +247,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
 
         </div>
     </div>
-</div>
+</section>
 <section>
     <div class="container">
         <div class="row">

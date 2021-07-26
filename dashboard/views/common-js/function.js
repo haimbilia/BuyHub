@@ -128,7 +128,7 @@ $(document).ready(function () {
                     .stop()
                     .slideDown(300);
             }
-        });       
+        });
     });
 
 
@@ -137,9 +137,9 @@ $(document).ready(function () {
         if ($('html').hasClass('toggled-user')) {
             $('.dropdown__trigger-js').parent('.dropdown').removeClass("is-active");
             $("html").removeClass("toggled-user");
-        }        
+        }
     });
-    $('html').click(function () {       
+    $('html').click(function () {
         if ($('.collection__container').hasClass('open-menu')) {
             $('.open-menu').parent().toggleClass('is-active');
             $('.open-menu').toggleClass('open-menu');
@@ -176,12 +176,12 @@ $(function () {
 
 
 /*back-top*/
-$(document).ready(function () {   
+$(document).ready(function () {
 
     $('.switch-button').click(function () {
         $(this).toggleClass("is--active");
         if ($(this).hasClass("buyer") && !$(this).hasClass("is--active")) {
-            window.location.href = fcom.makeUrl('seller', '',[], siteConstants.webrootfront);
+            window.location.href = fcom.makeUrl('seller', '', [], siteConstants.webrootfront);
         } if ($(this).hasClass("seller") && $(this).hasClass("is--active")) {
             window.location.href = fcom.makeUrl('buyer', '', [], siteConstants.webrootfront);
         }
@@ -566,7 +566,10 @@ function setCookie(cname, cvalue, exdays = 365) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     var expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";domain=" + window.location.hostname + ";path=/";
+    if ('' != callback) {
+        callback();
+    }
 }
 
 function getCookie(cname) {
@@ -599,7 +602,10 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
     }
     var fieldElement = document.getElementById(elementId);
     setTimeout(function () { $("#" + elementId).attr('autocomplete', 'no'); }, 500);
-    var options = { types: ['(regions)'] }
+    var options = {
+        /* types: ['address'] */
+        fields: ["formatted_address", "geometry", "name", "address_components"],
+    }
     var autocomplete = new google.maps.places.Autocomplete(fieldElement, options);
     google.maps.event.addListener(autocomplete, 'place_changed', function () {
         var place = autocomplete.getPlace();

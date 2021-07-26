@@ -38,7 +38,7 @@
 
                                         <div class="checkbox_wrap">
                                             <span class="checkbox">
-                                                <input <?php echo ($checked == true) ? 'checked="checked"' : ''; ?> name="shipping_address_id" value="<?php echo $address['addr_id']; ?>" type="radio"><i class="input-helper"></i>
+                                                <input <?php echo ($checked == true) ? 'checked="checked"' : ''; ?> name="shipping_address_id" value="<?php echo $address['addr_id']; ?>" type="radio">
                                             </span>
                                         </div>
 

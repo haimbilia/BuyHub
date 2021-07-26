@@ -348,7 +348,7 @@
         }
         .slick-arrow {
             position: relative;
-            top: auto; 
+            top: auto;
             width: 40px;
             height: 40px;
             padding: 0;
@@ -587,8 +587,6 @@
 }
 
 .yes-no ul {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -600,8 +598,7 @@
 }
 
 .yes-no ul li a {
-    font-size: 0.875em;
-    color: $body-color;
+    font-size: 0.8rem;
 }
 
 .yes-no img {
@@ -1186,18 +1183,12 @@
 }
 
 .video-wrapper {
+    background: $bg-placeholder;
+    @include placeholder;
+    @include responsive-ratio(16, 9);
     position: relative;
-    overflow: hidden;
-    width: 100%;
-    padding-top: 56.25%;
     iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
+        @include img-absolute;
     }
 }
 
@@ -1256,10 +1247,14 @@
 .review-container {
     padding-top: 1.25rem;
     p {
-        line-height: 1.4;
+        color: $txt-gray;
+        line-height: 1.6;
+    }
+    .readMore {
+        margin-top: 10px;
+        display: inline-block;
     }
 }
-
 
 .list-services {
     display: flex;
@@ -1320,6 +1315,7 @@
         font-size: 1.5rem !important;
     }
 }
+
 .list-files {
     li {
         list-style: none;
@@ -1362,8 +1358,9 @@
 
 .jwplayer--content {
     /* (16:9 ratio) */
-    width: 600px;
-    height: 338px;
+    width: 100%;
+    max-width: 500px;
+    //height: 338px;
     @include media-breakpoint-down(md) {
         width: 100%;
         height: auto;
