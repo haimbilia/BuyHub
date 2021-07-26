@@ -147,13 +147,17 @@ Updates/Fixes :
     => 056229 - Notice: Undefined index: oua_phone_dcode
     => 055714 - seller> promotions> manage badges> when there is no data then message is not aligned
 ==========================TV-9.3.2.20210723========================================
-=> 056222 - buyer/seller dashboard> logo is redirecting to dashboard instead of home page
+    => 056222 - buyer/seller dashboard> logo is redirecting to dashboard instead of home page
+    => 056147 - buyer> orders> feedback form> rating stars are not populating
+================TV-9.3.2.20210726===================
+    => 056373 - if admin shipping is enabled then even seller is credited with shipping amount
+    => 056221 - seller> inventory> badges and ribbon collectively not working in filter
 
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
     => task-85619 Adding files when digital order is delivered   
-   
+
 Enhancements :
    => At shop level  pickup interval option given
    => Tracking order with Google Analytics ecommerce 

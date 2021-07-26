@@ -82,8 +82,8 @@ trait SellerProducts
                 'selprod_available_from',
                 'IFNULL(product_name, product_identifier) as product_name',
                 'selprod_title',
-                'COALESCE(badge_name, badge_identifier) as badge_name',
-                'blinkcond_badge_id',
+                'GROUP_CONCAT(COALESCE(badge_name, badge_identifier)) as badge_name',
+                'GROUP_CONCAT(badge_id) as badge_id',
                 'badge_shape_type',
                 'badge_color'
             )
@@ -114,8 +114,7 @@ trait SellerProducts
 
             if (0 < $badgeId && 0 < $ribbonId) {
                 $condition .= 'badge_type = ' . Badge::TYPE_BADGE . ' OR badge_type = ' . Badge::TYPE_RIBBON;
-                $cnd = $srch->addCondition('badge_id', '=', $badgeId);
-                $cnd->attachCondition('badge_id', '=', $ribbonId, 'OR');
+                $srch->addHaving('badge_id', '=', implode(',', [$badgeId, $ribbonId]));
             } else if (0 < $badgeId && 1 > $ribbonId) {
                 $condition .= 'badge_type = ' . Badge::TYPE_BADGE;
                 $srch->addCondition('badge_id', '=', $badgeId);
@@ -140,10 +139,7 @@ trait SellerProducts
 
         $srch->addOrder('selprod_id', 'DESC');
         $srch->addGroupBy('selprod_id');
-        $db = FatApp::getDb();
-
-        $rs = $srch->getResultSet();
-        $arrListing = $db->fetchAll($rs);
+        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
         if (count($arrListing)) {
             foreach ($arrListing as &$arr) {
                 $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
@@ -3240,6 +3236,18 @@ trait SellerProducts
         $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $this->siteLangId, 'bdg_l');
         $srch->addCondition('blinkcond_record_type', '=', $recordType);
         $srch->addCondition('badge_type', '=', $badgeType);
+
+        $srch->addDirectCondition(
+            '(CASE 
+                WHEN blinkcond_from_date != 0 AND blinkcond_to_date != 0
+                THEN "' . date('Y-m-d H:i:s') . '" BETWEEN blinkcond_from_date AND blinkcond_to_date 
+                WHEN blinkcond_from_date != 0 AND blinkcond_to_date = 0
+                THEN "' . date('Y-m-d H:i:s') . '" >= blinkcond_from_date
+                WHEN blinkcond_from_date = 0 AND blinkcond_to_date != 0
+                THEN "' . date('Y-m-d H:i:s') . '" <= blinkcond_to_date 
+                ELSE TRUE 
+            END)'
+        );
 
         if (!empty($keyword)) {
             $srch->addCondition(Badge::DB_TBL_PREFIX . 'name', 'LIKE', '%' . $keyword . '%');

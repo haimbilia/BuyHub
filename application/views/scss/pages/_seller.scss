@@ -19,6 +19,11 @@
         ul {
             li {
                 margin-#{$start-direction}: 1rem;
+                a {
+                    &:hover {
+                        color: $brand-color
+                    }
+                }
             }
         }
     }

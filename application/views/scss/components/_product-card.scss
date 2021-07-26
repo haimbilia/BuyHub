@@ -250,29 +250,23 @@
         font-weight: 400;
     }
     .products__price {
-        font-size: 0.85em;
+        font-size: 0.85rem;
         color: inherit;
         padding: 0 5px;
-        font-weight: 600;
-    }
-    .product_off {
-        font-size: 0.875rem;
-        font-weight: 300;
-        color: $brand-color;
-        display: inline-block;
-    }
-    .products__price_sold {
-        font-size: 0.875rem;
-        font-weight: 300;
-        color: lighten($body-color, 50%);
-        line-height: 1;
-        vertical-align: middle;
-    }
-    .products__price_old {
-        font-weight: 300;
-        color: lighten($body-color, 50%);
-        line-height: 1;
-        text-decoration: line-through;
+        display: flex;
+        justify-content: center;
+        &_new {
+            font-weight: 600;
+        }
+        &_old {
+            padding: 0 5px;
+            text-decoration: line-through;
+            color: $txt-gray;
+        }
+        &_off {
+            font-weight: 300;
+            color: $brand-color;
+        }
     }
     .products-head-specification {
         color: lighten($body-color, 50%);
@@ -362,9 +356,6 @@
                 cursor: pointer;
             }
         }
-    }
-    .share-icon {
-        margin-bottom: 15px;
     }
     .svg {
         width: 16px;

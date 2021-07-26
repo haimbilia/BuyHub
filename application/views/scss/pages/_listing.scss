@@ -4,6 +4,19 @@
         max-width: 100%;
     }
     
+    .collection-pager {
+        display: flex;
+        flex: 1;
+        margin-top: 4rem;
+        .pagination {
+            margin: 0;
+        }
+        .sorting-select {
+            max-width: 100px;
+            margin-#{$start-direction}: auto;
+        }
+    }
+    
     .page-sort-wrap {
         margin-bottom: 2rem;
         .page-sort {
@@ -581,10 +594,13 @@
                 display: inline-block;
                 font-size: 12px;
                 vertical-align: top;
-                height: 40px;
+                height: 2rem;
             }
             .input-group-text {
                 font-size: 0.8rem;
+                font-weight: 500;
+                background: $bg-white;
+                padding: 0 5px;
             }
         }
         .rsText {

@@ -249,16 +249,15 @@ class Badge extends MyAppModel
         $srchRecord->joinBadge();
         $srchRecord->addMultipleFields(['MAX(blinkcond_id) as m_blinkcond_id, badgelink_record_id as record']);
 
-        $recordCondition = '(CASE 
-                                WHEN blinkcond_condition_type = 0
-                                THEN badgelink_record_id = 
-                                    (CASE 
-                                        WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . ' THEN ' . $this->selProdId . '
-                                        WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_PRODUCT . ' THEN ' . $this->prodId . '
-                                        WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP . ' THEN ' . $this->shopId . '
-                                        ELSE 0 
-                                    END)
-                                ELSE FALSE END)';
+        $recordCondition = 'WHEN blinkcond_condition_type = 0
+                            THEN badgelink_record_id = 
+                                (CASE 
+                                    WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . ' THEN ' . $this->selProdId . '
+                                    WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_PRODUCT . ' THEN ' . $this->prodId . '
+                                    WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP . ' THEN ' . $this->shopId . '
+                                    ELSE 0 
+                                END)
+                            ELSE FALSE END';
 
         if ($type == Badge::TYPE_BADGE) {
             $srchRecord->addFld('blinkcond_condition_type');
@@ -281,14 +280,12 @@ class Badge extends MyAppModel
                                 THEN ' . $orderCancellationRate . ' = blinkcond_condition_from
                             ELSE FALSE
                         END)
-                    WHEN blinkcond_condition_type = 0
-                    THEN ' . $recordCondition . '
-                    ELSE FALSE END)'
+                    ' . $recordCondition . ')'
             );
         }
 
         if ($type == Badge::TYPE_RIBBON) {
-            $srchRecord->addDirectCondition($recordCondition);
+            $srchRecord->addDirectCondition('(CASE ' . $recordCondition . ')');
         }
 
         $srchRecord->addDirectCondition(
