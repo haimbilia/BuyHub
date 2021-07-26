@@ -211,12 +211,7 @@
                                     </svg>
                                 </i></span>
                                         <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
-                                        <span class="increase increase-js"><i class="icn">
-                                    <svg class="svg" width="16px" height="16px">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                        </use>
-                                    </svg>
-                                </i></span>
+                                        <span class="increase increase-js"><i class="fas fa-plus"></i></span>
                                     </div>
 
 
@@ -296,12 +291,7 @@
                                     </svg>
                                 </i></span>
                             <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
-                            <span class="increase increase-js"><i class="icn">
-                                    <svg class="svg" width="16px" height="16px">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                        </use>
-                                    </svg>
-                                </i></span>
+                            <span class="increase increase-js"><i class="fas fa-plus"></i></span>
                         </div>
                         <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
                             <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>

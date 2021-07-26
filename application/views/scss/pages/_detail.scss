@@ -1183,18 +1183,12 @@
 }
 
 .video-wrapper {
+    background: $bg-placeholder;
+    @include placeholder;
+    @include responsive-ratio(16, 9);
     position: relative;
-    overflow: hidden;
-    width: 100%;
-    padding-top: 56.25%;
     iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
+        @include img-absolute;
     }
 }
 
@@ -1364,8 +1358,9 @@
 
 .jwplayer--content {
     /* (16:9 ratio) */
-    width: 600px;
-    height: 338px;
+    width: 100%;
+    max-width: 500px;
+    //height: 338px;
     @include media-breakpoint-down(md) {
         width: 100%;
         height: auto;

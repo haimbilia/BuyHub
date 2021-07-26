@@ -67,7 +67,8 @@
 
 .order-completed {
     color: $txt-gray;
-    h2 {color: $txt-body;
+    h2 {
+        color: $txt-body;
         font-size: calc(1.75rem + ((1vw - 0.1875rem) * 1.2346));
         font-weight: 300;
         margin-bottom: 1rem;
@@ -119,7 +120,6 @@
         color: $brand-color;
         .svg {
             margin-#{$end-direction}: 5px;
-             
             width: 1rem;
             height: 1rem;
         }
@@ -128,6 +128,8 @@
         font-size: 0.8rem;
     }
     .preferred-shipping-list {
+        max-height: 200px;
+        overflow-y: auto;
         li {
             background-color: $bg-gray;
             border-radius: $radius2;

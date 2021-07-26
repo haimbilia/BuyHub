@@ -855,4 +855,8 @@ class Shipping
         return $this->shippingServicesArr[$sellerId] = $pluginObj;
     }
 
+    public static function canUseShippingApi(int $userId): bool
+    {
+        return (1 > (int) User::getUserMeta($userId, 'easyEcomSyncingStatus'));
+    }
 }

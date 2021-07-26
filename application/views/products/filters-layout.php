@@ -18,7 +18,8 @@
                     <?php echo $shop['shop_name']; ?>
                     <span class="blk-txt"><?php echo Labels::getLabel('LBL_Shop_Opened_On', $siteLangId); ?> <strong>
                             <?php $date = new DateTime($shop['user_regdate']);
-                                                                                                                            echo $date->format('M d, Y'); ?> </strong></span>
+                                                                                                                            echo $date->format('M d, Y'); ?>
+                        </strong></span>
                 </h5>
                 <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
                 <div class="products__rating"> <i class="icn"><svg class="svg">

@@ -177,39 +177,43 @@ if (isset($prodcat_code)) {
                  <?php echo Labels::getLabel('LBL_Price', $siteLangId) . ' (' . (CommonHelper::getCurrencySymbolRight() ? CommonHelper::getCurrencySymbolRight() : CommonHelper::getCurrencySymbolLeft()) . ')'; ?>
              </button>
              <div class="filter-target dropdown-menu dropdown-menu-anim dropdown-menu-fit" id="price">
-                 <div class="prices" id="perform_price">
-                     <div id="rangeSlider"></div>
-                 </div>
-                 <div class="clear"></div>
-                 <div class="slide__fields">
-                     <?php $symbol = CommonHelper::getCurrencySymbolRight() ? CommonHelper::getCurrencySymbolRight() : CommonHelper::getCurrencySymbolLeft(); ?>
-                     <div class="price-input">
-                         <div class="price-text-box input-group">
-                             <div class="input-group-prepend"><span
-                                     class="input-group-text"><?php echo $symbol; ?></span>
-                             </div>
-                             <input class="input-filter form-control"
-                                 value="<?php echo floor($priceArr['minPrice']); ?>"
-                                 data-defaultvalue="<?php echo $filterDefaultMinValue; ?>" name="priceFilterMinValue"
-                                 type="text" id="priceFilterMinValue">
+                 <div class="filter-content ">
 
+
+                     <div class="prices" id="perform_price">
+                         <div id="rangeSlider"></div>
+                     </div>
+                     <div class="clear"></div>
+                     <div class="slide__fields">
+                         <?php $symbol = CommonHelper::getCurrencySymbolRight() ? CommonHelper::getCurrencySymbolRight() : CommonHelper::getCurrencySymbolLeft(); ?>
+                         <div class="price-input">
+                             <div class="price-text-box input-group">
+                                 <div class="input-group-prepend"><span
+                                         class="input-group-text"><?php echo $symbol; ?></span>
+                                 </div>
+                                 <input class="input-filter form-control"
+                                     value="<?php echo floor($priceArr['minPrice']); ?>"
+                                     data-defaultvalue="<?php echo $filterDefaultMinValue; ?>"
+                                     name="priceFilterMinValue" type="text" id="priceFilterMinValue">
+
+                             </div>
+                         </div>
+                         <span class="dash"></span>
+                         <div class="price-input">
+                             <div class="price-text-box input-group">
+                                 <div class="input-group-prepend"><span
+                                         class="input-group-text"><?php echo $symbol; ?></span>
+                                 </div>
+                                 <input class="input-filter form-control"
+                                     value="<?php echo ceil($priceArr['maxPrice']); ?>"
+                                     data-defaultvalue="<?php echo $filterDefaultMaxValue; ?>"
+                                     name="priceFilterMaxValue" type="text" id="priceFilterMaxValue">
+
+                             </div>
                          </div>
                      </div>
-                     <span class="dash"></span>
-                     <div class="price-input">
-                         <div class="price-text-box input-group">
-                             <div class="input-group-prepend"><span
-                                     class="input-group-text"><?php echo $symbol; ?></span>
-                             </div>
-                             <input class="input-filter form-control" value="<?php echo ceil($priceArr['maxPrice']); ?>"
-                                 data-defaultvalue="<?php echo $filterDefaultMaxValue; ?>" name="priceFilterMaxValue"
-                                 type="text" id="priceFilterMaxValue">
 
-                         </div>
-                     </div>
                  </div>
-
-
              </div>
          </li>
          <?php

@@ -337,7 +337,7 @@ a:hover {
 }
 
 .scroll {
-    padding-#{$end-direction}: 5px;
+    //padding-#{$end-direction}: 5px;
 }
 
 .svg {
@@ -347,4 +347,11 @@ a:hover {
 .text-link {
     font-weight: 500;
     color: $brand-color;
+}
+
+.icn-eye {
+    position: absolute;
+    #{$end-direction}: 5px;
+    top: 12px;
+    color: $txt-gray;
 }

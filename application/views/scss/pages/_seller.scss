@@ -1,4 +1,6 @@
 .header-supplier {
+    font-size: 0.85rem;
+    color: $txt-gray;
     .logo-bar {
         padding: 10px 0;
         .logo {
@@ -9,6 +11,18 @@
                 }
                 &[data-ratio="1:1"] {
                     max-width: 60px;
+                }
+            }
+        }
+    }
+    .short-links {
+        ul {
+            li {
+                margin-#{$start-direction}: 1rem;
+                a {
+                    &:hover {
+                        color: $brand-color
+                    }
                 }
             }
         }

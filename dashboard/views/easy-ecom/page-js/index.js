@@ -28,13 +28,16 @@ $(document).ready(function () {
 
     syncStatusToggle = function (obj, status) {
         $(obj).attr('onclick', 'syncStatusToggle(this, ' + (status ? 0 : 1) + ')');
+        $.systemMessage(langLbl.processing, "alert--process", false);
         fcom.ajax(fcom.makeUrl(keyName, 'syncStatus', [status]), '', function (res) {
             res = $.parseJSON(res);
             if (1 > res.status) {
                 var value = (value == 0 ? 1 : 0);
                 $(obj).prop('checked', (status == 0));
                 $.systemMessage(res.msg, 'alert--danger', true);
+                return;
             }
+            $.systemMessage(res.msg, 'alert--success', true);
         });
     }
 })();
