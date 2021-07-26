@@ -281,6 +281,17 @@ class EasyEcomController extends MarketplaceChannelsBaseController
             $response = ['msg' => $this->getError(), 'status' => Plugin::RETURN_FALSE];
         }
 
+        if (Plugin::RETURN_TRUE == $response['status'] && 0 < $status) {
+            $userId = UserAuthentication::getLoggedUserId(0);
+            $response['msg'] = Labels::getLabel('MSG_SHIPPING_SERVICE_PLUGIN_WILL_TURNED_OFF_AND_MANUAL_SHIPPING_RATE_ARE_APPLICABLE_FOR_THE_SAME.', $this->siteLangId);
+            SellerPlugin::updateStatusByType($userId, Plugin::TYPE_SHIPPING_SERVICES, Plugin::INACTIVE);
+
+            $shop_id = Shop::getAttributesByUserId($userId, 'shop_id');
+            $shopSpecificsObj = new ShopSpecifics($shop_id);
+            $shopSpecificsObj->assignValues(['shop_use_manual_shipping_rates' => 1]);
+            $shopSpecificsObj->save();
+        }
+
         $this->dieWithJsonResponse($response);
     }
     

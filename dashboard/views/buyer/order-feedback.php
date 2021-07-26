@@ -56,17 +56,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         ?>
                                             <div class="rating">
                                                 <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
-                                                <div class="rating-action" data-rating="0">
-                                                    <?php for ($i = 5; $i >= 1; $i--) { ?>
-                                                        <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star">
-                                                            </use>
-                                                        </svg>
-                                                    <?php } ?>
-                                                </div>
                                                 <?php
                                                 $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
-                                                $fld->setFieldTagAttribute('class', 'd-none');
+                                                $fld->setFieldTagAttribute('class', 'd-none star-rating');
                                                 echo $frm->getFieldHtml('review_rating[' . $ratingTypeId . ']'); ?>
                                             </div>
                                         <?php } ?>
@@ -131,13 +123,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </div>
                             </div>
                         </div>
-
-
-
                         <?php if (!empty($shopRatingTypesArr) || !empty($deliveryRatingTypesArr)) { ?>
                             <div class="col-md-6">
                                 <?php if (!empty($shopRatingTypesArr)) { ?>
-
                                     <div class="feedback-block">
                                         <h5 class="card-title ">
                                             <?php echo Labels::getLabel('LBL_SELLER_FEEDBACK', $siteLangId); ?></h5>
@@ -158,17 +146,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 <div class="rating-listing">
                                                     <?php foreach ($shopRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
                                                         <div class="rating">
-                                                            <div class="rating-action" data-rating="0">
-                                                                <?php for ($i = 5; $i >= 1; $i--) { ?>
-                                                                    <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star">
-                                                                        </use>
-                                                                    </svg>
-                                                                <?php } ?>
-                                                            </div>
                                                             <?php
                                                             $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
-                                                            $fld->setFieldTagAttribute('class', 'd-none');
+                                                            $fld->setFieldTagAttribute('class', 'd-none star-rating');
                                                             echo $frm->getFieldHtml('review_rating[' . $ratingTypeId . ']'); ?>
                                                         </div>
                                                     <?php } ?>
@@ -187,17 +167,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 <div class="rating-listing">
                                                     <?php foreach ($deliveryRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
                                                         <div class="rating pb-0">
-                                                            <div class="rating-action" data-rating="0">
-                                                                <?php for ($i = 5; $i >= 1; $i--) { ?>
-                                                                    <svg class="icon" width="24" height="24" data-star='<?php echo $i; ?>'>
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star">
-                                                                        </use>
-                                                                    </svg>
-                                                                <?php } ?>
-                                                            </div>
                                                             <?php
                                                             $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
-                                                            $fld->setFieldTagAttribute('class', 'd-none');
+                                                            $fld->setFieldTagAttribute('class', 'd-none star-rating');
                                                             echo $frm->getFieldHtml('review_rating[' . $ratingTypeId . ']'); ?>
                                                         </div>
                                                     <?php } ?>
@@ -254,5 +226,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                 $("input[name='btn_submit']").attr('disabled', 'disabled');
             }
         });
+
+        $('.star-rating').barrating({ showSelectedRating:false });
     });
 </script>

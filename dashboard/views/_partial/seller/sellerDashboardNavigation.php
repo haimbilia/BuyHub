@@ -265,8 +265,7 @@ $plugin = new Plugin();
                         </li>
                     <?php } ?>
                     <?php
-                    $obj = new Plugin();
-                    $pluginData = $obj->getDefaultPluginData(Plugin::TYPE_ADVERTISEMENT_FEED, null, $siteLangId);
+                    $pluginData = $plugin->getDefaultPluginData(Plugin::TYPE_ADVERTISEMENT_FEED, null, $siteLangId);
                     if ($userPrivilege->canViewAdvertisementFeed(UserAuthentication::getLoggedUserId(), true) && false !== $pluginData && !empty($pluginData) && 0 < $pluginData['plugin_active'] && $userPrivilege->canViewAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) { ?>
                         <li class="menu__item <?php echo ($controller == strtolower($pluginData['plugin_code'])) ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner">
@@ -567,7 +566,12 @@ $plugin = new Plugin();
                         <li class="menu__item">
                             <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_Plugins', $siteLangId); ?></span></div>
                         </li>
-                        <?php foreach(SellerPlugin::getAllowedTypeArr($siteLangId) as $type => $name) { ?>  
+                        <?php foreach(SellerPlugin::getAllowedTypeArr($siteLangId) as $type => $name) { 
+                            $canUseShippingApi = Shipping::canUseShippingApi(UserAuthentication::getLoggedUserId(0));
+                            if (false === $canUseShippingApi && Plugin::TYPE_SHIPPING_SERVICES == $type) {
+                                continue;
+                            }
+                            ?>  
                         <li class="menu__item <?php echo ($controller == 'sellerplugins' && $action == 'index' && is_array($params) && current($params) == $type) ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner">
                                 <a title="<?php echo $name; ?>" href="<?php echo UrlHelper::generateUrl('sellerPlugins', 'index', [$type]); ?>">

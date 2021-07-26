@@ -2,7 +2,6 @@
 
 class SellerPlugin extends PluginCommon
 {
-
     protected $userId;
 
     public function __construct(int $id = 0, $userId = 0)
@@ -259,6 +258,35 @@ class SellerPlugin extends PluginCommon
             FatApp::getDb()->query($deleteQuery);
         }
 
+        return true;
+    }
+
+    public static function updateStatusByType(int $userId, int $typeId, int $status, string &$error = ''): bool
+    {
+        if (0 < $status && in_array($typeId, static::getKingpinTypeArr())) {
+            $error = Labels::getLabel('MSG_KING_PIN_TYPE_PLUGINS_ARE_NOT_ALLOWED_TO_ACTIVATE_BY_TYPE', CommonHelper::getLangId());
+            return false;
+        }
+
+        $db = FatApp::getDb();
+        if (1 > $status) {
+            if (!$db->query("DELETE pu 
+                            FROM tbl_plugin_to_user as pu 
+                            INNER JOIN tbl_plugins p ON p.plugin_id = pu.pu_plugin_id
+                            WHERE p.plugin_type = " . $typeId . "
+                            AND pu.pu_user_id = " . $userId)) {
+                $error = $db->getError();
+                return false;
+            }
+        } else {
+            if (!$db->query("INSERT INTO tbl_plugin_to_user (pu_plugin_id, pu_user_id, pu_active)
+                            SELECT plugin_id, " . $userId . ", 1
+                            FROM tbl_plugins
+                            WHERE plugin_type = " . $typeId)) {
+                $error = $db->getError();
+                return false;
+            }
+        }
         return true;
     }
 }
