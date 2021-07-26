@@ -1,6 +1,6 @@
 <?php
 
-class PluginBaseController extends DashboardBaseController
+class PluginBaseController extends MyAppController
 {
     use PluginHelper;
     use PluginBaseCommon;

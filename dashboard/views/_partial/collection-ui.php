@@ -17,7 +17,7 @@ if ($showAddToFavorite) {
         $ribSelProdId = $product['selprod_id'];
         $ribProdId = $product['product_id'];
         $ribShopId = $product['shop_id'];
-        include (CONF_THEME_PATH . '_partial/get-ribbon.php');
+        include (CONF_FRONT_END_THEME_PATH . '_partial/get-ribbon.php');
     } ?>
 
 
