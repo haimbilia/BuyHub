@@ -39,12 +39,7 @@
                                         'onclick' => 'addPackageForm(0)',
                                         'title' => Labels::getLabel('LBL_Add_New_Product', $adminLangId)
                                     ],
-                                    'label' => '<i class="icn">
-                                    <svg class="svg" width="16px" height="16px">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                        </use>
-                                    </svg>
-                                </i>'
+                                    'label' => '<i class="fas fa-plus"></i>'
                                 ]
                             ];
                             $this->includeTemplate('_partial/action-buttons.php', ['otherButtons' => $otherButtons, 'adminLangId' => $adminLangId], false);
