@@ -72,9 +72,8 @@ if ($showAddToFavorite) {
                 <?php }
             } ?>            
 
-            <div class="dropdown">
-                <a class="no-after share-icon" data-display="static"
-                    href="javascript:void(0)" data-toggle="dropdown">
+            <div class="dropdown">                
+                <a class="share-icon" href="javascript:void(0)"  data-toggle="modal" data-target="#shareIcon">
                     <i class="icn">
                         <svg class="svg">
                             <use
@@ -83,47 +82,62 @@ if ($showAddToFavorite) {
                         </svg>
                     </i>
                 </a>
-                <div class="dropdown-menu dropdown-menu-anim">
-                    <ul class="social-sharing">
-                        <li class="social-facebook">
-                            <a class="st-custom-button" data-network="facebook"
-                                data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id'])); ?>/">
-                                <i class="icn"><svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb"
-                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">
-                                        </use>
-                                    </svg></i>
-                            </a>
-                        </li>
-                        <li class="social-twitter">
-                            <a class="st-custom-button" data-network="twitter">
-                                <i class="icn"><svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw"
-                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
-                                        </use>
-                                    </svg></i>
-                            </a>
-                        </li>
-                        <li class="social-pintrest">
-                            <a class="st-custom-button" data-network="pinterest">
-                                <i class="icn"><svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt"
-                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
-                                        </use>
-                                    </svg></i>
-                            </a>
-                        </li>
-                        <li class="social-email">
-                            <a class="st-custom-button" data-network="email">
-                                <i class="icn"><svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope"
-                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
-                                        </use>
-                                    </svg></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                <div class="modal fade" id="shareIcon" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title"><?php echo Labels::getLabel('Lbl_Share', $siteLangId); ?></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="" >
+                                    <ul class="social-sharing">
+                                        <li class="social-facebook">
+                                            <a class="st-custom-button" data-network="facebook"
+                                                data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id'])); ?>/">
+                                                <i class="icn"><svg class="svg">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb"
+                                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">
+                                                        </use>
+                                                    </svg></i>
+                                            </a>
+                                        </li>
+                                        <li class="social-twitter">
+                                            <a class="st-custom-button" data-network="twitter">
+                                                <i class="icn"><svg class="svg">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw"
+                                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
+                                                        </use>
+                                                    </svg></i>
+                                            </a>
+                                        </li>
+                                        <li class="social-pintrest">
+                                            <a class="st-custom-button" data-network="pinterest">
+                                                <i class="icn"><svg class="svg">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt"
+                                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
+                                                        </use>
+                                                    </svg></i>
+                                            </a>
+                                        </li>
+                                        <li class="social-email">
+                                            <a class="st-custom-button" data-network="email">
+                                                <i class="icn"><svg class="svg">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope"
+                                                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
+                                                        </use>
+                                                    </svg>
+                                                </i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
             </div>
         <?php } ?>
     </div>
