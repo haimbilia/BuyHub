@@ -179,6 +179,7 @@
         color: $body-color;
     }
     .dropdown-menu {
+        overflow-y: auto;
         max-height: 300px;
     }
 }
@@ -1134,6 +1135,7 @@
 
 .addons-scrollbar {
     max-height: 250px;
+    overflow-y: auto;
     border: $border;
     border-radius: $radius4;
 }
