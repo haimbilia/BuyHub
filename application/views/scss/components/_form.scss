@@ -416,3 +416,10 @@ form.custom-form {
         }
     }
 }
+
+.magni-search {
+    background: url(images/retina/magni-gray.svg) no-repeat 9px center;
+    background-size: 20px;
+    padding-#{$start-direction}: 36px;
+    font-size: 0.8rem;
+}

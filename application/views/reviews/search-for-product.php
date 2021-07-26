@@ -39,6 +39,11 @@
                                 (<?php echo $review['notHelpful']; ?>)
                             </a>
                         </li>
+                        <li>
+                            <a class="btn btn-outline-gray btn-sm"
+                                href="<?php echo UrlHelper::generateUrl('Reviews', 'productPermalink', array($review['spreview_selprod_id'], $review['spreview_id'])) ?>"><?php echo Labels::getLabel('Lbl_Permalink', $siteLangId); ?>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -111,9 +116,7 @@
                                 } ?>
                     </ul>
                 </div>
-                <a class="btn btn-outline-gray btn-sm mt-3"
-                    href="<?php echo UrlHelper::generateUrl('Reviews', 'productPermalink', array($review['spreview_selprod_id'], $review['spreview_id'])) ?>"><?php echo Labels::getLabel('Lbl_Permalink', $siteLangId); ?>
-                </a>
+
             </div>
 
         </div>
@@ -121,7 +124,7 @@
     <?php } ?>
 </ul>
 <div class="align-center mt-4"><a href="<?php echo UrlHelper::generateUrl('Reviews', 'Product', array($selprod_id)); ?>"
-        class="btn btn-outline-brand"><?php echo Labels::getLabel('Lbl_Showing_All', $siteLangId) . ' ' . count($reviewsList) . ' ' . Labels::getLabel('Lbl_Reviews', $siteLangId); ?>
+        class="btn btn-outline-gray btn-sm"><?php echo Labels::getLabel('Lbl_Showing_All', $siteLangId) . ' ' . count($reviewsList) . ' ' . Labels::getLabel('Lbl_Reviews', $siteLangId); ?>
     </a></div>
 <?php echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmSearchReviewsPaging')); ?>
 <?php } else {
