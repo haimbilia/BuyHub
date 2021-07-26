@@ -40,7 +40,7 @@
 
         
             <div class="shop-btn-group">
-                <a class="share-icon" href="javascript:void(0)" onclick="shopSocialShare()">
+                <a class="share-icon" href="javascript:void(0)"  data-toggle="modal" data-target="#shareIcon">
                     <i class="icn" title="<?php echo Labels::getLabel('Lbl_Share', $siteLangId); ?>">
                         <svg class="svg">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share"
@@ -109,9 +109,10 @@
         <?php } ?>
     </div>
 </div>
-
 <?php } ?>
-<div id="shopSocialShare" class="hide">
+<div class="modal fade" id="shareIcon" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
     <div class="modal-header">
         <h5 class="modal-title"><?php echo Labels::getLabel('Lbl_Share', $siteLangId); ?></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -158,10 +159,13 @@
             </ul>
         </div>
     </div>
-</div>
-<script>
-function shopSocialShare(){
-    $.facebox($('#shopSocialShare').html());
-}
+       </div>
+  </div>
+</div>   
 
+<script>
+    $('#shareIcon').insertAfter("#body");
 </script>
+        
+
+
