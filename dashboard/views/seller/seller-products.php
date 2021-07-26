@@ -85,7 +85,7 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                     $ribSelProdId = $row['selprod_id'];
                     $frontReturn = true;
 
-                    include(CONF_THEME_PATH . '_partial/get-ribbon.php');
+                    include(CONF_FRONT_END_THEME_PATH . '_partial/get-ribbon.php');
                     $html = empty($html) ? Labels::getLabel('LBL_N/A', $siteLangId) : $html;
                     $html = '<div class="badge-wrap">' . $html . '</div>';
                     $td->appendElement('plaintext', [], $html, true);
