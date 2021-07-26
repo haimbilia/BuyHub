@@ -11,8 +11,9 @@ class SellerPluginsController extends SellerPluginBaseController
 
     public function index($type = Plugin::TYPE_DATA_MIGRATION)
     {
+        $canUseShippingApi = Shipping::canUseShippingApi(UserAuthentication::getLoggedUserId(0));
         $pluginTypes = SellerPlugin::getAllowedTypeArr($this->siteLangId);
-        if (!array_key_exists($type, $pluginTypes)) {
+        if (!array_key_exists($type, $pluginTypes) || (false === $canUseShippingApi && Plugin::TYPE_SHIPPING_SERVICES == $type)) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }

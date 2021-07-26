@@ -2381,6 +2381,7 @@ class SellerController extends SellerBaseController
         ShippingProfile::getDefaultProfileId($this->userParentId);
 
         $msg = !empty($errorMsg) ? $errorMsg : Labels::getLabel('MSG_SET_UP_SUCCESSFULLY', $this->siteLangId);
+
         $this->set('shopId', $shop_id);
         $this->set('langId', $newTabLangId);
         $this->set('msg', $msg);
