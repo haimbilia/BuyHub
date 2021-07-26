@@ -149,7 +149,7 @@ Updates/Fixes :
 ==========================TV-9.3.2.20210723========================================
     => 056222 - buyer/seller dashboard> logo is redirecting to dashboard instead of home page
     => 056147 - buyer> orders> feedback form> rating stars are not populating
-
+================TV-9.3.2.20210726===================
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
