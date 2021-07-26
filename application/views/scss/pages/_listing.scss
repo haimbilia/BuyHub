@@ -4,6 +4,19 @@
         max-width: 100%;
     }
     
+    .collection-pager {
+        display: flex;
+        flex: 1;
+        margin-top: 4rem;
+        .pagination {
+            margin: 0;
+        }
+        .sorting-select {
+            max-width: 100px;
+            margin-#{$start-direction}: auto;
+        }
+    }
+    
     .page-sort-wrap {
         margin-bottom: 2rem;
         .page-sort {
