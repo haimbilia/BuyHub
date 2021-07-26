@@ -66,7 +66,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 </div>
                                                 <?php
                                                 $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
-                                                $fld->setFieldTagAttribute('class', 'd-none');
+                                                $fld->setFieldTagAttribute('class', 'd-none star-rating');
                                                 echo $frm->getFieldHtml('review_rating[' . $ratingTypeId . ']'); ?>
                                             </div>
                                         <?php } ?>
@@ -131,13 +131,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </div>
                             </div>
                         </div>
-
-
-
                         <?php if (!empty($shopRatingTypesArr) || !empty($deliveryRatingTypesArr)) { ?>
                             <div class="col-md-6">
                                 <?php if (!empty($shopRatingTypesArr)) { ?>
-
                                     <div class="feedback-block">
                                         <h5 class="card-title ">
                                             <?php echo Labels::getLabel('LBL_SELLER_FEEDBACK', $siteLangId); ?></h5>
@@ -168,7 +164,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                             </div>
                                                             <?php
                                                             $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
-                                                            $fld->setFieldTagAttribute('class', 'd-none');
+                                                            $fld->setFieldTagAttribute('class', 'd-none star-rating');
                                                             echo $frm->getFieldHtml('review_rating[' . $ratingTypeId . ']'); ?>
                                                         </div>
                                                     <?php } ?>
@@ -197,7 +193,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                             </div>
                                                             <?php
                                                             $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
-                                                            $fld->setFieldTagAttribute('class', 'd-none');
+                                                            $fld->setFieldTagAttribute('class', 'd-none star-rating');
                                                             echo $frm->getFieldHtml('review_rating[' . $ratingTypeId . ']'); ?>
                                                         </div>
                                                     <?php } ?>
@@ -254,5 +250,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                 $("input[name='btn_submit']").attr('disabled', 'disabled');
             }
         });
+
+        $('.star-rating').barrating({ showSelectedRating:false });
     });
 </script>

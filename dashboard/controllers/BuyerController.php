@@ -1762,6 +1762,7 @@ class BuyerController extends BuyerBaseController
         $this->set('shopRatingTypesArr', $shopRatingTypesArr);
         $this->set('deliveryRatingTypesArr', $deliveryRatingTypesArr);
         $this->set('shop', $shop);
+        $this->_template->addJs(array('js/jquery.barrating.min.js'));
         $this->_template->render(true, true);
     }
 
