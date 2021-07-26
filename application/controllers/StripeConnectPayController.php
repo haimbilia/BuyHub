@@ -298,6 +298,8 @@ class StripeConnectPayController extends PaymentController
         }
 
         if (true === MOBILE_APP_API_CALL) {
+            $this->set('paymentAmount', $this->paymentAmount);
+            $this->set('orderInfo', $this->orderInfo);
             $this->_template->render();
         }
 
