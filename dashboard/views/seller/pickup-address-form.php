@@ -328,12 +328,7 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                                 </i></button>
                                                         <?php }                                                        
                                                         if (count($slotData['tslot_from_time'][$i]) - 1 == $key) { ?>
-                                                                <button type="button" name="btn_add_row[<?php echo $i; ?>]" onClick="addTimeSlotRow(<?php echo $i; ?>)" class="btn btn-brand btn-sm js-slot-add-<?php echo $i; ?>"><i class="icn">
-                                    <svg class="svg" width="16px" height="16px">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                        </use>
-                                    </svg>
-                                </i></button>
+                                                                <button type="button" name="btn_add_row[<?php echo $i; ?>]" onClick="addTimeSlotRow(<?php echo $i; ?>)" class="btn btn-brand btn-sm js-slot-add-<?php echo $i; ?>"><i class="fas fa-plus"></i></button>
                                                         <?php } ?>                                                        
                                                     </div>
                                                 </div>
@@ -411,12 +406,7 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
 										<div class="field-wraper">
 											<div class="field_cover">
 											<?php //echo $frm->getFieldHtml('btn_add_row['.$i.']'); ?>
-											<button type="button" name="btn_add_row[<?php echo $i; ?>]" onClick= "addTimeSlotRow(<?php echo $i; ?>)" class="d-none btn btn-brand js-slot-add-<?php echo $i; ?>"><i class="icn">
-                                    <svg class="svg" width="16px" height="16px">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                        </use>
-                                    </svg>
-                                </i></button>
+											<button type="button" name="btn_add_row[<?php echo $i; ?>]" onClick= "addTimeSlotRow(<?php echo $i; ?>)" class="d-none btn btn-brand js-slot-add-<?php echo $i; ?>"><i class="fas fa-plus"></i></button>
 											</div>
 										</div>
 									</div>

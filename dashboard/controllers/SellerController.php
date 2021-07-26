@@ -2299,6 +2299,16 @@ class SellerController extends SellerBaseController
             }
         }
 
+        $marketPlaceChannels = (array) Plugin::getNamesWithCode(Plugin::TYPE_MARKETPLACE_CHANNELS, $this->siteLangId);
+
+        $errorMsg = '';
+        $manualShipping = FatApp::getPostedData('shop_use_manual_shipping_rates', FatUtility::VAR_INT, 0);
+        $status = (int) User::getUserMeta($userId, 'easyEcomSyncingStatus');
+        if (1 > $manualShipping && in_array('EasyEcom', $marketPlaceChannels) && 0 < $status) {
+            $post['shop_use_manual_shipping_rates'] = 1;
+            $errorMsg = Labels::getLabel('MSG_PLEASE_TURN_OFF_EASYECOM_AUTO_SYNC_FIRST.', $this->siteLangId);
+        }
+
         $stateCode = $post['shop_state'];
         $frm = $this->getShopInfoForm($userId);
         $post = $frm->getFormDataFromArray($post, [], true);
@@ -2340,23 +2350,6 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        /* $userObj = new User( $userId );
-          $vendorReturnAddress = $userObj->getUserReturnAddress( $this->siteLangId );
-
-          if( !$vendorReturnAddress ){
-          $dataToSave = array(
-          'ura_country_id'=>$post['shop_country_id'],
-          'ura_state_id'=> $state_id,
-          'ura_zip'=>$post['shop_postalcode'],
-          'ura_phone_dcode'=>ValidateElement::formatDialCode($post['shop_phone_dcode']),
-          'ura_phone'=>$post['shop_phone'],
-          );
-          if ( !$userObj->updateUserReturnAddress($dataToSave) ) {
-          Message::addErrorMessage(Labels::getLabel($userObj->getError(),$this->siteLangId));
-          FatUtility::dieJsonError( Message::getHtml() );
-          }
-          } */
-
         /* url data[ */
         $shopOriginalUrl = Shop::SHOP_TOP_PRODUCTS_ORGINAL_URL . $shop_id;
         if ($post['urlrewrite_custom'] == '') {
@@ -2385,14 +2378,12 @@ class SellerController extends SellerBaseController
             $newTabLangId = $this->siteLangId;
         }
 
-        /* if( $newTabLangId == 0 && !$this->isMediaUploaded($shop_id))
-          {
-          $this->set('openMediaForm', true);
-          } */
         ShippingProfile::getDefaultProfileId($this->userParentId);
+
+        $msg = !empty($errorMsg) ? $errorMsg : Labels::getLabel('MSG_SET_UP_SUCCESSFULLY', $this->siteLangId);
         $this->set('shopId', $shop_id);
         $this->set('langId', $newTabLangId);
-        $this->set('msg', Labels::getLabel('MSG_SET_UP_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', $msg);
         $this->_template->render(false, false, 'json-success.php');
     }
 

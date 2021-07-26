@@ -851,3 +851,7 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 DELETE FROM tbl_configurations WHERE conf_name = "CONF_FILTERS_LAYOUT";
 
 -- -----------------TV-9.3.2.20210723----------------------------
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_PLEASE_TURN_OFF_EASYECOM_AUTO_SYNC_FIRST.', 1, 'Please Turn Off EasyEcom Auto Sync First. To Turn Off Manual Shipping Rates Settings.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
