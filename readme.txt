@@ -153,6 +153,7 @@ Updates/Fixes :
     => 056373 - if admin shipping is enabled then even seller is credited with shipping amount
     => 056221 - seller> inventory> badges and ribbon collectively not working in filter
     => 056264 - Shop details >> If "use manual shipping rates" checkbox is not checked then "postal code" should be mandatory
+    => 056246 - Catalog -> Shipping options
 
 New Features:  
     => Admin shipped products listing page
