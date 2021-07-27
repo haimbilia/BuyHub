@@ -229,6 +229,7 @@ class ShopsController extends MyAppController
                 'productSearchPageType' => SavedSearchProduct::PAGE_SHOP,
                 'recordId' => $shop_id,
                 'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'categories'),
+                'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId) 
             );
             $data = array_merge($data, $arr);
 
@@ -245,6 +246,8 @@ class ShopsController extends MyAppController
                 $this->set('postedData', $get);
                 $this->set('recordCount', $data['recordCount']);
                 $this->set('siteLangId', $this->siteLangId);
+                $this->set('pageSize', $data['pageSize']);
+                $this->set('pageSizeArr', $data['pageSizeArr']);
                 echo $this->_template->render(false, false, 'products/products-list.php', true);
                 exit;
             }
