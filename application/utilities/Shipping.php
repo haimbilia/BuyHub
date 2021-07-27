@@ -363,7 +363,7 @@ class Shipping
                 $shopAddress,
                 $shippingAddressDetail                
             ];
-            
+
             foreach ($carriers as $carrier) {
                 $carrierCode = !empty($carrier) && array_key_exists('code', $carrier) ? $carrier['code'] : '';
                 $cacheKeyArr = array_merge($cacheKeyArr, [$carrierCode, $fromZipCode, $this->langId]);

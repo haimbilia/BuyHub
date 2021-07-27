@@ -4,27 +4,27 @@ class DummyController extends AdminBaseController
 {
     public function index()
     {
-      
-       $prodSrchObj = new ProductSearch();
-       $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
-       $prodSrchObj->joinProductToCategory();
-       $prodSrchObj->doNotCalculateRecords();
-       $prodSrchObj->doNotLimitRecords();
-       $prodSrchObj->joinSellerSubscription($siteLangId, true);
-       $prodSrchObj->addSubscriptionValidCondition();
-       $prodSrchObj->addMultipleFields(array('count(selprod_id)'));
-       $prodSrchObj->addDirectCondition('c.prodcat_id = temp.prodcat_id');
-       /*For better performance */
-       $srch = new SearchBase(ProductCategory::DB_TBL, 'temp');
-       $srch->addMultipleFields(array('prodcat_code AS prodrootcat_code', '(' . $prodSrchObj->getQuery() . ') as productCounts', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'prodcat_parent'));
-       $srch->joinTable(
-           ProductCategory::DB_TBL_LANG,
-           'LEFT OUTER JOIN',
-           'prodcatlang_prodcat_id = c.prodcat_id AND prodcatlang_lang_id = ' . $langId,
-           'c_l'
-       );
-       $srch->addOrder('prodcat_display_order', 'asc');
-       echo $srch->getQuery();
+
+        $prodSrchObj = new ProductSearch();
+        $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
+        $prodSrchObj->joinProductToCategory();
+        $prodSrchObj->doNotCalculateRecords();
+        $prodSrchObj->doNotLimitRecords();
+        $prodSrchObj->joinSellerSubscription($siteLangId, true);
+        $prodSrchObj->addSubscriptionValidCondition();
+        $prodSrchObj->addMultipleFields(array('count(selprod_id)'));
+        $prodSrchObj->addDirectCondition('c.prodcat_id = temp.prodcat_id');
+        /*For better performance */
+        $srch = new SearchBase(ProductCategory::DB_TBL, 'temp');
+        $srch->addMultipleFields(array('prodcat_code AS prodrootcat_code', '(' . $prodSrchObj->getQuery() . ') as productCounts', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'prodcat_parent'));
+        $srch->joinTable(
+            ProductCategory::DB_TBL_LANG,
+            'LEFT OUTER JOIN',
+            'prodcatlang_prodcat_id = c.prodcat_id AND prodcatlang_lang_id = ' . $langId,
+            'c_l'
+        );
+        $srch->addOrder('prodcat_display_order', 'asc');
+        echo $srch->getQuery();
 
         $orderObj = new Orders();
         $orderDetail = $orderObj->getOrderById('O1605086396', 1);
@@ -138,6 +138,15 @@ class DummyController extends AdminBaseController
     {
         $dataMigration = new DataMigration();
         $dataMigration->sync();
-
     }
-                    }
+    
+    public function ship()
+    {
+        $plugin = PluginHelper::callPlugin('ShipRocket', [$this->adminLangId], $error, $this->adminLangId, false);
+        $plugin->init();
+        $resp = $plugin->getAuthToken();
+        echo $plugin->getError();
+        CommonHelper::printArray($resp);
+        CommonHelper::printArray($plugin->getResponse(), true);
+    }
+}

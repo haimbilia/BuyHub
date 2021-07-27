@@ -856,3 +856,7 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('MSG_PLEASE_TURN_OFF_EASYECOM_AUTO_SYNC_FIRST.', 1, 'Please Turn Off EasyEcom Auto Sync First. To Turn Off Manual Shipping Rates Settings.', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 -- -------------TV-9.3.2.20210726---------------------
+
+-- --- ShipRocket Shipping API Task : 88040 --- --
+INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('ShipRocket', '8', 'ShipRocket', '0', '1');
+-- --- ShipRocket Shipping API Task : 88040 --- --
