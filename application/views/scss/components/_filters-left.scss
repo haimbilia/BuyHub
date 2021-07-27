@@ -113,21 +113,22 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    font-size: 0.8rem;
-    margin-top: 0.6rem;
-    margin-bottom: 0.875rem;
+    font-size: 0.75rem;
+    margin: 1rem 0;
     .chip {
         white-space: nowrap;
         display: flex;
         align-items: center;
         border-radius: 30px;
-        border: $border;
+        //border: $border;
         padding: 5px 5px;
         margin: 2px 0;
         padding-#{$start-direction}: 14px;
-        margin-#{$end-direction}: 10px;
+        margin-#{$end-direction}: 14px;
         font-size: inherit;
-        background-color: #fff;
+        background-color: $brand-color;
+        color: $brand-color-inverse;
+        font-weight: 300;
         height: 28px;
         &:hover {
             border-color: $brand-color;

@@ -464,6 +464,7 @@
 .tagify__dropdown__wrapper {
     max-height: 300px;
     overflow: hidden;
+    overflow-y: auto;
     background: #fff;
     background: var(--tagify-dd-bg-color);
     border: 1px solid #3595f6;
