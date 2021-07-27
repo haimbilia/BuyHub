@@ -1033,7 +1033,7 @@ class CollectionsController extends AdminBaseController
         $this->set('collection_type', $collectionDetails['collection_type']);
         $this->set('collection_layout_type', $collectionDetails['collection_layout_type']);
         $this->set('collection_id', $collectionId);
-        $this->set('imgUpdatedOn', Collections::getAttributesById($collectionId, 'collection_img_updated_on'));
+        $this->set('imgUpdatedOn', Collections::getAttributesById($collectionId, 'collection_updated_on'));
         $this->set('displayMediaOnly', $collectionDetails['collection_display_media_only']);
         $this->set('collectionMediaFrm', $this->getMediaForm($collectionId));
         $this->set('languages', Language::getAllNames());
@@ -1120,7 +1120,7 @@ class CollectionsController extends AdminBaseController
         }
 
         $collection = new Collections($collection_id);
-        $collection->addUpdateData(array('collection_img_updated_on' => date('Y-m-d H:i:s')));
+        $collection->addUpdateData(array('collection_updated_on' => date('Y-m-d H:i:s')));
 
         $this->set('file', $_FILES['cropped_image']['name']);
         $this->set('collection_id', $collection_id);
@@ -1144,7 +1144,7 @@ class CollectionsController extends AdminBaseController
         }
 
         $collection = new Collections($collection_id);
-        $collection->addUpdateData(array('collection_img_updated_on' => date('Y-m-d H:i:s')));
+        $collection->addUpdateData(array('collection_updated_on' => date('Y-m-d H:i:s')));
 
         $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
