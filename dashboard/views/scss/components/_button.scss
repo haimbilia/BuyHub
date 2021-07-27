@@ -50,6 +50,8 @@
  }
  
  .btn {
+     padding: 0.6rem .75rem;
+     height: auto;
      &.btn-brand {
          background-color: var(--brand-color);
          color: var(--brand-color-inverse);

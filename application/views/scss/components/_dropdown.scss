@@ -103,6 +103,7 @@
 
 .dropdown__target .scroll-y {
     max-height: 350px;
+    overflow-y: auto;
 }
 
 .dropdown.is-active .dropdown__target .list-vertical li {
@@ -171,7 +172,7 @@
 
 @-webkit-keyframes dropdown-menu-move-up {
     from {
-        margin-top: 10px 
+        margin-top: 10px
     }
     to {
         margin-top: 0

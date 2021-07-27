@@ -1,12 +1,11 @@
 .more-sellers {
     padding: 2rem 3rem;
-  
     .item__pic-seller {
         width: 65px;
         height: 65px;
         border-radius: 50%;
-        flex: none; 
-        max-width: inherit; 
+        flex: none;
+        max-width: inherit;
         padding: 5px;
         display: none;
     }
@@ -48,7 +47,7 @@
                 font-weight: 500;
                 padding: 0;
                 margin: 0;
-                margin-#{$end-direction}:10px;
+                margin-#{$end-direction}: 10px;
             }
             &.more {
                 width: auto;
@@ -75,7 +74,9 @@
     }
 }
 
-.responsive-table {  max-height: 400px;
+.responsive-table {
+    max-height: 400px;
+    overflow-y: auto;
     >li {
         font-size: 0.8rem;
         //border-radius: $radius4;

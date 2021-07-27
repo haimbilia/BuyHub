@@ -2,52 +2,49 @@
 
 <div class="product-description">
     <div class="product-description-inner">
-
-        <!-- Title, Rating and Review -->
+        <?php if (!empty($product['brand_name'])) { ?>
+        <div class="brand-data"><span
+                class="txt-gray-light"><?php echo Labels::getLabel('LBL_Brand', $siteLangId); ?>:</span>
+            <?php echo $product['brand_name']; ?></div>
+        <?php } ?>
         <div class="products__title">
-            <?php if (!empty($product['brand_name'])) { ?>
-            <div class="brand-data"><span
-                    class="txt-gray-light"><?php echo Labels::getLabel('LBL_Brand', $siteLangId); ?>:</span>
-                <?php echo $product['brand_name']; ?></div>
-            <?php } ?>
+
             <h1> <?php echo $product['selprod_title']; ?> </h1>
 
-            <div class="reviews-wrap">
-                <div class="favourite-wrapper favourite-wrapper-detail ">
-                    <?php
+
+        </div>
+        <div class="reviews-wrap">
+            <?php
                     $includeRibbon = false;
                     include(CONF_THEME_PATH . '_partial/collection-ui.php'); ?>
+
+            <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
+            <?php $label = (round($product['prod_rating']) > 0) ? round($product['totReviews'], 1) . ' ' . Labels::getLabel('LBL_Reviews', $siteLangId) : Labels::getLabel('LBL_No_Reviews', $siteLangId); ?>
+            <div class="products-reviews">
+                <div class="products__rating">
+                    <i class="icn"><svg class="svg">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"
+                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                            </use>
+                        </svg>
+                    </i>
+                    <span class="rate"><?php echo round($product['prod_rating'], 1); ?></span>
                 </div>
-                <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
-                <?php $label = (round($product['prod_rating']) > 0) ? round($product['totReviews'], 1) . ' ' . Labels::getLabel('LBL_Reviews', $siteLangId) : Labels::getLabel('LBL_No_Reviews', $siteLangId); ?>
-                <div class="products-reviews">
-                    <div class="products__rating">
-                        <i class="icn"><svg class="svg">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"
-                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                </use>
-                            </svg>
-                        </i>
-                        <span class="rate"><?php echo round($product['prod_rating'], 1); ?></span>
-                    </div>
-                    <a href="#itemRatings" class="totals-review link nav-scroll-js"><?php echo $label; ?></a>
-                </div>
-                <?php } ?>
+                <a href="#itemRatings" class="totals-review link nav-scroll-js"><?php echo $label; ?></a>
             </div>
+            <?php } ?>
         </div>
 
-        <!-- Brand Row -->
+
         <div class="block-detail">
-
-
             <div class="products__price">
                 <span
-                    class="original_price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></span>
+                    class="products__price_new"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></span>
                 <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
                 <del
                     class="products__price_old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></del>
                 <span
-                    class="product_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
+                    class="products__price_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                 <?php } ?>
 
                 <?php

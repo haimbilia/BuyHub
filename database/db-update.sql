@@ -856,3 +856,4 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('MSG_PLEASE_TURN_OFF_EASYECOM_AUTO_SYNC_FIRST.', 1, 'Please Turn Off EasyEcom Auto Sync First. To Turn Off Manual Shipping Rates Settings.', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 -- -------------TV-9.3.2.20210726---------------------
+ALTER TABLE `tbl_collections` CHANGE `collection_img_updated_on` `collection_updated_on` DATETIME on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;

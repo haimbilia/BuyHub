@@ -2,16 +2,6 @@
     margin-top: 1rem;
 }
 
-.share-icon {
-    color: $brand-color;
-    .svg {
-        width: 16px;
-        height: 16px;
-        display: block;
-        fill: currentColor;
-    }
-}
-
 .social-icons {
     display: flex;
     justify-content: center;
@@ -30,12 +20,15 @@
         font-size: 0.8rem;
         display: block;
         position: relative;
-        -webkit-transition: all .3s ease;
         transition: all .3s ease;
-        flex: 0 0 50%;
-        max-width: 50%;
+        flex: 0 0 40%;
+        max-width: 40%;
+        border-radius: 40px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        margin: 1rem;
         a {
             display: block;
+            padding: 0.5rem;
             .icn {
                 height: inherit;
                 width: inherit;
@@ -44,8 +37,8 @@
                 justify-content: center;
                 svg {
                     fill: #fff;
-                    width: 15px;
-                    height: 15px;
+                    width: 1.5rem;
+                    height: 1.5rem;
                 }
             }
         }

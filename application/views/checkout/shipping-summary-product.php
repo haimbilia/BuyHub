@@ -49,11 +49,15 @@ $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product
             <div class="product-profile">
                 <div class="product-profile__thumbnail">
                     <a href="<?php echo $productUrl; ?>">
-                        <img class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
+                        <img class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>"
+                            alt="<?php echo $product['product_name']; ?>"
+                            title="<?php echo $product['product_name']; ?>">
                     </a>
                 </div>
                 <div class="product-profile__data">
-                    <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a></div>
+                    <div class="title"><a class=""
+                            href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+                    </div>
                     <div class="options">
                         <p class=""> <?php if (isset($product['options']) && count($product['options'])) {
                                             $optionStr = '';
@@ -70,20 +74,29 @@ $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product
         <div class="cell cell_qty">
             <div class="quantity quantity-2">
                 <span class="decrease decrease-js"><i class="icn">
-                                    <svg class="svg" width="16px" height="16px">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                        </use>
-                                    </svg>
-                                </i></span>
-                <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
-                <span class="increase increase-js"><i class="fas fa-plus"></i></span>
+                        <svg class="svg" width="16px" height="16px">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                            </use>
+                        </svg>
+                    </i></span>
+                <input class="qty-input no-focus cartQtyTextBox productQty-js"
+                    title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text"
+                    name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>"
+                    value="<?php echo $product['quantity']; ?>">
+                <span class="increase increase-js"> <i class="icn">
+                        <svg class="svg" width="16px" height="16px">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                            </use>
+                        </svg>
+                    </i></span>
             </div>
 
         </div>
         <div class="cell cell_price">
-            <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
+            <div class="product-price">
+                <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
                 <?php if ($product['special_price_found']) { ?>
-                    <del><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></del>
+                <del><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></del>
                 <?php } ?>
             </div>
         </div>
