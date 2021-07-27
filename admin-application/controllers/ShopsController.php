@@ -588,7 +588,7 @@ class ShopsController extends AdminBaseController
         $fld->requirement->setRequired(true);
 
         $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'shop_state', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirement->setRequired(true);
-        $frm->addTextBox(Labels::getLabel('LBL_Postal_Code', $this->adminLangId), 'shop_postalcode');
+        $frm->addRequiredField(Labels::getLabel('LBL_Postal_Code', $this->adminLangId), 'shop_postalcode');
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'shop_active', $activeInactiveArr, '', array(), '');
         /*  $fld = $frm->addTextBox(Labels::getLabel('LBL_Free_Shipping_On', $this->adminLangId), 'shop_free_ship_upto');
