@@ -154,6 +154,7 @@ Updates/Fixes :
     => 056221 - seller> inventory> badges and ribbon collectively not working in filter
     => 056264 - Shop details >> If "use manual shipping rates" checkbox is not checked then "postal code" should be mandatory
     => 056246 - Catalog -> Shipping options
+    => 056265 - Admin >> General settings >> local > postal code and address should be mandatory as it requires when we use shipping API
 
 New Features:  
     => Admin shipped products listing page
