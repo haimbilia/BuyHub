@@ -434,6 +434,9 @@ class AttachedFile extends MyAppModel
                 )
             );
         }
+
+        $this->setRecordModifiedTime($fileType, $recordId);
+        
         return $fileLoc;
     }
 
@@ -923,6 +926,8 @@ class AttachedFile extends MyAppModel
             $this->error = $db->getError();
             return false;
         }
+
+        $this->setRecordModifiedTime($fileType, $recordId);
         //@todo:: not deleted physical file from the system.
         return true;
     }
@@ -1034,5 +1039,45 @@ class AttachedFile extends MyAppModel
         header("Accept-Ranges: bytes");
         header("Content-Length: " . filesize($path));
         return readfile($path);
+    }
+
+    public static function setRecordModifiedTime(int $fileType, int $recordId){
+        $recordObj = false;
+        switch ($fileType) {
+            case self::FILETYPE_PRODUCT_IMAGE:
+                $recordObj = new Product($recordId);
+                break;
+            case self::FILETYPE_SHOP_LOGO:
+            case self::FILETYPE_SHOP_BANNER:
+            case self::FILETYPE_SHOP_BACKGROUND_IMAGE:
+                $recordObj = new Shop($recordId);
+                break;   
+            case self::FILETYPE_BRAND_LOGO:
+            case self::FILETYPE_BRAND_IMAGE:
+                $recordObj = new Brand($recordId);
+                break; 
+            case self::FILETYPE_USER_IMAGE:
+            case self::FILETYPE_USER_PROFILE_IMAGE:
+                $recordObj = new User($recordId);
+                break;            
+            case self::FILETYPE_BLOG_POST_IMAGE:
+                $recordObj = new BlogPost($recordId);
+                break;     
+            case self::FILETYPE_COLLECTION_IMAGE:
+            case self::FILETYPE_COLLECTION_BG_IMAGE:
+                $recordObj = new Collections($recordId);
+                break;  
+            case self::FILETYPE_CATEGORY_ICON:
+            case self::FILETYPE_CATEGORY_BANNER:
+            case self::FILETYPE_CATEGORY_IMAGE:
+            case self::FILETYPE_PRODCAT_IMAGE:    
+                $recordObj = new ProductCategory($recordId);
+                break;        
+        }
+
+        if(false != $recordObj){
+            return $recordObj->updateModifiedTime();
+        }
+        return false;
     }
 }

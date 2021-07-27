@@ -78,6 +78,7 @@
     max-height: 400px;
     border: $border;
     border-radius: $radius4;
+    overflow-y: auto;
     >li {
         font-size: 0.8rem;
         //border-radius: $radius4;

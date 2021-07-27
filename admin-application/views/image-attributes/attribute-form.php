@@ -93,6 +93,7 @@ if($optionIdFld !== null){
             <div class="">
 				<?php if(!empty($images)) { ?>
 					<?php foreach($images as $afileId => $afileData) {
+                        $uploadedTime = AttachedFile::setTimeParam($afileData['afile_updated_at']);
 						$frm->getField('image_title'.$afileId)->value = $afileData['afile_attribute_title'];
 						$frm->getField('image_alt'.$afileId)->value = $afileData['afile_attribute_alt'];
 						switch ($moduleType) {
@@ -118,7 +119,7 @@ if($optionIdFld !== null){
 					<div class="row">
 						<div class="col-md-2">
                         <div class="field-set">
-							<img src="<?php echo $imageUrl; ?>">
+							<img src="<?php echo UrlHelper::getCachedUrl($imageUrl . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>">
 						</div>
 						</div>
 						<div class="col-md-5">

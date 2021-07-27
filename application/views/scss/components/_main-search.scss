@@ -1,8 +1,5 @@
 .main-search {
-    
     display: flex;
-    
-   
     flex: 1;
     @include media-breakpoint-down(lg) {
         & {
@@ -26,14 +23,8 @@
         }
         .icn {
             vertical-align: top;
-            
-            
             display: flex;
-            
-            
             align-items: center;
-            
-            
             justify-content: center;
             width: 20px;
             height: 20px;
@@ -52,23 +43,17 @@
 }
 
 .form--search {
-    
-   
     flex: 1;
     margin: 15px auto;
     max-width: 850px;
     .main-search-form {
-
         display: flex;
-
         align-items: center;
         flex: 1;
         width: 100%;
         .main-search__field {
             position: relative;
             width: 100%;
-            
-           
             flex: 1;
             .close-layer {
                 top: 2px;
@@ -111,9 +96,7 @@
         background: #fff;
         opacity: 0;
         visibility: hidden;
-
         display: flex;
-
         align-items: center;
         max-width: 100%;
         pointer-events: none;
@@ -236,9 +219,7 @@
     bottom: auto;
     z-index: 10;
     padding: 1rem;
-    
     display: -webkit-flex;
-    
     display: flex;
     box-shadow: 0 0 35px 10px rgba(0, 0, 0, 0.1);
     border-radius: $radius4;
@@ -258,11 +239,8 @@
     }
     .text-suggestions {
         -webkit-flex: 1;
-       
         flex: 1;
-        
         display: -webkit-flex;
-        
         display: flex;
         -webkit-flex-direction: column;
         -ms-flex-direction: column;
@@ -271,11 +249,9 @@
         li {
             padding-bottom: 8px;
             transition: all 0.2s ease-in-out;
-            
             a {
                 display: block;
                 position: relative;
-                
                 transition: all .2s linear;
                 &:before {
                     visibility: hidden;
@@ -291,7 +267,6 @@
                     border-top: 1px solid currentColor;
                     border-right: 1px solid currentColor;
                     transform: rotate(45deg);
-                     
                     transition: all .2s linear;
                 }
                 &:hover {

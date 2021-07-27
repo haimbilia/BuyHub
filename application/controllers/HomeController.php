@@ -565,7 +565,7 @@ class HomeController extends MyAppController
             }
 
             if (true === MOBILE_APP_API_CALL && 0 < $collection['collection_display_media_only'] && !in_array($collection['collection_type'], Collections::COLLECTION_WITHOUT_MEDIA)) {
-                $imgUpdatedOn = Collections::getAttributesById($collection_id, 'collection_img_updated_on');
+                $imgUpdatedOn = Collections::getAttributesById($collection_id, 'collection_updated_on');
                 $uploadedTime = AttachedFile::setTimeParam($imgUpdatedOn);
 
                 $collection['collection_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'collectionReal', array($collection_id, $langId,  'ORIGINAL', AttachedFile::FILETYPE_COLLECTION_IMAGE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
@@ -742,7 +742,7 @@ class HomeController extends MyAppController
                     if (false === MOBILE_APP_API_CALL) {
                         $shopObj->setPageSize($collection['collection_primary_records']);
                     }
-                    $shopObj->addMultipleFields(array('ctr.ctr_display_order', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'));
+                    $shopObj->addMultipleFields(array('ctr.ctr_display_order', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'shop_updated_on'));
                     $shopObj->addOrder('ctr.ctr_display_order', 'ASC');
 
                     $rs = $shopObj->getResultSet();
