@@ -8,6 +8,7 @@
     $ribSelProdId = $product['selprod_id'];
     $ribProdId = $product['product_id'];
     $ribShopId = $product['shop_id'];
+    $isFront = true;
     include(CONF_THEME_PATH . '_partial/get-ribbon.php'); ?>
 
     <div class="slider-for" dir="<?php echo CommonHelper::getLayoutDirection(); ?>" id="slider-for">
