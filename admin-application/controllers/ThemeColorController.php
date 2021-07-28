@@ -160,8 +160,8 @@ class ThemeColorController extends AdminBaseController
         $data = [
             "CONF_THEME_FONT_FAMILY_URL" => "",
             "CONF_THEME_FONT_FAMILY" => $font,
-            "CONF_THEME_COLOR" => "#ff3a59",
-            "CONF_THEME_COLOR_INVERSE" => "#fff",
+            "CONF_THEME_COLOR" => "rgb(255,58,89)",
+            "CONF_THEME_COLOR_INVERSE" => "rgb(255,255,255)",
         ];
 
         $record = new Configurations();
