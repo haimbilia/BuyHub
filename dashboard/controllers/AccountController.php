@@ -3595,7 +3595,7 @@ class AccountController extends LoggedUserController
         $otpFrm = $this->getOtpForm();
         $otpFrm->fill(['user_id' => $this->userId]);
         $this->set('frm', $otpFrm);
-        $json['html'] = $this->_template->render(false, false, 'guest-user/otp-form.php', true, false);
+        $json['html'] = $this->_template->render(false, false, 'account/otp-form.php', true, false);
         FatUtility::dieJsonSuccess($json);
     }
 

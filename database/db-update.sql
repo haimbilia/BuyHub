@@ -857,3 +857,4 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 -- -------------TV-9.3.2.20210726---------------------
 ALTER TABLE `tbl_collections` CHANGE `collection_img_updated_on` `collection_updated_on` DATETIME on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+-- ------------TV-9.3.2.20210727---------------

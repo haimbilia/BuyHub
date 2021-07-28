@@ -162,6 +162,7 @@ class BrandsController extends MyAppController
             'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'brands'),
             'siteLangId' => $this->siteLangId,
             'showBreadcrumb' => true,
+            'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId)
         );
 
         if (FatUtility::isAjaxCall()) {       
@@ -172,6 +173,8 @@ class BrandsController extends MyAppController
             $this->set('postedData', $get);
             $this->set('recordCount', $srch->recordCount());
             $this->set('siteLangId', $this->siteLangId);
+            $this->set('pageSize', $data['pageSize']);
+            $this->set('pageSizeArr', $data['pageSizeArr']);
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }

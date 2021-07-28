@@ -710,10 +710,9 @@ class Orders extends MyAppModel
 
                 $orderProdSpecificsObj = new OrderProductSpecifics($op_id);
                 $orderProdSpecificsObj->assignValues($product['productSpecifics']);
-                $orderProdSpecificsObj->setFldValue('ops_op_id', $op_id);
-                $data = $orderProdSpecificsObj->getFlds();
+                $orderProdSpecificsObj->setFldValue('ops_op_id', $op_id);             
 
-                if (!$orderProdSpecificsObj->addNew(array(), $data)) {
+                if (!$orderProdSpecificsObj->addNew(array(), $orderProdSpecificsObj->getFlds())) {
                     $this->error = $orderProdSpecificsObj->getError();
                     return false;
                 }

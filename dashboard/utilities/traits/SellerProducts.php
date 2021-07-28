@@ -85,7 +85,8 @@ trait SellerProducts
                 'GROUP_CONCAT(COALESCE(badge_name, badge_identifier)) as badge_name',
                 'GROUP_CONCAT(badge_id) as badge_id',
                 'badge_shape_type',
-                'badge_color'
+                'badge_color',
+                'product_updated_on'
             )
         );
         if ($product_id) {

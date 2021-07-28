@@ -1544,7 +1544,8 @@ class SellerController extends SellerBaseController
             'GROUP_CONCAT(COALESCE(badge_name, badge_identifier)) as badge_name',
             'GROUP_CONCAT(badge_id) as badge_id',
             'badge_shape_type',
-            'badge_color'
+            'badge_color',
+            'product_updated_on'
         );
 
         $srch->addMultipleFields($attr);
@@ -3650,7 +3651,8 @@ class SellerController extends SellerBaseController
 
         $frm->addSelectBox(Labels::getLabel('Lbl_State', $this->siteLangId), 'shop_state', array(), '', array(), Labels::getLabel('Lbl_Select', $this->siteLangId))->requirement->setRequired(true);
 
-        $zipFld = $frm->addTextBox(Labels::getLabel('Lbl_Postalcode', $this->siteLangId), 'shop_postalcode');
+        $zipFld = $frm->addRequiredField(Labels::getLabel('Lbl_Postalcode', $this->siteLangId), 'shop_postalcode');
+        
         /* $zipFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
         $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_alphanumeric_value_is_allowed.', $this->siteLangId)); */
 

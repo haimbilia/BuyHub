@@ -76,7 +76,7 @@ $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $ord
                                 'label' => '<i class="fas fa-print"></i>'
                             ];
                             
-                            if ($order['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && !$shippingHanldedBySeller && is_object($shippingApiObj) && ('CashOnDelivery' == $order['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $order['order_payment_status'])) {
+                            if (!in_array($order['op_status_id'], unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS"))) && $order['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && !$shippingHanldedBySeller && is_object($shippingApiObj) && ('CashOnDelivery' == $order['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $order['order_payment_status'])) {
                                 $allowedForPlugin = in_array($shippingApiObj->keyName, ['EasyPost', 'Aramex']); 
                                 if (1 < $order['opshipping_rate_id'] && ( empty($order['opshipping_plugin_id']) || ( $shippingApiObj->getKey('plugin_id') != $order['opshipping_plugin_id'] && empty($order['opr_response'])))) {
                                     $data['otherButtons'][] = [

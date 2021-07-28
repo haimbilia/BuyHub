@@ -43,6 +43,28 @@ $(document).ready(function () {
   ) {
     $("[data-simplebar]").attr("data-simplebar-direction", "rtl");
   }
+
+
+  $(document).on("keyup", "input.otpVal-js", function (e) {
+    if ("" != $(this).val()) {
+      $(this).removeClass("is-invalid");
+    }
+
+    var element = "";
+
+    /* 
+      # e.which = 8(Backspace)
+      */
+    if (8 != e.which && "" != $(this).val()) {
+      element = $(this).parents(".otpCol-js").nextAll()[0];
+    } else {
+      element = $(this).parents(".otpCol-js").prevAll()[0];
+    }
+    element = $(element).find("input.otpVal-js");
+    if ("undefined" != typeof element) {
+      element.focus();
+    }
+  });
 });
 
 installJsColor = function () {
@@ -82,6 +104,36 @@ checkEmpty = function (element) {
   if ("" == element.val()) {
     element.addClass("is-invalid");
   }
+};
+
+var otpIntervalObj;
+startOtpInterval = function (parent = "", callback = "", params = []) {
+  if ("undefined" != typeof otpIntervalObj) {
+    clearInterval(otpIntervalObj);
+  }
+
+  var parent = "" != parent ? parent + " " : "";
+  var element = $(parent + ".intervalTimer-js");
+  var counter = langLbl.otpInterval;
+  element.parent().parent().show();
+  element.text(counter);
+  $(parent + ".getOtpBtnBlock--js").addClass("d-none");
+
+  var resendOtpEle = $(parent + ".resendOtp-js");
+  var onClickFn = resendOtpEle.attr("onclick");
+  resendOtpEle.removeAttr("onclick");
+  otpIntervalObj = setInterval(function () {
+    counter--;
+    if (counter === 0) {
+      clearInterval(otpIntervalObj);
+      resendOtpEle.attr("onclick", onClickFn).removeClass("disabled");
+      element.parent().parent().hide();
+      if ("" != callback && eval("typeof " + callback) == "function") {
+        window[callback](params);
+      }
+    }
+    element.text(counter);
+  }, 1000);
 };
 
 function setCurrDateFordatePicker() {
@@ -702,12 +754,12 @@ function defaultSetUpLogin(frm, v) {
       /* $('.system_message').css({top:10}); */
     },
     close: function () {
-      $(document).trigger("close.systemMessage");
+      $.mbsmessage.close();
     },
   });
 
   $(document).bind("close.systemMessage", function () {
-    $(".system_message").fadeOut();
+    $.mbsmessage.close();
   });
 
   function initialize() {
@@ -1044,7 +1096,7 @@ function stylePhoneNumberFld(
   var inputList = document.querySelectorAll(element);
   var country =
     "" == langLbl.defaultCountryCode ||
-    "undefined" == typeof langLbl.defaultCountryCode
+      "undefined" == typeof langLbl.defaultCountryCode
       ? "in"
       : langLbl.defaultCountryCode;
   inputList.forEach(function (input) {
@@ -1060,11 +1112,7 @@ function stylePhoneNumberFld(
 
       var elementName = $(input).attr("name") + "_dcode";
       var dialCodeElement = $('input[name="' + elementName + '"]');
-      if (
-        0 < dialCodeElement.length &&
-        "" != dialCodeElement.val() &&
-        "undefined" != typeof dialCodeElement.val()
-      ) {
+      if (0 < dialCodeElement.length && "" != dialCodeElement.val() && "undefined" != typeof dialCodeElement.val()) {
         var elementVal = dialCodeElement.val();
         var countryCodePos = elementVal.indexOf("-");
         if (0 < countryCodePos) {
@@ -1079,24 +1127,18 @@ function stylePhoneNumberFld(
         initialCountry: country,
       });
 
-      var dCode =
-        "+" +
-        iti.getSelectedCountryData().dialCode +
-        "-" +
-        iti.getSelectedCountryData().iso2;
+      var dCode = "+" + iti.getSelectedCountryData().dialCode + "-" + iti.getSelectedCountryData().iso2;
       if (0 < dialCodeElement.length) {
         dialCodeElement.insertAfter(input);
         if ("" == dialCodeElement.val()) {
           dialCodeElement.val(dCode);
         }
       } else {
-        $("<input>")
-          .attr({
+        $("<input>").attr({
             type: "hidden",
             name: elementName,
             value: dCode,
-          })
-          .insertAfter(input);
+          }).insertAfter(input);
       }
 
       input.addEventListener("countrychange", function (e) {
@@ -1340,7 +1382,7 @@ var imagesPreview = function (input, placeToInsertImagePreview) {
           .attr("src", event.target.result)
           .appendTo(
             placeToInsertImagePreview +
-              " ul li:last-child .uploaded-file__thumb"
+            " ul li:last-child .uploaded-file__thumb"
           );
       };
 
