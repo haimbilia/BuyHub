@@ -112,8 +112,10 @@
         display: flex;
         align-items: center;
         color: currentColor;
+        padding: 0;
         .svg {
-            fill: $brand-color;
+            margin-#{$end-direction}: 5px;
+            //fill: $brand-color;
         }
     }
     &-selected {

@@ -248,6 +248,9 @@
             .products__title {
                 padding-#{$start-direction}: 0;
             }
+            .products__price {
+                justify-content: inherit;
+            }
         }
     }
 }
