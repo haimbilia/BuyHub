@@ -48,9 +48,10 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                     $td->appendElement('plaintext', array(), $sr_no, true);
                     break;
                 case 'name':
+                    $uploadedTime = AttachedFile::setTimeParam($row['product_updated_on']);
                     $variantStr = '<div class="item">
                                         <figure class="item__pic">
-                                            <img src="' . UrlHelper::getCachedUrl(UrlHelper::generateUrl('image', 'product', array($row['selprod_product_id'], "SMALL", $row['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $row['product_name'] . '" alt="' . $row['product_name'] . '">
+                                            <img src="' . UrlHelper::getCachedUrl(UrlHelper::generateUrl('image', 'product', array($row['selprod_product_id'], "SMALL", $row['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $row['product_name'] . '" alt="' . $row['product_name'] . '">
                                         </figure>
                                     <div class="item__description">
 				                        <div class="item__title">' . wordwrap($row['product_name'], 150, "<br>\n") . '</div>';
