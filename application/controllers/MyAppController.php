@@ -529,13 +529,11 @@ class MyAppController extends FatController
             $sortByArr = array('keyword_relevancy' => Labels::getLabel('LBL_Keyword_Relevancy', $this->siteLangId)) + $sortByArr;
             $sortBy = 'keyword_relevancy';
         }
-
-        $pageSize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
-        $pageSizeArr = FilterHelper::getPageSizeArr($this->siteLangId);
+      
         $frm = new Form('frmProductSearch');
         $frm->addTextBox('', 'keyword', '', array('id' => 'keyword'));
-        $frm->addSelectBox('', 'sortBy', $sortByArr, $sortBy, array('id' => 'sortBy'), '');
-        $frm->addSelectBox('', 'pageSize', $pageSizeArr, $pageSize, array('id' => 'pageSize'), '');
+        $frm->addSelectBox('', 'sortBy', $sortByArr, $sortBy, array('id' => 'sortBy'), '');        
+        $frm->addHiddenField('', 'pageSize', '', array('id' => 'pageSize'));
         $frm->addHiddenField('', 'page', 1);
         $frm->addHiddenField('', 'sortOrder', 'asc');
         $frm->addHiddenField('', 'category', 0);

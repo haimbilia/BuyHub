@@ -71,7 +71,8 @@ $daysSpent = round($datediff / (60 * 60 * 24));
                                 <i class="fas fa-print"></i>
                             </a>
                             <?php
-                            if ($orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && $shippedBySeller && is_object($shippingApiObj) && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status']) && false === OrderCancelRequest::getCancelRequestById($orderDetail['op_id'])) {
+                            
+                            if (!in_array($orderDetail['op_status_id'], unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS"))) && $orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && $shippedBySeller && is_object($shippingApiObj) && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status']) && false === OrderCancelRequest::getCancelRequestById($orderDetail['op_id'])) {
                                     $opId = $orderDetail['op_id'];
                                     $allowedForPlugin = in_array($shippingApiObj->keyName, ['EasyPost', 'Aramex']);
                                     if (1 < $orderDetail['opshipping_rate_id'] && ( empty($orderDetail['opshipping_plugin_id']) || ( $shippingApiObj->getKey('plugin_id') != $orderDetail['opshipping_plugin_id'] && empty($orderDetail['opr_response'])))) {

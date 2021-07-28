@@ -95,8 +95,10 @@ $(document).ready(function () {
     $(document).on('change', 'input[name=free_shipping]', function () {
         alert("Pending...");
     });
-
-    $(document).on('change', 'select[name=pageSize]', function () {
+    
+    $(document).on('change', 'select[name=pageSizeSelect]', function () {
+        var selectedVal = $(this).val();
+        $('#pageSize').val(selectedVal);
         removePageSideFromLink();
         removePaginationFromLink();
         reloadProductListing();
@@ -504,7 +506,7 @@ function getSearchQueryUrl(includeBaseUrl) {
     }
 
     var e = document.getElementById("pageSize");
-    var pageSize = parseInt(e.options[e.selectedIndex].value);
+    var pageSize = parseInt(e.value);
     if (pageSize > 0) {
         url = url + setQueryParamSeperator(url) + 'pagesize' + valueSeperator + pageSize;
     }
