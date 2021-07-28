@@ -162,12 +162,8 @@ loginPopupOtp = function (userId, getOtpOnly = 0) {
       if ($(".contentBody--js form").hasClass("loginpopup--js")) {
         formClass = "form.loginpopup--js";
       }
-      $(formClass + " .countdownFld--js, " + formClass + " .resendOtp-js")
-        .parent()
-        .removeClass("d-none");
-      $(
-        formClass + ".otpFieldBlock--js," + formClass + " .countdownFld--js"
-      ).removeClass("d-none");
+      $(formClass + " .countdownFld--js, " + formClass + " .resendOtp-js").parent().removeClass("d-none");
+      $(formClass + ".otpFieldBlock--js," + formClass + " .countdownFld--js").removeClass("d-none");
       startOtpInterval(parent);
     }
   );
@@ -999,12 +995,12 @@ sendResetPasswordLink = function (user) {
       /* $('.system_message').css({top:10}); */
     },
     close: function () {
-      $(document).trigger("close.systemMessage");
+      $.mbsmessage.close();
     },
   });
 
   $(document).bind("close.systemMessage", function () {
-    $(".system_message").fadeOut();
+    $.mbsmessage.close();
   });
 
   function initialize() {
