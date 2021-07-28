@@ -258,7 +258,7 @@
                             <a href="javascript:void(0);"
                                 onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
                                 <svg class="svg" width="20px" height="20px">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
                                     </use>
                                 </svg>
                             </a>

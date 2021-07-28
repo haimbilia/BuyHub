@@ -1,4 +1,9 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+$showAddToFavorite = true;
+if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
+    $showAddToFavorite = false;
+}
+?>
 <div class="cart-blocks">
     <?php
     $productsCount = count($products);
@@ -13,7 +18,7 @@
             //if (count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) > 0 && count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) != $productsCount) { 
             if (count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) != $productsCount) {
             ?>
-        <li class="">
+        <li class="minus-space">
             <div class="info">
                 <span> <svg class="svg">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info"
@@ -30,8 +35,7 @@
                     <li>
                         <a href="javascript:void(0);" onClick="removePickupOnlyProducts();"><svg class="svg"
                                 width="20px" height="20px">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove"
-                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
                                 </use>
                             </svg>
                         </a>
@@ -78,19 +82,23 @@
                             <?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_SHIPPING', $siteLangId); ?></p>
                     </div>
                 </div>
+                <ul class="actions">
+                    <li>
+                        <a href="javascript:void(0)"
+                            onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );">
 
-                <button class="btn-saveforlater" type="button"
-                    onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );">
+                            <i class="icn">
+                                <svg class="svg" width="20px" height="20px"
+                                    title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                    <use
+                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#saveforlater">
+                                    </use>
+                                </svg>
 
-                    <i class="icn">
-                        <svg class="svg" width="20px" height="20px"
-                            title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#saveforlater">
-                            </use>
-                        </svg>
-
-                    </i>
-                </button>
+                            </i>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </li>
         <?php } ?>
@@ -135,37 +143,7 @@
                                 <?php }
                                                 } ?></p>
                         </div>
-                        <p class="save-later">
-                            <?php
-                                $showAddToFavorite = true;
-                                if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
-                                    $showAddToFavorite = false;
-                                }
-                                if ($showAddToFavorite) { ?>
 
-                            <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
-                                        if (empty($product['ufp_id'])) {  ?>
-                            <a href="javascript:void(0)" class=""
-                                onClick="addToFavourite( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?> );"
-                                title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_Move_to_favourites', $siteLangId); ?></a>
-                            <?php } else {
-                                            echo Labels::getLabel('LBL_Already_marked_as_favourites.', $siteLangId);
-                                        }
-                                    } else {
-                                        if (empty($product['is_in_any_wishlist'])) { ?>
-                            <a href="javascript:void(0)" class=""
-                                onClick="moveToWishlist( <?php echo $product['selprod_id']; ?>, event, '<?php echo md5($product['key']); ?>' );"
-                                title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?></a>
-                            <?php  } else {
-
-                                            echo Labels::getLabel('LBL_Already_added_to_your_wishlist.', $siteLangId);
-                                        }
-                                    }
-                                } ?>
-                            / <a href="javascript:void(0)" class=""
-                                onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );"
-                                title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_Save_For_later', $siteLangId); ?></a>
-                        </p>
                     </div>
                 </div>
             </div>
@@ -203,12 +181,70 @@
             </div>
             <div class="cell cell_action">
                 <ul class="actions">
+
+                    <?php if ($showAddToFavorite) { ?>
+                    <li>
+                        <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+                            if (empty($product['ufp_id'])) {  ?>
+                        <a href="javascript:void(0)" class=""
+                            onClick="addToFavourite( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?> );"
+                            title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_Move_to_favourites', $siteLangId); ?>
+                            <svg class="svg" width="20px" height="20px"
+                                title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
+                                </use>
+                            </svg>
+                        </a>
+                        <?php } else {
+                                        echo Labels::getLabel('LBL_Already_marked_as_favourites.', $siteLangId);
+                                    }
+                                } else {
+                                    if (empty($product['is_in_any_wishlist'])) { ?>
+                        <a href="javascript:void(0)" class=""
+                            onClick="moveToWishlist( <?php echo $product['selprod_id']; ?>, event, '<?php echo md5($product['key']); ?>' );"
+                            title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>">
+
+                            <svg class="svg" width="20px" height="20px"
+                                title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
+                                </use>
+                            </svg>
+                        </a>
+                        <?php  } else { ?>
+                        <a class="favourite wishListLink-Js is-active" data-id="<?php echo $product['selprod_id']; ?>"
+                            href="javascript:void(0)"
+                            onClick="viewWishList(<?php echo $product['selprod_id']; ?>,this,event);"
+                            title="<?php echo Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId); ?>">
+                            <i class="icn">
+                                <svg class="svg" width="16px" height="16px">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
+                                    </use>
+                                </svg>
+                            </i>
+                        </a>
+                        <?php }
+                                } ?>
+                    </li>
+                    <?php } ?>
+                    <li>
+                        <a href="javascript:void(0)"
+                            onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );"
+                            title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>">
+
+                            <svg class="svg" width="20px" height="20px"
+                                title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#saveforlater">
+                                </use>
+                            </svg>
+
+                        </a>
+                    </li>
                     <li>
                         <a href="javascript:void(0)"
                             onclick="cart.remove('<?php echo md5($product['key']); ?>','cart')">
                             <svg class="svg" width="20px" height="20px"
                                 title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
                                 </use>
                             </svg>
                         </a>
@@ -255,8 +291,7 @@
                                 <?php }
                                                     } ?></p>
                         </div>
-                        <button class="btn btn-outline-brand btn-sm product-profile__btn" type="button"
-                            onclick="moveToCart(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event, <?php echo Shipping::FULFILMENT_SHIP; ?>)"><?php echo Labels::getLabel('LBL_Move_To_Bag', $siteLangId); ?></button>
+
                     </div>
                 </div>
             </div>
@@ -267,11 +302,19 @@
                 <ul class="actions">
                     <li>
                         <a href="javascript:void(0)"
-                            onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event)"><svg
-                                class="svg" width="20px" height="20px"
-                                title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove"
-                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                            onclick="moveToCart(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event, <?php echo Shipping::FULFILMENT_SHIP; ?>)">
+                            <svg class="svg" width="20px" height="20px">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#cart">
+                                </use>
+                            </svg>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"
+                            onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event)">
+                            <svg class="svg" width="20px" height="20px">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
                                 </use>
                             </svg>
                         </a>

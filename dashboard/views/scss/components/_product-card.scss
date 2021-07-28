@@ -101,16 +101,15 @@
      vertical-align: top;
      white-space: nowrap;
      margin: 0;
+     color: $txt-gray;
      @include media-breakpoint-down(sm) {
-         & {
-             flex-wrap: wrap;
-         }
+         flex-wrap: wrap;
      }
-     li {
+     >li {
          display: inline-block;
          vertical-align: top;
          margin: 0 2px 4px 0;
-         a {
+         >a {
              display: block;
              background: none;
              padding: 5px;
@@ -118,8 +117,8 @@
              height: 30px;
              line-height: 1.4;
              text-align: center;
-             color: $body-color;
-             font-size: 0.7rem !important;
+             color: currentColor;
+             font-size: 0.7rem;
              border: $border;
              border-radius: $radius2;
              display: flex;
@@ -138,21 +137,17 @@
                  width: 16px;
                  height: 16px;
                  display: block;
-                 fill: inherit;
+                 fill: currentColor;
              }
+             &.is-active,
              &:hover {
                  background: $brand-color;
                  color: $brand-color-inverse;
                  border-color: $brand-color;
-                 text-decoration: none !important;
-                 fill: $brand-color-inverse;
-                 .svg {
-                     fill: inherit;
-                 }
              }
          }
      }
-     &.actions--large {
+     &--large {
          li {
              a {
                  width: 2.5rem;
