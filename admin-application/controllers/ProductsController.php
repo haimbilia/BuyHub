@@ -1400,11 +1400,12 @@ class ProductsController extends AdminBaseController
     {
         $frm = new Form('frmProductShipping');
         $productData = Product::getAttributesById($productId, ['product_type', 'product_seller_id']);
-
-        $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, $shippedByUserId, true, true);
-        $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
-
+        
         if ($productData['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
+            if (!$shippedByUserId) {
+                $fulFillmentArr = Shipping::getFulFillmentArr($this->adminLangId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
+                $fulFillmentTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->adminLangId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, ['class' => 'fieldsVisibility-js'], Labels::getLabel('LBL_Select', $this->adminLangId));
+            }
             if (FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) {
                 $shipPackArr = ShippingPackage::getAllNames();
                 $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Package', $this->adminLangId), 'product_ship_package', $shipPackArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
@@ -1425,11 +1426,18 @@ class ProductsController extends AdminBaseController
                 $codFld->addFieldTagAttribute('disabled', 'disabled');
                 $codFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_COD_option_is_disabled_in_payment_gateway_settings', $this->adminLangId) . '</small>';
             }
-            /* ] */
-
+            /* ] */            
+            
+            $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, $shippedByUserId, true, true);            
+            $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
             if (!$shippedByUserId) {
-                $fulFillmentArr = Shipping::getFulFillmentArr($this->adminLangId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
-                $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->adminLangId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, [], Labels::getLabel('LBL_Select', $this->adminLangId));
+                $profileUnReqObj = new FormFieldRequirement('shipping_profile', Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId));
+                $profileUnReqObj->setRequired(false);
+                $profileReqObj = new FormFieldRequirement('shipping_profile', Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId));
+                $profileReqObj->setRequired(true);
+
+                $fulFillmentTypeFld->requirements()->addOnChangerequirementUpdate(Shipping::FULFILMENT_PICKUP ,'eq', 'shipping_profile', $profileUnReqObj);
+                $fulFillmentTypeFld->requirements()->addOnChangerequirementUpdate(Shipping::FULFILMENT_PICKUP, 'ne', 'shipping_profile', $profileReqObj);
             }
         }
 

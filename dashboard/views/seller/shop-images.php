@@ -1,9 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php ($imageType != 'banner') ? $count = 1 : '';
-foreach ($images as $img) { ?>
+foreach ($images as $img) { 
+    $uploadedTime = AttachedFile::setTimeParam($img['afile_updated_at']);?>
     <div class="<?php echo ($imageType != 'banner') ? 'col-md-12' : 'col-md-12'; ?>">
         <div class="profile__pic">
-            <img src="<?php echo UrlHelper::generateUrl('Image', $imageFunction, array($img['afile_record_id'], $img['afile_lang_id'], 'PREVIEW', $img['afile_id']), CONF_WEBROOT_FRONTEND); ?>" alt="<?php echo Labels::getLabel('LBL_Shop_Banner', $siteLangId); ?>">
+            <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', $imageFunction, array($img['afile_record_id'], $img['afile_lang_id'], 'PREVIEW', $img['afile_id']), CONF_WEBROOT_FRONTEND). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo Labels::getLabel('LBL_Shop_Banner', $siteLangId); ?>">
         </div>
         <small class="form-text text-muted"><?php echo $languages[$img['afile_lang_id']]; ?></small>
 

@@ -1,11 +1,12 @@
 <div class="featured">
     <?php $i = 0; 
-    foreach ($collection['shops'] as $shop) { ?>    
+    foreach ($collection['shops'] as $shop) { 
+        $uploadedTime = AttachedFile::setTimeParam($shop['shopData']['shop_updated_on']);?>    
         <div class="featured-item">
             <div class="featured-item__body">
-                <div class="featured_logo">
+                <div class="featured_logo">                    
                     <img loading='lazy'
-                        src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shopData']['shop_id'], $siteLangId, "THUMB", 0, false), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg'); ?>"
+                        src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shopData']['shop_id'], $siteLangId, "THUMB", 0, false), CONF_WEBROOT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>"
                         alt="<?php echo $shop['shopData']['shop_name']; ?>">
                 </div>
                 <div class="featured_detail">

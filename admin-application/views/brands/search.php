@@ -44,10 +44,11 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'brand_logo':
+                $uploadedTime = AttachedFile::setTimeParam($row['brand_updated_on']);
                 $td->appendElement(
                     'plaintext',
                     array('style' => 'text-align:center'),
-                    '<img class="max-img" src="' . UrlHelper::generateUrl('image', 'brand', array($row['brand_id'], $adminLangId, 'MINITHUMB'), CONF_WEBROOT_FRONT_URL) . '">',
+                    '<img class="max-img" src="' . UrlHelper::getCachedUrl(UrlHelper::generateUrl('image', 'brand', array($row['brand_id'], $adminLangId, 'MINITHUMB'), CONF_WEBROOT_FRONT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '">',
                     true
                 );
                 break;

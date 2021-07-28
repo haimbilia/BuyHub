@@ -119,7 +119,8 @@ class ProductsController extends MyAppController
             $common = array(
                 'frmProductSearch' => $frm,
                 'recordId' => 0,
-                'showBreadcrumb' => false
+                'showBreadcrumb' => false,
+                'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId)             
             );
         }    
         
@@ -137,7 +138,7 @@ class ProductsController extends MyAppController
             $et->sendRequest();
         }
 
-        if (FatUtility::isAjaxCall()) {
+        if (FatUtility::isAjaxCall()) {          
             $this->set('products', $data['products']);
             $this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);
             $this->set('page', $data['page']);
@@ -145,6 +146,8 @@ class ProductsController extends MyAppController
             $this->set('postedData', $get);
             $this->set('recordCount', $data['recordCount']);
             $this->set('siteLangId', $this->siteLangId);
+            $this->set('pageSize', $data['pageSize']);
+            $this->set('pageSizeArr', $data['pageSizeArr']);
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }

@@ -217,7 +217,8 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                     'postedData' => $postedData,
                     'recordCount' => $recordCount,
                     'siteLangId' => $siteLangId,
-                    'colMdVal' => 4
+                    'pageSize' => $pageSize,
+                    'pageSizeArr' => $pageSizeArr,                    
                 );                
                 if (isset($postedData['vtype']) && $postedData['vtype'] == "map") { ?>
                 <div class="interactive-stores">

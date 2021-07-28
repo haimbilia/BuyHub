@@ -23,13 +23,6 @@
             @include media-breakpoint-down(sm) {
                 //grid-template-columns: auto;
             }
-            .location {
-                display: block;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                overflow: hidden;
-                padding: 6px 0;
-            }
         }
         a {
             color: inherit;
