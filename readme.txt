@@ -152,7 +152,7 @@ Updates/Fixes :
 ================TV-9.3.2.20210726===================
     => 056373 - if admin shipping is enabled then even seller is credited with shipping amount
     => 056221 - seller> inventory> badges and ribbon collectively not working in filter
-
+===============TV-9.3.2.20210728====================
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
