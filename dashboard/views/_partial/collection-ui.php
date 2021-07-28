@@ -67,8 +67,7 @@ if ($showAddToFavorite) {
     onclick="<?php echo $jsFunc; ?>" data-id="<?php echo $product['selprod_id']; ?>">
     <a href="javascript:void(0)"
         title="<?php echo ($product['ufp_id']) ? Labels::getLabel('LBL_Remove_product_from_favourite_list', $siteLangId) : Labels::getLabel('LBL_Add_Product_to_favourite_list', $siteLangId); ?>">
-        <div class="ring"></div>
-        <div class="circles"></div>
+
     </a>
 </div>
 <?php } else { ?>
@@ -76,8 +75,7 @@ if ($showAddToFavorite) {
     data-id="<?php echo $product['selprod_id']; ?>">
     <a href="javascript:void(0)" onClick="viewWishList(<?php echo $product['selprod_id']; ?>,this,event);"
         title="<?php echo ($product['is_in_any_wishlist']) ? Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId) : Labels::getLabel('LBL_Add_Product_to_your_wishlist', $siteLangId); ?>">
-        <div class="ring"></div>
-        <div class="circles"></div>
+
     </a>
 </div>
 <?php }
@@ -94,7 +92,7 @@ if ($showAddToFavorite) {
     <div class="dropdown-menu dropdown-menu-anim">
         <ul class="social-sharing">
             <li class="social-facebook">
-                <a class="st-custom-button" data-network="facebook"
+                <a href="javascript:void(0)" class="st-custom-button" data-network="facebook"
                     data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id']), CONF_WEBROOT_FRONTEND); ?>/">
                     <i class="icn"><svg class="svg">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb"
@@ -104,7 +102,7 @@ if ($showAddToFavorite) {
                 </a>
             </li>
             <li class="social-twitter">
-                <a class="st-custom-button" data-network="twitter">
+                <a href="javascript:void(0)" class="st-custom-button" data-network="twitter">
                     <i class="icn"><svg class="svg">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw"
                                 href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
@@ -113,7 +111,7 @@ if ($showAddToFavorite) {
                 </a>
             </li>
             <li class="social-pintrest">
-                <a class="st-custom-button" data-network="pinterest">
+                <a href="javascript:void(0)" class="st-custom-button" data-network="pinterest">
                     <i class="icn"><svg class="svg">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt"
                                 href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
@@ -122,7 +120,7 @@ if ($showAddToFavorite) {
                 </a>
             </li>
             <li class="social-email">
-                <a class="st-custom-button" data-network="email">
+                <a href="javascript:void(0)" class="st-custom-button" data-network="email">
                     <i class="icn"><svg class="svg">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope"
                                 href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">

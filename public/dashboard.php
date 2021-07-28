@@ -6,7 +6,6 @@ define('HTTP_YOKART', preg_replace('~/[^/]*/([^/]*)$~', '/\1', HTTP_YOKART_PUBLI
 if (is_file('settings.php')) {
     require_once('settings.php');
 }
-
 require_once dirname(__DIR__) . '/conf/conf-dashboard.php';
 
 require_once dirname(__FILE__) . '/application-top.php';

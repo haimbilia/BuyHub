@@ -152,6 +152,12 @@ Updates/Fixes :
 ================TV-9.3.2.20210726===================
     => 056373 - if admin shipping is enabled then even seller is credited with shipping amount
     => 056221 - seller> inventory> badges and ribbon collectively not working in filter
+===============TV-9.3.2.20210728====================
+    => 056264 - Shop details >> If "use manual shipping rates" checkbox is not checked then "postal code" should be mandatory
+    => 056246 - Catalog -> Shipping options
+    => 056265 - Admin >> General settings >> local > postal code and address should be mandatory as it requires when we use shipping API
+    => 056337 - getting notices on checkout screen when multiple items are there in cart
+    => 056340 - label generation option is coming on order when order is marked as completed
 
 New Features:  
     => Admin shipped products listing page

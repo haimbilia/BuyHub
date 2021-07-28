@@ -76,6 +76,8 @@
 
 .responsive-table {
     max-height: 400px;
+    border: $border;
+    border-radius: $radius4;
     overflow-y: auto;
     >li {
         font-size: 0.8rem;
@@ -84,7 +86,6 @@
         display: flex;
         //align-items: center;
         justify-content: space-between;
-        margin-bottom: 20px;
         @include media-breakpoint-down(md) {
             display: block;
         }
@@ -104,14 +105,13 @@
         background-color: $bg-white;
         color: $bg-white-inverse;
         //box-shadow: $shadow1;
-        border-radius: $radius4;
-        border: $border;
-        //border: $border;
+        //border-radius: $radius4;
+        border-bottom: $border;
         color: $txt-gray;
         position: relative;
         overflow: hidden;
         &:last-child {
-            //border-bottom: none;
+            border-bottom: none;
         }
         &.is-active {
             border-#{$start-direction}-color: $brand-color;

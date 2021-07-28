@@ -39,12 +39,19 @@
 }
 
 .favourite-wrapper {
-    a {
-        color: $txt-gray;
-        &.is-active {
-            border-color: $brand-color;
-            background: $brand-color;
-            color: $brand-color-inverse;
+    .actions {
+        li {
+            a {
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                color: $txt-gray;
+                &.is-active {
+                    border-color: $brand-color;
+                    background: $brand-color;
+                    color: $brand-color-inverse;
+                }
+            }
         }
     }
 }
@@ -607,8 +614,7 @@
 
 .shop-btn-group {
     max-width: 350px;
-    .btn,
-    .share-icon {
+    a.btn {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -620,23 +626,22 @@
         min-width: 1%;
         background-color: #fff !important;
         border: $border !important;
-    }
-    .btn {
+        color: $txt-gray;
         .icn {
             svg {
                 width: 18px;
                 height: 18px;
-                fill: $brand-color;
             }
         }
         &.is-active {
             background: $brand-color !important;
+            color: $brand-color-inverse !important;
             border-color: $brand-color !important;
-            .icn {
-                svg {
-                    fill: #fff;
-                }
-            }
+        }
+        &:hover {
+            background: $brand-color !important;
+            color: $brand-color-inverse !important;
+            border-color: $brand-color !important;
         }
     }
     .share-icon {
