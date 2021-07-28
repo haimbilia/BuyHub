@@ -158,6 +158,7 @@ Updates/Fixes :
     => 056265 - Admin >> General settings >> local > postal code and address should be mandatory as it requires when we use shipping API
     => 056337 - getting notices on checkout screen when multiple items are there in cart
     => 056340 - label generation option is coming on order when order is marked as completed
+    => 056344 - on moving item to wish list from cart getting 404 
 
 New Features:  
     => Admin shipped products listing page

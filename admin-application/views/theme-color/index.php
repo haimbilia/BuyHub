@@ -8,8 +8,8 @@ $fld->addFieldTagAttribute('onclick', 'resetToDefault();');
 $googleFontFamily = "Poppins";
 
 $googleFontFamilyUrl = FatApp::getConfig('CONF_THEME_FONT_FAMILY_URL', FatUtility::VAR_STRING, '');
-$themeColor = FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "#FF3A59");
-$themeColorInverse = FatApp::getConfig('CONF_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, "#FFFFFF");
+$themeColor = FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "rgb(255 58 89)");
+$themeColorInverse = FatApp::getConfig('CONF_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, "rgb(255,255,255)");
 if (!empty($googleFontFamilyUrl)) {
     $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
     $googleFontFamily = str_replace("+", " ", explode('-', $googleFontFamily)[0]);
