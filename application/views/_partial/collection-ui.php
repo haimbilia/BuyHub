@@ -17,6 +17,7 @@ if ($showAddToFavorite) {
         $ribSelProdId = $product['selprod_id'];
         $ribProdId = $product['product_id'];
         $ribShopId = $product['shop_id'];
+        $isFront = true;
         include (CONF_THEME_PATH . '_partial/get-ribbon.php');
     } ?>
 
@@ -107,17 +108,15 @@ if ($showAddToFavorite) {
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><?php echo Labels::getLabel('Lbl_Share', $siteLangId); ?></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                <div class="modal-body"> <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                </div>
-                <div class="modal-body">
-                    <div class="">
+                    <div class="share-wrap">
+                        <h6><?php echo Labels::getLabel('Lbl_Share_this_via', $siteLangId); ?></h6>
                         <ul class="social-sharing">
                             <li class="social-facebook">
-                                <a class="st-custom-button" data-network="facebook"
+                                <a href="javascript:void(0)" class="st-custom-button" data-network="facebook"
                                     data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id'])); ?>/">
                                     <i class="icn"><svg class="svg">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb"
@@ -127,7 +126,7 @@ if ($showAddToFavorite) {
                                 </a>
                             </li>
                             <li class="social-twitter">
-                                <a class="st-custom-button" data-network="twitter">
+                                <a href="javascript:void(0)" class="st-custom-button" data-network="twitter">
                                     <i class="icn"><svg class="svg">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw"
                                                 href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
@@ -136,7 +135,7 @@ if ($showAddToFavorite) {
                                 </a>
                             </li>
                             <li class="social-pintrest">
-                                <a class="st-custom-button" data-network="pinterest">
+                                <a href="javascript:void(0)" class="st-custom-button" data-network="pinterest">
                                     <i class="icn"><svg class="svg">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt"
                                                 href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
@@ -145,7 +144,7 @@ if ($showAddToFavorite) {
                                 </a>
                             </li>
                             <li class="social-email">
-                                <a class="st-custom-button" data-network="email">
+                                <a href="javascript:void(0)" class="st-custom-button" data-network="email">
                                     <i class="icn"><svg class="svg">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope"
                                                 href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
@@ -155,6 +154,15 @@ if ($showAddToFavorite) {
                                 </a>
                             </li>
                         </ul>
+                        <div class="gap"></div>
+                        <h6>Or copy link</h6>
+                        <div class="clipboard">
+                            <span
+                                class="clipboard_url">https://dribbble.com/shots/8230931-Game-Share-Modal-w-Color</span>
+                            <a class="clipboard_btn" href=""><i class="far fa-copy"></i></a>
+
+
+                        </div>
                     </div>
                 </div>
             </div>

@@ -51,7 +51,8 @@
                     <div class="dropdown-menu dropdown-menu-anim">
                         <ul class="social-sharing">
                             <li class="social-facebook">
-                                <a class="social-link st-custom-button" data-network="facebook"
+                                <a href="javascript:void(0)" class="social-link st-custom-button"
+                                    data-network="facebook"
                                     data-url="<?php echo UrlHelper::generateFullUrl('Shops', 'view', array($shop['shop_id'])); ?>/">
                                     <i class="icn"><svg class="svg">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb"
@@ -60,7 +61,8 @@
                                 </a>
                             </li>
                             <li class="social-twitter">
-                                <a class="social-link st-custom-button" data-network="twitter">
+                                <a href="javascript:void(0)" class="social-link st-custom-button"
+                                    data-network="twitter">
                                     <i class="icn"><svg class="svg">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw"
                                                 href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw"></use>
@@ -68,7 +70,8 @@
                                 </a>
                             </li>
                             <li class="social-pintrest">
-                                <a class="social-link st-custom-button" data-network="pinterest">
+                                <a href="javascript:void(0)" class="social-link st-custom-button"
+                                    data-network="pinterest">
                                     <i class="icn"><svg class="svg">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt"
                                                 href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt"></use>
@@ -76,7 +79,7 @@
                                 </a>
                             </li>
                             <li class="social-email">
-                                <a class="social-link st-custom-button" data-network="email">
+                                <a href="javascript:void(0)" class="social-link st-custom-button" data-network="email">
                                     <i class="icn"><svg class="svg">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope"
                                                 href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">

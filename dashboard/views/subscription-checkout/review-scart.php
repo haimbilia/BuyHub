@@ -4,57 +4,61 @@ $cartTotal = isset($scartSummary['cartTotal']) ? $scartSummary['cartTotal'] : 0;
 $cartAdjustableAmount = isset($scartSummary['cartAdjustableAmount']) ? $scartSummary['cartAdjustableAmount'] : 0;
 $discountTotal = isset($scartSummary['cartDiscounts']) && isset($scartSummary['cartDiscounts']['coupon_discount_total']) ? $scartSummary['cartDiscounts']['coupon_discount_total'] : 0;
 ?>
-<div class="main">
-    <main class="main__content">
+<div class="checkout-page">
+    <main class="main">
         <div class="step active">
             <div class="step_section">
                 <div class="step_head">
-                    <?php echo Labels::getLabel('LBL_Review_Order', $siteLangId); ?></div>
-                <?php if (count($subscriptions)) { ?>
-                <ul class="list-cart list-cart-page list-shippings">
-                    <?php foreach ($subscriptions as $subscription) { ?>
-                    <li>
-                        <div class="product-profile">
-                            <div class="product-profile__data">
-                                <div class="title">
-                                    <?php
+                    <?php echo Labels::getLabel('LBL_Review_Order', $siteLangId); ?>
+                </div>
+                <div class="step_body">
+                    <?php if (count($subscriptions)) { ?>
+                    <ul class="list-cart list-cart-page list-shippings">
+                        <?php foreach ($subscriptions as $subscription) { ?>
+                        <li>
+                            <div class="product-profile">
+                                <div class="product-profile__data">
+                                    <div class="title">
+                                        <?php
                                             $spackageName = isset($subscription['spackage_name']) ? $subscription['spackage_name'] : '';
                                             $spackagePrice = isset($subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price']) ? $subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price'] : '';
                                             $interval = isset($subscription[SellerPackagePlans::DB_TBL_PREFIX . 'trial_interval']) ? $subscription[SellerPackagePlans::DB_TBL_PREFIX . 'trial_interval'] : 0;
                                             echo  $spackageName; ?>
-                                </div>
-                                <div class="options">
-                                    <p class="">
-                                        <?php echo SellerPackagePlans::getPlanPeriod($subscription, $spackagePrice); ?>
-                                    </p>
-                                </div>
+                                    </div>
+                                    <div class="options">
+                                        <p class="">
+                                            <?php echo SellerPackagePlans::getPlanPeriod($subscription, $spackagePrice); ?>
+                                        </p>
+                                    </div>
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="wrap-qty-price">
-                            <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($spackagePrice); ?>
+                            <div class="wrap-qty-price">
+                                <div class="product-price">
+                                    <?php echo CommonHelper::displayMoneyFormat($spackagePrice); ?>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="product-action">
-                            <ul class="list-actions">
-                                <li>
-                                    <a href="javascript::void(0)"
-                                        onclick="subscription.remove('<?php echo md5($subscription['key']); ?>')"
-                                        title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                        <svg class="svg" width="24px" height="24px">
-                                            <use xlink:href="/yokart/images/retina/sprite.svg#remove"
-                                                href="/yokart/images/retina/sprite.svg#remove">
-                                            </use>
-                                        </svg>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <?php } ?>
-                </ul>
-                <div class="step__footer">
+                            <div class="product-action">
+                                <ul class="list-actions">
+                                    <li>
+                                        <a href="javascript::void(0)"
+                                            onclick="subscription.remove('<?php echo md5($subscription['key']); ?>')"
+                                            title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                            <svg class="svg" width="24px" height="24px">
+                                                <use xlink:href="/yokart/images/retina/sprite.svg#remove"
+                                                    href="/yokart/images/retina/sprite.svg#remove">
+                                                </use>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <?php } ?>
+                    </ul>
+                </div>
+                <div class="step_foot">
                     <?php
                         $amount = CommonHelper::displayMoneyFormat($cartTotal - $cartAdjustableAmount - $discountTotal, true, false, true, false, true);
                         if ($amount > 0) {
@@ -69,10 +73,11 @@ $discountTotal = isset($scartSummary['cartDiscounts']) && isset($scartSummary['c
             </div>
         </div>
     </main>
+
+    <aside class="sidebar" data-close-on-click-outside=" ">
+        <div class="sidebar__content">
+            <div id="order-summary" class="order-summary summary-listing-js"></div>
+            <?php //echo FatUtility::decodeHtmlEntities($pageData['epage_content']); ?>
+        </div>
+    </aside>
 </div>
-<aside class="sidebar" data-close-on-click-outside=" ">
-    <div class="sidebar__content">
-        <div id="order-summary" class="order-summary summary-listing-js"></div>
-        <?php //echo FatUtility::decodeHtmlEntities($pageData['epage_content']); ?>
-    </div>
-</aside>

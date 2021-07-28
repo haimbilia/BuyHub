@@ -1,8 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
+$viewDirPath = isset($isFront) ? CONF_VIEW_DIR_PATH : CONF_FRONT_END_THEME_PATH;
+
 $html = "";
 if (isset($ribbRow) && !empty($ribbRow)) {
-    include CONF_FRONT_END_THEME_PATH . '_partial/ribbon-ui.php';
+    include $viewDirPath . '_partial/ribbon-ui.php';
 } else {
     $ribSelProdId = isset($ribSelProdId) ? $ribSelProdId : 0;
     $ribProdId = isset($ribProdId) ? $ribProdId : 0;
@@ -16,7 +18,7 @@ if (isset($ribbRow) && !empty($ribbRow)) {
     if (is_array($ribbonDetail) && !empty($ribbonDetail)) {
         foreach ($ribbonDetail as $ribbRow) {
             $position = $ribbRow['blinkcond_position'];
-            include CONF_FRONT_END_THEME_PATH . '_partial/ribbon-ui.php';
+            include $viewDirPath . '_partial/ribbon-ui.php';
             $html .= $ribbon;
         }
         $ribbRow = '';

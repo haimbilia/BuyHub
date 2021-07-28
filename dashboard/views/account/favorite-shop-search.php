@@ -1,7 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="featured">
     <?php if ($shops) { ?>
-    <?php foreach ($shops as $shop) { ?>
+    <?php foreach ($shops as $shop) { 
+    $uploadedTime = AttachedFile::setTimeParam($shop['shop_updated_on']);
+    ?>
     <div class="featured-item">
         <div class="featured-item__body">
             <div class="favourite-wrapper">
@@ -13,7 +15,7 @@
                 </div>
             </div>
             <div class="featured_logo"><img
-                    src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, "THUMB", 0, false), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg'); ?>"
+                    src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, "THUMB", 0, false), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>"
                     alt="<?php echo $shop['shop_name']; ?>"></div>
             <div class="featured_detail">
                 <div class="featured_name"><a

@@ -423,3 +423,23 @@ form.custom-form {
     padding-#{$start-direction}: 36px;
     font-size: 0.8rem;
 }
+
+.clipboard {
+    background: $bg-gray;
+    border-radius: 6px;
+    display: flex;
+    font-size: 0.8rem;
+    padding: 1rem;
+    &_url {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
+        color: $txt-body;
+        padding-#{$end-direction}: 1rem;
+    }
+    &_btn {
+        font-size: 1.2rem;
+    }
+}

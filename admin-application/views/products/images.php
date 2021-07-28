@@ -23,10 +23,11 @@ $(function() {
 	<ul class="grids--onefifth ui-sortable" id="<?php if($canEdit){ ?>sortable<?php } ?>">
 	<?php 
 		$count=1;
-		foreach( $images as $afile_id => $row ){ ?>
+		foreach( $images as $afile_id => $row ){ 
+			$uploadedTime = AttachedFile::setTimeParam($row['afile_updated_at']);?>
 		<li id="<?php echo $row['afile_id']; ?>">
 		  <div class="logoWrap">
-			<div class="logothumb"> <img src="<?php echo UrlHelper::generateUrl('image','product', array($row['afile_record_id'], "THUMB",$row['afile_id']),CONF_WEBROOT_URL); ?>" title="<?php echo $row['afile_name'];?>" alt="<?php echo $row['afile_name'];?>"> <?php echo ( $count == 1 ) ? '<small><strong>'.Labels::getLabel('LBL_Default_Image',$adminLangId).'</strong></small>' : '&nbsp;'; if($canEdit){ ?> <a class="deleteLink white" href="javascript:void(0);" title="Delete <?php echo $row['afile_name'];?>" onclick="deleteImage(<?php echo $row['afile_record_id']; ?>, <?php echo $row['afile_id']; ?>);" class="delete"><i class="ion-close-round"></i></a>
+			<div class="logothumb"> <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateUrl('image','product', array($row['afile_record_id'], "THUMB",$row['afile_id']),CONF_WEBROOT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" title="<?php echo $row['afile_name'];?>" alt="<?php echo $row['afile_name'];?>"> <?php echo ( $count == 1 ) ? '<small><strong>'.Labels::getLabel('LBL_Default_Image',$adminLangId).'</strong></small>' : '&nbsp;'; if($canEdit){ ?> <a class="deleteLink white" href="javascript:void(0);" title="Delete <?php echo $row['afile_name'];?>" onclick="deleteImage(<?php echo $row['afile_record_id']; ?>, <?php echo $row['afile_id']; ?>);" class="delete"><i class="ion-close-round"></i></a>
 			  <?php } ?>
 			</div>
 			<?php if(isset($imgTypesArr) && !empty($imgTypesArr[$row['afile_record_subid']])){
