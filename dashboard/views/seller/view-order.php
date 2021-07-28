@@ -73,7 +73,6 @@ $daysSpent = round($datediff / (60 * 60 * 24));
                             <?php
                             if ($orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && $shippedBySeller && is_object($shippingApiObj) && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status']) && false === OrderCancelRequest::getCancelRequestById($orderDetail['op_id'])) {
                                     $opId = $orderDetail['op_id'];
-                                    $allowedForPlugin = in_array($shippingApiObj->keyName, ['EasyPost', 'Aramex']);
                                     if (1 < $orderDetail['opshipping_rate_id'] && ( empty($orderDetail['opshipping_plugin_id']) || ( $shippingApiObj->getKey('plugin_id') != $orderDetail['opshipping_plugin_id'] && empty($orderDetail['opr_response'])))) {
                                         ?>
                                         <a href="javascript:void(0)" onclick="shippingRatesForm(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId); ?>"><i class="fas fa-file-invoice"></i></a>
@@ -81,7 +80,7 @@ $daysSpent = round($datediff / (60 * 60 * 24));
                                         <?php
                                     } else {
                                         if ($shippingApiObj->getKey('plugin_id') == $orderDetail['opshipping_plugin_id']) {
-                                            if (empty($orderDetail['opr_response']) && empty($orderDetail['opship_tracking_number']) && !$allowedForPlugin) {
+                                            if (empty($orderDetail['opr_response']) && empty($orderDetail['opship_tracking_number']) && true === $shippingApiObj->canGenerateLabelSeprately()) {
                                                 $orderId = $orderDetail['order_id'];
                                                 ?>
                                                 <a href="javascript:void(0)" onclick='generateLabel(<?php echo $opId; ?>)' class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId); ?>"><i class="fas fa-file-download"></i></a>
@@ -96,11 +95,14 @@ $daysSpent = round($datediff / (60 * 60 * 24));
                                                 <?php
                                             }
 
-                                            if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response']) || $allowedForPlugin) && empty($orderDetail['opship_order_number'])) {
-                                                if ('EasyPost' == $shippingApiObj->keyName) {
+                                            if (
+                                                (!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response'])) || 
+                                                (false === $shippingApiObj->canGenerateLabelSeprately() && empty($orderDetail['opship_order_number']))
+                                            ) {
+                                                if (true === $shippingApiObj->canGenerateLabelFromShipment()) {
                                                     $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $siteLangId);
                                                 } else {
-                                                    $label = Labels::getLabel('LBL_BUY_SHIPMENT_', $siteLangId);
+                                                    $label = Labels::getLabel('LBL_BUY_SHIPMENT', $siteLangId);
                                                 }
                                                 ?>
                                                 <a href="javascript:void(0)" onclick="proceedToShipment(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo $label; ?>"><i class="fas fa-shipping-fast"></i></a>

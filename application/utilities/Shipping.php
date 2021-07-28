@@ -260,7 +260,6 @@ class Shipping
      */
     private function fetchShippingRatesFromApi(array $shippingAddressDetail, array $productInfo, array &$physicalSelProdIdArr): bool
     {
-               
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);
         $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
 
@@ -279,6 +278,7 @@ class Shipping
             }
             
             $shippingApiObj = $this->getShippingApiObj(0 < $rates['shiippingBySeller'] ? $rates['selprod_user_id'] : 0 );
+            
             if(false === $shippingApiObj){
                 /* if api not enabled or any error in loading them fetch manual rates*/
                 $this->systemRatesToFetchSelprodIds[] = $rates['selprod_id'];

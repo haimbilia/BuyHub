@@ -144,9 +144,14 @@ class DummyController extends AdminBaseController
     {
         $plugin = PluginHelper::callPlugin('ShipRocket', [$this->adminLangId], $error, $this->adminLangId, false);
         $plugin->init();
-        $resp = $plugin->getAuthToken();
+        $plugin->proceedToShipment(['op_id' => 400]);
+        
+        /* $plugin->setAddress('Michael', '', '', '', '', '122002', '', '');
+        $plugin->setFromAddress('Michael', '', '', '', '', '110030', '', '');
+        $plugin->setWeight((10.0000096848 / 0.02834952));
+        $plugin->setDimensions('15.00', '15.00', '10.00', 'cm');
+        $resp = $plugin->getRates(); */
         echo $plugin->getError();
-        CommonHelper::printArray($resp);
-        CommonHelper::printArray($plugin->getResponse(), true);
+        CommonHelper::printArray($plugin->getResponse());
     }
 }
