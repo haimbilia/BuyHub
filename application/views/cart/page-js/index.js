@@ -113,7 +113,7 @@ $(document).ready(function(){
 			return false;
 		}
 
-		fcom.ajax(fcom.makeUrl('Account','moveToWishList', [selprod_id],siteConstants.webroot_dashboard),'',function( resp ){
+		fcom.ajax(fcom.makeUrl('Account','moveToWishList', [selprod_id], siteConstants.webroot_dashboard),'',function( resp ){
 			removeFromCart( key );
 		});
 	};
@@ -124,7 +124,7 @@ $(document).ready(function(){
 			return false;
 		}
 		$.mbsmessage.close();
-		fcom.updateWithAjax(fcom.makeUrl('Account', 'markAsFavorite', [selProdId],siteConstants.webroot_dashboard), '', function(ans) {
+		fcom.updateWithAjax(fcom.makeUrl('Account', 'markAsFavorite', [selProdId], siteConstants.webroot_dashboard), '', function(ans) {
 			if( ans.status ){
 				removeFromCart( key );
 			}
@@ -137,7 +137,7 @@ $(document).ready(function(){
 			return false;
 		}
 		$.mbsmessage.close();
-		fcom.updateWithAjax(fcom.makeUrl('Account', 'moveToSaveForLater', [selProdId],siteConstants.webroot_dashboard), '', function(ans) {
+		fcom.updateWithAjax(fcom.makeUrl('Account', 'moveToSaveForLater', [selProdId], siteConstants.webroot_dashboard), '', function(ans) {
 			if( ans.status ){
 				listCartProducts(fulfilmentType);
 				$.mbsmessage(langLbl.MovedSuccessfully, true, 'alert--success');

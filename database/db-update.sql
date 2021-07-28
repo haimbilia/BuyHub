@@ -858,6 +858,6 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 -- -------------TV-9.3.2.20210726---------------------
 ALTER TABLE `tbl_collections` CHANGE `collection_img_updated_on` `collection_updated_on` DATETIME on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
-
+-- ------------TV-9.3.2.20210727---------------
 UPDATE `tbl_configurations` SET `conf_val` = 'rgb(255,255,255)' WHERE `tbl_configurations`.`conf_name` = 'CONF_THEME_COLOR_INVERSE';
 UPDATE `tbl_configurations` SET `conf_val` = 'rgb(255 58 89)' WHERE `tbl_configurations`.`conf_name` = 'CONF_THEME_COLOR';

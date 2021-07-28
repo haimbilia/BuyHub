@@ -72,7 +72,7 @@
     border: $border;
     border-radius: $radius4;
     background-color: $bg-white;
-    li {
+    >li {
         display: flex;
         justify-content: space-between;
         padding: 1rem;

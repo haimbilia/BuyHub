@@ -170,7 +170,6 @@
                 </div>
             </div>
             <div class="cell cell_qty">
-
                 <div class="product-quantity">
                     <div class="quantity quantity-2" data-stock="<?php echo $product['selprod_stock']; ?>">
                         <span
@@ -198,20 +197,23 @@
                         </span>
                     </div>
                 </div>
-
-
             </div>
             <div class="cell cell_price">
                 <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
             </div>
             <div class="cell cell_action">
-                <a href="javascript:void(0)" onclick="cart.remove('<?php echo md5($product['key']); ?>','cart')">
-                    <svg class="svg" width="20px" height="20px"
-                        title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
-                        </use>
-                    </svg>
-                </a>
+                <ul class="actions">
+                    <li>
+                        <a href="javascript:void(0)"
+                            onclick="cart.remove('<?php echo md5($product['key']); ?>','cart')">
+                            <svg class="svg" width="20px" height="20px"
+                                title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                                </use>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </li>
         <?php } ?>
@@ -262,15 +264,19 @@
                 <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
             </div>
             <div class="cell cell_action">
-                <a href="javascript:void(0)"
-                    onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event)"><svg
-                        class="svg" width="20px" height="20px"
-                        title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove"
-                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
-                        </use>
-                    </svg>
-                </a>
+                <ul class="actions">
+                    <li>
+                        <a href="javascript:void(0)"
+                            onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event)"><svg
+                                class="svg" width="20px" height="20px"
+                                title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove"
+                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                                </use>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </li>
         <?php } ?>

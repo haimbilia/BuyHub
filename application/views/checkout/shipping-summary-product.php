@@ -101,12 +101,15 @@ $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product
             </div>
         </div>
         <div class="cell cell_action">
-            <a href="#" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
-                <svg class="svg" width="20px" height="20px">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
-                    </use>
-                </svg>
-            </a>
+            <ul class="actions">
+                <li> <a href="#" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
+                        <svg class="svg" width="20px" height="20px">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                            </use>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
         </div>
     </li>
 </ul>

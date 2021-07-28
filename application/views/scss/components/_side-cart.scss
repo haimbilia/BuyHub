@@ -42,7 +42,7 @@
         overflow-y: auto;
         .list-cart {
             border: none;
-            li {
+            >li {
                 padding-#{$end-direction}: 0;
             }
         }

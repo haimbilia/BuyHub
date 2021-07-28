@@ -80,6 +80,7 @@ $(document).ready(function(){
             if (0 < updateToDbFrm) {
                 $(lastFormElement + " input[name='user_phone']").attr('readonly', 'readonly');
             }
+            
             $(lastFormElement).after(t.html);
             $(".otpForm-js .form-side").removeClass('form-side');
             $('.formTitle-js').remove();
@@ -92,6 +93,8 @@ $(document).ready(function(){
                 resendFunction = 'resendOtp("' + phoneNumber + '", "' + dialCode + '")';
             }
             $(resendOtpElement).removeAttr('onclick').attr('onclick', resendFunction);
+            $(lastFormElement + " .countdownFld--js, " + lastFormElement + " .resendOtp-js").parent().removeClass("d-none");
+            $(lastFormElement + ".otpFieldBlock--js," + lastFormElement + " .countdownFld--js").removeClass("d-none");
             startOtpInterval();
         });
         return false;
@@ -129,7 +132,7 @@ $(document).ready(function(){
                 $.systemMessage.close();
                 $(phoneNumberdv + " .otpForm-js").remove();
                 var lastFormElement = phoneNumberdv + ' form:last';
-                $(lastFormElement).html(t.html);
+                $(lastFormElement).after(t.html);
                 stylePhoneNumberFld();
             } else {
                 $.systemMessage(t.msg,'alert--success', true);
