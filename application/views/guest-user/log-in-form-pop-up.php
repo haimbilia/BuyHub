@@ -35,7 +35,7 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Sign_In', $siteLangId); ?></h5>
 </div>
 <div class="modal-body">
-    <div class="loginpopup--js">
+    <div class="login-popup loginpopup--js">
         <?php
         $fldSubmit = $loginFrm->getField('btn_submit');
         $fldSubmit->addFieldTagAttribute('class', 'btn btn-brand btn-wide btn-block');

@@ -26,13 +26,15 @@
                     <?php } ?>
                 </span>
                 <div class="cell cell_action">
-                    <a href="javascript:void(0);" onClick="removeShippedOnlyProducts();"><svg class="svg" width="20px"
-                            height="20px">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove"
-                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
-                            </use>
-                        </svg>
-                    </a>
+                    <ul class="actions">
+                        <li> <a href="javascript:void(0);" onClick="removeShippedOnlyProducts();"><svg class="svg"
+                                    width="20px" height="20px">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove"
+                                        href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                                    </use>
+                                </svg>
+                            </a></li>
+                    </ul>
 
                 </div>
             </div>
@@ -80,7 +82,6 @@
             <div class="cell cell_action">
                 <button class="btn-saveforlater" type="button"
                     onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_PICKUP; ?> );">
-
                     <i class="icn">
                         <svg class="svg" width="20px" height="20px"
                             title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
@@ -203,14 +204,19 @@
                 <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
             </div>
             <div class="cell cell_action">
-                <a href="javascript:void(0)" onclick="cart.remove('<?php echo md5($product['key']); ?>','cart')">
+                <ul class="actions">
+                    <li>
+                        <a href="javascript:void(0)"
+                            onclick="cart.remove('<?php echo md5($product['key']); ?>','cart')">
 
-                    <svg class="svg" width="20px" height="20px"
-                        title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
-                        </use>
-                    </svg>
-                </a>
+                            <svg class="svg" width="20px" height="20px"
+                                title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                                </use>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </li>
         <?php } ?>
@@ -262,15 +268,19 @@
                 <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
             </div>
             <div class="cell cell_action">
-                <a href="javascript:void(0)"
-                    onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event)"><svg
-                        class="svg" width="20px" height="20px"
-                        title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove"
-                            href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
-                        </use>
-                    </svg>
-                </a>
+                <ul class="actions">
+                    <li>
+                        <a href="javascript:void(0)"
+                            onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event)"><svg
+                                class="svg" width="20px" height="20px"
+                                title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove"
+                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                                </use>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </li>
         <?php } ?>
