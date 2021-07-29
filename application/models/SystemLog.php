@@ -16,22 +16,30 @@ class SystemLog extends MyAppModel
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $logId);
     }
-
-    public static function getModuleTypes(): array
+    
+    public static function getSearchObject($isActive = true)
     {
+        $srch = new SearchBase(static::DB_TBL, 'sylog');
+        return $srch;
+    }
+    
+    public static function getModuleTypes(): array
+    {   
+        $langId = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
         return [
-            self::MODULE_TYPE_SYSTEM,
-            self::MODULE_TYPE_TRANSACTION,
-            self::MODULE_TYPE_PLUGIN,
+            self::MODULE_TYPE_SYSTEM =>Labels::getLabel('MSG_System', $langId),
+            self::MODULE_TYPE_TRANSACTION =>Labels::getLabel('MSG_Transaction', $langId),
+            self::MODULE_TYPE_PLUGIN =>Labels::getLabel('MSG_Plugin', $langId),
         ];
     }
 
     public static function getTypes(): array
-    {
+    {   
+        $langId = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
         return [
-            self::TYPE_ERROR,
-            self::TYPE_INFO,
-            self::TYPE_SUCCESS,            
+            self::TYPE_ERROR =>Labels::getLabel('MSG_Error', $langId),
+            self::TYPE_INFO =>Labels::getLabel('MSG_Info', $langId),
+            self::TYPE_SUCCESS =>Labels::getLabel('MSG_Success', $langId),            
         ];
     }
 

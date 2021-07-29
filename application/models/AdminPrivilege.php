@@ -126,6 +126,7 @@ class AdminPrivilege
     public const SECTION_BADGES = 120;
     public const SECTION_BADGE_LINKS = 121;
     public const SECTION_BADGE_REQUESTS = 122;
+    public const SECTION_SYSTEMLOG = 123;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -1627,4 +1628,10 @@ class AdminPrivilege
     {
         return $this->checkPermission($adminId, static::SECTION_BADGE_REQUESTS, static::PRIVILEGE_WRITE, $returnResult);
     }
+    
+    public function canViewSystemLog($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SYSTEMLOG, static::PRIVILEGE_READ, $returnResult);
+    }
+    
 }
