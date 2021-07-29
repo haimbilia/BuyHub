@@ -30,6 +30,7 @@
         }
         &.not-allowed {
             background: none;
+            opacity: 0.5;
         }
     }
     input {
@@ -48,9 +49,10 @@
         border: none;
         span {
             width: 24px;
+            height: 24px;
             flex: 0 0 24px;
             max-width: 24px;
-            // background-color: $bg-gray;
+            background-color: $bg-gray;
             border-radius: $radius4;
         }
     }

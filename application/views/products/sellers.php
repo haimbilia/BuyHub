@@ -6,7 +6,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0))
 }
 ?>
 <div id="body" class="body">
-    <div class="bg-second pt-3 pb-3">
+    <div class="bg-brand-light pt-3 pb-3">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-8">

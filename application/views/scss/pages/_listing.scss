@@ -100,16 +100,19 @@
                 }
             }
             .page-views {
-                padding: 10px;
-                border-radius: 3px;
-                background-color: $bg-gray;
-                color: $txt-gray;
-                .active {
+                a {
+                    padding: 10px;
+                    border-radius: 3px;
+                    background: $bg-brand-light;
                     color: $brand-color;
-                }
-                .svg {
-                    width: 18px;
-                    height: 18px;
+                    &.active {
+                        background: $brand-color;
+                        color: $brand-color-inverse;
+                    }
+                    .svg {
+                        width: 18px;
+                        height: 18px;
+                    }
                 }
             }
         }
