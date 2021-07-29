@@ -175,10 +175,6 @@
      &:hover {
          text-decoration: none;
          background-size: 100% 1px;
-         &:after {
-             transform: scaleX(0);
-             transform-origin: bottom right;
-         }
      }
  }
  

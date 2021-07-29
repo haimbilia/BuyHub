@@ -703,51 +703,17 @@
                 white-space: nowrap;
                 line-height: 1;
                 font-weight: 400;
-                &:after,
-                &:before {
-                    content: "";
-                    background: transparent;
-                    height: 2px;
-                    width: 0;
-                    position: absolute;
-                    bottom: 0;
-                    -webkit-transition: 0.4s all ease;
-                    transition: 0.4s all ease;
-                }
-                &:before {
-                    #{$end-direction}: 50%;
-                }
-                &:after {
-                    #{$start-direction}: 50%;
-                }
+                text-rendering: optimizeLegibility;
+                transition: color 0.3s ease-in-out;
+                background-image: linear-gradient(currentColor, currentColor);
+                background-position: 50% 100%;
+                background-repeat: no-repeat;
+                background-size: 0% 2px;
+                transition: background-size 0.3s;
+                &:hover,
                 &.is-active {
+                    background-size: 100% 2px;
                     color: $brand-color;
-                    &:after {
-                        #{$start-direction}: 0;
-                        width: 50%;
-                        background: $brand-color;
-                        color: $brand-color-inverse;
-                    }
-                    &:before {
-                        #{$end-direction}: 0;
-                        width: 50%;
-                        background: $brand-color;
-                        color: $brand-color-inverse;
-                    }
-                }
-                &:hover {
-                    &:after {
-                        #{$start-direction}: 0;
-                        width: 50%;
-                        background: $brand-color;
-                        color: $brand-color-inverse;
-                    }
-                    &:before {
-                        #{$end-direction}: 0;
-                        width: 50%;
-                        background: $brand-color;
-                        color: $brand-color-inverse;
-                    }
                 }
             }
         }

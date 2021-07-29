@@ -117,7 +117,6 @@
                         top: 0;
                         background-color: $brand-color;
                         opacity: 0;
-                        -webkit-transition: all 0.5s ease-in-out;
                         transition: all 0.5s ease-in-out;
                     }
                     .menu-head {
@@ -131,7 +130,6 @@
                         opacity: 0;
                         visibility: hidden;
                         display: none;
-                        -webkit-transition: all 0.7s ease-in-out;
                         transition: all 0.7s ease-in-out;
                         margin-top: 10px;
                     }
@@ -143,7 +141,6 @@
                         font-size: 0.8125rem;
                         #{$start-direction}: 220px;
                         opacity: 0;
-                        -webkit-transition: all 0.7s ease-in-out;
                         transition: all 0.7s ease-in-out;
                         display: flex;
                         justify-content: space-between;
@@ -163,7 +160,7 @@
                     }
                 }
                 &.is-active {
-                    background: rgba(0, 0, 0, 00.05);
+                    background: $bg-brand-light;
                     color: $brand-color;
                     fill: $brand-color;
                 }
