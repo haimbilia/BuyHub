@@ -160,6 +160,7 @@ Updates/Fixes :
     => 056340 - label generation option is coming on order when order is marked as completed
     => 056344 - on moving item to wish list from cart getting 404 
     => 056509 - Unable to change phone number if SMS plugin on
+    => 056427 - after registration through phone number and configuring details post login page is flooded with errors
 
 New Features:  
     => Admin shipped products listing page

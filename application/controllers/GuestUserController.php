@@ -520,7 +520,7 @@ class GuestUserController extends MyAppController
             $token = $record['uprr_token'];
             $redirectUrl = UrlHelper::generateFullUrl('GuestUser', 'resetPassword', array($userId, $token));
         } else {
-            $redirectUrl = isset($_SESSION['referer_page_url']) ? $_SESSION['referer_page_url'] : UrlHelper::generateUrl('Account');
+            $redirectUrl = isset($_SESSION['referer_page_url']) ? $_SESSION['referer_page_url'] : UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD);
         }
         unset($_SESSION[UserAuthentication::TEMP_SESSION_ELEMENT_NAME]);
         $this->set('redirectUrl', $redirectUrl);
@@ -1165,7 +1165,7 @@ class GuestUserController extends MyAppController
         $this->set('frm', $frm);
         $this->set('siteLangId', $this->siteLangId);
         $this->set('canSendSms', SmsArchive::canSendSms(SmsTemplate::LOGIN));
-        $this->_template->render(false, false, 'account/change-email-form.php');
+        $this->_template->render(false, false, 'guest-user/change-email-form.php');
     }
 
     public function configurePhoneForm()
@@ -1174,7 +1174,7 @@ class GuestUserController extends MyAppController
         $this->set('frm', $frm);
         $this->set('updatePhnFrm', applicationConstants::YES);
         $this->set('siteLangId', $this->siteLangId);
-        $this->_template->render(false, false, 'account/change-phone-form.php');
+        $this->_template->render(false, false, 'guest-user/change-phone-form.php');
     }
 
     public function updateEmail()
