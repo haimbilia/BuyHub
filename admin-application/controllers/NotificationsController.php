@@ -39,7 +39,6 @@ class NotificationsController extends AdminBaseController
 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-
         $this->set('labelArr', Notification::getLabelKeyString($this->adminLangId));
         $this->set('arrListing', $records);
         $this->set('pageCount', $srch->pages());

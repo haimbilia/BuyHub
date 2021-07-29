@@ -164,6 +164,7 @@ Updates/Fixes :
     => 056414 - Admin >> users >> for sub sellers >> edit >> bank account and address tabs are getting displayed only when we click on "cookies " tab
     => 056413 - Checkout (pickup ) >> when we select slot then "undefined " gets displayed on selected time and date
     => 056412 - Checkout (pickup ) >> when we select slot then popup should get closed.
+    => 056410 - admin >> notifications for shop report > when we click on report notification then admin gets redirect to report reasons instead of report listing
 
 New Features:  
     => Admin shipped products listing page
