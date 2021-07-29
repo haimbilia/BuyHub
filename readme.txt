@@ -161,6 +161,7 @@ Updates/Fixes :
     => 056344 - on moving item to wish list from cart getting 404 
     => 056509 - Unable to change phone number if SMS plugin on
     => 056427 - after registration through phone number and configuring details post login page is flooded with errors
+    => 056414 - Admin >> users >> for sub sellers >> edit >> bank account and address tabs are getting displayed only when we click on "cookies " tab
 
 New Features:  
     => Admin shipped products listing page
