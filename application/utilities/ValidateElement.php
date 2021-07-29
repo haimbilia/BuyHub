@@ -107,7 +107,7 @@ class ValidateElement extends FatUtility
         return $result;
     }
 
-    public static function formatDialCode(string $dialCode): string
+    public static function formatDialCode($dialCode)
     {
         return (false !== strpos($dialCode, '-') ? (explode('-', $dialCode))[0] : $dialCode);
     }
