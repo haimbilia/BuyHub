@@ -189,10 +189,14 @@ class OrderProductSearch extends SearchBase
         $this->joinTable(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, 'LEFT OUTER JOIN', 'optosu.optsu_op_id = op.op_id', 'optosu');
     }
 
-    public function joinShippingCharges()
+    public function joinShippingCharges(bool $joinShippingUser = false)
     {
         $this->isShippingChargesTblJoined = true;
-        $this->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
+        $this->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
+        if (true === $joinShippingUser) {
+            $this->joinTable(User::DB_TBL, 'LEFT JOIN', 'ops.opshipping_by_seller_user_id = shpu.user_id', 'shpu');
+            $this->addfld('shpu.user_name as ship_by');
+        }
     }
 
     public function joinAddress(int $langId = 0)
