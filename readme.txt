@@ -159,11 +159,12 @@ Updates/Fixes :
     => 056337 - getting notices on checkout screen when multiple items are there in cart
     => 056340 - label generation option is coming on order when order is marked as completed
     => 056344 - on moving item to wish list from cart getting 404 
+    => 056508 - on order cancellation requests error coming at admin side
 
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
-    => task-85619 Adding files when digital order is delivered   
+    => task-85619 Adding files when digital order is delivered  
 
 Enhancements :
    => At shop level  pickup interval option given
