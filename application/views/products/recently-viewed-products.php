@@ -7,7 +7,7 @@ if ($recentViewedProducts) {
 ?>
     <section class="section bg-gray">
         <div class="container">
-            <div class="section-head section--white--head section--head--center">
+            <div class="section-head section--head--center">
                 <div class="section__heading">
                     <h2><?php echo Labels::getLabel('LBL_Recently_Viewed', $siteLangId); ?>
                     </h2>

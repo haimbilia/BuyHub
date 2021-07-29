@@ -54,7 +54,7 @@ $pagination .=     FatUtility::getPageString(
 $ul = new HtmlElement(
     'ul',
     array(
-        'class' => 'pagination pagination--center',
+        'class' => 'pagination',
     ),
     $pagination,
     true

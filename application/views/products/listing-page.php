@@ -103,11 +103,11 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
 <?php } ?>
 
 <?php if (isset($pageTitle)) { ?>
-<section class="bg-second pt-3 pb-3">
+<section class="bg-brand-light pt-3 pb-3">
     <div class="container">
-        <div class="section-head section--white--head section--head--center mb-0">
+        <div class="section-head section--head--center mb-0">
             <div class="section__heading">
-                <h1 class="mb-0">
+                <h1>
                     <?php $keywordStr = '';
                         if (isset($keyword) && !empty($keyword)) {
                             $short_keyword = (mb_strlen($keyword) > 20) ? mb_substr($keyword, 0, 20) . "..." : $keyword;
@@ -115,7 +115,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                         }
                         echo $pageTitle; ?> <?php echo $keywordStr; ?></h1>
                 <?php if (isset($showBreadcrumb) && $showBreadcrumb) { ?>
-                <div class="breadcrumbs breadcrumbs--white breadcrumbs--center">
+                <div class="breadcrumbs breadcrumbs--center">
                     <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>
                 </div>
                 <?php } ?>
@@ -165,7 +165,6 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                     <?php } ?>
                                 </li>
                                 <li><?php echo $frmProductSearch->getFieldHtml('sortBy'); ?></li>
-                                <li><?php echo $frmProductSearch->getFieldHtml('pageSize'); ?></li>
                                 <li class="page-views">
                                     <a href="javascript:void(0);" data-vtype="grid"
                                         class="listing-view-toggle--js <?php echo $vtype == 'grid' ? 'active' : ''; ?>">
@@ -205,6 +204,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                 </li>
                                 <?php } ?>
                             </ul>
+                            <?php echo $frmProductSearch->getFieldHtml('pageSize'); ?>
                         </div>
                     </div>
                 </div>

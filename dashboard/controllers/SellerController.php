@@ -1,5 +1,7 @@
 <?php
 
+use PhpParser\Node\Stmt\Label;
+
 class SellerController extends SellerBaseController
 {
     // use Attributes;
@@ -200,7 +202,7 @@ class SellerController extends SellerBaseController
         $srch->joinSellerProducts();
         $srch->joinPaymentMethod();
         $srch->joinShippingUsers();
-        $srch->joinShippingCharges();
+        $srch->joinShippingCharges(true);
         $srch->addCountsOfOrderedProducts();
         $srch->joinOrderProductShipment();
         $srch->joinTable('(' . $qryOtherCharges . ')', 'LEFT OUTER JOIN', 'op.op_id = opcc.opcharge_op_id', 'opcc');
@@ -247,6 +249,11 @@ class SellerController extends SellerBaseController
             $srch->addMaxPriceCondition($priceTo);
         }
 
+        $shippedById = FatApp::getPostedData('opshipping_by_seller_user_id');
+        if ('' != $shippedById) {
+            $srch->addCondition('opshipping_by_seller_user_id', '=', $shippedById);
+        }
+
         $rs = $srch->getResultSet();
         $orders = FatApp::getDb()->fetchAll($rs);
 
@@ -273,6 +280,13 @@ class SellerController extends SellerBaseController
         $currencySymbol = ($currencyData['currency_symbol_left'] != '') ? $currencyData['currency_symbol_left'] : $currencyData['currency_symbol_right'];
         $frm = new Form('frmOrderSrch');
         $frm->addTextBox('', 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $langId)));
+
+        $vendors = [
+            0 => Labels::getLabel('LBL_ADMIN', $langId),
+            UserAuthentication::getLoggedUserId() => Labels::getLabel('LBL_ME', $langId),
+        ];
+        $frm->addSelectBox(Labels::getLabel('LBL_SHIPPPED_BY', $langId), 'opshipping_by_seller_user_id', $vendors, '', array('title' => Labels::getLabel('LBL_SHIPPED_BY', $langId)), Labels::getLabel('LBL_FULLFILED_BY', $langId));
+
         $frm->addSelectBox('', 'status', Orders::getOrderProductStatusArr($langId, unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS"))), '', array(), Labels::getLabel('LBL_Status', $langId));
         $frm->addTextBox('', 'price_from', '', array('placeholder' => Labels::getLabel('LBL_Price_Min', $langId) . ' [' . $currencySymbol . ']'));
         $frm->addTextBox('', 'price_to', '', array('placeholder' => Labels::getLabel('LBL_Price_Max', $langId) . ' [' . $currencySymbol . ']'));
@@ -533,6 +547,7 @@ class SellerController extends SellerBaseController
         $this->set('urlParts', $urlParts);
 
         $this->_template->addJs(array('js/jquery.datetimepicker.js'));
+        $this->_template->addCss(array('css/jquery.datetimepicker.css'), false);
         $this->_template->render(true, true);
     }
 

@@ -1,8 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<section class="section pt-0">
-	<div class="">
-		<div class="js-hero-slider hero-slider" dir="<?php echo CommonHelper::getLayoutDirection();?>">
-		<?php foreach($slides as $slide){
+<section class="">
+    <div class="">
+        <div class="js-hero-slider hero-slider" dir="<?php echo CommonHelper::getLayoutDirection();?>">
+            <?php foreach($slides as $slide){
 			$desktop_url = '';
 			$tablet_url = '';
 			$mobile_url = '';
@@ -58,6 +58,6 @@
 				Promotion::updateImpressionData($slide['promotion_id']);
 			}
 		} ?>
-	</div>
-	</div>
+        </div>
+    </div>
 </section>

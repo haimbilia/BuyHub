@@ -1,8 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
 <div id="body" class="body">
-    <section class="bg-second pt-3 pb-3">
+    <section class="bg-brand-light pt-3 pb-3">
         <div class="container">
-            <div class="section-head section--white--head justify-content-center mb-0">
+            <div class="section-head justify-content-center mb-0">
                 <div class="section__heading">
                     <h2 class="mb-0"><?php echo $collection['collection_name']; ?>
                     </h2>

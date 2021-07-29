@@ -6,6 +6,11 @@
     color: $brand-color-inverse;
 }
 
+.bg-brand-light {
+    background: $bg-brand-light;
+    color: $brand-color;
+}
+
 .bg-second {
     background: $secondary-color;
     color: $secondary-color-inverse;
