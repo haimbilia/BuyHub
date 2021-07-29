@@ -1,10 +1,10 @@
-<div class="bg-second pt-3 pb-3">
+<div class="bg-brand-light pt-3 pb-3">
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-sm-7">
                 <div class="cell">
                     <div class="cell__left">
-                        <div class="avtar avtar--rounded"><img alt="<?php echo $userInfo['user_name']; ?>" src="<?php echo UrlHelper::generateUrl('Image', 'user', array($userInfo['user_id'], 'thumb', '1'), CONF_WEBROOT_FRONTEND); ?>"></div>
+                        <div class="avtar avtar--rounded"><img alt="<?php echo $userInfo['user_name']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($userInfo['user_id'], 'thumb', '1'), CONF_WEBROOT_FRONTEND); ?>"></div>
                     </div>
                     <div class="cell__right">
                         <div class="avtar__info">

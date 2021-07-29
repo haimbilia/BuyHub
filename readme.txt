@@ -158,11 +158,20 @@ Updates/Fixes :
     => 056265 - Admin >> General settings >> local > postal code and address should be mandatory as it requires when we use shipping API
     => 056337 - getting notices on checkout screen when multiple items are there in cart
     => 056340 - label generation option is coming on order when order is marked as completed
+    => 056344 - on moving item to wish list from cart getting 404 
+    => 056509 - Unable to change phone number if SMS plugin on
+    => 056427 - after registration through phone number and configuring details post login page is flooded with errors
+    => 056414 - Admin >> users >> for sub sellers >> edit >> bank account and address tabs are getting displayed only when we click on "cookies " tab
+    => 056413 - Checkout (pickup ) >> when we select slot then "undefined " gets displayed on selected time and date
+    => 056412 - Checkout (pickup ) >> when we select slot then popup should get closed.
+    => 056410 - admin >> notifications for shop report > when we click on report notification then admin gets redirect to report reasons instead of report listing
+    => 056508 - on order cancellation requests error coming at admin side
+    => 056406 - admin> seller orders> ship by seller/admin needs to be there in listing and in filters too
 
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
-    => task-85619 Adding files when digital order is delivered   
+    => task-85619 Adding files when digital order is delivered  
 
 Enhancements :
    => At shop level  pickup interval option given

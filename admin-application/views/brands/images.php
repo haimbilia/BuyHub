@@ -9,7 +9,7 @@
             <li id="<?php echo $row['afile_id']; ?>">
                 <div class="logoWrap">
                     <div class="logothumb">
-                        <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', $imageFunction, array($row['afile_record_id'], $row['afile_lang_id'], "THUMB", $row['afile_id'], $row['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" title="<?php echo $row['afile_name']; ?>" alt="<?php echo $row['afile_name']; ?>">
+                        <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', $imageFunction, array($row['afile_record_id'], $row['afile_lang_id'], "THUMB", $row['afile_id'], $row['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" title="<?php echo $row['afile_name']; ?>" alt="<?php echo $row['afile_name']; ?>">
                         <?php if ($canEdit) { ?>
                             <a class="deleteLink white" href="javascript:void(0);" title="Delete <?php echo $row['afile_name']; ?>" onclick="deleteMedia(<?php echo $row['afile_record_id']; ?>, '<?php echo $file_type; ?>', <?php echo $row['afile_id']; ?>);" class="delete">
                                 <i class="ion-close-round"></i>

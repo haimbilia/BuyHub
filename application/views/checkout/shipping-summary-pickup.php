@@ -253,13 +253,17 @@
                     </div>
                 </div>
                 <div class="cell cell_action">
-                    <a href="javascript:void(0);"
-                        onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
-                        <svg class="svg" width="20px" height="20px">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
-                            </use>
-                        </svg>
-                    </a>
+                    <ul class="actions">
+                        <li>
+                            <a href="javascript:void(0);"
+                                onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
+                                <svg class="svg" width="20px" height="20px">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
+                                    </use>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </li>
             <?php if (isset($levelItems['products']) && count($levelItems['products']) == 1) { ?>

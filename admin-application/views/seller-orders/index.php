@@ -25,9 +25,15 @@
                         $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
                         $frmSearch->developerTags['fld_default_col'] = 12;
 
+                        $shippedByFld = $frmSearch->getField('opshipping_by_seller_user_id');
+
                         $keywordFld = $frmSearch->getField('keyword');
-                        $keywordFld->developerTags['col'] = 6;
+                        $keywordFld->developerTags['col'] = (null != $shippedByFld) ? 3 : 6;
                         $keywordFld->htmlAfterField = '<small>' . Labels::getLabel('LBL_Search_in_list', $adminLangId) . '</small>';
+
+                        if (null != $shippedByFld) {
+                            $shippedByFld->developerTags['col'] = 3;
+                        }
 
                         $buyerFld = $frmSearch->getField('buyer');
                         $buyerFld->developerTags['col'] = 3;

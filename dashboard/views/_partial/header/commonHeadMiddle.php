@@ -30,8 +30,8 @@ if ($canonicalUrl == '') {
 <?php $googleFontFamily = "'Poppins', sans-serif !important";
 $fontKey = FatApp::getConfig('CONF_GOOGLE_FONTS_API_KEY', FatUtility::VAR_STRING, '');
 $googleFontFamilyUrl = FatApp::getConfig('CONF_THEME_FONT_FAMILY_URL', FatUtility::VAR_STRING, '');
-$themeColor = FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "#FF3A59");
-$themeColorInverse = FatApp::getConfig('CONF_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, "#FFFFFF");
+$themeColor = FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "rgb(255,58,89)");
+$themeColorInverse = FatApp::getConfig('CONF_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, "rgb(255,255,255)");
 if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
     $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
     $googleFontFamily =  '"' . str_replace("+", " ", explode('-', $googleFontFamily)[0]) . '" !important';
@@ -53,6 +53,7 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
         --secondary-color: #<?php echo FatApp::getConfig('CONF_SECONDARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
         --secondary-color-inverse: #<?php echo FatApp::getConfig('CONF_SECONDARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
         <?php } else { ?>--brand-color: <?php echo $themeColor; ?>;
+        --brand-color-alpha: <?php echo strtr($themeColor,["rgb("=>"",")"=>""]); ?>;
         --brand-color-inverse: <?php echo $themeColorInverse; ?>;
         <?php } ?>
     }

@@ -141,7 +141,7 @@ $("document").ready(function() {
         var data = fcom.frmData(frm);
 
         fcom.updateWithAjax(fcom.makeUrl('SubscriptionCheckout', 'applyPromoCode'), data, function(res) {
-            $("#facebox .close").trigger('click');
+            $.facebox.close();
             if ($('.payment-area').length > 0) {
                 loadPaymentSummary();
             }       
@@ -164,7 +164,7 @@ $("document").ready(function() {
 
     removePromoCode = function() {
         fcom.updateWithAjax(fcom.makeUrl('SubscriptionCheckout', 'removePromoCode'), '', function(res) {
-            $("#facebox .close").trigger('click');
+            $.facebox.close();
             if ($('.payment-area').length > 0) {
                 loadPaymentSummary();
             }    

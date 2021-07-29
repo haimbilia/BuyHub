@@ -5,11 +5,11 @@ $shop_state = (strlen($shop['shop_city']) > 0) ? ', ' . $shop['shop_state_name']
 $shop_country = (strlen($shop_state) > 0) ? ', ' . $shop['shop_country_name'] : $shop['shop_country_name'];
 $shopLocation = $shop_city . $shop_state . $shop_country;
 ?> <div id="body" class="body">
-    <div class="bg-second pt-3 pb-3">
+    <div class="bg-brand-light pt-3 pb-3">
         <div class="container">
             <div class="row align-items-center justify-content-between">
                 <div class="col-md-8">
-                    <div class="section-head section--white--head mb-0">
+                    <div class="section-head mb-0">
                         <div class="section__heading">
                             <h2><?php echo $shop['shop_name']; ?></h2>
                             <p><?php echo $shopLocation; ?>
@@ -41,7 +41,7 @@ $shopLocation = $shop_city . $shop_state . $shop_country;
                                         <div class="col-auto">
                                             <div class="profile-avatar">
                                                 <div class="profile__dp">
-                                                    <img src="<?php echo UrlHelper::generateUrl('Image', 'user', array($reviewData['spreview_postedby_user_id'], 'thumb', true)); ?>"
+                                                    <img src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($reviewData['spreview_postedby_user_id'], 'thumb', true)); ?>"
                                                         alt="<?php echo $reviewData['user_name']; ?>">
                                                 </div>
                                                 <div class="profile__bio">

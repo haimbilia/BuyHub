@@ -82,16 +82,18 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                     </div>
 
                     <div class="cell cell_action">
-                        <a href="javascript:void(0)" class=""
-                            onclick="cart.remove('<?php echo md5($product['key']); ?>')"
-                            title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                            <svg class="svg" width="20px" height="20px"
-                                title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove"
-                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
-                                </use>
-                            </svg>
-                        </a>
+                        <ul class="actions">
+                            <li><a href="javascript:void(0)" class=""
+                                    onclick="cart.remove('<?php echo md5($product['key']); ?>')"
+                                    title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                    <svg class="svg" width="20px" height="20px"
+                                        title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
+                                        </use>
+                                    </svg>
+                                </a></li>
+                        </ul>
+
                     </div>
                 </li>
                 <?php

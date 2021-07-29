@@ -133,7 +133,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             <div class="shop-rating-wrap">
                                                 <div class="shop-card">
                                                     <div class="shop-card__img">
-                                                        <img src="<?php echo UrlHelper::generateUrl('image', 'shopLogo', array($opDetail['op_shop_id'], $siteLangId, 'SMALL'), CONF_WEBROOT_FRONTEND); ?>" />
+                                                        <img src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($opDetail['op_shop_id'], $siteLangId, 'SMALL'), CONF_WEBROOT_FRONTEND); ?>" />
                                                     </div>
                                                     <div class="shop-card__detail">
                                                         <h6><?php echo $opDetail['op_shop_name']; ?> </h6>

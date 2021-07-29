@@ -4,9 +4,9 @@
         flex-direction: column;
     }
     &_main {
-        flex: 0 0 65%;
-        max-width: 65%;
-        padding-#{$end-direction}: 4rem;
+        flex: 0 0 70%;
+        max-width: 70%;
+        padding-#{$end-direction}: 3rem;
         @include media-breakpoint-down(md) {
             flex: 1;
             max-width: none;
@@ -28,6 +28,9 @@
         margin-bottom: 2rem;
         >li {
             //padding: 2.5rem;
+        }
+        &:last-child {
+            margin-bottom: 0;
         }
     }
     .cart-title {
@@ -72,7 +75,7 @@
     border: $border;
     border-radius: $radius4;
     background-color: $bg-white;
-    li {
+    >li {
         display: flex;
         justify-content: space-between;
         padding: 1rem;
@@ -90,6 +93,9 @@
                     flex-direction: row;
                 }
             }
+        }
+        &.minus-space {
+            padding: 0;
         }
     }
     .cell {
@@ -127,17 +133,14 @@
         }
         &_action {
             text-align: #{$end-direction};
-            flex: 0 0 30px;
-            max-width: 30px;
+            // flex: 0 0 30px;
+            // max-width: 30px;
             margin-#{$start-direction}: auto;
             @include media-breakpoint-down(sm) {
                 margin-#{$start-direction}: 0;
                 flex: 1;
                 max-width: inherit;
                 text-align: inherit;
-            }
-            .svg {
-                fill: #a9a9a9;
             }
         }
         &:last-child {
@@ -488,11 +491,14 @@
 }
 
 .secure {
-    margin-top: 1.5rem;
+    margin-top: 4rem;
     text-align: center;
     p {
         margin: 0.5rem 0;
         font-weight: 500;
+        .icn {
+            margin-#{$end-direction}: 6px;
+        }
     }
 }
 
@@ -597,7 +603,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem;
+    padding: 1rem;
     background: $bg-gray;
     border-radius: $radius4;
     font-size: 0.85rem;

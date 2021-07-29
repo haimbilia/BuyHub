@@ -2,7 +2,7 @@
 <div id="body" class="body">
 
 
-    <div class="bg-second pt-3 pb-3">
+    <div class="bg-brand-light pt-3 pb-3">
         <div class="container">
             <div class="row align-items-center justify-content-between">
                 <div class="col-md-8 col-sm-8">
@@ -48,7 +48,7 @@
                                         <div class="col-md-4">
                                             <div class="profile-avatar">
                                                 <div class="profile__dp">
-                                                    <img src="<?php echo UrlHelper::generateUrl('Image', 'user', array($reviewData['spreview_postedby_user_id'], 'thumb', true)); ?>"
+                                                    <img src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($reviewData['spreview_postedby_user_id'], 'thumb', true)); ?>"
                                                         alt="<?php echo $reviewData['user_name']; ?>">
                                                 </div>
                                                 <div class="profile__bio">

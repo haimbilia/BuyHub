@@ -56,7 +56,22 @@
                     <div class="top-bar__left">
                         <div class="location">
                             <div class="location_inner">
-                                <div class="dropdown">
+                                
+                                <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
+                                <div class="dropdown">                                    
+                                    <?php
+                                    $geoAddress = '';
+                                    if ((!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['_ykGeoLng']) || !isset($_COOKIE['_ykGeoCountryCode'])) && FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+                                        $geoAddress = FatApp::getConfig('CONF_GEO_DEFAULT_ADDR', FatUtility::VAR_STRING, '');
+                                        if (empty($address)) {
+                                            $address = FatApp::getConfig('CONF_GEO_DEFAULT_ZIPCODE', FatUtility::VAR_INT, 0) . '-' . FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, '');
+                                        }
+                                    }
+                                    if (empty($geoAddress)) {
+                                        $geoAddress = Labels::getLabel("LBL_Location", $siteLangId);
+                                    }
+                                    $geoAddress =  isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : $geoAddress;
+                                    ?>                                    
                                     <button class="location_trigger" type="button" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
                                         <i class="icn">
@@ -66,7 +81,7 @@
                                                 </use>
                                             </svg>
                                         </i>
-                                        <div class="location-selected">140301, Sahibzada Ajit Singh Nagar, Punjab, India
+                                        <div class="location-selected"><?php echo $geoAddress;?>
                                         </div>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-fit dropdown-menu-anim location_dropdown-menu"
@@ -80,51 +95,21 @@
                                                             xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#gps">
                                                         </use>
                                                     </svg></i>
-                                                <span>Detect My Current Location </span></button>
+                                                <span><?php echo Labels::getLabel('LBL_DETECT_MY_CURRENT_LOCATION', $siteLangId); ?></span></button>
                                             <div class="or">
                                                 <span>Or</span>
                                             </div>
-                                            <input class="location_input form-control pac-target-input" type="text"
-                                                name="location" placeholder="Search For ..." id="ga-autoComplete"
-                                                autocomplete="no"
-                                                value="140301, Sahibzada Ajit Singh Nagar, Punjab, India">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
-                        <div class="header-location">
-                            <div class="header-location__field">
-                                <?php
-                                    $geoAddress = '';
-                                    if ((!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['_ykGeoLng']) || !isset($_COOKIE['_ykGeoCountryCode'])) && FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
-                                        $geoAddress = FatApp::getConfig('CONF_GEO_DEFAULT_ADDR', FatUtility::VAR_STRING, '');
-                                        if (empty($address)) {
-                                            $address = FatApp::getConfig('CONF_GEO_DEFAULT_ZIPCODE', FatUtility::VAR_INT, 0) . '-' . FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, '');
-                                        }
-                                    }
-                                    if (empty($geoAddress)) {
-                                        $geoAddress = Labels::getLabel("LBL_Location", $siteLangId);
-                                    }
-                                    $geoAddress =  isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : $geoAddress;
-                                    ?>
-                                <input autocomplete="no" id="ga-autoComplete-header"
+                                            <input autocomplete="no" id="ga-autoComplete-header"
                                     class="form-control pac-target-input"
                                     title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>"
                                     placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>"
                                     type="text" name="location" value="<?php echo $geoAddress; ?>">
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php } ?>
                             </div>
-                            <div class="header-location__icon" onclick="loadGeoLocation();">
-                                <i class="icn">
-                                    <svg class="svg" width="15px" height="15px">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#gps">
-                                        </use>
-                                    </svg>
-                                </i>
-                            </div>
-                        </div>
-                        <?php } ?>
+                        </div>                       
                     </div>
                     <div class="top-bar__right">
                         <div class="short-links">

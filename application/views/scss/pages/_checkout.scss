@@ -495,50 +495,61 @@
 .list-addresses {
     max-height: 400px;
     overflow-y: auto;
-    li {
-        padding: 1rem;
-        position: relative;
-        border: $border;
-        border-radius: 2px;
-        .delivery-address {
-            font-size: 0.85rem;
-            color: $txt-gray;
-            line-height: 1.5;
-            margin-bottom: 0;
-            h5 {
-                margin-bottom: 10px;
-                font-weight: 500;
-                font-size: 0.9rem;
-                line-height: 1.5;
-                color: $body-color;
+    >ul {
+        >li {
+            padding: 1rem;
+            position: relative;
+            border: $border;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            &.is-active {
+                border-color: $brand-color;
+            }
+            .label-block {
                 display: flex;
-                align-items: center;
+                margin: 0;
             }
-            span {
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                overflow: hidden;
-                display: inline-block;
-                max-width: 50%;
-            }
-            .tag {
-                margin: 0 5px;
-                border: solid 1px $success-color;
-                border-radius: 40px;
-                color: $success-color;
-                padding: 2px 0.6rem;
-                line-height: 1;
-                font-size: 0.75rem;
-                font-weight: 400;
-                text-transform: uppercase;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                max-width: 42%;
-            }
-            .phone-txt {
-                font-weight: 500;
-                margin-top: 8px;
+            .delivery-address {
+                flex: 1;
+                font-size: 0.85rem;
+                color: $txt-gray;
+                line-height: 1.5;
+                margin-bottom: 0;
+                h5 {
+                    margin-bottom: 10px;
+                    font-weight: 500;
+                    font-size: 0.9rem;
+                    line-height: 1.5;
+                    color: $body-color;
+                    display: flex;
+                    align-items: center;
+                }
+                span {
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    display: inline-block;
+                    max-width: 50%;
+                }
+                .tag {
+                    margin: 0 5px;
+                    border: solid 1px $success-color;
+                    border-radius: 40px;
+                    color: $success-color;
+                    padding: 2px 0.6rem;
+                    line-height: 1;
+                    font-size: 0.75rem;
+                    font-weight: 400;
+                    text-transform: uppercase;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: 42%;
+                }
+                .phone-txt {
+                    font-weight: 500;
+                    margin-top: 8px;
+                }
             }
         }
     }
@@ -667,6 +678,7 @@
         display: flex;
         justify-content: space-between;
         color: $txt-body;
+        flex: 1;
         /* flex: 0 0 20%;
        max-width: 20%;*/
         h6 {
