@@ -159,6 +159,7 @@ Updates/Fixes :
     => 056337 - getting notices on checkout screen when multiple items are there in cart
     => 056340 - label generation option is coming on order when order is marked as completed
     => 056344 - on moving item to wish list from cart getting 404 
+    => 056509 - Unable to change phone number if SMS plugin on
 
 New Features:  
     => Admin shipped products listing page
