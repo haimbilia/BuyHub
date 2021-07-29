@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="box" style="text-align: center;">
-<img src="<?php echo UrlHelper::generateUrl('user', 'photo', array($data['user_id'], 100, 100)); ?>">
+<img src="<?php echo UrlHelper::generateFileUrl('user', 'photo', array($data['user_id'], 100, 100)); ?>">
 <form method="post" enctype="multipart/form-data" action="<?php echo UrlHelper::generateUrl('profile', 'updatePhoto') ?>">
 	<?php echo Labels::getLabel('LBL_CHANGE_PHOTO', $siteLangId) ?> <input type="file" name="photo" onchange="this.form.submit();">
 </form>

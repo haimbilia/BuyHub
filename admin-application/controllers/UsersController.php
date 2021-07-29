@@ -274,9 +274,6 @@ class UsersController extends AdminBaseController
                 FatUtility::dieWithError($this->str_invalid_request);
             }
 
-            /* if(isset($data['credential_username'])){
-            $data['credential_username'] = htmlentities($data['credential_username']);
-            } */
             $stateId = $data['user_state_id'];
             $frmUser->fill($data);
             $userParent = $data['user_parent'];
@@ -537,7 +534,7 @@ class UsersController extends AdminBaseController
         if ($data != false) {
             $frm->fill($data);
         }
-
+        $this->set('userParent', User::getAttributesById($user_id, 'user_parent'));
         $this->set('frm', $frm);
         $this->set('user_id', $user_id);
         $this->_template->render(false, false);
@@ -591,6 +588,7 @@ class UsersController extends AdminBaseController
             FatUtility::dieWithError($this->str_invalid_request);
         }
 
+        $this->set('userParent', User::getAttributesById($userId, 'user_parent'));
         $this->set('user_id', $userId);
         $address =  new Address(0, $this->adminLangId);
         $addresses = $address->getData(Address::TYPE_USER, $userId);
@@ -623,6 +621,7 @@ class UsersController extends AdminBaseController
             $addressFrm->fill(array('addr_record_id' => $userId));
         }
 
+        $this->set('userParent', User::getAttributesById($userId, 'user_parent'));
         $this->set('addressFrm', $addressFrm);
         $this->set('stateId', $stateId);
         $this->set('user_id', $userId);
@@ -2302,6 +2301,7 @@ class UsersController extends AdminBaseController
             $frm->fill($data);
         }
 
+        $this->set('userParent', User::getAttributesById($userId, 'user_parent'));
         $this->set('frm', $frm);
         $this->set('user_id', $userId);
         $this->_template->render(false, false);

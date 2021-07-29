@@ -54,7 +54,7 @@ $(document).ready(function(){
                     t = $.parseJSON(t);
                     if(typeof t.status != 'undefined' &&  1 > t.status){
                         $.systemMessage(t.msg,'alert--danger', false);
-                        $("#facebox .close").trigger('click');
+                        $.facebox.close();
                         if (typeof t.url != 'undefined') {
                             setTimeout(function(){ document.location.href = t.url; }, 1000);
                         }

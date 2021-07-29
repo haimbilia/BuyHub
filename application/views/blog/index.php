@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php if (!empty($postList)) {
     foreach ($postList as $blogPost) { ?>
-        <section class="section bg-second">
+        <section class="section bg-brand-light">
             <div class="container">
                 <div class="first-fold">
                     <div class="post">
@@ -10,7 +10,7 @@
                             <a
                                 href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><img
                                     data-ratio="16:9"
-                                    src="<?php echo UrlHelper::generateUrl('image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, "LAYOUT1"), CONF_WEBROOT_URL); ?>"
+                                    src="<?php echo UrlHelper::generateFileUrl('image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, "LAYOUT1"), CONF_WEBROOT_URL); ?>"
                                     alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blogPost['post_title'];?>"
                                     title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $blogPost['post_title'];?>"></a>
                         </figure>

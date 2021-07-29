@@ -589,16 +589,15 @@
     vertical-align: top;
     white-space: nowrap;
     margin: 0;
+    color: $txt-gray;
     @include media-breakpoint-down(sm) {
-        & {
-            flex-wrap: wrap;
-        }
+        flex-wrap: wrap;
     }
-    li {
+    >li {
         display: inline-block;
         vertical-align: top;
-        margin: 0 2px 4px 0;
-        a {
+        margin: 0 4px 4px 0;
+        >a {
             display: block;
             background: none;
             padding: 5px;
@@ -606,10 +605,13 @@
             height: 30px;
             line-height: 1.4;
             text-align: center;
-            color: $body-color;
+            color: currentColor;
             font-size: 0.7rem !important;
-            border: $border;
-            border-radius: $radius2;
+            // border: $border;
+            // border-radius: $radius2; 
+            border-radius: 50%;
+            background: $bg-brand-light;
+            color: $brand-color;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -623,20 +625,17 @@
                 }
             }
             .svg {
-                width: 16px;
-                height: 16px;
+                width: 14px;
+                height: 14px;
                 display: block;
-                fill: inherit;
+                margin: 0;
+                fill: currentColor;
             }
+            &.is-active,
             &:hover {
                 background: $brand-color;
                 color: $brand-color-inverse;
                 border-color: $brand-color;
-                text-decoration: none !important;
-                fill: $brand-color-inverse;
-                .svg {
-                    fill: inherit;
-                }
             }
         }
     }

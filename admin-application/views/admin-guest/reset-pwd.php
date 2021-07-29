@@ -12,7 +12,7 @@ defined( 'SYSTEM_INIT' ) or die( 'Invalid Usage.' );
                         $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $adminLangId, false);
                         $aspectRatioArr = AttachedFile::getRatioTypeArray($adminLangId);
                         ?>
-                        <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio= "<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo UrlHelper::generateUrl('Image','siteAdminLogo', array(  $adminLangId)); ?>" alt="">
+                        <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio= "<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo UrlHelper::generateFileUrl('Image','siteAdminLogo', array(  $adminLangId)); ?>" alt="">
                     </figure>
                    
                    <div class="-align-center">

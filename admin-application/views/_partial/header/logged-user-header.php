@@ -9,7 +9,7 @@
                     $aspectRatioArr = AttachedFile::getRatioTypeArray($adminLangId);
                     ?>
                  <a href="<?php echo UrlHelper::generateUrl('home'); ?>">
-                     <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo UrlHelper::generateUrl('Image', 'siteAdminLogo', array($adminLangId)); ?>" alt="">
+                     <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($adminLangId)); ?>" alt="">
                  </a>
              </div>
              <div class="one_third_grid">

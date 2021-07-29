@@ -58,7 +58,7 @@ $stateFld->setFieldTagAttribute('id','user_state_id');
 					<li><a href="javascript:void(0)" onclick="addBankInfoForm(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_Bank_Info',$adminLangId); ?></a></li>
 					<li><a href="javascript:void(0)" onclick="addUserAddress(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_Addresses',$adminLangId); ?></a></li>
 				<?php }?>
-                            <li><a href="javascript:void(0)" onclick="displayCookiesPerferences(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_Cookies_Preferences',$adminLangId); ?></a></li>	
+                <li><a href="javascript:void(0)" onclick="displayCookiesPerferences(<?php echo $user_id ?>);"><?php echo Labels::getLabel('LBL_Cookies_Preferences',$adminLangId); ?></a></li>	
 			</ul>
                         <?php }?>
 			<div class="tabs_panel_wrap">
