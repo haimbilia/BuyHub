@@ -533,6 +533,7 @@ class SellerController extends SellerBaseController
         $this->set('urlParts', $urlParts);
 
         $this->_template->addJs(array('js/jquery.datetimepicker.js'));
+        $this->_template->addCss(array('css/jquery.datetimepicker.css'), false);
         $this->_template->render(true, true);
     }
 

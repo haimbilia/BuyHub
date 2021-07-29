@@ -228,15 +228,10 @@ class Shipping
                 $temp[] = $row['selprod_id'];
             }
 
-            if (0 < $row['shiippingBySeller']) {
-                $fields = array('shop_postalcode as postalCode', 'shop_address_line_1 as line1', 'shop_address_line_2 as line2', 'shop_city as city', 'state_name as state', 'state_code as stateCode', 'country_code as countryCode', 'shop_phone as phone', 'shop_name', 'shop_id');
-                $row['shopAddress'] = Shop::getShopAddress($row['shop_id'], true, $this->langId, $fields);
-            } else {
-                $adminAddress = Admin::getAddress($this->langId);
-                $adminAddress['phone'] = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, 0);
-                $adminAddress['shop_name'] = FatApp::getConfig('CONF_SITE_OWNER_' . $this->langId, FatUtility::VAR_STRING, '');
-                $adminAddress['shop_id'] = 0;
-                $row['shopAddress'] = $adminAddress;
+            if (0 < $row['shiippingBySeller']) {                
+                $row['shopAddress'] = $this->getShopAddress($row['shop_id']);
+            } else {                
+                $row['shopAddress'] = $this->getShopAddress(0);
             }
 
             $res[] = $row;
@@ -249,6 +244,20 @@ class Shipping
         }
         return $res = array_merge($res, []);
     }
+    
+    private function getShopAddress($shopId)
+    {
+        if (0 < $shopId) {
+            $fields = array('shop_postalcode as postalCode', 'shop_address_line_1 as line1', 'shop_address_line_2 as line2', 'shop_city as city', 'state_name as state', 'state_code as stateCode', 'country_code as countryCode', 'shop_phone as phone', 'shop_name', 'shop_id');
+            return Shop::getShopAddress($shopId, true, $this->langId, $fields);
+        }
+        
+        $adminAddress = Admin::getAddress($this->langId);
+        $adminAddress['phone'] = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, 0);
+        $adminAddress['shop_name'] = FatApp::getConfig('CONF_SITE_OWNER_' . $this->langId, FatUtility::VAR_STRING, '');
+        $adminAddress['shop_id'] = 0;
+        return $adminAddress;
+    }
 
     /**
      * fetchShippingRatesFromApi
@@ -260,32 +269,40 @@ class Shipping
      */
     private function fetchShippingRatesFromApi(array $shippingAddressDetail, array $productInfo, array &$physicalSelProdIdArr): bool
     {
-               
+
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);
         $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
-
-        foreach ($this->selProdShipRates as $rateId => $rates) {
+        
+       
+        foreach ($productInfo as $selprod_id => $product) {
+            if (!in_array($selprod_id, $physicalSelProdIdArr)) {
+                continue;
+            }        
             
-            $product = $productInfo[$rates['selprod_id']];
+            $isProductShippedBySeller = $product['isProductShippedBySeller'];
+            
+            if(0 < FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)){
+                $isProductShippedBySeller = 0;
+            }
             
             $useManualShipping = FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_ADMIN', FatUtility::VAR_INT, 0);
-            if (0 < $rates['shiippingBySeller']) {
+            if (0 < $isProductShippedBySeller) {
                 $useManualShipping = ShopSpecifics::getAttributesById($product['shop_id'], 'shop_use_manual_shipping_rates');
             }
 
             if (0 < $useManualShipping) {
-                $this->systemRatesToFetchSelprodIds[] = $rates['selprod_id'];
+                $this->systemRatesToFetchSelprodIds[] = $product['selprod_id'];
                 continue;
             }
-            
-            $shippingApiObj = $this->getShippingApiObj(0 < $rates['shiippingBySeller'] ? $rates['selprod_user_id'] : 0 );
-            if(false === $shippingApiObj){
-                /* if api not enabled or any error in loading them fetch manual rates*/
-                $this->systemRatesToFetchSelprodIds[] = $rates['selprod_id'];
+
+            $shippingApiObj = $this->getShippingApiObj(0 < $isProductShippedBySeller ? $product['selprod_user_id'] : 0);
+            if (false === $shippingApiObj) {
+                /* if api not enabled or any error in loading them fetch manual rates */
+                $this->systemRatesToFetchSelprodIds[] = $product['selprod_id'];
                 continue;
             }
-            
-            $cacheKey = self::CARRIER_CACHE_KEY_NAME . $this->langId . get_class($shippingApiObj) . ($rates['shiippingBySeller'] ? $rates['selprod_user_id'] : 0);
+
+            $cacheKey = self::CARRIER_CACHE_KEY_NAME . $this->langId . get_class($shippingApiObj) . ($isProductShippedBySeller ? $product['selprod_user_id'] : 0);
             $carriers = FatCache::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
             if ($carriers) {
                 $carriers = unserialize($carriers);
@@ -298,12 +315,12 @@ class Shipping
             }
 
             if (empty($carriers)) {
-                SystemLog::system(get_class($shippingApiObj)::KEY_NAME."--" .$shippingApiObj->getError());     
+                SystemLog::system(get_class($shippingApiObj)::KEY_NAME . "--" . $shippingApiObj->getError());
                 continue;
-            } 
-            
+            }
+
             $shippingApiObj->setAddress($shippingAddressDetail['addr_name'], $shippingAddressDetail['addr_address1'], $shippingAddressDetail['addr_address2'], $shippingAddressDetail['addr_city'], $shippingAddressDetail['state_name'], $shippingAddressDetail['addr_zip'], $shippingAddressDetail['country_code'], $shippingAddressDetail['addr_phone']);
-            
+
             if (empty($product['shippack_length']) || empty($product['shippack_width']) || empty($product['shippack_height']) || empty($product['shippack_units'])) {
                 $msg = Labels::getLabel('MSG_MISSING_LENGTH_/_WIDTH_/_HEIGHT_OR_UNIT_PARAMS_FOR_"{PRODUCT}"._PLEASE_BIND_CORRECT_PACKAGE.', $this->langId);
                 $msg = CommonHelper::replaceStringData($msg, ['{PRODUCT}' => $product['selprod_title']]);
@@ -311,19 +328,19 @@ class Shipping
                 continue;
             }
 
-            $shopAddress = $rates['shopAddress'];
-            
+            $shopAddress = 0 < $isProductShippedBySeller ? $this->getShopAddress($product['shop_id']) : $this->getShopAddress(0);
+
             if (method_exists($shippingApiObj, 'setAddressReference')) {
                 $referenceId = str_pad($shopAddress['shop_id'], 6, "0", STR_PAD_LEFT);
                 $shippingApiObj->setAddressReference($referenceId);
             }
-            
+
             if (method_exists($shippingApiObj, 'setFromAddress')) {
                 $shippingApiObj->setFromAddress($shopAddress['shop_name'], $shopAddress['line1'], $shopAddress['line2'], $shopAddress['city'], $shopAddress['state'], $shopAddress['postalCode'], $shopAddress['countryCode'], $shopAddress['phone']);
             }
 
             if (method_exists($shippingApiObj, 'setReference')) {
-                $shippingApiObj->setReference('selProd-' . $rates['selprod_id'] . $product['quantity']);
+                $shippingApiObj->setReference('selProd-' . $product['selprod_id'] . $product['quantity']);
             }
 
             if (method_exists($shippingApiObj, 'setQuantity')) {
@@ -332,17 +349,15 @@ class Shipping
 
             /* Retrieve Selected Shipping Service Detail. */
             if (method_exists($shippingApiObj, 'setSelectedShipping') && is_array($this->selectedShippingService) && 0 < count($this->selectedShippingService)) {
-                $shippingApiObj->setSelectedShipping($this->selectedShippingService[$rates['selprod_id']]);
+                $shippingApiObj->setSelectedShipping($this->selectedShippingService[$product['selprod_id']]);
             }
             /* Retrieve Selected Shipping Service Detail. */
 
             $shippingLevel = self::LEVEL_PRODUCT;
 
             $shippedBy = -1; /* admin shipping */
-            $fromZipCode = FatApp::getConfig('CONF_ZIP_CODE', FatUtility::VAR_STRING, '');
-            if (0 < $rates['shiippingBySeller']) {
+            if (0 < $isProductShippedBySeller) {
                 $shippedBy = $product['shop_id'];
-                $fromZipCode = $rates['shop_postalcode'];
             }
             $prodWeight = $product['product_weight'] * $product['quantity'];
             $productWeightClass = isset($weightUnitsArr[$product['product_weight_unit']]) ? $weightUnitsArr[$product['product_weight_unit']] : '';
@@ -361,32 +376,32 @@ class Shipping
                 $product['shippack_height'],
                 $dimensionUnits[$product['shippack_units']],
                 $shopAddress,
-                $shippingAddressDetail                
+                $shippingAddressDetail
             ];
-            
+
             foreach ($carriers as $carrier) {
                 $carrierCode = !empty($carrier) && array_key_exists('code', $carrier) ? $carrier['code'] : '';
-                $cacheKeyArr = array_merge($cacheKeyArr, [$carrierCode, $fromZipCode, $this->langId]);
+                $cacheKeyArr = array_merge($cacheKeyArr, [$carrierCode, $shopAddress['postalCode'], $this->langId]);
                 $cacheKey = self::RATE_CACHE_KEY_NAME . md5(json_encode($cacheKeyArr));
                 $shippingRates = FatCache::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
                 if ($shippingRates) {
                     $shippingRates = unserialize($shippingRates);
                 } else {
-                    $shippingRates = $shippingApiObj->getRates($carrierCode, $fromZipCode);
+                    $shippingRates = $shippingApiObj->getRates($carrierCode, $shopAddress['postalCode']);
                     if (!empty($shippingRates)) {
                         FatCache::set($cacheKey, serialize($shippingRates), '.txt');
                     }
                 }
-                              
+
                 if ((false == $shippingRates || empty($shippingRates))) {
-                    SystemLog::system($shippingApiObj->getError());     
+                    SystemLog::system($shippingApiObj->getError());
                     continue;
                 }
-                unset($physicalSelProdIdArr[$rates['selprod_id']]);
+                unset($physicalSelProdIdArr[$product['selprod_id']]);
                 foreach ($shippingRates as $key => $value) {
                     $shippingCost = [
                         'id' => $value['serviceCode'],
-                        'code' => $rates['selprod_id'],
+                        'code' => $product['selprod_id'],
                         'title' => $value['serviceName'],
                         'cost' => $value['shipmentCost'] + $value['otherCost'],
                         'shiprate_condition_type' => 0,
@@ -399,20 +414,20 @@ class Shipping
                     ];
 
                     $shipmentId = array_key_exists('shipmentId', $value) ? $value['shipmentId'] : $carrierCode . '|' . $value['serviceName'];
-                    $this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$rates['selprod_id']][$shipmentId] = $shippingCost;
+                    $this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$product['selprod_id']][$shipmentId] = $shippingCost;
                 }
                 /* If rates fetched from one shipment carriers then ignore for others */
-                if (!empty($this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$rates['selprod_id']])) {
+                if (!empty($this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$product['selprod_id']])) {
                     break;
                 }
             }
-            
-            /* add product info if rates fetched*/
-            if (!in_array($rates['selprod_id'], $physicalSelProdIdArr)) {
-                $this->shippedByArr[$shippedBy][$shippingLevel]['products'][$rates['selprod_id']] = $product;
+
+            /* add product info if rates fetched */
+            if (!in_array($product['selprod_id'], $physicalSelProdIdArr)) {
+                $this->shippedByArr[$shippedBy][$shippingLevel]['products'][$product['selprod_id']] = $product;
             }
-        }        
-        
+        }
+
         return true;
     }
 
