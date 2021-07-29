@@ -6,6 +6,7 @@
         'product'   =>    Labels::getLabel('LBL_Ordered_Product', $siteLangId),
         'op_qty'    =>    Labels::getLabel('LBL_Qty', $siteLangId),
         'total'     =>    Labels::getLabel('LBL_Total', $siteLangId),
+        'opshipping_by_seller_user_id'     =>    Labels::getLabel('LBL_FULLFILED_BY', $siteLangId),
         'status'    =>    Labels::getLabel('LBL_Status', $siteLangId),
         'action'    =>    '',
     );
@@ -63,6 +64,12 @@
                     // $txt .= CommonHelper::displayMoneyFormat($order['order_net_amount']);
                     $txt .= CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($order, 'netamount', false, User::USER_TYPE_SELLER));
                     $td->appendElement('plaintext', array(), $txt, true);
+                    break;
+                case 'opshipping_by_seller_user_id':
+                    $label = (0 == $order[$key] ? Labels::getLabel('LBL_ADMIN', $siteLangId) : Labels::getLabel('LBL_ME', $siteLangId));
+                    $class = (0 == $order[$key] ? 'label-warning' : 'label-success');
+                    $htm = '<span class="label label-inline ' . $class . '">' . $label . '</span>';
+                    $td->appendElement('plaintext', array(), $htm, true);
                     break;
                 case 'status':
                     if (Orders::ORDER_PAYMENT_CANCELLED == $order["order_payment_status"]) {

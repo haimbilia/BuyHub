@@ -165,11 +165,13 @@ Updates/Fixes :
     => 056413 - Checkout (pickup ) >> when we select slot then "undefined " gets displayed on selected time and date
     => 056412 - Checkout (pickup ) >> when we select slot then popup should get closed.
     => 056410 - admin >> notifications for shop report > when we click on report notification then admin gets redirect to report reasons instead of report listing
+    => 056508 - on order cancellation requests error coming at admin side
+    => 056406 - admin> seller orders> ship by seller/admin needs to be there in listing and in filters too
 
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
-    => task-85619 Adding files when digital order is delivered   
+    => task-85619 Adding files when digital order is delivered  
 
 Enhancements :
    => At shop level  pickup interval option given
@@ -180,6 +182,7 @@ Enhancements :
    => Price surge based on special price. 
    => Admin Reports.
    => Map listing for products & shops 
+   => Webp image support
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

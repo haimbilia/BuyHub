@@ -168,7 +168,8 @@ class ImageController extends FatController
 
         $image_name = (isset($file_row['afile_physical_path']) && !empty($file_row['afile_physical_path'])) ? AttachedFile::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
         /* CommonHelper::printArray($image_name); die();  */
-
+        $image_name = AttachedFile::setNamePrefix($sizeType, $image_name); 
+        $default_image = AttachedFile::setNamePrefix($sizeType, $default_image); 
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;

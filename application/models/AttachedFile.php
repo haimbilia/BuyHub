@@ -477,21 +477,115 @@ class AttachedFile extends MyAppModel
         return $this->saveAttachment($fl, $fileType, $recordId, $recordSubid, $name, $displayOrder, $uniqueRecord, $lang_id, $screen, $aspectRatio);
     }
 
-    /* public function checkExtension($file,
-    $allowedExt = array()) {
+    public static function displayWebpImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true) {
+        ob_end_clean();
+        ini_set('memory_limit', '-1');
+        $noImage = 'images/defaults/' . $noImage;
+        $imageQuality = (true == $imageCompression) ? 80 : 100;
 
-    $fileExt = pathinfo($file, PATHINFO_EXTENSION);
+        $uploadedFilePath = CONF_UPLOADS_PATH . trim($uploadedFilePath);
 
-    if (getimagesize($fl) === false ) {
-    $this->error = 'ERR_UNRECOGNISED_IMAGE_FILE';
-    return false;
+        $fileMimeType = '';
+        $imagePath = $uploadedFilePath . $imageName;
+
+        if (empty($imageName) || !file_exists($uploadedFilePath . $imageName)) {
+            $imagePath = $noImage;
+        }
+
+        $fileMimeType = mime_content_type($imagePath);
+        
+        static::setHeaders();
+
+        $w = FatUtility::int($w);
+        $h = FatUtility::int($h);
+        
+        static::setLastModified($imagePath);
+        static::setContentType($imagePath, '');
+
+        list($width, $height) = getimagesize($imagePath);
+        $ratio_orig = $width / $height;
+        
+        $thumb = imagecreatetruecolor($w, $h);
+        $newWidth = $w;
+        $newHeight = $h;
+        if ($w/$h > $ratio_orig) {
+            $newWidth = $h*$ratio_orig;
+         } else {
+            $newHeight = $w/$ratio_orig;
+         }
+
+        switch ($fileMimeType) {
+            case 'image/png':
+                $img = imagecreatefrompng($imagePath);
+                break;
+            case 'image/webp':
+                $img = imagecreatefromwebp($imagePath);
+                break;
+            case 'image/jpg':
+            case 'image/jpeg':
+                $img = imagecreatefromjpeg($imagePath);
+                break;
+            default:
+                $img = imagecreatefromjpeg($imagePath);
+                break;
+        }
+
+        
+        $color_fill = imagecolorallocate($thumb, 255, 255, 255);
+        imagefill($thumb, 0, 0, $color_fill);
+        
+         if ($apply_watermark && !empty($imagePath)) {
+            $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_WATERMARK_IMAGE, 0, 0, CommonHelper::getLangId());
+            $wtrmrkFile = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
+            if (!empty($wtrmrkFile)) {
+                $wtrmrkFile = $uploadedFilePath . $wtrmrkFile;
+                $stampMimeType = mime_content_type($wtrmrkFile);
+                
+                switch ($stampMimeType) {
+                    case 'image/png':
+                        $stamp = imagecreatefrompng($wtrmrkFile);
+                        break;
+                    case 'image/webp':
+                        $stamp = imagecreatefromwebp($wtrmrkFile);
+                        break;
+                    case 'image/jpg':
+                    case 'image/jpeg':
+                        $stamp = imagecreatefromjpeg($wtrmrkFile);
+                        break;
+                    default:
+                        $stamp = imagecreatefromjpeg($wtrmrkFile);
+                        break;
+                }
+
+                // Set the margins for the stamp and get the height/width of the stamp image
+                $marge_right = 10;
+                $marge_bottom = 10;
+                $sx = imagesx($stamp);
+                $sy = imagesy($stamp);
+
+                // Copy the stamp image onto our photo using the margin offsets and the photo 
+                // width to calculate positioning of the stamp. 
+                imagecopy($img, $stamp, imagesx($img) - $sx - $marge_right, imagesy($img) - $sy - $marge_bottom, 0, 0, imagesx($stamp), imagesy($stamp));
+                
+            }
+        }
+
+        $xPosition = ($w - $newWidth)/2;
+        $yPosition = ($h - $newHeight)/2;
+        imagecopyresampled($thumb, $img, $xPosition, $yPosition, 0, 0, $newWidth, $newHeight, $width, $height);
+        
+        imagewebp($thumb, null, $imageQuality);
+        imagedestroy($thumb);
+        exit;
     }
-    return false;
-    } */
 
     /* always call this function using image controller and pass relavant arguments. */
     public static function displayImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true)
     {
+        if (substr($imageName, 0, 5) == 'webp/'){
+            $imageName = substr($imageName, 5);
+            self::displayWebpImage($imageName, $w, $h, $noImage , $uploadedFilePath, $resizeType , $apply_watermark , $cache , $imageCompression);
+        }       
         ob_end_clean();
         ini_set('memory_limit', '-1');
         $noImage = 'images/defaults/' . $noImage;
@@ -1039,6 +1133,14 @@ class AttachedFile extends MyAppModel
         header("Accept-Ranges: bytes");
         header("Content-Length: " . filesize($path));
         return readfile($path);
+    }
+
+    public static function setNamePrefix(&$sizeType, $imageName){
+        if (substr(strtoupper($sizeType), 0, 4) == 'WEBP'){
+            $sizeType = substr($sizeType, 4);
+            return 'webp/'.$imageName;
+        }
+        return $imageName;
     }
 
     public static function setRecordModifiedTime(int $fileType, int $recordId){
