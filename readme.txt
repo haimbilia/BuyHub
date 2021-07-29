@@ -163,6 +163,7 @@ Updates/Fixes :
     => 056427 - after registration through phone number and configuring details post login page is flooded with errors
     => 056414 - Admin >> users >> for sub sellers >> edit >> bank account and address tabs are getting displayed only when we click on "cookies " tab
     => 056413 - Checkout (pickup ) >> when we select slot then "undefined " gets displayed on selected time and date
+    => 056412 - Checkout (pickup ) >> when we select slot then popup should get closed.
 
 New Features:  
     => Admin shipped products listing page
