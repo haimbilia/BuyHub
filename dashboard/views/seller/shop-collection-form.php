@@ -32,7 +32,7 @@ $fld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
                                     <?php foreach ($bannerAttachments as $img) { ?>
 
                                         <div class="profile__pic">
-                                            <img src="<?php echo UrlHelper::generateUrl('Image', 'shopBanner', array($img['afile_record_id'], $img['afile_lang_id'], 'PREVIEW'), CONF_WEBROOT_FRONTEND); ?>" alt="<?php echo Labels::getLabel('LBL_Shop_Banner', $siteLangId); ?>">
+                                            <img src="<?php echo UrlHelper::generateFileUrl('Image', 'shopBanner', array($img['afile_record_id'], $img['afile_lang_id'], 'PREVIEW'), CONF_WEBROOT_FRONTEND); ?>" alt="<?php echo Labels::getLabel('LBL_Shop_Banner', $siteLangId); ?>">
                                         </div>
                                         <small class="form-text text-muted"><?php echo $bannerTypeArr[$img['afile_lang_id']]; ?></small>
                                         <div class="btngroup--fix">
@@ -51,7 +51,7 @@ $fld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
                                         <?php $count = 1;
                                         foreach ($logoAttachments as $img) { ?>
                                             <div class="col-md-6">
-                                                <div class="profile__pic"><img src="<?php echo UrlHelper::generateUrl('Image', 'shopLogo', array($img['afile_record_id'], $img['afile_lang_id'], 'SMALL'), CONF_WEBROOT_FRONTEND); ?>" alt="<?php echo Labels::getLabel('LBL_Shop_Logo', $siteLangId); ?>"></div>
+                                                <div class="profile__pic"><img src="<?php echo UrlHelper::generateFileUrl('Image', 'shopLogo', array($img['afile_record_id'], $img['afile_lang_id'], 'SMALL'), CONF_WEBROOT_FRONTEND); ?>" alt="<?php echo Labels::getLabel('LBL_Shop_Logo', $siteLangId); ?>"></div>
                                                 <small class="form-text text-muted"><?php echo $bannerTypeArr[$img['afile_lang_id']]; ?></small>
                                                 <div class="btngroup--fix">
                                                     <a class="btn btn-brand btn-sm" href="javascript:void(0);" onClick="removeShopLogo(<?php echo $img['afile_record_id']; ?>,<?php echo $img['afile_lang_id']; ?>)"><?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?></a>

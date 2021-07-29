@@ -48,7 +48,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement(
                     'plaintext',
                     array('style' => 'text-align:center'),
-                    '<img class="max-img" src="' . UrlHelper::getCachedUrl(UrlHelper::generateUrl('image', 'brand', array($row['brand_id'], $adminLangId, 'MINITHUMB'), CONF_WEBROOT_FRONT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '">',
+                    '<img class="max-img" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $adminLangId, 'MINITHUMB'), CONF_WEBROOT_FRONT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '">',
                     true
                 );
                 break;
