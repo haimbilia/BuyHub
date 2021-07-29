@@ -4,7 +4,7 @@
 ?>
 <div class="sectionbody space">
 	<span class="-gap"></span><span class="-gap"></span>
-	<div class="avtar avtar--large"><img src="<?php echo UrlHelper::generateUrl('Image','profileImage',array(AdminAuthentication::getLoggedAdminId(),'croped',true));?>" alt=""></div>
+	<div class="avtar avtar--large"><img src="<?php echo UrlHelper::generateFileUrl('Image','profileImage',array(AdminAuthentication::getLoggedAdminId(),'croped',true));?>" alt=""></div>
 	<span class="-gap"></span><span class="-gap"></span>
 	<div class="btngroup--fix">
 		<?php echo $imgFrm->getFormTag();	?>

@@ -27,10 +27,10 @@ foreach ($arrListing as $sn => $row) {
                 
                 if ($row['message_from_shop_name'] != '') {
                     $name =  $row['message_from_shop_name'] . ' (' . $row['message_sent_by_username'] . ')';
-                    $div_about_me->appendElement('img', array('src'=>UrlHelper::generateUrl('Image', 'shopLogo', array($row['message_from_shop_id'], $adminLangId,'MINI'), CONF_WEBROOT_FRONT_URL)));
+                    $div_about_me->appendElement('img', array('src'=>UrlHelper::generateFileUrl('Image', 'shopLogo', array($row['message_from_shop_id'], $adminLangId,'MINI'), CONF_WEBROOT_FRONT_URL)));
                 } else {
                     $name =  $row['message_sent_by_username'];
-                    $div_about_me->appendElement('img', array('src'=>UrlHelper::generateUrl('Image', 'user', array($row['message_sent_by'],'MINI',true), CONF_WEBROOT_FRONT_URL)));
+                    $div_about_me->appendElement('img', array('src'=>UrlHelper::generateFileUrl('Image', 'user', array($row['message_sent_by'],'MINI',true), CONF_WEBROOT_FRONT_URL)));
                 }
                 $span = $td->appendElement('span', array('class'=>'avtar__name'), $name);
 
@@ -40,10 +40,10 @@ foreach ($arrListing as $sn => $row) {
                 $figure = $td->appendElement('figure', array('class'=>'avtar bgm-purple'));
                 
                 if ($row['message_to_shop_name'] != '') {
-                    $figure->appendElement('img', array('src'=>UrlHelper::generateUrl('Image', 'shopLogo', array($row['message_to_shop_id'], $adminLangId,'MINI'), CONF_WEBROOT_FRONT_URL)));
+                    $figure->appendElement('img', array('src'=>UrlHelper::generateFileUrl('Image', 'shopLogo', array($row['message_to_shop_id'], $adminLangId,'MINI'), CONF_WEBROOT_FRONT_URL)));
                     $name =  $row['message_to_shop_name'] . ' (' . $row['message_sent_to_name'] . ')';
                 } else {
-                    $figure->appendElement('img', array('src'=>UrlHelper::generateUrl('Image', 'user', array($row['message_sent_to'],'MINI',true), CONF_WEBROOT_FRONT_URL)));
+                    $figure->appendElement('img', array('src'=>UrlHelper::generateFileUrl('Image', 'user', array($row['message_sent_to'],'MINI',true), CONF_WEBROOT_FRONT_URL)));
                     $name =  $row['message_sent_to_name'];
                 }
                 $span = $td->appendElement('span', array('class'=>'avtar__name'), $name);

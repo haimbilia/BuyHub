@@ -91,7 +91,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0))
                                                             <a title="' . $moresellers[$key] . '" href="' . UrlHelper::generateUrl('shops', 'view', array(
                                             $moresellers['shop_id']
                                         )) . '">
-                                                                <img data-ratio="1:1 (150x150)" src="' . UrlHelper::generateUrl('image', 'shopLogo', array(
+                                                                <img data-ratio="1:1 (150x150)" src="' . UrlHelper::generateFileUrl('image', 'shopLogo', array(
                                             $moresellers['shop_id'],
                                             $siteLangId,
                                             'SMALL'
