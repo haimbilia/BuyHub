@@ -15,6 +15,8 @@ class ShipRocket extends ShippingServicesBase
     private const REQUEST_ADD_ORDER = 3;
     private const REQUEST_GET_PICKUP_LOCATIONS = 4;
     private const REQUEST_ADD_PICKUP_LOCATION = 5;
+    private const REQUEST_ASSIGN_AWB = 6;
+    private const REQUEST_GENERATE_LABEL = 7;
 
     private $resp;
     private $clientInfoCols = [];
@@ -417,7 +419,7 @@ class ShipRocket extends ShippingServicesBase
         }
 
         $requestParam = [
-            'order_id' => $this->orderDetail['op_invoice_number'],
+            'order_id' => $this->orderDetail['op_invoice_number'] . rand(),
             'order_date' => date('Y-m-d H:i', $orderTimestamp),
             'pickup_location' => FatUtility::convertToType($pickupLocationId, FatUtility::VAR_STRING),
             'channel_id' => isset($channel['id']) ? $channel['id'] : '',
@@ -465,7 +467,30 @@ class ShipRocket extends ShippingServicesBase
             'weight' => $this->convertToKg($this->orderDetail['op_product_weight'])
         ];
         
-        return $this->doRequest(self::REQUEST_ADD_ORDER, $requestParam);
+        /* if (false === $this->doRequest(self::REQUEST_ADD_ORDER, $requestParam)) {
+            return false;
+        }
+        $orderShipment = $this->getResponse();
+        CommonHelper::printArray($orderShipment); */
+
+        $requestParam = [
+            'shipmentIdsArr' => ['128594647'],
+            'courierId' => $this->orderDetail['opshipping_service_code'],
+            'weight' => $this->convertToKg($this->orderDetail['op_product_weight']),
+        ];
+        if (false === $this->doRequest(self::REQUEST_ASSIGN_AWB, $requestParam)) {
+            return false;
+        }
+
+        $resp = $this->getResponse();
+        CommonHelper::printArray($resp, true);
+
+        // if (false === $this->doRequest(self::REQUEST_GENERATE_LABEL, ['shipment_id' => $orderShipment['shipment_id']])) {
+        if (false === $this->doRequest(self::REQUEST_GENERATE_LABEL, ['shipment_id' => ['128594647']])) {
+            return false;
+        }
+        $resp = $this->getResponse();
+        CommonHelper::printArray($resp, true);
     }
 
     /**
@@ -493,6 +518,15 @@ class ShipRocket extends ShippingServicesBase
                     break;
                 case self::REQUEST_ADD_PICKUP_LOCATION:
                     $this->resp = $this->client->createPickup($requestParam);
+                    break;
+                case self::REQUEST_ASSIGN_AWB:
+                    $shipmentIdsArr = $requestParam['shipmentIdsArr'];
+                    $courierId = $requestParam['courierId'];
+                    $weight = $requestParam['weight'];
+                    $this->resp = $this->client->assignAWBs($shipmentIdsArr, $courierId, $weight);
+                    break;
+                case self::REQUEST_GENERATE_LABEL:
+                    $this->resp = $this->client->generateLabel($requestParam);
                     break;
             }
             return true;

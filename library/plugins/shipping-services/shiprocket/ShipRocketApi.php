@@ -7,7 +7,8 @@ use Shiprocket\Client as ShiprocketClient;
 class ShipRocketApi extends ShiprocketClient
 {
     use Channels,
-        Pickups;
+        Pickups,
+        OrderLabels;
 
     public function __construct($config = [])
     {
