@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php if (!empty($postList)) {
     foreach ($postList as $blogPost) { ?>
-        <section class="section bg-second">
+        <section class="section bg-brand-light">
             <div class="container">
                 <div class="first-fold">
                     <div class="post">

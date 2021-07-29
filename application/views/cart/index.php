@@ -3,7 +3,7 @@
     <section class="section">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-xl-10" id="js-cart-listing">
+                <div class="col-xl-11" id="js-cart-listing">
                     <?php if($total > 0){ ?>
                     <div class="cart-page">
                         <main class="cart-page_main">
@@ -55,8 +55,9 @@
 
 
                                 <div class="secure">
-                                    <p><i
-                                            class="fas fa-lock"></i><?php echo Labels::getLabel('LBL_100%_SECURE_PAYMENT', $siteLangId); ?>
+                                    <p>
+                                        <i class="icn fas fa-lock"></i>
+                                        <?php echo Labels::getLabel('LBL_100%_SECURE_PAYMENT', $siteLangId); ?>
                                     </p>
                                     <div class="payment-list justify-content-center">
                                         <svg class="payment-list__item" viewBox="0 0 38 24"

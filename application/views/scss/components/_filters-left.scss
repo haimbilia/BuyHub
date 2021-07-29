@@ -126,8 +126,8 @@
         padding-#{$start-direction}: 14px;
         margin-#{$end-direction}: 14px;
         font-size: inherit;
-        background-color: $brand-color;
-        color: $brand-color-inverse;
+        background: $bg-brand-light;
+        color: $brand-color;
         font-weight: 300;
         height: 28px;
         &:hover {

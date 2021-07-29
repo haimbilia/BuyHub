@@ -51,44 +51,51 @@
 ?>
 
 <div id="body" class="body">
- 
- <div class="bg-second pt-3 pb-3">
-      <div class="container">
-        <div class="row align-items-center justify-content-between">
-          <div class="col-md-8 col-sm-8">
-           
-           <div class="section-head section--white--head mb-0">
-            <div class="section__heading">
-                <h1><?php echo $shop['shop_name']; ?></h1>
-              <p><?php echo $shopLocation; ?> <?php echo Labels::getLabel('LBL_Opened_on', $siteLangId); ?> <?php echo FatDate::format($shop['shop_created_on']); ?></p>
+
+    <div class="bg-brand-light pt-3 pb-3">
+        <div class="container">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-md-8 col-sm-8">
+
+                    <div class="section-head mb-0">
+                        <div class="section__heading">
+                            <h1><?php echo $shop['shop_name']; ?></h1>
+                            <p><?php echo $shopLocation; ?>
+                                <?php echo Labels::getLabel('LBL_Opened_on', $siteLangId); ?>
+                                <?php echo FatDate::format($shop['shop_created_on']); ?></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-auto col-sm-auto">
+                    <a href="<?php echo UrlHelper::generateUrl('Shops', 'View', array($shop['shop_id'])); ?>"
+                        class="btn btn-outline-white btn-sm"><?php echo Labels::getLabel('LBL_Back_to_Shop', $siteLangId); ?></a>
+                </div>
             </div>
         </div>
-          </div>
-          <div class="col-md-auto col-sm-auto">
-          	<a href="<?php echo UrlHelper::generateUrl('Shops', 'View', array($shop['shop_id'])); ?>" class="btn btn-outline-white btn-sm"><?php echo Labels::getLabel('LBL_Back_to_Shop', $siteLangId); ?></a>
-           </div>
-        </div>
-      </div>
     </div>
- 
- 
-  <section class="section">
-    <div class="container">      
-		  <div class="row justify-content-center">
-			<div class="col-lg-7">
-                <div class="section-head">
-                    <div class="section__heading">
-                        <h4><?php echo Labels::getLabel('LBL_Send_Message_to_shop_owner', $siteLangId); ?></h4>
+
+
+    <section class="section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-7">
+                    <div class="section-head">
+                        <div class="section__heading">
+                            <h4><?php echo Labels::getLabel('LBL_Send_Message_to_shop_owner', $siteLangId); ?></h4>
+                        </div>
+                        <?php /* if( $shop['shop_user_id'] === $loggedUserData['user_id']){ ?>
+                        <div class="section__action">
+                            <div class="note-messages">
+                                <?php echo Labels::getLabel('LBL_User_is_not_allowed_to_send_message', $siteLangId); ?>
+                            </div>
+                        </div>
+                        <?php } */ ?>
                     </div>
-                    <?php /* if( $shop['shop_user_id'] === $loggedUserData['user_id']){ ?>
-                        <div class="section__action"><div class="note-messages"><?php echo Labels::getLabel('LBL_User_is_not_allowed_to_send_message', $siteLangId); ?></div></div>
-                    <?php } */ ?>
+                    <div class="bg-gray rounded p-5"> <?php echo $frm->getFormHtml(); ?> </div>
                 </div>
-                <div class="bg-gray rounded p-5"> <?php echo $frm->getFormHtml(); ?> </div>
-			</div>
-		  </div>
-		 
-    </div>
-  </section>
-	
+            </div>
+
+        </div>
+    </section>
+
 </div>

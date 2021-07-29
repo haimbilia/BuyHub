@@ -17,12 +17,12 @@
 
 <div id="body" class="body">
  
- <div class="bg-second pt-3 pb-3">
+ <div class="bg-brand-light pt-3 pb-3">
       <div class="container">
         <div class="row align-items-center justify-content-between">
           <div class="col-md-8">
           
-          <div class="section-head section--white--head mb-0">
+          <div class="section-head mb-0">
 						<div class="section__heading">
 							<h1><?php echo $shop['shop_name']; ?></h1>
 							<p><?php echo $shopLocation; ?> <?php echo Labels::getLabel('LBL_Opened_on', $siteLangId); ?> <?php echo FatDate::format($shop['shop_created_on']); ?></p>
