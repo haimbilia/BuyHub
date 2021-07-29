@@ -46,7 +46,7 @@ foreach ($sellers as $sellerDetail) {
             <div class="item">
                 <div class="item__pic item__pic-seller">
                     <a href="<?php echo UrlHelper::generateUrl('shops', 'view', array($sellerDetail['shop_id'])); ?>" title="<?php echo $sellerDetail['shop_name']; ?>">
-                        <img src="<?php echo UrlHelper::generateUrl('image', 'shopLogo', array($sellerDetail['shop_id'], $siteLangId, 'SMALL')); ?>" alt="<?php echo $sellerDetail['shop_name']; ?>" title="<?php echo $sellerDetail['shop_name']; ?>">
+                        <img src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($sellerDetail['shop_id'], $siteLangId, 'SMALL')); ?>" alt="<?php echo $sellerDetail['shop_name']; ?>" title="<?php echo $sellerDetail['shop_name']; ?>">
                     </a>
                 </div>
                 <div class="item__description">

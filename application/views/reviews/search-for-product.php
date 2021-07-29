@@ -7,7 +7,7 @@
             <div class="col-auto">
                 <div class="profile-avatar">
                     <div class="profile__dp">
-                        <img src="<?php echo UrlHelper::generateUrl('Image', 'user', array($review['spreview_postedby_user_id'], 'thumb', true)); ?>"
+                        <img src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($review['spreview_postedby_user_id'], 'thumb', true)); ?>"
                             alt="<?php echo $review['user_name']; ?>">
                     </div>
                     <div class="profile__bio">

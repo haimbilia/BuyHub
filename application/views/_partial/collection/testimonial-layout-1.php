@@ -36,7 +36,7 @@ if (isset($collection['testimonials']) && count($collection['testimonials']) > 0
                 </div>
                 <div class="slide-item__from">
                     <img class="user-pic" alt="<?php echo $testimonial['testimonial_user_name']; ?>"
-                        src="<?php echo UrlHelper::generateUrl('Image', 'testimonial', array($testimonial['testimonial_id'], $siteLangId, 'THUMB')) . '?t=' . time(); ?>">
+                        src="<?php echo UrlHelper::generateFileUrl('Image', 'testimonial', array($testimonial['testimonial_id'], $siteLangId, 'THUMB')) . '?t=' . time(); ?>">
                     <div class="user-detail">
                         <p><span class="name"><?php echo $testimonial['testimonial_user_name']; ?></span>
                             <!--span class="designation">Senior UI/UX Designer</span-->
@@ -44,13 +44,15 @@ if (isset($collection['testimonials']) && count($collection['testimonials']) > 0
                     </div>
                 </div>
             </div>
-            <?php } ?>
         </div>
-        <!-- /Slider -->
-        <div class="section-foot text-center">
-            <a class="btn btn-outline-brand btn-wide"
-                href="<?php echo UrlHelper::generateUrl('Testimonials'); ?>"><?php echo Labels::getLabel('LBL_View_all', $siteLangId); ?></a>
-        </div>
+    </div>
+    <?php } ?>
+    </div>
+    <!-- /Slider -->
+    <div class="section-foot text-center">
+        <a class="btn btn-outline-brand btn-wide"
+            href="<?php echo UrlHelper::generateUrl('Testimonials'); ?>"><?php echo Labels::getLabel('LBL_View_all', $siteLangId); ?></a>
+    </div>
     </div>
 </section>
 <?php if (3 < count($collection['testimonials'])) { ?>

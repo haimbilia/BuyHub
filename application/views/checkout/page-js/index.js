@@ -445,7 +445,7 @@ $("document").ready(function () {
         var data = fcom.frmData(frm);
 
         fcom.updateWithAjax(fcom.makeUrl('Cart', 'applyPromoCode'), data, function (res) {
-            $("#facebox .close").trigger('click');
+            $.facebox.close();
             $.systemMessage.close();
             loadFinancialSummary();
             if ($(paymentDiv).hasClass('is-current')) {
@@ -562,15 +562,15 @@ $("document").ready(function () {
     };
 
     displayPickupAddress = function (pickUpBy, recordId) {
-        $.facebox(function () {
-            var addrId = $(".js-slot-addr-" + pickUpBy).attr('data-addr-id');
-            var slotId = $("input[name='slot_id[" + pickUpBy + "]']").val();
-            var slotDate = $("input[name='slot_date[" + pickUpBy + "]']").val();
-            var data = 'pickUpBy=' + pickUpBy + '&recordId=' + recordId + '&addrId=' + addrId + '&slotId=' + slotId + '&slotDate=' + slotDate;
-            fcom.ajax(fcom.makeUrl('Addresses', 'getPickupAddresses', [], siteConstants.webroot_dashboard), data, function (rsp) {
-                $.facebox(rsp, 'faceboxWidth medium-fb-width');
-                $("input[name='coupon_code']").focus();
-            });
+        $.mbsmessage(langLbl.processing, true, 'alert--process alert');
+        var addrId = $(".js-slot-addr-" + pickUpBy).attr('data-addr-id');
+        var slotId = $("input[name='slot_id[" + pickUpBy + "]']").val();
+        var slotDate = $("input[name='slot_date[" + pickUpBy + "]']").val();
+        var data = 'pickUpBy=' + pickUpBy + '&recordId=' + recordId + '&addrId=' + addrId + '&slotId=' + slotId + '&slotDate=' + slotDate;
+        fcom.ajax(fcom.makeUrl('Addresses', 'getPickupAddresses', [], siteConstants.webroot_dashboard), data, function (rsp) {
+            $.mbsmessage.close();
+            $.facebox(rsp, 'faceboxWidth medium-fb-width');
+            $("input[name='coupon_code']").focus();
         });
     }
 

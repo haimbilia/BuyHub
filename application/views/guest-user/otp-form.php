@@ -3,7 +3,7 @@
 $userIdFld = $frm->getField('user_id');
 $userId = $userIdFld->value;
 
-$frm->setFormTagAttribute('class', 'form form-otp loginpopup--js');
+$frm->setFormTagAttribute('class', 'form form-otp otpForm-js');
 $frm->developerTags['fld_default_col'] = 2;
 $frm->setFormTagAttribute('name', 'frmGuestLoginOtp');
 $frm->setFormTagAttribute('id', 'frmGuestLoginOtp');
