@@ -3,9 +3,9 @@
     <div class="">
         <div class="js-hero-slider hero-slider" dir="<?php echo CommonHelper::getLayoutDirection();?>">
             <?php foreach($slides as $slide){
-			$desktop_url = '';
-			$tablet_url = '';
-			$mobile_url = '';
+			$desktopUrl = $desktopWebpUrl = '';
+			$tabletUrl = $tabletWebpUrl = '';
+			$mobileUrl = $mobileWebpUrl = '';
 			$haveUrl = ( $slide['slide_url'] != '' ) ? true : false;
 			$defaultUrl = '';
 			$slideArr = AttachedFile::getMultipleAttachments( AttachedFile::FILETYPE_HOME_PAGE_BANNER, $slide['slide_id'], 0, $siteLangId );
@@ -16,22 +16,25 @@
 					$uploadedTime = AttachedFile::setTimeParam($slideScreen['afile_updated_at']);
 					switch($slideScreen['afile_screen']){
 						case applicationConstants::SCREEN_MOBILE:
-							$mobile_url = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image','slide',array($slide['slide_id'], applicationConstants::SCREEN_MOBILE, $siteLangId, 'MOBILE')).$uploadedTime,CONF_IMG_CACHE_TIME, '.jpg').",";
+							$mobileUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image','slide',array($slide['slide_id'], applicationConstants::SCREEN_MOBILE, $siteLangId, 'MOBILE')).$uploadedTime,CONF_IMG_CACHE_TIME, '.jpg');
+							$mobileWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image','slide',array($slide['slide_id'], applicationConstants::SCREEN_MOBILE, $siteLangId, 'WEBPMOBILE')).$uploadedTime,CONF_IMG_CACHE_TIME, '.webp');
 							break;
 						case applicationConstants::SCREEN_IPAD:
-							$tablet_url = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image','slide',array($slide['slide_id'], applicationConstants::SCREEN_IPAD, $siteLangId, 'TABLET')).$uploadedTime,
-							CONF_IMG_CACHE_TIME, '.jpg').",";
+							$tabletUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image','slide',array($slide['slide_id'], applicationConstants::SCREEN_IPAD, $siteLangId, 'TABLET')).$uploadedTime,
+							CONF_IMG_CACHE_TIME, '.jpg');
+							$tabletWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image','slide',array($slide['slide_id'], applicationConstants::SCREEN_IPAD, $siteLangId, 'WEBPTABLET')).$uploadedTime,
+							CONF_IMG_CACHE_TIME, '.webp');
 							break;
 						case applicationConstants::SCREEN_DESKTOP:
-							$defaultUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image','slide',array($slide['slide_id'], applicationConstants::SCREEN_DESKTOP, $siteLangId, 'DESKTOP')).$uploadedTime,CONF_IMG_CACHE_TIME, '.jpg');
-							$desktop_url = $defaultUrl.",";
+							$desktopUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image','slide',array($slide['slide_id'], applicationConstants::SCREEN_DESKTOP, $siteLangId, 'DESKTOP')).$uploadedTime,CONF_IMG_CACHE_TIME, '.jpg');							
+							$desktopWebpUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image','slide',array($slide['slide_id'], applicationConstants::SCREEN_DESKTOP, $siteLangId, 'WEBPDESKTOP')).$uploadedTime,CONF_IMG_CACHE_TIME, '.webp');							
 							break;
 					}
 				}
 			}
 
-			if($defaultUrl == ''){
-				$defaultUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image','slide',array($slide['slide_id'], applicationConstants::SCREEN_DESKTOP, $siteLangId, 'DESKTOP')),CONF_IMG_CACHE_TIME, '.jpg');
+			if($desktopUrl == ''){
+				$desktopUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image','slide',array($slide['slide_id'], applicationConstants::SCREEN_DESKTOP, $siteLangId, 'DESKTOP')),CONF_IMG_CACHE_TIME, '.jpg');
 			}
 
 			$out = '<div class="hero-item">';
@@ -45,10 +48,9 @@
 			if( $haveUrl ){ $out .= '<a target="'.$slide['slide_target'].'" href="'.$slideUrl.'">'; }
 			$out .= '<div class="hero-media">
 				<picture>
-					<source data-aspect-ratio="4:3" srcset="'. rtrim($mobile_url, ',') .'" media="(max-width: 767px)">
-					<source data-aspect-ratio="4:3" srcset="'. rtrim($tablet_url, ',') .'" media="(max-width: 1024px)">
-					<source data-aspect-ratio="10:3" srcset="'. rtrim($desktop_url, ',') .'">
-					<img data-aspect-ratio="10:3" src="'. rtrim($desktop_url, ',') .'" alt="">
+					<source type="image/webp" srcset="' . $mobileWebpUrl . ','. $tabletWebpUrl . ',' . $desktopWebpUrl.'" media="(max-width: 767px),(max-width: 1024px)">
+					<source type="image/jpeg" srcset="' . $mobileUrl . ','. $tabletUrl . ',' . $desktopUrl.'" media="(max-width: 767px),(max-width: 1024px)">
+					<img data-aspect-ratio="10:3" src="'. $desktopUrl .'" alt="" loading="lazy">
 				</picture>
 			</div>';
 			if( $haveUrl ){ $out .= '</a>'; }

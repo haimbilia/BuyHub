@@ -158,23 +158,25 @@ class BannerController extends MyAppController
         $this->showBanner($bannerId, $langId, 200, 50, $screen);
     }
 
-    public function showBanner($bannerId, $langId, $w = '200', $h = '200', $screen = 0)
+    public function showBanner($bannerId, $langId, $w = '200', $h = '200', $screen = 0, $sizeType = '')
     {
         $bannerId = FatUtility::int($bannerId);
         $langId = FatUtility::int($langId);
 
         $fileRow = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $bannerId, 0, $langId, true, $screen);
         $image_name = isset($fileRow['afile_physical_path']) ? $fileRow['afile_physical_path'] : '';
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         AttachedFile::displayImage($image_name, $w, $h, '', '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, false, true, false);
     }
 
-    public function showOriginalBanner($bannerId, $langId, $screen = 0)
+    public function showOriginalBanner($bannerId, $langId, $screen = 0, $sizeType = '')
     {
         $bannerId = FatUtility::int($bannerId);
         $langId = FatUtility::int($langId);
 
         $fileRow = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $bannerId, 0, $langId, true, $screen);
         $image_name = isset($fileRow['afile_physical_path']) ? $fileRow['afile_physical_path'] : '';
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         AttachedFile::displayOriginalImage($image_name, '', '', true);
     }
 
