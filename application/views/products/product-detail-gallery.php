@@ -12,7 +12,8 @@
     include(CONF_THEME_PATH . '_partial/get-ribbon.php'); ?>
 
     <div class="slider-for" dir="<?php echo CommonHelper::getLayoutDirection(); ?>" id="slider-for">
-        <?php if ($productImagesArr) { ?>
+        <?php 
+        if ($productImagesArr) { ?>
             <?php foreach ($productImagesArr as $afile_id => $image) {
                 $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']); 
                 $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'ORIGINAL', 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');

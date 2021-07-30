@@ -66,7 +66,7 @@
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'opshipping_by_seller_user_id':
-                    $label = (0 == $order[$key] ? Labels::getLabel('LBL_ADMIN', $siteLangId) : Labels::getLabel('LBL_ME', $siteLangId));
+                    $label = (0 == $order[$key] ? Labels::getLabel('LBL_ADMIN', $siteLangId) : Labels::getLabel('LBL_SELLER', $siteLangId));
                     $class = (0 == $order[$key] ? 'label-warning' : 'label-success');
                     $htm = '<span class="label label-inline ' . $class . '">' . $label . '</span>';
                     $td->appendElement('plaintext', array(), $htm, true);

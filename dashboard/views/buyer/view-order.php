@@ -832,7 +832,8 @@ if (!$print) { ?>
                                                     if ($row['oshistory_orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED) {
                                                         if (empty($row['oshistory_courier'])) {
                                                             $trackingNumber = $row['oshistory_tracking_number'];
-                                                            if (!empty($shippingApiObj) && true === $shippingApiObj->canFetchTrackingDetail()) {
+                                                            if (!empty($shippingApiObj) && true === $shippingApiObj->canFetchTrackingDetail()) 
+                                                            {
                                                                 $trackingNumber =  '<a href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'" . $trackingNumber . "'" . ',' . "'" . $childOrderDetail['op_id'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $siteLangId) . '">' . $trackingNumber . '</a>';
                                                             }
 
