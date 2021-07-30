@@ -37,7 +37,7 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
                         break;
                     case applicationConstants::SCREEN_DESKTOP:
                         $desktopUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerBottomLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); 
-                        $desktopWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerBottomLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP),'webp').$uploadedTime, CONF_IMG_CACHE_TIME, '.webp');                        
+                        $desktopWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerBottomLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP,'webp')).$uploadedTime, CONF_IMG_CACHE_TIME, '.webp');                        
                         break;
                 }
         }
@@ -45,7 +45,7 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
 
     if($desktopUrl == ''){
         $desktopUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerBottomLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); 
-        $desktopWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerBottomLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP),'webp').$uploadedTime, CONF_IMG_CACHE_TIME, '.webp');  
+        $desktopWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerBottomLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP,'webp')).$uploadedTime, CONF_IMG_CACHE_TIME, '.webp');  
     }
 
     if ($val['banner_record_id'] > 0 && $val['banner_type'] == Banner::TYPE_PPC) {
