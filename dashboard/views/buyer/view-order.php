@@ -1193,10 +1193,10 @@ if (!$print) { ?>
     }
 
     trackOrder = function(trackingNumber, courier, orderNumber) {
-        $.facebox(function() {
-            fcom.ajax(fcom.makeUrl('Buyer', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function(res) {
-                $.facebox(res );
-            });
+        $.mbsmessage(langLbl.processing, false, 'alert--process');
+        fcom.ajax(fcom.makeUrl('Buyer', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function(res) {
+            $.mbsmessage.close();
+            $.facebox(res );
         });
     };
 </script>

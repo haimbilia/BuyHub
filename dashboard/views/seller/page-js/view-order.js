@@ -30,8 +30,10 @@ $(document).ready(function () {
     };
 
     trackOrder = function (trackingNumber, courier, orderNumber) {
+        $.mbsmessage(langLbl.processing, false, 'alert--process');
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('Seller', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function (res) {
+                $.mbsmessage.close();
                 $.facebox(res );
             });
         });

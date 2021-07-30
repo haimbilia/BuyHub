@@ -167,6 +167,7 @@ Updates/Fixes :
     => 056410 - admin >> notifications for shop report > when we click on report notification then admin gets redirect to report reasons instead of report listing
     => 056508 - on order cancellation requests error coming at admin side
     => 056406 - admin> seller orders> ship by seller/admin needs to be there in listing and in filters too
+    => 056367 - once order is generated with aftership then link is not getting generated on seller/buyer end
 
 New Features:  
     => Admin shipped products listing page
