@@ -167,6 +167,7 @@ Updates/Fixes :
     => 056410 - admin >> notifications for shop report > when we click on report notification then admin gets redirect to report reasons instead of report listing
     => 056508 - on order cancellation requests error coming at admin side
     => 056555 - Unable to view products when seller has pending subscription
+    => 056568 - on admin seller product left navigation wrong seller order count
 
 New Features:  
     => Admin shipped products listing page
