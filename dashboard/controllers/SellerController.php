@@ -283,7 +283,7 @@ class SellerController extends SellerBaseController
 
         $vendors = [
             0 => Labels::getLabel('LBL_ADMIN', $langId),
-            UserAuthentication::getLoggedUserId() => Labels::getLabel('LBL_ME', $langId),
+            UserAuthentication::getLoggedUserId() => Labels::getLabel('LBL_SELLER', $langId),
         ];
         $frm->addSelectBox(Labels::getLabel('LBL_SHIPPPED_BY', $langId), 'opshipping_by_seller_user_id', $vendors, '', array('title' => Labels::getLabel('LBL_SHIPPED_BY', $langId)), Labels::getLabel('LBL_FULLFILED_BY', $langId));
 
