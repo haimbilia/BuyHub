@@ -166,6 +166,7 @@ Updates/Fixes :
     => 056412 - Checkout (pickup ) >> when we select slot then popup should get closed.
     => 056410 - admin >> notifications for shop report > when we click on report notification then admin gets redirect to report reasons instead of report listing
     => 056508 - on order cancellation requests error coming at admin side
+    => 056555 - Unable to view products when seller has pending subscription
 
 New Features:  
     => Admin shipped products listing page
