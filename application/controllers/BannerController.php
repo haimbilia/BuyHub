@@ -84,7 +84,7 @@ class BannerController extends MyAppController
         FatApp::redirectUser(UrlHelper::generateUrl(''));
     }
 
-    public function HomePageBannerTopLayout($bannerId, $langId = 0, $screen = 0)
+    public function HomePageBannerTopLayout($bannerId, $langId = 0, $screen = 0, $sizeType = '')
     {
         $bannerId = FatUtility::int($bannerId);
         $blocationId = Banner::getAttributesById($bannerId, 'banner_blocation_id');
@@ -98,11 +98,11 @@ class BannerController extends MyAppController
         if (array_key_exists('blocation_banner_height', $bannerDimensions)) {
             $h = $bannerDimensions['blocation_banner_height'];
         }
-        $this->showBanner($bannerId, $langId, $w, $h, $screen);
+        $this->showBanner($bannerId, $langId, $w, $h, $screen, $sizeType);
     }
 
     // For Mobile API
-    public function HomePageBannerMiddleLayout($bannerId, $langId = 0, $screen = 0)
+    public function HomePageBannerMiddleLayout($bannerId, $langId = 0, $screen = 0, $sizeType = '')
     {
         $bannerId = FatUtility::int($bannerId);
         $blocationId = Banner::getAttributesById($bannerId, 'banner_blocation_id');
@@ -116,10 +116,10 @@ class BannerController extends MyAppController
         if (array_key_exists('blocation_banner_height', $bannerDimensions)) {
             $h = $bannerDimensions['blocation_banner_height'];
         }
-        $this->showBanner($bannerId, $langId, $w, $h, $screen);
+        $this->showBanner($bannerId, $langId, $w, $h, $screen, $sizeType);
     }
 
-    public function HomePageBannerBottomLayout($bannerId, $langId = 0, $screen = 0)
+    public function HomePageBannerBottomLayout($bannerId, $langId = 0, $screen = 0, $sizeType = '')
     {
         $bannerId = FatUtility::int($bannerId);
         $blocationId = Banner::getAttributesById($bannerId, 'banner_blocation_id');
@@ -133,10 +133,10 @@ class BannerController extends MyAppController
         if (array_key_exists('blocation_banner_height', $bannerDimensions)) {
             $h = $bannerDimensions['blocation_banner_height'];
         }
-        $this->showBanner($bannerId, $langId, $w, $h, $screen);
+        $this->showBanner($bannerId, $langId, $w, $h, $screen, $sizeType);
     }
 
-    public function productDetailPageBanner($bannerId, $langId = 0, $screen = 0)
+    public function productDetailPageBanner($bannerId, $langId = 0, $screen = 0, $sizeType = '')
     {
         $bannerId = FatUtility::int($bannerId);
         $blocationId = Banner::getAttributesById($bannerId, 'banner_blocation_id');
@@ -150,12 +150,12 @@ class BannerController extends MyAppController
         if (array_key_exists('blocation_banner_height', $bannerDimensions)) {
             $h = $bannerDimensions['blocation_banner_height'];
         }
-        $this->showBanner($bannerId, $langId, $w, $h, $screen);
+        $this->showBanner($bannerId, $langId, $w, $h, $screen, $sizeType);
     }
 
-    public function thumb($bannerId, $langId = 0, $screen = 0)
+    public function thumb($bannerId, $langId = 0, $screen = 0, $sizeType = '')
     {
-        $this->showBanner($bannerId, $langId, 200, 50, $screen);
+        $this->showBanner($bannerId, $langId, 200, 50, $screen, $sizeType);
     }
 
     public function showBanner($bannerId, $langId, $w = '200', $h = '200', $screen = 0, $sizeType = '')
