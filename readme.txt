@@ -150,6 +150,7 @@ Updates/Fixes :
     => 056373 - if admin shipping is enabled then even seller is credited with shipping amount
     => 056508 - on order cancellation requests error coming at admin side
     => 056555 - Unable to view products when seller has pending subscription
+    => 056568 - on admin seller product left navigation wrong seller order count
 
 Enhancements :
    => Make provision to made seller
