@@ -149,6 +149,7 @@ Updates/Fixes :
     => 056225 - The settings are not getting saved for the related product settings under Admin dashboard
     => 056373 - if admin shipping is enabled then even seller is credited with shipping amount
     => 056508 - on order cancellation requests error coming at admin side
+    => 056555 - Unable to view products when seller has pending subscription
 
 Enhancements :
    => Make provision to made seller
