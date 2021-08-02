@@ -172,6 +172,9 @@ Updates/Fixes :
     => 056366 - once after ship is enabled then on accessing email for the same is flooded with errors
     => 056362 - seller order is not accessible when only tracking api is enabled and order is marked s shipped
     => 056349 - admin> during login> getting message overlapped
+    => 056555 - Unable to view products when seller has pending subscription
+    => 056568 - on admin seller product left navigation wrong seller order count
+    => 056585 - on manage collections Banner layout1 and layout2 has wrong image of layout
 
 New Features:  
     => Admin shipped products listing page
