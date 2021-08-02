@@ -42,13 +42,19 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
 
                                     <div class="cell cell_product">
                                         <div class="item">
-                                            <div class="item__pic"><a href="<?php echo $productUrl; ?>">
-                                                    <picture>
-                                                        <source type="image/webp" srcset="<?php echo $imageWebpUrl; ?>">
-                                                        <source type="image/jpeg" srcset="<?php echo $imageUrl; ?>">
-                                                        <img loading="lazy" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
-                                                    </picture>
-                                                </a></div>
+                                            <div class="item__pic">
+                                                <a href="<?php echo $productUrl; ?>">
+                                                    <?php
+                                                        $pictureAttr = [
+                                                            'webpImageUrl' => $imageWebpUrl,
+                                                            'jpgImageUrl' => $imageUrl,
+                                                            'alt' => $product['product_name'],
+                                                        ];
+                            
+                                                        $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
+                                                    ?>
+                                                </a>
+                                            </div>
                                             <div class="item__description">
                                                 <div class="item__category"><a href="<?php echo $shopUrl; ?>"><?php echo $product['shop_name']; ?> </a></div>
                                                 <div class="item__title"><a title="<?php echo $product['product_name']; ?>" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>

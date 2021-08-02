@@ -55,11 +55,16 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                             <div class="product-profile">
                                 <div class="product-profile__thumbnail">
                                     <a href="<?php echo $productUrl; ?>">
-                                        <picture>
-                                            <source type="image/webp" srcset="<?php echo $imageWebpUrl; ?>">
-                                            <source type="image/jpeg" srcset="<?php echo $imageUrl; ?>">
-                                            <img loading="lazy" class="img-fluid" data-ratio="1:1" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
-                                        </picture>
+                                        <?php
+                                            $pictureAttr = [
+                                                'webpImageUrl' => $imageWebpUrl,
+                                                'jpgImageUrl' => $imageUrl,
+                                                'ratio' => '1:1',
+                                                'alt' => $productTitle,
+                                            ];
+
+                                            $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
+                                        ?>
                                     </a>
                                 </div>
                                 <div class="product-profile__data">
@@ -118,11 +123,16 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                     <div class="product-profile">
                         <div class="product-profile__thumbnail">
                             <a href="<?php echo $productUrl; ?>">
-                                <picture>
-                                    <source type="image/webp" srcset="<?php echo $imageWebpUrl; ?>">
-                                    <source type="image/jpeg" srcset="<?php echo $imageUrl; ?>">
-                                    <img loading="lazy" class="img-fluid" data-ratio="1:1" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
-                                </picture>
+                                <?php
+                                    $pictureAttr = [
+                                        'webpImageUrl' => $imageWebpUrl,
+                                        'jpgImageUrl' => $imageUrl,
+                                        'ratio' => '1:1',
+                                        'alt' => $productTitle,
+                                    ];
+
+                                    $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
+                                ?>
                             </a>
                         </div>
                         <div class="product-profile__data">
@@ -236,11 +246,16 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                         <div class="product-profile">
                             <div class="product-profile__thumbnail">
                                 <a href="<?php echo $productUrl; ?>">
-                                    <picture>
-                                        <source type="image/webp" srcset="<?php echo $imageWebpUrl; ?>">
-                                        <source type="image/jpeg" srcset="<?php echo $imageUrl; ?>">
-                                        <img loading="lazy" class="img-fluid" data-ratio="1:1" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
-                                    </picture>
+                                    <?php
+                                        $pictureAttr = [
+                                            'webpImageUrl' => $imageWebpUrl,
+                                            'jpgImageUrl' => $imageUrl,
+                                            'ratio' => '1:1',
+                                            'alt' => $productTitle,
+                                        ];
+
+                                        $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
+                                    ?>
                                 </a>
                             </div>
                             <div class="product-profile__data">

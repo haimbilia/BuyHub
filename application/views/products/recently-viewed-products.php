@@ -33,14 +33,16 @@ if ($recentViewedProducts) {
                         <a title="<?php echo $rProduct['selprod_title']; ?>"
                             href="<?php echo !isset($rProduct['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($rProduct['promotion_record_id'])); ?>">
                             <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $rProduct['product_id']); ?>
-                            <picture>
-                                <source type="image/webp" srcset="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($rProduct['product_id'], "WEBPCLAYOUT3", $rProduct['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.webp'); ?>">
-                                <source type="image/jpeg" srcset="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($rProduct['product_id'], "CLAYOUT3", $rProduct['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
-                                <img data-ratio="1:1 (500x500)"
-                                src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($rProduct['product_id'], "CLAYOUT3", $rProduct['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>"
-                                alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $rProduct['prodcat_name']; ?>"
-                                title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $rProduct['prodcat_name']; ?>">
-                            </picture>                            
+                            <?php
+                                $pictureAttr = [
+                                    'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($rProduct['product_id'], "WEBPCLAYOUT3", $rProduct['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.webp'),
+                                    'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($rProduct['product_id'], "CLAYOUT3", $rProduct['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'),
+                                    'ratio' => '1:1',
+                                    'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $rProduct['prodcat_name'],
+                                ];
+
+                                $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
+                            ?>                            
                         </a>
                     </div>
                 </div>
