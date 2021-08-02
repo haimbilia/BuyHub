@@ -5,6 +5,17 @@ $frmSearch->setCustomRendererClass('FormRendererBS');
 $frmSearch->developerTags['colWidthClassesDefault'] = ['col-lg-', 'col-md-', null, null];
 $frmSearch->developerTags['colWidthValuesDefault'] = [4, 4, null, null];
 
+$fld = $frmSearch->getField('date_from');
+if (null != $fld) {
+    $fld->setFieldTagAttribute('placeholder', $fld->getCaption());
+    $fld->developerTags['noCaptionTag'] = true;
+}
+
+$fld = $frmSearch->getField('date_to');
+if (null != $fld) {
+    $fld->setFieldTagAttribute('placeholder', $fld->getCaption());
+    $fld->developerTags['noCaptionTag'] = true;
+}
 $sortBy = $frmSearch->getField('sortBy');
 $sortBy->setFieldTagAttribute('id', 'sortBy');
 

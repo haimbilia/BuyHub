@@ -18,7 +18,7 @@
             </div>
         </div>
     </div>
-    <section class="section bg-gray">
+    <section class="section">
         <div class="container">
             <div class="cms">
                 <div class="list__all" id='listing'></div>

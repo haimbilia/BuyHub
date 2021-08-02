@@ -347,11 +347,14 @@
             flex-wrap: wrap;
             justify-content: space-between;
             li {
-                padding-right: 10px;
+                padding-#{$end-direction}: 10px;
                 margin-bottom: 10px;
                 position: relative;
                 flex: 0 0 50%;
                 max-width: 50%;
+                &:last-child {
+                    padding-#{$end-direction}: 0;
+                }
                 .control-input {
                     position: absolute;
                     opacity: 0;
@@ -678,7 +681,8 @@
         display: flex;
         justify-content: space-between;
         color: $txt-body;
-        flex: 1;
+        //flex: 1;
+        width: 100%;
         /* flex: 0 0 20%;
        max-width: 20%;*/
         h6 {

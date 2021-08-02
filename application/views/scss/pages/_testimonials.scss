@@ -3,8 +3,7 @@
     position: relative;
     height: 100%;
     border-radius: $radius4;
-    -webkit-box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.06);
-    box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.22);
     background-color: $bg-white;
     .user {
         width: 60px;
@@ -14,12 +13,10 @@
         top: -10px;
         #{$start-direction}: 25px;
         z-index: 3;
-        -webkit-transition: all 0.3s ease 0s;
         transition: all 0.3s ease 0s;
         border-radius: $radius4;
         overflow: hidden;
-        -webkit-box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.06);
-        box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.06);
+        box-shadow: 0 -5px 15px 0 rgba(0, 0, 0, 0.22);
         img {
             max-width: 100%;
         }

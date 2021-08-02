@@ -71,6 +71,17 @@ class Product extends MyAppModel
     public const CATALOG_TYPE_REQUEST = 1;
     public const CATALOG_TYPE_INVENTORY = 2;
 
+    /* For API */
+    public const FILTER_POSITION_DEFAULT = 0;
+    public const FILTER_POSITION_ALTERNATE = 1;
+
+    public const FILTER_TYPE_CATEGORY = 1;
+    public const FILTER_TYPE_BRAND = 2;
+    public const FILTER_TYPE_OPTION = 3;
+    public const FILTER_TYPE_SORT_BY = 4;
+    public const FILTER_TYPE_PRICE = 5;
+    /* For API */
+
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);

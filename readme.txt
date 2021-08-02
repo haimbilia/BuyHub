@@ -167,6 +167,18 @@ Updates/Fixes :
     => 056410 - admin >> notifications for shop report > when we click on report notification then admin gets redirect to report reasons instead of report listing
     => 056508 - on order cancellation requests error coming at admin side
     => 056406 - admin> seller orders> ship by seller/admin needs to be there in listing and in filters too
+===================TV-9.3.2.20210730==================
+    => 056367 - once order is generated with aftership then link is not getting generated on seller/buyer end
+    => 056366 - once after ship is enabled then on accessing email for the same is flooded with errors
+    => 056362 - seller order is not accessible when only tracking api is enabled and order is marked s shipped
+    => 056349 - admin> during login> getting message overlapped
+    => 056555 - Unable to view products when seller has pending subscription
+    => 056568 - on admin seller product left navigation wrong seller order count
+    => 056585 - on manage collections Banner layout1 and layout2 has wrong image of layout
+    => 056600 - Wallet recharge wrong URL
+    => 056314 - on removing item from wishlist getting 404
+    => 056263 - Cart >> For save for later >> "move to wishlist " tool tip is there instead of " save for later".
+    => 056243 - seller> payout report> filters> buttons are not aligned with fields
 
 New Features:  
     => Admin shipped products listing page
@@ -182,6 +194,7 @@ Enhancements :
    => Price surge based on special price. 
    => Admin Reports.
    => Map listing for products & shops 
+   => Webp image support
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

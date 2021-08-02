@@ -211,7 +211,7 @@ a:hover {
 .info {
     background: lighten($info-color, 33);
     color: $info-color;
-    border: solid 1px lighten($info-color, 25);
+    border: dashed 1px $info-color;
     padding: 1rem 2rem;
     border-radius: 0.25rem;
     font-size: 0.875rem;

@@ -973,7 +973,7 @@ class ShopsController extends MyAppController
         }
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 250;

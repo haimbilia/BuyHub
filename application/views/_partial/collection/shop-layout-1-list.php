@@ -4,10 +4,16 @@
         $uploadedTime = AttachedFile::setTimeParam($shop['shopData']['shop_updated_on']);?>    
         <div class="featured-item">
             <div class="featured-item__body">
-                <div class="featured_logo">                    
-                    <img loading='lazy'
-                        src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shopData']['shop_id'], $siteLangId, "THUMB", 0, false), CONF_WEBROOT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>"
-                        alt="<?php echo $shop['shopData']['shop_name']; ?>">
+                <div class="featured_logo">                
+                    <?php
+                        $pictureAttr = [
+                            'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shopData']['shop_id'], $siteLangId, "WEBPTHUMB", 0, false), CONF_WEBROOT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
+                            'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shopData']['shop_id'], $siteLangId, "THUMB", 0, false), CONF_WEBROOT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                            'alt' => $shop['shopData']['shop_name'],
+                        ];
+
+                        $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
+                    ?>
                 </div>
                 <div class="featured_detail">
                     <div class="featured_name"><a

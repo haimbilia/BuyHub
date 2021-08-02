@@ -529,7 +529,7 @@ class AccountController extends LoggedUserController
             $this->set('orderType', Orders::ORDER_WALLET_RECHARGE);
             $this->_template->render();
         }
-        $this->set('redirectUrl', UrlHelper::generateUrl('WalletPay', 'Recharge', array($order_id)));
+        $this->set('redirectUrl', UrlHelper::generateUrl('WalletPay', 'Recharge', array($order_id), CONF_WEBROOT_FRONT_URL));
         $this->set('msg', Labels::getLabel('MSG_Redirecting', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -827,6 +827,7 @@ class AccountController extends LoggedUserController
         }
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;

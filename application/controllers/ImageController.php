@@ -31,7 +31,7 @@ class ImageController extends FatController
         }
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);         
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 150;
@@ -81,7 +81,7 @@ class ImageController extends FatController
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $recordId, 0, $lang_id);
         }
         $image_name = (isset($file_row['afile_physical_path']) && !empty($file_row['afile_physical_path'])) ? AttachedFile::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);        
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
@@ -168,7 +168,7 @@ class ImageController extends FatController
 
         $image_name = (isset($file_row['afile_physical_path']) && !empty($file_row['afile_physical_path'])) ? AttachedFile::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
         /* CommonHelper::printArray($image_name); die();  */
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);       
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
@@ -242,19 +242,20 @@ class ImageController extends FatController
         }
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType); 
         AttachedFile::displayOriginalImage($image_name, $default_image);
     }
 
-    public function promotion_banner($img = '', $type)
+    public function promotion_banner($image_name = '', $sizeType)
     {
         $default_image = 'product_default_image.jpg';
-        switch (strtoupper($type)) {
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);  
+        switch (strtoupper($sizeType)) {
             case 'MINI':
-                return AttachedFile::displayImage($img, 50, 50, 'promotions/', 'shop_default.jpg');
+                return AttachedFile::displayImage($image_name, 50, 50, 'promotions/', 'shop_default.jpg');
                 break;
             default:
-                return AttachedFile::displayImage($img, 50, 50, $default_image);
+                return AttachedFile::displayImage($image_name, 50, 50, $default_image);
         }
     }
 
@@ -276,7 +277,7 @@ class ImageController extends FatController
         }
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType); 
         switch (strtoupper($sizeType)) {
             case 'TEMP1':
                 $w = 2000;
@@ -322,7 +323,7 @@ class ImageController extends FatController
         }
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType); 
         switch (strtoupper($sizeType)) {
             case 'TEMP2':
                 $w = 1298;
@@ -395,6 +396,7 @@ class ImageController extends FatController
         if ($image_name == '' || empty($image_name)) {
             $image_name = $default_image;
         }
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);  
         switch (strtoupper($sizeType)) {
             default:
                 $h = '';
@@ -435,7 +437,7 @@ class ImageController extends FatController
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $recordId, 0, $langId, $displayUniversalImage);
         }
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType); 
         switch (strtoupper($sizeType)) {
             case 'MINITHUMB':
                 $w = 42;
@@ -479,7 +481,7 @@ class ImageController extends FatController
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_IMAGE, $recordId, 0, $langId, $displayUniversalImage, $screen);
         }
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType); 
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 61;
@@ -532,7 +534,7 @@ class ImageController extends FatController
         }
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);  
         switch (strtoupper($sizeType)) {
             case 'ICON':
                 $w = 30;
@@ -573,7 +575,7 @@ class ImageController extends FatController
 
         $recordId = FatUtility::int($recordId);
         $filePath = LayoutTemplate::LAYOUTTYPE_SHOP_IMAGE_PATH;
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType); 
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 200;
@@ -600,7 +602,7 @@ class ImageController extends FatController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, $recordId, 0, $lang_id, false);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $default_image = '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType); 
         switch (strtoupper($sizeType)) {
             case 'THUMB':                
                 $w = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 100 : 120);
@@ -623,7 +625,8 @@ class ImageController extends FatController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_EMAIL_LOGO, $recordId, 0, $lang_id);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $default_image = 'no_image.jpg';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType); 
+        $default_image = AttachedFile::setNamePrefix($default_image, $sizeType); 
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
@@ -650,7 +653,7 @@ class ImageController extends FatController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE, $recordId, 0, $lang_id);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $default_image = '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);  
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 120;
@@ -672,6 +675,7 @@ class ImageController extends FatController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO, $recordId, 0, $lang_id);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $default_image = '';
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);  
         switch (strtoupper($sizeType)) {
             case 'THUMB':                
                 $w = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 100 : 120);
@@ -695,7 +699,7 @@ class ImageController extends FatController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_WATERMARK_IMAGE, $recordId, 0, $lang_id);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $default_image = '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);  
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
@@ -715,7 +719,7 @@ class ImageController extends FatController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_APPLE_TOUCH_ICON, $recordId, 0, $lang_id);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $default_image = '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType); 
         switch (strtoupper($sizeType)) {
             case 'MINI':
                 $w = 72;
@@ -746,7 +750,7 @@ class ImageController extends FatController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_MOBILE_LOGO, $recordId, 0, $lang_id);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $default_image = '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);  
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
@@ -768,7 +772,7 @@ class ImageController extends FatController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_INVOICE_LOGO, $recordId, 0, $lang_id);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $default_image = '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);  
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
@@ -787,15 +791,16 @@ class ImageController extends FatController
     {
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_COLLECTION_BG_IMAGE, $recordId, 0, $langId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $default_image = 'no_image.jpg';
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);  
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
                 $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h);
+                AttachedFile::displayImage($image_name, $w, $h, $default_image);
                 break;
             default:
-                AttachedFile::displayOriginalImage($image_name);
+                AttachedFile::displayOriginalImage($image_name, $default_image);
                 break;
         }
     }
@@ -804,15 +809,16 @@ class ImageController extends FatController
     {
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_COLLECTION_BG_IMAGE, $recordId, 0, $langId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $default_image = 'no_image.jpg';
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);  
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
                 $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h);
+                AttachedFile::displayImage($image_name, $w, $h, $default_image);
                 break;
             default:
-                AttachedFile::displayOriginalImage($image_name);
+                AttachedFile::displayOriginalImage($image_name, $default_image);
                 break;
         }
     }
@@ -823,7 +829,8 @@ class ImageController extends FatController
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_DISCOUNT_COUPON_IMAGE, $coupon_id, 0, $lang_id);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $default_image = 'no_image.jpg';
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);  
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
@@ -849,7 +856,7 @@ class ImageController extends FatController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_META_IMAGE, 0, 0, $lang_id);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $default_image = '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);  
         switch (strtoupper($sizeType)) {
             default:
                 $w = 600;
@@ -865,7 +872,7 @@ class ImageController extends FatController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE, 0, 0, $lang_id);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $default_image = '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);  
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
@@ -892,7 +899,7 @@ class ImageController extends FatController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_FAVICON, $recordId, 0, $lang_id);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $default_image = '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);  
         switch (strtoupper($sizeType)) {
             case 'MINI':
                 $w = 72;
@@ -923,7 +930,7 @@ class ImageController extends FatController
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $slide_id, 0, $lang_id, $displayUniversalImage, $screen);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);  
         if ($sizeType) {
             switch (strtoupper($sizeType)) {
                 case 'THUMB':
@@ -986,7 +993,7 @@ class ImageController extends FatController
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE, $splatform_id);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);  
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 200;
@@ -1019,7 +1026,7 @@ class ImageController extends FatController
         //$file_row = AttachedFile::getAttachment( AttachedFile::FILETYPE_COLLECTION_IMAGE, $collectionId );
         $file_row = AttachedFile::getAttachment($fileType, $collectionId, 0, $langId, $displayUniversalImage);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
@@ -1052,7 +1059,7 @@ class ImageController extends FatController
         $collectionId = FatUtility::int($collectionId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_COLLECTION_BG_IMAGE, $collectionId, 0, $langId, $displayUniversalImage);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
@@ -1075,7 +1082,7 @@ class ImageController extends FatController
         $this->blogPost($postId, $langId, $size_type, $subRecordId, $afile_id);
     }
 
-    public function blogPost($postId, $langId = 0, $size_type = '', $subRecordId = 0, $afile_id = 0, $displayUniversalImage = true)
+    public function blogPost($postId, $langId = 0, $sizeType = '', $subRecordId = 0, $afile_id = 0, $displayUniversalImage = true)
     {
         $default_image = 'post_default_image.jpg';
 
@@ -1093,8 +1100,8 @@ class ImageController extends FatController
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $postId, $subRecordId, $langId, $displayUniversalImage);
         }
         $image_name = isset($file_row['afile_physical_path']) ? AttachedFile::FILETYPE_BLOG_POST_IMAGE_PATH . $file_row['afile_physical_path'] : '';
-
-        switch (strtoupper($size_type)) {
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
+        switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
                 $h = 100;
@@ -1137,7 +1144,7 @@ class ImageController extends FatController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BATCH_IMAGE, $prodgroup_id, 0, $lang_id);
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
@@ -1173,7 +1180,7 @@ class ImageController extends FatController
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_TESTIMONIAL_IMAGE, $recordId, 0, $langId, $displayUniversalImage);
         }
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'MINITHUMB':
                 $w = 42;
@@ -1200,7 +1207,7 @@ class ImageController extends FatController
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE, $cpageId, 0, $langId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 150;
@@ -1224,7 +1231,7 @@ class ImageController extends FatController
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment($fileType, $cblockId, 0, $langId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
@@ -1244,7 +1251,7 @@ class ImageController extends FatController
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_COLLECTION_IMAGE, $recordId, 0, $langId, $displayUniversalImage);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
@@ -1262,10 +1269,11 @@ class ImageController extends FatController
         }
     }
 
-    public function pushNotificationImage($pNotificationId)
+    public function pushNotificationImage($pNotificationId, $sizeType = '')
     {
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE, $pNotificationId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         AttachedFile::displayOriginalImage($image_name);
     }
 
@@ -1275,7 +1283,7 @@ class ImageController extends FatController
         $recordId = FatUtility::int($recordId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId, 0, 0, $displayUniversalImage);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'ICON':
                 $w = 30;
@@ -1329,7 +1337,7 @@ class ImageController extends FatController
         }
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-        
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'ICON':
                 $w = 30;
@@ -1392,7 +1400,7 @@ class ImageController extends FatController
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badgeId, 0, $langId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $filePath = AttachedFile::FILETYPE_BADGE_IMAGE_PATH;
         switch (strtoupper($sizeType)) {
             case 'THUMB':
@@ -1419,7 +1427,7 @@ class ImageController extends FatController
     {
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $bReqId, 0, $langId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $filePath = AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH;
         switch (strtoupper($sizeType)) {
             case 'THUMB':
