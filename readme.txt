@@ -177,6 +177,7 @@ Updates/Fixes :
     => 056236 - Affiliate / advertiser >> some warnings are there. 
     => 056237 - if any user is logged in then 404 page is getting opened if we click on "become a seller " , " Advertise with us" or " register as affiliate" link in footer.
     => 056239 - seller> buy together> on clicking existing items getting error
+    => 056241 - seller> sales reports> back button is not working
 
 New Features:  
     => Admin shipped products listing page
