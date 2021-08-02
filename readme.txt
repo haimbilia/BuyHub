@@ -168,6 +168,7 @@ Updates/Fixes :
     => 056508 - on order cancellation requests error coming at admin side
     => 056555 - Unable to view products when seller has pending subscription
     => 056568 - on admin seller product left navigation wrong seller order count
+    => 056585 - on manage collections Banner layout1 and layout2 has wrong image of layout
 
 New Features:  
     => Admin shipped products listing page
