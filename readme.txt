@@ -175,6 +175,7 @@ Updates/Fixes :
     => 056585 - on manage collections Banner layout1 and layout2 has wrong image of layout
     => 056398 - when tax is zero then on generating slip getting wrong tax amount listed
     => 056236 - Affiliate / advertiser >> some warnings are there. 
+    => 056237 - if any user is logged in then 404 page is getting opened if we click on "become a seller " , " Advertise with us" or " register as affiliate" link in footer.
 
 New Features:  
     => Admin shipped products listing page

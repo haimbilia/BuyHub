@@ -466,7 +466,7 @@ class User extends MyAppModel
                 return UrlHelper::generateFullUrl('affiliate', '', [], CONF_WEBROOT_DASHBOARD);
                 break;
         }
-        return UrlHelper::generateFullUrl('account');
+        return UrlHelper::generateFullUrl('account', '', [], CONF_WEBROOT_DASHBOARD);
     }
 
     public static function getSupplierReqStatusArr($langId)
