@@ -1,4 +1,19 @@
 
+Release Number : 
+Release Date : 
+
+New Feature :     
+    => 88083 : System Log Listing Page 
+    
+Updates:
+    => 88333 : Fix for cron that completes order 
+
+	
+Fixes: N/A
+    
+    
+================================================================================
+
 Multivendor - Released Version : RV-9.3.1
     => IOS/Android Buyer APP version : 2.0.1
     => System API version : 2.3
@@ -160,27 +175,11 @@ Updates/Fixes :
     => 056340 - label generation option is coming on order when order is marked as completed
     => 056344 - on moving item to wish list from cart getting 404 
     => 056509 - Unable to change phone number if SMS plugin on
-    => 056427 - after registration through phone number and configuring details post login page is flooded with errors
-    => 056414 - Admin >> users >> for sub sellers >> edit >> bank account and address tabs are getting displayed only when we click on "cookies " tab
-    => 056413 - Checkout (pickup ) >> when we select slot then "undefined " gets displayed on selected time and date
-    => 056412 - Checkout (pickup ) >> when we select slot then popup should get closed.
-    => 056410 - admin >> notifications for shop report > when we click on report notification then admin gets redirect to report reasons instead of report listing
-    => 056508 - on order cancellation requests error coming at admin side
-    => 056406 - admin> seller orders> ship by seller/admin needs to be there in listing and in filters too
-===================TV-9.3.2.20210730==================
-    => 056367 - once order is generated with aftership then link is not getting generated on seller/buyer end
-    => 056366 - once after ship is enabled then on accessing email for the same is flooded with errors
-    => 056362 - seller order is not accessible when only tracking api is enabled and order is marked s shipped
-    => 056349 - admin> during login> getting message overlapped
-    => 056555 - Unable to view products when seller has pending subscription
-    => 056568 - on admin seller product left navigation wrong seller order count
-    => 056585 - on manage collections Banner layout1 and layout2 has wrong image of layout
-    => 056600 - Wallet recharge wrong URL
 
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
-    => task-85619 Adding files when digital order is delivered  
+    => task-85619 Adding files when digital order is delivered   
 
 Enhancements :
    => At shop level  pickup interval option given
@@ -191,7 +190,6 @@ Enhancements :
    => Price surge based on special price. 
    => Admin Reports.
    => Map listing for products & shops 
-   => Webp image support
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
