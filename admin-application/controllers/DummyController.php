@@ -140,4 +140,4 @@ class DummyController extends AdminBaseController
         $dataMigration->sync();
 
     }
-                    }
+}

@@ -1,0 +1,1 @@
+<?php include CONF_FRONT_END_THEME_PATH . '_partial/emails/child-order-detail-email-seller.php';

@@ -168,6 +168,7 @@ Updates/Fixes :
     => 056508 - on order cancellation requests error coming at admin side
     => 056406 - admin> seller orders> ship by seller/admin needs to be there in listing and in filters too
     => 056367 - once order is generated with aftership then link is not getting generated on seller/buyer end
+    => 056366 - once after ship is enabled then on accessing email for the same is flooded with errors
 
 New Features:  
     => Admin shipped products listing page
