@@ -174,6 +174,7 @@ Updates/Fixes :
     => 056568 - on admin seller product left navigation wrong seller order count
     => 056585 - on manage collections Banner layout1 and layout2 has wrong image of layout
     => 056398 - when tax is zero then on generating slip getting wrong tax amount listed
+    => 056236 - Affiliate / advertiser >> some warnings are there. 
 
 New Features:  
     => Admin shipped products listing page
