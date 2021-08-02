@@ -28,7 +28,7 @@
         //=== Render paypal Buttons
         paypal.Buttons({
             onError: function (err) {
-                $.systemMessage(err.message, 'alert--danger', false);
+                $.mbsmessage(err.message, false, 'alert--danger');
                 return;
             },
             style: {
@@ -36,25 +36,25 @@
             },
             //=== Call your server to create an order
             createOrder: function (data, actions) {
-                $.systemMessage(langLbl.requestProcessing, 'alert--process', false);
+                $.mbsmessage(langLbl.requestProcessing, false, 'alert--process');
                 return fetch(fcom.makeUrl('PaypalPay', 'createOrder', ['<?php echo $orderInfo['id']; ?>']), {
                     method: "POST",
                 }).then(function (res) {
                     return res.json();
                 }).then(function (data) {
-                    $.systemMessage(langLbl.waitingForResponse, 'alert--process', false);
+                    $.mbsmessage(langLbl.waitingForResponse, false, 'alert--process');
                     if (!data.success && (data.message || data.msg)) {
                         var msg = typeof data.msg != 'undefined' ? data.msg : data.message;
-                        $.systemMessage(msg, 'alert--danger', true);
+                        $.mbsmessage(msg, true, 'alert--danger');
                         return;
                     }
-                    $.systemMessage.close();
+                    $.mbsmessage.close();
                     return data.id;
                 });
             },
             //=== Call your server to save the transaction
             onApprove: function (data, actions) {
-                $.systemMessage(langLbl.waitingForResponse, 'alert--process', false);
+                $.mbsmessage(langLbl.waitingForResponse, false, 'alert--process');
                 return fetch(fcom.makeUrl('PaypalPay', 'captureOrder', [data.orderID]), {
                     method: "POST",
                 }).then(function (res) {
@@ -67,13 +67,13 @@
                         data: data,
                         dataType: 'json',
                         beforeSend: function() {
-                            $.systemMessage(langLbl.updatingRecord, 'alert--info', false);
+                            $.mbsmessage(langLbl.updatingRecord, false, 'alert--info');
                         },
                         success: function (resp) {
                             if (1 > resp.status) {
-                                $.systemMessage(resp.msg, 'alert--danger', false);
+                                $.mbsmessage(resp.msg, false, 'alert--danger');
                             } else {
-                                $.systemMessage(resp.msg, 'alert--success', false);
+                                $.mbsmessage(resp.msg, false, 'alert--success');
                                 setTimeout(function () {
                                     window.location.href = resp.redirecUrl;
                                 }, 100);

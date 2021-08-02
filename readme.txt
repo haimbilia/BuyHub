@@ -170,6 +170,8 @@ Updates/Fixes :
 ===================TV-9.3.2.20210730==================
     => 056367 - once order is generated with aftership then link is not getting generated on seller/buyer end
     => 056366 - once after ship is enabled then on accessing email for the same is flooded with errors
+    => 056362 - seller order is not accessible when only tracking api is enabled and order is marked s shipped
+    => 056349 - admin> during login> getting message overlapped
 
 New Features:  
     => Admin shipped products listing page
