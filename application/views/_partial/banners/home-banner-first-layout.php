@@ -15,11 +15,10 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
         {
             $bannerClass="banners_left";
         } */
-        $desktop_url = '';
-        $tablet_url = '';
-        $mobile_url = '';
-        $defaultImgUrl = '';
-
+        $desktopUrl = $desktopWebpUrl = '';
+        $tabletUrl = $tabletWebpUrl = '';
+        $mobileUrl = $mobileWebpUrl = '';
+       
         if (!AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $val['banner_id'], 0, $siteLangId)) {
             continue;
         } else {
@@ -28,17 +27,24 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
                 $uploadedTime = AttachedFile::setTimeParam($slideScreen['afile_updated_at']);
                 switch ($slideScreen['afile_screen']) {
                     case applicationConstants::SCREEN_MOBILE:
-                        $mobile_url = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerTopLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_MOBILE)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg').",";
+                        $mobileUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerTopLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_MOBILE)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg').",";
+                        $mobileWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerTopLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_MOBILE, 'webp')).$uploadedTime, CONF_IMG_CACHE_TIME, '.webp').",";
                         break;
                     case applicationConstants::SCREEN_IPAD:
-                        $tablet_url = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerTopLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD)).$uploadedTime).",";
+                        $tabletUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerTopLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg').",";
+                        $tabletWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerTopLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD,'webp')).$uploadedTime, CONF_IMG_CACHE_TIME, '.webp').",";
                         break;
                     case applicationConstants::SCREEN_DESKTOP:
-                        $defaultImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerTopLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $desktop_url = $defaultImgUrl.",";
+                        $desktopUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerTopLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $desktopWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerTopLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, 'webp')).$uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
                         break;
                 }
             }
+        }
+
+        if($desktopUrl == ''){
+            $desktopUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerTopLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $desktopWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'HomePageBannerTopLayout', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, 'webp')).$uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
         }
 
         if ($val['banner_record_id'] > 0 && $val['banner_type'] == Banner::TYPE_PPC) {
@@ -48,12 +54,11 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
         } */ ?>
 	<div class="banner-ppc <?php /* echo $bannerClass; */ ?>">
 		<a  target="<?php echo $val['banner_target']; ?>" href="<?php echo UrlHelper::generateUrl('Banner', 'url', array($val['banner_id'])); ?>" title="<?php echo $val['banner_title']; ?>">
-			<picture>
-				<source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>" media="(max-width: 767px)">
-				<source data-aspect-ratio="4:3" srcset="<?php echo $tablet_url; ?>" media="(max-width: 1024px)">
-				<source data-aspect-ratio="10:3" srcset="<?php echo $desktop_url; ?>">
-				<img data-aspect-ratio="10:3" src="<?php echo $desktop_url; ?>" alt="">
-			</picture>
+        <picture>
+            <source type="image/webp" srcset="<?php echo $mobileWebpUrl . $tabletWebpUrl . $desktopWebpUrl; ?>" media="(max-width: 767px),(max-width: 1024px)">
+            <source type="image/jpeg" srcset="<?php echo $mobileUrl . $tabletUrl . $desktopUrl; ?>" media="(max-width: 767px),(max-width: 1024px)">
+            <img data-aspect-ratio="10:3" src="<?php echo $desktopUrl; ?>" alt="" loading="lazy">
+        </picture>		
 		</a>
 	</div>
 <?php $bCount++;
