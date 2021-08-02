@@ -647,7 +647,6 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 
 delete FROM `tbl_cron_schedules` where cron_command='Orders/afterShipOrderStatusDelivered';
 INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Mark Order Status Delivered Via Shipping Api', 'Orders/markOrderStatusDeliveredViaApi', '1440', '1');
-ALTER TABLE `tbl_orders_status_history` ADD `oshistory_tracking_url` TEXT NOT NULL AFTER `oshistory_tracking_number`;
 
 -- ------------Forgot Password -> Reset Password
 UPDATE `tbl_email_templates` SET `etpl_subject` = 'Reset Password Email', `etpl_body` = '<table width="100%" align="center" cellpadding="0" cellspacing="0">
@@ -826,9 +825,6 @@ ALTER TABLE `tbl_order_product_plugin_specifics`
 /* TaxJar Enhancements */
 -- ---------------------------------TV-9.3.2.20210716---------------------
 
-ALTER TABLE tbl_seller_products ADD UNIQUE( selprod_user_id, selprod_code);
--- ------------------------TV-9.3.2.20210720------------------
-
 /* Remove Duplicate Rows. */
 DELETE t1 FROM tbl_seller_products t1
 INNER JOIN tbl_seller_products t2 
@@ -839,6 +835,7 @@ WHERE
 /* Remove Duplicate Rows. */
 
 ALTER TABLE tbl_seller_products ADD UNIQUE( selprod_user_id, selprod_code);
+-- ------------------------TV-9.3.2.20210720------------------
 
 ALTER TABLE tbl_order_prod_charges_logs CHANGE opchargelog_percentvalue opchargelog_percentvalue DECIMAL(10,4) NOT NULL;
 

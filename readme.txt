@@ -175,6 +175,8 @@ Updates/Fixes :
     => 056555 - Unable to view products when seller has pending subscription
     => 056568 - on admin seller product left navigation wrong seller order count
     => 056585 - on manage collections Banner layout1 and layout2 has wrong image of layout
+    => 056600 - Wallet recharge wrong URL
+    => 056314 - on removing item from wishlist getting 404
 
 New Features:  
     => Admin shipped products listing page

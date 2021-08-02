@@ -130,4 +130,15 @@ class Zone extends MyAppModel
         }      
         return $zoneCountryStateArray;
     }
+
+    public static function getExcludeLocations($profileId, $zoneId)
+    {
+        $srch = ShippingProfileZone::getSearchObject();
+        $srch->joinTable(ShippingZone::DB_SHIP_LOC_TBL, 'LEFT OUTER JOIN', 'zoneLoc.shiploc_shipzone_id = spzone.shipprozone_shipzone_id', 'zoneLoc');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $cnd = $srch->addCondition('shipprozone_shipprofile_id', '=', $profileId);
+        $cnd->attachCondition('shipprozone_shipzone_id', '!=', $zoneId, 'AND', false);
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
+    }
 }
