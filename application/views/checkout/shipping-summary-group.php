@@ -43,80 +43,80 @@
     </li>
     <?php
     foreach ($productData as $product) {
+        $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
         $productUrl = !$isAppUser ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : 'javascript:void(0)';
         $shopUrl = !$isAppUser ? UrlHelper::generateUrl('Shops', 'View', array($product['shop_id'])) : 'javascript:void(0)';
         $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+        $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBPTHUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.webp');
     ?>
-    <li>
-        <div class="cell cell_product">
-            <div class="product-profile">
-                <div class="product-profile__thumbnail">
-                    <a href="<?php echo $productUrl; ?>">
-                        <img class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>"
-                            alt="<?php echo $product['product_name']; ?>"
-                            title="<?php echo $product['product_name']; ?>">
-                    </a>
-                </div>
-                <div class="product-profile__data">
-                    <div class="title"><a class=""
-                            href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+        <li>
+            <div class="cell cell_product">
+                <div class="product-profile">
+                    <div class="product-profile__thumbnail">
+                        <a href="<?php echo $productUrl; ?>">
+                            <picture>
+                                <source type="image/webp" srcset="<?php echo $imageWebpUrl; ?>">
+                                <source type="image/jpeg" srcset="<?php echo $imageUrl; ?>">
+                                <img loading="lazy" class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
+                            </picture>
+                        </a>
                     </div>
-                    <div class="options">
-                        <p class=""> <?php if (isset($product['options']) && count($product['options'])) {
+                    <div class="product-profile__data">
+                        <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+                        </div>
+                        <div class="options">
+                            <p class=""> <?php if (isset($product['options']) && count($product['options'])) {
                                                 $optionStr = '';
                                                 foreach ($product['options'] as $option) {
                                                     $optionStr .= $option['optionvalue_name'] . '|';
                                                 }
                                                 echo rtrim($optionStr, '|');
                                             } ?></p>
-                    </div>
+                        </div>
 
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="cell cell_qty">
-            <div class="quantity quantity-2">
-                <span class="decrease decrease-js">
-                    <i class="icn">
-                        <svg class="svg" width="16px" height="16px">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                            </use>
-                        </svg>
-                    </i></span>
-                <input class="qty-input no-focus cartQtyTextBox productQty-js"
-                    title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text"
-                    name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>"
-                    value="<?php echo $product['quantity']; ?>">
-                <span class="increase increase-js">
-                    <i class="icn">
-                        <svg class="svg" width="16px" height="16px">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                            </use>
-                        </svg>
-                    </i>
-                </span>
+            <div class="cell cell_qty">
+                <div class="quantity quantity-2">
+                    <span class="decrease decrease-js">
+                        <i class="icn">
+                            <svg class="svg" width="16px" height="16px">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                </use>
+                            </svg>
+                        </i></span>
+                    <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
+                    <span class="increase increase-js">
+                        <i class="icn">
+                            <svg class="svg" width="16px" height="16px">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                </use>
+                            </svg>
+                        </i>
+                    </span>
+                </div>
             </div>
-        </div>
-        <div class="cell cell_price">
-            <div class="product-price">
-                <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
-                <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
-                <del><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></del>
-                <?php } ?>
+            <div class="cell cell_price">
+                <div class="product-price">
+                    <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
+                    <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
+                        <del><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></del>
+                    <?php } ?>
+                </div>
             </div>
-        </div>
 
-        <div class="cell cell_action">
-            <ul class="actions">
-                <li> <a href="#" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
-                        <svg class="svg" width="20px" height="20px">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
-                            </use>
-                        </svg>
-                    </a></li>
-            </ul>
-        </div>
-    </li>
+            <div class="cell cell_action">
+                <ul class="actions">
+                    <li> <a href="#" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
+                            <svg class="svg" width="20px" height="20px">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
+                                </use>
+                            </svg>
+                        </a></li>
+                </ul>
+            </div>
+        </li>
     <?php
     }
     ?>
