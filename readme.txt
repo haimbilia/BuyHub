@@ -178,6 +178,7 @@ Updates/Fixes :
     => 056600 - Wallet recharge wrong URL
     => 056314 - on removing item from wishlist getting 404
     => 056263 - Cart >> For save for later >> "move to wishlist " tool tip is there instead of " save for later".
+    => 056243 - seller> payout report> filters> buttons are not aligned with fields
 
 New Features:  
     => Admin shipped products listing page
