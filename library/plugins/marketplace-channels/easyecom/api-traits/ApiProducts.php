@@ -67,18 +67,64 @@ trait ApiProducts
      */
     private function getImagesArr(array $options, int $productId, int $count): array
     {
+        $productGroupImages = array();
         $productImagesArr = [];
         foreach ($options as &$optionRow) {
             $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $productId, $optionRow['value_id'], $this->langId, true, '', $count);
-            foreach ($images as $recordId => $row) {
-                $productImagesArr[] = [
-                    'id' => $row['afile_id'],
-                    'src' => CommonHelper::generateFullUrl('Image', 'product', [$recordId, 'ORIGINAL', 0, $row['afile_id']]),
-                    'thumb_src' => CommonHelper::generateFullUrl('Image', 'product', [$recordId, 'THUMB', 0, $row['afile_id']]),
-                ];
+            if ($images) {
+                $productImagesArr += $images;
             }
         }
-        return $productImagesArr;
+
+        if (count($productImagesArr) > 0) {
+            foreach ($productImagesArr as $image) {
+                $afileId = $image['afile_id'];
+                if (!array_key_exists($afileId, $productGroupImages)) {
+                    $productGroupImages[$afileId] = array();
+                }
+                $productGroupImages[$afileId] = $image;
+            }
+        }
+
+        if (isset($count) && $count > 0) {
+            $universal_allowed_images_count = $count - count($productImagesArr);
+        }
+
+        $productUniversalImagesArr = array();
+        if (empty($productGroupImages) || isset($universal_allowed_images_count)) {
+            $universalImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $productId, -1, $this->langId, true, '');
+
+            if ($universalImages) {
+                $productUniversalImagesArr = $universalImages;
+                if (isset($universal_allowed_images_count)) {
+                    $images = array_slice($universalImages, 0, $universal_allowed_images_count);
+                    $productUniversalImagesArr = $images;
+                    $universal_allowed_images_count = $universal_allowed_images_count - count($productUniversalImagesArr);
+                }                
+            }
+        }
+
+        if ($productUniversalImagesArr) {
+            foreach ($productUniversalImagesArr as $image) {
+                $afileId = $image['afile_id'];
+                if (!array_key_exists($afileId, $productGroupImages)) {
+                    $productGroupImages[$afileId] = array();
+                }
+                $productGroupImages[$afileId] = $image;
+            }
+        }
+
+        $imageArr = [];
+        foreach ($productGroupImages as $recordId => $row) {
+            $imageArr[] = [
+                'id' => $row['afile_id'],
+                'src' => UrlHelper::generateFullFileUrl('Image', 'product', [$recordId, 'ORIGINAL', 0, $row['afile_id']]),
+                'thumb_src' => UrlHelper::generateFullFileUrl('Image', 'product', [$recordId, 'THUMB', 0, $row['afile_id']]),
+            ];
+            
+        }
+
+        return $imageArr;
     }
 
     /**
@@ -130,8 +176,8 @@ trait ApiProducts
         foreach ($products as &$row) {
             $productId = FatUtility::int($row['product_id']);
             $sellerProducts = $this->getSellerProducts($productId);
+
             $this->addOptionsArr($sellerProducts);
-            $selprodRow['images'] = [];
             foreach ($sellerProducts as &$selprodRow) {
                 $count = -1;
                 if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE')) {
@@ -139,7 +185,6 @@ trait ApiProducts
                     $count = $currentPlanData['ossubs_images_allowed'];
                 }
                 unset($selprodRow['selprod_user_id']);
-
                 $selprodRow['images'] = $this->getImagesArr($selprodRow['options'], $productId, $count);
             }
 

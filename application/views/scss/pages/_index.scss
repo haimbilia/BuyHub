@@ -26,7 +26,6 @@
         position: absolute;
         z-index: 5;
         top: 50%;
-        -webkit-transform: translateY(-50%);
         transform: translateY(-50%);
         background: #858835;
         border-radius: 50%;
@@ -120,6 +119,8 @@
         border-color: #fff;
         outline-color: #fff;
         margin: 0 1rem 1.5rem;
+        border-radius: 2px;
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
         @include media-breakpoint-down(sm) {
             margin: 0 5px 1.5rem;
         }

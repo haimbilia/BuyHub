@@ -287,39 +287,36 @@ class ProductsController extends MyAppController
         /* ] */
 
         /* Price Filters[ */
-        $priceArr = FilterHelper::getPrice($headerFormParamsAssocArr, $this->siteLangId);
+            $priceArr = FilterHelper::getPrice($headerFormParamsAssocArr, $this->siteLangId);
 
-        $priceInFilter = false;
-        $filterDefaultMinValue = 0;
-        $filterDefaultMaxValue = 0;
-        
-        if(!empty($priceArr)){            
-            $filterDefaultMinValue = $priceArr['minPrice'];
-            $filterDefaultMaxValue = $priceArr['maxPrice'];
+            $priceInFilter = false;
+            $filterDefaultMinValue = 0;
+            $filterDefaultMaxValue = 0;
+            
+            if(!empty($priceArr)){            
+                $filterDefaultMinValue = $priceArr['minPrice'];
+                $filterDefaultMaxValue = $priceArr['maxPrice'];
 
-            if ($this->siteCurrencyId != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1) || (array_key_exists('currency_id', $headerFormParamsAssocArr) && $headerFormParamsAssocArr['currency_id'] != $this->siteCurrencyId)) {
-                $filterDefaultMinValue = CommonHelper::displayMoneyFormat($priceArr['minPrice'], false, false, false);
-                $filterDefaultMaxValue = CommonHelper::displayMoneyFormat($priceArr['maxPrice'], false, false, false);
-                $priceArr['minPrice'] = $filterDefaultMinValue;
-                $priceArr['maxPrice'] = $filterDefaultMaxValue;
+                if ($this->siteCurrencyId != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1) || (array_key_exists('currency_id', $headerFormParamsAssocArr) && $headerFormParamsAssocArr['currency_id'] != $this->siteCurrencyId)) {
+                    $filterDefaultMinValue = CommonHelper::displayMoneyFormat($priceArr['minPrice'], false, false, false);
+                    $filterDefaultMaxValue = CommonHelper::displayMoneyFormat($priceArr['maxPrice'], false, false, false);
+                    $priceArr['minPrice'] = $filterDefaultMinValue;
+                    $priceArr['maxPrice'] = $filterDefaultMaxValue;
+                }
+
+                if (array_key_exists('price-min-range', $headerFormParamsAssocArr) && array_key_exists('price-max-range', $headerFormParamsAssocArr)) {
+                    $priceArr['minPrice'] = $headerFormParamsAssocArr['price-min-range'];
+                    $priceArr['maxPrice'] = $headerFormParamsAssocArr['price-max-range'];
+                    $priceInFilter = true;
+                }
+
+                if (array_key_exists('currency_id', $headerFormParamsAssocArr) && $headerFormParamsAssocArr['currency_id'] != $this->siteCurrencyId && array_key_exists('price-min-range', $headerFormParamsAssocArr) && array_key_exists('price-max-range', $headerFormParamsAssocArr)) {
+                    $filterDefaultMinValue = CommonHelper::convertExistingToOtherCurrency($headerFormParamsAssocArr['currency_id'], $headerFormParamsAssocArr['price-min-range'], $this->siteCurrencyId, false);
+                    $filterDefaultMaxValue = CommonHelper::convertExistingToOtherCurrency($headerFormParamsAssocArr['currency_id'], $headerFormParamsAssocArr['price-max-range'], $this->siteCurrencyId, false);
+                    $priceArr['minPrice'] = $filterDefaultMinValue;
+                    $priceArr['maxPrice'] = $filterDefaultMaxValue;
+                }            
             }
-
-            if (array_key_exists('price-min-range', $headerFormParamsAssocArr) && array_key_exists('price-max-range', $headerFormParamsAssocArr)) {
-                $priceArr['minPrice'] = $headerFormParamsAssocArr['price-min-range'];
-                $priceArr['maxPrice'] = $headerFormParamsAssocArr['price-max-range'];
-                $priceInFilter = true;
-            }
-
-            if (array_key_exists('currency_id', $headerFormParamsAssocArr) && $headerFormParamsAssocArr['currency_id'] != $this->siteCurrencyId && array_key_exists('price-min-range', $headerFormParamsAssocArr) && array_key_exists('price-max-range', $headerFormParamsAssocArr)) {
-                $filterDefaultMinValue = CommonHelper::convertExistingToOtherCurrency($headerFormParamsAssocArr['currency_id'], $headerFormParamsAssocArr['price-min-range'], $this->siteCurrencyId, false);
-                $filterDefaultMaxValue = CommonHelper::convertExistingToOtherCurrency($headerFormParamsAssocArr['currency_id'], $headerFormParamsAssocArr['price-max-range'], $this->siteCurrencyId, false);
-                $priceArr['minPrice'] = $filterDefaultMinValue;
-                $priceArr['maxPrice'] = $filterDefaultMaxValue;
-            }            
-        }
-        
-        
-
         /* ] */
 
         /* Availability Filters[ */
@@ -396,6 +393,7 @@ class ProductsController extends MyAppController
         $this->set('layoutDirection', CommonHelper::getLayoutDirection());
 
         if (true === MOBILE_APP_API_CALL) {
+            $this->set('position', FatApp::getPostedData('position', FatUtility::VAR_INT, 0));
             $this->_template->render();
         }
 

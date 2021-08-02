@@ -774,11 +774,11 @@ $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $ord
     var canShipByPlugin = <?php echo (!empty($shippingApiObj) ? 1 : 0); ?>;
     var orderShippedStatus = <?php echo OrderStatus::ORDER_SHIPPED; ?>;
     trackOrder = function(trackingNumber, courier, orderNumber) {
-        $.facebox(function() {
-            fcom.ajax(fcom.makeUrl('SellerOrders', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function(res) {
-                $.facebox(res, 'medium-fb-width');
-                $(".medium-fb-width").parent('.popup').addClass('h-min-auto');
-            });
+        $.mbsmessage(langLbl.processing, false, 'alert--process');
+        fcom.ajax(fcom.makeUrl('SellerOrders', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function(res) {
+            $.mbsmessage.close();
+            $.facebox(res, 'medium-fb-width');
+            $(".medium-fb-width").parent('.popup').addClass('h-min-auto');
         });
     };
 </script>

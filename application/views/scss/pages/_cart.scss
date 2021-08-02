@@ -405,7 +405,9 @@
 }
 
 .coupons-applied {
-    border: dashed 1px $success-color;
+    background: $bg-brand-light;
+    border: dashed 1px $brand-color;
+    color: $brand-color;
     padding: 1rem;
     border-radius: $radius4;
     display: flex;
@@ -420,6 +422,7 @@
         position: relative;
         display: flex;
         align-items: center;
+        color: $txt-body;
         &:before {
             content: "";
             background: url(images/retina/tick.svg) no-repeat center;
@@ -432,7 +435,6 @@
     }
     p {
         font-size: 0.8rem;
-        color: $success-color;
     }
 }
 

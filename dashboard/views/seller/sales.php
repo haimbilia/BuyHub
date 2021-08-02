@@ -5,9 +5,14 @@ $frmOrderSrch->developerTags['colClassPrefix'] = 'col-md-';
 $frmOrderSrch->developerTags['fld_default_col'] = 12;
 
 $keywordFld = $frmOrderSrch->getField('keyword');
-$keywordFld->setWrapperAttribute('class', 'col-lg-3');
-$keywordFld->developerTags['col'] = 3;
+$keywordFld->developerTags['col'] = 6;
 $keywordFld->developerTags['noCaptionTag'] = true;
+
+$shippedByFld = $frmOrderSrch->getField('opshipping_by_seller_user_id');
+if (null != $shippedByFld) {
+    $shippedByFld->developerTags['noCaptionTag'] = true;
+    $shippedByFld->developerTags['col'] = 3;
+}
 
 $statusFld = $frmOrderSrch->getField('status');
 $statusFld->setWrapperAttribute('class', 'col-lg-3');

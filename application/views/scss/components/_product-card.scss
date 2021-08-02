@@ -161,32 +161,6 @@
     }
     &__body {
         position: relative;
-        .not-available {
-            background-color: rgba(#ffffff, 0.9);
-            color: $danger-color;
-            border-radius: $radius3;
-            border: none;
-            padding: 0.5rem;
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 3;
-            font-size: 0.8rem;
-            font-weight: 600;
-            right: 0;
-            margin: auto;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            .svg {
-                width: 16px;
-                height: 16px;
-                fill: currentColor;
-                margin-#{$end-direction}: 8px;
-            }
-        }
         .products__img {
             --aspect-ratio: 1/1;
             display: block;
@@ -310,22 +284,31 @@
 }
 
 .not-available {
-    background-color: rgba(#ffffff, 0.9);
+    background-color: rgba(255, 255, 255, 0.80);
     color: $danger-color;
     border-radius: $radius3;
-    border: solid 1px currentColor;
-    padding: 2rem 0.5rem;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
     font-size: 0.8rem;
     font-weight: 600;
-    margin: 0;
+    right: 0;
+    margin: auto;
+    //white-space: nowrap;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     .svg {
-        width: 16px;
-        height: 16px;
+        width: 30px;
+        height: 30px;
         fill: currentColor;
-        margin-#{$end-direction}: 8px;
+        margin-bottom: 1rem;
+        //margin-#{$end-direction}: 8px;
     }
 }
 

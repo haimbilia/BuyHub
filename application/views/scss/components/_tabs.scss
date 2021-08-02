@@ -1,25 +1,19 @@
 .tabs {
-    
     margin: 0 auto;
     display: block;
     text-align: center;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    
     display: flex;
     position: relative;
     width: 100%;
     color: $body-color;
     ul {
-
         display: flex;
-        -ms-flex-wrap: nowrap;
         flex-wrap: nowrap;
         overflow-x: auto;
         @include media-breakpoint-down(md) {
-            & {
-                overflow-y: hidden;
-            }
+            overflow-y: hidden;
         }
         li {
             display: inline-block;
@@ -35,43 +29,27 @@
                 margin-#{$end-direction}: 0;
                 padding-#{$end-direction}: 0;
             }
-            &:after {
-                content: "";
-                bottom: 0;
-                background: $body-color;
-                height: 1px;
-                position: absolute;
-                z-index: 1;
-                #{$start-direction}: 0;
-                #{$end-direction}: 100%;
-                -webkit-transition-duration: 0.3s;
-                transition-duration: 0.3s;
-                -webkit-transition-property: right;
-                transition-property: right;
-                -webkit-transition-timing-function: ease-out;
-                transition-timing-function: ease-out;
-            }
             a {
                 color: inherit;
                 display: inline-block;
                 vertical-align: top;
                 padding: 5px 0;
+                text-rendering: optimizeLegibility;
+                transition: color 0.3s ease-in-out;
+                background-image: linear-gradient(currentColor, currentColor);
+                background-position: 50% 100%;
+                background-repeat: no-repeat;
+                background-size: 0% 1px;
+                transition: background-size 0.3s;
+                &:hover {
+                    text-decoration: none;
+                    background-size: 100% 1px;
+                }
             }
             &.is-active {
                 a {
+                    background-size: 100% 1px;
                     color: $brand-color;
-                }
-                &:after {
-                    content: "";
-                    position: absolute;
-                    background: $brand-color;
-                    color: $brand-color-inverse;
-                    #{$end-direction}: 0;
-                }
-            }
-            &:hover {
-                &:after {
-                    #{$end-direction}: 0;
                 }
             }
         }
@@ -195,12 +173,10 @@
 
 .v-tabs {
     display: flex;
-
     &-list {
         flex: 0 0 30%;
         max-width: 30%;
         margin-#{$end-direction}: 20px;
-
         li {
             background-color: $gray-light;
             border-radius: 5px;
@@ -216,7 +192,6 @@
                 a {
                     color: currentColor;
                 }
-
                 &:after {
                     content: "";
                     position: absolute;
