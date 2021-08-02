@@ -95,9 +95,10 @@ class Navigation
         /* seller orders */
         $sellerOrderStatus = FatApp::getConfig('CONF_BADGE_COUNT_ORDER_STATUS', FatUtility::VAR_STRING, '0');
         if($sellerOrderStatus && $sellerOrderStatusArr = (array)unserialize($sellerOrderStatus)) {
-            $sellerOrderSrchObj = new OrderProductSearch($langId);
+            $sellerOrderSrchObj = new OrderProductSearch($langId, true, false);
             $sellerOrderSrchObj->addStatusCondition($sellerOrderStatusArr);            
             $sellerOrderSrchObj->addMultipleFields(array('count(op_id) as countOfRec'));
+            $sellerOrderSrchObj->doNotLimitRecords();           
             $sellerOrderResult = $db->fetch($sellerOrderSrchObj->getResultset());
             $sellerOrderCount = FatUtility::int($sellerOrderResult['countOfRec']);
             $template->set('sellerOrderCount', $sellerOrderCount);

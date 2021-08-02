@@ -164,7 +164,7 @@ class CategoryController extends MyAppController
         }
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
@@ -188,6 +188,7 @@ class CategoryController extends MyAppController
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $catId, 0, $langId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
         switch (strtoupper($sizeType)) {
             case 'THUMB':
@@ -214,7 +215,7 @@ class CategoryController extends MyAppController
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER_SELLER, $shopId, $prodCatId, $langId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 250;
@@ -249,7 +250,7 @@ class CategoryController extends MyAppController
 
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType); 
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 250;

@@ -37,15 +37,12 @@ if (isset($options) && 0 < count($options)) {
 $data = array(
     'productFiltersArr' => empty($productFiltersArr) ? (object)array() : $productFiltersArr,
     'headerFormParamsAssocArr' => $headerFormParamsAssocArr,
-    'categoriesArr' => $categoriesArr,
     'shopCatFilters' => $shopCatFilters,
     'prodcatArr' => $prodcatArr,
-    'brandsArr' => $brandsArr,
     'brandsCheckedArr' => $brandsCheckedArr,
     'optionValueCheckedArr' => $optionValueCheckedArr,
     'conditionsArr' => $conditions,
     'conditionsCheckedArr' => $conditionsCheckedArr,
-    'options' => array_values($optionsResult),
     'priceArr' => $priceArr,
     'priceInFilter' => $priceInFilter,
     'filterDefaultMinValue' => $filterDefaultMinValue,
@@ -53,3 +50,28 @@ $data = array(
     'availability' => $availability,
     'availabilityArr' => array_values($availabilityArr),
 );
+
+if (Product::FILTER_POSITION_DEFAULT == $position) {
+    $data['categoriesArr'] = $categoriesArr;
+    $data['brandsArr'] = $brandsArr;
+    $data['options'] = $options;
+
+} else if (Product::FILTER_POSITION_ALTERNATE == $position) {
+    $data['filters'] = [
+        [
+            'title' => Labels::getLabel('LBL_CATEGORIES', $siteLangId),
+            'type' => Product::FILTER_TYPE_CATEGORY,
+            'data' => $categoriesArr,
+        ],
+        [
+            'title' => Labels::getLabel('LBL_BRANDS', $siteLangId),
+            'type' => Product::FILTER_TYPE_BRAND,
+            'data' => $brandsArr,
+        ],
+        [
+            'title' => Labels::getLabel('LBL_OPTIONS', $siteLangId),
+            'type' => Product::FILTER_TYPE_OPTION,
+            'data' => array_values($optionsResult),
+        ],
+    ];
+}

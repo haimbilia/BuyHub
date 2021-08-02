@@ -1174,7 +1174,7 @@ class ProductSearch extends SearchBase
             $sSrch = new SearchBase(Orders::DB_TBL, 'o');
             $sSrch->addCondition('o.order_type', '=', Orders::ORDER_SUBSCRIPTION);
             $sSrch->addCondition('o.order_payment_status', '=', 1);
-            $sSrch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'o_temp.order_date_added > o.order_date_added and o_temp.order_user_id = o.order_user_id and o_temp.order_type = ' . Orders::ORDER_SUBSCRIPTION, 'o_temp');
+            $sSrch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'o_temp.order_date_added > o.order_date_added and o_temp.order_payment_status = 1 and o_temp.order_user_id = o.order_user_id and o_temp.order_type = ' . Orders::ORDER_SUBSCRIPTION, 'o_temp');
             $sSrch->addMultipleFields(['COALESCE(o_temp.order_id, o.order_id) as currentOrderId']);
             $sSrch->addGroupBy('o.order_id');
             $sSrch->doNotCalculateRecords();

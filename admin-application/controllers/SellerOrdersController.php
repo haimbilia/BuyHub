@@ -217,9 +217,17 @@ class SellerOrdersController extends AdminBaseController
                 }
                 $opRow['thirdPartyorderInfo'] = $shippingApiObj->getResponse();
             }
+            $aftershipRequiredConfigStatus = [
+                FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS", FatUtility::VAR_INT, 0),
+                FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0),
+                FatApp::getConfig("CONF_DEFAULT_INPROCESS_ORDER_STATUS", FatUtility::VAR_INT, 0),
+                FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0),
+                FatApp::getConfig("CONF_COD_ORDER_STATUS", FatUtility::VAR_INT, 0),
+                OrderStatus::ORDER_APPROVED,
+            ];
 
             $shipmentTracking = new ShipmentTracking();
-            if (null !== $shippingApiObj && false !== $shipmentTracking->init($this->adminLangId)) {
+            if (in_array($opRow['op_status_id'], $aftershipRequiredConfigStatus) && null !== $shippingApiObj && false !== $shipmentTracking->init($this->adminLangId)) {
                 $srch = TrackingCourierCodeRelation::getSearchObject();
                 $srch->addCondition("tccr_shipapi_courier_code", "=", $opRow['opshipping_carrier_code']);
                 $srch->doNotCalculateRecords();

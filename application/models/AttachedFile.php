@@ -493,15 +493,29 @@ class AttachedFile extends MyAppModel
         }
 
         $fileMimeType = mime_content_type($imagePath);
+        if (strpos($_SERVER['REQUEST_URI'], '?t=') === false) {
+            $filemtime = filemtime($imagePath);
+            $_SERVER['REQUEST_URI'] = rtrim($_SERVER['REQUEST_URI'], '/') . '/?t=' . $filemtime;
+        }
         
         static::setHeaders();
+        static::checkModifiedHeader($imagePath);
+
+        if (CONF_USE_FAT_CACHE && $cache) {
+            ob_get_clean();
+            ob_start();
+            static::setContentType($imagePath);
+            $fileContent = FatCache::get($_SERVER['REQUEST_URI'], null, '.webp');
+            if ($fileContent) {
+                static::loadImage($fileContent, $imagePath);
+            } 
+        }
+        
+        static::setLastModified($imagePath);
+        static::setContentType($imagePath, 'image/webp');
 
         $w = FatUtility::int($w);
         $h = FatUtility::int($h);
-        
-        static::setLastModified($imagePath);
-        static::setContentType($imagePath, '');
-
         list($width, $height) = getimagesize($imagePath);
         $ratio_orig = $width / $height;
         
@@ -573,6 +587,18 @@ class AttachedFile extends MyAppModel
         $xPosition = ($w - $newWidth)/2;
         $yPosition = ($h - $newHeight)/2;
         imagecopyresampled($thumb, $img, $xPosition, $yPosition, 0, 0, $newWidth, $newHeight, $width, $height);
+        
+        if (CONF_USE_FAT_CACHE && $cache) {
+            ob_end_clean();
+            ob_start();
+            ini_set('memory_limit', '-1');
+            static::setContentType($imagePath, 'image/webp');
+            imagewebp($thumb, null, $imageQuality);
+            imagedestroy($thumb);
+            $imgData = ob_get_clean();
+            FatCache::set($_SERVER['REQUEST_URI'], $imgData, '.jpg');
+            static::loadImage($imgData, $imagePath);
+        }
         
         imagewebp($thumb, null, $imageQuality);
         imagedestroy($thumb);
@@ -746,8 +772,90 @@ class AttachedFile extends MyAppModel
         return $img = new ImageResize($image_name);
     }
 
+    public static function displayOriginalImageWebp($imageName, $noImage = 'no_image.jpg', $uploadedFilePath = '', $cache = false){
+        ob_end_clean();
+        ini_set('memory_limit', '-1');
+        $noImage = 'images/defaults/' . $noImage;
+        $imageQuality = 100;
+
+        $uploadedFilePath = CONF_UPLOADS_PATH . trim($uploadedFilePath);
+
+        $fileMimeType = '';
+        $imagePath = $uploadedFilePath . $imageName;
+
+        if (empty($imageName) || !file_exists($uploadedFilePath . $imageName)) {
+            $imagePath = $noImage;
+        }
+
+        $fileMimeType = mime_content_type($imagePath);
+        if (strpos($_SERVER['REQUEST_URI'], '?t=') === false) {
+            $filemtime = filemtime($imagePath);
+            $_SERVER['REQUEST_URI'] = rtrim($_SERVER['REQUEST_URI'], '/') . '/?t=' . $filemtime;
+        }
+
+        static::setHeaders();
+        static::checkModifiedHeader($imagePath);
+
+        if (CONF_USE_FAT_CACHE && $cache) {
+            ob_get_clean();
+            ob_start();
+            static::setContentType($imagePath, 'image/webp');
+            $fileContent = FatCache::get($_SERVER['REQUEST_URI'], null, '.jpg');
+            if ($fileContent) {
+                static::loadImage($fileContent, $imagePath);
+            }
+        }
+
+        static::setLastModified($imagePath);
+        static::setContentType($imagePath, 'image/webp');
+
+        list($width, $height) = getimagesize($imagePath);
+        
+        $thumb = imagecreatetruecolor($width, $height);
+        
+        switch ($fileMimeType) {
+            case 'image/png':
+                $img = imagecreatefrompng($imagePath);
+                break;
+            case 'image/webp':
+                $img = imagecreatefromwebp($imagePath);
+                break;
+            case 'image/jpg':
+            case 'image/jpeg':
+                $img = imagecreatefromjpeg($imagePath);
+                break;
+            default:
+                $img = imagecreatefromjpeg($imagePath);
+                break;
+        }
+        
+        $color_fill = imagecolorallocate($thumb, 255, 255, 255);
+        imagefill($thumb, 0, 0, $color_fill);
+        imagecopyresampled($thumb, $img, 0, 0, 0, 0, $width, $height, $width, $height);  
+
+        if (CONF_USE_FAT_CACHE && $cache) {
+            ob_end_clean();
+            ob_start();
+            ini_set('memory_limit', '-1');
+            static::setContentType($imagePath, 'image/webp');
+            imagewebp($thumb, null, $imageQuality);
+            imagedestroy($thumb);
+            $imgData = ob_get_clean();
+            FatCache::set($_SERVER['REQUEST_URI'], $imgData, '.jpg');
+            static::loadImage($imgData, $imagePath);
+        }
+
+        imagewebp($thumb, null, $imageQuality);
+        imagedestroy($thumb);
+        exit;
+    }
+
     public static function displayOriginalImage($imageName, $noImage = 'no_image.jpg', $uploadedFilePath = '', $cache = false)
     {
+        if (substr($imageName, 0, 5) == 'webp/'){
+            $imageName = substr($imageName, 5);
+            self::displayOriginalImageWebp($imageName, $noImage , $uploadedFilePath, $cache );
+        } 
         ob_end_clean();
         $noImage = 'images/defaults/' . $noImage;
         $uploadedFilePath = CONF_UPLOADS_PATH . trim($uploadedFilePath);
@@ -1135,8 +1243,8 @@ class AttachedFile extends MyAppModel
         return readfile($path);
     }
 
-    public static function setNamePrefix(&$sizeType, $imageName){
-        if (substr(strtoupper($sizeType), 0, 4) == 'WEBP'){
+    public static function setNamePrefix($imageName = '', &$sizeType = ''){
+        if ('' != $sizeType && substr(strtoupper($sizeType), 0, 4) == 'WEBP'){
             $sizeType = substr($sizeType, 4);
             return 'webp/'.$imageName;
         }
