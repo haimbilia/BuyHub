@@ -23,8 +23,7 @@ class Common
         if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
             $cartObj->excludeTax();
         }
-        $productsArr = $cartObj->getProducts($siteLangId);
-
+        $productsArr = $cartObj->getProducts($siteLangId);       
         $cartSummary = $cartObj->getCartFinancialSummary($siteLangId);
 
         $template->set('siteLangId', $siteLangId);
