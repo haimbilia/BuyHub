@@ -457,7 +457,7 @@ class ShipRocket extends ShippingServicesBase
                     'tax' => $taxPercentage,
                 ]
             ],
-            'payment_method' => $this->orderDetail['opayment_method'],
+            'payment_method' => (FatApp::getConfig("CONF_COD_ORDER_STATUS", FatUtility::VAR_INT, OrderStatus::ORDER_COD) == $this->orderDetail['op_status_id']) ? 'COD' : 'Prepaid',
             'shipping_charges' => $shippingTotal,
             'total_discount' => $totalDiscount,
             'sub_total' => CommonHelper::orderProductAmount($this->orderDetail, 'CART_TOTAL', false , User::USER_TYPE_SELLER) + $taxCharged,
@@ -467,14 +467,13 @@ class ShipRocket extends ShippingServicesBase
             'weight' => $this->convertToKg($this->orderDetail['op_product_weight'])
         ];
         
-        /* if (false === $this->doRequest(self::REQUEST_ADD_ORDER, $requestParam)) {
+        if (false === $this->doRequest(self::REQUEST_ADD_ORDER, $requestParam)) {
             return false;
         }
         $orderShipment = $this->getResponse();
-        CommonHelper::printArray($orderShipment); */
 
         $requestParam = [
-            'shipmentIdsArr' => ['128594647'],
+            'shipmentIdsArr' => [$orderShipment['shipment_id']],
             'courierId' => $this->orderDetail['opshipping_service_code'],
             'weight' => $this->convertToKg($this->orderDetail['op_product_weight']),
         ];
@@ -482,15 +481,30 @@ class ShipRocket extends ShippingServicesBase
             return false;
         }
 
-        $resp = $this->getResponse();
-        CommonHelper::printArray($resp, true);
-
-        // if (false === $this->doRequest(self::REQUEST_GENERATE_LABEL, ['shipment_id' => $orderShipment['shipment_id']])) {
-        if (false === $this->doRequest(self::REQUEST_GENERATE_LABEL, ['shipment_id' => ['128594647']])) {
+        $awbResp = $this->getResponse();
+        if (applicationConstants::SUCCESS != $awbResp['awb_assign_status']) {
+            $this->error = Labels::getLabel('MSG_UNABLE_TO_ASSIGN_AWB_FOR_THE_ORDER', $this->langId);
             return false;
         }
-        $resp = $this->getResponse();
-        CommonHelper::printArray($resp, true);
+
+        if (false === $this->doRequest(self::REQUEST_GENERATE_LABEL, ['shipment_id' => $orderShipment['shipment_id']])) {
+            return false;
+        }
+
+        $labelResp = $this->getResponse();
+        if (applicationConstants::SUCCESS != $labelResp['label_created']) {
+            $this->error = Labels::getLabel('MSG_UNABLE_TO_BIND_LABEL', $this->langId);
+            return false;
+        }
+        $this->resp = [
+            'shipment_response' => json_encode($orderShipment),
+            'awb_response' => json_encode($awbResp),
+            'label_response' => json_encode($labelResp),
+            'orderNumber' => $orderShipment['order_id'],
+            'tracking_url' => $labelResp['label_url'],
+            'tracking_code' => $labelResp['shipment_id'],
+        ];
+        return true;
     }
 
     /**
@@ -531,7 +545,7 @@ class ShipRocket extends ShippingServicesBase
             }
             return true;
         } catch (Exception $e) {
-            CommonHelper::printArray($e);
+            CommonHelper::printArray($e, true);
             $this->error = $e->getMessage();
         } catch (Error $e) {
             $this->error = $e->getMessage();
