@@ -84,9 +84,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                 </div>
                 <ul class="actions">
                     <li>
-                        <a href="javascript:void(0)"
-                            onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );">
-
+                        <a href="javascript:void(0)" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );">
                             <i class="icn">
                                 <svg class="svg" width="20px" height="20px"
                                     title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
@@ -229,7 +227,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                     <li>
                         <a href="javascript:void(0)"
                             onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );"
-                            title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>">
+                            title="<?php echo Labels::getLabel('LBL_SAVE_FOR_LATER', $siteLangId); ?>">
 
                             <svg class="svg" width="20px" height="20px"
                                 title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">

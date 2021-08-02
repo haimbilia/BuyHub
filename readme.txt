@@ -177,6 +177,7 @@ Updates/Fixes :
     => 056585 - on manage collections Banner layout1 and layout2 has wrong image of layout
     => 056600 - Wallet recharge wrong URL
     => 056314 - on removing item from wishlist getting 404
+    => 056263 - Cart >> For save for later >> "move to wishlist " tool tip is there instead of " save for later".
 
 New Features:  
     => Admin shipped products listing page
