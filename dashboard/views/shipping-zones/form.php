@@ -99,7 +99,7 @@ if (!empty($excludeLocations)) {
                                                     <?php foreach ($countries as $country) {
                                                         $statesCount = count($country['states']);
                                                         $countryId = $country['country_id'];
-                                                        $disabled = '';
+                                                        $countryDisabled = '';
                                                         $checked = '';
                                                         $countryStates = [];
                                                         if (!empty($countryStatesArr) && isset($countryStatesArr[$countryId])) {
@@ -108,9 +108,11 @@ if (!empty($excludeLocations)) {
                                                         if (!empty($countryStates) && in_array('-1', $countryStates)) {
                                                             $checked = 'checked';
                                                         }
-                                                        if (!empty($excludeCountryStates) && isset($excludeCountryStates[$countryId])) {
-                                                            $disabled = 'disabled';
-                                                        } ?>
+                                                        
+                                                        if (isset($excludeCountryStates[$countryId]) && in_array(-1, $excludeCountryStates[$countryId])){
+                                                            $countryDisabled = 'disabled';
+                                                        }
+                                                        ?>
                                                         <li class="collapse" id="countries_list_<?php echo $zone['zone_id']; ?>">
                                                             <div class="row no-gutters">
                                                                 <div class="col">
@@ -118,7 +120,7 @@ if (!empty($excludeLocations)) {
                                                                         <div class="field_cover">
                                                                             <label>
                                                                                 <span class="checkbox country--js " data-countryid="<?php echo $countryId; ?>" data-statecount="<?php echo $statesCount; ?>">
-                                                                                <input type="checkbox" name="c_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>" class="checkbox_country_<?php echo $countryId; ?>" <?php echo $checked; ?>> <?php echo $country['country_name']; ?></span>
+                                                                                <input type="checkbox" name="c_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>" class="checkbox_country_<?php echo $countryId; ?>" <?php echo $checked; ?> <?php echo $countryDisabled; ?> > <?php echo $country['country_name']; ?></span>
                                                                             </label>
                                                                         </div>
                                                                     </div>
@@ -138,23 +140,27 @@ if (!empty($excludeLocations)) {
                                                                 <?php if (!empty($country['states'])) { ?>
                                                                     <ul class="child-checkbox-ul list-country-zone_states country_<?php echo $countryId; ?>">
                                                                         <?php foreach ($country['states'] as  $state) {
-                                                                            $checked = '';
-                                                                            $disabled = '';
+                                                                            $stateChecked = '';                                                                      
                                                                             $countryStates = [];
                                                                             $exCountryStates = [];
+                                                                            $stateDisabled = ''; 
 
                                                                             if (!empty($countryStatesArr) && isset($countryStatesArr[$countryId])) {
                                                                                 $countryStates = $countryStatesArr[$countryId];
                                                                             }
                                                                             if ((!empty($countryStates) && (in_array('-1', $countryStates) || in_array($state['state_id'], $countryStates)))) {
-                                                                                $checked = 'checked';
+                                                                                $stateChecked = 'checked';
 
+                                                                            }
+                                                                                                                                           
+                                                                            if (isset($excludeCountryStates[$countryId]) && (in_array(-1, $excludeCountryStates[$countryId]) || in_array($state['state_id'], $excludeCountryStates[$countryId]))) {
+                                                                                $stateDisabled = ' disabled';
                                                                             }
                                                                         ?>
                                                                             <li>
                                                                                 <div class="field-wraper">
                                                                                     <div class="field_cover">
-                                                                                        <label><span class="checkbox" data-stateid="<?php echo $state['state_id']; ?>"><input type="checkbox" name="s_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>-<?php echo $state['state_id']; ?>" class="state--js" <?php echo $checked; ?> <?php echo $disabled; ?>><?php echo $state['state_name']; ?></span></label>
+                                                                                        <label><span class="checkbox" data-stateid="<?php echo $state['state_id']; ?>"><input type="checkbox" name="s_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>-<?php echo $state['state_id']; ?>" class="state--js" <?php echo $stateChecked; ?> <?php echo $stateDisabled; ?>><?php echo $state['state_name']; ?></span></label>
                                                                                     </div>
                                                                                 </div>
                                                                             </li>

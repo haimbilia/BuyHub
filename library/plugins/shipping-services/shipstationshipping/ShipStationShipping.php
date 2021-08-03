@@ -133,18 +133,12 @@ class ShipStationShipping extends ShippingServicesBase
 
         $orderTimestamp = strtotime($orderDetail['order_date_added']);
         $orderDate = date('Y-m-d', $orderTimestamp) . 'T' . date('H:i:s', $orderTimestamp) . '.0000000';
-
-        $taxCharged = 0;
+       
         $orderInvoiceNumber = 0;
 
-        $taxOptions = json_decode($orderDetail['op_product_tax_options'], true);
-
         $shippingTotal = CommonHelper::orderProductAmount($orderDetail, 'SHIPPING');
-        if (!empty($taxOptions)) {
-            foreach ($taxOptions as $key => $val) {
-                $taxCharged += $val['value'];
-            }
-        }
+        $taxCharged = CommonHelper::orderProductAmount($orderDetail, 'TAX');
+        
         $orderInvoiceNumber = $orderDetail['op_invoice_number'];
 
         $orderObj = new Orders($orderDetail['order_id']);
@@ -161,7 +155,7 @@ class ShipStationShipping extends ShippingServicesBase
         $this->order['customerUsername'] = $orderDetail['buyer_user_name'];
         $this->order['customerEmail'] = $orderDetail['buyer_email'];
         $this->order['amountPaid'] = $orderDetail['order_net_amount'];
-        $this->order['taxAmount'] = (1 > $taxCharged ? $orderDetail['order_tax_charged'] : $taxCharged);
+        $this->order['taxAmount'] = $taxCharged;
         $this->order['shippingAmount'] = $shippingTotal;
         /* $this->order['customerNotes'] = null;
         $this->order['internalNotes'] = "Express Shipping Please"; */

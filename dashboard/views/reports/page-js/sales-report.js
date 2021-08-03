@@ -81,5 +81,8 @@ $(function () {
 		});
 		$(frm.reportColumns).val(JSON.stringify(reportColumns));
 	};
+        redirectUrl = function (url) {
+            window.location = url;
+        }
 
 })();

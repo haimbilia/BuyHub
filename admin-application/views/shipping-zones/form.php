@@ -3,6 +3,7 @@
 $zoneIds = [];
 $countryStatesArr = [];
 $zoneCountries = [];
+
 if (!empty($zoneLocations)) {
     $zoneIds = array_column($zoneLocations, 'shiploc_zone_id');
     $zoneIds = array_unique(array_map('intval', $zoneIds));
@@ -129,7 +130,7 @@ if (!empty($excludeLocations)) {
                                                         <ul class="child-checkbox-ul country_<?php echo $countryId; ?>">
                                                             <?php
                                                             foreach ($country['states'] as $state) {
-                                                                $checked = '';                                                           
+                                                                $stateChecked = '';                                                           
                                                                 $countryStates = [];
                                                                 $exCountryStates = [];
 
@@ -137,14 +138,17 @@ if (!empty($excludeLocations)) {
                                                                     $countryStates = $countryStatesArr[$countryId];
                                                                 }
                                                                 if ((!empty($countryStates) && (in_array('-1', $countryStates) || in_array($state['state_id'], $countryStates)))) {
-                                                                    $checked = 'checked';
+                                                                    $stateChecked = 'checked';
                                                                 }
-
+                                                                $stateDisabled ='';                                                                
+                                                                if (isset($excludeCountryStates[$countryId]) && in_array($state['state_id'],$excludeCountryStates[$countryId])) {                                          
+                                                                    $stateDisabled = ' disabled';
+                                                                }
                                                                 ?>	
                                                                 <li>
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover">
-                                                                            <label><span class="checkbox " data-stateid="<?php echo $state['state_id']; ?>"><input type="checkbox" name="s_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>-<?php echo $state['state_id']; ?>" class="state--js" <?php echo $checked; ?> <?php echo $disabled; ?>><i class="input-helper"></i></span><?php echo $state['state_name']; ?></label>
+                                                                            <label><span class="checkbox " data-stateid="<?php echo $state['state_id']; ?>"><input type="checkbox" name="s_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>-<?php echo $state['state_id']; ?>" class="state--js" <?php echo $stateChecked; ?> <?php echo $stateDisabled; ?>><i class="input-helper"></i></span><?php echo $state['state_name']; ?></label>
                                                                         </div>
                                                                     </div>
                                                                 </li>
@@ -204,44 +208,3 @@ if (!empty($excludeLocations)) {
 
     </script>
 <?php } ?>
-<script>
-    /* $(document).on('keyup', "input[name='shipzone_name']", function() {
-        var currObj = $(this);
-        var parentForm = currObj.closest('form').attr('id');
-        $("#" + parentForm + " input[name='shipzone_id']").val(0);
-        $('.country--js input[type="checkbox"]').prop('checked', false);
-        $('.zone--js input[type="checkbox"]').prop('checked', false);
-        if ('' != currObj.val()) {
-            currObj.siblings('ul.dropdown-menu').remove();
-            currObj.autocomplete({
-                'source': function(request, response) {
-                    $.ajax({
-                        url: fcom.makeUrl('ShippingZones', 'autoCompleteZone'),
-                        data: {
-                            fIsAjax: 1,
-                            keyword: currObj.val()
-                        },
-                        dataType: 'json',
-                        type: 'post',
-                        success: function(json) {
-                            response($.map(json, function(item) {
-                                return {
-                                    label: item['name'],
-                                    value: item['name'],
-                                    id: item['id']
-                                };
-                            }));
-                        },
-                    });
-                },
-                appendTo: '.zone-main-field--js',
-                select: function(event, ui) {
-                    $("#" + parentForm + " input[name='shipzone_id']").val(ui.item.id);
-                    getZoneLocation(ui.item.id);
-                }
-            });
-        } else {
-            $("#" + parentForm + " input[name='shipzone_id']").val(0);
-        }
-    }); */
-</script>
