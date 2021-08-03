@@ -281,7 +281,7 @@ class ShippingZonesController extends AdminBaseController
                     $arr = explode('-', $countryData);
                     $countryIds[] = $arr[1];
                 }
-            }
+            }            
 
             if (!empty($postedStates)) {
                 foreach ($postedStates as $statesData) {
