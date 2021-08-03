@@ -98,7 +98,7 @@ if (Product::FILTER_POSITION_DEFAULT == $position) {
         [
             'title' => Labels::getLabel('LBL_PRICE_FILTER', $siteLangId),
             'type' => Product::FILTER_TYPE_PRICE,
-            'data' => $priceArr,
+            'data' => [$priceArr],
         ],
     ];
 }
