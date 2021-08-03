@@ -78,6 +78,8 @@ class Product extends MyAppModel
     public const FILTER_TYPE_CATEGORY = 1;
     public const FILTER_TYPE_BRAND = 2;
     public const FILTER_TYPE_OPTION = 3;
+    public const FILTER_TYPE_SORT_BY = 4;
+    public const FILTER_TYPE_PRICE = 5;
     /* For API */
 
     public function __construct($id = 0)

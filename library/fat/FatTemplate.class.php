@@ -111,7 +111,7 @@ class FatTemplate
                     var siteConstants = ' . json_encode(array(
                     'webroot' => CONF_WEBROOT_URL . $langCode,
                     'webrootfront' => CONF_WEBROOT_FRONTEND . $langCode,
-                    'webroot_dashboard' => CONF_WEBROOT_URL . 'dashboard/' . $langCode,
+                    'webroot_dashboard' => CONF_WEBROOT_URL . $langCode,
                     'webroot_traditional' => CONF_WEBROOT_URL_TRADITIONAL,
                     'rewritingEnabled' => (CONF_URL_REWRITING_ENABLED ? '1' : '0'),
                 )) . ';

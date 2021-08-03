@@ -14,6 +14,7 @@ class OrderStatus extends MyAppModel
     public const ORDER_COMPLETED = 7;
     public const ORDER_CANCELLED = 8;
     public const ORDER_REFUNDED = 9;
+    public const ORDER_APPROVED = 15;
 
 
     public function __construct($id = 0)

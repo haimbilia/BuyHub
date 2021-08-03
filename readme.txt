@@ -170,15 +170,22 @@ Updates/Fixes :
 ===================TV-9.3.2.20210730==================
     => 056367 - once order is generated with aftership then link is not getting generated on seller/buyer end
     => 056366 - once after ship is enabled then on accessing email for the same is flooded with errors
+    => 056362 - seller order is not accessible when only tracking api is enabled and order is marked s shipped
+    => 056349 - admin> during login> getting message overlapped
     => 056555 - Unable to view products when seller has pending subscription
     => 056568 - on admin seller product left navigation wrong seller order count
     => 056585 - on manage collections Banner layout1 and layout2 has wrong image of layout
+    => 056600 - Wallet recharge wrong URL
+    => 056314 - on removing item from wishlist getting 404
+    => 056263 - Cart >> For save for later >> "move to wishlist " tool tip is there instead of " save for later".
+    => 056243 - seller> payout report> filters> buttons are not aligned with fields
     => 056398 - when tax is zero then on generating slip getting wrong tax amount listed
     => 056236 - Affiliate / advertiser >> some warnings are there. 
     => 056237 - if any user is logged in then 404 page is getting opened if we click on "become a seller " , " Advertise with us" or " register as affiliate" link in footer.
     => 056239 - seller> buy together> on clicking existing items getting error
     => 056241 - seller> sales reports> back button is not working
     => 056293 - Shipping profile is not getting created from admin end 
+
 
 New Features:  
     => Admin shipped products listing page

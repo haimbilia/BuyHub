@@ -54,11 +54,16 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
         } */ ?>
 	<div class="banner-ppc <?php /* echo $bannerClass; */ ?>">
 		<a  target="<?php echo $val['banner_target']; ?>" href="<?php echo UrlHelper::generateUrl('Banner', 'url', array($val['banner_id'])); ?>" title="<?php echo $val['banner_title']; ?>">
-        <picture>
-            <source type="image/webp" srcset="<?php echo $mobileWebpUrl . $tabletWebpUrl . $desktopWebpUrl; ?>" media="(max-width: 767px),(max-width: 1024px)">
-            <source type="image/jpeg" srcset="<?php echo $mobileUrl . $tabletUrl . $desktopUrl; ?>" media="(max-width: 767px),(max-width: 1024px)">
-            <img data-aspect-ratio="10:3" src="<?php echo $desktopUrl; ?>" alt="" loading="lazy">
-        </picture>		
+            <?php
+                $pictureAttr = [
+                    'webpImageUrl' => $mobileWebpUrl . $tabletWebpUrl . $desktopWebpUrl,
+                    'jpgImageUrl' => $mobileUrl . $tabletUrl . $desktopUrl,
+                    'ratio' => '10:3',
+                    'alt' => $val['banner_title'],
+                ];
+
+                $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
+            ?>	
 		</a>
 	</div>
 <?php $bCount++;

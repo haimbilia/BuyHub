@@ -95,7 +95,7 @@ class ShippingZonesController extends SellerBaseController
         }else{
             $zones =  unserialize($zones); 
         }
-        $excludeLocations = $this->getExcludeLocations($profileId, $zoneId);
+        $excludeLocations = Zone::getExcludeLocations($profileId, $zoneId);
 
         $this->set('profile_id', $profileId);
         $this->set('zone_id', $zoneId);
@@ -107,25 +107,12 @@ class ShippingZonesController extends SellerBaseController
         $this->_template->render(false, false);
     }
 
-    public function getExcludeLocations($profileId, $zoneId)
-    {
-        $srch = ShippingProfileZone::getSearchObject();
-        $srch->joinTable(ShippingZone::DB_SHIP_LOC_TBL, 'LEFT OUTER JOIN', 'zoneLoc.shiploc_shipzone_id = spzone.shipprozone_shipzone_id', 'zoneLoc');
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $cnd = $srch->addCondition('shipprozone_shipprofile_id', '=', $profileId);
-        $cnd->attachCondition('shipprozone_shipzone_id', '!=', $zoneId, 'AND', false);
-        $rs = $srch->getResultSet();
-        $zoneLocations = FatApp::getDb()->fetchAll($rs);
-        return $zoneLocations;
-    }
-
     public function searchStates($countryId, $zoneId, $shipZoneId, $profileId, $selected = 0)
     {
         $stateObj = new States();
         $states = $stateObj->getStatesByCountryId($countryId, $this->siteLangId, true);
         $zoneLocations = $this->getLocations($shipZoneId);
-        $excludeLocations = $this->getExcludeLocations($profileId, $shipZoneId);
+        $excludeLocations = Zone::getExcludeLocations($profileId, $shipZoneId);
 
         $this->set("states", $states);
         $this->set("countryId", $countryId);
@@ -276,7 +263,7 @@ class ShippingZonesController extends SellerBaseController
 
     private function checkForLocations($profileId, $shipZoneId, $data)
     {
-        $excludeLocations = $this->getExcludeLocations($data['shipzone_profile_id'], $shipZoneId);
+        $excludeLocations = Zone::getExcludeLocations($data['shipzone_profile_id'], $shipZoneId);
 
         if (!empty($excludeLocations)) {
             $isRestOfWorld = (isset($data['rest_of_the_world'])) ? $data['rest_of_the_world'] : 0;
