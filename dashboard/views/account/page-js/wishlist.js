@@ -260,13 +260,13 @@ $("document").ready(function() {
         } else {
             var data = $('#favtlistForm').serialize();
         }
-        fcom.updateWithAjax(fcom.makeUrl('cart', 'addSelectedToCart'), data, function(ans) {
+        fcom.updateWithAjax(fcom.makeUrl('cart', 'addSelectedToCart', [], siteConstants.webrootfront), data, function(ans) {
             if (0 < isWishlist) {
                 updateWishlist();
             } else {
                 removeSelectedFromFavtlist(event, true);
             }
-            setTimeout(function() { location.href = fcom.makeUrl('cart'); }, 1000);
+            setTimeout(function() { location.href = fcom.makeUrl('cart', '', [], siteConstants.webrootfront); }, 1000);
         });
     };
 
