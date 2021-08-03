@@ -100,6 +100,18 @@ class OrderProductSearch extends SearchBase
         }
     }
 
+    public function joinProduct(int $langId = 0)
+    {
+        $langId = FatUtility::int($langId);
+        if ($this->langId) {
+            $langId = $this->langId;
+        }
+        $this->joinTable(Product::DB_TBL, 'LEFT OUTER JOIN', 'sp.selprod_product_id = p.product_id', 'p');
+        if ($langId) {
+            $this->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $langId, 'p_l');
+        }
+    }
+
     public function joinSellerProductGroup($langId = 0)
     {
         $langId = FatUtility::int($langId);

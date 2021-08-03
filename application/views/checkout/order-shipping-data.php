@@ -12,10 +12,23 @@ if (!empty($orderShippingData)) {
 						<div class="shipping-data">
 							<ul class="media-more media-more-sm show">
 
-								<?php foreach ($shipData as $data) { ?>
+								<?php 
+                                foreach ($shipData as $data) {
+                                    $uploadedTime = AttachedFile::setTimeParam($data['product_updated_on']);
+                                    $imageUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($data['selprod_product_id'], "EXTRA-SMALL", $data['op_selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                    $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($data['selprod_product_id'], "WEBPEXTRA-SMALL", $data['op_selprod_id'], 0, $siteLangId)) . $uploadedTime,   CONF_IMG_CACHE_TIME, '.webp');
+                                    ?>
 									<li>
 										<span class="circle" data-toggle="tooltip" data-placement="top" title="<?php echo $data['op_selprod_title']; ?>" data-original-title="<?php echo $data['op_selprod_title']; ?>">
-											<img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($data['selprod_product_id'], "THUMB", $data['op_selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $data['op_selprod_title']; ?>">
+                                            <?php
+                                                $pictureAttr = [
+                                                    'webpImageUrl' => $imageWebpUrl,
+                                                    'jpgImageUrl' => $imageUrl,
+                                                    'alt' => $data['op_selprod_title'],
+                                                ];
+                    
+                                                $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
+                                            ?>
 										</span>
 									</li>
 								<?php } ?>
