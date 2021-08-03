@@ -698,8 +698,6 @@ class EasyPost extends ShippingServicesBase
         return true;
     }
 
-
-
     /**
      * getRefundResponse
      *

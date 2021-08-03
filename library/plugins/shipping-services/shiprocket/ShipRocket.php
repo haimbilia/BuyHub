@@ -10,13 +10,16 @@ class ShipRocket extends ShippingServicesBase
 {
     public const KEY_NAME = __CLASS__;
 
-    private const REQUEST_GET_RATES = 1;
-    private const REQUEST_CHANNELS = 2;
-    private const REQUEST_ADD_ORDER = 3;
-    private const REQUEST_GET_PICKUP_LOCATIONS = 4;
-    private const REQUEST_ADD_PICKUP_LOCATION = 5;
-    private const REQUEST_ASSIGN_AWB = 6;
-    private const REQUEST_GENERATE_LABEL = 7;
+    private const REQUEST_AUTH_LOGIN = 1;
+    private const REQUEST_GET_RATES = 2;
+    private const REQUEST_CHANNELS = 3;
+    private const REQUEST_ADD_ORDER = 4;
+    private const REQUEST_GET_PICKUP_LOCATIONS = 5;
+    private const REQUEST_ADD_PICKUP_LOCATION = 6;
+    private const REQUEST_ASSIGN_AWB = 7;
+    private const REQUEST_GENERATE_LABEL = 8;
+    private const REQUEST_RETURN_ORDER = 9;
+    private const REQUEST_CANCEL_ORDER = 10;
 
     private $resp;
     private $clientInfoCols = [];
@@ -28,6 +31,7 @@ class ShipRocket extends ShippingServicesBase
     private $channel = [];
     private $pickups = [];
     private $orderDetail = [];
+    private $buyerReturnAddress = [];
 
     public $requiredKeys = [
         'email',
@@ -57,11 +61,11 @@ class ShipRocket extends ShippingServicesBase
             return false;
         }
 
-        $this->client = new ShipRocketApi([
-            'email' => $this->settings['email'],
-            'password' => $this->settings['password'],
-            'use_sandbox' => 0,  /* Use 0 As this API won`t support sanbox mode. */
-        ]);
+        if (false === $this->doRequest(self::REQUEST_AUTH_LOGIN)) {
+            return false;
+        }
+
+        $this->client = $this->getResponse();
         return true;
     }
 
@@ -299,8 +303,9 @@ class ShipRocket extends ShippingServicesBase
     private function getPickupLocation(int $shopId): int
     {
         $updatedOn = Shop::getAttributesById($shopId, 'shop_updated_on');
-        $pickupLocationId = str_pad($shopId . date('ym', strtotime($updatedOn)), 8, 0, STR_PAD_LEFT);
+        $pickupLocationId = $shopId . date('ym', strtotime($updatedOn));
         $pickups = $this->getAllPickupLocations();
+
         if (false !== array_search($pickupLocationId, array_column($pickups, 'pickup_location'))) {
             return (int) $pickupLocationId;
         }
@@ -309,6 +314,33 @@ class ShipRocket extends ShippingServicesBase
             return 0;
         }
         return $pickupLocationId;
+    }
+
+    /**
+     * getReturnPickupLocation
+     *
+     * @return string
+     */
+    private function getReturnPickupLocation(): int
+    {
+        $pickupLocationId = $this->orderDetail['op_invoice_number'];
+        $pickups = $this->getAllPickupLocations();
+        
+        $locationIndex = array_search($pickupLocationId, array_column($pickups, 'pickup_location'));
+        if (false !== $locationIndex) {
+            return (int) $pickups[$locationIndex]['id'];
+        }
+
+        if (false === $this->addReturnPickupLocation($pickupLocationId)) {
+            return 0;
+        }
+
+        $resp = $this->getResponse();
+        if (1 > $resp['success']) {
+            $this->error = Labels::getLabel('MSG_UNABLE_TO_ADD_LOCATION', $this->langId);
+            return 0;
+        }
+        return (int) $resp['address']['id'];
     }
 
     /**
@@ -331,7 +363,7 @@ class ShipRocket extends ShippingServicesBase
     }
 
     /**
-     * getAllPickupLocations
+     * addPickupLocation
      *
      * @return array
      */
@@ -358,6 +390,29 @@ class ShipRocket extends ShippingServicesBase
             'state' => $address['state_name'],
             'country' => $address['country_name'],
             'pin_code' => $address['shop_postalcode'],
+        ];
+        return $this->doRequest(self::REQUEST_ADD_PICKUP_LOCATION, $requestParam);
+    }
+    
+    /**
+     * addReturnPickupLocation
+     *
+     * @param  string $pickupLocationId
+     * @return void
+     */
+    private function addReturnPickupLocation(string $pickupLocationId)
+    {
+        $requestParam = [
+            'pickup_location' => FatUtility::convertToType($pickupLocationId, FatUtility::VAR_STRING),
+            'name' => $this->buyerReturnAddress['oua_name'],
+            'email' => $this->orderDetail['buyer_email'],
+            'phone' => $this->buyerReturnAddress['oua_phone'],
+            'address' => $this->buyerReturnAddress['oua_address1'],
+            'address_2' => $this->buyerReturnAddress['oua_address2'],
+            'city' => $this->buyerReturnAddress['oua_city'],
+            'state' => $this->buyerReturnAddress['oua_state'],
+            'country' => $this->buyerReturnAddress['oua_country'],
+            'pin_code' => $this->buyerReturnAddress['oua_zip'],
         ];
         return $this->doRequest(self::REQUEST_ADD_PICKUP_LOCATION, $requestParam);
     }
@@ -419,7 +474,7 @@ class ShipRocket extends ShippingServicesBase
         }
 
         $requestParam = [
-            'order_id' => $this->orderDetail['op_invoice_number'] . rand(),
+            'order_id' => $this->orderDetail['op_invoice_number'],
             'order_date' => date('Y-m-d H:i', $orderTimestamp),
             'pickup_location' => FatUtility::convertToType($pickupLocationId, FatUtility::VAR_STRING),
             'channel_id' => isset($channel['id']) ? $channel['id'] : '',
@@ -443,8 +498,8 @@ class ShipRocket extends ShippingServicesBase
             'shipping_address_2' => $shippingAddress['oua_address2'],
             'shipping_city' => $shippingAddress['oua_city'],
             'shipping_pincode' => $shippingAddress['oua_zip'],
-            'shipping_country' => $shippingAddress['oua_state'],
-            'shipping_state' => $shippingAddress['oua_country'],
+            'shipping_country' => $shippingAddress['oua_country'],
+            'shipping_state' => $shippingAddress['oua_state'],
             'shipping_email' => $this->orderDetail['buyer_email'],
             'shipping_phone' => $this->orderDetail['buyer_phone'],
             'order_items' => [
@@ -466,11 +521,16 @@ class ShipRocket extends ShippingServicesBase
             'height' => $this->convertToCm($this->orderDetail['op_product_height'], $this->orderDetail['op_product_dimension_unit']),
             'weight' => $this->convertToKg($this->orderDetail['op_product_weight'])
         ];
-        
+
         if (false === $this->doRequest(self::REQUEST_ADD_ORDER, $requestParam)) {
             return false;
         }
         $orderShipment = $this->getResponse();
+
+        if (!isset($orderShipment['shipment_id']) && isset($orderShipment['message'])) {
+            $this->error = $orderShipment['message'];
+            return false;
+        }
 
         $requestParam = [
             'shipmentIdsArr' => [$orderShipment['shipment_id']],
@@ -507,6 +567,131 @@ class ShipRocket extends ShippingServicesBase
         return true;
     }
 
+    
+    /**
+     * loadSystemOrder
+     *
+     * @param  int $opId
+     * @return void
+     */
+    public function loadSystemOrder(int $opId): void
+    {
+        $this->orderDetail = (array) $this->getSystemOrder($opId);
+    }
+
+    /**
+     * returnShipment
+     *
+     * @return bool
+     */
+    /* public function returnShipment(): bool
+    {
+        if (!is_array($this->orderDetail) || 1 > count($this->orderDetail)) {
+            $this->error = Labels::getLabel('MSG_INVALID_ORDER', $this->langId);
+            return false;
+        }
+        $orderTimestamp = strtotime($this->orderDetail['order_date_added']);
+        $channel = $this->getChannel();
+
+        $orderObj = new Orders($this->orderDetail['order_id']);
+        $addresses = $orderObj->getOrderAddresses($this->orderDetail['order_id']);
+        $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : [];
+        
+        $this->buyerReturnAddress = $shippingAddress;
+        $pickupLocationId = $this->getReturnPickupLocation();
+        if (1 > (int) $pickupLocationId) {
+            $this->error = Labels::getLabel('MSG_UNABLE_TO_GET_PICKUP_LOCATION', $this->langId);
+            return false;
+        }
+
+        $attr = [
+            'shop_address_line_1',
+            'shop_address_line_2',
+            'shop_city',
+            'COALESCE(state_name, state_identifier) as state_name',
+            'country_name',
+            'shop_postalcode',
+        ];
+        $shopAddress = Shop::getShopAddress($this->orderDetail['op_shop_id'], false, $this->langId, $attr);
+
+        $taxCharged = 0;
+        if (!empty($taxOptions)) {
+            foreach ($taxOptions as $key => $val) {
+                $taxCharged += $val['value'];
+            }
+        }
+
+        $sellingPrice = $this->orderDetail['op_unit_price'] + ($taxCharged / $this->orderDetail['op_qty']);
+        if (0 < FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
+            $sellingPrice =  $this->orderDetail['op_unit_price'];
+        }
+
+        $discount = CommonHelper::orderProductAmount($this->orderDetail, 'DISCOUNT');
+        $volumeDiscount = CommonHelper::orderProductAmount($this->orderDetail, 'VOLUME_DISCOUNT');
+        $totalDiscount = abs($discount) + abs($volumeDiscount);
+        $discountPerUnit = ($totalDiscount / $this->orderDetail['op_qty']); // Inclusive Tax
+
+        $requestParam = [
+            'order_id' => 'R-' . $this->orderDetail['op_invoice_number'],
+            'order_date' => date('Y-m-d H:i', $orderTimestamp),
+            'channel_id' => isset($channel['id']) ? $channel['id'] : '',
+            'pickup_customer_name' => CommonHelper::getFirstName($this->orderDetail['buyer_user_name']),
+            'pickup_last_name' => CommonHelper::getLastName($this->orderDetail['buyer_user_name']),
+            'pickup_address' => $shippingAddress['oua_address1'],
+            'pickup_address_2' => $shippingAddress['oua_address2'],
+            'pickup_city' => $shippingAddress['oua_city'],
+            'pickup_state' => $shippingAddress['oua_state'],
+            'pickup_country' => $shippingAddress['oua_country'],
+            'pickup_pincode' => $shippingAddress['oua_zip'],
+            'pickup_email' => $this->orderDetail['buyer_email'],
+            'pickup_phone' => $this->orderDetail['buyer_phone'],
+            'pickup_location_id' => FatUtility::convertToType($pickupLocationId, FatUtility::VAR_STRING),
+            'shipping_customer_name' => CommonHelper::getFirstName($this->orderDetail['op_shop_owner_name']),
+            'shipping_last_name' => CommonHelper::getLastName($this->orderDetail['op_shop_owner_name']),
+            'shipping_address' => $shopAddress['shop_address_line_1'],
+            'shipping_address_2' => $shopAddress['shop_address_line_2'],
+            'shipping_city' => $shopAddress['shop_city'],
+            'shipping_country' => $shopAddress['country_name'],
+            'shipping_pincode' => $shopAddress['shop_postalcode'],
+            'shipping_state' => $shopAddress['state_name'],
+            'shipping_email' => $this->orderDetail['op_shop_owner_email'],
+            'shipping_phone' => $this->orderDetail['op_shop_owner_phone'],
+            'order_items' => [
+                [
+                    'name' => $this->orderDetail['op_selprod_title'],
+                    'sku' => $this->orderDetail['op_selprod_sku'],
+                    'units' => $this->orderDetail['op_qty'],
+                    'selling_price' => $sellingPrice,
+                    'discount' => $discountPerUnit,
+                ]
+            ],
+            'payment_method' => (FatApp::getConfig("CONF_COD_ORDER_STATUS", FatUtility::VAR_INT, OrderStatus::ORDER_COD) == $this->orderDetail['op_status_id']) ? 'COD' : 'Prepaid',
+            'total_discount' => $totalDiscount,
+            'sub_total' => CommonHelper::orderProductAmount($this->orderDetail, 'CART_TOTAL', false , User::USER_TYPE_SELLER),
+            'length' => $this->convertToCm($this->orderDetail['op_product_length'], $this->orderDetail['op_product_dimension_unit']),
+            'breadth' => $this->convertToCm($this->orderDetail['op_product_width'], $this->orderDetail['op_product_dimension_unit']),
+            'height' => $this->convertToCm($this->orderDetail['op_product_height'], $this->orderDetail['op_product_dimension_unit']),
+            'weight' => $this->convertToKg($this->orderDetail['op_product_weight'])
+        ];
+
+        return $this->doRequest(self::REQUEST_RETURN_ORDER, $requestParam);
+    } */
+
+    /**
+     * refundShipment
+     *
+     * @return bool
+     */
+    public function refundShipment(): bool
+    {
+        $orderId = OrderProductShipment::getAttributesById($this->orderDetail['op_id'], 'opship_order_number');
+        if (false == $orderId || empty($orderId)) {
+            $this->error = Labels::getLabel('MSG_UNABLE_TO_LOCATE_ORDER', $this->langId);
+            return false;
+        }
+        return $this->doRequest(self::REQUEST_CANCEL_ORDER, ['ids' => [$orderId]]);
+    }
+
     /**
      * doRequest
      *
@@ -518,6 +703,13 @@ class ShipRocket extends ShippingServicesBase
     {
         try {
             switch ($requestType) {
+                case self::REQUEST_AUTH_LOGIN:
+                    $this->resp = new ShipRocketApi([
+                        'email' => $this->settings['email'],
+                        'password' => $this->settings['password'],
+                        'use_sandbox' => 0,  /* Use 0 As this API won`t support sanbox mode. */
+                    ]);
+                    break;
                 case self::REQUEST_GET_RATES:
                     $this->resp = $this->client->checkServiceability($requestParam['pickup_postcode'], $requestParam['delivery_postcode'], 0, $requestParam['weight']);
                     break;
@@ -542,10 +734,15 @@ class ShipRocket extends ShippingServicesBase
                 case self::REQUEST_GENERATE_LABEL:
                     $this->resp = $this->client->generateLabel($requestParam);
                     break;
+                case self::REQUEST_RETURN_ORDER:
+                    $this->resp = $this->client->createReturnOrder($requestParam);
+                    break;
+                case self::REQUEST_CANCEL_ORDER:
+                    $this->resp = $this->client->cancelOrder($requestParam);
+                    break;
             }
             return true;
         } catch (Exception $e) {
-            CommonHelper::printArray($e, true);
             $this->error = $e->getMessage();
         } catch (Error $e) {
             $this->error = $e->getMessage();
