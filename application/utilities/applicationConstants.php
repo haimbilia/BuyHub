@@ -137,7 +137,12 @@ class applicationConstants
     public static function bannerTypeArr()
     {
         $bannerTypeArr = Language::getAllNames();
-        return array(0 => Labels::getLabel('LBL_All_Languages', CommonHelper::getLangId())) + $bannerTypeArr;
+		if(count($bannerTypeArr) > 1){
+			 return array(0 => Labels::getLabel('LBL_All_Languages', CommonHelper::getLangId())) + $bannerTypeArr;
+		} else  {
+			return  $bannerTypeArr;
+		}
+       
     }
 
     public static function digitalDownloadTypeArr($langId)
