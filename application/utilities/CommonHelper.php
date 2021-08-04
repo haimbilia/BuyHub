@@ -2111,4 +2111,14 @@ class CommonHelper extends FatUtility
             return false;
         }
     }
+
+    public static function getFirstName(string $name): string
+    {
+        return (false !== strpos($name, ' ') ? (explode(' ', $name))[0] : $name);
+    }
+
+    public static function getLastName(string $name): string
+    {
+        return (false !== strpos($name, ' ') ? (explode(' ', $name))[1] : $name);
+    }
 }

@@ -1252,7 +1252,9 @@ class Cart extends FatModel
         $orderNetAmount = (max($cartTotal - $cartVolumeDiscount - $totalDiscountAmount, 0) + $shippingTotal + $cartTaxTotal + $roundingOff);
 
         $orderNetAmount = $orderNetAmount - CommonHelper::rewardPointDiscount($orderNetAmount, $cartRewardPoints);
+
         $WalletAmountCharge = ($this->isCartUserWalletSelected()) ? min($orderNetAmount, $userWalletBalance) : 0;
+
         $orderPaymentGatewayCharges = $orderNetAmount - $WalletAmountCharge;
 
         $isCodValidForNetAmt = true;
