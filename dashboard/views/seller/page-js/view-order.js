@@ -92,8 +92,10 @@ $(document).ready(function () {
     }
 
     fetchTrackingDetail = function (trackingId, opInvoiceId) {
+        fcom.displayProcessing();
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {
+                $.mbsmessage.close();
                 $.facebox(res );
             });
         });

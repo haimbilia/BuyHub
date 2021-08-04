@@ -139,19 +139,6 @@ class DummyController extends AdminBaseController
         $dataMigration = new DataMigration();
         $dataMigration->sync();
     }
-    
-    public function ship()
-    {
-        $plugin = PluginHelper::callPlugin('ShipRocket', [$this->adminLangId], $error, $this->adminLangId, false);
-        if (false === $plugin->init()) {
-            echo $plugin->getError();
-        }
-        $plugin->loadSystemOrder('479');
-        $plugin->returnShipment();
-        // $plugin->proceedToShipment(['op_id' => 479]);
-        echo $plugin->getError();
-        CommonHelper::printArray($plugin->getResponse());
-    }
 
     public function ship()
     {
@@ -159,7 +146,10 @@ class DummyController extends AdminBaseController
         if (false === $plugin->init()) {
             echo $plugin->getError();
         }
-        $plugin->getCarriers();
+        // $plugin->getCarriers();
+        /* $plugin->loadSystemOrder('479');
+        $plugin->returnShipment(); */
+        $plugin->proceedToShipment(['op_id' => 493]);
         echo $plugin->getError();
         CommonHelper::printArray($plugin->getResponse());
     }

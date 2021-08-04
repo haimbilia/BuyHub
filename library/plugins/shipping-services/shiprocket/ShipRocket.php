@@ -557,16 +557,14 @@ class ShipRocket extends ShippingServicesBase
             return false;
         }
         $this->resp = [
-            'shipment_response' => json_encode($orderShipment),
-            'awb_response' => json_encode($awbResp),
-            'label_response' => json_encode($labelResp),
+            'shipment_response' => $orderShipment,
+            'awb_response' => $awbResp,
+            'label_response' => $labelResp,
             'orderNumber' => $orderShipment['order_id'],
-            'tracking_url' => $labelResp['label_url'],
             'tracking_code' => $labelResp['shipment_id'],
         ];
         return true;
     }
-
     
     /**
      * loadSystemOrder

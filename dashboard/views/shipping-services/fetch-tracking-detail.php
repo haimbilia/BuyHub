@@ -17,9 +17,11 @@
                     </li>
                 <?php } ?>
             <?php } else { ?>
-                <li class="event">
-                    <?php echo Labels::getLabel('MSG_NO_DETAIL_FOUND', $siteLangId); ?>
-                </li>
+                <?php if (!empty($trackingData) && array_key_exists('trackingUrl', $trackingData)) {?>
+                    <a href="<?php echo $trackingData['trackingUrl']; ?>" target="_blank" class="link"><?php echo Labels::getLabel('LBL_CLICK_HERE_TO_TRACK_EXTERNALLY', $siteLangId); ?></a>
+                <?php } else {
+                    echo Labels::getLabel('MSG_NO_DETAIL_FOUND', $adminLangId);
+                } ?>
             <?php } ?>
         </ul>
     </div>
