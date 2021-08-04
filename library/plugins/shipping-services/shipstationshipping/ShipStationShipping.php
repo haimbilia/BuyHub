@@ -49,6 +49,16 @@ class ShipStationShipping extends ShippingServicesBase
     {
         return $this->validateSettings($this->langId);
     }
+    
+    /**
+     * canGenerateLabelSeprately
+     *
+     * @return bool
+     */
+    public function canGenerateLabelSeprately(): bool
+    {
+        return true;
+    }
         
     /**
      * getCarriers

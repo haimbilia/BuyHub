@@ -869,15 +869,17 @@ class CheckoutController extends MyAppController
 
     public function paymentSummary()
     {
-        if (true === MOBILE_APP_API_CALL) {
+        $canUseWallet = PaymentMethods::canUseWalletForPayment();
+        if (true === MOBILE_APP_API_CALL || false === $canUseWallet) {
             $payFromWallet = FatApp::getPostedData('payFromWallet', Fatutility::VAR_INT, 0);
             $this->cartObj->updateCartWalletOption($payFromWallet);
-
+            
             $useRewardPoints = FatApp::getPostedData('redeem_rewards', FatUtility::VAR_INT, 0);
-            if (0 < $useRewardPoints) {
+            if (0 < $useRewardPoints && true === MOBILE_APP_API_CALL) {
                 $this->useRewardPoints(true);
             }
         }
+
 
         $criteria = array('isUserLogged' => true, 'hasProducts' => true, 'hasStock' => true, 'hasBillingAddress' => true);
         $fulfillmentType = $this->cartObj->getCartCheckoutType();
@@ -1511,7 +1513,7 @@ class CheckoutController extends MyAppController
             $this->set('confirmForm', $confirmForm);
         }
 
-        $this->set('canUseWalletForPayment', PaymentMethods::canUseWalletForPayment());
+        $this->set('canUseWalletForPayment', $canUseWallet);
         $this->set('shippingAddressId', $shippingAddressId);
         $this->set('billingAddressId', $billingAddressId);
         $this->set('billingAddressArr', $billingAddressArr);
@@ -1635,9 +1637,7 @@ class CheckoutController extends MyAppController
 
     public function walletSelection()
     {
-        $post = FatApp::getPostedData();
-        $payFromWallet = $post['payFromWallet'];
-        //$this->cartObj = new Cart();
+        $payFromWallet = FatApp::getPostedData('payFromWallet', FatUtility::VAR_INT, 0);
         $this->cartObj->updateCartWalletOption($payFromWallet);
         $this->_template->render(false, false, 'json-success.php');
     }
