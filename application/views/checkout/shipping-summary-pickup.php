@@ -287,27 +287,30 @@
                 </li>
             <?php } ?>
             <li>
-                <div class="product-profile">
-                    <div class="product-profile__thumbnail">
-                        <a href="<?php echo $productUrl; ?>">
-                            <img class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
-                        </a>
-                    </div>
-                    <div class="product-profile__data">
-                        <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+                <div class="cell cell_product">
+                    <div class="product-profile">
+                        <div class="product-profile__thumbnail">
+                            <a href="<?php echo $productUrl; ?>">
+                                <img class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
+                            </a>
                         </div>
-                        <div class="options">
-                            <p class=""> <?php if (isset($product['options']) && count($product['options'])) {
-                                                $optionStr = '';
-                                                foreach ($product['options'] as $option) {
-                                                    $optionStr .= $option['optionvalue_name'] . '|';
-                                                }
-                                                echo rtrim($optionStr, '|');
-                                            } ?></p>
-                        </div>
+                        <div class="product-profile__data">
+                            <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+                            </div>
+                            <div class="options">
+                                <p class=""> <?php if (isset($product['options']) && count($product['options'])) {
+                                                    $optionStr = '';
+                                                    foreach ($product['options'] as $option) {
+                                                        $optionStr .= $option['optionvalue_name'] . '|';
+                                                    }
+                                                    echo rtrim($optionStr, '|');
+                                                } ?></p>
+                            </div>
 
+                        </div>
                     </div>
                 </div>
+                <div class="cell cell_qty">
                 <div class="wrap-qty-price">
                     <div class="quantity quantity-2">
                         <span class="decrease decrease-js">
@@ -326,6 +329,9 @@
                                 </svg>
                             </i></span>
                     </div>
+                </div>
+                </div>
+                <div class="cell cell_price">
                     <div class="product-price">
                         <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
                         <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
@@ -333,17 +339,19 @@
                         <?php } ?>
                     </div>
                 </div>
+                <div class="cell cell_action">
                 <div class="product-action">
-                    <ul class="list-actions">
+                    <ul class="actions">
                         <li>
                             <a href="javascript:void(0);" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
                                 <svg class="svg" width="24px" height="24px">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
                                     </use>
                                 </svg>
                             </a>
                         </li>
                     </ul>
+                </div>
                 </div>
             </li>
         <?php $count++;
