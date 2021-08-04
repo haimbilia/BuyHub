@@ -140,4 +140,15 @@ class DummyController extends AdminBaseController
         $dataMigration->sync();
 
     }
+
+    public function ship()
+    {
+        $plugin = PluginHelper::callPlugin('ShipEngine', [$this->adminLangId], $error, $this->adminLangId, false);
+        if (false === $plugin->init()) {
+            echo $plugin->getError();
+        }
+        $plugin->getCarriers();
+        echo $plugin->getError();
+        CommonHelper::printArray($plugin->getResponse());
+    }
 }

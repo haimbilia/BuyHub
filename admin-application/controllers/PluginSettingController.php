@@ -139,7 +139,7 @@ class PluginSettingController extends AdminBaseController
             /* Sanbox Key Field */
 
             /* Live Key Fields */
-            $colName = 'live_' . $colName;
+            $colName = (false === strpos($colName, 'live_') ? 'live_' . $colName : $colName);
             $fld = $frm->$fieldFn($colLabel, $colName);
             $fld->htmlAfterField = $htmlAfterField;
 
