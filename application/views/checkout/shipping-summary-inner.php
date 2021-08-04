@@ -49,6 +49,7 @@
                     ?>
             </h5>
         </div>
+        <div class="step_body">
         <?php
             ksort($shippingRates);
             foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
@@ -78,6 +79,7 @@
                     }
                 }
             } ?>
+        </div>    
         <div class="step_foot">
             <a class="btn btn-outline-brand btn-wide" href="javascript:void(0)" onclick="showAddressList();">
                 <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>

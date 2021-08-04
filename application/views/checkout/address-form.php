@@ -6,10 +6,10 @@ $addressFrm->setCustomRendererClass('FormRendererBS');
 //$addressFrm->developerTags['colClassAfterWidthDefault'] = 'colClassAfterWidth';
 $addressFrm->developerTags['colWidthClassesDefault'] = [null, 'col-md-', null, null];
 $addressFrm->developerTags['colWidthValuesDefault'] = [null, '6', null, null];
-$addressFrm->developerTags['fldWidthClassesDefault'] = [null, null, null, null];
-$addressFrm->developerTags['fldWidthValuesDefault'] = [null, null, null, null];
-$addressFrm->developerTags['labelWidthClassesDefault'] = [null, null, null, null];
-$addressFrm->developerTags['labelWidthValuesDefault'] = [null, null, null, null];
+$addressFrm->developerTags['fldWidthClassesDefault'] = ['field_', 'field_', 'field_', 'field_'];
+$addressFrm->developerTags['fldWidthValuesDefault'] = ['cover', 'cover', 'cover', 'cover'];
+$addressFrm->developerTags['labelWidthClassesDefault'] = ['field_', 'field_', 'field_', 'field_'];
+$addressFrm->developerTags['labelWidthValuesDefault'] = ['label', 'label', 'label', 'label'];
 $addressFrm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
 
 $addressFrm->setFormTagAttribute('class', 'form');

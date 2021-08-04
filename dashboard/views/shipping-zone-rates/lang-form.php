@@ -3,10 +3,10 @@ $langFrm->setCustomRendererClass('FormRendererBS');
 
 $langFrm->developerTags['colWidthClassesDefault'] = [null, 'col-md-', null, null];
 $langFrm->developerTags['colWidthValuesDefault'] = [null, '12', null, null];
-$langFrm->developerTags['fldWidthClassesDefault'] = [null, null, null, null];
-$langFrm->developerTags['fldWidthValuesDefault'] = [null, null, null, null];
-$langFrm->developerTags['labelWidthClassesDefault'] = [null, null, null, null];
-$langFrm->developerTags['labelWidthValuesDefault'] = [null, null, null, null];
+$langFrm->developerTags['fldWidthClassesDefault'] = ['field_', 'field_', 'field_', 'field_'];
+$langFrm->developerTags['fldWidthValuesDefault'] = ['cover', 'cover', 'cover', 'cover'];
+$langFrm->developerTags['labelWidthClassesDefault'] = ['field_', 'field_', 'field_', 'field_'];
+$langFrm->developerTags['labelWidthValuesDefault'] = ['label', 'label', 'label', 'label'];
 $langFrm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
 
 $langFrm->setFormTagAttribute('class', 'form');

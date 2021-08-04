@@ -34,15 +34,14 @@
                                     $checked = true;
                                 }
                                 ?>
-                        <li class="s-<?php echo $address['addr_id']; ?> <?php //echo ($checked == true) ? 'selected' : ''
-                                                                                ?>">
-                            <label class="label-block" for="">
+                        <li class="addrListJs s-<?php echo $address['addr_id']; ?> <?php echo ($checked == true) ? 'is-active' : ''?>">
+                            <label class="label-block" for="s-<?php echo $address['addr_id']; ?>">
 
                                 <div class="checkbox_wrap">
                                     <span class="checkbox">
                                         <input <?php echo ($checked == true) ? 'checked="checked"' : ''; ?>
                                             name="shipping_address_id" value="<?php echo $address['addr_id']; ?>"
-                                            type="radio">
+                                            type="radio" id="s-<?php echo $address['addr_id']; ?>">
                                     </span>
                                 </div>
 
