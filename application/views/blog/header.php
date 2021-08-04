@@ -6,6 +6,7 @@ $commonHeadData = array(
     'siteLangCountryCode' => $siteLangCountryCode,
     'controllerName' => $controllerName,
     'action' => $action,
+    'cacheTimeStamp' => $cacheTimeStamp,
     'jsVariables' => $jsVariables,    
     'currencySymbolLeft' => $currencySymbolLeft,
     'currencySymbolRight' => $currencySymbolRight,    

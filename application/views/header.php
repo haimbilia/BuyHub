@@ -7,6 +7,7 @@ array_walk($jsVariables, function (&$item1, $key) {
 $commonHeadData = array(
     'siteLangId' => $siteLangId,
     'siteLangCode' => $siteLangCode,
+    'cacheTimeStamp' => $cacheTimeStamp,
     'controllerName' => $controllerName,
     'action' => $action,
     'jsVariables' => $jsVariables,

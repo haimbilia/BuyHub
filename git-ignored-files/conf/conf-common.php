@@ -13,7 +13,7 @@ define('PASSWORD_SALT', 'ewoiruqojfklajreajflfdsaf');
 define('CONF_INSTALLATION_PATH', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
 define('CONF_UPLOADS_PATH', CONF_INSTALLATION_PATH . 'user-uploads' . DIRECTORY_SEPARATOR);
 //define('CONF_UPLOADS_PATH',  's3://');
-define('CONF_FRONT_APP_DIR', 'application/');
+define('CONF_FRONT_END_APPLICATION_DIR', 'application/');
 define('CONF_PLUGIN_DIR', CONF_INSTALLATION_PATH . 'library/plugins/');
 define('CONF_TEST_CASES_DIR', CONF_INSTALLATION_PATH . 'testcases/');
 

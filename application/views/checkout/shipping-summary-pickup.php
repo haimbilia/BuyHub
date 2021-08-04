@@ -41,6 +41,7 @@
                 ?>
             </h5>
         </div>
+        <div class="step_body">
         <?php
         ksort($shippingRates);
         $levelNo = 0;

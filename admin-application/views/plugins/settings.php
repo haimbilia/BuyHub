@@ -11,10 +11,8 @@ $frm->developerTags['fld_default_col'] = 12;
     </div>
     <div class="sectionbody space">
         <div class="tabs_nav_container responsive flat">
-            <div class="tabs_panel_wrap">
-                <div class="tabs_panel">
-                    <?php echo $frm->getFormHtml(); ?>
-                </div>
+            <div class="tabs_panel p-4">
+                <?php echo $frm->getFormHtml(); ?>
             </div>
         </div>
     </div>
