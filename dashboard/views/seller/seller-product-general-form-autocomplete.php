@@ -53,10 +53,10 @@ $inventoryForm->setCustomRendererClass('FormRendererBS');
 $inventoryForm->developerTags['colClassAfterWidthDefault'] = 'col-3';
 $inventoryForm->developerTags['colWidthClassesDefault'] = [null, null, null, null];
 $inventoryForm->developerTags['colWidthValuesDefault'] = [null, null, null, null];
-$inventoryForm->developerTags['fldWidthClassesDefault'] = [null, null, null, null];
-$inventoryForm->developerTags['fldWidthValuesDefault'] = [null, null, null, null];
-$inventoryForm->developerTags['labelWidthClassesDefault'] = [null, null, null, null];
-$inventoryForm->developerTags['labelWidthValuesDefault'] = [null, null, null, null];
+$inventoryForm->developerTags['fldWidthClassesDefault'] = ['field_', 'field_', 'field_', 'field_'];
+$inventoryForm->developerTags['fldWidthValuesDefault'] = ['cover', 'cover', 'cover', 'cover'];
+$inventoryForm->developerTags['labelWidthClassesDefault'] = ['field_', 'field_', 'field_', 'field_'];
+$inventoryForm->developerTags['labelWidthValuesDefault'] = ['label', 'label', 'label', 'label'];
 $inventoryForm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
 
 $inventoryForm->setFormTagAttribute('onsubmit', 'addInvOption(); return(false);');

@@ -6,7 +6,7 @@ if(isset($includeEditor) && $includeEditor){ ?>
 <?php  }  ?></head>
 <body class="<?php echo $bodyClass;?>">
 <?php if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonHelper::demoUrl()) { 
-	$tplFile = str_replace( CONF_APPLICATION_PATH, CONF_INSTALLATION_PATH.CONF_FRONT_APP_DIR, CONF_THEME_PATH );
+	$tplFile = str_replace( CONF_APPLICATION_PATH, CONF_INSTALLATION_PATH.CONF_FRONT_END_APPLICATION_DIR, CONF_THEME_PATH );
 	$tplFile.='restore-system/top-header.php';
 	include_once $tplFile;	
 }?>

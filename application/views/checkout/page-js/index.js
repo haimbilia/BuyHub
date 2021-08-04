@@ -809,4 +809,10 @@ $("document").ready(function () {
             }
         );
     };
+
+    $(document).on('click', '.addrListJs', function () {
+        $('.addrListJs').removeClass('is-active');
+        $(this).addClass('is-active');
+    });
+
 })();

@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'conf-common.php';
 
-define('CONF_APPLICATION_PATH', CONF_INSTALLATION_PATH . CONF_FRONT_APP_DIR);
+define('CONF_APPLICATION_PATH', CONF_INSTALLATION_PATH . CONF_FRONT_END_APPLICATION_DIR);
 define('CONF_VIEW_DIR_PATH', CONF_APPLICATION_PATH . 'views/');
 
 if (strpos($_SERVER['REQUEST_URI'], '/app-api/') !== false) {
