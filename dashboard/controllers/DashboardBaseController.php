@@ -43,6 +43,15 @@ class DashboardBaseController extends FatController
         $this->set('siteLangCode', $this->siteLangCode);
         $this->set('siteCurrencyId', $this->siteCurrencyId);
         $this->set('siteLangCountryCode', $this->siteLangCountryCode);
+
+        $cacheTimeStamp = FatCache::get('cacheTimeStamp' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$cacheTimeStamp) {
+            $cacheTimeStamp = date('Y-m-d H:i:s');
+            FatCache::set('cacheTimeStamp' . $this->siteLangId, $cacheTimeStamp, '.txt');
+        }
+        $cacheTimeStamp = AttachedFile::setTimeParam($cacheTimeStamp);
+        $this->set('cacheTimeStamp', $cacheTimeStamp);
+
         $loginData = array(
             'loginFrm' => $this->getLoginForm(),
             'siteLangId' => $this->siteLangId,
@@ -171,6 +180,7 @@ class DashboardBaseController extends FatController
                 'deleteAccount' => Labels::getLabel('MSG_ARE_YOU_SURE_?_DELETING_ACCOUNT_WILL_UNLINK_ALL_TRANSACTIONS_RELATED_TO_THIS_ACCOUNT.', $this->siteLangId),
                 'unlinkAccount' => Labels::getLabel('MSG_ARE_YOU_SURE_?_UNLINKING_ACCOUNT_WILL_UNLINK_ALL_TRANSACTIONS_RELATED_TO_THIS_ACCOUNT.', $this->siteLangId),
                 'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->siteLangId),
+                'cacheTimeStamp' => $cacheTimeStamp,
                 'close' => Labels::getLabel('LBL_CLOSE', $this->siteLangId),
             );
 
@@ -196,7 +206,7 @@ class DashboardBaseController extends FatController
             $address = FatApp::getConfig('CONF_GEO_DEFAULT_ADDR', FatUtility::VAR_STRING, '');
             if (empty($address)) {
                 $address = FatApp::getConfig('CONF_GEO_DEFAULT_ZIPCODE', FatUtility::VAR_INT, 0) . '-' . FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, '');
-            }            
+            }
             setcookie('_ykGeoAddress', $address, time() + (86400 * 30), CONF_WEBROOT_FRONTEND, $_SERVER['SERVER_NAME']); // 86400 = 1 day
         }
 

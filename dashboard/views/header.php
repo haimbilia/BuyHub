@@ -17,6 +17,7 @@ $commonHeadData = array(
     'action' => $action,
     'jsVariables' => $jsVariables,
     'extendEditorJs' => $extendEditorJs,
+    'cacheTimeStamp' => $cacheTimeStamp,
     'currencySymbolLeft' => $currencySymbolLeft,
     'currencySymbolRight' => $currencySymbolRight,
     'isUserDashboard' => $isUserDashboard,

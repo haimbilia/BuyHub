@@ -860,6 +860,10 @@ UPDATE `tbl_configurations` SET `conf_val` = 'rgb(255,255,255)' WHERE `tbl_confi
 UPDATE `tbl_configurations` SET `conf_val` = 'rgb(255,58,89)' WHERE `tbl_configurations`.`conf_name` = 'CONF_THEME_COLOR';
 -- ---------------TV-9.3.2.20210730------------
 
+-- --- ShipRocket Shipping API Task : 88040 --- --
+INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('ShipRocket', '8', 'ShipRocket', '0', '1');
+-- --- ShipRocket Shipping API Task : 88040 --- --
+
 -- --- ShipEngine Shipping API Task : 88449 --- --
 INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Ship Engine', '8', 'ShipEngine', '0', '1');
 -- --- ShipEngine Shipping API Task : 88449 --- --

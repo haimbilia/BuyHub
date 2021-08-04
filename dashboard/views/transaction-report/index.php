@@ -2,6 +2,10 @@
 $frmSearch->setCustomRendererClass('FormRendererBS');
 $frmSearch->developerTags['colWidthClassesDefault'] = ['col-lg', 'col-md-', null, null];
 $frmSearch->developerTags['colWidthValuesDefault'] = [4, 4, null, null];
+$frmSearch->developerTags['fldWidthClassesDefault'] = ['field_', 'field_', 'field_', 'field_'];
+$frmSearch->developerTags['fldWidthValuesDefault'] = ['cover', 'cover', 'cover', 'cover'];
+$frmSearch->developerTags['labelWidthClassesDefault'] = ['field_', 'field_', 'field_', 'field_'];
+$frmSearch->developerTags['labelWidthValuesDefault'] = ['label', 'label', 'label', 'label'];
 $frmSearch->setFormTagAttribute('onsubmit', 'searchReport(this); return(false);');
 $frmSearch->setFormTagAttribute('class', 'form');
 
