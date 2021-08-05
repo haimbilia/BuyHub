@@ -773,8 +773,16 @@ class ProductsController extends AdminBaseController
         $frm = new Form('imageFrm');
         $frm->addSelectBox(Labels::getLabel('LBL_Image_File_Type', $this->adminLangId), 'option_id', $imgTypesArr, 0, array(), '');
         $languagesAssocArr = Language::getAllNames();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->adminLangId)) + $languagesAssocArr, '', array(), '');
-        $frm->addHiddenField('', 'min_width', 500);
+		if(count($languagesAssocArr) > 1){
+			$frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->adminLangId)) + $languagesAssocArr, '', array(), '');
+		} else  {
+			$lang_id = array_key_first($languagesAssocArr); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+       
+        
+		
+		$frm->addHiddenField('', 'min_width', 500);
         $frm->addHiddenField('', 'min_height', 500);
         $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->adminLangId), 'prod_image', array('id' => 'prod_image'));
         $frm->addHiddenField('', 'product_id', $productId);
@@ -784,6 +792,10 @@ class ProductsController extends AdminBaseController
     public function images($productId, $option_id = 0, $lang_id = 0)
     {
         $productId = FatUtility::int($productId);
+		$languages = Language::getAllNames();
+		if(count($languages) <= 1){
+			 $lang_id =  array_key_first($languages); 
+		}
         if ($productId < 1) {
             Message::addErrorMessage($this->str_invalid_request);
             FatUtility::dieWithError(Message::getHtml());
@@ -838,7 +850,13 @@ class ProductsController extends AdminBaseController
 
         $productId = FatUtility::int($post['product_id']);
         $option_id = FatUtility::int($post['option_id']);
-        $lang_id = FatUtility::int($post['lang_id']);
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $lang_id = FatUtility::int($post['lang_id']);
+		} else  {
+			$lang_id = array_key_first($languages); 
+		}
+		
         $fileHandlerObj = new AttachedFile();
         if (!$res = $fileHandlerObj->saveImage($_FILES['cropped_image']['tmp_name'], AttachedFile::FILETYPE_PRODUCT_IMAGE, $productId, $option_id, $_FILES['cropped_image']['name'], -1, $unique_record = false, $lang_id)) {
             Message::addErrorMessage($fileHandlerObj->getError());

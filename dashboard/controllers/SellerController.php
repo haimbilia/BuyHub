@@ -2425,7 +2425,14 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
         $shop_id = FatUtility::int($shopDetails['shop_id']);
-        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+		
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			$lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+		} else  {
+			$lang_id = array_key_first($languages); 
+		}
+       
 
         if ($lang_id <= 0) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request_id', $this->siteLangId));
@@ -2557,7 +2564,12 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
         $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
-        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			$lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+		} else  {
+			$lang_id = array_key_first($languages); 
+		}
         $slide_screen = FatApp::getPostedData('slide_screen', FatUtility::VAR_INT, 0);
         $aspectRatio = FatApp::getPostedData('ratio_type', FatUtility::VAR_INT, 0);
         if (!$file_type) {
@@ -3390,9 +3402,16 @@ class SellerController extends SellerBaseController
         $this->userPrivilege->canViewShop(UserAuthentication::getLoggedUserId());
         $post = FatApp::getPostedData();
         $splatform_id = FatUtility::int($post['splatform_id']);
-        $lang_id = $post['lang_id'];
-
-        if ($splatform_id == 0 || $lang_id == 0) {
+		
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			$lang_id = $post['lang_id'];
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$post['lang_id'] = $lang_id;
+		}
+      
+		if ($splatform_id == 0 || $lang_id == 0) {
             Message::addErrorMessage('Invalid Request');
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -3597,8 +3616,17 @@ class SellerController extends SellerBaseController
     {
         $frm = new Form('frmSocialPlatformLang');
         $frm->addHiddenField('', 'splatform_id', $splatform_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Title', $this->siteLangId), 'splatform_title');
+		
+       
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+		
+		$frm->addRequiredField(Labels::getLabel('LBL_Title', $this->siteLangId), 'splatform_title');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -3750,7 +3778,15 @@ class SellerController extends SellerBaseController
         $frm = new Form('frmShopLogo');
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $bannerTypeArr = applicationConstants::bannerTypeArr();
-        $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'logo-language-js'), '');
+		
+		if(count($bannerTypeArr) > 1){
+			 $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'logo-language-js'), '');
+        } else  {
+			$langId = array_key_first($bannerTypeArr); 
+			$frm->addHiddenField('', 'lang_id', $langId);
+		}
+       
+		
         $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
         $frm->addRadioButtons(Labels::getLabel('LBL_Ratio', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE, array('class' => 'list-inline'));
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_SHOP_LOGO);
@@ -3765,7 +3801,13 @@ class SellerController extends SellerBaseController
         $frm = new Form('frmBackgroundImage');
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $bannerTypeArr = applicationConstants::bannerTypeArr();
-        $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'bg-language-js'), '');
+		if(count($bannerTypeArr) > 1){
+			$frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'bg-language-js'), '');
+        } else  {
+			$langId = array_key_first($bannerTypeArr); 
+			$frm->addHiddenField('', 'lang_id', $langId);
+		}
+		
         $fld = $frm->addButton(
             Labels::getLabel('Lbl_Background_Image', $langId),
             'shop_background_image',
@@ -3780,7 +3822,13 @@ class SellerController extends SellerBaseController
         $frm = new Form('frmShopBanner');
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $bannerTypeArr = applicationConstants::bannerTypeArr();
-        $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'banner-language-js'), '');
+		if(count($bannerTypeArr) > 1){
+			 $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'banner-language-js'), '');
+        } else  {
+			$langId = array_key_first($bannerTypeArr); 
+			$frm->addHiddenField('', 'lang_id', $langId);
+		}
+	  
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->siteLangId), 'slide_screen', $screenArr, '', array(), '');
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_SHOP_BANNER);
@@ -3794,7 +3842,16 @@ class SellerController extends SellerBaseController
     {
         $frm = new Form('frmShopLang');
         $frm->addHiddenField('', 'shop_id', $shop_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $lang_id), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+		
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			$frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $lang_id), 'lang_id', $languages, $lang_id, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$fl = $frm->addHiddenField('', 'lang_id', $lang_id);
+			
+		}
+		
         $frm->addRequiredField(Labels::getLabel('LbL_Shop_Name', $lang_id), 'shop_name');
         $frm->addRequiredField(Labels::getLabel('LBL_SHOP_ADDRESS_LINE_1', $lang_id), 'shop_address_line_1');
         $frm->addTextBox(Labels::getLabel('LBL_SHOP_ADDRESS_LINE_2', $lang_id), 'shop_address_line_2');
@@ -4827,7 +4884,17 @@ class SellerController extends SellerBaseController
     {
         $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId());
         $post = FatApp::getPostedData();
-        $lang_id = $post['lang_id'];
+		
+		
+		
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $lang_id = $post['lang_id'];
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$post['lang_id'] =  array_key_first($languages); 
+		}
+		
         $userId = $this->userParentId;
 
         if ($userId == 0 || $lang_id == 0) {
@@ -4912,7 +4979,14 @@ class SellerController extends SellerBaseController
         $formLangId = FatUtility::int($formLangId);
 
         $frm = new Form('frmReturnAddressLang');
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $formLangId, array(), '');
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			  $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $formLangId, array(), '');
+		} else  {
+			$formLangId = array_key_first($languages); 
+			$frm->addHiddenField('', 'lang_id', $formLangId);
+		}
+		
         $frm->addTextBox(Labels::getLabel('LBL_Name', $formLangId), 'ura_name')->requirement->setRequired(true);;
         $frm->addTextBox(Labels::getLabel('LBL_City', $formLangId), 'ura_city')->requirement->setRequired(true);;
         $frm->addTextarea(Labels::getLabel('LBL_Address1', $formLangId), 'ura_address_line_1')->requirement->setRequired(true);;

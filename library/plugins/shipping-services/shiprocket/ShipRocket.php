@@ -4,6 +4,8 @@
  * ShipRocket - https://apidocs.shiprocket.in
  */
 
+use PhpParser\Node\Stmt\Label;
+
 require_once dirname(__FILE__) . '/ShipRocketApi.php';
 
 class ShipRocket extends ShippingServicesBase
@@ -20,6 +22,7 @@ class ShipRocket extends ShippingServicesBase
     private const REQUEST_GENERATE_LABEL = 8;
     private const REQUEST_RETURN_ORDER = 9;
     private const REQUEST_CANCEL_ORDER = 10;
+    private const REQUEST_TRACKING = 11;
 
     private $resp;
     private $clientInfoCols = [];
@@ -105,6 +108,17 @@ class ShipRocket extends ShippingServicesBase
     {
         return true;
     }
+    
+    /**
+     * canFetchTrackingDetail
+     *
+     * @return bool
+     */
+    public function canFetchTrackingDetail(): bool
+    {
+        return true;
+    }
+
 
     /**
      * getCarriers - No API found to fetch carrier list.
@@ -691,6 +705,58 @@ class ShipRocket extends ShippingServicesBase
     }
 
     /**
+     * fetchTrackingDetail
+     *
+     * @return array
+     */
+    public function fetchTrackingDetail(): array
+    {
+        if (empty($this->orderDetail)) {
+            $this->error = Labels::getLabel('MSG_UNABLE_TO_LOAD_ORDER', $this->langId);
+            return [];
+        }
+
+        if (false === $this->doRequest(self::REQUEST_TRACKING, $this->orderDetail['opship_tracking_number'])) {
+            return [];
+        }
+
+        $trackingDetail = $this->getResponse();
+        if (!array_key_exists('tracking_data', $trackingDetail)) {
+            $this->error = Labels::getLabel('MSG_UNABLE_TO_FETCH_TRACKING_DETAILS', $this->langId);
+            return [];
+        }
+
+        if (applicationConstants::FAILURE == $trackingDetail['tracking_data']['track_status']) {
+            $this->error = $trackingDetail['tracking_data']['error'];
+            return [];
+        }
+
+        $trackingDetail = $trackingDetail['tracking_data'];
+
+        $data = [
+            'detail' => [],
+            'response' => $trackingDetail,
+            'trackingUrl' => isset($trackingDetail['track_url']) ? $trackingDetail['track_url'] : '',
+        ];
+
+        if (isset($trackingDetail['shipment_track_activities'])) {
+            $trackingResult = $trackingDetail['shipment_track_activities'];
+            if (is_array($trackingResult)) {
+                foreach ($trackingResult as $trkData) {
+                    $data['detail'][] = [
+                        'description' => $trkData['activity'],
+                        'dateTime' => $trkData['date'],
+                        'location' => $trkData['location'],
+                        'comments' => '',
+                        'status' => self::TRACKING_STATUS_PROCESSING,
+                    ];
+                }
+            }
+        }
+        return $data;
+    }
+
+    /**
      * doRequest
      *
      * @param  int $requestType
@@ -737,6 +803,9 @@ class ShipRocket extends ShippingServicesBase
                     break;
                 case self::REQUEST_CANCEL_ORDER:
                     $this->resp = $this->client->cancelOrder($requestParam);
+                    break;
+                case self::REQUEST_TRACKING:
+                    $this->resp = $this->client->trackUsingShipmentId($requestParam);
                     break;
             }
             return true;

@@ -147,10 +147,11 @@ class DummyController extends AdminBaseController
             echo $plugin->getError();
         }
         // $plugin->getCarriers();
-        /* $plugin->loadSystemOrder('479');
-        $plugin->returnShipment(); */
-        $plugin->proceedToShipment(['op_id' => 493]);
+        // $plugin->returnShipment();
+        $plugin->loadSystemOrder(396);
+        $resp = $plugin->fetchTrackingDetail();
+        // $plugin->proceedToShipment(['op_id' => 493]);
         echo $plugin->getError();
-        CommonHelper::printArray($plugin->getResponse());
+        CommonHelper::printArray($resp);
     }
 }

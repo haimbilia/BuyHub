@@ -82,7 +82,7 @@
         }
     }
     &.sign-up {
-        transform: translateX(-34% * $transform-direction);
+        transform: translateX(-35% * $transform-direction);
         @include media-breakpoint-down(sm) {
             & {
                 transform: none;

@@ -152,8 +152,16 @@ class RatingTypesController extends AdminBaseController
     public function langSetup()
     {
         $this->objPrivilege->canEditRatingTypes();
-
-        $langId = FatApp::getPostedData('ratingtypelang_lang_id', FatUtility::VAR_INT, $this->adminLangId);
+		
+		
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			$langId = FatApp::getPostedData('ratingtypelang_lang_id', FatUtility::VAR_INT, $this->adminLangId);
+		} else  {
+			$langId = array_key_first($languages); 
+			$post['ratingtypelang_lang_id'] = $langId;
+		}
+		
         $frm = $this->getLangForm($langId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
@@ -221,8 +229,15 @@ class RatingTypesController extends AdminBaseController
         $frm = new Form('frmRatingTypes');
         $frm->addHiddenField('', 'ratingtypelang_ratingtype_id');
         $languages = Language::getAllNames();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $langId), 'ratingtypelang_lang_id', $languages, $langId, [], '');
-        $frm->addRequiredField(Labels::getLabel('LBL_RATING_TYPE', $langId), 'ratingtype_name');
+		if(count($languages) > 1){
+			  $frm->addSelectBox(Labels::getLabel('LBL_Language', $langId), 'ratingtypelang_lang_id', $languages, $langId, [], '');
+		} else  {
+			$langId = array_key_first($languages); 
+			$frm->addHiddenField('', 'ratingtypelang_lang_id', $langId);
+		}
+       
+        
+		$frm->addRequiredField(Labels::getLabel('LBL_RATING_TYPE', $langId), 'ratingtype_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
