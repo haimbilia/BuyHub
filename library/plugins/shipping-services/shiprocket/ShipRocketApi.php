@@ -9,7 +9,8 @@ class ShipRocketApi extends ShiprocketClient
     use Channels,
         Pickups,
         OrderLabels,
-        ReturnOrders;
+        ReturnOrders,
+        Tracking;
 
     public function __construct($config = [])
     {
