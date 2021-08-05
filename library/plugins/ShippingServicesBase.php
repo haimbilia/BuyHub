@@ -28,7 +28,8 @@ class ShippingServicesBase extends PluginBase
         $srch->addCondition('op.op_id', '=', $opId);
         $srch->joinTable(Orders::DB_TBL_ORDER_PAYMENTS, 'LEFT JOIN', 'o.order_id = opaym.opayment_order_id', 'opaym');
         $srch->joinTable(OrderProductShipment::DB_TBL, 'LEFT JOIN', 'opshp.opship_op_id = op.op_id', 'opshp');
-        $srch->addMultipleFields(['ops.*', 'order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'order_net_amount', 'opshipping_label', 'opshipping_carrier_code', 'opshipping_service_code', 'op.*', 'op_shop_name', 'op_product_tax_options', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'op_selprod_title', 'op_product_name', 'sp.selprod_product_id', 'opshipping_by_seller_user_id', 'opaym.*', 'opship_tracking_number']);
+        $srch->joinTable(OrderProduct::DB_TBL_RESPONSE, 'LEFT JOIN', 'opr_op_id = op.op_id', 'opr');
+        $srch->addMultipleFields(['ops.*', 'order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'order_net_amount', 'opshipping_label', 'opshipping_carrier_code', 'opshipping_service_code', 'op.*', 'op_shop_name', 'op_product_tax_options', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'op_selprod_title', 'op_product_name', 'sp.selprod_product_id', 'opshipping_by_seller_user_id', 'opaym.*', 'opship_tracking_number', 'opr_response']);
         $rs = $srch->getResultSet();
         $orderDetail = (array) FatApp::getDb()->fetch($rs);
         if (!empty($orderDetail)) {

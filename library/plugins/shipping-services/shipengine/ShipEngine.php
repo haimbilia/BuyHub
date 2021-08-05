@@ -432,7 +432,7 @@ class ShipEngine extends ShippingServicesBase
      */
     public function fetchTrackingDetail(): array
     {
-        $labelData = OrderProductShipment::getAttributesById($this->orderDetail['op_id'], 'opr_response');
+        $labelData = $this->orderDetail['opr_response'];
         if (empty($labelData)) {
             $this->error = Labels::getLabel('MSG_UNABLE_TO_FETCH_TRACKING_DETAILS', $this->langId);
             return [];
