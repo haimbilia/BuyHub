@@ -351,7 +351,7 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
             },
             'source': function(request, response) {
                 $.ajax({
-                    url: fcom.makeUrl('brands', 'autoComplete'),
+                    url: fcom.makeUrl('brands', 'autoComplete',[], siteConstants.webrootfront),
                     data: {
                         keyword: request['term'],
                         fIsAjax: 1,

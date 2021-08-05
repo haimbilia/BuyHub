@@ -425,9 +425,15 @@ class SellerRequestsController extends SellerBaseController
         $post = FatApp::getPostedData();
 
         $brandReqId = $post['brand_id'];
-        $lang_id = $post['lang_id'];
-
-        if ($brandReqId == 0 || $lang_id == 0) {
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			$lang_id = $post['lang_id'];
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$post['lang_id'] = $lang_id;
+		}
+       
+		if ($brandReqId == 0 || $lang_id == 0) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
@@ -544,8 +550,15 @@ class SellerRequestsController extends SellerBaseController
     public function uploadBrandLogo()
     {
         $brand_id = FatApp::getPostedData('brand_id', FatUtility::VAR_INT, 0);
-        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-        if (!$brand_id) {
+		
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			$lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+		} else  {
+			$lang_id = array_key_first($languages); 
+		}
+       
+	   if (!$brand_id) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
@@ -593,7 +606,14 @@ class SellerRequestsController extends SellerBaseController
         $languagesAssocArr = Language::getAllNames();
         $frm->addHiddenField('', 'brand_id', $brand_id);
         $frm->addHTML('', 'brand_logo_heading', '');
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'brand_lang_id', array(0 => Labels::getLabel('LBL_Universal', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
+		
+		if(count($languagesAssocArr) > 1){
+			$frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'brand_lang_id', array(0 => Labels::getLabel('LBL_Universal', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
+		} else  {
+			$lang_id = array_key_first($languagesAssocArr); 
+			$frm->addHiddenField('', 'brand_lang_id', $lang_id);
+		}
+		
         $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
         $frm->addRadioButtons(Labels::getLabel('LBL_Ratio', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
         $frm->addFileUpload(Labels::getLabel('Lbl_Logo', $this->siteLangId), 'logo', array('accept' => 'image/*', 'data-frm' => 'frmBrandMedia'));
@@ -640,7 +660,16 @@ class SellerRequestsController extends SellerBaseController
     {
         $frm = new Form('frmBrandReqLang', array('id' => 'frmBrandReqLang'));
         $frm->addHiddenField('', 'brand_id', $brandReqId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+		
+       
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+		
         $frm->addRequiredField(Labels::getLabel('LBL_Brand_Name', $this->siteLangId), 'brand_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);

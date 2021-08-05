@@ -275,9 +275,16 @@ class BrandsController extends AdminBaseController
         $post = FatApp::getPostedData();
 
         $brand_id = $post['brand_id'];
-        $lang_id = $post['lang_id'];
-
-        if ($brand_id == 0 || $lang_id == 0) {
+		
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $lang_id = $post['lang_id'];
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$post['lang_id'] = $lang_id;
+		}
+       
+		if ($brand_id == 0 || $lang_id == 0) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -436,12 +443,19 @@ class BrandsController extends AdminBaseController
 
     public function images($brand_id, $file_type, $lang_id = 0, $slide_screen = 0)
     {
-        $lang_id = FatUtility::int($lang_id);
-        $slide_screen = FatUtility::int($slide_screen);
+		
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			$lang_id = FatUtility::int($lang_id);
+		} else  {
+			$lang_id = array_key_first($languages); 
+		}
+		
+		$slide_screen = FatUtility::int($slide_screen);
         $brand_id = FatUtility::int($brand_id);
         if ($file_type == 'logo') {
             $brandLogos = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, $lang_id, false);
-            $this->set('images', $brandLogos);
+			$this->set('images', $brandLogos);
             $this->set('imageFunction', 'brandReal');
         } else {
             $brandImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_IMAGE, $brand_id, 0, $lang_id, false, $slide_screen);
@@ -451,7 +465,7 @@ class BrandsController extends AdminBaseController
 
         $this->set('file_type', $file_type);
         $this->set('brand_id', $brand_id);
-        $this->set('languages', Language::getAllNames());
+        $this->set('languages', $languages);
         $this->_template->render(false, false);
     }
 
@@ -477,7 +491,12 @@ class BrandsController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
         $brand_id = FatApp::getPostedData('brand_id', FatUtility::VAR_INT, 0);
-        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			$lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+		} else  {
+			$lang_id = array_key_first($languages); 
+		}
         $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
         $slide_screen = FatApp::getPostedData('slide_screen', FatUtility::VAR_INT, 0);
         $aspectRatio = FatApp::getPostedData('ratio_type', FatUtility::VAR_INT, 0);
@@ -532,8 +551,16 @@ class BrandsController extends AdminBaseController
         $languagesAssocArr = Language::getAllNames();
         $frm->addHTML('', 'brand_logo_heading', '');
         $frm->addHiddenField('', 'brand_id', $brand_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', array(0 => Labels::getLabel('LBL_Universal', $this->adminLangId)) + $languagesAssocArr, '', array(), '');
-        $ratioArr = AttachedFile::getRatioTypeArray($this->adminLangId);
+		
+		if(count($languagesAssocArr) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', array(0 => Labels::getLabel('LBL_Universal', $this->adminLangId)) + $languagesAssocArr, '', array(), '');
+		} else  {
+			$lang_id = array_key_first($languagesAssocArr); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+        
+        
+		$ratioArr = AttachedFile::getRatioTypeArray($this->adminLangId);
         $frm->addRadioButtons(Labels::getLabel('LBL_Ratio', $this->adminLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BRAND_LOGO);
         $frm->addHiddenField('', 'logo_min_width');
@@ -551,8 +578,13 @@ class BrandsController extends AdminBaseController
         $languagesAssocArr = Language::getAllNames();
         $frm->addHTML('', 'brand_logo_heading', '');
         $frm->addHiddenField('', 'brand_id', $brand_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', array(0 => Labels::getLabel('LBL_Universal', $this->adminLangId)) + $languagesAssocArr, '', array(), '');
-        $screenArr = applicationConstants::getDisplaysArr($this->adminLangId);
+		if(count($languagesAssocArr) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', array(0 => Labels::getLabel('LBL_Universal', $this->adminLangId)) + $languagesAssocArr, '', array(), '');
+		} else  {
+			$lang_id = array_key_first($languagesAssocArr); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+		$screenArr = applicationConstants::getDisplaysArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->adminLangId), 'slide_screen', $screenArr, '', array(), '');
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BRAND_IMAGE);
         $frm->addHiddenField('', 'banner_min_width');
@@ -713,23 +745,19 @@ class BrandsController extends AdminBaseController
     {
         $frm = new Form('frmProdBrandLang', array('id' => 'frmProdBrandLang'));
         $frm->addHiddenField('', 'brand_id', $brand_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+		
+      
+		
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			  $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+		
         $frm->addRequiredField(Labels::getLabel('LBL_Brand_Name', $this->adminLangId), 'brand_name');
-        //$fld = $frm->addTextarea(Labels::getLabel('LBL_Short_Description', $this->adminLangId), 'brand_short_description');
-        /* $fld->requirements()->setLength(0,250); */
-        //$fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_First_100_characters_will_be_shown_at_Product_detail_page', $this->adminLangId) . '</small>';
-
-        /* $fld = $frm->addButton('Logo','logo','Upload File',array('class'=>'uploadFile-Js','id'=>'','data-brand_id'=>$brand_id)
-        );
-        $htmlAfterField = '<span id="input-field"></span>
-        <span class = "uploadimage--info" >It will be displayed in 192 × 82 pixels</span>
-        <div class="uploaded--image"><img src="'.UrlHelper::generateUrl('image','brand',array($brand_id, $lang_id),CONF_WEBROOT_FRONT_URL).'">';
-        if( AttachedFile::getAttachment( AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, $lang_id ) ){
-            $htmlAfterField .= '<a href="javascript:void(0);" onclick="removeBrandLogo('.$brand_id.', '.$lang_id.')" class="remove--img"><i class="ion-close-round"></i></a>';
-        }
-        $htmlAfterField .= '</div>';
-
-        $fld->htmlAfterField = $htmlAfterField;  */
+        
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
