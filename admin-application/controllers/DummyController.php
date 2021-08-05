@@ -142,16 +142,16 @@ class DummyController extends AdminBaseController
 
     public function ship()
     {
-        $plugin = PluginHelper::callPlugin('ShipEngine', [$this->adminLangId], $error, $this->adminLangId, false);
+        $plugin = PluginHelper::callPlugin('ShipRocket', [$this->adminLangId], $error, $this->adminLangId, false);
         if (false === $plugin->init()) {
             echo $plugin->getError();
         }
         // $plugin->getCarriers();
         // $plugin->returnShipment();
-        $plugin->loadSystemOrder(396);
-        $resp = $plugin->fetchTrackingDetail();
-        // $plugin->proceedToShipment(['op_id' => 493]);
+        // $plugin->loadSystemOrder(396);
+        // $resp = $plugin->fetchTrackingDetail();
+        $plugin->proceedToShipment(['op_id' => 493]);
         echo $plugin->getError();
-        CommonHelper::printArray($resp);
+        CommonHelper::printArray($this->getResponse());
     }
 }
