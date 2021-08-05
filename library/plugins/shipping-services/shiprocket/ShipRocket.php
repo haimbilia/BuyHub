@@ -270,8 +270,14 @@ class ShipRocket extends ShippingServicesBase
         }
 
         $resp = $this->getResponse();
+        if (isset($resp['status']) && 404 == $resp['status']) {
+            $this->error = $resp['message'];
+            return [];
+        }
+
         $courierCompanies = isset($resp['data']['available_courier_companies']) ? $resp['data']['available_courier_companies'] : [];
         if (empty($courierCompanies)) {
+            $this->error = Labels::getLabel('MSG_UNABLE_TO_FETCH_CARRIERS', $this->langId);
             return [];
         }
 
@@ -488,7 +494,7 @@ class ShipRocket extends ShippingServicesBase
         }
 
         $requestParam = [
-            'order_id' => $this->orderDetail['op_invoice_number'],
+            'order_id' => $this->orderDetail['op_invoice_number'] . rand(), //Remove rand()
             'order_date' => date('Y-m-d H:i', $orderTimestamp),
             'pickup_location' => FatUtility::convertToType($pickupLocationId, FatUtility::VAR_STRING),
             'channel_id' => isset($channel['id']) ? $channel['id'] : '',
@@ -521,7 +527,7 @@ class ShipRocket extends ShippingServicesBase
                     'name' =>  $this->orderDetail['op_selprod_title'],
                     'sku' =>  $this->orderDetail['op_selprod_sku'],
                     'units' => $this->orderDetail['op_qty'],
-                    'selling_price' => $sellingPrice,
+                    'selling_price' => $sellingPrice + $discountPerUnit,
                     'discount' => $discountPerUnit,
                     'tax' => $taxPercentage,
                 ]
@@ -536,11 +542,13 @@ class ShipRocket extends ShippingServicesBase
             'weight' => $this->convertToKg($this->orderDetail['op_product_weight'])
         ];
 
+        // CommonHelper::printArray($requestParam);
+
         if (false === $this->doRequest(self::REQUEST_ADD_ORDER, $requestParam)) {
             return false;
         }
         $orderShipment = $this->getResponse();
-
+        // CommonHelper::printArray($orderShipment, true);
         if (!isset($orderShipment['shipment_id']) && isset($orderShipment['message'])) {
             $this->error = $orderShipment['message'];
             return false;
