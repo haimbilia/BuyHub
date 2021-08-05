@@ -46,8 +46,8 @@ $discountTotal = isset($scartSummary['cartDiscounts']) && isset($scartSummary['c
                                             onclick="subscription.remove('<?php echo md5($subscription['key']); ?>')"
                                             title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
                                             <svg class="svg" width="24px" height="24px">
-                                                <use xlink:href="/yokart/images/retina/sprite.svg#remove"
-                                                    href="/yokart/images/retina/sprite.svg#remove">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove"
+                                                    href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#remove">
                                                 </use>
                                             </svg>
                                         </a>

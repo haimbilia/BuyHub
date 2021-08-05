@@ -14,8 +14,8 @@
 
                         <span class="wallet__txt">
                             <svg class="svg">
-                                <use xlink:href="/yokart/images/retina/sprite.svg#wallet"
-                                    href="/yokart/images/retina/sprite.svg#wallet">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#wallet"
+                                    href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#wallet">
                                 </use>
                             </svg>
                             <div class="">
