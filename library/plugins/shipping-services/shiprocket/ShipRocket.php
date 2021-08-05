@@ -713,6 +713,11 @@ class ShipRocket extends ShippingServicesBase
      */
     public function fetchTrackingDetail(): array
     {
+        if (empty($this->orderDetail)) {
+            $this->error = Labels::getLabel('MSG_UNABLE_TO_LOAD_ORDER', $this->langId);
+            return [];
+        }
+
         if (false === $this->doRequest(self::REQUEST_TRACKING, $this->orderDetail['opship_tracking_number'])) {
             return [];
         }

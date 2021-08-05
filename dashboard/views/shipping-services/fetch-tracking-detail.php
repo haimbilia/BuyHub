@@ -23,7 +23,7 @@
                     </li>
                 <?php } ?>
             <?php } else {
-                echo Labels::getLabel('MSG_NO_DETAIL_FOUND', $adminLangId);
+                echo Labels::getLabel('MSG_NO_DETAIL_FOUND', $siteLangId);
             } ?>
         </ul>
     </div>
