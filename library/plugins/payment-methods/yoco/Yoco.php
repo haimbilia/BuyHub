@@ -25,11 +25,11 @@ class Yoco extends PaymentMethodBase
     }
 
     /**
-     * getColsLabelArr - Used to display settings form
+     * getFormFieldsArr - Used to display settings form
      *
      * @return array
      */
-    public function getColsLabelArr(): array
+    public function getFormFieldsArr(): array
     {
         return [
             'public_key' => Labels::getLabel('LBL_PUBLIC_KEY', $this->langId),
@@ -45,7 +45,7 @@ class Yoco extends PaymentMethodBase
     public function requiredKeys()
     {
         $environment = FatUtility::int($this->getKey('env'));
-        $this->requiredKeys = array_keys($this->getColsLabelArr());
+        $this->requiredKeys = array_keys($this->getFormFieldsArr());
         if (0 < $environment) {
             $this->environment = preg_filter('/^/', 'live_', $this->requiredKeys);
         }

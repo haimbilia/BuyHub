@@ -24,8 +24,6 @@ class Aramex extends ShippingServicesBase
     private $addressReference;
     private $serviceRequest = 0;
 
-    private $clientInfoCols = [];
-
     public $requiredKeys = [
         'AccountCountryCode',
         'AccountEntity',
@@ -43,7 +41,6 @@ class Aramex extends ShippingServicesBase
     public function __construct(int $langId)
     {
         $this->langId = 0 < $langId ? $langId : CommonHelper::getLangId();
-        $this->clientInfoCols = $this->requiredKeys;
     }
 
 
@@ -56,16 +53,16 @@ class Aramex extends ShippingServicesBase
     {
         return $this->validateSettings($this->langId);
     }
-    
+
     /**
-     * getColsLabelArr
+     * getFormFieldsArr
      *
      * @return array
      */
-    public function getColsLabelArr(): array
+    public function getFormFieldsArr(): array
     {
         $lblArr = [];
-        foreach ($this->clientInfoCols as $col) {
+        foreach ($this->requiredKeys as $col) {
             $lbl = Labels::getLabel('LBL_' . strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $col)), $this->langId);
             $lblArr[$col] = $lbl;
         }
@@ -95,7 +92,7 @@ class Aramex extends ShippingServicesBase
         }
 
         $clientInfoArr = [];
-        foreach ($this->clientInfoCols as $col) {
+        foreach ($this->requiredKeys as $col) {
             $clientInfoArr[$col] = $this->settings[$col];
         }
         $clientInfoArr['Version'] = 'v1.0';
@@ -122,7 +119,7 @@ class Aramex extends ShippingServicesBase
             case self::REQUEST_PICKUP:
                 $wsdl .= '/shipping.wsdl';
                 break;
-            
+
             case self::REQUEST_PICKUP_CANCEL:
                 $wsdl .= '/shipping.wsdl';
                 break;
@@ -611,7 +608,7 @@ class Aramex extends ShippingServicesBase
     {
         return true;
     }
-    
+
     /**
      * getPickupFormElementsArr
      *
@@ -661,7 +658,7 @@ class Aramex extends ShippingServicesBase
 
     public function createPickup(array $orderData)
     {
-        
+
         if ($orderData['ReadyTime'] > $orderData['LastPickupTime'] || $orderData['ReadyTime'] > $orderData['ClosingTime'] || $orderData['ClosingTime'] < $orderData['LastPickupTime'] || time() > strtotime($orderData['PickupDate'])) {
             $this->error = Labels::getLabel('LBL_INVALID_TIME', $this->langId);
             return false;
@@ -747,26 +744,26 @@ class Aramex extends ShippingServicesBase
             ),
         );
 
-        $this->setServiceRequest(self::REQUEST_PICKUP);       
-        
+        $this->setServiceRequest(self::REQUEST_PICKUP);
+
         if (false === $this->doRequest($requestParam)) {
             return false;
         }
         $pickupResponse = $this->getResponse();
-        if($pickupResponse['HasErrors'] == 1){
+        if ($pickupResponse['HasErrors'] == 1) {
             $this->error = $pickup['Notifications']['Notification']['Message'] ?? Labels::getLabel('ERR_UNABLE_TO_CREATE_PICKUP', $this->langId);
             return false;
         }
 
-        if (0 < count($pickupResponse)) {          
+        if (0 < count($pickupResponse)) {
             $pickupResponse['orderNumber'] = $pickupResponse['Transaction']['Reference1'];
             $pickupResponse['pickUpId'] = $pickupResponse['ProcessedPickup']['GUID'];
         }
         $this->resp = $pickupResponse;
-        return true;        
+        return true;
     }
-    
-    
+
+
     public function cancelPickup(array $orderData)
     {
         $requestParam = array(
@@ -874,5 +871,4 @@ class Aramex extends ShippingServicesBase
         }
         return false;
     }
-    
 }

@@ -25,7 +25,7 @@ class ShipRocket extends ShippingServicesBase
     private const REQUEST_TRACKING = 11;
 
     private $resp;
-    private $clientInfoCols = [];
+    private $formFieldsArr = [];
     private $client;
     private $toAddress = [];
     private $fromAddress = [];
@@ -49,7 +49,7 @@ class ShipRocket extends ShippingServicesBase
     public function __construct(int $langId)
     {
         $this->langId = 0 < $langId ? $langId : CommonHelper::getLangId();
-        $this->clientInfoCols = $this->requiredKeys;
+        $this->formFieldsArr = $this->requiredKeys;
     }
 
 
@@ -73,14 +73,14 @@ class ShipRocket extends ShippingServicesBase
     }
 
     /**
-     * getColsLabelArr
+     * getFormFieldsArr
      *
      * @return array
      */
-    public function getColsLabelArr(): array
+    public function getFormFieldsArr(): array
     {
         $lblArr = [];
-        foreach ($this->clientInfoCols as $col) {
+        foreach ($this->formFieldsArr as $col) {
             $lbl = Labels::getLabel('LBL_' . strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $col)), $this->langId);
             $lblArr[$col] = $lbl;
         }
