@@ -171,7 +171,16 @@ class ProductCategoriesController extends AdminBaseController
         }
 
         $mediaLanguages = applicationConstants::bannerTypeArr();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'icon_lang_id', $mediaLanguages, '', array(), '');
+		
+		if(count($mediaLanguages) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'icon_lang_id', $mediaLanguages, '', array(), '');
+        } else  {
+			$langid = array_key_first($mediaLanguages); 
+			$frm->addHiddenField('', 'icon_lang_id', $langid);
+		}
+
+       
+		
         $frm->addHiddenField('', 'icon_file_type', AttachedFile::FILETYPE_CATEGORY_ICON);
         $frm->addHiddenField('', 'logo_min_width');
         $frm->addHiddenField('', 'logo_min_height');
@@ -180,7 +189,14 @@ class ProductCategoriesController extends AdminBaseController
             $frm->addHiddenField('', 'cat_icon_image_id[' . $key . ']');
         }
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'banner_lang_id', $mediaLanguages, '', array(), '');
+       
+		if(count($mediaLanguages) > 1){
+			  $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'banner_lang_id', $mediaLanguages, '', array(), '');
+        } else  {
+			$langid = array_key_first($mediaLanguages); 
+			$frm->addHiddenField('', 'banner_lang_id', $langid);
+		}
+		
         $screenArr = applicationConstants::getDisplaysArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel("LBL_Device", $this->adminLangId), 'slide_screen', $screenArr, '', array(), '');
         $frm->addHiddenField('', 'banner_file_type', AttachedFile::FILETYPE_CATEGORY_BANNER);
@@ -242,7 +258,13 @@ class ProductCategoriesController extends AdminBaseController
     {
         $canEdit = $this->objPrivilege->canEditProductCategories(0, true);
         $prodcat_id = FatUtility::int($prodcat_id);
-        $lang_id = FatUtility::int($lang_id);
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $lang_id = FatUtility::int($lang_id);
+		} else  {
+			$lang_id = array_key_first($languages); 
+		}
+		
         $catIcons = $catBanners = array();
         if ($imageType == 'icon') {
             $catIcons = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $prodcat_id, 0, $lang_id, false);
@@ -264,8 +286,13 @@ class ProductCategoriesController extends AdminBaseController
         $this->objPrivilege->canEditProductCategories();
         $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
         $prodcat_id = FatApp::getPostedData('prodcat_id', FatUtility::VAR_INT, 0);
-        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-        $slide_screen = FatApp::getPostedData('slide_screen', FatUtility::VAR_INT, 0);
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			$lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+		} else  {
+			$lang_id = array_key_first($languages); 
+		}
+		$slide_screen = FatApp::getPostedData('slide_screen', FatUtility::VAR_INT, 0);
         $afileId = FatApp::getPostedData('afile_id', FatUtility::VAR_INT, 0);
         if (!$file_type) {
             Message::addErrorMessage($this->str_invalid_request);

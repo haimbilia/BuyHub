@@ -13,9 +13,11 @@ $(document).ready(function () {
     };
 
     fetchTrackingDetail = function (trackingId, opInvoiceId) {
+        fcom.displayProcessing();
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {
-                $.facebox(res );
+                $.mbsmessage.close();
+                $.facebox(res);
             });
         });
     }

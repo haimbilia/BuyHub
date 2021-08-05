@@ -5,7 +5,7 @@ if (!empty($orderShippingData)) {
 		<h5 class="modal-title"><?php echo Labels::getLabel('LBL_Shipping', $siteLangId); ?></h5>
 	</div>
 	<div class="modal-body">
-		<ul class="review-block">
+		<ul class="review-block scroll-y" style="max-height:400px;">
 			<?php foreach ($orderShippingData as $shipData) { ?>
 				<li>
 					<div class="review-block__content">

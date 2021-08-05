@@ -86,6 +86,16 @@ class EasyPost extends ShippingServicesBase
     {
         return $this->resp;
     }
+    
+    /**
+     * canGenerateLabelFromShipment
+     *
+     * @return bool
+     */
+    public function canGenerateLabelFromShipment(): bool
+    {
+        return true;
+    }
 
     /**
      * getCarriers
@@ -687,8 +697,6 @@ class EasyPost extends ShippingServicesBase
         }
         return true;
     }
-
-
 
     /**
      * getRefundResponse
