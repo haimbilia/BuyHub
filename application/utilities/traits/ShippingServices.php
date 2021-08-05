@@ -403,6 +403,11 @@ trait ShippingServices
             return false;
         }
         $this->loadShippingService($orderData);
+
+        if (method_exists($this->shippingService, 'loadSystemOrder')) {
+            $this->shippingService->loadSystemOrder($opId);
+        }
+
         $trackingData = (array) $this->shippingService->fetchTrackingDetail($trackingId, $orderData['op_invoice_number']);
         $this->set('trackingData', $trackingData);
         $this->_template->render(false, false);
