@@ -465,14 +465,6 @@ class ShipRocket extends ShippingServicesBase
         $discount = CommonHelper::orderProductAmount($this->orderDetail, 'DISCOUNT');
         $volumeDiscount = CommonHelper::orderProductAmount($this->orderDetail, 'VOLUME_DISCOUNT');
         $totalDiscount = abs($discount) + abs($volumeDiscount);
-        $discountPerUnit = ($totalDiscount / $this->orderDetail['op_qty']); /* Inclusive Tax */
-
-        $taxCharged = 0;
-        if (!empty($taxOptions)) {
-            foreach ($taxOptions as $key => $val) {
-                $taxCharged += $val['value'];
-            }
-        }
 
         $orderObj = new Orders($this->orderDetail['order_id']);
         $addresses = $orderObj->getOrderAddresses($this->orderDetail['order_id']);
@@ -488,13 +480,15 @@ class ShipRocket extends ShippingServicesBase
         $taxOptions = !empty($this->orderDetail['op_product_tax_options']) ? json_decode($this->orderDetail['op_product_tax_options'], true) : [];
         $taxPercentage = !empty($taxOptions) ? $taxOptions['Tax']['percentageValue'] : 0;
 
+        $taxCharged = CommonHelper::orderProductAmount($this->orderDetail, 'TAX');
+
         $sellingPrice = $this->orderDetail['op_unit_price'] + ($taxCharged / $this->orderDetail['op_qty']);
         if (0 < FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
             $sellingPrice =  $this->orderDetail['op_unit_price'];
         }
 
         $requestParam = [
-            'order_id' => $this->orderDetail['op_invoice_number'] . rand(), //Remove rand()
+            'order_id' => $this->orderDetail['op_invoice_number'],
             'order_date' => date('Y-m-d H:i', $orderTimestamp),
             'pickup_location' => FatUtility::convertToType($pickupLocationId, FatUtility::VAR_STRING),
             'channel_id' => isset($channel['id']) ? $channel['id'] : '',
@@ -527,8 +521,7 @@ class ShipRocket extends ShippingServicesBase
                     'name' =>  $this->orderDetail['op_selprod_title'],
                     'sku' =>  $this->orderDetail['op_selprod_sku'],
                     'units' => $this->orderDetail['op_qty'],
-                    'selling_price' => $sellingPrice + $discountPerUnit,
-                    'discount' => $discountPerUnit,
+                    'selling_price' => $sellingPrice,
                     'tax' => $taxPercentage,
                 ]
             ],
@@ -542,13 +535,12 @@ class ShipRocket extends ShippingServicesBase
             'weight' => $this->convertToKg($this->orderDetail['op_product_weight'])
         ];
 
-        // CommonHelper::printArray($requestParam);
 
         if (false === $this->doRequest(self::REQUEST_ADD_ORDER, $requestParam)) {
             return false;
         }
         $orderShipment = $this->getResponse();
-        // CommonHelper::printArray($orderShipment, true);
+        
         if (!isset($orderShipment['shipment_id']) && isset($orderShipment['message'])) {
             $this->error = $orderShipment['message'];
             return false;
