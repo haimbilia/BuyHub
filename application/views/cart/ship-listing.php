@@ -55,14 +55,14 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 <div class="product-profile__thumbnail">
                                     <a href="<?php echo $productUrl; ?>">
                                         <?php
-                                            $pictureAttr = [
-                                                'webpImageUrl' => $imageWebpUrl,
-                                                'jpgImageUrl' => $imageUrl,
-                                                'ratio' => '1:1',
-                                                'alt' => $productTitle,
-                                            ];
+                                        $pictureAttr = [
+                                            'webpImageUrl' => $imageWebpUrl,
+                                            'jpgImageUrl' => $imageUrl,
+                                            'ratio' => '1:1',
+                                            'alt' => $productTitle,
+                                        ];
 
-                                            $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
+                                        $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
                                         ?>
                                     </a>
                                 </div>
@@ -123,14 +123,14 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                         <div class="product-profile__thumbnail">
                             <a href="<?php echo $productUrl; ?>">
                                 <?php
-                                    $pictureAttr = [
-                                        'webpImageUrl' => $imageWebpUrl,
-                                        'jpgImageUrl' => $imageUrl,
-                                        'ratio' => '1:1',
-                                        'alt' => $productTitle,
-                                    ];
+                                $pictureAttr = [
+                                    'webpImageUrl' => $imageWebpUrl,
+                                    'jpgImageUrl' => $imageUrl,
+                                    'ratio' => '1:1',
+                                    'alt' => $productTitle,
+                                ];
 
-                                    $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
+                                $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
                                 ?>
                             </a>
                         </div>
@@ -185,15 +185,22 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                             <li>
                                 <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
                                     if (empty($product['ufp_id'])) {  ?>
-                                        <a href="javascript:void(0)" class="" onClick="addToFavourite( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?> );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_Move_to_favourites', $siteLangId); ?>
+                                        <a href="javascript:void(0)" class="" onClick="addToFavourite( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?> );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>">
                                             <svg class="svg" width="20px" height="20px">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
                                                 </use>
                                             </svg>
                                         </a>
-                                    <?php } else {
-                                        echo Labels::getLabel('LBL_Already_marked_as_favourites.', $siteLangId);
-                                    }
+                                    <?php } else { ?>
+                                        <a href="javascript:void(0)" class="is-active" title="<?php echo Labels::getLabel('LBL_Already_marked_as_favourites.', $siteLangId); ?>">
+                                        <i class="icn">
+                                            <svg class="svg" width="16px" height="16px">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
+                                                </use>
+                                            </svg>
+                                        </i>
+                                    </a>
+                                    <?php }
                                 } else {
                                     if (empty($product['is_in_any_wishlist'])) { ?>
                                         <a href="javascript:void(0)" class="" onClick="moveToWishlist( <?php echo $product['selprod_id']; ?>, event, '<?php echo md5($product['key']); ?>' );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>">
@@ -257,14 +264,14 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                             <div class="product-profile__thumbnail">
                                 <a href="<?php echo $productUrl; ?>">
                                     <?php
-                                        $pictureAttr = [
-                                            'webpImageUrl' => $imageWebpUrl,
-                                            'jpgImageUrl' => $imageUrl,
-                                            'ratio' => '1:1',
-                                            'alt' => $productTitle,
-                                        ];
+                                    $pictureAttr = [
+                                        'webpImageUrl' => $imageWebpUrl,
+                                        'jpgImageUrl' => $imageUrl,
+                                        'ratio' => '1:1',
+                                        'alt' => $productTitle,
+                                    ];
 
-                                        $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
+                                    $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
                                     ?>
                                 </a>
                             </div>

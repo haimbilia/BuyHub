@@ -12,6 +12,7 @@ $frmSearch->developerTags['fldWidthClassesDefault'] = ['field_', 'field_', 'fiel
 $frmSearch->developerTags['fldWidthValuesDefault'] = ['cover', 'cover', 'cover', 'cover'];
 $frmSearch->developerTags['labelWidthClassesDefault'] = ['field_', 'field_', 'field_', 'field_'];
 $frmSearch->developerTags['labelWidthValuesDefault'] = ['label', 'label', 'label', 'label'];
+$frmSearch->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
 
 $dateFrm = $frmSearch->getField('date_from');
 $dateTo = $frmSearch->getField('date_to');
