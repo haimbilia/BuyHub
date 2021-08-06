@@ -54,7 +54,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 continue;
                                             }
                                         ?>
-                                            <div class="rating">
+                                            <div class="rating rating-f">
                                                 <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
                                                 <?php
                                                 $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
@@ -145,7 +145,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 </div>
                                                 <div class="rating-listing">
                                                     <?php foreach ($shopRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
-                                                        <div class="rating">
+                                                        <div class="rating rating-f">
                                                             <?php
                                                             $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
                                                             $fld->setFieldTagAttribute('class', 'd-none star-rating');
@@ -166,7 +166,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             <div class="shop-rating-wrap">
                                                 <div class="rating-listing">
                                                     <?php foreach ($deliveryRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
-                                                        <div class="rating pb-0">
+                                                        <div class="rating rating-f pb-0">
                                                             <?php
                                                             $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
                                                             $fld->setFieldTagAttribute('class', 'd-none star-rating');

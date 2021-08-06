@@ -51,6 +51,11 @@
         &.badges-left {
             transform: rotate(-90deg);
         }
+        &.badges-right {
+            svg {
+                transform: scaleX($transform-direction);
+            }
+        }
     }
     &-3 {
         display: flex;
@@ -93,20 +98,25 @@
         }
     }
     &-left {
-        #{$start-direction}:10px;
-        top:10px;
+        #{$start-direction}: 10px;
+        top: 10px;
     }
     &-right {
-        #{$end-direction}:10px;
-        top:10px;
+        #{$end-direction}: 10px;
+        top: 10px;
+        svg {
+            transform: scaleX($transform-direction);
+        }
     }
 }
- [direction="rtl"]{
+
+[direction="rtl"] {
     .badges {
         &-4 {
             .text {
-                #{$start-direction}: -22px;
-                top: 10px;
+                #{$start-direction}: -10px;
+                top: 6px;
+                transform: rotate(-45deg);
             }
             &.badges-left {
                 transform: none;
@@ -114,12 +124,10 @@
         }
         &-2 {
             .text {
-                #{$start-direction}: -14px;
+                #{$start-direction}: 0px;
                 top: 10px;
-            }                        
-            &.badges-right {
-                transform: rotate(-90deg);
+                transform: rotate( -45deg);
             }
         }
     }
- }
+}
