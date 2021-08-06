@@ -1,4 +1,4 @@
-<div class="products__footer">
+<div class="products_foot">
 	<?php /* if(round($product['prod_rating'])>0 && FatApp::getConfig("CONF_ALLOW_REVIEWS",FatUtility::VAR_INT,0)){ ?>
 	<?php if(round($product['prod_rating'])>0 ){ ?>
 	<div class="products__rating"> <i class="icn"><svg class="svg">
@@ -14,7 +14,7 @@
 	</div>
 	<?php } ?>
 	<?php } */  ?>
-	<div class="products__category"><a href="<?php echo UrlHelper::generateUrl('Category','View',array($product['prodcat_id']));?>"><?php echo $product['prodcat_name'];?> </a></div>
-	<div class="products__title"><a title="<?php echo $product['selprod_title'];?>" href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])); ?>"><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr($product['selprod_title'],0,50)."..." : $product['selprod_title'];?> </a></div>
+	<div class="products_category"><a href="<?php echo UrlHelper::generateUrl('Category','View',array($product['prodcat_id']));?>"><?php echo $product['prodcat_name'];?> </a></div>
+	<div class="products_title"><a title="<?php echo $product['selprod_title'];?>" href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])); ?>"><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr($product['selprod_title'],0,50)."..." : $product['selprod_title'];?> </a></div>
 	<?php include(CONF_THEME_PATH.'_partial/collection/product-price.php');?>
 </div>

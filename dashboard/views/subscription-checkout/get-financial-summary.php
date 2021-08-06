@@ -21,8 +21,14 @@ $amount = CommonHelper::displayMoneyFormat($cartTotal - $cartAdjustableAmount - 
     </div>
     <?php } else { ?>
     <div class="coupons">
-        <button class="btn btn-outline-brand btn-block" onclick="getPromoCode()">
-            <?php echo Labels::getLabel('LBL_I_have_a_coupon', $siteLangId); ?></button>
+        <button class="btn btn-outline-brand btn-block btn-coupons" onclick="getPromoCode()">
+            <i class="icn">
+                <svg class="svg">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#coupon">
+                    </use>
+                </svg>
+            </i>
+            <span><?php echo Labels::getLabel('LBL_I_have_a_coupon', $siteLangId); ?></span></button>
 
     </div>
     <?php } ?>

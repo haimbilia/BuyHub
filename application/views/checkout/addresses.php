@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="step active">
+<div class="step">
     <form class="form ">
         <div class="step_section">
             <div class="step_head">
@@ -34,7 +34,8 @@
                                     $checked = true;
                                 }
                                 ?>
-                        <li class="addrListJs s-<?php echo $address['addr_id']; ?> <?php echo ($checked == true) ? 'is-active' : ''?>">
+                        <li
+                            class="addrListJs s-<?php echo $address['addr_id']; ?> <?php echo ($checked == true) ? 'is-active' : ''?>">
                             <label class="label-block" for="s-<?php echo $address['addr_id']; ?>">
 
                                 <div class="checkbox_wrap">

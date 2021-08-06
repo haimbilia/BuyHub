@@ -28,7 +28,7 @@
             <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12">
                 <div class="product-description">
                     <div class="product-description-inner">
-                        <div class="products__title"><?php echo $product['product_name']; ?></div>
+                        <div class="products_title"><?php echo $product['product_name']; ?></div>
                         <div class="gap"></div>
                         <div class="cms">
                             <table>

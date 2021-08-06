@@ -28,16 +28,16 @@
             <div class="product-detail product-description product-detail-quickview">
                 <div>
                     <div class="product-description-inner">
-                        <div class="products__title"><a title="<?php echo $product['selprod_title']; ?>"
+                        <div class="products_title"><a title="<?php echo $product['selprod_title']; ?>"
                                 href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])) ?>"><?php echo $product['selprod_title']; ?></a>
                         </div>
                         <div class="gap"></div>
-                        <div class="products__price">
-                            <span class="products__price_new">
+                        <div class="products_price">
+                            <span class="products_price_new">
                                 <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></span>
                             <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
                             <del
-                                class="products__price_old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></del>
+                                class="products_price_old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></del>
                             <span
                                 class="product_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                             <?php } ?>
