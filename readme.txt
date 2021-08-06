@@ -188,6 +188,7 @@ Updates/Fixes :
 ====================TV-9.3.2.20210805========================
     => 056898 - Seller/Buyer is not able to click on the "Accept Cookies" button
     => 056944 - on saving seller catalog specification at admin end error coming
+    => 056959 - on updating seller order getting error at admin end 
 
 New Features:  
     => Admin shipped products listing page

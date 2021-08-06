@@ -213,11 +213,6 @@ class CommonHelper extends FatUtility
 
     public static function canAvailShippingChargesBySeller($opSellerId = 0, $shippedByUserId = 0)
     {
-
-        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
-            return false;
-        }
-
         $opSellerId = FatUtility::int($opSellerId);
         $shippedByUserId = FatUtility::int($shippedByUserId);
         if ($opSellerId > 0 && $opSellerId == $shippedByUserId) {
