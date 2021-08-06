@@ -1250,11 +1250,7 @@ class ProductsController extends AdminBaseController
                  FatUtility::dieWithError(Message::getHtml());
              }
          } */
-
-        if ($post['product_seller_id'] > 0) {
-            $taxData = Tax::getTaxCatByProductId($productId);
-            $prod->saveProductTax($taxData['ptt_taxcat_id'], $post['product_seller_id']);
-        }
+        
         $this->set('msg', Labels::getLabel('LBL_Product_Attributes_Setup_Successful', $this->adminLangId));
         $this->set('productId', $prod->getMainTableRecordId());
         $this->_template->render(false, false, 'json-success.php');
