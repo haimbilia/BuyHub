@@ -647,7 +647,6 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 
 delete FROM `tbl_cron_schedules` where cron_command='Orders/afterShipOrderStatusDelivered';
 INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Mark Order Status Delivered Via Shipping Api', 'Orders/markOrderStatusDeliveredViaApi', '1440', '1');
-ALTER TABLE `tbl_orders_status_history` ADD `oshistory_tracking_url` TEXT NOT NULL AFTER `oshistory_tracking_number`;
 
 -- ------------Forgot Password -> Reset Password
 UPDATE `tbl_email_templates` SET `etpl_subject` = 'Reset Password Email', `etpl_body` = '<table width="100%" align="center" cellpadding="0" cellspacing="0">
@@ -826,9 +825,6 @@ ALTER TABLE `tbl_order_product_plugin_specifics`
 /* TaxJar Enhancements */
 -- ---------------------------------TV-9.3.2.20210716---------------------
 
-ALTER TABLE tbl_seller_products ADD UNIQUE( selprod_user_id, selprod_code);
--- ------------------------TV-9.3.2.20210720------------------
-
 /* Remove Duplicate Rows. */
 DELETE t1 FROM tbl_seller_products t1
 INNER JOIN tbl_seller_products t2 
@@ -839,6 +835,7 @@ WHERE
 /* Remove Duplicate Rows. */
 
 ALTER TABLE tbl_seller_products ADD UNIQUE( selprod_user_id, selprod_code);
+-- ------------------------TV-9.3.2.20210720------------------
 
 ALTER TABLE tbl_order_prod_charges_logs CHANGE opchargelog_percentvalue opchargelog_percentvalue DECIMAL(10,4) NOT NULL;
 
@@ -862,3 +859,12 @@ ALTER TABLE `tbl_collections` CHANGE `collection_img_updated_on` `collection_upd
 UPDATE `tbl_configurations` SET `conf_val` = 'rgb(255,255,255)' WHERE `tbl_configurations`.`conf_name` = 'CONF_THEME_COLOR_INVERSE';
 UPDATE `tbl_configurations` SET `conf_val` = 'rgb(255,58,89)' WHERE `tbl_configurations`.`conf_name` = 'CONF_THEME_COLOR';
 -- ---------------TV-9.3.2.20210730------------
+
+-- --- ShipRocket Shipping API Task : 88040 --- --
+INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('ShipRocket', '8', 'ShipRocket', '0', '1');
+-- --- ShipRocket Shipping API Task : 88040 --- --
+
+-- --- ShipEngine Shipping API Task : 88449 --- --
+INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Ship Engine', '8', 'ShipEngine', '0', '1');
+-- --- ShipEngine Shipping API Task : 88449 --- --
+-- -----------------TV-9.3.2.20210805-----------------

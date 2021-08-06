@@ -355,3 +355,8 @@ a:hover {
     top: 12px;
     color: $txt-gray;
 }
+
+.list-country-zone {
+    max-height: 360px;
+    overflow-y: auto;
+}

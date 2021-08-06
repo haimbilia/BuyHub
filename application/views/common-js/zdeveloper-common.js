@@ -332,7 +332,7 @@ toggleShopFavorite = function (shop_id) {
   }
   var data = "shop_id=" + shop_id;
   fcom.updateWithAjax(
-    fcom.makeUrl("Account", "toggleShopFavorite"),
+    fcom.makeUrl("Account", "toggleShopFavorite", [], siteConstants.webroot_dashboard),
     data,
     function (ans) {
       if (ans.status) {
@@ -352,12 +352,12 @@ setupWishList = function (frm, event) {
   var data = fcom.frmData(frm);
   var selprod_id = $(frm).find('input[name="selprod_id"]').val();
   fcom.updateWithAjax(
-    fcom.makeUrl("Account", "setupWishList"),
+    fcom.makeUrl("Account", "setupWishList",[],siteConstants.webroot_dashboard),
     data,
     function (ans) {
       if (ans.status) {
         fcom.ajax(
-          fcom.makeUrl("Account", "viewWishList", [selprod_id]),
+          fcom.makeUrl("Account", "viewWishList", [selprod_id],siteConstants.webroot_dashboard),
           "",
           function (ans) {
             $(".collection-ui-popup").html(ans);
@@ -1058,7 +1058,7 @@ $(document).ready(function () {
     }
     $.mbsmessage.close();
     fcom.updateWithAjax(
-      fcom.makeUrl("Account", "markAsFavorite", [selProdId]),
+      fcom.makeUrl("Account", "markAsFavorite", [selProdId], siteConstants.webroot_dashboard),
       "",
       function (ans) {
         if (ans.status) {
@@ -1082,7 +1082,7 @@ $(document).ready(function () {
     }
     $.mbsmessage.close();
     fcom.updateWithAjax(
-      fcom.makeUrl("Account", "removeFromFavorite", [selProdId]),
+      fcom.makeUrl("Account", "removeFromFavorite", [selProdId], siteConstants.webroot_dashboard),
       "",
       function (ans) {
         if (ans.status) {

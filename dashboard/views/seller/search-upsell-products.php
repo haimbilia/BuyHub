@@ -36,7 +36,7 @@
                     // last Param of getProductDisplayTitle function used to get title in html form.
                     $txt = '<div class="item__description">';
                     //$productName = "<span class='js-prod-name'>" . SellerProduct::getProductDisplayTitle($selProdId, $siteLangId, true) . "</span>";
-                    $txt .= '<div class="item__title">' . SellerProduct::getProductDisplayTitle($selProdId, $siteLangId, true) . '</div>';
+                    $txt .= '<div class="item__title js-prod-name">' . SellerProduct::getProductDisplayTitle($selProdId, $siteLangId, true) . '</div>';
                     $txt .= '</div>';
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;

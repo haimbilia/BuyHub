@@ -43,7 +43,6 @@ $data = array(
     'optionValueCheckedArr' => $optionValueCheckedArr,
     'conditionsArr' => $conditions,
     'conditionsCheckedArr' => $conditionsCheckedArr,
-    'priceArr' => $priceArr,
     'priceInFilter' => $priceInFilter,
     'filterDefaultMinValue' => $filterDefaultMinValue,
     'filterDefaultMaxValue' => $filterDefaultMaxValue,
@@ -54,7 +53,8 @@ $data = array(
 if (Product::FILTER_POSITION_DEFAULT == $position) {
     $data['categoriesArr'] = $categoriesArr;
     $data['brandsArr'] = $brandsArr;
-    $data['options'] = $options;
+    $data['options'] = array_values($optionsResult);
+    $data['priceArr'] = $priceArr;
 
 } else if (Product::FILTER_POSITION_ALTERNATE == $position) {
     $data['filters'] = [
@@ -72,6 +72,33 @@ if (Product::FILTER_POSITION_DEFAULT == $position) {
             'title' => Labels::getLabel('LBL_OPTIONS', $siteLangId),
             'type' => Product::FILTER_TYPE_OPTION,
             'data' => array_values($optionsResult),
+        ],
+        [
+            'title' => Labels::getLabel('LBL_SORT_BY', $siteLangId),
+            'type' => Product::FILTER_TYPE_SORT_BY,
+            'data' => [
+                [
+                    'title' => Labels::getLabel('LBL_Price_(Low_to_High)', $siteLangId),
+                    'value' => 'price_asc',
+                ],
+                [
+                    'title' => Labels::getLabel('LBL_Price_(High_to_Low)', $siteLangId),
+                    'value' => 'price_desc',
+                ],
+                [
+                    'title' => Labels::getLabel('LBL_Sort_by_Popularity', $siteLangId),
+                    'value' => 'popularity_desc',
+                ],
+                [
+                    'title' => Labels::getLabel('LBL_Most_discounted', $siteLangId),
+                    'value' => 'discounted',
+                ],
+            ],
+        ],
+        [
+            'title' => Labels::getLabel('LBL_PRICE_FILTER', $siteLangId),
+            'type' => Product::FILTER_TYPE_PRICE,
+            'data' => [$priceArr],
         ],
     ];
 }

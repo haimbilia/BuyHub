@@ -580,7 +580,7 @@ class Cart extends FatModel
             'selprod_id', 'selprod_code', 'selprod_stock', 'selprod_user_id', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_min_order_qty',
             'special_price_found', 'theprice', 'shop_id', 'shop_free_ship_upto', 'shop_state_id', 'shop_country_id',
             'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_price', 'selprod_cost', 'case when product_seller_id=0 then IFNULL(psbs_user_id,0)   else product_seller_id end  as psbs_user_id', 'product_seller_id', 'product_cod_enabled', 'shop_fulfillment_type', 'selprod_fulfillment_type', 'selprod_cod_enabled', 'shippack_length', 'shippack_width', 'shippack_height', 'shippack_units',
-            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name'
+            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on'
         ));
 
         if ($siteLangId) {
@@ -1252,7 +1252,9 @@ class Cart extends FatModel
         $orderNetAmount = (max($cartTotal - $cartVolumeDiscount - $totalDiscountAmount, 0) + $shippingTotal + $cartTaxTotal + $roundingOff);
 
         $orderNetAmount = $orderNetAmount - CommonHelper::rewardPointDiscount($orderNetAmount, $cartRewardPoints);
+
         $WalletAmountCharge = ($this->isCartUserWalletSelected()) ? min($orderNetAmount, $userWalletBalance) : 0;
+
         $orderPaymentGatewayCharges = $orderNetAmount - $WalletAmountCharge;
 
         $isCodValidForNetAmt = true;
@@ -1802,7 +1804,6 @@ class Cart extends FatModel
                 }
             }
         }
-
         return $shippingRates;
     }
 

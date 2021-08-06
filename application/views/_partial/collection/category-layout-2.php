@@ -19,16 +19,17 @@
                         <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $category['prodcat_id']);
                         $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']); 
                         ?>
-                        <div class="cat-img">
-                            <picture>
-                                <source type="image/webp" srcset="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'] , $siteLangId, 'WEBPMEDIUM', applicationConstants::SCREEN_DESKTOP)).$uploadedTime, CONF_IMG_CACHE_TIME, '.webp'); ?>">
-                                <source type="image/jpeg" srcset="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'] , $siteLangId, 'MEDIUM', applicationConstants::SCREEN_DESKTOP)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>">
-                                <img loading='lazy' data-ratio="4:1"
-                                src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'] , $siteLangId, 'MEDIUM', applicationConstants::SCREEN_DESKTOP)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>"
-                                alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $category['prodcat_name']; ?>"
-                                title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $category['prodcat_name']; ?>">
-                            </picture>    
-                        
+                        <div class="cat-img">  
+                            <?php
+                                $pictureAttr = [
+                                    'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'] , $siteLangId, 'WEBPMEDIUM', applicationConstants::SCREEN_DESKTOP)).$uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
+                                    'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'] , $siteLangId, 'MEDIUM', applicationConstants::SCREEN_DESKTOP)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                    'ratio' => '4:1',
+                                    'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $category['prodcat_name'],
+                                ];
+
+                                $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
+                            ?>
                         </div>
                         <div class="cat-tittle"> <a
                                 href="<?php echo UrlHelper::generateUrl('Category', 'View', array($category['prodcat_id'] )); ?>">

@@ -262,17 +262,19 @@ $(document).on('blur', ".js--volDiscountCol", function(){
         currObj.addClass('hidden');
     };
 
-    setUpSellerProductLinks = function(frm){
-		if (!$(frm).validate()) return;
-		var data = fcom.frmData(frm);
-		fcom.updateWithAjax(fcom.makeUrl('SellerProducts', 'setupUpsellProduct'), data, function(t) {
+    setUpSellerProductLinks = function (frm) {
+        if (!$(frm).validate())
+            return;
+        var data = fcom.frmData(frm);
+        fcom.updateWithAjax(fcom.makeUrl('SellerProducts', 'setupUpsellProduct'), data, function (t) {
             document.frmUpsellSellerProduct.reset();
-            $("input[name='selprod_id']").val(''); 
-            $('#upsell-products').empty();            
+            $("input[name='selprod_id']").val('');
+            $('#upsell-products').empty();
+            $(frm).find("select[name='product_name']").find('option').remove();
             $(frm).find("select[name='product_name']").trigger('change.select2');
             searchUpsellProducts(document.frmUpsellSellerProduct);
-		});
-	};
+        });
+    };
 })();
 
 $(document).on('click', ".js-product-edit", function(){
@@ -284,8 +286,9 @@ $(document).on('click', ".js-product-edit", function(){
     
     fcom.ajax(fcom.makeUrl('SellerProducts', 'getUpsellProductsList', [selProdId]), '', function(t) {
         var ans = $.parseJSON(t);
-        $("input[name='selprod_id']").val(selProdId); 
-        $("input[name='product_name']").val(selectName); 
+        $("input[name='selprod_id']").val(selProdId);    
+        $("select[name='product_name']").find('option').remove();
+        $("select[name='product_name']").append('<option value="-1">'+selectName+'</option>').val(-1).trigger('change.select2');
         $('#upsell-products').empty();
         for (var key in ans.upsellProducts) {
             $("#upsell-products").append(

@@ -87,7 +87,7 @@ class ShippingZonesController extends AdminBaseController
         }else{
             $zones =  unserialize($zones); 
         }
-        $excludeLocations = $this->getExcludeLocations($profileId, $zoneId);
+        $excludeLocations = Zone::getExcludeLocations($profileId, $zoneId);
 
         $this->set('profile_id', $profileId);
         $this->set('zone_id', $zoneId);
@@ -98,25 +98,12 @@ class ShippingZonesController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    public function getExcludeLocations($profileId, $zoneId)
-    {
-        $srch = ShippingProfileZone::getSearchObject();
-        $srch->joinTable(ShippingZone::DB_SHIP_LOC_TBL, 'LEFT OUTER JOIN', 'zoneLoc.shiploc_shipzone_id = spzone.shipprozone_shipzone_id', 'zoneLoc');
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $cnd = $srch->addCondition('shipprozone_shipprofile_id', '=', $profileId);
-        $cnd->attachCondition('shipprozone_shipzone_id', '!=', $zoneId, 'AND', false);
-        $rs = $srch->getResultSet();
-        $zoneLocations = FatApp::getDb()->fetchAll($rs);
-        return $zoneLocations;
-    }
-
     public function searchStates($countryId, $zoneId, $shipZoneId, $profileId, $selected = 0)
     {
         $stateObj = new States();
         $states = $stateObj->getStatesByCountryId($countryId, $this->adminLangId, true);
         $zoneLocations = $this->getLocations($shipZoneId);
-        $excludeLocations = $this->getExcludeLocations($profileId, $shipZoneId);
+        $excludeLocations = Zone::getExcludeLocations($profileId, $shipZoneId);
 
         $this->set("states", $states);
         $this->set("countryId", $countryId);
@@ -144,7 +131,6 @@ class ShippingZonesController extends AdminBaseController
 
         $shipZoneId = (isset($post['shipzone_id'])) ? $post['shipzone_id'] : 0;
         $msg = 0 < $shipZoneId ? Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId) : Labels::getLabel('LBL_ADDED_SUCCESSFULLY', $this->adminLangId);
-
         if (!$this->checkForLocations($post['shipzone_profile_id'], $shipZoneId, $post)) {
             Message::addErrorMessage(Labels::getLabel('LBL_Locations_already_added_in_other_zone_of_same_profile', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
@@ -267,8 +253,7 @@ class ShippingZonesController extends AdminBaseController
 
     private function checkForLocations($profileId, $shipZoneId, $data)
     {
-        $excludeLocations = $this->getExcludeLocations($data['shipzone_profile_id'], $shipZoneId);
-
+        $excludeLocations = Zone::getExcludeLocations($data['shipzone_profile_id'], $shipZoneId);
         if (!empty($excludeLocations)) {
             $isRestOfWorld = (isset($data['rest_of_the_world'])) ? $data['rest_of_the_world'] : 0;
             $postedCountries = (isset($data['c_id'])) ? $data['c_id'] : array();
@@ -281,7 +266,7 @@ class ShippingZonesController extends AdminBaseController
                     $arr = explode('-', $countryData);
                     $countryIds[] = $arr[1];
                 }
-            }
+            }            
 
             if (!empty($postedStates)) {
                 foreach ($postedStates as $statesData) {
@@ -293,7 +278,6 @@ class ShippingZonesController extends AdminBaseController
             $oldZone = array_filter(array_column($excludeLocations, 'shiploc_zone_id'));
             $oldCountries = array_filter(array_column($excludeLocations, 'shiploc_country_id'));
             $oldStates = array_filter(array_column($excludeLocations, 'shiploc_state_id'));
-
             if ((in_array($isRestOfWorld, $oldZone)) || array_intersect($countryIds, $oldCountries) || array_intersect($stateIds, $oldStates)) {
                 return false;
             }

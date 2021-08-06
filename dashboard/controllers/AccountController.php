@@ -529,7 +529,7 @@ class AccountController extends LoggedUserController
             $this->set('orderType', Orders::ORDER_WALLET_RECHARGE);
             $this->_template->render();
         }
-        $this->set('redirectUrl', UrlHelper::generateUrl('WalletPay', 'Recharge', array($order_id)));
+        $this->set('redirectUrl', UrlHelper::generateUrl('WalletPay', 'Recharge', array($order_id), CONF_WEBROOT_FRONT_URL));
         $this->set('msg', Labels::getLabel('MSG_Redirecting', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -1654,7 +1654,7 @@ class AccountController extends LoggedUserController
                     $srch->addCondition('selprod_active', '=', applicationConstants::YES);
                     $srch->setPageNumber(1);
                     $srch->setPageSize(4);
-                    $srch->addMultipleFields(array('selprod_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_id', 'IFNULL(product_name, product_identifier) as product_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock'));
+                    $srch->addMultipleFields(array('selprod_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_id', 'IFNULL(product_name, product_identifier) as product_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'product_updated_on'));
                     $srch->addOrder('uwlp_added_on');
                     $srch->addGroupBy('selprod_id');
                     $rs = $srch->getResultSet();
@@ -1762,7 +1762,7 @@ class AccountController extends LoggedUserController
                 'product_id', 'prodcat_id', 'ufp_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on',
                 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand.brand_id', 'product_model',
                 'IFNULL(brand_name, brand_identifier) as brand_name', 'IFNULL(splprice_price, selprod_price) AS theprice', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
-                'CASE WHEN splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found', 'selprod_price', 'selprod_user_id', 'selprod_code', 'selprod_sold_count', 'selprod_condition', 'IFNULL(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist', 'IFNULL(uwlp.uwlp_uwlist_id, 0) as uwlp_uwlist_id', 'ifnull(prod_rating,0) prod_rating', 'selprod_min_order_qty', 'selprod_available_from', 'selprod_stock', 'shop_id'
+                'CASE WHEN splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found', 'selprod_price', 'selprod_user_id', 'selprod_code', 'selprod_sold_count', 'selprod_condition', 'IFNULL(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist', 'IFNULL(uwlp.uwlp_uwlist_id, 0) as uwlp_uwlist_id', 'ifnull(prod_rating,0) prod_rating', 'selprod_min_order_qty', 'selprod_available_from', 'selprod_stock', 'shop_id', 'product_updated_on'
             )
         );
 
@@ -2103,7 +2103,7 @@ class AccountController extends LoggedUserController
             array(
                 's.shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'shop_name', 'shop_description',
                 'shop_country_l.country_name as country_name', 'shop_state_l.state_name as state_name', 'shop_city',
-                'IFNULL(ufs.ufs_id, 0) as is_favorite'
+                'IFNULL(ufs.ufs_id, 0) as is_favorite', 'shop_updated_on'
             )
         );
         $srch->setPageNumber($page);

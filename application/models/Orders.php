@@ -2776,6 +2776,7 @@ class Orders extends MyAppModel
     {
         $srch = new OrderProductSearch($langId, true);
         $srch->joinSellerProducts($langId);
+        $srch->joinProduct($langId);
         $srch->joinShippingCharges();
         $srch->addCondition('order_id', '=', $orderId);
         $srch->addCondition('op_product_type', '=', product::PRODUCT_TYPE_PHYSICAL);

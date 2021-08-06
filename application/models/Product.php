@@ -78,6 +78,8 @@ class Product extends MyAppModel
     public const FILTER_TYPE_CATEGORY = 1;
     public const FILTER_TYPE_BRAND = 2;
     public const FILTER_TYPE_OPTION = 3;
+    public const FILTER_TYPE_SORT_BY = 4;
+    public const FILTER_TYPE_PRICE = 5;
     /* For API */
 
     public function __construct($id = 0)
@@ -1087,7 +1089,7 @@ class Product extends MyAppModel
         $srch->addSubscriptionValidCondition();
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addCondition('ufp_user_id', '=', $user_id);
-        $srch->addMultipleFields(array('selprod_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_id', 'IFNULL(product_name, product_identifier) as product_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock'));
+        $srch->addMultipleFields(array('selprod_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_id', 'IFNULL(product_name, product_identifier) as product_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'product_updated_on'));
         $srch->setPageNumber(1);
         $srch->setPageSize(4);
         $srch->addGroupBy('selprod_id');

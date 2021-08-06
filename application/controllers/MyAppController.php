@@ -43,6 +43,15 @@ class MyAppController extends FatController
         $this->set('siteLangCode', $this->siteLangCode);
         $this->set('siteCurrencyId', $this->siteCurrencyId);
         $this->set('siteLangCountryCode', $this->siteLangCountryCode);
+
+        $cacheTimeStamp = FatCache::get('cacheTimeStamp' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$cacheTimeStamp) {
+            $cacheTimeStamp = date('Y-m-d H:i:s');
+            FatCache::set('cacheTimeStamp' . $this->siteLangId, $cacheTimeStamp, '.txt');
+        }
+        $cacheTimeStamp = AttachedFile::setTimeParam($cacheTimeStamp);
+        $this->set('cacheTimeStamp', $cacheTimeStamp);
+
         $loginData = array(
             'loginFrm' => $this->getLoginForm(),
             'siteLangId' => $this->siteLangId,
@@ -173,6 +182,7 @@ class MyAppController extends FatController
                 'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->siteLangId),
                 'searchAsIMoveTheMap' => Labels::getLabel('MSG_SEARCH_AS_I_MOVE_THE_MAP', $this->siteLangId),
                 'currentSearchLocation' => Labels::getLabel('LBL_CURRENT_SEARCH_LOCATION', $this->siteLangId),
+                'cacheTimeStamp' => $cacheTimeStamp,
                 'close' => Labels::getLabel('LBL_CLOSE', $this->siteLangId),
             );
 
@@ -529,10 +539,10 @@ class MyAppController extends FatController
             $sortByArr = array('keyword_relevancy' => Labels::getLabel('LBL_Keyword_Relevancy', $this->siteLangId)) + $sortByArr;
             $sortBy = 'keyword_relevancy';
         }
-      
+
         $frm = new Form('frmProductSearch');
         $frm->addTextBox('', 'keyword', '', array('id' => 'keyword'));
-        $frm->addSelectBox('', 'sortBy', $sortByArr, $sortBy, array('id' => 'sortBy'), '');        
+        $frm->addSelectBox('', 'sortBy', $sortByArr, $sortBy, array('id' => 'sortBy'), '');
         $frm->addHiddenField('', 'pageSize', '', array('id' => 'pageSize'));
         $frm->addHiddenField('', 'page', 1);
         $frm->addHiddenField('', 'sortOrder', 'asc');

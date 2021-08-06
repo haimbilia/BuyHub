@@ -193,6 +193,7 @@ class Shop extends MyAppModel
 
         if (0 < $langId) {
             $srch->joinTable(States::DB_TBL_LANG, 'LEFT JOIN', 'ss_l.statelang_state_id=ss.state_id and ss_l.statelang_lang_id=' . $langId, 'ss_l');
+            $srch->joinTable(Countries::DB_TBL_LANG, 'LEFT JOIN', 'sc_l.countrylang_country_id=sc.country_id and sc_l.countrylang_lang_id=' . $langId, 'sc_l');
         }
 
         if ($isActive) {

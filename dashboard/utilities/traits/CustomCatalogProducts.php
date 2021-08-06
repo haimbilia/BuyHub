@@ -611,6 +611,12 @@ trait CustomCatalogProducts
         if (!in_array($productRow['preq_user_id'], $userArr)) {
             FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $lang_id = $lang_id;
+		} else  {
+			$lang_id = array_key_first($languages); 
+		}
 
         $product_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $preq_id, $option_id, $lang_id, false, 0, 0, true);
         $imgTypesArr = $this->getSeparateImageOptionsOfCustomProduct($preq_id, $this->siteLangId);
@@ -665,7 +671,13 @@ trait CustomCatalogProducts
         }
         $preq_id = FatUtility::int($post['preq_id']);
         $option_id = FatUtility::int($post['option_id']);
-        $lang_id = FatUtility::int($post['lang_id']);
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			$lang_id = FatUtility::int($post['lang_id']);
+		} else  {
+			$lang_id = array_key_first($languages); 
+		}
+       
 
 
         /* Validate product belongs to current logged seller[ */
@@ -956,8 +968,15 @@ trait CustomCatalogProducts
         $frm = new Form('imageFrm', array('id' => 'imageFrm'));
         $frm->addSelectBox(Labels::getLabel('LBL_Image_File_Type', $this->siteLangId), 'option_id', $imgTypesArr, 0, array('class' => 'option'), '');
         $languagesAssocArr = Language::getAllNames();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->siteLangId)) + $languagesAssocArr, '', array('class' => 'language'), '');
-        $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Photo(s)', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
+		
+		if(count($languagesAssocArr) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->siteLangId)) + $languagesAssocArr, '', array('class' => 'language'), '');
+        } else  {
+			$lang_id = array_key_first($languagesAssocArr); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+		
+		$fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Photo(s)', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
         $fldImg->htmlBeforeField = '<div class="filefield">';
         $fldImg->htmlAfterField = '</div><span class="form-text text-muted">' . Labels::getLabel('LBL_Please_keep_image_dimensions_greater_than_500_x_500', $this->siteLangId) . '</span>';
         $frm->addHiddenField('', 'min_width', 500);

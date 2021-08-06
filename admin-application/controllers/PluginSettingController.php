@@ -101,10 +101,10 @@ class PluginSettingController extends AdminBaseController
             LibHelper::dieJsonError(Labels::getLabel('LBL_INVALID_KEY_NAME', $langId));
         }
         $plugin = PluginHelper::callPlugin($keyName, [$langId], $error, $langId, false);
-        if (false == method_exists($plugin, 'getColsLabelArr')) {
+        if (false == method_exists($plugin, 'getFormFieldsArr')) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_UNABLE_TO_LOAD_SETTINGS_FORM', $langId));
         }
-        $labelsArr = $plugin->getColsLabelArr();
+        $labelsArr = $plugin->getFormFieldsArr();
 
         $nonEnvFields = [];
         if (array_key_exists('envFields', $labelsArr)) {
@@ -139,7 +139,7 @@ class PluginSettingController extends AdminBaseController
             /* Sanbox Key Field */
 
             /* Live Key Fields */
-            $colName = 'live_' . $colName;
+            $colName = (false === strpos($colName, 'live_') ? 'live_' . $colName : $colName);
             $fld = $frm->$fieldFn($colLabel, $colName);
             $fld->htmlAfterField = $htmlAfterField;
 
