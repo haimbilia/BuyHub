@@ -186,6 +186,7 @@ Updates/Fixes :
     => 056241 - seller> sales reports> back button is not working
     => 056293 - Shipping profile is not getting created from admin end 
 ====================TV-9.3.2.20210805========================
+    => 056898 - Seller/Buyer is not able to click on the "Accept Cookies" button
 
 New Features:  
     => Admin shipped products listing page
