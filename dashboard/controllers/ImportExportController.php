@@ -651,8 +651,9 @@ class ImportExportController extends SellerBaseController
             $rangeTypeFld->requirements()->addOnChangerequirementUpdate(Importexport::BY_BATCHES, 'eq', 'batch_count', $batchCountReqObj);
             $rangeTypeFld->requirements()->addOnChangerequirementUpdate(Importexport::BY_BATCHES, 'eq', 'batch_number', $batchNumberReqObj);
         }
-
+		
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $langId));
+		$this->set('displayRangeFields',$displayRangeFields);
         return $frm;
     }
 

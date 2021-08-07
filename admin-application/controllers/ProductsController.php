@@ -804,7 +804,9 @@ class ProductsController extends AdminBaseController
             Message::addErrorMessage($this->str_no_record);
             FatUtility::dieWithError(Message::getHtml());
         }
-        $productImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $productId, $option_id, $lang_id, false, 0, 0, true);
+        $productImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $productId, $option_id, $lang_id, (count($languages) <= 1) ? true : false , 0, 0, true);
+		
+		
         $imgTypesArr = $this->getSeparateImageOptions($productId, $this->adminLangId);
 
         $this->set('images', $productImages);

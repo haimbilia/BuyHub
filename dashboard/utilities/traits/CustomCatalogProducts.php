@@ -618,7 +618,7 @@ trait CustomCatalogProducts
 			$lang_id = array_key_first($languages); 
 		}
 
-        $product_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $preq_id, $option_id, $lang_id, false, 0, 0, true);
+        $product_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $preq_id, $option_id, $lang_id, (count($languages) > 1) ? false : true, 0, 0, true);
         $imgTypesArr = $this->getSeparateImageOptionsOfCustomProduct($preq_id, $this->siteLangId);
 
         $this->set('images', $product_images);

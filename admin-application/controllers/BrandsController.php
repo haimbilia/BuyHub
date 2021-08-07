@@ -454,11 +454,11 @@ class BrandsController extends AdminBaseController
 		$slide_screen = FatUtility::int($slide_screen);
         $brand_id = FatUtility::int($brand_id);
         if ($file_type == 'logo') {
-            $brandLogos = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, $lang_id, false);
+            $brandLogos = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, $lang_id, (count($languages) > 1) ? false : true);
 			$this->set('images', $brandLogos);
             $this->set('imageFunction', 'brandReal');
         } else {
-            $brandImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_IMAGE, $brand_id, 0, $lang_id, false, $slide_screen);
+            $brandImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_IMAGE, $brand_id, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
             $this->set('images', $brandImages);
             $this->set('imageFunction', 'brandImage');
         }

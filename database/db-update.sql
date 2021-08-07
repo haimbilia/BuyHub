@@ -874,3 +874,8 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('MSG_STRIPE_CONNECT_ACCOUNT_NOT_COMPLETE', 1, 'Your Account Setup Is Incomplete. {click-here} To Complete Your Account Setup.', '')
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 -- ---------Task 86672 Stripe Connect Changes ------ -- 
+
+
+-- --------- Added InActive Subscription Value ------ --
+INSERT IGNORE INTO tbl_configurations (conf_name, conf_val, conf_common) VALUES ('CONF_SUBSCRIPTION_INACTIVE_ORDER_STATUS', 10, 0) ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val)
+-- ---------Added InActive Subscription Value------ -- 

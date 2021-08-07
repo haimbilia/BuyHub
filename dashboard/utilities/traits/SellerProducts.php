@@ -1658,7 +1658,17 @@ trait SellerProducts
         $frm->addHiddenField('', 'meta_id', $metaId);
         $frm->addHiddenField('', 'meta_type', $metaType);
         $frm->addHiddenField('', 'meta_record_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+		
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+        
+		
+		
         $frm->addRequiredField(Labels::getLabel("LBL_Meta_Title", $this->siteLangId), 'meta_title');
         $frm->addTextarea(Labels::getLabel("LBL_Meta_Keywords", $this->siteLangId), 'meta_keywords');
         $frm->addTextarea(Labels::getLabel("LBL_Meta_Description", $this->siteLangId), 'meta_description');
@@ -1681,7 +1691,17 @@ trait SellerProducts
     {
         $this->userPrivilege->canEditMetaTags(UserAuthentication::getLoggedUserId());
         $post = FatApp::getPostedData();
-        $lang_id = $post['lang_id'];
+		
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			$lang_id = $post['lang_id'];
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$post['lang_id']= $lang_id;
+		}
+       
+		
+		
         if ($lang_id == 0) {
             Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
             FatApp::redirectUser($_SESSION['referer_page_url']);

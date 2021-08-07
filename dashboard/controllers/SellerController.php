@@ -750,7 +750,7 @@ class SellerController extends SellerBaseController
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS")));
         $srch->addCondition('op_selprod_user_id', '=', $loggedUserId);
         $srch->addCondition('op_id', '=', $op_id);
-        $srch->addMultipleFields(['op.*','pm.*','opshipping_by_seller_user_id','ocrequest_status','opshipping_fulfillment_type','order_language_id','ops_plugin.plugin_code as opshipping_plugin_code', 'opship_tracking_number', 'orderstatus_id', 'opshipping_carrier_code']);
+        $srch->addMultipleFields(['op.*','pm.*','opshipping_by_seller_user_id','ocrequest_status','opshipping_fulfillment_type','order_language_id','ops_plugin.plugin_code as opshipping_plugin_code', 'opship_tracking_number', 'orderstatus_id']);
         $rs = $srch->getResultSet();
 
         $orderDetail = FatApp::getDb()->fetch($rs);
@@ -2146,7 +2146,13 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
-
+		
+		$languages = Language::getAllNames();
+		if(count($languages) <= 1){
+			 $lang_id =  array_key_first($languages); 
+		}
+		
+		
         $shop_id = 0;
         $stateId = 0;
         $bannerAttachments = array();
@@ -2158,15 +2164,15 @@ class SellerController extends SellerBaseController
             $stateId = $shopDetails['shop_state_id'];
 
             if ($imageType == 'logo') {
-                $logoAttachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_LOGO, $shop_id, 0, $lang_id, false);
+                $logoAttachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_LOGO, $shop_id, 0, $lang_id, (count($languages) <= 1) ? true : false);
                 $this->set('images', $logoAttachments);
                 $this->set('imageFunction', 'shopLogo');
             } elseif ($imageType == 'banner') {
-                $bannerAttachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_BANNER, $shop_id, 0, $lang_id, false, $slide_screen);
+                $bannerAttachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_BANNER, $shop_id, 0, $lang_id, (count($languages) <= 1) ? true : false, $slide_screen);
                 $this->set('images', $bannerAttachments);
                 $this->set('imageFunction', 'shopBanner');
             } else {
-                $backgroundAttachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_BACKGROUND_IMAGE, $shop_id, 0, $lang_id, false);
+                $backgroundAttachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_BACKGROUND_IMAGE, $shop_id, 0, $lang_id, (count($languages) <= 1) ? true : false);
                 $this->set('images', $backgroundAttachments);
                 $this->set('imageFunction', 'shopBackgroundImage');
             }
