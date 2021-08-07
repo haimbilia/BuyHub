@@ -17,7 +17,7 @@ class SupplierController extends MyAppController
         }
         if (UserAuthentication::isUserLogged()) {
             if (User::canViewSupplierTab()) {
-                FatApp::redirectUser(UrlHelper::generateUrl('account', 'supplierApprovalForm'));
+                FatApp::redirectUser(UrlHelper::generateUrl('account', 'supplierApprovalForm', [], CONF_WEBROOT_DASHBOARD));
             }
             Message::addErrorMessage(Labels::getLabel('MSG_You_are_already_logged_in._Please_logout_and_register_for_seller.', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('account'));
