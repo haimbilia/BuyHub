@@ -49,11 +49,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         </div>
                                     </div>
                                     <div class="rating-listing mb-4">
-                                        <?php foreach ($ratingAspects as $ratingTypeId => $ratingTypeLabel) {
-                                            if (in_array($ratingTypeId, [RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY])) {
-                                                continue;
-                                            }
-                                        ?>
+                                        <?php foreach ($selProdRating as $ratingTypeId => $ratingTypeLabel) { ?>
                                             <div class="rating rating-f">
                                                 <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
                                                 <?php
