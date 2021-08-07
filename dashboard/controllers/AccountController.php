@@ -2876,7 +2876,6 @@ class AccountController extends LoggedUserController
 
         $userObj = new User();
         $supplier_form_fields = $userObj->getSupplierFormFields($this->siteLangId);
-
         foreach ($supplier_form_fields as $field) {
             $fieldName = 'sformfield_' . $field['sformfield_id'];
 

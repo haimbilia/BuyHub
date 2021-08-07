@@ -1,7 +1,7 @@
 $(window).on("load", function () {
   setTimeout(function () {
     $("body").addClass("loaded");
-    if (0 < $("#scrollElement-js").length) {
+    if (0 < $("#scrollElement-js").length && 0 < $(".menu__item.is-active").length) {
       var el = new SimpleBar(document.getElementById("scrollElement-js"));
       let scrollElement = el.getScrollElement();
       scrollElement.scrollTop =

@@ -189,6 +189,7 @@ Updates/Fixes :
     => 056898 - Seller/Buyer is not able to click on the "Accept Cookies" button
     => 056944 - on saving seller catalog specification at admin end error coming
     => 056959 - on updating seller order getting error at admin end 
+    => 056954 - Seller: Country code is not showing while adding the Contact Number in the Seller Approval form
 
 New Features:  
     => Admin shipped products listing page
