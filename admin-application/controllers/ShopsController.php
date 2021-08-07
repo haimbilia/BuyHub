@@ -585,8 +585,6 @@ class ShopsController extends AdminBaseController
     private function getForm($shop_id = 0)
     {
         $shop_id = FatUtility::int($shop_id);
-
-        $shopObj = new Tag();
         $frm = new Form('frmShop');
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $frm->addRequiredField(Labels::getLabel('LBL_Shop_Identifier', $this->adminLangId), 'shop_identifier');
