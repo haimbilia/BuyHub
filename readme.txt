@@ -185,7 +185,10 @@ Updates/Fixes :
     => 056239 - seller> buy together> on clicking existing items getting error
     => 056241 - seller> sales reports> back button is not working
     => 056293 - Shipping profile is not getting created from admin end 
-
+====================TV-9.3.2.20210805========================
+    => 056898 - Seller/Buyer is not able to click on the "Accept Cookies" button
+    => 056944 - on saving seller catalog specification at admin end error coming
+    => 056959 - on updating seller order getting error at admin end 
 
 New Features:  
     => Admin shipped products listing page

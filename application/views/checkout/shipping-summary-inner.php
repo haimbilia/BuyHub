@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
-<div id="shipping-summary" class="step active" role="step:3">
+<div id="shipping-summary" class="step">
     <ul class="review-block">
         <li>
             <div class="review-block__label">
@@ -50,7 +50,7 @@
             </h5>
         </div>
         <div class="step_body">
-        <?php
+            <?php
             ksort($shippingRates);
             foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                 ksort($shippedByItemArr);
@@ -79,7 +79,7 @@
                     }
                 }
             } ?>
-        </div>    
+        </div>
         <div class="step_foot">
             <a class="btn btn-outline-brand btn-wide" href="javascript:void(0)" onclick="showAddressList();">
                 <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>

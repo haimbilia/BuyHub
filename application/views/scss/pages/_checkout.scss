@@ -500,7 +500,6 @@
     overflow-y: auto;
     >ul {
         >li {
-            padding: 1rem;
             position: relative;
             border: $border;
             border-radius: 4px;
@@ -509,6 +508,8 @@
                 border-color: $brand-color;
             }
             .label-block {
+                padding: 1rem;
+                cursor: pointer;
                 display: flex;
                 margin: 0;
             }
@@ -663,6 +664,7 @@
     margin-bottom: 1.5rem;
     font-size: 0.8rem;
     .shipping-select {
+        position: relative;
         font-size: 0.85rem;
         background-color: $bg-gray;
         padding: 1rem;
@@ -670,7 +672,7 @@
         //align-items: center;
         display: flex;
         justify-content: space-between;
-        //flex-direction: column;
+        flex-direction: column;
     }
     .pickup-select {
         display: flex;
@@ -699,9 +701,12 @@
     .shop-address {
         flex: 1;
         color: $txt-gray;
+        margin-top: 1.5rem;
     }
     .shipping-method {
-        max-width: 50%;
+        position: absolute;
+        top: auto;
+        #{$end-direction}: 0;
         &_messages {
             font-size: inherit;
         }

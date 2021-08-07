@@ -234,21 +234,21 @@
         align-items: center;
         justify-content: space-between;
         height: 100%;
-        .products__body {
+        .products_body {
             position: relative;
             width: 150px;
         }
-        .products__img {
+        .products_img {
             margin: 0;
         }
-        .products__footer {
+        .products_foot {
             padding: 20px;
             width: calc(100% - 150px);
             text-align: #{$start-direction};
-            .products__title {
+            .products_title {
                 padding-#{$start-direction}: 0;
             }
-            .products__price {
+            .products_price {
                 justify-content: inherit;
             }
         }

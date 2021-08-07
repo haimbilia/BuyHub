@@ -8,7 +8,7 @@ class AramexSettingsController extends ShippingServicesSettingsController
         $frm = new Form('frm' . self::KEY_NAME);
 
         $plugin = PluginHelper::callPlugin(self::KEY_NAME, [$langId], $error, $langId, false);
-        $labelsArr = $plugin->getColsLabelArr();
+        $labelsArr = $plugin->getFormFieldsArr();
         foreach ($labelsArr as $colName => $colLabel) {
             $fieldFn = ('password'== strtolower($colName)) ? 'addPasswordField' : 'addTextBox';
             $fld = $frm->$fieldFn($colLabel, $colName);

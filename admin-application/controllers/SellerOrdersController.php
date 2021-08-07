@@ -287,9 +287,12 @@ class SellerOrdersController extends AdminBaseController
 
         if (((in_array(strtolower($opRow['plugin_code']), ['cashondelivery', 'payatstore'])) || (in_array($opRow['op_status_id'], $allowedShippingUserStatuses))) && $this->canEdit && !$shippingHanldedBySeller && ($opRow['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL && $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED)) {
             $displayShippingUserForm = true;
+            /*
             if ($opRow["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) {
                 $displayShippingUserForm = false;
             }
+             * 
+             */
             $shippingUserFrm = $this->getShippingCompanyUserForm($displayShippingUserForm);
             $shippingUserdata = array('op_id' => $op_id, 'optsu_user_id' => $opRow['optsu_user_id']);
             $shippingUserFrm->fill($shippingUserdata);

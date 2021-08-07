@@ -23,7 +23,7 @@
 @import 'components/cookies';
 @import 'components/data-not-found';
 @import 'components/dropdown';
-// @import 'components/featured-shop';
+@import 'components/featured-shop';
 // @import 'components/fetured-slider';
 @import 'components/form';
 // @import 'components/ftshops';
@@ -50,7 +50,7 @@
 @import 'components/scroll-hint';
 // @import 'components/slider';
 // @import 'components/social-profiles';
-// @import 'components/star-rating';
+@import 'components/star-rating';
 // @import 'components/steps';
 // @import 'components/sticky-head-demo';
 @import 'components/system-messages';
@@ -72,9 +72,9 @@
 // @import 'components/quantity-input';
 @import 'components/saved-cards';
 @import 'components/no-data';
-// @import 'components/timeline';
+// @import 'components/timeline'; 
 // @import 'components/review-media';
-// @import 'components/badges';
+@import 'components/badges';
 @import 'components/scrollbar';
 @import 'components/packages';
 //
@@ -93,4 +93,5 @@
 // @import 'vendors/nouislider.min';
 //
 @import 'pages/dashboard';
+@import 'pages/share-earn';
 //

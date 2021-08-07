@@ -114,8 +114,8 @@
     }
     &:hover {
         border-color: $brand-color;
-        .products__body {
-            .products__img {
+        .products_body {
+            .products_img {
                 img {
                     transform: scale3d(0.9, 0.9, 0.9);
                 }
@@ -159,9 +159,9 @@
             }
         }
     }
-    &__body {
+    &_body {
         position: relative;
-        .products__img {
+        .products_img {
             --aspect-ratio: 1/1;
             display: block;
             margin: 0 0 15px;
@@ -201,11 +201,11 @@
             }
         }
     }
-    &__footer {
+    &_foot {
         padding-bottom: 15px;
         color: $body-color;
     }
-    .products__title {
+    .products_title {
         color: inherit;
         margin: 0 auto;
         padding: 10px;
@@ -218,12 +218,12 @@
             font-weight: inherit;
         }
     }
-    .products__category {
+    .products_category {
         color: lighten($body-color, 50%);
         font-size: 0.8em;
         font-weight: 400;
     }
-    .products__price {
+    .products_price {
         font-size: 0.85rem;
         color: inherit;
         padding: 0 5px;

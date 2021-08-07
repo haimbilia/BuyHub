@@ -694,7 +694,7 @@ $(document).ready(function () {
     });
     $(".cookie-preferences-js").click(function () {
         $.facebox(function () {
-            fcom.ajax(fcom.makeUrl("Custom", "cookiePreferencesData"), "", function (t) {
+            fcom.ajax(fcom.makeUrl("Custom", "cookiePreferencesData", [], siteConstants.webrootfront), "", function (t) {
                 fcom.updateFaceboxContent(t)
             })
         })
@@ -715,7 +715,7 @@ $(document).ready(function () {
         updateUserCookies(data)
     };
     updateUserCookies = function (data) {
-        fcom.ajax(fcom.makeUrl("Custom", "updateUserCookies"), data, function (rsp) {
+        fcom.ajax(fcom.makeUrl("Custom", "updateUserCookies", [], siteConstants.webrootfront), data, function (rsp) {
             var ans = $.parseJSON(rsp);
             console.log(ans);
             if (ans.status == 0) {

@@ -53,7 +53,7 @@ $data = array(
 if (Product::FILTER_POSITION_DEFAULT == $position) {
     $data['categoriesArr'] = $categoriesArr;
     $data['brandsArr'] = $brandsArr;
-    $data['options'] = $options;
+    $data['options'] = array_values($optionsResult);
     $data['priceArr'] = $priceArr;
 
 } else if (Product::FILTER_POSITION_ALTERNATE == $position) {

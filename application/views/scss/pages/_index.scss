@@ -362,12 +362,12 @@
     grid-template-columns: repeat(12, 1fr);
     .items {
         .products {
-            &__body {
-                .products__img {
+            &_body {
+                .products_img {
                     margin: 0;
                 }
             }
-            &__footer {
+            &_foot {
                 position: absolute;
                 left: 0;
                 right: 0;
@@ -411,7 +411,7 @@
                 }
             }
             &:hover {
-                .products__footer {
+                .products_foot {
                     * {
                         opacity: 1;
                     }

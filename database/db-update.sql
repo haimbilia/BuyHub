@@ -867,6 +867,7 @@ INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_co
 -- --- ShipEngine Shipping API Task : 88449 --- --
 INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Ship Engine', '8', 'ShipEngine', '0', '1');
 -- --- ShipEngine Shipping API Task : 88449 --- --
+-- -----------------TV-9.3.2.20210805-----------------
 
 -- ---------Task 86672 Stripe Connect Changes ------ --
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES

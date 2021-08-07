@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="checkout-page">
     <main class="main">
-        <div class="step active">
+        <div class="step">
             <div class="step_section">
                 <div class="step_head"><?php echo Labels::getLabel('LBL_Payment_Summary', $siteLangId); ?>
                 </div>

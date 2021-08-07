@@ -38,7 +38,7 @@
                                     <?php if (in_array($fileExt, applicationConstants::allowedVideoFileExtensions())) { ?>
                                     <a class="btn btn-light btn-sm play-preview" href="javascript:void(0);"
                                         title="<?php echo $attachment['preview'];?>"
-                                        onclick="playVideo('<?php echo $videoPath;?>', '<?php echo $fileExt;?>'); return false;">
+                                        onclick="playVideo('<?php echo $videoPath;?>', '<?php echo $fileExt;?>','<?php echo $attachment['preview'];?>','<?php echo $attachment['preview'];?>'); return false;">
                                         <i class="fa fa-caret-square-right icon"></i>
                                     </a>
                                     <?php } ?>
