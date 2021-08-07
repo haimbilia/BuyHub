@@ -867,3 +867,9 @@ INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_co
 -- --- ShipEngine Shipping API Task : 88449 --- --
 INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Ship Engine', '8', 'ShipEngine', '0', '1');
 -- --- ShipEngine Shipping API Task : 88449 --- --
+
+-- ---------Task 86672 Stripe Connect Changes ------ --
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_STRIPE_CONNECT_ACCOUNT_NOT_COMPLETE', 1, 'Your Account Setup Is Incomplete. {click-here} To Complete Your Account Setup.', '')
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+-- ---------Task 86672 Stripe Connect Changes ------ -- 
