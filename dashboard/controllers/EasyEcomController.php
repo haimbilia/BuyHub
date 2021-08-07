@@ -22,7 +22,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         $this->easyEcom = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId, $action, $this->userId], $error, $this->siteLangId);
         if (false === $this->easyEcom) {
             $error = is_string($error) ? $this->formatOutput(Plugin::RETURN_FALSE, $error) : $error;
-            $this->dieWithJsonResponse($error);
+            LibHelper::dieJsonResponse($error, $this->langId);
         }
 
         $this->init();
@@ -39,7 +39,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         if (true === MOBILE_APP_API_CALL && false == UserAuthentication::doAppLogin(CommonHelper::getAppToken())) {
             $msg = Labels::getLabel("MSG_INVALID_USER", $this->siteLangId);
             $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
-            $this->dieWithJsonResponse($resp);
+            LibHelper::dieJsonResponse($resp, $this->langId);
         }
     }
     
@@ -150,7 +150,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     {
         $post = FatApp::getPostedData();
         $resp = $this->easyEcom->getProducts($post);
-        $this->dieWithJsonResponse($resp);
+        LibHelper::dieJsonResponse($resp, $this->langId);
     }
 
     /**
@@ -162,7 +162,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     {
         $post = FatApp::getPostedData();
         $resp = $this->easyEcom->getOrders($post);
-        $this->dieWithJsonResponse($resp);
+        LibHelper::dieJsonResponse($resp, $this->langId);
     }
 
     /**
@@ -178,11 +178,11 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         if (1 > $selProdId || 0 > $balanceQty) {
             $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->langId);
             $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
-            $this->dieWithJsonResponse($resp);
+            LibHelper::dieJsonResponse($resp, $this->langId);
         }
 
         $resp = $this->easyEcom->updateProductStockQty($selProdId, $balanceQty);
-        $this->dieWithJsonResponse($resp);
+        LibHelper::dieJsonResponse($resp, $this->langId);
     }
 
     /**
@@ -196,10 +196,10 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         if (1 > $opId) {
             $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->langId);
             $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
-            $this->dieWithJsonResponse($resp);
+            LibHelper::dieJsonResponse($resp, $this->langId);
         }
         $resp = $this->easyEcom->getShippedOrderCarrierDetail($opId);
-        $this->dieWithJsonResponse($resp);
+        LibHelper::dieJsonResponse($resp, $this->langId);
     }
 
     /**
@@ -213,10 +213,10 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         if (1 > $opId) {
             $msg = Labels::getLabel("MSG_INVALID_REQUEST", $this->langId);
             $resp = $this->formatOutput(Plugin::RETURN_FALSE, $msg);
-            $this->dieWithJsonResponse($resp);
+            LibHelper::dieJsonResponse($resp, $this->langId);
         }
         $resp = $this->easyEcom->getOrderStatus($opId);
-        $this->dieWithJsonResponse($resp);
+        LibHelper::dieJsonResponse($resp, $this->langId);
     }
 
     /**
@@ -227,7 +227,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     public function markOrderAsShipped()
     {
         $resp = $this->easyEcom->markOrderAsShipped(FatApp::getPostedData());
-        $this->dieWithJsonResponse($resp);
+        LibHelper::dieJsonResponse($resp, $this->langId);
     }
     
     /**
@@ -292,7 +292,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
             $shopSpecificsObj->save();
         }
 
-        $this->dieWithJsonResponse($response);
+        LibHelper::dieJsonResponse($response, $this->langId);
     }
     
     /**
@@ -305,6 +305,6 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         $orderStatusArr = Orders::getOrderProductStatusArr($this->siteLangId);
         $msg = Labels::getLabel('MSG_SUCCESS', $this->siteLangId);
         $resp = $this->formatOutput(Plugin::RETURN_TRUE, $msg, $orderStatusArr);
-        $this->dieWithJsonResponse($resp);
+        LibHelper::dieJsonResponse($resp, $this->langId);
     }
 }
