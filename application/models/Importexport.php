@@ -180,7 +180,7 @@ class Importexport extends ImportexportCommon
         //html_entity_decode($colValue, ENT_QUOTES, 'utf-8');
     }
 
-    private function validateCSVHeaders($csvFilePointer, $coloumArr, $langId)
+    private function validateCSVHeaders($csvFilePointer, &$coloumArr, $langId)
     {
         $headingRow = $this->getFileRow($csvFilePointer);
         $i = 0;
@@ -191,6 +191,16 @@ class Importexport extends ImportexportCommon
                     $string = str_replace('"', '', preg_replace('/[^\x{0600}-\x{06FF}A-Za-z !@#$%^&*()]/u', '', $string));
                 }
                 $i++;
+            }
+        );
+        
+        array_walk(
+            $coloumArr,
+            function (&$string1) use (&$j) {
+                if (0 == $j) {
+                    $string1 = str_replace('"', '', preg_replace('/[^\x{0600}-\x{06FF}A-Za-z !@#$%^&*()]/u', '', $string1));
+                }
+                $j++;
             }
         );
 
