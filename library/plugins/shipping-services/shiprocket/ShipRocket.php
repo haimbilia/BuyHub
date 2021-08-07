@@ -4,8 +4,6 @@
  * ShipRocket - https://apidocs.shiprocket.in
  */
 
-use PhpParser\Node\Stmt\Label;
-
 require_once dirname(__FILE__) . '/ShipRocketApi.php';
 
 class ShipRocket extends ShippingServicesBase
