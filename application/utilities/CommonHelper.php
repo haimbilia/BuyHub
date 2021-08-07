@@ -2089,31 +2089,10 @@ class CommonHelper extends FatUtility
     {
         $len = strlen($data);
         return substr($data, 0, 1) . str_repeat('*', $len - 2) . substr($data, $len - 1, 1);
-
-        /*$formattedNumber = preg_replace("/^(\d{3})(\d{3})(\d{4})$/", "$1-$2-$3", $phone);
-        $userPhone = explode('-', $formattedNumber);
-        $dobFirstPart = substr($userPhone[0], 0, 1).str_repeat('*', strlen($userPhone[0]) - 1);
-        $dobSecondPart = str_repeat('*', strlen($userPhone[1]));
-        $dobThirdPart = str_repeat('*', strlen($userPhone[2]) - 1).substr($userPhone[2], strlen($userPhone[2]) - 1, 1);
-        return $dobFirstPart.'-'.$dobSecondPart.'-'.$dobThirdPart;*/
     }
 
     public static function isFieldEncrypted($data)
     {
-        if (strpos($data, '*') !== false) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public static function getFirstName(string $name): string
-    {
-        return (false !== strpos($name, ' ') ? (explode(' ', $name))[0] : $name);
-    }
-
-    public static function getLastName(string $name): string
-    {
-        return (false !== strpos($name, ' ') ? (explode(' ', $name))[1] : $name);
+        return (strpos($data, '*') !== false);
     }
 }

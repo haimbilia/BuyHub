@@ -3130,4 +3130,14 @@ class User extends MyAppModel
             return (isset($_SESSION['yk_personalise_cookies']) && $_SESSION['yk_personalise_cookies'] == 1) ? true : false;
         }
     }
+
+    public static function getFirstName(string $name): string
+    {
+        return (false !== strpos($name, ' ') ? (explode(' ', $name))[0] : $name);
+    }
+
+    public static function getLastName(string $name): string
+    {
+        return (false !== strpos($name, ' ') ? (explode(' ', $name))[1] : $name);
+    }
 }
