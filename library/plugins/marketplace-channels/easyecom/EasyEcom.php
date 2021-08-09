@@ -36,7 +36,7 @@ class EasyEcom extends MarketplaceChannelsBase
             if (Plugin::INACTIVE == $autoSyncStatus) {
                 $msg = '<p>'. Labels::getLabel('MSG_AUTO_SYNC_IS_NOT_ENABLED', $this->langId) . '</p>';
                 $resp = $this->formatOutput($autoSyncStatus, $msg, [], LibHelper::RC_UNAUTHORIZED);
-                $this->dieWithJsonResponse($resp);
+                LibHelper::dieJsonResponse($resp, $this->langId);
             }
         }
     }

@@ -55,8 +55,10 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
                 <div class="col-lg-12">
                     <div class="card">
                         <?php if ($codMinWalletBalance > -1) { ?>
-                            <div class="cards-header pb-0">
-                                <p class="note"><?php echo Labels::getLabel('MSG_Minimum_balance_Required_For_COD', $siteLangId) . ' : ' . CommonHelper::displaymoneyformat($codMinWalletBalance); ?></p>
+                            <div class="cards-header ml-3">
+                                <p class="note">
+                                    <?php echo Labels::getLabel('MSG_Minimum_balance_Required_For_COD', $siteLangId) . ' : ' . CommonHelper::displaymoneyformat($codMinWalletBalance); ?>
+                                </p>
                             </div>
                         <?php } ?>
                         <div class="card-body">
