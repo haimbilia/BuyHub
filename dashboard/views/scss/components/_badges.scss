@@ -1,7 +1,7 @@
 .badges {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
+    position: relative;
+    top: 0;
+    right: auto;
     z-index: 9;
     font-size: 0.8rem;
     svg {
@@ -21,8 +21,8 @@
         padding: 4px 8px;
         top: 0;
         right: 0;
-        width: 70px;
-        height: 70px;
+        width: 40px;
+        height: 40px;
         padding-top: 8px;
         .text {
             transform: rotate( 45deg);

@@ -48,7 +48,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             <div class="item__specification"> <?php echo $opDetail['op_selprod_options']; ?> </div>
                                         </div>
                                     </div>
-                                    <div class="rating-listing mb-4">
+                                    <div class="rating-listing rating-listing-column mb-4">
                                         <?php foreach ($selProdRating as $ratingTypeId => $ratingTypeLabel) { ?>
                                             <div class="rating rating-f">
                                                 <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
