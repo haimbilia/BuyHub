@@ -167,7 +167,7 @@ if (null != $fld) {
                     </div>
                 </div>
             <?php } ?>
-
+            <div id="cropperBox-js"></div>
             <?php $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
             if (!empty($translatorSubscriptionKey) && count($otherLangData) > 0) { ?>
                 <div class="row">
