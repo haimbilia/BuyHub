@@ -197,6 +197,7 @@ Updates/Fixes :
     => 057045 - Seller: Shipping Packages icon is missing in the menu list
     => 057112 - Seller: JSON error is receiving while adding the inventory for the Admin's products
     => 057113 - on submitting product review getting error 
+    => 057109 - Buyer: Records are created in the "Reward Points" section with 0 value while placing an order
 
 New Features:  
     => Admin shipped products listing page
