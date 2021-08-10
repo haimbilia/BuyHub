@@ -61,7 +61,7 @@ if (null != $fld) {
 <?php } ?>
 <div class="sectionbody space">
     <div class="row justify-content-center">
-        <div class="col-md-9">
+        <div class="col-md-12">
             <h3 class="form__heading"><?php echo Labels::getLabel('LBL_General', $adminLangId); ?></h3>
             <div class="row">
                 <div class="col-md-6">
