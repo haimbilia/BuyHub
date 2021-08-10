@@ -459,7 +459,7 @@ class StripeConnectPayController extends PaymentController
                 
                 if (0 < $sellerShippingApiCharges) {
                     $firstTransferAmount = $firstTransferAmount - $sellerShippingApiCharges;
-                    $apiComments = commonHelper::replaceStringData(Labels::getLabel('LBL_DEDUCTED_ADMIN_SHIPPING_API_CHARGES_{invoice}', $langId), ['{invoice}' => $op['op_invoice_number']]);
+                    $apiComments = commonHelper::replaceStringData(Labels::getLabel('LBL_DEDUCTED_ADMIN_SHIPPING_API_CHARGES_{invoice}', $this->siteLangId), ['{invoice}' => $op['op_invoice_number']]);
                     Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_ADMIN_SHIPPING_API_CHARGES, $sellerShippingApiCharges, $this->siteLangId, $apiComments, $op['op_id']);
                     if (1 > $firstTransferAmount) {
                         return;
