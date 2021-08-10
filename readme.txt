@@ -195,11 +195,15 @@ Updates/Fixes :
     => 057091 - Buyer: Suggestion to make the Brands name clickable on the Product details page at the buyers end
     => 057089 - Admin: Suggestion to override the images while uploading multiple images because we are showing only one image for the Brands at the buyers end
     => 057045 - Seller: Shipping Packages icon is missing in the menu list
+===========================TV-9.3.2.20210810==================
+    => 057137 - Getting error while stripe connect transfer seller part
+    => 057130 - Admin, Seller, and Buyer: Suggestion to give an "option" to Redirect to the Order details page on the Cancelled and Returned requests list
+    => 057117 - Seller and Admin: Shipping packages' details are not showing on the Order details page with the Product
 
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
-    => task-85619 Adding files when digital order is delivered
+    => task-85619 Adding files when digital order is delivered 
 
 Enhancements :
    => At shop level  pickup interval option given
@@ -210,7 +214,6 @@ Enhancements :
    => Price surge based on special price. 
    => Admin Reports.
    => Map listing for products & shops 
-   => Webp image support
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

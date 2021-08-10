@@ -459,7 +459,7 @@ class StripeConnectPayController extends PaymentController
                 
                 if (0 < $sellerShippingApiCharges) {
                     $firstTransferAmount = $firstTransferAmount - $sellerShippingApiCharges;
-                    $apiComments = commonHelper::replaceStringData(Labels::getLabel('LBL_DEDUCTED_ADMIN_SHIPPING_API_CHARGES_{invoice}', $langId), ['{invoice}' => $op['op_invoice_number']]);
+                    $apiComments = commonHelper::replaceStringData(Labels::getLabel('LBL_DEDUCTED_ADMIN_SHIPPING_API_CHARGES_{invoice}', $this->siteLangId), ['{invoice}' => $op['op_invoice_number']]);
                     Transactions::debitWallet($op['op_selprod_user_id'], Transactions::TYPE_ADMIN_SHIPPING_API_CHARGES, $sellerShippingApiCharges, $this->siteLangId, $apiComments, $op['op_id']);
                     if (1 > $firstTransferAmount) {
                         return;
@@ -469,7 +469,7 @@ class StripeConnectPayController extends PaymentController
                 if (!empty($accountId) &&  0 < $firstTransferAmount) {
                     $charge = [
                         'amount' => $this->convertInPaisa($firstTransferAmount),
-                        'currency' => $this->orderInf['order_currency_code'],
+                        'currency' => $this->orderInfo['order_currency_code'],
                         'destination' => $accountId,
                         // 'transfer_group' => $op['op_invoice_number'],
                         'description' => $comments,
@@ -484,7 +484,7 @@ class StripeConnectPayController extends PaymentController
                             'msg' => $this->stripeConnect->getError(),
                             'response' => $charge,
                         ];              
-                        SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
+                        SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
                         continue;
                     }
 

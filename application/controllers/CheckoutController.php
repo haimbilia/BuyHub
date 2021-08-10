@@ -1322,6 +1322,10 @@ class CheckoutController extends MyAppController
                 $taxCollectedBySeller = applicationConstants::YES;
                 } */
                 
+                if(1 > $productInfo['return_age']) {
+                    $productInfo['return_age'] = FatApp::getConfig("CONF_DEFAULT_RETURN_AGE", FatUtility::VAR_INT, 7);
+                }
+                
                 $orderData['products'][CART::CART_KEY_PREFIX_PRODUCT . $productInfo['selprod_id']] = array(
                     'op_selprod_id' => $productInfo['selprod_id'],
                     'op_is_batch' => 0,
