@@ -150,12 +150,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'shippingpackages') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner">
                                 <a title="<?php echo Labels::getLabel('LBL_Shipping_Packages', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('shippingPackages'); ?>">
-                                    <i class="icn shop">
-                                        <svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#shipping-package">
-                                            </use>
-                                        </svg>
-                                    </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Shipping_Packages', $siteLangId); ?></span></a>
+                                    <i class="fas fa-box icn"></i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Shipping_Packages', $siteLangId); ?></span></a>
                             </div>
                         </li>
                     <?php } ?>

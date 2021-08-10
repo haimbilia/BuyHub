@@ -69,11 +69,6 @@ if (Product::FILTER_POSITION_DEFAULT == $position) {
             'data' => $brandsArr,
         ],
         [
-            'title' => Labels::getLabel('LBL_OPTIONS', $siteLangId),
-            'type' => Product::FILTER_TYPE_OPTION,
-            'data' => array_values($optionsResult),
-        ],
-        [
             'title' => Labels::getLabel('LBL_SORT_BY', $siteLangId),
             'type' => Product::FILTER_TYPE_SORT_BY,
             'data' => [
@@ -101,4 +96,16 @@ if (Product::FILTER_POSITION_DEFAULT == $position) {
             'data' => [$priceArr],
         ],
     ];
+
+    if (is_array($optionsResult) && !empty($optionsResult)) {
+        foreach (array_values($optionsResult) as $option) {
+            $data['filters'][] = [
+                'title' => $option['option_name'],
+                'option_id' => $option['option_id'],
+                'option_is_color' => $option['option_is_color'],
+                'type' => Product::FILTER_TYPE_OPTION,
+                'data' => $option['values']
+            ];
+        }
+    }
 }
