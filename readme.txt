@@ -196,6 +196,8 @@ Updates/Fixes :
     => 057089 - Admin: Suggestion to override the images while uploading multiple images because we are showing only one image for the Brands at the buyers end
     => 057045 - Seller: Shipping Packages icon is missing in the menu list
 ===========================TV-9.3.2.20210810==================
+    => 057137 - Getting error while stripe connect transfer seller part
+
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
