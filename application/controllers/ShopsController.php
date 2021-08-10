@@ -233,12 +233,6 @@ class ShopsController extends MyAppController
             );
             $data = array_merge($data, $arr);
 
-            if (UserAuthentication::isUserLogged()) {
-                $userData = User::getAttributesById(UserAuthentication::getLoggedUserId());
-                $userParentId = (0 < $userData['user_parent']) ? $userData['user_parent'] : UserAuthentication::getLoggedUserId();
-                $this->set('userParentId', $userParentId);
-            }
-
             if (FatUtility::isAjaxCall()) {
                 $this->set('products', $data['products']);
                 $this->set('page', $data['page']);
@@ -398,6 +392,11 @@ class ShopsController extends MyAppController
         $this->set('template_id', SHOP::TEMPLATE_ONE);
         $showBgImage = $this->showBackgroundImage($shop_id, $this->siteLangId, SHOP::TEMPLATE_ONE);
         $this->set('showBgImage', $showBgImage);
+        if (UserAuthentication::isUserLogged()) {
+            $userParent = User::getAttributesById(UserAuthentication::getLoggedUserId(),'user_parent');
+            $userParentId = (0 < $userParent) ? $userParent : UserAuthentication::getLoggedUserId();
+            $this->set('userParentId', $userParentId);
+        }
     }
 
     public function getShopCollectionListing($shop_id)
@@ -466,6 +465,7 @@ class ShopsController extends MyAppController
             'productSearchPageType' => SavedSearchProduct::PAGE_SHOP,
             'recordId' => $shop_id,
             'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'categories'),
+            'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId) 
         );
 
         $data = array_merge($data, $arr);
@@ -478,6 +478,7 @@ class ShopsController extends MyAppController
             $this->set('postedData', $get);
             $this->set('recordCount', $data['recordCount']);
             $this->set('siteLangId', $this->siteLangId);
+            $this->set('pageSizeArr', $data['pageSizeArr']);
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }
@@ -500,8 +501,7 @@ class ShopsController extends MyAppController
         $frm->fill($frmData);
         $searchFrm->fill($frmData);
         $this->set('frmProductSearch', $frm);
-        $this->set('searchFrm', $searchFrm);
-        $this->set('shopId', $shop_id);
+        $this->set('searchFrm', $searchFrm);      
         $this->_template->addJs('js/slick.js');
         $this->_template->addJs('js/shop-nav.js');
         $this->_template->addJs('js/jquery.colourbrightness.min.js');
@@ -612,6 +612,7 @@ class ShopsController extends MyAppController
             $products = $db->fetch($rs);
             $this->set('product', $products);
         }
+        $this->shopDetail($shop_id, true);
 
         $frm->fill($frmData);
         $this->set('frm', $frm);
@@ -718,11 +719,14 @@ class ShopsController extends MyAppController
             Message::addErrorMessage(Labels::getLabel('LBL_YOU_ALREADY_REPORTED_FOR_THIS_SHOP', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Shops', 'View', array($shop_id)));
         }
+        
+        $this->shopDetail($shop_id, true);
 
         $frm = $this->getReportSpamForm($this->siteLangId);
         $frm->fill(array('shop_id' => $shop_id));
         $this->set('frm', $frm);
         $this->set('shop', $shop);
+        $this->set('template_id', SHOP::TEMPLATE_ONE);
         $this->_template->render();
     }
 

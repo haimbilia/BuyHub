@@ -199,7 +199,7 @@ Updates/Fixes :
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
-    => task-85619 Adding files when digital order is delivered
+    => task-85619 Adding files when digital order is delivered 
 
 Enhancements :
    => At shop level  pickup interval option given
@@ -210,7 +210,6 @@ Enhancements :
    => Price surge based on special price. 
    => Admin Reports.
    => Map listing for products & shops 
-   => Webp image support
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
