@@ -194,6 +194,7 @@ Updates/Fixes :
     => 057017 - importing seller products in german getting error invalid csv column
     => 057091 - Buyer: Suggestion to make the Brands name clickable on the Product details page at the buyers end
     => 057089 - Admin: Suggestion to override the images while uploading multiple images because we are showing only one image for the Brands at the buyers end
+    => 057045 - Seller: Shipping Packages icon is missing in the menu list
 
 New Features:  
     => Admin shipped products listing page
