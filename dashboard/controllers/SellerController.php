@@ -2928,6 +2928,7 @@ class SellerController extends SellerBaseController
         $this->set('postedData', $post);
         $this->set('OrderCancelRequestStatusArr', OrderCancelRequest::getRequestStatusArr($this->siteLangId));
         $this->set('cancelReqStatusClassArr', OrderCancelRequest::getStatusClassArr());
+        $this->set('isSeller', true);
         $this->_template->render(false, false, 'buyer/order-cancellation-request-search.php');
     }
 

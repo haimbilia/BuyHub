@@ -13,7 +13,7 @@
 	foreach ($arr_flds as $val) {
 		$e = $th->appendElement('th', array(), $val);
 	}
-
+    
 	$sr_no = 0;
 	foreach ($requests as $sn => $row) {
 		$sr_no++;
@@ -24,6 +24,13 @@
 			switch ($key) {
 				case 'ocrequest_id':
 					$td->appendElement('plaintext', array(), str_pad($row[$key], 5, '0', STR_PAD_LEFT), true);
+					break;
+				case 'op_invoice_number':
+                    $url = UrlHelper::generateUrl('Buyer', 'viewOrder', array($row['order_id'], $row['op_id']));
+                    if (isset($isSeller) && true == $isSeller) {
+                        $url = UrlHelper::generateUrl('Seller', 'viewOrder', array($row['op_id']));
+                    }
+					$td->appendElement('a', array('target' => '_blank', 'href' => $url), $row[$key], true);
 					break;
 				case 'ocrequest_date':
 					$td->appendElement('plaintext', array(), FatDate::format($row[$key]), true);

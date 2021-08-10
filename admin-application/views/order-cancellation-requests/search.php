@@ -42,7 +42,7 @@ foreach ($arrListing as $sn=>$row){
 				$td->appendElement('plaintext', array(), $txt, true);
 			break;
 			case 'reuqest_detail':
-				$txt = '<strong>'.Labels::getLabel('LBL_Order/Invoice',$adminLangId).': </strong>'.$row['op_invoice_number'];
+				$txt = '<strong>'.Labels::getLabel('LBL_Order/Invoice',$adminLangId).': </strong><a href="' . UrlHelper::generateUrl('SellerOrders', 'view', array($row['op_id'])) . '">'.$row['op_invoice_number'] . '</a>';
 				$txt .= '<br/><strong>'.Labels::getLabel('LBL_Order_Status',$adminLangId).': </strong>'.$row['orderstatus_name'];
 				$txt .= '<br/><strong>'.Labels::getLabel('LBL_Reason',$adminLangId).': </strong>'.$row['ocreason_title'];
 				$txt .= '<br/><strong>'.Labels::getLabel('LBL_Comments',$adminLangId).': </strong>'.nl2br($row['ocrequest_message']);
