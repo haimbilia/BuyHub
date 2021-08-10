@@ -191,7 +191,8 @@ Updates/Fixes :
     => 056959 - on updating seller order getting error at admin end 
     => 056954 - Seller: Country code is not showing while adding the Contact Number in the Seller Approval form
     => 056948 - Web Buyer: Getting a "404 error" while clicking on the "Open a Store" button on the front end
-    => 057017 - importing seller products in german getting error invalid csv column 
+    => 057017 - importing seller products in german getting error invalid csv column
+    => 057091 - Buyer: Suggestion to make the Brands name clickable on the Product details page at the buyers end
 
 New Features:  
     => Admin shipped products listing page
