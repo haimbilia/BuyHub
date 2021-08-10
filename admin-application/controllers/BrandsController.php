@@ -512,9 +512,9 @@ class BrandsController extends AdminBaseController
         }
 
         $fileHandlerObj = new AttachedFile();
-        $fileHandlerObj->deleteFile($file_type, $brand_id, 0, 0, $lang_id);
+        $fileHandlerObj->deleteFile($file_type, $brand_id, 0, 0, $lang_id, $slide_screen);
 
-        if (!$res = $fileHandlerObj->saveAttachment(
+        if (!$fileHandlerObj->saveAttachment(
             $_FILES['cropped_image']['tmp_name'],
             $file_type,
             $brand_id,
