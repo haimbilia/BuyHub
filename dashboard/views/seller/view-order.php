@@ -205,8 +205,12 @@ $daysSpent = round($datediff / (60 * 60 * 24));
                         </div>
                         <div class="col-lg-6 col-md-6 mb-4">
                             <div class="info--order">
+                                <?php 
+                                    $unitType = (isset($unitTypeArray[$orderDetail['op_product_dimension_unit']])) ? $unitTypeArray[$orderDetail['op_product_dimension_unit']] : '' ;
+                                ?>
                                 <p><strong><?php echo Labels::getLabel('LBL_Invoice', $siteLangId); ?> #: </strong><?php echo $orderDetail['op_invoice_number']; ?></p>
                                 <p><strong><?php echo Labels::getLabel('LBL_Date', $siteLangId); ?>: </strong><?php echo FatDate::format($orderDetail['order_date_added']); ?></p>
+                                <p><strong><?php echo Labels::getLabel('LBL_PACKAGE_DETAIL', $siteLangId); ?>: </strong><?php echo $orderDetail['op_product_length'] . ' x ' . $orderDetail['op_product_width'] . ' x ' . $orderDetail['op_product_height'] . ' ' . $unitType; ?></p>
                                 <?php if ($orderDetail["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) { ?>
                                     <p><strong><?php echo Labels::getLabel('LBL_Pickup_Date', $siteLangId); ?>: </strong>
                                         <?php
