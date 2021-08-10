@@ -2656,8 +2656,8 @@ class Orders extends MyAppModel
         if (1 > $completedOrderStatus || 1 > $deliveredOrderStatus) {
             return false;
         }
-        $defaultReturnAge = FatApp::getConfig("CONF_DEFAULT_RETURN_AGE", FatUtility::VAR_INT, 7);
-
+        //$defaultReturnAge = FatApp::getConfig("CONF_DEFAULT_RETURN_AGE", FatUtility::VAR_INT, 7);
+        //'IFNULL(op_selprod_return_age, ' . $defaultReturnAge . ') as return_age',    /*replaced*/ 
         $srch = new OrderProductSearch(0, true);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -2666,7 +2666,7 @@ class Orders extends MyAppModel
                 'op.op_id',
                 'o.order_date_added',
                 'o.order_language_id',
-                'IFNULL(op_selprod_return_age, ' . $defaultReturnAge . ') as return_age',
+                'op_selprod_return_age as return_age',
                 "DATEDIFF(CURDATE(), o.order_date_added) as daysSpent"
             ]
         );

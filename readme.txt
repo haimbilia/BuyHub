@@ -191,12 +191,12 @@ Updates/Fixes :
     => 056959 - on updating seller order getting error at admin end 
     => 056954 - Seller: Country code is not showing while adding the Contact Number in the Seller Approval form
     => 056948 - Web Buyer: Getting a "404 error" while clicking on the "Open a Store" button on the front end
-    => 057017 - importing seller products in german getting error invalid csv column 
+    => 057017 - importing seller products in german getting error invalid csv column
 
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
-    => task-85619 Adding files when digital order is delivered  
+    => task-85619 Adding files when digital order is delivered   
 
 Enhancements :
    => At shop level  pickup interval option given
@@ -207,7 +207,6 @@ Enhancements :
    => Price surge based on special price. 
    => Admin Reports.
    => Map listing for products & shops 
-   => Webp image support
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
