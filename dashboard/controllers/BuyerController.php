@@ -1885,6 +1885,7 @@ class BuyerController extends BuyerBaseController
 
         $orderProd = new OrderProduct($opId);
         $specifics = $orderProd->getSpecifics();
+        $ratingTypes = [];
         if (array_key_exists('op_prodcat_id', $specifics) && !empty($specifics['op_prodcat_id'])) {
             $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
             $srch->addCondition('prt_prodcat_id', '=', $specifics['op_prodcat_id']);

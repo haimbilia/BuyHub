@@ -196,6 +196,7 @@ Updates/Fixes :
     => 057089 - Admin: Suggestion to override the images while uploading multiple images because we are showing only one image for the Brands at the buyers end
     => 057045 - Seller: Shipping Packages icon is missing in the menu list
     => 057112 - Seller: JSON error is receiving while adding the inventory for the Admin's products
+    => 057113 - on submitting product review getting error 
 
 New Features:  
     => Admin shipped products listing page
