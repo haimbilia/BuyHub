@@ -469,7 +469,7 @@ class StripeConnectPayController extends PaymentController
                 if (!empty($accountId) &&  0 < $firstTransferAmount) {
                     $charge = [
                         'amount' => $this->convertInPaisa($firstTransferAmount),
-                        'currency' => $this->orderInf['order_currency_code'],
+                        'currency' => $this->orderInfo['order_currency_code'],
                         'destination' => $accountId,
                         // 'transfer_group' => $op['op_invoice_number'],
                         'description' => $comments,
@@ -484,7 +484,7 @@ class StripeConnectPayController extends PaymentController
                             'msg' => $this->stripeConnect->getError(),
                             'response' => $charge,
                         ];              
-                        SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
+                        SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
                         continue;
                     }
 
