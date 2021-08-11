@@ -203,6 +203,7 @@ Updates/Fixes :
     => 057160 - Uncaught TypeError: Cannot set property scrollTop of undefined
     => 057144 - Admin: "Complete" option is showing in the "User Gdpr Requests" section when the seller "Request to Remove My Data"
     => 057171 - Buyer: Suggestion to show the "Order ID" with cancelled order under the "My Credit" section
+    => 057177 - Buyer: Suggestion to show the "Return Order Age" in the Order details page at the buyers end
 
 New Features:  
     => Admin shipped products listing page
