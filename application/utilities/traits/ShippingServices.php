@@ -559,7 +559,7 @@ trait ShippingServices
         if (false === $rates) {
             LibHelper::exitWithError($this->error);
         }
-        $rateOptions = self::formatShippingRates($rates, $this->langId);
+        $rateOptions = $this->formatShippingRates($rates, $this->langId);
 
         $frm = new Form('frmRates');
         $frm->addSelectBox(Labels::getLabel('LBL_RATES', $this->langId), 'shipping_rates', $rateOptions)->requirements()->setRequired();

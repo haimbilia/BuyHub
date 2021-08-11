@@ -786,30 +786,7 @@ class Shipping
 
         return Fatutility::float($productWeight * $coversionRate);
     }
-    /**
-     * formatShippingRates
-     *
-     * @return array
-     */
-    public static function formatShippingRates(array $rates, int $langId): array
-    {
-        $rateOptions = [];
-        if (!empty($rates)) {
-            $rateOptions[] = Labels::getLabel('MSG_SELECT_SERVICE', $langId);
-            foreach ($rates as $key => $value) {
-                $code = $value['serviceCode'];
-                $price = $value['shipmentCost'] + $value['otherCost'];
-                $name = $value['serviceName'];
-                $displayPrice = CommonHelper::displayMoneyFormat($price);
-
-                $label = $name . " (" . $displayPrice . " )";
-                $rateOptions[$code . "-" . $price] = $label;
-            }
-        }
-
-        return $rateOptions;
-    }
-
+    
     /**
      * setSelectedShipping
      *
