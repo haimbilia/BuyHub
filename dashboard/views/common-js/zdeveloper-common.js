@@ -4,7 +4,9 @@ $(document).ready(function () {
         if (0 < $("#scrollElement-js").length && 0 < $(".menu__item.is-active").length) {
             var el = new SimpleBar(document.getElementById("scrollElement-js"));
             let scrollElement = el.getScrollElement();
-            scrollElement.scrollTop = $(".menu__item.is-active").position().top - ($(window).height() / 2 - 100)
+            if ('undefined' != typeof scrollElement) {
+                scrollElement.scrollTop = $(".menu__item.is-active").position().top - ($(window).height() / 2 - 100)
+            }
         }
         stylePhoneNumberFld(".phone-js");
     }, 1000);
