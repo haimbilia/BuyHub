@@ -199,6 +199,7 @@ Updates/Fixes :
     => 057137 - Getting error while stripe connect transfer seller part
     => 057130 - Admin, Seller, and Buyer: Suggestion to give an "option" to Redirect to the Order details page on the Cancelled and Returned requests list
     => 057117 - Seller and Admin: Shipping packages' details are not showing on the Order details page with the Product
+    => 057145 - Seller: Suggestion to dont allow the seller to add a Special Price greater than the Current Price
 
 New Features:  
     => Admin shipped products listing page

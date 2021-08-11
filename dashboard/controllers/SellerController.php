@@ -5122,19 +5122,25 @@ class SellerController extends SellerBaseController
     public function updateSpecialPriceRow()
     {
         $this->userPrivilege->canEditSpecialPrice(UserAuthentication::getLoggedUserId());
-        $data = FatApp::getPostedData();
-        if (empty($data)) {
+        $post = FatApp::getPostedData();
+        if (empty($post)) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
         }
 
-        $splPriceId = $this->updateSelProdSplPrice($data, true);
+        $splPrice = FatApp::getPostedData('splprice_price', FatUtility::VAR_FLOAT, 0);
+        $selprodPrice = SellerProduct::getAttributesById($post['splprice_selprod_id'], 'selprod_price');
+        if ($selprodPrice < $splPrice) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_SPECIAL_PRICE_MUST_BE_LESS_THAN_EQUAL_TO_CURRENT_PRICE', $this->siteLangId));
+        }
+
+        $splPriceId = $this->updateSelProdSplPrice($post, true);
         if (!$splPriceId) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
         }
         // last Param of getProductDisplayTitle function used to get title in html form.
-        $productName = SellerProduct::getProductDisplayTitle($data['splprice_selprod_id'], $this->siteLangId, true);
-        $data['product_name'] = $productName;
-        $this->set('data', $data);
+        $productName = SellerProduct::getProductDisplayTitle($post['splprice_selprod_id'], $this->siteLangId, true);
+        $post['product_name'] = $productName;
+        $this->set('data', $post);
         $this->set('splPriceId', $splPriceId);
         $json = array(
             'status' => true,
@@ -5142,7 +5148,7 @@ class SellerController extends SellerBaseController
             'data' => $this->_template->render(false, false, 'seller/update-special-price-row.php', true)
         );
 
-        $productId = SellerProduct::getAttributesById($data['splprice_selprod_id'], 'selprod_product_id');
+        $productId = SellerProduct::getAttributesById($post['splprice_selprod_id'], 'selprod_product_id');
         Product::updateMinPrices($productId);
         FatUtility::dieJsonSuccess($json);
     }
@@ -5266,6 +5272,11 @@ class SellerController extends SellerBaseController
         }
         $value = FatApp::getPostedData('value');
         $selProdId = FatApp::getPostedData('selProdId', FatUtility::VAR_INT, 0);
+
+        $selprodPrice = SellerProduct::getAttributesById($selProdId, 'selprod_price');
+        if ($selprodPrice < $value && 'splprice_price' == $attribute) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_SPECIAL_PRICE_MUST_BE_LESS_THAN_EQUAL_TO_ORIGNAL_PRICE', $this->siteLangId));
+        }
 
         $dataToUpdate = array(
             'splprice_selprod_id' => $selProdId,
