@@ -83,8 +83,7 @@ $(document).ready(function () {
         }
 
         var addRowBtnHtml = '<input class="addRowBtn' + day + '-js js-slot-add-' + day + ' d-none" onclick="addTimeSlotRow(' + day + ')" type="button" name="btn_add_row[' + day + ']" value="+">';
-        //var html = "<div class='row row-" + count + " js-added-rows-" + day + "'><div class='col-md-2'></div><div class='col-md-4 js-from_time_" + day + "'>" + fromTimeHtml + "</div><div class='col-md-4 js-to_time_" + day + "'>" + toTimeHtml + "</div><div class='col-md-2'><input class='mt-4' type='button' data-day='" + day + "' name='btn_remove_row' value='x'>" + addRowBtnHtml + "</div></div>";
-        var html = "<div class='row row-" + count + " js-added-rows-" + day + "'><div class='col-md-2'></div><div class='col-md-4 js-from_time_" + day + "'>" + fromTimeHtml + "</div><div class='col-md-4 js-to_time_" + day + "'>" + toTimeHtml + "</div><div class='col-md-2'><div class='field-set'><div class='caption-wraper'><label class='field_label'></label></div><div class='field-wraper'><div class='field_cover'><input class='' type='button' data-day='" + day + "' name='btn_remove_row' value='x'>" + addRowBtnHtml + "</div></div></div></div></div>";
+        var html = "<div class='row row-" + count + " js-added-rows-" + day + "'><div class='col-md-2 jsWeekDay"+ ($(".availabilityType-js:checked").val() == 2 ?' d-none':'')   +" '></div><div class='col-md-4 js-from_time_" + day + "'>" + fromTimeHtml + "</div><div class='col-md-4 js-to_time_" + day + "'>" + toTimeHtml + "</div><div class='col-md-2'><div class='field-set'><div class='caption-wraper'><label class='field_label'></label></div><div class='field-wraper'><div class='field_cover'><input class='' type='button' data-day='" + day + "' name='btn_remove_row' value='x'>" + addRowBtnHtml + "</div></div></div></div></div>";
         $(".js-from_time_" + day).last().parent().after(html);
         $(rowElement + " select").val('').attr('data-row', (count));
         var frmElement = rowElement + " .js-slot-from-" + day;
@@ -102,12 +101,16 @@ $(document).ready(function () {
         if ($(ele).prop("checked") == true) {
             $(".js-slot-from-" + day).removeAttr('disabled');
             $(".js-slot-to-" + day).removeAttr('disabled');
+            $(".addRowBtnBlock"+day+"-js").removeClass('d-none');
             displayAddRowField(day, ele);
         } else {
             $(".js-slot-from-" + day).attr('disabled', 'true');
             $(".js-slot-to-" + day).attr('disabled', 'true');
             $(".js-slot-add-" + day).addClass('d-none');
-            $(".js-added-rows-" + day).remove();
+            /*$(".js-added-rows-" + day).remove();*/
+            $(".jsDay-" + day).find("[name='btn_remove_row']").trigger('click');
+            $(".addRowBtnBlock"+day+"-js").addClass('d-none');
+            
         }
     }
 
@@ -184,11 +187,17 @@ $(document).ready(function () {
     displaySlotTimings = function (ele) {
         var selectedVal = $(ele).val();
         if (selectedVal == 2) {
-            $('.js-slot-individual').addClass('d-none');
-            $('.js-slot-all').removeClass('d-none');
+            $('.js-slot-individual .row').addClass('d-none');
+            $('.js-slot-individual .jsDay-' + DAY_SUNDAY + ' .jsWeekDay').addClass('d-none');
+            $('.js-slot-individual .jsDay-' + DAY_SUNDAY).removeClass('d-none');
+                  
+            
+            //$('.js-slot-individual .jsRow:first .slotDays-js').prop("checked",true).trigger("change"); 
+           /* $('.js-slot-all').removeClass('d-none');*/
         } else {
-            $('.js-slot-all').addClass('d-none');
-            $('.js-slot-individual').removeClass('d-none');
+            /*$('.js-slot-all').addClass('d-none');*/
+            $('.js-slot-individual .row').removeClass('d-none');
+            $('.js-slot-individual .jsDay-' + DAY_SUNDAY + ' .jsWeekDay').removeClass('d-none');
         }
     }
 

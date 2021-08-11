@@ -17,16 +17,9 @@ $slotTypeFld = $frm->getField('tslot_availability');
 $slotTypeFld->setOptionListTagAttribute('class', 'list-inline');
 $slotTypeFld->developerTags['rdLabelAttributes'] = array('class' => 'radio');
 $slotTypeFld->developerTags['rdHtmlAfterRadio'] = '';
-$slotTypeFld->setFieldTagAttribute('onClick', 'displaySlotTimings(this);');
+$slotTypeFld->setFieldTagAttribute('onChange', 'displaySlotTimings(this);');
 $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
 
-$fromAllFld = $frm->getField('tslot_from_all');
-$fromAllFld->setFieldTagAttribute('onChange', 'validateTimeFields()');
-$fromAllFld->setFieldTagAttribute('class', 'selectAllFromTime-js');
-
-$toAllFld = $frm->getField('tslot_to_all');
-$toAllFld->setFieldTagAttribute('onChange', 'validateTimeFields()');
-$toAllFld->setFieldTagAttribute('class', 'selectAllToTime-js');
 
 $cancelFld = $frm->getField('btn_cancel');
 $cancelFld->setFieldTagAttribute('class', 'btn btn-outline-brand');
@@ -232,7 +225,7 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                     </div>
                 </div>
 
-                <div class="js-slot-individual <?php echo $availability == TimeSlot::DAY_ALL_DAYS ? 'd-none' : ''; ?>">
+                <div class="js-slot-individual">
                     <?php
                     $daysArr = TimeSlot::getDaysArr($siteLangId);
                     $row = 0;
@@ -261,9 +254,9 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                                 $toFld->setFieldTagAttribute('onChange', 'displayAddRowField(' . $i . ', this)');
                                 $toFld->value = $toTime;
                     ?>
-                    <div class="row row-<?php echo $row;
+                                <div class="row jsDay-<?php echo $i;?> row-<?php echo $row;
                                                     echo ($key > 0) ? ' js-added-rows-' . $i : '' ?>">
-                        <div class="col-md-2">
+                                    <div class="col-md-2 jsWeekDay">
                             <div class="field-set">
                                 <div class="caption-wraper">
                                     <label class="field_label">
@@ -328,20 +321,21 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                                                         xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
                                                     </use>
                                                 </svg>
-                                            </i></button>
-                                        <?php }                                                        
-                                                        if (count($slotData['tslot_from_time'][$i]) - 1 == $key) { ?>
-                                        <button type="button" name="btn_add_row[<?php echo $i; ?>]"
-                                            onClick="addTimeSlotRow(<?php echo $i; ?>)"
-                                            class="btn btn-brand btn-sm js-slot-add-<?php echo $i; ?>">
-                                            <i class="icn">
-                                                <svg class="svg" width="16px" height="16px">
-                                                    <use
-                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                                    </use>
-                                                </svg>
                                             </i>
-                                        </button>
+                                        </button>                                        
+                                       <?php }                                                        
+                                        if (count($slotData['tslot_from_time'][$i]) - 1 == $key) { ?>
+                                            <button type="button" name="btn_add_row[<?php echo $i; ?>]"
+                                                onClick="addTimeSlotRow(<?php echo $i; ?>)"
+                                                class="btn btn-brand btn-sm js-slot-add-<?php echo $i; ?>">
+                                                <i class="icn">
+                                                    <svg class="svg" width="16px" height="16px">
+                                                        <use
+                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                        </use>
+                                                    </svg>
+                                                </i>
+                                            </button>
                                         <?php } ?>
                                     </div>
                                 </div>
@@ -364,8 +358,8 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                             $toFld->setFieldTagAttribute('class', 'js-slot-to-'.$i);
                             $toFld->setFieldTagAttribute('onChange', 'displayAddRowField('.$i.', this)');
 							?>
-                    <div class="row row-<?php echo $row; ?>">
-                        <div class="col-md-2">
+                             <div class="row jsDay-<?php echo $i;?> row-<?php echo $row; ?>">
+                                    <div class="col-md-2 jsWeekDay">
                             <div class="field-set">
                                 <div class="caption-wraper">
                                     <label class="field_label">
@@ -439,41 +433,6 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                     }
                     ?>
                 </div>
-                <div
-                    class="row js-slot-all  <?php echo $availability == TimeSlot::DAY_INDIVIDUAL_DAYS ? 'd-none' : ''; ?>">
-                    <div class="col-md-6">
-                        <div class="field-set">
-                            <div class="caption-wraper">
-                                <label class="field_label">
-                                    <?php $fld = $frm->getField('tslot_from_all');
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $frm->getFieldHtml('tslot_from_all'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="field-set">
-                            <div class="caption-wraper">
-                                <label class="field_label">
-                                    <?php $fld = $frm->getField('tslot_to_all');
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $frm->getFieldHtml('tslot_to_all'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="field-set">
@@ -500,7 +459,8 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
 </div>
 
 <script language="javascript">
-$(document).ready(function() {
+    var DAY_SUNDAY = <?php echo TimeSlot::DAY_SUNDAY; ?>;
+    $(document).ready(function() {
     getCountryStates($("#addr_country_id").val(), <?php echo ($stateId) ? $stateId : 0; ?>, '#addr_state_id');
 
     addTimeSlotRow = function(day) {
@@ -530,10 +490,10 @@ $(document).ready(function() {
             '</i></button>';
 
         var html = "<div class='row row-" + count + " js-added-rows-" + day +
-            "'><div class='col-md-2'></div><div class='col-md-4 js-from_time_" + day + "'>" + fromTimeHtml +
+            "'><div class='col-md-2 jsWeekDay"+ ($(".availabilityType-js:checked").val() == 2 ?' d-none':'')   +" '></div><div class='col-md-4 js-from_time_" + day + "'>" + fromTimeHtml +
             "</div><div class='col-md-4 js-to_time_" + day + "'>" + toTimeHtml +
-            "</div><div class='col-md-2'><div class='field-set'><div class='caption-wraper'><label class='field_label'></label></div><div class='field-wraper'><div class='field_cover btn-group'><button class='btn btn-outline-brand btn-sm' type='button' name='btn_remove_row' data-day='" +
-            day + "'><i class='fas fa-minus'></i></button>" + addRowBtnHtml +
+            "</div><div class='col-md-2'><div class='field-set'><div class='caption-wraper'><label class='field_label'></label></div><div class='field-wraper'><div class='field_cover'><button class='btn btn-outline-brand btn-sm' type='button' name='btn_remove_row' data-day='" +
+            day + "'><i class='icn'><svg class='svg' width='16px' height='16px'><use xlink:href='<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus'></svg></i></button>&nbsp;" + addRowBtnHtml +
             "</div></div></div></div></div>";
 
         $(".js-from_time_" + day).last().parent().after(html);
@@ -553,12 +513,15 @@ $(document).ready(function() {
         if ($(ele).prop("checked") == true) {
             $(".js-slot-from-" + day).removeAttr('disabled');
             $(".js-slot-to-" + day).removeAttr('disabled');
+                $(".addRowBtnBlock"+day+"-js").removeClass('d-none');
             displayAddRowField(day, ele);
         } else {
             $(".js-slot-from-" + day).attr('disabled', 'true');
             $(".js-slot-to-" + day).attr('disabled', 'true');
             $(".js-slot-add-" + day).addClass('d-none');
-            $(".js-added-rows-" + day).remove();
+                /*$(".js-added-rows-" + day).remove();*/
+                $(".jsDay-" + day).find("[name='btn_remove_row']").trigger('click');
+                $(".addRowBtnBlock"+day+"-js").addClass('d-none');
         }
     }
 
@@ -634,11 +597,12 @@ $(document).ready(function() {
     displaySlotTimings = function(ele) {
         var selectedVal = $(ele).val();
         if (selectedVal == 2) {
-            $('.js-slot-individual').addClass('d-none');
-            $('.js-slot-all').removeClass('d-none');
+                $('.js-slot-individual .row').addClass('d-none');
+                $('.js-slot-individual .jsDay-' + DAY_SUNDAY + ' .jsWeekDay').addClass('d-none');
+                $('.js-slot-individual .jsDay-' + DAY_SUNDAY).removeClass('d-none');
         } else {
-            $('.js-slot-all').addClass('d-none');
-            $('.js-slot-individual').removeClass('d-none');
+                $('.js-slot-individual .row').removeClass('d-none');
+                $('.js-slot-individual .jsDay-' + DAY_SUNDAY + ' .jsWeekDay').removeClass('d-none');
         }
     }
 
@@ -659,6 +623,7 @@ $(document).ready(function() {
             $("[name='tslot_to_all']").removeClass('error');
         }
     }
+        $('.availabilityType-js:checked').trigger('change');
 });
 
 $(document).on("click", "[name='btn_remove_row']", function() {

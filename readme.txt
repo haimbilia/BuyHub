@@ -198,6 +198,7 @@ Updates/Fixes :
     => 057112 - Seller: JSON error is receiving while adding the inventory for the Admin's products
     => 057113 - on submitting product review getting error 
     => 057109 - Buyer: Records are created in the "Reward Points" section with 0 value while placing an order
+    => 057115 - Seller and Admin: "+" button is not showing while adding the pickup address' for "All days"
 
 New Features:  
     => Admin shipped products listing page

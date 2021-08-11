@@ -5631,11 +5631,7 @@ class SellerController extends SellerBaseController
                 $timeSlots = $timeSlot->timeSlotsByAddrId($addrId);
 
                 $timeSlotsRow = current($timeSlots);
-                $availability = isset($timeSlotsRow['tslot_availability']) ? $timeSlotsRow['tslot_availability'] : $availability;
-                if ($availability == TimeSlot::DAY_ALL_DAYS) {
-                    $data['tslot_from_all'] = date('H:i', strtotime($timeSlotsRow['tslot_from_time']));
-                    $data['tslot_to_all'] = date('H:i', strtotime($timeSlotsRow['tslot_to_time']));
-                }
+                $availability = isset($timeSlotsRow['tslot_availability']) ? $timeSlotsRow['tslot_availability'] : $availability;                
                 $data['tslot_availability'] = $availability;
                 $frm->fill($data);
                 if (!empty($timeSlots)) {
@@ -5731,9 +5727,6 @@ class SellerController extends SellerBaseController
             //$frm->addButton('', 'btn_add_row['.$i.']', '+');
         }
 
-        $frm->addSelectBox(Labels::getLabel('LBL_From', $this->siteLangId), 'tslot_from_all', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
-        $frm->addSelectBox(Labels::getLabel('LBL_To', $this->siteLangId), 'tslot_to_all', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
-
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         $fldCancel = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $this->siteLangId));
         return $frm;
@@ -5749,24 +5742,19 @@ class SellerController extends SellerBaseController
         $availability = FatApp::getPostedData('tslot_availability', FatUtility::VAR_INT, 1);
 
         $addrStateId = FatUtility::int($post['addr_state_id']);
-
-        $slotFromAll = '';
-        $slotToAll = '';
-        $slotDays = [];
-        if ($availability == TimeSlot::DAY_ALL_DAYS) {
-            $slotFromAll = $post['tslot_from_all'];
-            $slotToAll = $post['tslot_to_all'];
-        } else {
             $slotDays = isset($post['tslot_day']) ? $post['tslot_day'] : array();
             $slotFromTime = $post['tslot_from_time'];
             $slotToTime = $post['tslot_to_time'];
-        }
 
         $frm = $this->getPickUpAddressForm($post['addr_id']);
         $postedData = $frm->getFormDataFromArray($post);
         if (false === $postedData) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
+        }
+
+        if($availability == TimeSlot::DAY_ALL_DAYS  && !isset($slotFromTime[TimeSlot::DAY_SUNDAY])){           
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
 
         $addressId = $post['addr_id'];
@@ -5820,23 +5808,27 @@ class SellerController extends SellerBaseController
             }
         }
 
-        if ($availability == TimeSlot::DAY_ALL_DAYS && !empty($slotFromAll) && !empty($slotToAll)) {
+        if (!empty($slotDays) && $availability == TimeSlot::DAY_ALL_DAYS) {
             $daysArr = TimeSlot::getDaysArr($this->siteLangId);
-            for ($i = 0; $i < count($daysArr); $i++) {
-                $slotData['tslot_type'] = Address::TYPE_SHOP_PICKUP;
-                $slotData['tslot_availability'] = $availability;
-                $slotData['tslot_record_id'] = $addrId;
-                $slotData['tslot_day'] = $i;
-                $slotData['tslot_from_time'] = $slotFromAll;
-                $slotData['tslot_to_time'] = $slotToAll;
-                $timeSlot = new TimeSlot();
-                $timeSlot->assignValues($slotData);
-                if (!$timeSlot->save()) {
-                    if (true === MOBILE_APP_API_CALL) {
-                        LibHelper::dieJsonError($timeSlot->getError());
+            foreach ($daysArr as $day => $label) {
+                foreach ($slotFromTime[TimeSlot::DAY_SUNDAY] as $key => $fromTime) {
+                    if (!empty($fromTime) && !empty($slotToTime[TimeSlot::DAY_SUNDAY][$key])) {
+                        $slotData['tslot_type'] = Address::TYPE_SHOP_PICKUP;
+                        $slotData['tslot_availability'] = $availability;
+                        $slotData['tslot_record_id'] = $addrId;
+                        $slotData['tslot_day'] = $day;
+                        $slotData['tslot_from_time'] = $fromTime;
+                        $slotData['tslot_to_time'] = $post['tslot_to_time'][TimeSlot::DAY_SUNDAY][$key];
+                        $timeSlot = new TimeSlot();
+                        $timeSlot->assignValues($slotData);
+                        if (!$timeSlot->save()) {
+                            if (true === MOBILE_APP_API_CALL) {
+                                LibHelper::dieJsonError($timeSlot->getError());
+                            }
+                            Message::addErrorMessage($timeSlot->getError());
+                            FatUtility::dieJsonError(Message::getHtml());
+                        }
                     }
-                    Message::addErrorMessage($timeSlot->getError());
-                    FatUtility::dieJsonError(Message::getHtml());
                 }
             }
         }
