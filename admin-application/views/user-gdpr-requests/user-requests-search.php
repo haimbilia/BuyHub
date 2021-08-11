@@ -59,29 +59,26 @@ foreach ($arrListing as $sn => $row) {
 
                 break;
             case 'action':
-                $ul = $td->appendElement("ul", array("class" => "actions actions--centered"));
                 if ($canEdit) {
                     if ($row['ureq_status'] == UserGdprRequest::STATUS_PENDING) {
-                        $li = $ul->appendElement("li", array('class' => 'droplink'));
-                        $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $adminLangId)), '<i class="ion-android-more-horizontal icon"></i>', true);
-                        $innerDiv = $li->appendElement('div', array('class' => 'dropwrap'));
-                        $innerUl = $innerDiv->appendElement('ul', array('class' => 'linksvertical'));
+                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_COMPLETE', $adminLangId), "onclick" => "updateRequestStatus(" . $row['ureq_id'] . "," . UserGdprRequest::STATUS_COMPLETE . ")"), "<i class='far fa-calendar-check'></i>", true);
 
                         if ($row['ureq_type'] == UserGdprRequest::TYPE_TRUNCATE) {
-                            $innerLi = $innerUl->appendElement('li');
-                            $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Truncate_User_Data', $adminLangId), "onclick" => "truncateUserData(" . $row['user_id'] . "," . $row['ureq_id'] . ")"), Labels::getLabel('LBL_Truncate_User_Data', $adminLangId), true);
+                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Truncate_User_Data', $adminLangId), "onclick" => "truncateUserData(" . $row['user_id'] . "," . $row['ureq_id'] . ")"), "<i class='fas fa-user-times'></i>", true);                            
                         }
 
-                        //if( $row['ureq_type'] == UserGdprRequest::TYPE_DATA_REQUEST ){
-                        $innerLi = $innerUl->appendElement('li');
-                        $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Change_Status_To_Complete', $adminLangId), "onclick" => "updateRequestStatus(" . $row['ureq_id'] . "," . UserGdprRequest::STATUS_COMPLETE . ")"), Labels::getLabel('LBL_Complete', $adminLangId), true);
+                        if( $row['ureq_type'] == UserGdprRequest::TYPE_DATA_REQUEST ){
 
-                        $innerLi = $innerUl->appendElement('li');
-                        $innerLi->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_View', $adminLangId), "onclick" => "viewRequestPurpose(" . $row['ureq_id'] . ")"), Labels::getLabel('LBL_View', $adminLangId), true);
-                        //}
+                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_View', $adminLangId), "onclick" => "viewRequestPurpose(" . $row['ureq_id'] . ")"), "<i class='far fa-eye icon'></i>", true);
+                            
+                        }
+
+                        
 
                         /* $innerLi=$innerUl->appendElement('li');
 						$innerLi->appendElement('a', array('href'=>'javascript:void(0)','class'=>'button small green','title'=>Labels::getLabel('LBL_Delete_Request',$adminLangId),"onclick"=>"deleteUserRequest(".$row['ureq_id'].")"),Labels::getLabel('LBL_Delete_Request',$adminLangId), true); */
+                    } else {
+                        $td->appendElement('plaintext', array(), Labels::getLabel('MSG_N/A', $adminLangId), true);
                     }
                 }
                 break;

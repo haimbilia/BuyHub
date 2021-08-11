@@ -201,6 +201,7 @@ Updates/Fixes :
     => 057117 - Seller and Admin: Shipping packages' details are not showing on the Order details page with the Product
     => 057145 - Seller: Suggestion to dont allow the seller to add a Special Price greater than the Current Price
     => 057160 - Uncaught TypeError: Cannot set property scrollTop of undefined
+    => 057144 - Admin: "Complete" option is showing in the "User Gdpr Requests" section when the seller "Request to Remove My Data"
 
 New Features:  
     => Admin shipped products listing page
