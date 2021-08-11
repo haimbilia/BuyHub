@@ -102,6 +102,8 @@ class FaqController extends AdminBaseController
             $srch = Faq::getSearchObject($this->adminLangId);
             $srch->addCondition('faq_faqcat_id', '=', $faqcat_id);
             $srch->addCondition('faq_id', '=', $faq_id);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $data = FatApp::getDb()->fetch($rs);
             if ($data === false) {

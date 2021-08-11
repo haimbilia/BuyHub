@@ -179,7 +179,7 @@ class OrderReturnRequestsController extends AdminBaseController
         );
         $srch->addCondition('orrequest_id', '=', $orrequest_id);
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $requestRow = FatApp::getDb()->fetch($rs);
         
@@ -290,7 +290,7 @@ class OrderReturnRequestsController extends AdminBaseController
         $srch->joinSellerProducts();
         $srch->joinOrderReturnReasons();
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $srch->addMultipleFields(array('orrequest_id', 'orrequest_status', 'orrequest_user_id' ));
         $rs = $srch->getResultSet();
         $requestRow = FatApp::getDb()->fetch($rs);
@@ -368,7 +368,7 @@ class OrderReturnRequestsController extends AdminBaseController
         $cnd = $srch->addCondition('orrequest_status', '=', OrderReturnRequest::RETURN_REQUEST_STATUS_PENDING);
         $cnd->attachCondition('orrequest_status', '=', OrderReturnRequest::RETURN_REQUEST_STATUS_ESCALATED);
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $srch->addMultipleFields(array('orrequest_id', 'op_id', 'orrequest_qty', 'order_language_id', 'orrequest_user_id', 'order_pmethod_id'));
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);

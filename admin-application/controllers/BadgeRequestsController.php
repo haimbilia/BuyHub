@@ -89,6 +89,8 @@ class BadgeRequestsController extends AdminBaseController
 
         if (0 < $badgeReqId) {
             $srch = $this->getRequestedBadgeObj();
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $srch->addCondition('breq_id', '=', $badgeReqId);
             $requestedBadge = FatApp::getDb()->fetch($srch->getResultSet());
             if ($requestedBadge === false) {

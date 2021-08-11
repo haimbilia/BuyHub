@@ -640,7 +640,7 @@ class CollectionsController extends AdminBaseController
             $srch->addCondition('banner_id', '=', $bannerId);
             $srch->addOrder('banner_active', 'DESC');
             $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $data = FatApp::getDb()->fetch($rs);
             if ($data === false) {

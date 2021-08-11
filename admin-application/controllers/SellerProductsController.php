@@ -198,6 +198,8 @@ class SellerProductsController extends AdminBaseController
             $urlSrch->doNotLimitRecords();
             $urlSrch->addFld('urlrewrite_custom');
             $urlSrch->addCondition('urlrewrite_original', '=', 'products/view/' . $selprod_id);
+            $urlSrch->doNotCalculateRecords();
+            $urlSrch->setPageSize(1);
             $rs = $urlSrch->getResultSet();
             $urlRow = FatApp::getDb()->fetch($rs);
             if ($urlRow) {
@@ -291,6 +293,7 @@ class SellerProductsController extends AdminBaseController
         $srch->addFld('splprice_price');
         $srch->addOrder('splprice_price', 'DESC');
         $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
         $result = $db->fetch($rs);
@@ -1971,7 +1974,7 @@ class SellerProductsController extends AdminBaseController
         $srch->addCondition('tucr.scatrequest_user_id', '=', UserAuthentication::getLoggedUserId());
         $srch->addMultipleFields(array('scatrequest_id', 'scatrequest_title', 'scatrequest_content', 'scatrequest_comments', 'scatrequest_reference'));
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
 
         $rs = $srch->getResultSet();
         if ($rs == false) {
@@ -1998,6 +2001,8 @@ class SellerProductsController extends AdminBaseController
         $userObj = new User();
         $srch = $userObj->getUserSupplierRequestsObj($requestId);
         $srch->addFld('tusr.*');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
 
         $rs = $srch->getResultSet();
 
@@ -2089,7 +2094,7 @@ class SellerProductsController extends AdminBaseController
         $srch = new CatalogRequestSearch($this->adminLangId);
         $srch->addCondition('scatrequest_id', '=', $requestId);
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $srch->addMultipleFields(array('scatrequest_id', 'scatrequest_status'));
         $rs = $srch->getResultSet();
         $requestRow = FatApp::getDb()->fetch($rs);
@@ -2149,7 +2154,7 @@ class SellerProductsController extends AdminBaseController
         $srch->addCondition('tucr.scatrequest_status', '=', 0);
         $srch->addMultipleFields(array('scatrequest_id', 'scatrequest_status'));
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
 
         $rs = $srch->getResultSet();
 

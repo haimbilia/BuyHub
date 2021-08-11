@@ -214,6 +214,8 @@ class LanguagesController extends AdminBaseController
         if ($status == applicationConstants::INACTIVE && ($languageId == FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1) || $languageId ==  FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1))) {
             $srch = Language::getSearchObject();
             $srch->addFld('language_id');
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $firstActivelangData = FatApp::getDb()->fetch($srch->getResultSet());
             if (!empty($firstActivelangData)) {                
                 $configuration = new Configurations();

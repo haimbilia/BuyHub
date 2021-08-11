@@ -145,7 +145,7 @@ trait ApiOrders
         $opSrch->joinTable(OrderProduct::DB_TBL_RESPONSE, 'LEFT JOIN', 'op.op_id = opr.opr_op_id', 'opr');
         $opSrch->joinTable(OrderProductShipment::DB_TBL, 'LEFT JOIN', 'opship.opship_op_id = op.op_id', 'opship');
         $opSrch->doNotCalculateRecords();
-        $opSrch->doNotLimitRecords();
+        $opSrch->setPageSize(1);
         $opSrch->addCondition('op.op_id', '=', $opId);
         $opSrch->addCondition('op_selprod_user_id', '=', $this->userId);
         $opSrch->addCondition('oshistory_orderstatus_id', '=', OrderStatus::ORDER_SHIPPED);
@@ -205,7 +205,7 @@ trait ApiOrders
             'op_status_id'
         ]);
         $opSrch->setPageSize(1);
-
+        $opSrch->doNotCalculateRecords();    
         $opRs = $opSrch->getResultSet();
         $orderStatus = FatApp::getDb()->fetch($opRs);
 

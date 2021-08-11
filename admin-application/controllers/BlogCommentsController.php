@@ -79,6 +79,8 @@ class BlogCommentsController extends AdminBaseController
         }
         $frm = $this->getForm($bpcomment_id);
         $srch = BlogComment::getSearchObject(true, $this->adminLangId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $srch->addCondition('bpcomment_id', '=', $bpcomment_id);
         $data = FatApp::getDb()->fetch($srch->getResultSet());
         if ($data === false) {
@@ -123,6 +125,8 @@ class BlogCommentsController extends AdminBaseController
 
         if ($oldData['bpcomment_approved'] != $post['bpcomment_approved']) {
             $srch = BlogComment::getSearchObject(true, $this->adminLangId);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $srch->addCondition('bpcomment_id', '=', $bpcomment_id);
             $newData = FatApp::getDb()->fetch($srch->getResultSet());
             $this->sendEmail($newData);
