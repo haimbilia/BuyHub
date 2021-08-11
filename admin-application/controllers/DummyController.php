@@ -152,6 +152,12 @@ class DummyController extends AdminBaseController
         // $resp = $plugin->fetchTrackingDetail();
         $plugin->proceedToShipment(['op_id' => 495]);
         echo $plugin->getError();
-        CommonHelper::printArray($this->getResponse());
+        CommonHelper::printArray($plugin->getResponse());
     }
+
+    public function test()
+    {
+        echo $comments = sprintf(Labels::getLabel('LBL_ORDER_%S._CANCEL_REQUEST_APPROVED', 1), '#Opopopad');
+    }
+
 }
