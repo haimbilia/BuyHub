@@ -53,7 +53,7 @@ if (!empty($data) && 0 < count($data)) {
                     <div class="field-set">
                         <div class="field-wraper">
                             <?php echo $frm->getFieldHtml('product_name'); ?>
-                            <div class="js-prod-price"></div>
+                            <div class="form-text text-muted js-prod-price"></div>
                         </div>
                     </div>
                 </div>

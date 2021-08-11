@@ -862,6 +862,7 @@
 
   function getAdjustedSizes(_ref4) // or 'cover'
   {
+      console.log(_ref4);
     var aspectRatio = _ref4.aspectRatio,
         height = _ref4.height,
         width = _ref4.width;

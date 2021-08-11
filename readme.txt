@@ -193,8 +193,14 @@ Updates/Fixes :
     => 056948 - Web Buyer: Getting a "404 error" while clicking on the "Open a Store" button on the front end
     => 057017 - importing seller products in german getting error invalid csv column
     => 057091 - Buyer: Suggestion to make the Brands name clickable on the Product details page at the buyers end
-    => 057089 - Admin: Suggestion to override the images while uploading multiple images because we are showing only one image for the Brands at the buyers end
-    => 057045 - Seller: Shipping Packages icon is missing in the menu list
+    => 057089 - Admin: Suggestion to override the images while uploading multiple images because we are showing only one image for the Brands at the buyers end    => 057045 - Seller: Shipping Packages icon is missing in the menu list
+
+===========================TV-9.3.2.20210810==================
+    => 057137 - Getting error while stripe connect transfer seller part
+    => 057130 - Admin, Seller, and Buyer: Suggestion to give an "option" to Redirect to the Order details page on the Cancelled and Returned requests list
+    => 057117 - Seller and Admin: Shipping packages' details are not showing on the Order details page with the Product
+    => 057145 - Seller: Suggestion to dont allow the seller to add a Special Price greater than the Current Price
+    => 057160 - Uncaught TypeError: Cannot set property scrollTop of undefined
     => 057112 - Seller: JSON error is receiving while adding the inventory for the Admin's products
     => 057113 - on submitting product review getting error 
     => 057109 - Buyer: Records are created in the "Reward Points" section with 0 value while placing an order
