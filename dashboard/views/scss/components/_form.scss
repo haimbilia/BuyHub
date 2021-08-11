@@ -163,7 +163,8 @@
     }
     [type="button"] {
         @include submit;
-        border-color: inherit;
+        // border-color: inherit;
+        min-width: 60px;
     }
     [type="reset"] {
         @include submit;
