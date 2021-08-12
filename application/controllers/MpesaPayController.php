@@ -85,6 +85,7 @@ class MpesaPayController extends PaymentController
 
         $phoneNumber = FatApp::getPostedData('customerPhone', FatUtility::VAR_INT, 0);
         if (0 < $phoneNumber) {
+            $this->paymentInitiated($orderId);
             if (false === $this->plugin->STKPushSimulation($orderId, $paymentAmount, $phoneNumber, $orderId)) {
                 $this->setErrorAndRedirect($this->plugin->getError(), FatUtility::isAjaxCall());
             }
