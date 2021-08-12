@@ -101,6 +101,7 @@ class StripePayController extends PaymentController
 
             if (!empty($_POST['cc_number']) && 1 < count($_POST)) {
                 $charge = $this->stripeAuthentication($orderId);
+                $this->paymentInitiated($orderId);
                 if (isset($charge['id']) && $charge['id']) {
                     $payment_method = \Stripe\PaymentMethod::create([
                         'type' => 'card',
