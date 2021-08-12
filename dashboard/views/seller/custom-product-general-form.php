@@ -384,7 +384,7 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
         });
 
         $('input[name=\'category_name\']').autocomplete({
-            minLength: 2,
+            minLength: 0,
             'classes': {
                 "ui-autocomplete": "custom-ui-autocomplete"
             },
@@ -411,6 +411,8 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
             'select': function(event, ui) {
                 $("input[name='ptc_prodcat_id']").val(ui.item.id);
             }
+        }).focus(function() {
+            $('input[name=\'category_name\']').autocomplete('search');
         });
 
         $('input[name=\'category_name\']').change(function() {
@@ -420,6 +422,7 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
         });
 
         $('input[name=\'taxcat_name\']').autocomplete({
+            minLength: 0,
             'classes': {
                 "ui-autocomplete": "custom-ui-autocomplete"
             },
@@ -446,6 +449,8 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
             select: function(event, ui) {
                 $('input[name=\'ptt_taxcat_id\']').val(ui.item.id);
             }
+        }).focus(function() {
+            $('input[name=\'taxcat_name\']').autocomplete('search');
         });
 
         var attachDownloadsWithInv = '<?php echo $attachDownloadsWithInv;?>';

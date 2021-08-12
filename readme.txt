@@ -209,6 +209,7 @@ Updates/Fixes :
     => 057171 - Buyer: Suggestion to show the "Order ID" with cancelled order under the "My Credit" section
     => 057177 - Buyer: Suggestion to show the "Return Order Age" in the Order details page at the buyers end
     => 057166 - Buyer: "Share and Earn" functionality is not working properly
+    => 057221 - Seller: "Categories and Tax Categories" listing is not showing when sellers click on these fields but, for brand listing is showing
 
 New Features:  
     => Admin shipped products listing page
