@@ -724,6 +724,13 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
+        $oldStatus = OrderProduct::getAttributesById($op_id, 'op_status_id');
+        if ($status == $oldStatus) {
+            $msg = current(OrderStatus::getAttributesByLangId($this->siteLangId, $status, ['COALESCE(orderstatus_name, orderstatus_identifier) as orderstatus_name'], true));
+            Message::addErrorMessage(sprintf(Labels::getLabel('MSG_ALREADY_%S', $this->siteLangId), $msg));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+
         $oCancelRequestSrch = new OrderCancelRequestSearch();
         $oCancelRequestSrch->doNotCalculateRecords();
         $oCancelRequestSrch->doNotLimitRecords();
@@ -869,16 +876,13 @@ class SellerController extends SellerBaseController
             $orderProducts->addCondition('op_order_id', '=', $orderDetail['order_id']);
             $orderProducts->addCondition('op_status_id', '!=', OrderStatus::ORDER_DELIVERED);
             $orderProducts->addCondition('op_status_id', '!=', OrderStatus::ORDER_COMPLETED);
-            $rs = $orderProducts->getResultSet();
-            if ($rs) {
-                $childOrders = FatApp::getDb()->fetchAll($rs);
-                if (empty($childOrders)) {
-                    $updateArray = array('order_payment_status' => Orders::ORDER_PAYMENT_PAID);
-                    $whr = array('smt' => 'order_id = ?', 'vals' => array($orderDetail['order_id']));
-                    if (!FatApp::getDb()->updateFromArray(Orders::DB_TBL, $updateArray, $whr)) {
-                        Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-                        FatUtility::dieJsonError(Message::getHtml());
-                    }
+            $childOrders = FatApp::getDb()->fetchAll($orderProducts->getResultSet());
+            if (empty($childOrders)) {
+                $updateArray = array('order_payment_status' => Orders::ORDER_PAYMENT_PAID);
+                $whr = array('smt' => 'order_id = ?', 'vals' => array($orderDetail['order_id']));
+                if (!FatApp::getDb()->updateFromArray(Orders::DB_TBL, $updateArray, $whr)) {
+                    Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+                    FatUtility::dieJsonError(Message::getHtml());
                 }
             }
         }

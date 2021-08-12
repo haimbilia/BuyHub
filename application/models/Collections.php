@@ -475,6 +475,8 @@ class Collections extends MyAppModel
         $srch->addCondition('collection_deleted', '=', applicationConstants::NO);
         $srch->addCondition('collection_id', '=', $collection_id);
         $srch->addFld('collection_id');
+        $srch->doNotCalculateRecords();        
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row) && $row['collection_id'] == $collection_id) {

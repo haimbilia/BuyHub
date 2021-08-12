@@ -17,7 +17,7 @@ class ReviewsController extends MyAppController
         $prodSrch->addSubscriptionValidCondition();
         $prodSrch->joinProductToCategory();
         $prodSrch->doNotCalculateRecords();
-        $prodSrch->doNotLimitRecords();
+        $prodSrch->setPageSize(1);
         $prodSrch->addCondition('selprod_id', '=', $selprod_id);
         $productRs = $prodSrch->getResultSet();
         $product = FatApp::getDb()->fetch($productRs);
@@ -31,7 +31,7 @@ class ReviewsController extends MyAppController
         $selProdReviewObj->joinSelProdRating();
         $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
         $selProdReviewObj->doNotCalculateRecords();
-        $selProdReviewObj->doNotLimitRecords();
+        $selProdReviewObj->setPageSize(1);
         $selProdReviewObj->addGroupBy('spr.spreview_product_id');
         $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $selProdReviewObj->addCondition('spreview_product_id', '=', $product['product_id']);
@@ -160,7 +160,7 @@ class ReviewsController extends MyAppController
         /* sub query to find out that logged user have marked current shop as favorite or not[ */
         $favSrchObj = new UserFavoriteShopSearch();
         $favSrchObj->doNotCalculateRecords();
-        $favSrchObj->doNotLimitRecords();
+        $favSrchObj->setPageSize(1);
         $favSrchObj->addMultipleFields(array('ufs_shop_id', 'ufs_id'));
         $favSrchObj->addCondition('ufs_user_id', '=', $loggedUserId);
         $favSrchObj->addCondition('ufs_shop_id', '=', $shop_id);
@@ -196,6 +196,8 @@ class ReviewsController extends MyAppController
         $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $selProdReviewObj->addCondition('spreview_seller_user_id', '=', $shop['shop_user_id']);
         $selProdReviewObj->addMultipleFields(array('spr.spreview_seller_user_id', 'count(*) as totReviews', "ROUND(AVG(seller_rating),2) as avg_seller_rating", 'sum(if(round(seller_rating)=1,1,0)) rated_1', 'sum(if(round(seller_rating)=2,1,0)) rated_2', 'sum(if(round(seller_rating)=3,1,0)) rated_3', 'sum(if(round(seller_rating)=4,1,0)) rated_4', 'sum(if(round(seller_rating)=5,1,0)) rated_5'));
+        $selProdReviewObj->doNotCalculateRecords();
+        $selProdReviewObj->setPageSize(1);
         //echo $selProdReviewObj->getQuery();exit;
         $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
         $this->set('reviews', $reviews);
@@ -341,7 +343,7 @@ class ReviewsController extends MyAppController
         $prodSrch->addSubscriptionValidCondition();
         $prodSrch->joinProductToCategory();
         $prodSrch->doNotCalculateRecords();
-        $prodSrch->doNotLimitRecords();
+        $prodSrch->setPageSize(1);
         $prodSrch->addCondition('selprod_id', '=', $selprod_id);
         $productRs = $prodSrch->getResultSet();
         $product = FatApp::getDb()->fetch($productRs);
@@ -387,7 +389,8 @@ class ReviewsController extends MyAppController
         $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $srch->addMultipleFields(array('spreview_id', 'spreview_selprod_id', "ROUND(AVG(sprating_rating),2) as prod_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked'));
         $srch->addCondition('spr.spreview_id', '=', $reviewId);
-
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $reviewHelpfulData = FatApp::getDb()->fetch($srch->getResultSet());
 
         
@@ -428,6 +431,7 @@ class ReviewsController extends MyAppController
             )
         );
         $srch->addCondition('shop_user_id', '=', $sellerId);
+        $srch->setPageSize(1);
         $shopRs = $srch->getResultSet();
         $shop = $db->fetch($shopRs);
 
@@ -482,6 +486,8 @@ class ReviewsController extends MyAppController
         $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $srch->addMultipleFields(array('spreview_id', 'spreview_seller_user_id', "ROUND(AVG(seller_rating),2) as shop_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked'));
         $srch->addCondition('spr.spreview_id', '=', $reviewId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
 
         $reviewHelpfulData = FatApp::getDb()->fetch($srch->getResultSet());
 
