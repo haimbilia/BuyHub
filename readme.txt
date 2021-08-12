@@ -209,6 +209,7 @@ Updates/Fixes :
     => 057171 - Buyer: Suggestion to show the "Order ID" with cancelled order under the "My Credit" section
     => 057177 - Buyer: Suggestion to show the "Return Order Age" in the Order details page at the buyers end
     => 057166 - Buyer: "Share and Earn" functionality is not working properly
+    => 057238 - Buyer: Order ID is not showing with the "Earned Reward Points On Purchase" under the reward points section
 
 New Features:  
     => Admin shipped products listing page

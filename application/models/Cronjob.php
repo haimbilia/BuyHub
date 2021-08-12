@@ -343,7 +343,7 @@ class Cronjob extends FatModel
             return false;
         }
 
-        $urpComments = Labels::getLabel("LBL_Earned_Reward_Points_On_Purchase.", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+        $urpComments = CommonHelper::replaceStringData(Labels::getLabel("LBL_EARNED_REWARD_POINTS_ON_PURCHASE_OF_ORDER_ID_{ORDER-ID}", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)), ['{ORDER-ID}' => $orderId]);
         $expiryDate = date('Y-m-d', strtotime(date('Y-m-d') . ' +' . FatApp::getConfig('CONF_REWARDS_VALIDITY_ON_PURCHASE') . 'days'));
 
         $rewardsRecord = new UserRewards();
