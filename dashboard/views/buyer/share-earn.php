@@ -27,14 +27,6 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             <p>
                                 <?php echo Labels::getLabel('LBL_INVITE_YOUR_FRIENDS_TO_JOIN_TRIBE_AND_EARN_ONCE_THEY_SIGNUP.', $siteLangId); ?>
                             </p>
-                            <ul class="points">
-                                <li><span class="badge yellow"></span>
-                                    <?php echo sprintf(Labels::getLabel('LBL_TOTAL_INVITES_SENT_:_%S', $siteLangId), 2); ?>
-                                </li>
-                                <li><span class="badge green"></span>
-                                    <?php echo sprintf(Labels::getLabel('LBL_TOTAL_POINTS_EARNED_:_%S', $siteLangId), 100); ?>
-                                </li>
-                            </ul>
                         </div>
                         <div class="invite-by-email">
                             <form id="" class="form form--inline form--fly">
@@ -47,16 +39,11 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             </form>
                         </div>
                         <ul class="social-invites ">
-                            <li><a href="javascript:;" data-url="" data-val="" data-code="" title="Copy link"
+                            <li><a href="javascript:;" title="<?php echo $referralTrackingUrl; ?>"
+                                    onclick="copy($(this))" data-url="" data-val="" data-code="" title="Copy link"
                                     class="btn"><span class="icon"><i class="svg--icon"><svg class="svg">
                                                 <use
                                                     xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icon_link">
-                                                </use>
-                                            </svg></i></span></a></li>
-                            <li><a href="javascript:void(0)" class="share-network-email"><span class="icon"><i
-                                            class="svg--icon"><svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-email"
-                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-email">
                                                 </use>
                                             </svg></i></span></a></li>
                             <li><a href="javascript:void(0)" class="share-network-facebook"><span class="icon"><i
@@ -104,59 +91,11 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         </ul>
                     </div>
 
-                    <div class="row justify-content-center mt-5">
-                        <div class="col-md-7">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th><?php echo Labels::getLabel('LBL_INVITE_TYPE', $siteLangId); ?></th>
-                                        <th><?php echo Labels::getLabel('LBL_NAME/Email/PHONE', $siteLangId); ?></th>
-                                        <th><?php echo Labels::getLabel('LBL_DATE', $siteLangId); ?></th>
-                                        <th><?php echo Labels::getLabel('LBL_STATUS', $siteLangId); ?></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Email</td>
-                                        <td><span>tina@dummyid.com</span></td>
-                                        <td>01-04-2021</td>
-                                        <td>
-                                            Invitation Sent
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Email</td>
-                                        <td><span>jimmy@dummyid.com</span></td>
-                                        <td>01-04-2021</td>
-                                        <td>
-                                            Invitation Sent
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
                 </div>
             </div>
 
-            <div class="share-earn mb-4">
-                <div class="share-earn-block">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title">
-                                <?php echo Labels::getLabel('LBL_Share_with_your_friends_and_you_both_earn_reward_points', $siteLangId) ?>
-                            </h5>
-                        </div>
-                        <div class="card-body ">
-                            <div class="stats">
-                                <a href="javascript:void(0)" class="btn btn-outline-brand btn-sm"
-                                    title="<?php echo $referralTrackingUrl; ?>"
-                                    onclick="copy($(this))"><?php echo Labels::getLabel('LBL_Click_to_copy', $siteLangId) ?></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <?php /* <div class="share-earn mb-4">
+               
                 <?php if (!empty(FatApp::getConfig("CONF_FACEBOOK_APP_ID")) && !empty(FatApp::getConfig("CONF_FACEBOOK_APP_SECRET"))) { ?>
                 <div class="share-earn-block">
                     <a id="facebook_btn" href="javascript:void(0);" class="box--share box--share-fb">
@@ -211,7 +150,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 id="custom_ajax"></span></div>
                     </div>
                 </div>
-            </div>
+            </div> */ ?>
         </div>
     </div>
 </main>
