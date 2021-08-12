@@ -13,6 +13,8 @@ class CmsController extends MyAppController
         $srch = ContentPage::getSearchObject($this->siteLangId);
         $srch->addMultipleFields(array('cpage_id', 'IFNULL(cpage_title, cpage_identifier) as cpage_title', 'cpage_layout', 'cpage_image_title', 'cpage_image_content', 'cpage_content' ));
         $srch->addCondition('cpage_id', '=', $cPageId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $cPage = FatApp::getDb()->fetch($srch->getResultset());
         if ($cPage == false) {
             FatUtility::exitWithErrorCode(404);

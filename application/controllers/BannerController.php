@@ -237,6 +237,8 @@ class BannerController extends MyAppController
         $db = FatApp::getDb();
         $bannerSrch = Banner::getBannerLocationSrchObj(true);
         /* $bannerSrch->addCondition('blocation_key', '=', $type); */
+        $bannerSrch->doNotCalculateRecords();
+        $bannerSrch->setPageSize(1);
         $rs = $bannerSrch->getResultSet();
         $bannerLocation = $db->fetch($rs);
 

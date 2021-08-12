@@ -1,0 +1,1 @@
+<?php require_once CONF_FRONT_END_THEME_PATH . '_partial/shareThisScript.php';
