@@ -205,6 +205,10 @@ Updates/Fixes :
     => 057113 - on submitting product review getting error 
     => 057109 - Buyer: Records are created in the "Reward Points" section with 0 value while placing an order
     => 057115 - Seller and Admin: "+" button is not showing while adding the pickup address' for "All days"
+    => 057144 - Admin: "Complete" option is showing in the "User Gdpr Requests" section when the seller "Request to Remove My Data"
+    => 057171 - Buyer: Suggestion to show the "Order ID" with cancelled order under the "My Credit" section
+    => 057177 - Buyer: Suggestion to show the "Return Order Age" in the Order details page at the buyers end
+    => 057166 - Buyer: "Share and Earn" functionality is not working properly
 
 New Features:  
     => Admin shipped products listing page

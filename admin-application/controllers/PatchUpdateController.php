@@ -54,6 +54,8 @@ class PatchUpdateController extends AdminBaseController
             $srch = TaxRuleLocation::getSearchObject();
             $srch->addCondition('taxruleloc_taxcat_id', '=', $taxCatId);
             $srch->addCondition('taxruleloc_to_country_id', '=', $countryId);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $res = $srch->getResultSet();
             $locationsData = FatApp::getDb()->fetch($res);
             if ($locationsData == false) {

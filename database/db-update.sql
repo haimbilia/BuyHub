@@ -316,7 +316,7 @@ SET afile.afile_record_id = pddr_id;
 DROP VIEW IF EXISTS pddr_files_view;
 --  Process links stored in tbl_seller_products table (selprod_downloadable_link) ---
 
-UPDATE tbl_seller_products SET selprod_downloadable_link = REPLACE(selprod_downloadable_link,'\n',',');
+UPDATE tbl_seller_products SET selprod_downloadable_link = REPLACE(selprod_downloadable_link,'\n',',') where selprod_downloadable_link != '';
 
 DROP VIEW IF EXISTS pddr_links_view;
 

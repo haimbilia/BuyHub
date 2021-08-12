@@ -183,7 +183,7 @@ class SellerOrdersController extends AdminBaseController
         $srch->joinAddress();
         $srch->addOrderProductCharges();
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = ops_plugin.plugin_id', 'ops_plugin');
         $srch->addMultipleFields(
             array(
@@ -375,6 +375,8 @@ class SellerOrdersController extends AdminBaseController
         $srch->addCondition('op_id', '=', $op_id);
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS")));
         $srch->addMultipleFields(array('*', 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $orderDetail = FatApp::getDb()->fetch($rs);
 
@@ -479,6 +481,8 @@ class SellerOrdersController extends AdminBaseController
                 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'ou.user_name as buyer_user_name', 'ouc.credential_username as buyer_username', 'IFNULL(plugin_name, IFNULL(plugin_identifier, "Wallet")) as plugin_name', 'op_commission_charged', 'op_commission_percentage',   'ou.user_name as buyer_name', 'ouc.credential_username as buyer_username', 'ouc.credential_email as buyer_email', 'ou.user_phone_dcode as buyer_phone_dcode', 'ou.user_phone as buyer_phone', 'op.op_shop_owner_name', 'op.op_shop_owner_username', 'op_l.op_shop_name', 'op.op_shop_owner_email', 'op.op_shop_owner_phone_dcode', 'op.op_shop_owner_phone', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_other_charges', 'op_rounding_off', 'optsu_user_id', 'op_product_weight', 'credential_email', 'plugin_code'
             )
         );
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $orderDetail = FatApp::getDb()->fetch($rs);
 
@@ -489,7 +493,7 @@ class SellerOrdersController extends AdminBaseController
 
         $srch = new SearchBase(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, 'optosu');
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $srch->addCondition('optosu.optsu_op_id', '=', $orderDetail['op_id']);
         $rs = $srch->getResultSet();
         $shippingUserRow = FatApp::getDb()->fetch($rs);
@@ -531,13 +535,15 @@ class SellerOrdersController extends AdminBaseController
         $shopSrch->joinShopState();
         $shopSrch->addCondition('shop_id', '=', 1);
         $shopSrch->addMultipleFields(array('ifnull(country_name,country_code) as country_name', 'ifnull(state_name,state_identifier) as state_name', 'shop_city', 'shop_address_line_1', 'shop_address_line_2'));
+        $shopSrch->doNotCalculateRecords();
+        $shopSrch->setPageSize(1);
         $rs = $shopSrch->getResultSet();
         $orderDetail['shopDetail'] = FatApp::getDb()->fetch($rs);
 
 
         $srch = new SearchBase(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, 'optosu');
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $srch->addCondition('optosu.optsu_op_id', '=', $orderDetail['op_id']);
         $rs = $srch->getResultSet();
         $shippingUserRow = FatApp::getDb()->fetch($rs);
@@ -595,7 +601,7 @@ class SellerOrdersController extends AdminBaseController
 
         $oCancelRequestSrch = new OrderCancelRequestSearch();
         $oCancelRequestSrch->doNotCalculateRecords();
-        $oCancelRequestSrch->doNotLimitRecords();
+        $oCancelRequestSrch->setPageSize(1);
         $oCancelRequestSrch->addCondition('ocrequest_op_id', '=', $op_id);
         $oCancelRequestSrch->addCondition('ocrequest_status', '!=', OrderCancelRequest::CANCELLATION_REQUEST_STATUS_DECLINED);
         $oCancelRequestRs = $oCancelRequestSrch->getResultSet();
@@ -616,6 +622,8 @@ class SellerOrdersController extends AdminBaseController
         $srch->joinOrderUser();
         $srch->addCondition('op_id', '=', $op_id);
         $srch->addMultipleFields(['op.*', 'pm.*', 'order_language_id', 'ops_plugin.plugin_code as opshipping_plugin_code']);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $orderDetail = array();
         if ($rs) {
@@ -767,7 +775,7 @@ class SellerOrdersController extends AdminBaseController
         $srch->addOrderProductCharges();
         $srch->joinShippingCharges();
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $srch->addMultipleFields(
             array(
                 'order_id', 'order_pmethod_id', 'order_date_added', 'op_id', 'op_qty', 'op_unit_price',
@@ -839,6 +847,8 @@ class SellerOrdersController extends AdminBaseController
         $srch = new OrderProductSearch($this->adminLangId, true, true);
         $srch->joinOrderUser();
         $srch->addCondition('op_id', '=', $op_id);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $orderDetail = (array) FatApp::getDb()->fetch($rs);
 

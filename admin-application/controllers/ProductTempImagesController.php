@@ -102,6 +102,8 @@ class ProductTempImagesController extends AdminBaseController
         $imageObj = new ProductTempImage($afile_id);
         $srch = $imageObj->getTempImageSearchObject();
         $srch->addMultipleFields(array('afile_id,afile_physical_path,afile_name'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $data = FatApp::getDb()->fetch($rs, 'afile_id');
 

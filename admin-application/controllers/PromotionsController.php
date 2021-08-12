@@ -254,6 +254,8 @@ class PromotionsController extends AdminBaseController
             $srch = BannerLocation::getSearchObject($this->adminLangId);
             $srch->addMultipleFields(array('blocation_promotion_cost'));
             $srch->addCondition('blocation_id', '=', $bannerLocationId);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $row = FatApp::getDb()->fetch($rs, 'blocation_id');
             if (!empty($row)) {
@@ -338,6 +340,8 @@ class PromotionsController extends AdminBaseController
             $srch->addCondition('banner_type', '=', Banner::TYPE_PPC);
             $srch->addCondition('banner_record_id', '=', $promotionId);
             $srch->addMultipleFields(array('banner_id'));
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $row = FatApp::getDb()->fetch($rs);
 
@@ -361,6 +365,8 @@ class PromotionsController extends AdminBaseController
             $srch->addCondition('slide_type', '=', Slides::TYPE_PPC);
             $srch->addCondition('slide_record_id', '=', $promotionId);
             $srch->addMultipleFields(array('slide_id'));
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $row = FatApp::getDb()->fetch($rs);
             if ($row) {
@@ -510,6 +516,8 @@ class PromotionsController extends AdminBaseController
         switch ($promotionType) {
         case Promotion::TYPE_BANNER:
             $srch->joinBannersAndLocation($this->adminLangId, Promotion::TYPE_BANNER, 'b');
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $promotionDetails = FatApp::getDb()->fetch($rs);
             $recordId = $promotionDetails['banner_id'];
@@ -517,6 +525,8 @@ class PromotionsController extends AdminBaseController
             break;
         case Promotion::TYPE_SLIDES:
             $srch->joinSlides();
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $promotionDetails = FatApp::getDb()->fetch($rs);
             $recordId = $promotionDetails['slide_id'];
@@ -613,7 +623,7 @@ class PromotionsController extends AdminBaseController
         $promotionId = FatUtility::int($promotionId);
         $frmPromotion = $this->getForm($promotionId);
         if (0 < $promotionId) {
-            $promotionObj = new Promotion();
+            // $promotionObj = new Promotion();
             $srch = new PromotionSearch($this->adminLangId);
             $srch->joinBannersAndLocation($this->adminLangId, Promotion::TYPE_BANNER, 'b');
             $srch->joinSlides();
@@ -621,6 +631,8 @@ class PromotionsController extends AdminBaseController
             $srch->addCondition('promotion_id', '=', $promotionId);
 
             $srch->addMultipleFields(array('promotion_id', 'promotion_identifier', 'promotion_user_id', 'promotion_type', 'promotion_budget', 'promotion_duration', 'promotion_start_date', 'promotion_end_date', 'promotion_start_time', 'promotion_end_time', 'promotion_active', 'promotion_approved', 'ifnull(shop_identifier,shop_name) as promotion_shop', 'banner_url', 'banner_target', 'banner_blocation_id', 'slide_url', 'slide_target'));
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $promotionDetails = FatApp::getDb()->fetch($rs);
 
@@ -656,6 +668,8 @@ class PromotionsController extends AdminBaseController
         $srch->joinSlides();
         $srch->addCondition('promotion_id', '=', $promotionId);
         $srch->addMultipleFields(array('promotion_id', 'promotion_type', 'banner_id', 'blocation_banner_width', 'blocation_banner_height', 'slide_id'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $promotionDetails = FatApp::getDb()->fetch($rs);
         if (empty($promotionDetails)) {
@@ -718,6 +732,8 @@ class PromotionsController extends AdminBaseController
         $srch->joinSlides();
         $srch->addCondition('promotion_id', '=', $promotionId);
         $srch->addMultipleFields(array('promotion_id', 'promotion_type', 'banner_id', 'blocation_banner_width', 'blocation_banner_height', 'slide_id'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $promotionDetails = FatApp::getDb()->fetch($rs);
         if (empty($promotionDetails)) {
@@ -914,6 +930,8 @@ class PromotionsController extends AdminBaseController
             $srch = new PromotionSearch($this->adminLangId);
             $srch->addCondition('promotion_id', '=', $promotionId);
             $srch->addMultipleFields(array('promotion_type'));
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $promotioType = FatApp::getDb()->fetch($rs);
             $promotionTypeArr = Promotion::getTypeArr($this->adminLangId);
@@ -1067,6 +1085,8 @@ class PromotionsController extends AdminBaseController
             $srch = BannerLocation::getSearchObject($this->adminLangId);
             $srch->addMultipleFields(array('blocation_promotion_cost'));
             $srch->addCondition('blocation_id', '=', $bannerLocationId);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $row = FatApp::getDb()->fetch($rs, 'blocation_id');
             if (!empty($row)) {
@@ -1090,6 +1110,8 @@ class PromotionsController extends AdminBaseController
         $srch->joinBannersAndLocation($this->adminLangId, Promotion::TYPE_BANNER, 'b', $deviceType);
         $srch->addCondition('promotion_id', '=', $promotionId);
         $srch->addMultipleFields(array('blocation_banner_width', 'blocation_banner_height'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $bannerDimensions = FatApp::getDb()->fetch($rs);
         $this->set('bannerWidth', $bannerDimensions['blocation_banner_width']);

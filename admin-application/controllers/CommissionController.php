@@ -74,6 +74,8 @@ class CommissionController extends AdminBaseController
                 $prodObj = Product::getSearchObject($this->adminLangId);
                 $prodObj->addCondition('product_id', '=', $data['commsetting_product_id']);
                 $prodObj->addMultipleFields(array('IFNULL(product_name,product_identifier) as product_name'));
+                $prodObj->doNotCalculateRecords();
+                $prodObj->setPageSize(1);
                 $rs = $prodObj->getResultSet();
                 $db = FatApp::getDb();
                 $row = $db->fetch($rs);

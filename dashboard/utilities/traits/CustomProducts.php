@@ -320,7 +320,8 @@ trait CustomProducts
         $optionSrch->addCondition('prodoption_option_id', '=', $optionId);
         $optionSrch->addCondition('selprodoption_option_id', '=', $optionId);
         $optionSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-
+        $optionSrch->doNotCalculateRecords();
+        $optionSrch->setPageSize(1);
         $rs = $optionSrch->getResultSet();
         $db = FatApp::getDb();
         $row = $db->fetch($rs);
@@ -358,6 +359,8 @@ trait CustomProducts
         $srch->addCondition('tspo.selprodoption_option_id', '=', $optionId);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addFld(array('selprod_id'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row)) {
@@ -825,6 +828,8 @@ trait CustomProducts
         $srch->addCondition('product_id', '=', $productId);
         $srch->addCondition('brand.brand_active', '=', applicationConstants::YES);
         $srch->addCondition('brand.brand_deleted', '=', applicationConstants::NO);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $product_row = FatApp::getDb()->fetch($rs);
         $prodObj = new Product();
@@ -1538,6 +1543,8 @@ trait CustomProducts
             $srch->addCondition('product_id', '=', $productId);
             $srch->addHaving('brand_active', '=', applicationConstants::YES);
             $srch->addHaving('brand_deleted', '=', applicationConstants::NO);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $brandData = FatApp::getDb()->fetch($rs);
             if (!empty($brandData)) {
@@ -1989,6 +1996,8 @@ trait CustomProducts
         $profSrch = ShippingProfileProduct::getSearchObject();
         $profSrch->addCondition('shippro_product_id', '=', $productId);
         $profSrch->addCondition('shippro_user_id', '=', $shippedByUserId);
+        $profSrch->doNotCalculateRecords();
+        $profSrch->setPageSize(1);
         $proRs = $profSrch->getResultSet();
         $profileData = FatApp::getDb()->fetch($proRs);
         if (!empty($profileData)) {

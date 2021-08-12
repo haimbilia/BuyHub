@@ -1638,9 +1638,9 @@ class Orders extends MyAppModel
                 $retReqObj = new OrderCancelRequest();
                 $cancelRequestDetail = $retReqObj->getCancelRequestById($childOrderInfo['op_id']);
                 if (!empty($cancelRequestDetail)) {
-                    $comments = sprintf(Labels::getLabel('LBL_Cancel_Request_Approved', $langId), $formattedRequestValue);
+                    $comments = sprintf(Labels::getLabel('LBL_ORDER_%S_CANCEL_REQUEST_APPROVED', $langId), $formattedRequestValue);
                 } else {
-                    $comments = sprintf(Labels::getLabel('LBL_Order_has_been_Cancelled', $langId), $formattedRequestValue);
+                    $comments = sprintf(Labels::getLabel('LBL_ORDER_%S_HAS_BEEN_CANCELLED', $langId), $formattedRequestValue);
                 }
 
                 $txnAmount = (($childOrderInfo["op_unit_price"] * $childOrderInfo["op_qty"]) + $childOrderInfo["op_other_charges"] + $childOrderInfo["op_rounding_off"]);
