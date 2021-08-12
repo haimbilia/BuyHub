@@ -245,7 +245,7 @@ class NavigationsController extends AdminBaseController
         } else {
             $srch = new NavigationLinkSearch($this->adminLangId);
             $srch->joinNavigation();
-            $srch->doNotLimitRecords();
+            $srch->setPageSize(1);
             $srch->doNotCalculateRecords();
             $srch->addCondition('nlink_id', '=', $nlink_id);
             $rs = $srch->getResultSet();
@@ -284,7 +284,7 @@ class NavigationsController extends AdminBaseController
         $srch = Navigations::getSearchObject($this->adminLangId, false);
         $srch->addCondition('nav_id', '=', $nlink_nav_id);
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $navRow = $db->fetch($rs);
         if (!$navRow) {

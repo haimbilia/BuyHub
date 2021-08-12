@@ -66,6 +66,8 @@ class PaymentMethodBase extends PluginBase
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'uc.' . User::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
         $srch->addMultipleFields($this->userInfoColumns);
         $srch->addCondition('user_id', '=', $this->userId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $this->formatUserData((array) FatApp::getDb()->fetch($rs));
         return true;
@@ -100,6 +102,8 @@ class PaymentMethodBase extends PluginBase
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . User::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
         $srch->addMultipleFields($this->userInfoColumns);
         $srch->addCondition('user_id', '=', $this->userId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $this->formatUserData((array) FatApp::getDb()->fetch($rs));
         return true;

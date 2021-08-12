@@ -137,7 +137,7 @@ class OrdersController extends AdminBaseController
         $srch = new OrderSearch($this->adminLangId);
         $srch->joinOrderPaymentMethod();
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $srch->joinOrderBuyerUser();
         $srch->addMultipleFields(
             array(
@@ -249,6 +249,8 @@ class OrdersController extends AdminBaseController
         $srch->addMultipleFields(array('plugin_code'));
         $srch->addCondition('order_id', '=', $orderId);
         $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $order = FatApp::getDb()->fetch($rs);
         if (!empty($order) && array_key_exists('plugin_code', $order) && 'CashOnDelivery' == $order['plugin_code']) {

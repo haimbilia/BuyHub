@@ -63,7 +63,7 @@ trait SellerCollections
             /* url data[ */
             $urlSrch = UrlRewrite::getSearchObject();
             $urlSrch->doNotCalculateRecords();
-            $urlSrch->doNotLimitRecords();
+            $urlSrch->setPageSize(1);
             $urlSrch->addFld('urlrewrite_custom');
 
             $urlSrch->addCondition('urlrewrite_original', '=', 'shops/collection/' . $shop_id . '/' . $scollection_id);

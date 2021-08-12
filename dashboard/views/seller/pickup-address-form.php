@@ -17,16 +17,9 @@ $slotTypeFld = $frm->getField('tslot_availability');
 $slotTypeFld->setOptionListTagAttribute('class', 'list-inline');
 $slotTypeFld->developerTags['rdLabelAttributes'] = array('class' => 'radio');
 $slotTypeFld->developerTags['rdHtmlAfterRadio'] = '';
-$slotTypeFld->setFieldTagAttribute('onClick', 'displaySlotTimings(this);');
+$slotTypeFld->setFieldTagAttribute('onChange', 'displaySlotTimings(this);');
 $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
 
-$fromAllFld = $frm->getField('tslot_from_all');
-$fromAllFld->setFieldTagAttribute('onChange', 'validateTimeFields()');
-$fromAllFld->setFieldTagAttribute('class', 'selectAllFromTime-js');
-
-$toAllFld = $frm->getField('tslot_to_all');
-$toAllFld->setFieldTagAttribute('onChange', 'validateTimeFields()');
-$toAllFld->setFieldTagAttribute('class', 'selectAllToTime-js');
 
 $cancelFld = $frm->getField('btn_cancel');
 $cancelFld->setFieldTagAttribute('class', 'btn btn-outline-brand');
@@ -232,7 +225,7 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                     </div>
                 </div>
 
-                <div class="js-slot-individual <?php echo $availability == TimeSlot::DAY_ALL_DAYS ? 'd-none' : ''; ?>">
+                <div class="js-slot-individual">
                     <?php
                     $daysArr = TimeSlot::getDaysArr($siteLangId);
                     $row = 0;
@@ -261,9 +254,9 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                                 $toFld->setFieldTagAttribute('onChange', 'displayAddRowField(' . $i . ', this)');
                                 $toFld->value = $toTime;
                     ?>
-                    <div class="row row-<?php echo $row;
+                                <div class="row jsDay-<?php echo $i;?> row-<?php echo $row;
                                                     echo ($key > 0) ? ' js-added-rows-' . $i : '' ?>">
-                        <div class="col-md-2">
+                                    <div class="col-md-2 jsWeekDay">
                             <div class="field-set">
                                 <div class="caption-wraper">
                                     <label class="field_label">
@@ -328,20 +321,21 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                                                         xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
                                                     </use>
                                                 </svg>
-                                            </i></button>
-                                        <?php }                                                        
-                                                        if (count($slotData['tslot_from_time'][$i]) - 1 == $key) { ?>
-                                        <button type="button" name="btn_add_row[<?php echo $i; ?>]"
-                                            onClick="addTimeSlotRow(<?php echo $i; ?>)"
-                                            class="btn btn-brand btn-sm js-slot-add-<?php echo $i; ?>">
-                                            <i class="icn">
-                                                <svg class="svg" width="16px" height="16px">
-                                                    <use
-                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                                    </use>
-                                                </svg>
                                             </i>
-                                        </button>
+                                        </button>                                        
+                                       <?php }                                                        
+                                        if (count($slotData['tslot_from_time'][$i]) - 1 == $key) { ?>
+                                            <button type="button" name="btn_add_row[<?php echo $i; ?>]"
+                                                onClick="addTimeSlotRow(<?php echo $i; ?>)"
+                                                class="btn btn-brand btn-sm js-slot-add-<?php echo $i; ?>">
+                                                <i class="icn">
+                                                    <svg class="svg" width="16px" height="16px">
+                                                        <use
+                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                        </use>
+                                                    </svg>
+                                                </i>
+                                            </button>
                                         <?php } ?>
                                     </div>
                                 </div>
@@ -364,8 +358,8 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                             $toFld->setFieldTagAttribute('class', 'js-slot-to-'.$i);
                             $toFld->setFieldTagAttribute('onChange', 'displayAddRowField('.$i.', this)');
 							?>
-                    <div class="row row-<?php echo $row; ?>">
-                        <div class="col-md-2">
+                             <div class="row jsDay-<?php echo $i;?> row-<?php echo $row; ?>">
+                                    <div class="col-md-2 jsWeekDay">
                             <div class="field-set">
                                 <div class="caption-wraper">
                                     <label class="field_label">
@@ -439,41 +433,6 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                     }
                     ?>
                 </div>
-                <div
-                    class="row js-slot-all  <?php echo $availability == TimeSlot::DAY_INDIVIDUAL_DAYS ? 'd-none' : ''; ?>">
-                    <div class="col-md-6">
-                        <div class="field-set">
-                            <div class="caption-wraper">
-                                <label class="field_label">
-                                    <?php $fld = $frm->getField('tslot_from_all');
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $frm->getFieldHtml('tslot_from_all'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="field-set">
-                            <div class="caption-wraper">
-                                <label class="field_label">
-                                    <?php $fld = $frm->getField('tslot_to_all');
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $frm->getFieldHtml('tslot_to_all'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="field-set">
@@ -493,6 +452,337 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
                     </div>
                 </div>
                 </form>
+                <!-- Updated Pickup UI  -->
+                <form action="" class="form">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-12 ">
+                                    <div class="field-set">
+                                        <div class="caption-wraper">
+                                            <label class="field_label">
+                                            </label>
+                                        </div>
+                                        <div class="field-wraper">
+                                            <div class="field_cover">
+                                                <label class="checkbox"><input checked="true" type="checkbox" >Sunday<label>    
+                                                </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">From</label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover">
+                                                        <select class="js-slot-from-0 fromTime-js" data-row="0" onchange="displayAddRowField(0, this)" data-field-caption="From" data-fatreq="{&quot;required&quot;:false}" name="tslot_from_time[0][]"><option value="">Select</option><option value="00:00">00:00</option><option value="00:30">00:30</option><option value="01:00">01:00</option><option value="01:30">01:30</option><option value="02:00">02:00</option><option value="02:30">02:30</option><option value="03:00">03:00</option><option value="03:30">03:30</option><option value="04:00">04:00</option><option value="04:30">04:30</option><option value="05:00" selected="selected">05:00</option><option value="05:30">05:30</option><option value="06:00">06:00</option><option value="06:30">06:30</option><option value="07:00">07:00</option><option value="07:30">07:30</option><option value="08:00">08:00</option><option value="08:30">08:30</option><option value="09:00">09:00</option><option value="09:30">09:30</option><option value="10:00">10:00</option><option value="10:30">10:30</option><option value="11:00">11:00</option><option value="11:30">11:30</option><option value="12:00">12:00</option><option value="12:30">12:30</option><option value="13:00">13:00</option><option value="13:30">13:30</option><option value="14:00">14:00</option><option value="14:30">14:30</option><option value="15:00">15:00</option><option value="15:30">15:30</option><option value="16:00">16:00</option><option value="16:30">16:30</option><option value="17:00">17:00</option><option value="17:30">17:30</option><option value="18:00">18:00</option><option value="18:30">18:30</option><option value="19:00">19:00</option><option value="19:30">19:30</option><option value="20:00">20:00</option><option value="20:30">20:30</option><option value="21:00">21:00</option><option value="21:30">21:30</option><option value="22:00">22:00</option><option value="22:30">22:30</option><option value="23:00">23:00</option><option value="23:30">23:30</option></select>                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">To</label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover">
+                                                        <select class="js-slot-to-0" data-row="0" onchange="displayAddRowField(0, this)" data-field-caption="To" data-fatreq="{&quot;required&quot;:false}" name="tslot_to_time[0][]"><option value="">Select</option><option value="00:00" class="d-none">00:00</option><option value="00:30" class="d-none">00:30</option><option value="01:00" class="d-none">01:00</option><option value="01:30" class="d-none">01:30</option><option value="02:00" class="d-none">02:00</option><option value="02:30" class="d-none">02:30</option><option value="03:00" class="d-none">03:00</option><option value="03:30" class="d-none">03:30</option><option value="04:00" class="d-none">04:00</option><option value="04:30" class="d-none">04:30</option><option value="05:00" class="d-none">05:00</option><option value="05:30">05:30</option><option value="06:00">06:00</option><option value="06:30">06:30</option><option value="07:00">07:00</option><option value="07:30">07:30</option><option value="08:00">08:00</option><option value="08:30">08:30</option><option value="09:00">09:00</option><option value="09:30">09:30</option><option value="10:00">10:00</option><option value="10:30">10:30</option><option value="11:00">11:00</option><option value="11:30">11:30</option><option value="12:00" selected="selected">12:00</option><option value="12:30">12:30</option><option value="13:00">13:00</option><option value="13:30">13:30</option><option value="14:00">14:00</option><option value="14:30">14:30</option><option value="15:00">15:00</option><option value="15:30">15:30</option><option value="16:00">16:00</option><option value="16:30">16:30</option><option value="17:00">17:00</option><option value="17:30">17:30</option><option value="18:00">18:00</option><option value="18:30">18:30</option><option value="19:00">19:00</option><option value="19:30">19:30</option><option value="20:00">20:00</option><option value="20:30">20:30</option><option value="21:00">21:00</option><option value="21:30">21:30</option><option value="22:00">22:00</option><option value="22:30">22:30</option><option value="23:00">23:00</option><option value="23:30">23:30</option></select>                                    </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">
+                                                    </label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover btn-group">
+                                                    <button class="btn btn-outline-brand btn-sm" type="button">
+                                                        <i class="icn"><svg class="svg" width="16px" height="16px">
+                                                            <use xlink:href="/dashboard/images/retina/sprite.svg#minus"></use></svg>
+                                                        </i>
+                                                    </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">From</label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover">
+                                                        <select class="js-slot-from-0 fromTime-js" data-row="0" onchange="displayAddRowField(0, this)" data-field-caption="From" data-fatreq="{&quot;required&quot;:false}" name="tslot_from_time[0][]"><option value="">Select</option><option value="00:00">00:00</option><option value="00:30">00:30</option><option value="01:00">01:00</option><option value="01:30">01:30</option><option value="02:00">02:00</option><option value="02:30">02:30</option><option value="03:00">03:00</option><option value="03:30">03:30</option><option value="04:00">04:00</option><option value="04:30">04:30</option><option value="05:00" selected="selected">05:00</option><option value="05:30">05:30</option><option value="06:00">06:00</option><option value="06:30">06:30</option><option value="07:00">07:00</option><option value="07:30">07:30</option><option value="08:00">08:00</option><option value="08:30">08:30</option><option value="09:00">09:00</option><option value="09:30">09:30</option><option value="10:00">10:00</option><option value="10:30">10:30</option><option value="11:00">11:00</option><option value="11:30">11:30</option><option value="12:00">12:00</option><option value="12:30">12:30</option><option value="13:00">13:00</option><option value="13:30">13:30</option><option value="14:00">14:00</option><option value="14:30">14:30</option><option value="15:00">15:00</option><option value="15:30">15:30</option><option value="16:00">16:00</option><option value="16:30">16:30</option><option value="17:00">17:00</option><option value="17:30">17:30</option><option value="18:00">18:00</option><option value="18:30">18:30</option><option value="19:00">19:00</option><option value="19:30">19:30</option><option value="20:00">20:00</option><option value="20:30">20:30</option><option value="21:00">21:00</option><option value="21:30">21:30</option><option value="22:00">22:00</option><option value="22:30">22:30</option><option value="23:00">23:00</option><option value="23:30">23:30</option></select>                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">To</label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover">
+                                                        <select class="js-slot-to-0" data-row="0" onchange="displayAddRowField(0, this)" data-field-caption="To" data-fatreq="{&quot;required&quot;:false}" name="tslot_to_time[0][]"><option value="">Select</option><option value="00:00" class="d-none">00:00</option><option value="00:30" class="d-none">00:30</option><option value="01:00" class="d-none">01:00</option><option value="01:30" class="d-none">01:30</option><option value="02:00" class="d-none">02:00</option><option value="02:30" class="d-none">02:30</option><option value="03:00" class="d-none">03:00</option><option value="03:30" class="d-none">03:30</option><option value="04:00" class="d-none">04:00</option><option value="04:30" class="d-none">04:30</option><option value="05:00" class="d-none">05:00</option><option value="05:30">05:30</option><option value="06:00">06:00</option><option value="06:30">06:30</option><option value="07:00">07:00</option><option value="07:30">07:30</option><option value="08:00">08:00</option><option value="08:30">08:30</option><option value="09:00">09:00</option><option value="09:30">09:30</option><option value="10:00">10:00</option><option value="10:30">10:30</option><option value="11:00">11:00</option><option value="11:30">11:30</option><option value="12:00" selected="selected">12:00</option><option value="12:30">12:30</option><option value="13:00">13:00</option><option value="13:30">13:30</option><option value="14:00">14:00</option><option value="14:30">14:30</option><option value="15:00">15:00</option><option value="15:30">15:30</option><option value="16:00">16:00</option><option value="16:30">16:30</option><option value="17:00">17:00</option><option value="17:30">17:30</option><option value="18:00">18:00</option><option value="18:30">18:30</option><option value="19:00">19:00</option><option value="19:30">19:30</option><option value="20:00">20:00</option><option value="20:30">20:30</option><option value="21:00">21:00</option><option value="21:30">21:30</option><option value="22:00">22:00</option><option value="22:30">22:30</option><option value="23:00">23:00</option><option value="23:30">23:30</option></select>                                    </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">
+                                                    </label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover btn-group">
+                                                    <button class="btn btn-outline-brand btn-sm" type="button">
+                                                        <i class="icn"><svg class="svg" width="16px" height="16px">
+                                                            <use xlink:href="/dashboard/images/retina/sprite.svg#minus"></use></svg>
+                                                        </i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-brand btn-sm">
+                                                            <i class="icn">
+                                                                <svg class="svg" width="16px" height="16px">
+                                                                    <use xlink:href="/dashboard/images/retina/sprite.svg#plus">
+                                                                    </use>
+                                                                </svg>
+                                                            </i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-12 ">
+                                    <div class="field-set">
+                                        <div class="caption-wraper">
+                                            <label class="field_label">
+                                            </label>
+                                        </div>
+                                        <div class="field-wraper">
+                                            <div class="field_cover">
+                                                <label class="checkbox"><input checked="true" type="checkbox" >Monday<label>    
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">From</label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover">
+                                                        <select class="js-slot-from-0 fromTime-js" data-row="0" onchange="displayAddRowField(0, this)" data-field-caption="From" data-fatreq="{&quot;required&quot;:false}" name="tslot_from_time[0][]"><option value="">Select</option><option value="00:00">00:00</option><option value="00:30">00:30</option><option value="01:00">01:00</option><option value="01:30">01:30</option><option value="02:00">02:00</option><option value="02:30">02:30</option><option value="03:00">03:00</option><option value="03:30">03:30</option><option value="04:00">04:00</option><option value="04:30">04:30</option><option value="05:00" selected="selected">05:00</option><option value="05:30">05:30</option><option value="06:00">06:00</option><option value="06:30">06:30</option><option value="07:00">07:00</option><option value="07:30">07:30</option><option value="08:00">08:00</option><option value="08:30">08:30</option><option value="09:00">09:00</option><option value="09:30">09:30</option><option value="10:00">10:00</option><option value="10:30">10:30</option><option value="11:00">11:00</option><option value="11:30">11:30</option><option value="12:00">12:00</option><option value="12:30">12:30</option><option value="13:00">13:00</option><option value="13:30">13:30</option><option value="14:00">14:00</option><option value="14:30">14:30</option><option value="15:00">15:00</option><option value="15:30">15:30</option><option value="16:00">16:00</option><option value="16:30">16:30</option><option value="17:00">17:00</option><option value="17:30">17:30</option><option value="18:00">18:00</option><option value="18:30">18:30</option><option value="19:00">19:00</option><option value="19:30">19:30</option><option value="20:00">20:00</option><option value="20:30">20:30</option><option value="21:00">21:00</option><option value="21:30">21:30</option><option value="22:00">22:00</option><option value="22:30">22:30</option><option value="23:00">23:00</option><option value="23:30">23:30</option></select>                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">To</label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover">
+                                                        <select class="js-slot-to-0" data-row="0" onchange="displayAddRowField(0, this)" data-field-caption="To" data-fatreq="{&quot;required&quot;:false}" name="tslot_to_time[0][]"><option value="">Select</option><option value="00:00" class="d-none">00:00</option><option value="00:30" class="d-none">00:30</option><option value="01:00" class="d-none">01:00</option><option value="01:30" class="d-none">01:30</option><option value="02:00" class="d-none">02:00</option><option value="02:30" class="d-none">02:30</option><option value="03:00" class="d-none">03:00</option><option value="03:30" class="d-none">03:30</option><option value="04:00" class="d-none">04:00</option><option value="04:30" class="d-none">04:30</option><option value="05:00" class="d-none">05:00</option><option value="05:30">05:30</option><option value="06:00">06:00</option><option value="06:30">06:30</option><option value="07:00">07:00</option><option value="07:30">07:30</option><option value="08:00">08:00</option><option value="08:30">08:30</option><option value="09:00">09:00</option><option value="09:30">09:30</option><option value="10:00">10:00</option><option value="10:30">10:30</option><option value="11:00">11:00</option><option value="11:30">11:30</option><option value="12:00" selected="selected">12:00</option><option value="12:30">12:30</option><option value="13:00">13:00</option><option value="13:30">13:30</option><option value="14:00">14:00</option><option value="14:30">14:30</option><option value="15:00">15:00</option><option value="15:30">15:30</option><option value="16:00">16:00</option><option value="16:30">16:30</option><option value="17:00">17:00</option><option value="17:30">17:30</option><option value="18:00">18:00</option><option value="18:30">18:30</option><option value="19:00">19:00</option><option value="19:30">19:30</option><option value="20:00">20:00</option><option value="20:30">20:30</option><option value="21:00">21:00</option><option value="21:30">21:30</option><option value="22:00">22:00</option><option value="22:30">22:30</option><option value="23:00">23:00</option><option value="23:30">23:30</option></select>                                    </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">
+                                                    </label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover btn-group">
+                                                    <button class="btn btn-outline-brand btn-sm" type="button">
+                                                        <i class="icn"><svg class="svg" width="16px" height="16px">
+                                                            <use xlink:href="/dashboard/images/retina/sprite.svg#minus"></use></svg>
+                                                        </i>
+                                                    </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">From</label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover">
+                                                        <select class="js-slot-from-0 fromTime-js" data-row="0" onchange="displayAddRowField(0, this)" data-field-caption="From" data-fatreq="{&quot;required&quot;:false}" name="tslot_from_time[0][]"><option value="">Select</option><option value="00:00">00:00</option><option value="00:30">00:30</option><option value="01:00">01:00</option><option value="01:30">01:30</option><option value="02:00">02:00</option><option value="02:30">02:30</option><option value="03:00">03:00</option><option value="03:30">03:30</option><option value="04:00">04:00</option><option value="04:30">04:30</option><option value="05:00" selected="selected">05:00</option><option value="05:30">05:30</option><option value="06:00">06:00</option><option value="06:30">06:30</option><option value="07:00">07:00</option><option value="07:30">07:30</option><option value="08:00">08:00</option><option value="08:30">08:30</option><option value="09:00">09:00</option><option value="09:30">09:30</option><option value="10:00">10:00</option><option value="10:30">10:30</option><option value="11:00">11:00</option><option value="11:30">11:30</option><option value="12:00">12:00</option><option value="12:30">12:30</option><option value="13:00">13:00</option><option value="13:30">13:30</option><option value="14:00">14:00</option><option value="14:30">14:30</option><option value="15:00">15:00</option><option value="15:30">15:30</option><option value="16:00">16:00</option><option value="16:30">16:30</option><option value="17:00">17:00</option><option value="17:30">17:30</option><option value="18:00">18:00</option><option value="18:30">18:30</option><option value="19:00">19:00</option><option value="19:30">19:30</option><option value="20:00">20:00</option><option value="20:30">20:30</option><option value="21:00">21:00</option><option value="21:30">21:30</option><option value="22:00">22:00</option><option value="22:30">22:30</option><option value="23:00">23:00</option><option value="23:30">23:30</option></select>                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">To</label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover">
+                                                        <select class="js-slot-to-0" data-row="0" onchange="displayAddRowField(0, this)" data-field-caption="To" data-fatreq="{&quot;required&quot;:false}" name="tslot_to_time[0][]"><option value="">Select</option><option value="00:00" class="d-none">00:00</option><option value="00:30" class="d-none">00:30</option><option value="01:00" class="d-none">01:00</option><option value="01:30" class="d-none">01:30</option><option value="02:00" class="d-none">02:00</option><option value="02:30" class="d-none">02:30</option><option value="03:00" class="d-none">03:00</option><option value="03:30" class="d-none">03:30</option><option value="04:00" class="d-none">04:00</option><option value="04:30" class="d-none">04:30</option><option value="05:00" class="d-none">05:00</option><option value="05:30">05:30</option><option value="06:00">06:00</option><option value="06:30">06:30</option><option value="07:00">07:00</option><option value="07:30">07:30</option><option value="08:00">08:00</option><option value="08:30">08:30</option><option value="09:00">09:00</option><option value="09:30">09:30</option><option value="10:00">10:00</option><option value="10:30">10:30</option><option value="11:00">11:00</option><option value="11:30">11:30</option><option value="12:00" selected="selected">12:00</option><option value="12:30">12:30</option><option value="13:00">13:00</option><option value="13:30">13:30</option><option value="14:00">14:00</option><option value="14:30">14:30</option><option value="15:00">15:00</option><option value="15:30">15:30</option><option value="16:00">16:00</option><option value="16:30">16:30</option><option value="17:00">17:00</option><option value="17:30">17:30</option><option value="18:00">18:00</option><option value="18:30">18:30</option><option value="19:00">19:00</option><option value="19:30">19:30</option><option value="20:00">20:00</option><option value="20:30">20:30</option><option value="21:00">21:00</option><option value="21:30">21:30</option><option value="22:00">22:00</option><option value="22:30">22:30</option><option value="23:00">23:00</option><option value="23:30">23:30</option></select>                                    </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">
+                                                    </label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover btn-group">
+                                                    <button class="btn btn-outline-brand btn-sm" type="button">
+                                                        <i class="icn"><svg class="svg" width="16px" height="16px">
+                                                            <use xlink:href="/dashboard/images/retina/sprite.svg#minus"></use></svg>
+                                                        </i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-brand btn-sm">
+                                                            <i class="icn">
+                                                                <svg class="svg" width="16px" height="16px">
+                                                                    <use xlink:href="/dashboard/images/retina/sprite.svg#plus">
+                                                                    </use>
+                                                                </svg>
+                                                            </i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-12 ">
+                                    <div class="field-set">
+                                        <div class="caption-wraper">
+                                            <label class="field_label">
+                                            </label>
+                                        </div>
+                                        <div class="field-wraper">
+                                            <div class="field_cover">
+                                                <label class="checkbox"><input checked="true" type="checkbox" >Tuesday<label>    
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">From</label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover">
+                                                        <select class="js-slot-from-0 fromTime-js" data-row="0" onchange="displayAddRowField(0, this)" data-field-caption="From" data-fatreq="{&quot;required&quot;:false}" name="tslot_from_time[0][]"><option value="">Select</option><option value="00:00">00:00</option><option value="00:30">00:30</option><option value="01:00">01:00</option><option value="01:30">01:30</option><option value="02:00">02:00</option><option value="02:30">02:30</option><option value="03:00">03:00</option><option value="03:30">03:30</option><option value="04:00">04:00</option><option value="04:30">04:30</option><option value="05:00" selected="selected">05:00</option><option value="05:30">05:30</option><option value="06:00">06:00</option><option value="06:30">06:30</option><option value="07:00">07:00</option><option value="07:30">07:30</option><option value="08:00">08:00</option><option value="08:30">08:30</option><option value="09:00">09:00</option><option value="09:30">09:30</option><option value="10:00">10:00</option><option value="10:30">10:30</option><option value="11:00">11:00</option><option value="11:30">11:30</option><option value="12:00">12:00</option><option value="12:30">12:30</option><option value="13:00">13:00</option><option value="13:30">13:30</option><option value="14:00">14:00</option><option value="14:30">14:30</option><option value="15:00">15:00</option><option value="15:30">15:30</option><option value="16:00">16:00</option><option value="16:30">16:30</option><option value="17:00">17:00</option><option value="17:30">17:30</option><option value="18:00">18:00</option><option value="18:30">18:30</option><option value="19:00">19:00</option><option value="19:30">19:30</option><option value="20:00">20:00</option><option value="20:30">20:30</option><option value="21:00">21:00</option><option value="21:30">21:30</option><option value="22:00">22:00</option><option value="22:30">22:30</option><option value="23:00">23:00</option><option value="23:30">23:30</option></select>                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">To</label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover">
+                                                        <select class="js-slot-to-0" data-row="0" onchange="displayAddRowField(0, this)" data-field-caption="To" data-fatreq="{&quot;required&quot;:false}" name="tslot_to_time[0][]"><option value="">Select</option><option value="00:00" class="d-none">00:00</option><option value="00:30" class="d-none">00:30</option><option value="01:00" class="d-none">01:00</option><option value="01:30" class="d-none">01:30</option><option value="02:00" class="d-none">02:00</option><option value="02:30" class="d-none">02:30</option><option value="03:00" class="d-none">03:00</option><option value="03:30" class="d-none">03:30</option><option value="04:00" class="d-none">04:00</option><option value="04:30" class="d-none">04:30</option><option value="05:00" class="d-none">05:00</option><option value="05:30">05:30</option><option value="06:00">06:00</option><option value="06:30">06:30</option><option value="07:00">07:00</option><option value="07:30">07:30</option><option value="08:00">08:00</option><option value="08:30">08:30</option><option value="09:00">09:00</option><option value="09:30">09:30</option><option value="10:00">10:00</option><option value="10:30">10:30</option><option value="11:00">11:00</option><option value="11:30">11:30</option><option value="12:00" selected="selected">12:00</option><option value="12:30">12:30</option><option value="13:00">13:00</option><option value="13:30">13:30</option><option value="14:00">14:00</option><option value="14:30">14:30</option><option value="15:00">15:00</option><option value="15:30">15:30</option><option value="16:00">16:00</option><option value="16:30">16:30</option><option value="17:00">17:00</option><option value="17:30">17:30</option><option value="18:00">18:00</option><option value="18:30">18:30</option><option value="19:00">19:00</option><option value="19:30">19:30</option><option value="20:00">20:00</option><option value="20:30">20:30</option><option value="21:00">21:00</option><option value="21:30">21:30</option><option value="22:00">22:00</option><option value="22:30">22:30</option><option value="23:00">23:00</option><option value="23:30">23:30</option></select>                                    </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">
+                                                    </label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover btn-group">
+                                                    <button class="btn btn-outline-brand btn-sm" type="button">
+                                                        <i class="icn"><svg class="svg" width="16px" height="16px">
+                                                            <use xlink:href="/dashboard/images/retina/sprite.svg#minus"></use></svg>
+                                                        </i>
+                                                    </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">From</label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover">
+                                                        <select class="js-slot-from-0 fromTime-js" data-row="0" onchange="displayAddRowField(0, this)" data-field-caption="From" data-fatreq="{&quot;required&quot;:false}" name="tslot_from_time[0][]"><option value="">Select</option><option value="00:00">00:00</option><option value="00:30">00:30</option><option value="01:00">01:00</option><option value="01:30">01:30</option><option value="02:00">02:00</option><option value="02:30">02:30</option><option value="03:00">03:00</option><option value="03:30">03:30</option><option value="04:00">04:00</option><option value="04:30">04:30</option><option value="05:00" selected="selected">05:00</option><option value="05:30">05:30</option><option value="06:00">06:00</option><option value="06:30">06:30</option><option value="07:00">07:00</option><option value="07:30">07:30</option><option value="08:00">08:00</option><option value="08:30">08:30</option><option value="09:00">09:00</option><option value="09:30">09:30</option><option value="10:00">10:00</option><option value="10:30">10:30</option><option value="11:00">11:00</option><option value="11:30">11:30</option><option value="12:00">12:00</option><option value="12:30">12:30</option><option value="13:00">13:00</option><option value="13:30">13:30</option><option value="14:00">14:00</option><option value="14:30">14:30</option><option value="15:00">15:00</option><option value="15:30">15:30</option><option value="16:00">16:00</option><option value="16:30">16:30</option><option value="17:00">17:00</option><option value="17:30">17:30</option><option value="18:00">18:00</option><option value="18:30">18:30</option><option value="19:00">19:00</option><option value="19:30">19:30</option><option value="20:00">20:00</option><option value="20:30">20:30</option><option value="21:00">21:00</option><option value="21:30">21:30</option><option value="22:00">22:00</option><option value="22:30">22:30</option><option value="23:00">23:00</option><option value="23:30">23:30</option></select>                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">To</label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover">
+                                                        <select class="js-slot-to-0" data-row="0" onchange="displayAddRowField(0, this)" data-field-caption="To" data-fatreq="{&quot;required&quot;:false}" name="tslot_to_time[0][]"><option value="">Select</option><option value="00:00" class="d-none">00:00</option><option value="00:30" class="d-none">00:30</option><option value="01:00" class="d-none">01:00</option><option value="01:30" class="d-none">01:30</option><option value="02:00" class="d-none">02:00</option><option value="02:30" class="d-none">02:30</option><option value="03:00" class="d-none">03:00</option><option value="03:30" class="d-none">03:30</option><option value="04:00" class="d-none">04:00</option><option value="04:30" class="d-none">04:30</option><option value="05:00" class="d-none">05:00</option><option value="05:30">05:30</option><option value="06:00">06:00</option><option value="06:30">06:30</option><option value="07:00">07:00</option><option value="07:30">07:30</option><option value="08:00">08:00</option><option value="08:30">08:30</option><option value="09:00">09:00</option><option value="09:30">09:30</option><option value="10:00">10:00</option><option value="10:30">10:30</option><option value="11:00">11:00</option><option value="11:30">11:30</option><option value="12:00" selected="selected">12:00</option><option value="12:30">12:30</option><option value="13:00">13:00</option><option value="13:30">13:30</option><option value="14:00">14:00</option><option value="14:30">14:30</option><option value="15:00">15:00</option><option value="15:30">15:30</option><option value="16:00">16:00</option><option value="16:30">16:30</option><option value="17:00">17:00</option><option value="17:30">17:30</option><option value="18:00">18:00</option><option value="18:30">18:30</option><option value="19:00">19:00</option><option value="19:30">19:30</option><option value="20:00">20:00</option><option value="20:30">20:30</option><option value="21:00">21:00</option><option value="21:30">21:30</option><option value="22:00">22:00</option><option value="22:30">22:30</option><option value="23:00">23:00</option><option value="23:30">23:30</option></select>                                    </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">
+                                                    </label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover btn-group">
+                                                    <button class="btn btn-outline-brand btn-sm" type="button">
+                                                        <i class="icn"><svg class="svg" width="16px" height="16px">
+                                                            <use xlink:href="/dashboard/images/retina/sprite.svg#minus"></use></svg>
+                                                        </i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-brand btn-sm">
+                                                            <i class="icn">
+                                                                <svg class="svg" width="16px" height="16px">
+                                                                    <use xlink:href="/dashboard/images/retina/sprite.svg#plus">
+                                                                    </use>
+                                                                </svg>
+                                                            </i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- Updated Pickup UI ends -->
+                
                 <?php echo $frm->getExternalJS(); ?>
             </div>
         </div>
@@ -500,7 +790,8 @@ $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false)
 </div>
 
 <script language="javascript">
-$(document).ready(function() {
+    var DAY_SUNDAY = <?php echo TimeSlot::DAY_SUNDAY; ?>;
+    $(document).ready(function() {
     getCountryStates($("#addr_country_id").val(), <?php echo ($stateId) ? $stateId : 0; ?>, '#addr_state_id');
 
     addTimeSlotRow = function(day) {
@@ -530,10 +821,10 @@ $(document).ready(function() {
             '</i></button>';
 
         var html = "<div class='row row-" + count + " js-added-rows-" + day +
-            "'><div class='col-md-2'></div><div class='col-md-4 js-from_time_" + day + "'>" + fromTimeHtml +
+            "'><div class='col-md-2 jsWeekDay"+ ($(".availabilityType-js:checked").val() == 2 ?' d-none':'')   +" '></div><div class='col-md-4 js-from_time_" + day + "'>" + fromTimeHtml +
             "</div><div class='col-md-4 js-to_time_" + day + "'>" + toTimeHtml +
-            "</div><div class='col-md-2'><div class='field-set'><div class='caption-wraper'><label class='field_label'></label></div><div class='field-wraper'><div class='field_cover btn-group'><button class='btn btn-outline-brand btn-sm' type='button' name='btn_remove_row' data-day='" +
-            day + "'><i class='fas fa-minus'></i></button>" + addRowBtnHtml +
+            "</div><div class='col-md-2'><div class='field-set'><div class='caption-wraper'><label class='field_label'></label></div><div class='field-wraper'><div class='field_cover'><button class='btn btn-outline-brand btn-sm' type='button' name='btn_remove_row' data-day='" +
+            day + "'><i class='icn'><svg class='svg' width='16px' height='16px'><use xlink:href='<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus'></svg></i></button>&nbsp;" + addRowBtnHtml +
             "</div></div></div></div></div>";
 
         $(".js-from_time_" + day).last().parent().after(html);
@@ -553,12 +844,15 @@ $(document).ready(function() {
         if ($(ele).prop("checked") == true) {
             $(".js-slot-from-" + day).removeAttr('disabled');
             $(".js-slot-to-" + day).removeAttr('disabled');
+                $(".addRowBtnBlock"+day+"-js").removeClass('d-none');
             displayAddRowField(day, ele);
         } else {
             $(".js-slot-from-" + day).attr('disabled', 'true');
             $(".js-slot-to-" + day).attr('disabled', 'true');
             $(".js-slot-add-" + day).addClass('d-none');
-            $(".js-added-rows-" + day).remove();
+                /*$(".js-added-rows-" + day).remove();*/
+                $(".jsDay-" + day).find("[name='btn_remove_row']").trigger('click');
+                $(".addRowBtnBlock"+day+"-js").addClass('d-none');
         }
     }
 
@@ -634,11 +928,12 @@ $(document).ready(function() {
     displaySlotTimings = function(ele) {
         var selectedVal = $(ele).val();
         if (selectedVal == 2) {
-            $('.js-slot-individual').addClass('d-none');
-            $('.js-slot-all').removeClass('d-none');
+                $('.js-slot-individual .row').addClass('d-none');
+                $('.js-slot-individual .jsDay-' + DAY_SUNDAY + ' .jsWeekDay').addClass('d-none');
+                $('.js-slot-individual .jsDay-' + DAY_SUNDAY).removeClass('d-none');
         } else {
-            $('.js-slot-all').addClass('d-none');
-            $('.js-slot-individual').removeClass('d-none');
+                $('.js-slot-individual .row').removeClass('d-none');
+                $('.js-slot-individual .jsDay-' + DAY_SUNDAY + ' .jsWeekDay').removeClass('d-none');
         }
     }
 
@@ -659,6 +954,7 @@ $(document).ready(function() {
             $("[name='tslot_to_all']").removeClass('error');
         }
     }
+        $('.availabilityType-js:checked').trigger('change');
 });
 
 $(document).on("click", "[name='btn_remove_row']", function() {

@@ -197,7 +197,7 @@ trait SellerProducts
             $srch->addCondition('uralang_user_id', '=', $userId);
             $srch->addCondition('uralang_lang_id', '=', $langId);
             $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $vendorReturnAddress = FatApp::getDb()->fetch($rs);
             if (!$vendorReturnAddress) {
@@ -300,10 +300,10 @@ trait SellerProducts
             if ($sellerProductRow['selprod_user_id'] != $this->userParentId) {
                 LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), false);
             }
-            $urlRewriteData = UrlRewrite::getAttributesById($sellerProductRow['selprod_urlrewrite_id']);
+            // $urlRewriteData = UrlRewrite::getAttributesById($sellerProductRow['selprod_urlrewrite_id']);
             $urlSrch = UrlRewrite::getSearchObject();
             $urlSrch->doNotCalculateRecords();
-            $urlSrch->doNotLimitRecords();
+            $urlSrch->setPageSize(1);
             $urlSrch->addFld('urlrewrite_custom');
             $urlSrch->addCondition('urlrewrite_original', '=', 'products/view/' . $selprod_id);
             $rs = $urlSrch->getResultSet();
@@ -555,7 +555,8 @@ trait SellerProducts
         $srch->addCondition('splprice_end_date', '>=', date('Y-m-d H:i:s'));
         $srch->addFld('splprice_price');
         $srch->addOrder('splprice_price', 'DESC');
-        $srch->doNotCalculateRecords();
+        $srch->doNotCalculateRecords();        
+        $srch->setPageSize(1);
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
         $result = $db->fetch($rs);
@@ -648,6 +649,8 @@ trait SellerProducts
         $srch->addCondition('selprod_user_id', '=', $userId);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addMultipleFields(array('selprod_id', 'selprodoption_optionvalue_id'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (empty($row)) {
@@ -1847,10 +1850,10 @@ trait SellerProducts
         $arrListing = $db->fetchAll($rs);
 
         foreach ($arrListing as $key => $sellerProduct) {
-            $urlRewriteData = UrlRewrite::getAttributesById($sellerProduct['selprod_id']);
+            // $urlRewriteData = UrlRewrite::getAttributesById($sellerProduct['selprod_id']);
             $urlSrch = UrlRewrite::getSearchObject();
             $urlSrch->doNotCalculateRecords();
-            $urlSrch->doNotLimitRecords();
+            $urlSrch->setPageSize(1);
             $urlSrch->addMultipleFields(array('urlrewrite_id', 'urlrewrite_custom'));
             $urlSrch->addCondition('urlrewrite_original', '=', 'products/view/' . $sellerProduct['selprod_id']);
             $rs = $urlSrch->getResultSet();
@@ -1921,6 +1924,8 @@ trait SellerProducts
             $srch->addCondition('ur.urlrewrite_custom', '=', $url);
             $srch->addCondition('ur.urlrewrite_id', '!=', $recordId);
             $srch->addMultipleFields(['ur.urlrewrite_id']);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             if (FatApp::getDb()->fetch($rs)) {
                 Message::addErrorMessage(Labels::getLabel('MSG_DUPLICATE_CUSTOM_URL', $this->siteLangId));

@@ -151,30 +151,34 @@ $("document").ready(function() {
         }else{
             updateProductOption(product_id, option_id, e);
         } 
-        tagifyTheOptions();       
+        /*tagifyTheOptions();*/       
     }
 
     removeOption = function(e){ 
         var option_id = e.detail.tag.id;
         removeProductOption( product_id,option_id);
-        tagifyTheOptions();
+        /*tagifyTheOptions();*/
     }
     
+    var delayTimer;
     getOptionsAutoComplete = function(e){
-        var keyword = e.detail.value;
-        tagifyOption.loading(true).dropdown.hide.call(tagifyOption);
-        var listOptions = [];
-        fcom.ajax(fcom.makeUrl('Seller', 'autoCompleteOptions'), '', function(t) {           
-            var ans = $.parseJSON(t);
-            for (i = 0; i < ans.length; i++) {            
-                listOptions.push({
-                    "id" : ans[i].id,
-                    "value" : ans[i].name+'('+ans[i].option_identifier+')',
-                });
-            }            
-            tagifyOption.settings.whitelist = listOptions;
-            tagifyOption.loading(false).dropdown.show.call(tagifyOption, keyword);
-        });    
+        clearTimeout(delayTimer);
+        delayTimer = setTimeout(function() {
+            var keyword = e.detail.value;
+            tagifyOption.loading(true).dropdown.hide.call(tagifyOption);
+            var listOptions = [];
+            fcom.ajax(fcom.makeUrl('Seller', 'autoCompleteOptions'), '', function(t) {           
+                var ans = $.parseJSON(t);
+                for (i = 0; i < ans.length; i++) {            
+                    listOptions.push({
+                        "id" : ans[i].id,
+                        "value" : ans[i].name+'('+ans[i].option_identifier+')',
+                    });
+                }            
+                tagifyOption.settings.whitelist = listOptions;
+                tagifyOption.loading(false).dropdown.show.call(tagifyOption, keyword);
+            }); 
+        }, 800);    
     };     
 
     tagifyTheOptions = function() {

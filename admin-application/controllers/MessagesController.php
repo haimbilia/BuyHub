@@ -208,7 +208,7 @@ class MessagesController extends AdminBaseController
         $srch = new SearchBase(Thread::DB_TBL_THREAD_MESSAGES);
         $srch->addCondition('message_id', '=', $message_id);
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $srch->addMultipleFields(array('message_id'));
         $rs = $srch->getResultSet();
         $requestRow = FatApp::getDb()->fetch($rs);

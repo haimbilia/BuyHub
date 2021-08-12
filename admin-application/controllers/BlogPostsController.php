@@ -82,7 +82,7 @@ class BlogPostsController extends AdminBaseController
             /* url data[ */
             $urlSrch = UrlRewrite::getSearchObject();
             $urlSrch->doNotCalculateRecords();
-            $urlSrch->doNotLimitRecords();
+            $urlSrch->setPageSize(1);
             $urlSrch->addFld('urlrewrite_custom');
             $urlSrch->addCondition('urlrewrite_original', '=', 'blog/post-detail/' . $post_id);
             $rs = $urlSrch->getResultSet();
@@ -531,11 +531,13 @@ class BlogPostsController extends AdminBaseController
     {
         $postId = FatUtility::int($postId);
 
-        $srch = BlogPost::getSearchObject(true);
+       /*  $srch = BlogPost::getSearchObject(true);
         $srch->addCondition('bp.post_id', '=', $postId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
 
         $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
+        $row = FatApp::getDb()->fetch($rs); */
         $frm = new Form('frmBlogPostCatLang', array('id' => 'frmBlogPostCatLang'));
         $frm->addHiddenField('', 'post_id', $postId);
         $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');

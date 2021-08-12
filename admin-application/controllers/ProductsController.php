@@ -208,6 +208,8 @@ class ProductsController extends AdminBaseController
         $srch->addCondition('tspo.selprodoption_option_id', '=', $option_id);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addFld(array('selprod_id'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row)) {
@@ -951,6 +953,8 @@ class ProductsController extends AdminBaseController
             $tax->doNotCalculateRecords();
             $tax->setPageSize(1);
             $tax->addOrder('ptt_seller_user_id', 'ASC');
+            $tax->doNotCalculateRecords();
+            $tax->setPageSize(1);
             $rs = $tax->getResultSet();
             $taxData = FatApp::getDb()->fetch($rs);
             if (!empty($taxData)) {
@@ -965,6 +969,8 @@ class ProductsController extends AdminBaseController
             $srch->addCondition('product_id', '=', $productId);
             $srch->addHaving('brand_active', '=', applicationConstants::YES);
             $srch->addHaving('brand_deleted', '=', applicationConstants::NO);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $brandData = FatApp::getDb()->fetch($rs);
             if (!empty($brandData)) {
@@ -1397,6 +1403,8 @@ class ProductsController extends AdminBaseController
         $profSrch = ShippingProfileProduct::getSearchObject();
         $profSrch->addCondition('shippro_product_id', '=', $productId);
         $profSrch->addCondition('shippro_user_id', '=', $shippedByUserId);
+        $profSrch->doNotCalculateRecords();
+        $profSrch->setPageSize(1);
         $proRs = $profSrch->getResultSet();
         $profileData = FatApp::getDb()->fetch($proRs);
         if (!empty($profileData)) {
