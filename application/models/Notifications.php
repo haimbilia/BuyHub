@@ -118,8 +118,8 @@ class Notifications extends MyAppModel
         $srch = new SearchBase(static::DB_TBL, 'unt');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $cnd = $srch->addCondition('unt.unotification_user_id', '=', $userId);
-        $cnd = $srch->addCondition('unt.unotification_is_read', '=', 0);
+        $srch->addCondition('unt.unotification_user_id', '=', $userId);
+        $srch->addCondition('unt.unotification_is_read', '=', 0);
         $srch->addMultipleFields(array("count(unt.unotification_id) as UnReadNotificationCount"));
         $rs = $srch->getResultSet();
         if (!$rs) {

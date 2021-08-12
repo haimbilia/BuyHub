@@ -162,6 +162,8 @@ class MetaTag extends MyAppModel
         $srch->addCondition('meta_action', '=', $action);
         $srch->addCondition('meta_record_id', '=', $recordId);
         $srch->addCondition('meta_subrecord_id', '=', $subRecordId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         self::$result = (array) FatApp::getDb()->fetch($rs);
         return !empty(self::$result);
