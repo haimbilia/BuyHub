@@ -2649,22 +2649,20 @@ class BuyerController extends BuyerBaseController
 
         $this->set('referralTrackingUrl', CommonHelper::referralTrackingUrl(UserAuthentication::getLoggedUserAttribute('user_referral_code')));
         $this->set('sharingFrm', $this->getFriendsSharingForm($this->siteLangId));
-        $this->_template->addJs('js/slick.min.js');
+
+        $this->_template->addJs(['js/slick.min.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js']);
         $this->_template->render(true, true);
     }
 
     public function sendMailShareEarn()
     {
         $post = FatApp::getPostedData();
-        $err = '';
-        if (!FatUtility::validateMultipleEmails($post["email"], $err)) {
-            Message::addErrorMessage($err);
-            FatUtility::dieJsonError(Message::getHtml());
+        $email = $post["email"];
+        if (empty($email)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
-        $email = CommonHelper::multipleExplode(array(",", ";", "\t", "\n"), trim($post["email"], ","));
-        $email = array_unique($email);
+        $email = array_unique(array_column(json_decode($email, true), 'value'));
         if (count($email) && !empty($email)) {
-            $email = array_unique($email);
             $personalMessage = empty($post['message']) ? "" : "<b>" . Labels::getLabel('Lbl_Personal_Message_From_Sender', $this->siteLangId) . ":</b> " . nl2br($post['message']);
             $emailNotificationObj = new EmailHandler();
             foreach ($email as $email_id) {
@@ -2678,14 +2676,9 @@ class BuyerController extends BuyerBaseController
                     CommonHelper::redirectUserReferer();
                 }
                 /* ] */
-                /* EmailHandler::sendMailTpl($email_id, 'invitation_email', array(
-                '{Sender_Name}' => htmlentities($this->user_details['user_name']),
-                '{Tracking_URL}' => $this->referral_tracking_url($this->user_details['user_referral_code']),
-                '{Invitation_Message}' => $personalMessage,
-                )); */
             }
         }
-        $this->set('msg', Labels::getLabel('MSG_invitation_emails_sent_successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_INVITATION_EMAILS_SENT_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2694,7 +2687,7 @@ class BuyerController extends BuyerBaseController
         $langId = FatUtility::int($langId);
         $frm = new Form('frmShareEarn');
         $fld = $frm->addTextArea(Labels::getLabel('L_Friends_Email', $langId), 'email');
-        $fld->htmlAfterField = ' <small>(' . Labels::getLabel('L_Use_commas_separate_emails', $langId) . ')</small>';
+        // $fld->htmlAfterField = ' <small>(' . Labels::getLabel('L_Use_commas_separate_emails', $langId) . ')</small>';
         $fld->requirements()->setRequired();
         $frm->addTextArea(Labels::getLabel('L_Personal_Message', $langId), 'message');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('L_Invite_Your_Friends', $langId));
