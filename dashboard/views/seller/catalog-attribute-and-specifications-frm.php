@@ -22,6 +22,9 @@ $btnBackFld->value = Labels::getLabel('LBL_Back', $siteLangId);
 
 $btnSubmit = $productFrm->getField('btn_submit');
 $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
+
+$warrantyFld = $productFrm->getField('product_warranty');
+$warrantyFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $siteLangId) . ' </small>';
 ?>
 <div class="row justify-content-center">
     <div class="col-md-12">
@@ -51,9 +54,8 @@ $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
                 <div class="field-set">
                     <div class="caption-wraper">
                         <label class="field_label">
-                            <?php
-                            $fld = $productFrm->getField('product_warranty');
-                            echo $fld->getCaption();
+                            <?php                           
+                            echo $warrantyFld->getCaption();
                             ?>
                         </label>
                         <?php if($fld->requirements()->isRequired()){ ?>

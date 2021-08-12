@@ -210,6 +210,7 @@ Updates/Fixes :
     => 057177 - Buyer: Suggestion to show the "Return Order Age" in the Order details page at the buyers end
     => 057166 - Buyer: "Share and Earn" functionality is not working properly
     => 057238 - Buyer: Order ID is not showing with the "Earned Reward Points On Purchase" under the reward points section
+    => 057227 - Admin and Seller: Suggestion to give some indication regarding the "Product Warranty" field is in Days or Months or Year while adding the product
 
 New Features:  
     => Admin shipped products listing page
