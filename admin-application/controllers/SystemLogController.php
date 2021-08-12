@@ -6,10 +6,6 @@ class SystemLogController extends AdminBaseController
     
     public function __construct($action)
     {   
-        $ajaxCallArray = array();
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die($this->str_invalid_Action);
-        }
         parent::__construct($action);
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
         $this->canView = $this->objPrivilege->canViewSystemLog($this->admin_id, true);
@@ -39,7 +35,8 @@ class SystemLogController extends AdminBaseController
         $srch = SystemLog::getSearchObject();
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
-            $srch->addCondition('slog_content', 'like', '%' . $keyword . '%');
+            $cond = $srch->addCondition('slog_content', 'like', '%' . $keyword . '%', 'AND');
+            $cond->attachCondition('slog_title', 'like', '%' . $keyword . '%', 'OR');
         }
         
         $log_type = FatApp::getPostedData('log_type', FatUtility::VAR_INT, -1);
@@ -81,6 +78,32 @@ class SystemLogController extends AdminBaseController
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
+    }
+    
+    public function detail($id)
+    {
+        $this->objPrivilege->canViewSystemLog();
+        $id = FatUtility::int($id);
+        if(1 > $id){
+            Message::addErrorMessage($this->str_invalid_request);
+            FatUtility::dieWithError(Message::getHtml());
+        }
+        $srch = SystemLog::getSearchObject();
+        $srch->addCondition('slog_id', '=', $id);
+        $rs = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+        
+        if (false == $row) {
+            Message::addErrorMessage($this->str_invalid_request);
+            FatUtility::dieWithError(Message::getHtml());
+        }    
+        
+        $moduleTypes = SystemLog::getModuleTypes();
+        $types = SystemLog::getTypes();
+        $this->set('moduleTypes', $moduleTypes);
+        $this->set('types', $types);
+        $this->set("detail", $row);
+        $this->_template->render(false, false, null, false, false);
     }
 
 }

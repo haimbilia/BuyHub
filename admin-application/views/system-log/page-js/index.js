@@ -41,5 +41,19 @@ $(document).ready(function() {
         document.frmSyslogSearch.reset();
         searchSystemLog(document.frmSyslogSearch);
     };
+    
+    viewLog = function(id) {
+        $.facebox(function() {
+            systemLog(id);
+        });
+    };
+
+    systemLog = function(id) {
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl('SystemLog', 'detail', [id]), '', function(t) {
+            fcom.updateFaceboxContent(t);
+        });
+    };
+    
 
 })();

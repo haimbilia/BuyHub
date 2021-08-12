@@ -3,8 +3,10 @@ $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     'slog_title' => Labels::getLabel('LBL_Title', $adminLangId),
     'slog_content' => Labels::getLabel('LBL_Content', $adminLangId),
+    'slog_response' => Labels::getLabel('LBL_Response', $adminLangId),
     'slog_type'    => Labels::getLabel('LBL_Log_Type', $adminLangId),
     'slog_module_type' => Labels::getLabel('LBL_Module_Type', $adminLangId),
+    'action' => '',
 );
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive'));
@@ -30,6 +32,12 @@ foreach ($arrListing as $sn => $row) {
             case 'slog_module_type':
                 $td->appendElement('plaintext', array(), $moduleTypes[$row['slog_module_type']], true);
                 break;
+            case 'slog_content':
+                $td->appendElement('plaintext', array(), CommonHelper::truncateCharacters($row['slog_content'], 40), true);
+                break;
+            case 'action':
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_View_details', $adminLangId), "onclick" => "viewLog(" . $row['slog_id'] . ")"), "<i class='fa fa-eye icon'></i>", true);
+                break;    
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);
                 break;
