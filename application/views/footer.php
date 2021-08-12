@@ -32,7 +32,7 @@ if (CommonHelper::demoUrl()) { ?>
                 <span>Top</span>
             </a>
         </div>
-        <div class="up-footer ">
+        <div class="up-footer">
             <div class="row">
                 <?php $this->includeTemplate('_partial/footerNavigation.php'); ?>
                 <?php if (FatApp::getConfig("CONF_ACTIVATE_SEPARATE_SIGNUP_FORM", FatUtility::VAR_INT, 1)) { ?>
@@ -92,14 +92,17 @@ if (CommonHelper::demoUrl()) { ?>
             </div>
         </div>
     </div>
+
+    </div>
     <div class="bottom-footer">
-        <div class="row align-items-center">
-            <div class="col-md-4">
-                <?php $this->includeTemplate('_partial/footerSocialMedia.php'); ?>
-            </div>
-            <div class="col-md-4">
-                <div class="copyright">
-                    <?php
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <?php $this->includeTemplate('_partial/footerSocialMedia.php'); ?>
+                </div>
+                <div class="col-md-4">
+                    <div class="copyright">
+                        <?php
                         $replacements = array(
                             '{YEAR}' => '&copy; ' . date("Y"),
                             '{PRODUCT}' => '<a target="_blank" href="https://yo-kart.com" rel="noopener">Yo!Kart</a>',
@@ -107,16 +110,17 @@ if (CommonHelper::demoUrl()) { ?>
                         );
                         echo CommonHelper::replaceStringData(Labels::getLabel('LBL_COPYRIGHT_TEXT', $siteLangId), $replacements);
                         ?>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="payment">
+                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment.png"
+                            alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="payment">
-                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment.png"
-                        alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
-                </div>
-            </div>
+
         </div>
-    </div>
     </div>
 </footer>
 
@@ -184,7 +188,7 @@ if (CommonHelper::demoUrl()) { ?>
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register(
                     '<?php echo CONF_WEBROOT_URL; ?>sw.js?t=<?php echo filemtime(CONF_INSTALLATION_PATH . 'public/sw.js'); ?>&f'
-                    ).then(function(registration) {});
+                ).then(function(registration) {});
             });
         }
     });
