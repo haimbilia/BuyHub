@@ -211,6 +211,7 @@ Updates/Fixes :
     => 057166 - Buyer: "Share and Earn" functionality is not working properly
     => 057221 - Seller: "Categories and Tax Categories" listing is not showing when sellers click on these fields but, for brand listing is showing
     => 057217 - Seller and Buyer: Suggestion to show the "Cancel Order" button instead of the "Cross" icon in the order details
+    => 057212 - The "same status" of order is updating when Seller clicks on the "Save Changes" button multiple times
 
 New Features:  
     => Admin shipped products listing page
