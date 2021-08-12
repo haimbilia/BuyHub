@@ -20,21 +20,19 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                 <div class="card-body">
                     <div class="invite-box">
                         <div class="share-earn">
-                            <img src="/yorent-v2.1/images/dashboard/share-earn.png" alt="">
+                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/share-earn.png" alt="">
                             <h2>
-                                Invite your friends
+                                <?php echo Labels::getLabel('LBL_INVITE_YOUR_FRIENDS', $siteLangId); ?>
                             </h2>
                             <p>
-                                Invite your friends to join tribe and earn once they signup.
+                                <?php echo Labels::getLabel('LBL_INVITE_YOUR_FRIENDS_TO_JOIN_TRIBE_AND_EARN_ONCE_THEY_SIGNUP.', $siteLangId); ?>
                             </p>
                             <ul class="points">
                                 <li><span class="badge yellow"></span>
-                                    Total invites sent :
-                                    2
+                                    <?php echo sprintf(Labels::getLabel('LBL_TOTAL_INVITES_SENT_:_%S', $siteLangId), 2); ?>
                                 </li>
                                 <li><span class="badge green"></span>
-                                    Total points earned :
-                                    100
+                                    <?php echo sprintf(Labels::getLabel('LBL_TOTAL_POINTS_EARNED_:_%S', $siteLangId), 100); ?>
                                 </li>
                             </ul>
                         </div>
@@ -43,7 +41,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 <div class="form-group">
                                     <input type="text" placeholder="Email addresses" class="form-control">
                                 </div> <button type="button" disabled="disabled" class="btn-fly"><svg class="svg">
-                                        <use xlink:href="/yorent-v2.1/images/dashboard/retina/sprite.svg#submitfly">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#submitfly">
                                         </use>
                                     </svg></button>
                             </form>
@@ -52,55 +50,55 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             <li><a href="javascript:;" data-url="" data-val="" data-code="" title="Copy link"
                                     class="btn"><span class="icon"><i class="svg--icon"><svg class="svg">
                                                 <use
-                                                    xlink:href="/yorent-v2.1/images/dashboard/retina/sprite.svg#icon_link">
+                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icon_link">
                                                 </use>
                                             </svg></i></span></a></li>
                             <li><a href="javascript:void(0)" class="share-network-email"><span class="icon"><i
                                             class="svg--icon"><svg class="svg">
-                                                <use xlink:href="/yorent-v2.1/images/dashboard/retina/sprite.svg#share-email"
-                                                    href="/yorent-v2.1/images/dashboard/retina/sprite.svg#share-email">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-email"
+                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-email">
                                                 </use>
                                             </svg></i></span></a></li>
                             <li><a href="javascript:void(0)" class="share-network-facebook"><span class="icon"><i
                                             class="svg--icon"><svg class="svg">
-                                                <use xlink:href="/yorent-v2.1/images/dashboard/retina/sprite.svg#share-facebook"
-                                                    href="/yorent-v2.1/images/dashboard/retina/sprite.svg#share-facebook">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-facebook"
+                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-facebook">
                                                 </use>
                                             </svg></i></span></a></li>
                             <li><a href="javascript:void(0)" class="share-network-linkedin"><span class="icon"><i
                                             class="svg--icon"><svg class="svg">
-                                                <use xlink:href="/yorent-v2.1/images/dashboard/retina/sprite.svg#share-linkedin"
-                                                    href="/yorent-v2.1/images/dashboard/retina/sprite.svg#share-linkedin">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-linkedin"
+                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-linkedin">
                                                 </use>
                                             </svg></i></span></a></li>
                             <li><a href="javascript:void(0)" class="share-network-reddit"><span class="icon"><i
                                             class="svg--icon"><svg class="svg">
-                                                <use xlink:href="/yorent-v2.1/images/dashboard/retina/sprite.svg#share-reddit"
-                                                    href="/yorent-v2.1/images/dashboard/retina/sprite.svg#share-reddit">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-reddit"
+                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-reddit">
                                                 </use>
                                             </svg></i></span></a></li>
                             <li><a href="javascript:void(0)" class="share-network-skype"><span class="icon"><i
                                             class="svg--icon"><svg class="svg">
-                                                <use xlink:href="/yorent-v2.1/images/dashboard/retina/sprite.svg#share-skype"
-                                                    href="/yorent-v2.1/images/dashboard/retina/sprite.svg#share-skype">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-skype"
+                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-skype">
                                                 </use>
                                             </svg></i></span></a></li>
                             <li><a href="javascript:void(0)" class="share-network-telegram"><span class="icon"><i
                                             class="svg--icon"><svg class="svg">
-                                                <use xlink:href="/yorent-v2.1/images/dashboard/retina/sprite.svg#share-telegram"
-                                                    href="/yorent-v2.1/images/dashboard/retina/sprite.svg#share-telegram">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-telegram"
+                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-telegram">
                                                 </use>
                                             </svg></i></span></a></li>
                             <li><a href="javascript:void(0)" class="share-network-twitter"><span class="icon"><i
                                             class="svg--icon"><svg class="svg">
-                                                <use xlink:href="/yorent-v2.1/images/dashboard/retina/sprite.svg#share-twitter"
-                                                    href="/yorent-v2.1/images/dashboard/retina/sprite.svg#share-twitter">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-twitter"
+                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-twitter">
                                                 </use>
                                             </svg></i></span></a></li>
                             <li><a href="javascript:void(0)" class="share-network-whatsapp"><span class="icon"><i
                                             class="svg--icon"><svg class="svg">
-                                                <use xlink:href="/yorent-v2.1/images/dashboard/retina/sprite.svg#share-whatsapp"
-                                                    href="/yorent-v2.1/images/dashboard/retina/sprite.svg#share-whatsapp">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-whatsapp"
+                                                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share-whatsapp">
                                                 </use>
                                             </svg></i></span></a></li>
                         </ul>
@@ -111,10 +109,10 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Invite Type</th>
-                                        <th>Name/Email/Phone</th>
-                                        <th>Date</th>
-                                        <th>Status</th>
+                                        <th><?php echo Labels::getLabel('LBL_INVITE_TYPE', $siteLangId); ?></th>
+                                        <th><?php echo Labels::getLabel('LBL_NAME/Email/PHONE', $siteLangId); ?></th>
+                                        <th><?php echo Labels::getLabel('LBL_DATE', $siteLangId); ?></th>
+                                        <th><?php echo Labels::getLabel('LBL_STATUS', $siteLangId); ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>

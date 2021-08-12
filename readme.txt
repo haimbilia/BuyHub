@@ -204,6 +204,7 @@ Updates/Fixes :
     => 057144 - Admin: "Complete" option is showing in the "User Gdpr Requests" section when the seller "Request to Remove My Data"
     => 057171 - Buyer: Suggestion to show the "Order ID" with cancelled order under the "My Credit" section
     => 057177 - Buyer: Suggestion to show the "Return Order Age" in the Order details page at the buyers end
+    => 057166 - Buyer: "Share and Earn" functionality is not working properly
 
 New Features:  
     => Admin shipped products listing page

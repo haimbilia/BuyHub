@@ -59,7 +59,7 @@ $(document).ready(function(){
 			e.preventDefault();
 		}, true);
 		document.execCommand('copy');
-		alert('copied text: ' + copyText);
+        $.mbsmessage(langLbl.copiedText + " : " + copyText, true, 'alert--info');
 	}
 
 })();
