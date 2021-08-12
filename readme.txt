@@ -212,6 +212,8 @@ Updates/Fixes :
     => 057221 - Seller: "Categories and Tax Categories" listing is not showing when sellers click on these fields but, for brand listing is showing
     => 057217 - Seller and Buyer: Suggestion to show the "Cancel Order" button instead of the "Cross" icon in the order details
     => 057212 - The "same status" of order is updating when Seller clicks on the "Save Changes" button multiple times
+    => 057238 - Buyer: Order ID is not showing with the "Earned Reward Points On Purchase" under the reward points section
+    => 057227 - Admin and Seller: Suggestion to give some indication regarding the "Product Warranty" field is in Days or Months or Year while adding the product
 
 New Features:  
     => Admin shipped products listing page
