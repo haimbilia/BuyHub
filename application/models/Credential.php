@@ -24,7 +24,8 @@ class Credential extends MyAppModel
         if (!empty($fields) && is_array($fields)) {
             $search->addFld($fields);
         }
-
+        $search->doNotCalculateRecords();
+        $search->setPageSize(1);
         $rs = $search->getResultSet();
         $db = FatApp::getDb();
         $row = $db->fetch($rs);

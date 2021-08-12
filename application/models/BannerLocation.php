@@ -86,6 +86,8 @@ class BannerLocation extends MyAppModel
 
         $bannerSrch = Banner::getBannerLocationSrchObj(true);
         $bannerSrch->addCondition('blocation_collection_id', '=', $collectionId);
+        $bannerSrch->doNotCalculateRecords();
+        $bannerSrch->setPageSize(1);
         $rs = $bannerSrch->getResultSet();
         $bannerLocation = $db->fetch($rs);
 
@@ -164,6 +166,8 @@ class BannerLocation extends MyAppModel
             }
         }
         $srch->addCondition('blocation_collection_id', '=', $collectionId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!$row) {

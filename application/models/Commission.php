@@ -144,6 +144,8 @@ class Commission extends MyAppModel
         $srch->addCondition('commsetting_product_id', '=', 0);
         $srch->addCondition('commsetting_prodcat_id', '=', 0);
         $srch->addFld('commsetting_id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         if (!$row = FatApp::getDb()->fetch($rs)) {
             return false;

@@ -201,6 +201,8 @@ class DigitalDownloadPrivilages extends FatModel
         }
 
         $srch->addMultipleFields($attrs);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         
         $rs = $srch->getResultSet();
         $this->sellerProduct = FatApp::getDb()->fetch($rs);

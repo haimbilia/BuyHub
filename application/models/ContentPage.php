@@ -106,6 +106,8 @@ class ContentPage extends MyAppModel
         $srch = static::getSearchObject();
         $srch->addCondition('p.' . static::DB_TBL_PREFIX . 'id', '=', $id);
         $srch->addFld('p.' . static::DB_TBL_PREFIX . 'id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row) && $row[static::DB_TBL_PREFIX . 'id'] == $id) {
@@ -119,6 +121,8 @@ class ContentPage extends MyAppModel
         $srch = static::getSearchObject();
         $srch->addCondition('p.' . static::DB_TBL_PREFIX . 'id', '=', $id);
         $srch->addFld('p.' . static::DB_TBL_PREFIX . 'id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row) && $row[static::DB_TBL_PREFIX . 'id'] == $id) {
