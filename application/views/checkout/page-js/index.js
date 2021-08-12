@@ -500,10 +500,11 @@ $("document").ready(function () {
     };
 
     getPromoCode = function () {
+        $.systemMessage(langLbl.processing, 'alert--process', false);
         checkLogin();
-
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl("Checkout", "getCouponForm"), "", function (t) {
+                $.systemMessage.close();
                 $.facebox(t);
                 $("input[name='coupon_code']").focus();
             });
