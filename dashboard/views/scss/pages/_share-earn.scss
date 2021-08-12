@@ -27,9 +27,9 @@
 }
 
 .invite-box {
-    max-width: 410px;
+    max-width: 600px;
     @include media-breakpoint-down(md) {
-        max-width: 460px;
+        max-width: 500px;
     }
     margin: auto;
 }
@@ -180,6 +180,7 @@
 .form--fly {
     position: relative;
     .form-group {
+        position: relative;
         input[type="text"] {
             border-radius: 25px;
         }
@@ -192,16 +193,22 @@
     }
     .btn-fly {
         position: absolute;
-        #{$end-direction}: 0px;
+        #{$end-direction}: 5px;
         background: none;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 0 5px;
         border: none;
-        height: 41px;
-        color: $brand-color;
+        height: 40px;
+        width: 40px;
+        min-width: auto;
+        border-radius: 50%;
+        color: $brand-color-inverse;
+        background: $brand-color;
         z-index: 3;
+        top: auto;
+        bottom: 5px;
         .svg {
             width: 16px;
             height: 16px;
@@ -211,8 +218,19 @@
             box-shadow: none;
         }
         &[disabled] {
-            color: $txt-gray;
-            opacity: 0.5;
+            opacity: 0.25;
+            filter: grayscale(1);
+        }
+    }
+    .tagify {
+        border-radius: 5px;
+        min-height: 50px;
+        padding-#{$end-direction}: 50px;
+        &--focus {
+            border-color: $brand-color!important;
+        }
+        &__input {
+            min-height: 22px;
         }
     }
 }
@@ -223,7 +241,7 @@
         margin-#{$end-direction}: 10px;
         flex: 1;
     }
-    .btn-fly {
-        #{$end-direction}: 10px;
-    }
+    // .btn-fly {
+    //     #{$end-direction}: 10px;
+    // }
 }
