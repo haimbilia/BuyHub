@@ -267,6 +267,7 @@ class ProductsController extends MyAppController
             foreach ($conditionArr as $key => $val) {
                 $conditionSrch = clone $prodSrchObj;
                 $conditionSrch->setPageSize(1);
+                $conditionSrch->doNotCalculateRecords();
                 $conditionSrch->addMultipleFields(array('selprod_condition'));
                 $conditionSrch->addCondition('selprod_condition', '=', $key);
                 /* if needs to show product counts under any condition[ */
@@ -537,7 +538,8 @@ class ProductsController extends MyAppController
         /* over all catalog product reviews */
         $selProdReviewObj->addCondition('spreview_product_id', '=', $product['product_id']);
         $selProdReviewObj->addMultipleFields(array('count(spreview_postedby_user_id) totReviews', 'sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5'));
-
+        $selProdReviewObj->doNotCalculateRecords();
+        $selProdReviewObj->setPageSize(1);
         $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
         /* CommonHelper::printArray($reviews); die; */
         $this->set('reviews', $reviews);
@@ -747,6 +749,7 @@ class ProductsController extends MyAppController
             array('shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'COALESCE(shop_name, shop_identifier) as shop_name', 'shop_description', 'shop_payment_policy', 'shop_delivery_policy', 'shop_refund_policy',  'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name', 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name', 'shop_city'/* , 'shop_free_ship_upto' */)
         );
         $srch->addCondition('shop_id', '=', $product['shop_id']);
+        $srch->setPageSize(1);
         $shopRs = $srch->getResultSet();
         $shop = FatApp::getDb()->fetch($shopRs);
 
@@ -1380,7 +1383,7 @@ class ProductsController extends MyAppController
                         $srch->joinSellerProducts();
                         $srch->joinProductToCategory();
                         $srch->doNotCalculateRecords();
-                        $srch->doNotLimitRecords();
+                        $srch->setPageSize(1);
                         $srch->addMultipleFields(array('COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'COALESCE(product_name, product_identifier)as product_name', 'prodcat_code'));
                         $srch->addCondition('selprod_id', '=', $selprod_id);
                         $rs = $srch->getResultSet();
@@ -1504,7 +1507,7 @@ class ProductsController extends MyAppController
         $productSrchObj = new ProductSearch($this->siteLangId);
         $productSrchObj->joinProductToCategory($this->siteLangId);
         $productSrchObj->doNotCalculateRecords();
-        $productSrchObj->setPageSize(10);
+        $productSrchObj->setPageSize(1);
         $productSrchObj->setDefinedCriteria();
 
         if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
@@ -1523,11 +1526,10 @@ class ProductsController extends MyAppController
             )
         );
 
-        $productCatSrchObj = ProductCategory::getSearchObject(false, $this->siteLangId);
+       /*  $productCatSrchObj = ProductCategory::getSearchObject(false, $this->siteLangId);
         $productCatSrchObj->addOrder('m.prodcat_active', 'DESC');
-        $productCatSrchObj->doNotCalculateRecords();
-        /* $productCatSrchObj->setPageSize(4); */
-        $productCatSrchObj->addMultipleFields(array('prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'prodcat_description'));
+        $productCatSrchObj->doNotCalculateRecords();       
+        $productCatSrchObj->addMultipleFields(array('prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'prodcat_description')); */
 
         $productSrchObj->joinTable('(' . $prodObj->getQuery() . ') ', 'INNER JOIN', 'selprod_id = ppr.proSelProdId ', 'ppr');
         $productSrchObj->addFld(array('promotion_id'));
@@ -1612,7 +1614,7 @@ class ProductsController extends MyAppController
         $prodSrch->validateAndJoinDeliveryLocation(false);
         $prodSrch->doNotCalculateRecords();
         $prodSrch->addCondition('selprod_id', '=', $selprod_id);
-        $prodSrch->doNotLimitRecords();
+        $prodSrch->setPageSize(1);
 
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinSelProdRating();
@@ -1690,7 +1692,7 @@ class ProductsController extends MyAppController
         $prodSrch->validateAndJoinDeliveryLocation(false);
         $prodSrch->doNotCalculateRecords();
         $prodSrch->addCondition('selprod_id', '=', $selprod_id);
-        $prodSrch->doNotLimitRecords();
+        $prodSrch->setPageSize(1);
 
         /* sub query to find out that logged user have marked current product as in wishlist or not[ */
         $loggedUserId = 0;

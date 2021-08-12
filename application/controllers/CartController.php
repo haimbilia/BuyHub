@@ -313,6 +313,8 @@ class CartController extends MyAppController
                 $srch->addMultipleFields(
                     array('selprod_min_order_qty')
                 );
+                $srch->doNotCalculateRecords();
+                $srch->setPageSize(1);
                 $rs = $srch->getResultSet();
                 $db = FatApp::getDb();
                 $sellerProductRow = $db->fetch($rs);
@@ -384,6 +386,8 @@ class CartController extends MyAppController
             $srch->addCondition('pricetbl.selprod_id', '=', $productId);
             $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
             $srch->addMultipleFields(array('selprod_id', 'selprod_code', 'selprod_min_order_qty', 'selprod_stock', 'product_name','prodcat_name','brand_name','selprod_title','selprod_price'));
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $db = FatApp::getDb();
             $sellerProductRow = $db->fetch($rs);
