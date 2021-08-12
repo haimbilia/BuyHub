@@ -132,6 +132,7 @@ class BraintreePayController extends PaymentController
                         Message::addErrorMessage(Labels::getLabel('BRAINTREE_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId));
                         CommonHelper::redirectUserReferer();
                     }
+                    $this->paymentInitiated($orderId);
                     $charge = Braintree_Transaction::sale(
                         array(
                             'amount' => $_POST['amount'],

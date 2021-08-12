@@ -744,6 +744,8 @@ trait CustomCatalogProducts
             $srch->addMultipleFields(array('m.prodcat_id', 'IFNULL(pc_l.prodcat_name,m.prodcat_identifier) as prodcat_name'));
             $srch->addCondition('m.prodcat_deleted', '=', applicationConstants::NO);
             $srch->addCondition('m.prodcat_id', '=', $prodCatId);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $db = FatApp::getDb();
             $rs = $srch->getResultSet();
             $category = $db->fetch($rs);

@@ -64,6 +64,7 @@ class TransferBankPayController extends PaymentController
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         if ($orderInfo) {
+            $this->paymentInitiated($orderId);
             $cartObj = new Cart();
             $cartObj->clear();
             $cartObj->updateUserCart();

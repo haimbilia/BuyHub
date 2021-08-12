@@ -215,6 +215,8 @@ trait BadgeRequestSetup
         if (0 < $badgeReqId) {
             $srch = $this->getRequestedBadgeObj();
             $srch->addCondition('breq_id', '=', $badgeReqId);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $requestedBadge = FatApp::getDb()->fetch($srch->getResultSet());
             if ($requestedBadge === false) {
                 FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));

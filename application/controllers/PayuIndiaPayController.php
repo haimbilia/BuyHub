@@ -39,6 +39,7 @@ class PayuIndiaPayController extends PaymentController
         $postOrderId = FatApp::getPostedData('orderId', FatUtility::VAR_STRING, '');
         $processRequest = false;
         if (!empty($postOrderId) && $orderId = $postOrderId) {
+            $this->paymentInitiated($orderId);
             $frm = $this->getPaymentForm($orderId, true);
             $processRequest = true;
         }

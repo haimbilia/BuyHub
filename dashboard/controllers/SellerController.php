@@ -5646,7 +5646,7 @@ class SellerController extends SellerBaseController
 
                 $timeSlot = new TimeSlot();
                 $timeSlots = $timeSlot->timeSlotsByAddrId($addrId);
-
+                
                 $timeSlotsRow = current($timeSlots);
                 $availability = isset($timeSlotsRow['tslot_availability']) ? $timeSlotsRow['tslot_availability'] : $availability;                
                 $data['tslot_availability'] = $availability;

@@ -287,6 +287,8 @@ class CheckoutController extends MyAppController
 
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
+        $cPageSrch->doNotCalculateRecords();
+        $cPageSrch->setPageSize(1);
         $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
         if (!empty($cpage) && is_array($cpage)) {
             $termsAndConditionsLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
@@ -671,7 +673,7 @@ class CheckoutController extends MyAppController
             $prodSrch->joinSellerSubscription();
             $prodSrch->addSubscriptionValidCondition();
             $prodSrch->doNotCalculateRecords();
-            $prodSrch->doNotLimitRecords();
+            $prodSrch->setPageSize(1);
             $prodSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);
             $prodSrch->addCondition('selprod_id', '=', $cartval['selprod_id']);
             /* $prodSrch->addDirectCondition( "( isnull(psbs.psbs_user_id) or psbs.psbs_user_id = '".$cartval['selprod_user_id']."')" ); */
@@ -831,7 +833,7 @@ class CheckoutController extends MyAppController
         $prodSrch->addSubscriptionValidCondition();
         $prodSrch->joinProductToCategory();
         $prodSrch->doNotCalculateRecords();
-        $prodSrch->doNotLimitRecords();
+        $prodSrch->setPageSize(1);
         $prodSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $prodSrch->addCondition('selprod_id', '=', $selprod_id);
         $fields = array(
@@ -846,7 +848,7 @@ class CheckoutController extends MyAppController
         );
         $prodSrch->addMultipleFields($fields);
         $rs = $prodSrch->getResultSet();
-        return $productInfo = FatApp::getDb()->fetch($rs);
+        return FatApp::getDb()->fetch($rs);
     }
 
     private function getCartProductLangData($selprod_id, $lang_id)
@@ -1073,7 +1075,7 @@ class CheckoutController extends MyAppController
         /* referrer details[ */
         $srchOrder = new OrderSearch();
         $srchOrder->doNotCalculateRecords();
-        $srchOrder->doNotLimitRecords();
+        $srchOrder->setPageSize(1);
         $srchOrder->addCondition('order_user_id', '=', $userId);
         $srchOrder->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
         $srchOrder->addCondition('order_referrer_user_id', '!=', 0);
@@ -1092,7 +1094,7 @@ class CheckoutController extends MyAppController
 
             $userSrchObj = User::getSearchObject();
             $userSrchObj->doNotCalculateRecords();
-            $userSrchObj->doNotLimitRecords();
+            $userSrchObj->setPageSize(1);
             $userSrchObj->addCondition('user_referral_code', '=', $userReferrerCode);
             $userSrchObj->addCondition('user_id', '!=', $userId);
             $userSrchObj->addMultipleFields(array('user_id', 'user_referral_code', 'user_name'));
@@ -1449,7 +1451,7 @@ class CheckoutController extends MyAppController
 
         $srch = Orders::getSearchObject();
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $srch->addCondition('order_id', '=', $order_id);
         $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
         $rs = $srch->getResultSet();
@@ -1555,7 +1557,7 @@ class CheckoutController extends MyAppController
 
         $srch = Orders::getSearchObject();
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $srch->addCondition('order_id', '=', $order_id);
         $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
         $rs = $srch->getResultSet();
@@ -1836,7 +1838,7 @@ class CheckoutController extends MyAppController
 
             $srch = Orders::getSearchObject();
             $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
+            $srch->setPageSize(1);
             $srch->addCondition('order_id', '=', $order_id);
             $srch->addCondition('order_user_id', '=', $user_id);
             $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
@@ -1915,7 +1917,7 @@ class CheckoutController extends MyAppController
 
         $srch = Orders::getSearchObject();
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $srch->addCondition('order_id', '=', $order_id);
         $srch->addCondition('order_user_id', '=', $user_id);
         $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
@@ -2217,7 +2219,7 @@ class CheckoutController extends MyAppController
                     $prodSrch->joinSellerSubscription();
                     $prodSrch->addSubscriptionValidCondition();
                     $prodSrch->doNotCalculateRecords();
-                    $prodSrch->doNotLimitRecords();
+                    $prodSrch->setPageSize(1);
                     $prodSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);
                     $prodSrch->addCondition('selprod_id', '=', $cartval['selprod_id']);
                     $prodSrch->addMultipleFields(array('selprod_id', 'product_seller_id', 'psbs_user_id as shippedBySellerId'));

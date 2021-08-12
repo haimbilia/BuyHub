@@ -8,7 +8,7 @@ $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
 $submitFld->developerTags['col'] = 2;
 
 $email = $sharingFrm->getField('email');
-$email->setFieldTagAttribute('class', 'form-control emailAddressJs');
+$email->setFieldTagAttribute('class', 'emailAddressJs');
 $email->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_EMAIL_ADDRESS', $siteLangId));
 
 $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
@@ -36,14 +36,14 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         <div class="invite-by-email">
                             <?php echo $sharingFrm->getFormTag(); ?>
                             <div class="form-group">
-                                <?php echo $sharingFrm->getFieldHTML('email'); ?>
+                                <?php echo $sharingFrm->getFieldHTML('email'); ?> 
+                                <button type="submit" disabled="disabled" class="btn-fly submitBtnJs">
+                                    <svg class="svg">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#submitfly">
+                                        </use>
+                                    </svg>
+                                </button>
                             </div>
-                            <button type="submit" disabled="disabled" class="btn-fly submitBtnJs">
-                                <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#submitfly">
-                                    </use>
-                                </svg>
-                            </button>
                             </form>
                             <?php echo $sharingFrm->getExternalJS(); ?>
                         </div>

@@ -86,6 +86,8 @@ class BrandsController extends MyAppController
         $brandSrch = Brand::getListingObj($this->siteLangId, array( 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name'), true);
         $brandSrch->addCondition('brand_id', '=', $brandId);
         $brandSrch->addOrder('brand_name', 'asc');
+        $brandSrch->doNotCalculateRecords();
+        $brandSrch->setPageSize(1);
         $brandRs = $brandSrch->getResultSet();
         $brand = FatApp::getDb()->fetch($brandRs);
 
@@ -262,7 +264,7 @@ class BrandsController extends MyAppController
                 if ($brandId > 0) {
                     $brandSrch = Brand::getListingObj($this->siteLangId, array( 'IFNULL(brand_name, brand_identifier) as brand_name', ));
                     $brandSrch->doNotCalculateRecords();
-                    $brandSrch->doNotLimitRecords();
+                    $brandSrch->setPageSize(1);
                     $brandSrch->addCondition('brand_id', '=', $brandId);
                     $brandRs = $brandSrch->getResultSet();
                     $brandsArr = FatApp::getDb()->fetch($brandRs);

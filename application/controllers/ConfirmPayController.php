@@ -34,7 +34,7 @@ class ConfirmPayController extends MyAppController
         $orderObj = new Orders();
         $srch = Orders::getSearchObject();
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $srch->addCondition('order_id', '=', $orderId);
         $srch->addCondition('order_user_id', '=', $user_id);
         $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);

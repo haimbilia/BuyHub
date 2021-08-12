@@ -2400,7 +2400,7 @@ class BuyerController extends BuyerBaseController
         $srch->addOrder('urp.urp_date_added', 'DESC');
         $srch->addOrder('urp.urp_id', 'DESC');
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $srch->addMultipleFields(array('sum(urp_points) as totalRewardPoints', 'min(urp.urp_date_expiry) as expiredOn'));
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetch($rs);

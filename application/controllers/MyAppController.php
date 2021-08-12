@@ -276,6 +276,8 @@ class MyAppController extends FatController
         $userObj = new User($user_id);
         $srch = $userObj->getUserSearchObj();
         $srch->addMultipleFields(array('u.*'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $this->user_details = $this->db->fetch($rs, 'user_id');
         /*$cObj = new Cart($user_id, 0, $this->app_user['temp_user_id']);

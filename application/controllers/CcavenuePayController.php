@@ -89,7 +89,7 @@ class CcavenuePayController extends PaymentController
         } else {
             $iframe_url = 'https://test.ccavenue.com';
         }
-
+        $this->paymentInitiated($orderId);
         $iframe_url .= '/transaction/transaction.do?command=initiateTransaction&encRequest=' . $encrypted_data . '&access_code=' . $access_code;
         FatApp::redirectUser($iframe_url);
     }

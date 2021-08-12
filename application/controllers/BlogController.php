@@ -212,7 +212,8 @@ class BlogController extends MyAppController
         $srch = BlogPost::getSearchObject($this->siteLangId, true, true);
         $srch->addCondition('post_id', '=', $blogPostId);
         $srch->addMultipleFields(array('bp.*', 'IFNULL(bp_l.post_title,post_identifier) as post_title', 'bp_l.post_author_name', 'bp_l.post_description', 'group_concat(bpcategory_id) categoryIds', 'group_concat(IFNULL(bpcategory_name, bpcategory_identifier) SEPARATOR "~") categoryNames'));
-
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $srch->addGroupby('post_id');
         if (!$blogPostData = FatApp::getDb()->fetch($srch->getResultSet())) {
             $message = Labels::getLabel('Lbl_Invalid_Request', $this->siteLangId);
