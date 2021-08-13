@@ -23,6 +23,7 @@ class ShopsController extends MyAppController
         $searchForm->fill($params);
         $this->set('searchForm', $searchForm);
         $this->_template->addJs('js/slick.js');
+        $this->set('geoLocation', FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0));
         $this->_template->render();
     }
 

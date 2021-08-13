@@ -31,8 +31,17 @@ $(document).ready(function(){
 			} else {
 				$(dv).html(ans.html);
 			}
-			$("#loadMoreBtnDiv").html( ans.loadMoreBtnHtml );
-			$("#favShopCount").html( ans.totalRecords );
+                        if(CONF_ENABLE_GEO_LOCATION){
+                            if (typeof map == 'undefined') {
+                                initMutipleMapMarker(markers, 'shopMap--js', getCookie('_ykGeoLat'), getCookie('_ykGeoLng'), dragCallback);
+                            } else {
+                                clearMarkers();
+                                createMarkers(markers);
+                            }
+                        }else{
+                            $("#loadMoreBtnDiv").html( ans.loadMoreBtnHtml );
+                            $("#favShopCount").html( ans.totalRecords );
+                        }
 		}); 
 	};
 	
@@ -54,5 +63,15 @@ $(document).ready(function(){
 	markShopFavorite = function(shopId){
 		toggleShopFavorite(shopId);
 		reloadListing();
+	};
+        dragCallback = function(dragendMap){
+                canSetCookie = true;
+                codeLatLng(dragendMap.getCenter().lat(),dragendMap.getCenter().lng(),function(data){                
+                    displayGeoAddress(setGeoAddress(data));  
+                    if(typeof dragTimeOutEvent != "undefined"){
+                        clearTimeout(dragTimeOutEvent); 
+                    }                                        
+                    dragTimeOutEvent = setTimeout(function(){  reloadListing(); }, 1000);
+                });
 	};
 })();
