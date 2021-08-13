@@ -102,7 +102,7 @@
 .location {
     position: relative;
     &_inner {
-        display: flex;
+        display: block;
         align-items: center;
     }
     &_trigger {
@@ -113,6 +113,7 @@
         align-items: center;
         color: currentColor;
         padding: 0;
+        width: 100%;
         .svg {
             margin-#{$end-direction}: 5px;
             //fill: $brand-color;

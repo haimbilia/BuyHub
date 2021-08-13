@@ -29,7 +29,9 @@
             color: $txt-body;
             padding: 0.5rem 1rem;
             border-bottom: none;
-            background: rgba(0, 0, 0, 0.05);
+            background: $bg-gray;
+            background: $bg-brand-light;
+            color: $brand-color;
             font-weight: 400;
             vertical-align: top;
             &:first-child {

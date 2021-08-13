@@ -23,13 +23,11 @@
 }
 
 .fetured-slider .fetured-item {
-    
     border-#{$end-direction}: $border;
     padding: 0 20px;
 }
 
 .fetured-slider .fetured-item:last-child {
-    
     border-#{$end-direction}: none;
 }
 
@@ -43,7 +41,6 @@
     position: absolute;
     top: 50%;
     #{$start-direction}: 74%;
-    
     transform: translate(-50%, -50%);
     text-indent: -9999px;
     background-color: #ededed;
@@ -58,12 +55,10 @@
 
 .fetured-slider .slick-next:after {
     border-bottom: 3px solid #000000;
-    
     border-#{$end-direction}: 3px solid #000000;
     content: "";
     height: 15px;
     #{$start-direction}: 50%;
-    
     margin-#{$start-direction}: -9px;
     margin-top: -7px;
     position: absolute;
@@ -74,7 +69,8 @@
 }
 
 .fetured-slider .slick-next:hover {
-    background: $brand-color; color:$brand-color-inverse;
+    background: $brand-color;
+    color: $brand-color-inverse;
 }
 
 .fetured-slider .slick-next:hover:after {
