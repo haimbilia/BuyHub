@@ -214,6 +214,7 @@ Updates/Fixes :
     => 057212 - The "same status" of order is updating when Seller clicks on the "Save Changes" button multiple times
     => 057238 - Buyer: Order ID is not showing with the "Earned Reward Points On Purchase" under the reward points section
     => 057227 - Admin and Seller: Suggestion to give some indication regarding the "Product Warranty" field is in Days or Months or Year while adding the product
+    => 057044 - Seller: UI design is not correct while uploading the Banner and Logo for the Shop
 
 New Features:  
     => Admin shipped products listing page

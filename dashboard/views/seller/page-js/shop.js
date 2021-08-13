@@ -549,8 +549,9 @@ $(document).on("change", ".state", function () {
 
     bannerPopupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
+            $.facebox(fcom.getLoader());
             fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
-                $.facebox(t );
+                $.facebox(t);
                 var file = inputBtn.files[0];
                 var minWidth = document.frmShopBanner.banner_min_width.value;
                 var minHeight = document.frmShopBanner.banner_min_height.value;
@@ -574,6 +575,7 @@ $(document).on("change", ".state", function () {
 
     logoPopupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
+            $.facebox(fcom.getLoader());
             fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
                 $.facebox(t );
                 var file = inputBtn.files[0];
@@ -661,6 +663,7 @@ $(document).on("change", ".state", function () {
 
     collectionPopupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
+            $.facebox(fcom.getLoader());
             fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
                 $.facebox(t );
                 var file = inputBtn.files[0];
