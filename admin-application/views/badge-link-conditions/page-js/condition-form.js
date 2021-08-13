@@ -212,7 +212,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     getRecordTypeURL = function () {
         var sellerId = $(formClass + 'input[name="blinkcond_user_id"]').val();
         if ("" == sellerId || 1 > sellerId) {
-            $.systemMessage(langLbl.invalidRequest, 'alert--danger');
+            $.systemMessage(langLbl.invalidSeller, 'alert--danger');
             return false;
         }
         
@@ -246,7 +246,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     getRequestData = function (params) {
         var sellerId = $(formClass + 'input[name="blinkcond_user_id"]').val();
         if ("" == sellerId || 1 > sellerId) {
-            $.systemMessage(langLbl.invalidRequest, 'alert--danger');
+            $.systemMessage(langLbl.invalidSeller, 'alert--danger');
             return false;
         }
         var arr = {keyword: params.term};        
