@@ -144,7 +144,7 @@ class Extrapage extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
-        return $pageData = FatApp::getDb()->fetch($rs);
+        return FatApp::getDb()->fetch($rs);
     }
 
     public static function getContentBlockArrWithBg($langId)

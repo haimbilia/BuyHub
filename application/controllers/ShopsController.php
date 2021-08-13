@@ -607,6 +607,8 @@ class ShopsController extends MyAppController
             $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
             $srch->addMultipleFields(array('IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title'));
             $srch->addCondition('selprod_id', '=', $selprod_id);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $db = FatApp::getDb();
             $rs = $srch->getResultSet();
             $products = $db->fetch($rs);
@@ -755,6 +757,7 @@ class ShopsController extends MyAppController
         $srch->setDefinedCriteria($this->siteLangId);
         $srch->joinSellerSubscription();
         $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $srch->addMultipleFields(array('shop_id', 'shop_user_id'));
         $srch->addCondition('shop_id', '=', $shop_id);
         $shopRs = $srch->getResultSet();

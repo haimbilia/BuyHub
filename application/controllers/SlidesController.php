@@ -41,7 +41,7 @@ class SlidesController extends MyAppController
 			  END ) )'
         );
         $srch->addMultipleFields(array('slide_id', 'slide_type', 'slide_record_id', 'slide_url', 'slide_target', 'slide_title', 'promotion_id', 'userBalance', 'daily_cost', 'weekly_cost', 'monthly_cost', 'total_cost', 'promotion_budget', 'promotion_duration', 'promotion_cpc'));
-
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs, 'slide_id');
         if ($row == false) {

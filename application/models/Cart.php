@@ -114,6 +114,7 @@ class Cart extends FatModel
         $srch = new SearchBase('tbl_user_cart');
         $srch->addCondition('usercart_user_id', '=', $userId);
         $srch->addCondition('usercart_type', '=', CART::TYPE_PRODUCT);
+        $srch->doNotCalculateRecords();        
         $rs = $srch->getResultSet();
         if ($row = FatApp::getDb()->fetch($rs)) {
             return $row["usercart_details"];
@@ -1702,6 +1703,7 @@ class Cart extends FatModel
         $srch = new SearchBase('tbl_user_cart');
         $srch->addCondition('usercart_user_id', '=', $tempUserId);
         $srch->addCondition('usercart_type', '=', CART::TYPE_PRODUCT);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 
         if (!$row = FatApp::getDb()->fetch($rs)) {

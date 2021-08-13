@@ -314,6 +314,8 @@ class OrderReturnRequest extends MyAppModel
             }
         }
 
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);    
         $rs = $srch->getResultSet();
         $row = $db->fetch($rs);
 

@@ -38,6 +38,8 @@ class EmptyCartItems extends MyAppModel
         $srch = static::getSearchObject(0, false);
         $srch->addCondition(static::DB_TBL_PREFIX . 'id', '=', $id);
         $srch->addFld(static::DB_TBL_PREFIX . 'id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row) && $row[static::DB_TBL_PREFIX . 'id'] == $id) {
