@@ -215,6 +215,7 @@ Updates/Fixes :
     => 057238 - Buyer: Order ID is not showing with the "Earned Reward Points On Purchase" under the reward points section
     => 057227 - Admin and Seller: Suggestion to give some indication regarding the "Product Warranty" field is in Days or Months or Year while adding the product
     => 057228 - Admin and Seller: Suggestion to give some indication regarding the "Display Time Slots After Order [Hours]", where it will be used? 
+    => 057256 - on promotion add page time picker not coming
 
 New Features:  
     => Admin shipped products listing page
