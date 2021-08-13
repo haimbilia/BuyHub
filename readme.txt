@@ -216,6 +216,8 @@ Updates/Fixes :
     => 057227 - Admin and Seller: Suggestion to give some indication regarding the "Product Warranty" field is in Days or Months or Year while adding the product
     => 057044 - Seller: UI design is not correct while uploading the Banner and Logo for the Shop
 ==========================TV-9.3.2.20210813=============================
+    => 057270 - Seller: Badges requests list is not showing if the first request is for Badges
+
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
