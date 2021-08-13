@@ -464,13 +464,8 @@ $(document).on("change", ".state", function () {
     setPickupAddress = function (frm) {
         if (!$(frm).validate()) return;
         if (1 == $(".availabilityType-js:checked").val()) {
-            if (1 > $(".slotDays-js:checked").length) {
+            if (1 > $(".slotDaysJs:checked").length) {
                 $.mbsmessage(langLbl.selectTimeslotDay, true, 'alert--danger');
-                return false;
-            }
-        } else {
-            if ('' == $(".selectAllFromTime-js option:selected").val() || '' == $(".selectAllToTime-js option:selected").val()) {
-                $.mbsmessage(langLbl.invalidTimeSlot, true, 'alert--danger');
                 return false;
             }
         }
@@ -554,8 +549,9 @@ $(document).on("change", ".state", function () {
 
     bannerPopupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
+            $.facebox(fcom.getLoader());
             fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
-                $.facebox(t );
+                $.facebox(t);
                 var file = inputBtn.files[0];
                 var minWidth = document.frmShopBanner.banner_min_width.value;
                 var minHeight = document.frmShopBanner.banner_min_height.value;
@@ -579,6 +575,7 @@ $(document).on("change", ".state", function () {
 
     logoPopupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
+            $.facebox(fcom.getLoader());
             fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
                 $.facebox(t );
                 var file = inputBtn.files[0];
@@ -666,6 +663,7 @@ $(document).on("change", ".state", function () {
 
     collectionPopupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
+            $.facebox(fcom.getLoader());
             fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
                 $.facebox(t );
                 var file = inputBtn.files[0];

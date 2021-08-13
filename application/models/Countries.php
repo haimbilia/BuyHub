@@ -116,6 +116,8 @@ class Countries extends MyAppModel
                 $srch->addFld($attr);
             }
         }
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
 
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
@@ -146,6 +148,8 @@ class Countries extends MyAppModel
                 $srch->addFld($attr);
             }
         }
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
 
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
@@ -175,7 +179,8 @@ class Countries extends MyAppModel
 
         $srch = static::getSearchObject(true, $langId, $attr);
         $srch->addCondition('country_name', '=', $countryName);
-        
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         return (array) FatApp::getDb()->fetch($rs);
     }

@@ -868,15 +868,7 @@ sendResetPasswordLink = function (user) {
         $("#facebox .content").addClass("fbminwidth");
     });
     $.systemMessage = function (data, cls, autoClose = true) {
-        if ("" == data) {
-            return;
-        }
-        if (typeof autoClose == "undefined" || autoClose == "undefined") {
-            autoClose = false;
-        }
-        initialize();
-        $.systemMessage.loading();
-        $.systemMessage.fillSysMessage(data, cls, autoClose);
+        $.mbsmessage(data, autoClose, cls)
     };
     $.extend($.systemMessage, {
         settings: {
@@ -903,7 +895,7 @@ sendResetPasswordLink = function (user) {
             }
         },
         close: function () {
-            $.mbsmessage.close();
+            $.mbsmessage.close()
         },
     });
     $(document).bind("close.systemMessage", function () {

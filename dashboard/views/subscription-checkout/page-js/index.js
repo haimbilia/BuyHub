@@ -120,12 +120,14 @@ $("document").ready(function() {
     };
 
     getPromoCode = function(){
+        $.systemMessage(langLbl.processing, 'alert--process', false);
         if (isUserLogged() == 0) {
             loginPopUpBox();
             return false;
         }
         $.facebox(function() {
             fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'getCouponForm'), '', function(t) {
+                $.systemMessage.close();
                 $.facebox(t );
                 $("input[name='coupon_code']").focus();
             });

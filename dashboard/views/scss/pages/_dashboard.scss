@@ -453,7 +453,7 @@
 .content-wrapper {
     &.content-space {
         padding: 3.125rem;
-        min-height: 500px;
+        min-height: calc(100vh - 180px);
         @include media-breakpoint-down(lg) {
             padding: 2rem;
         }

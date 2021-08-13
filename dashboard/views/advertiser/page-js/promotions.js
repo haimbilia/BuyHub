@@ -162,6 +162,7 @@ $(document).on('change',"select[name='banner_blocation_id']",function(){
 
     popupImage = function(inputBtn){
 		if (inputBtn.files && inputBtn.files[0]) {
+            $.facebox(fcom.getLoader());
 	        fcom.ajax(fcom.makeUrl('Advertiser', 'imgCropper'), '', function(t) {
 	    		$.facebox(t);
                 var file = inputBtn.files[0];

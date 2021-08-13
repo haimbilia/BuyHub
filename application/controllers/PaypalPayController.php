@@ -92,6 +92,7 @@ class PaypalPayController extends PaymentController
             $msg = is_array($msg) && isset($msg['message']) ? $msg['message'] : $msg;
             $this->setErrorAndRedirect($msg, true);
         }
+        $this->paymentInitiated($orderId);
         $order = $this->plugin->getResponse();
         echo json_encode($order->result, JSON_PRETTY_PRINT);
     }

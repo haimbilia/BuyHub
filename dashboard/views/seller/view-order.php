@@ -42,11 +42,7 @@ $daysSpent = round($datediff / (60 * 60 * 24));
                 if ($canCancelOrder && $canEdit) { ?>
                     <div class="col-auto">
                         <div class="btn-group">
-                            <ul class="actions">
-                                <li>
-                                    <a href="<?php echo UrlHelper::generateUrl('seller', 'cancelOrder', array($orderDetail['op_id'])); ?>" class="icn-highlighted" title="<?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId); ?>"><i class="fas fa-times"></i></a>
-                                </li>
-                            </ul>
+                            <a href="<?php echo UrlHelper::generateUrl('seller', 'cancelOrder', array($orderDetail['op_id'])); ?>" class="btn btn-outline-brand btn-sm" title="<?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId); ?></a>
                         </div>
                     </div>
                 <?php } ?>

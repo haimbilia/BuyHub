@@ -70,6 +70,8 @@ class Plugin extends PluginCommon
         $srch = new SearchBase(static::DB_TBL, 'plg');
         $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'type', '=', $type);
         $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row)) {
@@ -287,7 +289,8 @@ class Plugin extends PluginCommon
                         break;
                 }
             }
-
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $result = FatApp::getDb()->fetch($rs);
             if (is_string($attr) && !empty($attr)) {

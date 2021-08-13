@@ -65,6 +65,7 @@ class KhipuPayController extends PaymentController
             $client = new Khipu\ApiClient($configuration);
             $payments = new Khipu\Client\PaymentsApi($client);
             try {
+                $this->paymentInitiated($orderId);
                 $this->initiatePayment = $payments->paymentsPost(
                     FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->siteLangId), // Reason for purchase
                     "CLP", // Currency

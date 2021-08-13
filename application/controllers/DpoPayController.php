@@ -60,6 +60,7 @@ class DpoPayController extends PaymentController
         $postOrderId = FatApp::getPostedData('orderId', FatUtility::VAR_STRING, '');
         $processRequest = false;
         if (!empty($postOrderId) && $orderId = $postOrderId) {
+            $this->paymentInitiated($orderId);
             if (false === $this->plugin->initiateRequest($orderId)) {
                 $this->setErrorAndRedirect($this->plugin->getError(), FatUtility::isAjaxCall());
             }

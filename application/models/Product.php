@@ -606,6 +606,8 @@ class Product extends MyAppModel
         $srch = new SearchBase(static::DB_TBL_PRODUCT_SHIPPING);
         $srch->addCondition(static::DB_TBL_PRODUCT_SHIPPING_PREFIX . 'product_id', '=', $productId);
         $srch->addCondition(static::DB_TBL_PRODUCT_SHIPPING_PREFIX . 'user_id', '=', $userId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
 
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
@@ -1115,6 +1117,8 @@ class Product extends MyAppModel
         $srch->addCondition(MetaTag::DB_TBL_PREFIX . 'controller', '=', 'Products');
         $srch->addCondition(MetaTag::DB_TBL_PREFIX . 'action', '=', 'view');
         $srch->addMultipleFields(array('meta_id'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetch($rs);
         return $records;
@@ -1155,6 +1159,7 @@ class Product extends MyAppModel
             )
         );
         $srch->addOrder('selprod_active', 'DESC');
+        $srch->doNotCalculateRecords();
 
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
@@ -1199,6 +1204,8 @@ class Product extends MyAppModel
         $db = FatApp::getDb();
 
         $srch->addMultipleFields(array('selprod_id', 'selprod_deleted'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = $db->fetch($rs);
 

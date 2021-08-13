@@ -213,6 +213,8 @@ class OrderPayment extends Orders
                 if (!empty($orderDetails['order_discount_coupon_code'])) {
                     $srch = DiscountCoupons::getSearchObject();
                     $srch->addCondition('coupon_code', '=', $orderDetails['order_discount_coupon_code']);
+                    $srch->doNotCalculateRecords();
+                    $srch->setPageSize(1);
                     $rs = $srch->getResultSet();
                     $row = FatApp::getDb()->fetch($rs);
                     if (!empty($row)) {
@@ -321,6 +323,8 @@ class OrderPayment extends Orders
         if (!empty($orderDetails['order_discount_coupon_code'])) {
             $srch = DiscountCoupons::getSearchObject();
             $srch->addCondition('coupon_code', '=', $orderDetails['order_discount_coupon_code']);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $row = FatApp::getDb()->fetch($rs);
             if (!empty($row)) {
@@ -354,6 +358,8 @@ class OrderPayment extends Orders
         if (!empty($orderDetails['order_discount_coupon_code'])) {
             $srch = DiscountCoupons::getSearchObject();
             $srch->addCondition('coupon_code', '=', $orderDetails['order_discount_coupon_code']);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $row = FatApp::getDb()->fetch($rs);
             if (!empty($row)) {

@@ -6,6 +6,9 @@ $fld = $productFrm->getField('product_featured');
 $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
 $fld->developerTags['cbHtmlAfterCheckbox'] = '';
 
+$warrantyFld = $productFrm->getField('product_warranty');
+$warrantyFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $siteLangId) . ' </small>';
+
 $btnBackFld = $productFrm->getField('btn_back');
 $btnBackFld->setFieldTagAttribute('class', "btn btn-outline-brand");
 $btnBackFld->setFieldTagAttribute('onClick', 'customProductForm('.$productId.');');
@@ -40,11 +43,11 @@ $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
                 <div class="field-set">
                      <div class="caption-wraper">
                         <label class="field_label">
-                            <?php $fld = $productFrm->getField('product_warranty');
-                              echo $fld->getCaption();
+                            <?php 
+                              echo $warrantyFld->getCaption();
                             ?>
                         </label>
-                        <?php if($fld->requirements()->isRequired()){ ?>
+                        <?php if($warrantyFld->requirements()->isRequired()){ ?>
                             <span class="spn_must_field">*</span> 
                         <?php } ?>                       
                      </div>

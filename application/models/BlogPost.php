@@ -171,6 +171,8 @@ class BlogPost extends MyAppModel
             $srch->addCondition('post_deleted', '=', applicationConstants::NO);
             $srch->addCondition('post_id', '=', $post_id);
             $srch->addFld('post_id');
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $row = FatApp::getDb()->fetch($rs);
             if (!empty($row) && $row['post_id'] == $post_id) {
@@ -213,6 +215,8 @@ class BlogPost extends MyAppModel
         $srch = new SearchBase(static::DB_TBL, 'bp');
         $srch->addCondition('post_id', '=', $post_id);
         $srch->addFld('post_view_count');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $this->total_records = $srch->recordCount();
         $result_data = $this->db->fetch($rs);

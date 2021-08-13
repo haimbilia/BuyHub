@@ -43,29 +43,29 @@ $(document).ready(function(){
 	};
 
 	getPromoCode = function(){
+        $.systemMessage(langLbl.processing, 'alert--process', false);
 		if( isUserLogged() == 0 ){
 			loginPopUpBox(true);
 			return false;
 		}
 
-		$.facebox(function() {
-			fcom.ajax(fcom.makeUrl('Checkout','getCouponForm'), '', function(t){
-                try{
-                    t = $.parseJSON(t);
-                    if(typeof t.status != 'undefined' &&  1 > t.status){
-                        $.systemMessage(t.msg,'alert--danger', false);
-                        $.facebox.close();
-                        if (typeof t.url != 'undefined') {
-                            setTimeout(function(){ document.location.href = t.url; }, 1000);
-                        }
-                        return false;
+        fcom.ajax(fcom.makeUrl('Checkout','getCouponForm'), '', function(t){
+            $.systemMessage.close();
+            try{
+                t = $.parseJSON(t);
+                if(typeof t.status != 'undefined' &&  1 > t.status){
+                    $.systemMessage(t.msg,'alert--danger', false);
+                    $.facebox.close();
+                    if (typeof t.url != 'undefined') {
+                        setTimeout(function(){ document.location.href = t.url; }, 1000);
                     }
+                    return false;
                 }
-                catch(exc){}
-                $.facebox(t);
-				$("input[name='coupon_code']").focus();
-			});
-		});
+            }
+            catch(exc){}
+            $.facebox(t);
+            $("input[name='coupon_code']").focus();
+        });
 	};
 
 	triggerApplyCoupon = function(coupon_code){

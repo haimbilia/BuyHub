@@ -95,8 +95,8 @@ class AmazonPayController extends PaymentController
             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_POST_REQUEST', $this->siteLangId));
         } elseif (strlen($postedData['orderReferenceId']) <= 0) {
             FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_POST_REQUEST', $this->siteLangId));
-        }
-
+        }        
+        $this->paymentInitiated($orderId);
         $config = array(
             'merchant_id' => trim($this->settings['amazon_merchantId']),
             'access_key' => trim($this->settings['amazon_accessKey']),

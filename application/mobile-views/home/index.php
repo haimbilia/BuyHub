@@ -29,22 +29,6 @@ foreach ($slides as $index => $slideDetail) {
         }
     }
 }
-/* 
-// Moved to collections.
-foreach ($sponsoredProds as $index => $product) {
-    $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-    $sponsoredProds[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $siteLangId)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-    $sponsoredProds[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
-    $sponsoredProds[$index]['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], true, true, true);
-}
-foreach ($sponsoredShops as $shopIndex => $shopData) {
-    foreach ($shopData["products"] as $index => $shopProduct) {
-        $uploadedTime = AttachedFile::setTimeParam($shopProduct['product_updated_on']);
-        $sponsoredShops[$shopIndex]['products'][$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($shopProduct['product_id'], "CLAYOUT3", $shopProduct['selprod_id'], 0, $siteLangId)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-        $sponsoredShops[$shopIndex]['products'][$index]['selprod_price'] = CommonHelper::displayMoneyFormat($shopProduct['selprod_price'], false, false, false);
-        $sponsoredShops[$shopIndex]['products'][$index]['theprice'] = CommonHelper::displayMoneyFormat($shopProduct['theprice'], true, true, true);
-    }
-} */
 
 foreach ($collections as $collectionIndex => $collectionData) {
     if (array_key_exists('products', $collectionData)) {

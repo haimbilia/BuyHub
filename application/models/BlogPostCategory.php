@@ -91,6 +91,8 @@ class BlogPostCategory extends MyAppModel
         $srch->addCondition('bpc.bpcategory_id', '=', $bpcategoryId);
         $srch->addOrder('bpc.bpcategory_display_order', 'asc');
         $srch->addOrder('bpc.bpcategory_identifier', 'asc');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         while ($categories = FatApp::getDb()->fetch($rs)) {
             $categoryTreeArray[] = $categories;
@@ -130,7 +132,7 @@ class BlogPostCategory extends MyAppModel
         }
         return false;
     }
-*/    
+*/
     /**
      * getParentTreeStructure
      *
@@ -146,6 +148,8 @@ class BlogPostCategory extends MyAppModel
         $srch->addCondition('bpc.bpcategory_deleted', '=', applicationConstants::NO);
         $srch->addCondition('bpc.bpcategory_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('bpc.bpCategory_id', '=', FatUtility::int($bpCategoryId));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetch($rs);
         $name = '';
@@ -440,6 +444,8 @@ class BlogPostCategory extends MyAppModel
         $srch->addCondition('bpc.bpcategory_deleted', '=', applicationConstants::NO);
         $srch->addCondition('bpc.bpcategory_id', '=', $bpcategory_id);
         $srch->addFld('bpc.bpcategory_id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row) && $row['bpcategory_id'] == $bpcategory_id) {
@@ -454,6 +460,8 @@ class BlogPostCategory extends MyAppModel
         $srch->addCondition('bpc.bpcategory_deleted', '=', applicationConstants::NO);
         $srch->addCondition('bpc.bpcategory_id', '=', $bpcategory_id);
         $srch->addFld('bpc.bpcategory_id,bpc.bpcategory_active');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row) && $row['bpcategory_id'] == $bpcategory_id) {

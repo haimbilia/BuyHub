@@ -209,6 +209,12 @@ Updates/Fixes :
     => 057171 - Buyer: Suggestion to show the "Order ID" with cancelled order under the "My Credit" section
     => 057177 - Buyer: Suggestion to show the "Return Order Age" in the Order details page at the buyers end
     => 057166 - Buyer: "Share and Earn" functionality is not working properly
+    => 057221 - Seller: "Categories and Tax Categories" listing is not showing when sellers click on these fields but, for brand listing is showing
+    => 057217 - Seller and Buyer: Suggestion to show the "Cancel Order" button instead of the "Cross" icon in the order details
+    => 057212 - The "same status" of order is updating when Seller clicks on the "Save Changes" button multiple times
+    => 057238 - Buyer: Order ID is not showing with the "Earned Reward Points On Purchase" under the reward points section
+    => 057227 - Admin and Seller: Suggestion to give some indication regarding the "Product Warranty" field is in Days or Months or Year while adding the product
+    => 057044 - Seller: UI design is not correct while uploading the Banner and Logo for the Shop
 
 New Features:  
     => Admin shipped products listing page
