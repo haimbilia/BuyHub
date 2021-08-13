@@ -549,7 +549,7 @@ $(document).on("change", ".state", function () {
 
     bannerPopupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
-            $.facebox(fcom.getLoader());
+            $.facebox(fcom.getLoader(), '', 'cropper-body');
             fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
                 $.facebox(t);
                 var file = inputBtn.files[0];
@@ -575,7 +575,7 @@ $(document).on("change", ".state", function () {
 
     logoPopupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
-            $.facebox(fcom.getLoader());
+            $.facebox(fcom.getLoader(), '', 'cropper-body');
             fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
                 $.facebox(t );
                 var file = inputBtn.files[0];
@@ -663,7 +663,7 @@ $(document).on("change", ".state", function () {
 
     collectionPopupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
-            $.facebox(fcom.getLoader());
+            $.facebox(fcom.getLoader(), '', 'cropper-body');
             fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
                 $.facebox(t );
                 var file = inputBtn.files[0];
