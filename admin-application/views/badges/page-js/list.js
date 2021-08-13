@@ -41,6 +41,7 @@ $(document).on('change', '.icon-language-js', function () {
         fcom.ajax(fcom.makeUrl(controller, 'form', [type, badge_id]), '', function (t) {
             $('.pagebody--js').hide();
             $('.editRecord--js').html(t);
+            conditionType($('select[name="badge_condition_type"]')[0]);
             if ('' != $("input[name='badge_id']").val()) {
                 var badge_id = $("input[name='badge_id']").val();
                 if ('' == badge_id) { badge_id = 0; }
@@ -249,4 +250,17 @@ $(document).on('change', '.icon-language-js', function () {
             }
         });
     };
+
+    conditionType = function (element) {
+        var approvalFld = $("select[name='badge_required_approval']");
+        if ("" == $("input[name='badge_id']").val() || condAuto == element.value) {
+            approvalFld.val("");
+        }
+
+        if (condManual == element.value) {
+            approvalFld.attr('data-fatreq', '{"required":true}').removeAttr('disabled');
+        } else {
+            approvalFld.attr({'data-fatreq' : '{"required":false}', 'disabled': 'disabled'});
+        }
+    }
 })()
