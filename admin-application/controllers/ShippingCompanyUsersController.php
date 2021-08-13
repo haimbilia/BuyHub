@@ -137,6 +137,8 @@ class ShippingCompanyUsersController extends AdminBaseController
             $userObj = new User($user_id);
             $srch = $userObj->getUserSearchObj();
             $srch->addMultipleFields(array('u.*'));
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $data = FatApp::getDb()->fetch($rs, 'user_id');
 

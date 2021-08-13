@@ -237,6 +237,18 @@ if (!$print) { ?>
                                         </strong>
                                         <?php echo FatDate::format($childOrderDetail['order_date_added']); ?>
                                     </p>
+                                    <p>
+                                        <strong>
+                                            <?php echo Labels::getLabel('LBL_RETURN_AGE', $siteLangId); ?>:
+                                        </strong>
+                                        <?php echo sprintf(Labels::getLabel('MSG_%S_DAYS', $siteLangId), $childOrderDetail['op_selprod_return_age']); ?>
+                                    </p>
+                                    <p>
+                                        <strong>
+                                            <?php echo Labels::getLabel('LBL_CANCELLATION_AGE', $siteLangId); ?>:
+                                        </strong>
+                                        <?php echo sprintf(Labels::getLabel('MSG_%S_DAYS', $siteLangId), $childOrderDetail['op_selprod_cancellation_age']); ?>
+                                    </p>
                                     <?php
                                     if ($childOrderDetail["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) { ?>
                                         <p>
@@ -259,7 +271,6 @@ if (!$print) { ?>
                                             <?php echo CommonHelper::displayMoneyFormat($totalSaving, true, false, true, false, true); ?>
                                         </p>
                                     <?php } ?>
-
                                 </div>
                             </div>
                         </div>

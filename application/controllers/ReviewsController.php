@@ -219,9 +219,14 @@ class ReviewsController extends MyAppController
         $this->set('shopRating', $shop_rating);
         $this->set('shopTotalReviews', SelProdReview::getSellerTotalReviews($shop['shop_user_id']));
         $this->set('collectionData', ShopCollection::getShopCollectionsDetail($shop_id, $this->siteLangId));        
-        $this->set('template_id', SHOP::TEMPLATE_ONE);
-        $this->set('shopId', $shop_id);
+        $this->set('template_id', SHOP::TEMPLATE_ONE);      
         $this->set('shop', $shop);
+        if (UserAuthentication::isUserLogged()) {
+            $userParent = User::getAttributesById(UserAuthentication::getLoggedUserId(),'user_parent');
+            $userParentId = (0 < $userParent) ? $userParent : UserAuthentication::getLoggedUserId();
+            $this->set('userParentId', $userParentId);
+        }
+        
         $this->_template->render();
     }
 

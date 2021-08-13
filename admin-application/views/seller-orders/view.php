@@ -187,11 +187,15 @@ $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $ord
                                 <td><strong><?php echo Labels::getLabel('LBL_Commission_Charged', $adminLangId); ?>[<?php echo $order["op_commission_percentage"] ?>%]:
                                     </strong><?php echo CommonHelper::displayMoneyFormat($order['op_commission_charged'] - $order['op_refund_commission'], true, true); ?> </td>
                                 <td><strong><?php echo Labels::getLabel('LBL_Cart_Total', $adminLangId); ?> : </strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($order, 'CART_TOTAL'), true, true); ?> </td>
-                                <td><strong>
-                                        <?php if ($shippingHanldedBySeller) {
-                                            echo Labels::getLabel('LBL_Delivery/Shipping', $adminLangId); ?>:
-                                    </strong><?php echo '+' . CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($order, 'SHIPPING'), true, true);
-                                            } ?>
+                                <td>
+                                    <?php if ($shippingHanldedBySeller) { ?>
+                                        <strong>
+                                                <?php echo Labels::getLabel('LBL_Delivery/Shipping', $adminLangId); ?>:
+                                        </strong><?php echo '+' . CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($order, 'SHIPPING'), true, true);
+                                        } ?>
+                                    <?php 
+                                        $unitType = (isset($unitTypeArray[$order['op_product_dimension_unit']])) ? $unitTypeArray[$order['op_product_dimension_unit']] : '' ;
+                                    ?>
                                 </td>
                             </tr>
                             <tr>
@@ -229,6 +233,11 @@ $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $ord
                                         ?>
                                     </td>
                                 <?php } ?>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong><?php echo Labels::getLabel('LBL_PACKAGE_DETAIL', $adminLangId); ?>: </strong><?php echo $order['op_product_length'] . ' x ' . $order['op_product_width'] . ' x ' . $order['op_product_height'] . ' ' . $unitType; ?>
+                                </td>
                             </tr>
 
                         </table>

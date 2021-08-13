@@ -236,9 +236,9 @@ class ShipEngine extends ShippingServicesBase
         }
 
         $this->dimensions = [
-            'length' => $this->convertToCm($length, $unit),
-            'breadth' => $this->convertToCm($width, $unit),
-            'height' => $this->convertToCm($height, $unit),
+            'length' => $this->convertToInch($length, $unit),
+            'breadth' => $this->convertToInch($width, $unit),
+            'height' => $this->convertToInch($height, $unit),
         ];
     }
 

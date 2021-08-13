@@ -12759,109 +12759,135 @@ form[name="frmShippingProfile"] {
     top: 0 !important;
     right: auto !important;
     z-index: 9;
-    font-size: 0.8rem; }
-    .badges .svg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      fill: var(--brand-color);
-      width: 100%;
-      height: 100%; }
-    .badges .text {
-      position: absolute;
-      top: auto;
-      text-transform: uppercase;
-      font-weight: 600;
-      text-align: center;
-      color: var(--brand-color-inverse);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis; }
-    .badges-1 {
-      background: var(--brand-color);
-      color: var(--brand-color-inverse);
-      border-radius: 4px;
-      padding: 4px 8px; }
-      .badges-1 .text {
-        position: static; }
-    .badges-2 {
-      top: 3px;
-      right: 3px;
-      width: 70px;
-      height: 70px; }
+    font-size: 0.8rem;
+}
 
-      .badges-2.badges-left {
-        transform: rotate(-90deg); }
+.badges .svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    fill: var(--brand-color);
+    width: 40px;
+    height: 40px;
+}
 
-      .badges-2 .text {
-        font-weight: 600;
-        transform: rotate(45deg);
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 8px;
-        line-height: 30px;
-        text-transform: uppercase;
-        width: 85px; }
-    .badges-3 {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 60px;
-      height: 60px; }
-    .badges-4 {
-      width: 60px;
-      height: 60px; }
-      .badges-4 .text {
-        transform: rotate(45deg);
-        left: 0;
-        right: 0;
-        line-height: 27px;
-        width: 90px;
-        top: 7px;
-        margin-left: -6px; }
-    .badges-5 {
-      top: 1rem;
-      right: 1rem;
-      width: 60px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center; }
-      .badges-5 .text {
-        line-height: 1;
-        font-weight: 600;
-        text-transform: uppercase;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis; }
+.badges .text {
+    position: absolute;
+    top: auto;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-align: center;
+    color: var(--brand-color-inverse);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
+.badges-1 {
+    background: var(--brand-color);
+    color: var(--brand-color-inverse);
+    border-radius: 4px;
+    padding: 4px 8px;
+}
 
-  .badges-left {
+.badges-1 .text {
+    position: static;
+}
+
+.badges-2 {
+    top: 3px;
+    right: 3px;
+    width: 40px;
+    height: 40px;
+}
+
+.badges-2.badges-left {
+    transform: rotate(-90deg);
+}
+
+.badges-2 .text {
+    font-weight: 600;
+    transform: rotate(45deg);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0px;
+    line-height: 30px;
+    text-transform: uppercase;
+    width: 50px;
+}
+
+.badges-3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.badges-4 {
+    width: 40px;
+    height: 40px;
+}
+
+.badges-4 .text {
+    transform: rotate(45deg);
+    left: 0;
+    right: 0;
+    line-height: 27px;
+    width: 60px;
+    top: 2px;
+    margin-left: -6px;
+}
+
+.badges-5 {
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.badges-5 .text {
+    line-height: 1;
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.badges-left {
     left: 10px;
-    top: 10px; }
-  .badges-right {
+    top: 10px;
+}
+
+.badges-right {
     right: 10px;
-    top: 10px; }
-
-
-  
-
+    top: 10px;
+}
 
 [direction="rtl"] .badges-4 .text {
-  left: -22px;
-  top: 10px; }
+    left: -22px;
+    top: 10px;
+}
 
 [direction="rtl"] .badges-4.badges-left {
-  transform: none; }
+    transform: none;
+}
 
 [direction="rtl"] .badges-2 .text {
-  left: -14px;
-  top: 10px; }
+    left: -14px;
+    top: 10px;
+}
 
 [direction="rtl"] .badges-2.badges-right {
-  transform: rotate(-90deg); }
+    transform: rotate(-90deg);
+}
+
 
 /* Badges and Ribbons Css 27-05-2021 */
 

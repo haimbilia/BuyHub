@@ -89,7 +89,7 @@ class BlogPostCategoriesController extends AdminBaseController
             /* url data[ */
             $urlSrch = UrlRewrite::getSearchObject();
             $urlSrch->doNotCalculateRecords();
-            $urlSrch->doNotLimitRecords();
+            $urlSrch->setPageSize(1);
             $urlSrch->addFld('urlrewrite_custom');
             $urlSrch->addCondition('urlrewrite_original', '=', 'blog/category/' . $bpcategory_id);
             $rs = $urlSrch->getResultSet();
@@ -480,6 +480,8 @@ class BlogPostCategoriesController extends AdminBaseController
         $srch = BlogPostCategory::getSearchObject(true);
         $srch->addCondition('bpc.bpcategory_id', '=', $bpcategory_id);
         $srch->addCondition('bpc.bpcategory_parent', '=', 0);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
 
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);

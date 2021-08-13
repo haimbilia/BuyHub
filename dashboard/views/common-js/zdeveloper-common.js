@@ -1,11 +1,14 @@
 $(document).ready(function () {
     setTimeout(function () {
         $("body").addClass("loaded");
-        if (0 < $("#scrollElement-js").length) {
-            /*let scrollElement = document.getElementById("scrollElement-js").SimpleBar.getScrollElement();*/
-            scrollElement.scrollTop = $(".menu__item.is-active").position().top - ($(window).height() / 2 - 100)
+        if (0 < $("#scrollElement-js").length && 0 < $(".menu__item.is-active").length) {
+            var el = new SimpleBar(document.getElementById("scrollElement-js"));
+            let scrollElement = el.getScrollElement();
+            if ('undefined' != typeof scrollElement) {
+                scrollElement.scrollTop = $(".menu__item.is-active").position().top - ($(window).height() / 2 - 100)
+            }
         }
-        stylePhoneNumberFld(".phone-js")
+        stylePhoneNumberFld(".phone-js");
     }, 1000);
     $(document).on("click", ".selectItem--js", function () {
         if ($(this).prop("checked") == false) {

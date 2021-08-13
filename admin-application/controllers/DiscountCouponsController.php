@@ -265,6 +265,8 @@ class DiscountCouponsController extends AdminBaseController
         $srch = DiscountCoupons::getSearchObject($this->adminLangId);
         $srch->addMultipleFields(array('coupon_id', 'IFNULL(coupon_title,coupon_identifier) as coupon_name', 'coupon_code'));
         $srch->addCondition('coupon_id', '=', $coupon_id);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
@@ -290,6 +292,8 @@ class DiscountCouponsController extends AdminBaseController
         $srch = DiscountCoupons::getSearchObject($this->adminLangId);
         $srch->addMultipleFields(array('coupon_id', 'IFNULL(coupon_title,coupon_identifier) as coupon_name', 'coupon_code'));
         $srch->addCondition('coupon_id', '=', $coupon_id);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
@@ -317,6 +321,8 @@ class DiscountCouponsController extends AdminBaseController
         $srch = DiscountCoupons::getSearchObject($this->adminLangId);
         $srch->addMultipleFields(array('coupon_id', 'IFNULL(coupon_title,coupon_identifier) as coupon_name', 'coupon_code'));
         $srch->addCondition('coupon_id', '=', $coupon_id);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
@@ -345,6 +351,8 @@ class DiscountCouponsController extends AdminBaseController
         $srch = DiscountCoupons::getSearchObject($this->adminLangId);
         $srch->addMultipleFields(array('coupon_id', 'IFNULL(coupon_title,coupon_identifier) as coupon_name', 'coupon_code'));
         $srch->addCondition('coupon_id', '=', $coupon_id);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
@@ -371,6 +379,8 @@ class DiscountCouponsController extends AdminBaseController
         $srch = DiscountCoupons::getSearchObject($this->adminLangId);
         $srch->addMultipleFields(array('coupon_id', 'IFNULL(coupon_title,coupon_identifier) as coupon_name', 'coupon_code'));
         $srch->addCondition('coupon_id', '=', $coupon_id);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
@@ -396,6 +406,8 @@ class DiscountCouponsController extends AdminBaseController
         $srch = DiscountCoupons::getSearchObject($this->adminLangId);
         $srch->addMultipleFields(array('coupon_id', 'IFNULL(coupon_title,coupon_identifier) as coupon_name', 'coupon_code'));
         $srch->addCondition('coupon_id', '=', $coupon_id);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 

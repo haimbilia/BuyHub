@@ -20,7 +20,7 @@ class CollectionsController extends MyAppController
             )
         );
         $collectionSrch->doNotCalculateRecords();
-        $collectionSrch->doNotLimitRecords();
+        $collectionSrch->setPageSize(1);
         $collectionSrch->addCondition('collection_id', '=', $collection_id);
         $collectionSrchRs = $collectionSrch->getResultSet();
         $collectionArr = FatApp::getDb()->fetch($collectionSrchRs);
@@ -63,6 +63,8 @@ class CollectionsController extends MyAppController
         $srch->addMultipleFields(['collection_id', 'IFNULL(collection_name, collection_identifier) as collection_name', 'collection_identifier', 'collection_link_url', 'collection_layout_type', 'collection_type', 'collection_criteria', 'collection_child_records', 'collection_primary_records', 'collection_display_order', 'collection_display_media_only', 'collection_active', 'collection_deleted', 'collection_updated_on']);
 
         $srch->addCondition('collection_id', '=', $collection_id);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
 
         $rs = $srch->getResultSet();
         $collection = $db->fetch($rs);

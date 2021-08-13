@@ -3,6 +3,7 @@
 require_once CONF_INSTALLATION_PATH . 'library/APIs/twitteroauth-master/autoload.php';
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use Avalara\RateType;
 
 class BuyerController extends BuyerBaseController
 {
@@ -1657,7 +1658,11 @@ class BuyerController extends BuyerBaseController
     {
         $opId = FatUtility::int($opId);
         if (1 > $opId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId));
+            $msg = Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId);
+            if (true === MOBILE_APP_API_CALL) {
+                LibHelper::dieJsonError($msg);
+            }
+            Message::addErrorMessage($msg);
             CommonHelper::redirectUserReferer();
         }
 
@@ -1673,7 +1678,11 @@ class BuyerController extends BuyerBaseController
         $rs = $srch->getResultSet();
         $opDetail = FatApp::getDb()->fetch($rs);
         if (!$opDetail || CommonHelper::isMultidimArray($opDetail) || !(FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0))) {
-            Message::addErrorMessage(Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId));
+            $msg = Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId);
+            if (true === MOBILE_APP_API_CALL) {
+                LibHelper::dieJsonError($msg);
+            }
+            Message::addErrorMessage($msg);
             CommonHelper::redirectUserReferer();
         }
 
@@ -1686,7 +1695,11 @@ class BuyerController extends BuyerBaseController
                 $statusNames[] = $orderStatuses[$status];
             }
 
-            Message::addErrorMessage(sprintf(Labels::getLabel('MSG_Feedback_can_be_placed_', $this->siteLangId), implode(',', $statusNames)));
+            $msg = sprintf(Labels::getLabel('MSG_Feedback_can_be_placed_', $this->siteLangId), implode(',', $statusNames));
+            if (true === MOBILE_APP_API_CALL) {
+                LibHelper::dieJsonError($msg);
+            }
+            Message::addErrorMessage($msg);
             CommonHelper::redirectUserReferer();
         }
 
@@ -1698,7 +1711,11 @@ class BuyerController extends BuyerBaseController
         }
 
         if (1 > FatUtility::int($selProdId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            $msg = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            if (true === MOBILE_APP_API_CALL) {
+                LibHelper::dieJsonError($msg);
+            }
+            Message::addErrorMessage($msg);
             CommonHelper::redirectUserReferer();
         }
 
@@ -1710,14 +1727,22 @@ class BuyerController extends BuyerBaseController
         $oFeedbackSrch->addCondition('spreview_selprod_id', '=', $selProdId);
         $oFeedbackRs = $oFeedbackSrch->getResultSet();
         if (FatApp::getDb()->fetch($oFeedbackRs)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Already_submitted_order_feedback', $this->siteLangId));
+            $msg = Labels::getLabel('MSG_Already_submitted_order_feedback', $this->siteLangId);
+            if (true === MOBILE_APP_API_CALL) {
+                LibHelper::dieJsonError($msg);
+            }
+            Message::addErrorMessage($msg);
             CommonHelper::redirectUserReferer();
         }
 
         $canSubmitFeedback = Orders::canSubmitFeedback($userId, $opDetail['op_order_id'], $selProdId);
 
         if (!$canSubmitFeedback) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Already_submitted_order_feedback', $this->siteLangId));
+            $msg = Labels::getLabel('MSG_Already_submitted_order_feedback', $this->siteLangId);
+            if (true === MOBILE_APP_API_CALL) {
+                LibHelper::dieJsonError($msg);
+            }
+            Message::addErrorMessage($msg);
             CommonHelper::redirectUserReferer();
         }
 
@@ -1731,21 +1756,24 @@ class BuyerController extends BuyerBaseController
         $shopRs = $srch->getResultSet();
         $shop = FatApp::getDb()->fetch($shopRs);
 
-        $ratingAspects = SelProdRating::getRatingAspectsArr($this->siteLangId, $opDetail['opshipping_fulfillment_type']);
+        $selProdRating = SelProdRating::getRatingAspectsArr($this->siteLangId, $opDetail['opshipping_fulfillment_type']);
 
         $orderProd = new OrderProduct($opId);
         $specifics = $orderProd->getSpecifics();
-        $ratingTypes = [];
+        $otherRatingTypes = [];
         if (array_key_exists('op_prodcat_id', $specifics) && !empty($specifics['op_prodcat_id'])) {
             $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
             $srch->addCondition('prt_prodcat_id', '=', $specifics['op_prodcat_id']);
+            $srch->addCondition('ratingtype_type', '=', RatingType::TYPE_OTHER);
             $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name']);
-            $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+            $otherRatingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         }
 
-        if (0 < count($ratingTypes)) {
-            $ratingAspects = $ratingAspects + $ratingTypes;
+        if (0 < count($otherRatingTypes)) {
+            $selProdRating = $selProdRating + $otherRatingTypes;
         }
+
+        $ratingAspects = $selProdRating;
 
         $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
         $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
@@ -1755,15 +1783,22 @@ class BuyerController extends BuyerBaseController
             $ratingAspects = (0 < count($deliveryRatingTypesArr)) ? ($deliveryRatingTypesArr + $ratingAspects) : $ratingAspects;
         }
 
-        $frm = $this->getOrderFeedbackForm($opId, $this->siteLangId, $ratingAspects);
-        $this->set('frm', $frm);
+
+        if (false === MOBILE_APP_API_CALL) {
+            $frm = $this->getOrderFeedbackForm($opId, $this->siteLangId, $ratingAspects);
+            $this->set('frm', $frm);
+            $this->_template->addJs(array('js/jquery.barrating.min.js'));
+        }
+
         $this->set('opDetail', $opDetail);
         $this->set('ratingAspects', $ratingAspects);
+        $this->set('selProdRating', $selProdRating);
+        $this->set('otherRatingTypesArr', $otherRatingTypes);
         $this->set('shopRatingTypesArr', $shopRatingTypesArr);
         $this->set('deliveryRatingTypesArr', $deliveryRatingTypesArr);
         $this->set('shop', $shop);
-        $this->_template->addJs(array('js/jquery.barrating.min.js'));
-        $this->_template->render(true, true);
+
+        $this->_template->render();
     }
 
     public function setupOrderFeedback()
@@ -1850,6 +1885,7 @@ class BuyerController extends BuyerBaseController
 
         $orderProd = new OrderProduct($opId);
         $specifics = $orderProd->getSpecifics();
+        $ratingTypes = [];
         if (array_key_exists('op_prodcat_id', $specifics) && !empty($specifics['op_prodcat_id'])) {
             $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
             $srch->addCondition('prt_prodcat_id', '=', $specifics['op_prodcat_id']);
@@ -2364,7 +2400,7 @@ class BuyerController extends BuyerBaseController
         $srch->addOrder('urp.urp_date_added', 'DESC');
         $srch->addOrder('urp.urp_id', 'DESC');
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $srch->addMultipleFields(array('sum(urp_points) as totalRewardPoints', 'min(urp.urp_date_expiry) as expiredOn'));
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetch($rs);
@@ -2613,22 +2649,20 @@ class BuyerController extends BuyerBaseController
 
         $this->set('referralTrackingUrl', CommonHelper::referralTrackingUrl(UserAuthentication::getLoggedUserAttribute('user_referral_code')));
         $this->set('sharingFrm', $this->getFriendsSharingForm($this->siteLangId));
-        $this->_template->addJs('js/slick.min.js');
+
+        $this->_template->addJs(['js/slick.min.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js']);
         $this->_template->render(true, true);
     }
 
     public function sendMailShareEarn()
     {
         $post = FatApp::getPostedData();
-        $err = '';
-        if (!FatUtility::validateMultipleEmails($post["email"], $err)) {
-            Message::addErrorMessage($err);
-            FatUtility::dieJsonError(Message::getHtml());
+        $email = $post["email"];
+        if (empty($email)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
-        $email = CommonHelper::multipleExplode(array(",", ";", "\t", "\n"), trim($post["email"], ","));
-        $email = array_unique($email);
+        $email = array_unique(array_column(json_decode($email, true), 'value'));
         if (count($email) && !empty($email)) {
-            $email = array_unique($email);
             $personalMessage = empty($post['message']) ? "" : "<b>" . Labels::getLabel('Lbl_Personal_Message_From_Sender', $this->siteLangId) . ":</b> " . nl2br($post['message']);
             $emailNotificationObj = new EmailHandler();
             foreach ($email as $email_id) {
@@ -2642,14 +2676,9 @@ class BuyerController extends BuyerBaseController
                     CommonHelper::redirectUserReferer();
                 }
                 /* ] */
-                /* EmailHandler::sendMailTpl($email_id, 'invitation_email', array(
-                '{Sender_Name}' => htmlentities($this->user_details['user_name']),
-                '{Tracking_URL}' => $this->referral_tracking_url($this->user_details['user_referral_code']),
-                '{Invitation_Message}' => $personalMessage,
-                )); */
             }
         }
-        $this->set('msg', Labels::getLabel('MSG_invitation_emails_sent_successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_INVITATION_EMAILS_SENT_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2658,7 +2687,7 @@ class BuyerController extends BuyerBaseController
         $langId = FatUtility::int($langId);
         $frm = new Form('frmShareEarn');
         $fld = $frm->addTextArea(Labels::getLabel('L_Friends_Email', $langId), 'email');
-        $fld->htmlAfterField = ' <small>(' . Labels::getLabel('L_Use_commas_separate_emails', $langId) . ')</small>';
+        // $fld->htmlAfterField = ' <small>(' . Labels::getLabel('L_Use_commas_separate_emails', $langId) . ')</small>';
         $fld->requirements()->setRequired();
         $frm->addTextArea(Labels::getLabel('L_Personal_Message', $langId), 'message');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('L_Invite_Your_Friends', $langId));

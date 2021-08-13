@@ -315,6 +315,7 @@ class BadgeLinkConditionsController extends AdminBaseController
     {
         $badgeSearch = new BadgeSearch($this->adminLangId);
         $badgeSearch->doNotCalculateRecords();
+        $badgeSearch->setPageSize(1);
         $badgeSearch->addCondition('badge_id', '=', $badgeId);
         $badgeSearch->addMultipleFields([
             'badge_id',

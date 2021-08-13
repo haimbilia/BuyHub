@@ -71,16 +71,7 @@ class BannersController extends AdminBaseController
         $frm = $this->getLocationForm();
 
         $data = $this->getBannerLocationById($bLocationId);
-        /* $srch = Banner::getBannerLocationSrchObj(false);
-        $srch->addCondition('blocation_id','=',$bLocationId);
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-        $data = array();
-        if($rs){
-        $data = FatApp::getDb()->fetch($rs);
-        } */
-
+        
         if (empty($data)) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
@@ -206,7 +197,7 @@ class BannersController extends AdminBaseController
             $srch->addCondition('banner_blocation_id', '=', $blocation_id);
             $srch->addCondition('banner_id', '=', $banner_id);
             $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $data = array();
             if ($rs) {
@@ -657,7 +648,7 @@ class BannersController extends AdminBaseController
         $srch = Banner::getBannerLocationSrchObj(false);
         $srch->addCondition('blocation_id', '=', $bLocationId);
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $data = array();
 

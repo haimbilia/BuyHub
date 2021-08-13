@@ -53,6 +53,7 @@
         min-height: none;
         cursor: default;
         /*opacity: 0.6;*/
+        font-weight: 500;
         &:empty {
             min-height: 15px;
         }
@@ -173,7 +174,8 @@
     }
     [type="button"] {
         @include submit;
-        border-color: inherit;
+        // border-color: inherit;
+        min-width: 60px;
     }
     [type="reset"] {
         @include submit;

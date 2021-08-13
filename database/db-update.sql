@@ -316,7 +316,7 @@ SET afile.afile_record_id = pddr_id;
 DROP VIEW IF EXISTS pddr_files_view;
 --  Process links stored in tbl_seller_products table (selprod_downloadable_link) ---
 
-UPDATE tbl_seller_products SET selprod_downloadable_link = REPLACE(selprod_downloadable_link,'\n',',');
+UPDATE tbl_seller_products SET selprod_downloadable_link = REPLACE(selprod_downloadable_link,'\n',',') where selprod_downloadable_link != '';
 
 DROP VIEW IF EXISTS pddr_links_view;
 
@@ -868,3 +868,10 @@ INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_co
 INSERT IGNORE INTO `tbl_plugins` (`plugin_identifier`, `plugin_type`, `plugin_code`, `plugin_active`, `plugin_display_order`) VALUES ('Ship Engine', '8', 'ShipEngine', '0', '1');
 -- --- ShipEngine Shipping API Task : 88449 --- --
 -- -----------------TV-9.3.2.20210805-----------------
+
+-- ---------Task 86672 Stripe Connect Changes ------ --
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('MSG_STRIPE_CONNECT_ACCOUNT_NOT_COMPLETE', 1, 'Your Account Setup Is Incomplete. {click-here} To Complete Your Account Setup.', '')
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+-- ---------Task 86672 Stripe Connect Changes ------ -- 
+-- ----------------------TV-9.3.2.20210810---------------------

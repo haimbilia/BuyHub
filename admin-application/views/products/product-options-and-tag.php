@@ -158,7 +158,7 @@ $("document").ready(function() {
                 } 
             });            
         }   
-        tagifyTheOptions();     
+        /*tagifyTheOptions();*/    
     }
 
     removeOption = function(e){ 
@@ -166,23 +166,26 @@ $("document").ready(function() {
         fcom.ajax(fcom.makeUrl('Products', 'removeProductOption'), 'product_id='+product_id+'&option_id='+option_id, function(t) {
             upcListing(product_id);
         });
-        tagifyTheOptions();
+        /*tagifyTheOptions();*/
     }
-    
+    var delayTimer;
     getOptionsAutoComplete = function(e){
-        var keyword = e.detail.value;
-        var listOptions = [];        
-        fcom.ajax(fcom.makeUrl('Options', 'autoComplete'), {keyword:keyword}, function(t) {           
-            var ans = $.parseJSON(t);
-            for (i = 0; i < ans.length; i++) {            
-                listOptions.push({
-                    "id" : ans[i].id,
-                    "value" : ans[i].name+'('+ans[i].option_identifier+')',
-                });
-            }
-            tagifyOption.settings.whitelist = listOptions;
-            tagifyOption.loading(false).dropdown.show.call(tagifyOption, keyword);
-        });       
+        clearTimeout(delayTimer);
+        delayTimer = setTimeout(function() {
+            var keyword = e.detail.value;
+            var listOptions = [];        
+            fcom.ajax(fcom.makeUrl('Options', 'autoComplete'), {keyword:keyword}, function(t) {           
+                var ans = $.parseJSON(t);
+                for (i = 0; i < ans.length; i++) {            
+                    listOptions.push({
+                        "id" : ans[i].id,
+                        "value" : ans[i].name+'('+ans[i].option_identifier+')',
+                    });
+                }
+                tagifyOption.settings.whitelist = listOptions;
+                tagifyOption.loading(false).dropdown.show.call(tagifyOption, keyword);
+            }); 
+        }, 800);
     };     
     
     tagifyTheOptions = function() {

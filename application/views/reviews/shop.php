@@ -13,7 +13,7 @@ $shopPolicyArr = array(
 
 <div id="body" class="body template-<?php echo $template_id;?>"   >
     <?php
-        $variables= array('shop'=>$shop, 'siteLangId'=>$siteLangId,'template_id'=>$template_id,'collectionData'=>$collectionData,'action'=>$action,'shopId'=>$shopId,'shopRating' =>$shopRating,'shopTotalReviews'=>$shopTotalReviews,'socialPlatforms' => $socialPlatforms);
+        $variables = array('shop' => $shop, 'siteLangId' => $siteLangId, 'template_id' => $template_id, 'collectionData' => $collectionData, 'action' => $action, 'shopRating' => $shopRating, 'shopTotalReviews' => $shopTotalReviews, 'socialPlatforms' => $socialPlatforms, 'userParentId' => $userParentId);
         $this->includeTemplate('shops/templates/'.$template_id.'.php', $variables, false);
     ?>
     <section class="section">      

@@ -71,7 +71,7 @@ class ShippingZonesController extends AdminBaseController
             $srch->addCondition("shipprozone_shipprofile_id", "=", $profileId);
             $srch->addCondition("shipprozone_shipzone_id", "=", $zoneId);
             $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $data = FatApp::getDb()->fetch($rs);
             if ($data === false) {
@@ -345,7 +345,7 @@ class ShippingZonesController extends AdminBaseController
         $locSrch->addCondition('shiploc_shipzone_id', '=', $zoneId);
 
         $locSrch->doNotCalculateRecords();
-        $locSrch->doNotLimitRecords();
+        $locSrch->setPageSize(1);
         $stateSrch = clone $locSrch;
         $zoneSrch = clone $locSrch;
 

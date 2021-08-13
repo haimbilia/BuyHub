@@ -54,6 +54,7 @@ class CategoryController extends MyAppController
         /* to show searched category data[ */
         $productCategorySearch->addMultipleFields(array('prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'prodcat_description', 'prodcat_code'));
         $productCategorySearch->setPageSize(1);
+        $productCategorySearch->doNotCalculateRecords();
         $productCategorySearchRs = $productCategorySearch->getResultSet();
         $category = $db->fetch($productCategorySearchRs);
 

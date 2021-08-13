@@ -280,6 +280,8 @@ class QuestionnairesController extends AdminBaseController
         
         $srch = new QuestionnairesSearch($this->adminLangId, false);
         $srch->addCondition('questionnaire_id', '=', $questionnaireId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
         $this->set('questionnaireData', $record);
@@ -300,6 +302,8 @@ class QuestionnairesController extends AdminBaseController
         
         $srch = new QuestionnairesSearch($this->adminLangId, false);
         $srch->addCondition('questionnaire_id', '=', $questionnaireId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
         
@@ -387,6 +391,8 @@ class QuestionnairesController extends AdminBaseController
         
         $srch = new QuestionnairesSearch($this->adminLangId, false);
         $srch->addCondition('questionnaire_id', '=', $questionnaireId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
         $this->set('questionnaireData', $record);

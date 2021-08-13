@@ -9,6 +9,8 @@ class CustomController extends MyAppController
         $termsAndConditionsLinkHref = 'javascript:void(0)';
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
+        $cPageSrch->doNotCalculateRecords();
+        $cPageSrch->setPageSize(1);
         $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
         if (!empty($cpage) && is_array($cpage)) {
             $termsAndConditionsLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
@@ -17,6 +19,8 @@ class CustomController extends MyAppController
         $privacyPolicyLinkHref = 'javascript:void(0)';
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_PRIVACY_POLICY_PAGE', FatUtility::VAR_INT, 0));
+        $cPageSrch->doNotCalculateRecords();
+        $cPageSrch->setPageSize(1);
         $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
         if (!empty($cpage) && is_array($cpage)) {
             $privacyPolicyLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
@@ -198,6 +202,7 @@ class CustomController extends MyAppController
             $srchFAQCat->addFld('faqcat_id');
             $srchFAQCat->addCondition('faqcat_active', '=', applicationConstants::ACTIVE);
             $srchFAQCat->addCondition('faqcat_type', '=', $faqPage);
+            $srchFAQCat->doNotCalculateRecords();
             $rs = $srchFAQCat->getResultSet();
             $faqCatId = FatApp::getDb()->fetch($rs, 'faqcat_id');
         }
@@ -406,7 +411,8 @@ class CustomController extends MyAppController
                 $srch->addCondition('faqcat_type', '=', FaqCategory::FAQ_PAGE);
                 $srch->addCondition('faqcat_id', '=', $parameters[0]);
                 $srch->setPageSize(1);
-
+                $srch->doNotCalculateRecords();
+            
                 $rs = $srch->getResultSet();
                 $records = FatApp::getDb()->fetch($rs);
 
@@ -531,6 +537,8 @@ class CustomController extends MyAppController
 
             $userObj = new User($orderInfo['order_user_id']);
             $srch = $userObj->getUserSearchObj(['credential_email']);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             if (!$rs) {
                 if (true === MOBILE_APP_API_CALL) {
@@ -723,7 +731,7 @@ class CustomController extends MyAppController
         }
         $userSrchObj = User::getSearchObject();
         $userSrchObj->doNotCalculateRecords();
-        $userSrchObj->doNotLimitRecords();
+        $userSrchObj->setPageSize(1);
         $userSrchObj->addCondition('user_referral_code', '=', $userReferralCode);
         $userSrchObj->addMultipleFields(array('user_id', 'user_referral_code'));
         $rs = $userSrchObj->getResultSet();

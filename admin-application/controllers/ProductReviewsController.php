@@ -123,7 +123,8 @@ class ProductReviewsController extends AdminBaseController
         $srch->addMultipleFields(array('IFNULL(product_name,product_identifier) as product_name', 'uc.credential_username as reviewed_by', 'spreview_id', 'spreview_posted_on', 'spreview_status', 'spreview_title', 'spreview_description'));
         $srch->addOrder('spreview_posted_on', 'DESC');
         $srch->addCondition('spreview_id', '=', $spreview_id);
-
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetch($rs);
 
@@ -131,7 +132,7 @@ class ProductReviewsController extends AdminBaseController
         $avgRatingSrch->addCondition('sprating_spreview_id', '=', $spreview_id);
         $avgRatingSrch->addMultipleFields(array('AVG(sprating_rating) as average_rating'));
         $avgRatingSrch->doNotCalculateRecords();
-        $avgRatingSrch->doNotLimitRecords();
+        $avgRatingSrch->setPageSize(1);
         $avgRatingRs = $avgRatingSrch->getResultSet();
         $avgRatingData = FatApp::getDb()->fetch($avgRatingRs);
 

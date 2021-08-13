@@ -168,9 +168,9 @@ class ShopsController extends AdminBaseController
             /* url data[ */
             $urlSrch = UrlRewrite::getSearchObject();
             $urlSrch->doNotCalculateRecords();
-            $urlSrch->doNotLimitRecords();
+            $urlSrch->setPageSize(1);
             $urlSrch->addFld('urlrewrite_custom');
-            $urlSrch->addCondition('urlrewrite_original', '=', 'shops/view/' . $shop_id);
+            $urlSrch->addCondition('urlrewrite_original', '=', 'shops/view/' . $shop_id);            
             $rs = $urlSrch->getResultSet();
             $urlRow = FatApp::getDb()->fetch($rs);
             if ($urlRow) {
@@ -585,8 +585,6 @@ class ShopsController extends AdminBaseController
     private function getForm($shop_id = 0)
     {
         $shop_id = FatUtility::int($shop_id);
-
-        $shopObj = new Tag();
         $frm = new Form('frmShop');
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $frm->addRequiredField(Labels::getLabel('LBL_Shop_Identifier', $this->adminLangId), 'shop_identifier');
@@ -875,7 +873,7 @@ class ShopsController extends AdminBaseController
             /* url data[ */
             $urlSrch = UrlRewrite::getSearchObject();
             $urlSrch->doNotCalculateRecords();
-            $urlSrch->doNotLimitRecords();
+            $urlSrch->setPageSize(1);
             $urlSrch->addFld('urlrewrite_custom');
 
             $orignalUrl = Shop::SHOP_COLLECTION_ORGINAL_URL . $shop_id . '/' . $scollection_id;

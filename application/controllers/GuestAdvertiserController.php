@@ -39,6 +39,8 @@ class GuestAdvertiserController extends MyAppController
         } else {
             $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
             $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
+            $cPageSrch->doNotCalculateRecords();
+            $cPageSrch->setPageSize(1);
             $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
             if (!empty($cpage) && is_array($cpage)) {
                 $termsAndConditionsLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));

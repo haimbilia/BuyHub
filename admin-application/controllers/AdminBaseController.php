@@ -199,6 +199,8 @@ class AdminBaseController extends FatController
         $notifyObject->addCondition('n.' . Notification::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
         $notifyObject->addCondition('n.' . Notification::DB_TBL_PREFIX . 'marked_read', '=', applicationConstants::NO);
         $notifyObject->addMultipleFields(array('count(notification_id) as countOfRec'));
+        $notifyObject->doNotCalculateRecords();
+        $notifyObject->setPageSize(1);
         $notifyCountResult = $db->fetch($notifyObject->getResultset());
         $notifyCount = FatUtility::int($notifyCountResult['countOfRec']);
 

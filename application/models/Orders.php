@@ -1439,7 +1439,7 @@ class Orders extends MyAppModel
             $paymentMethodRow = Plugin::getAttributesById($orderInfo['order_pmethod_id']);
 
             /* Use Reward Point [ */
-            if (0 < $walletSelected || (is_array($paymentMethodRow) && !empty($paymentMethodRow) && !in_array(strtolower($paymentMethodRow['plugin_code']), ['cashondelivery', 'payatstore']) && $orderInfo['order_reward_point_used'] > 0)) {
+            if ($orderInfo['order_reward_point_used'] > 0 && (0 < $walletSelected || (is_array($paymentMethodRow) && !empty($paymentMethodRow) && !in_array(strtolower($paymentMethodRow['plugin_code']), ['cashondelivery', 'payatstore'])))) {
                 UserRewards::debit($orderInfo['order_user_id'], $orderInfo['order_reward_point_used'], $orderId, $orderInfo['order_language_id']);
             }
             /*]*/
@@ -1638,9 +1638,9 @@ class Orders extends MyAppModel
                 $retReqObj = new OrderCancelRequest();
                 $cancelRequestDetail = $retReqObj->getCancelRequestById($childOrderInfo['op_id']);
                 if (!empty($cancelRequestDetail)) {
-                    $comments = sprintf(Labels::getLabel('LBL_Cancel_Request_Approved', $langId), $formattedRequestValue);
+                    $comments = sprintf(Labels::getLabel('LBL_ORDER_%S_CANCEL_REQUEST_APPROVED', $langId), $formattedRequestValue);
                 } else {
-                    $comments = sprintf(Labels::getLabel('LBL_Order_has_been_Cancelled', $langId), $formattedRequestValue);
+                    $comments = sprintf(Labels::getLabel('LBL_ORDER_%S_HAS_BEEN_CANCELLED', $langId), $formattedRequestValue);
                 }
 
                 $txnAmount = (($childOrderInfo["op_unit_price"] * $childOrderInfo["op_qty"]) + $childOrderInfo["op_other_charges"] + $childOrderInfo["op_rounding_off"]);
@@ -2656,8 +2656,8 @@ class Orders extends MyAppModel
         if (1 > $completedOrderStatus || 1 > $deliveredOrderStatus) {
             return false;
         }
-        $defaultReturnAge = FatApp::getConfig("CONF_DEFAULT_RETURN_AGE", FatUtility::VAR_INT, 7);
-
+        //$defaultReturnAge = FatApp::getConfig("CONF_DEFAULT_RETURN_AGE", FatUtility::VAR_INT, 7);
+        //'IFNULL(op_selprod_return_age, ' . $defaultReturnAge . ') as return_age',    /*replaced*/ 
         $srch = new OrderProductSearch(0, true);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -2666,7 +2666,7 @@ class Orders extends MyAppModel
                 'op.op_id',
                 'o.order_date_added',
                 'o.order_language_id',
-                'IFNULL(op_selprod_return_age, ' . $defaultReturnAge . ') as return_age',
+                'op_selprod_return_age as return_age',
                 "DATEDIFF(CURDATE(), o.order_date_added) as daysSpent"
             ]
         );

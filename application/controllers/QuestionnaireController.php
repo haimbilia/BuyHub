@@ -21,6 +21,8 @@ class QuestionnaireController extends MyAppController
         }
         $srch = new QuestionnairesSearch($this->siteLangId);
         $srch->addCondition('questionnaire_id', '=', $questionnaireId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $questionnaire = FatApp::getDb()->fetch($srch->getResultset());
         if ($questionnaire == false) {
             FatUtility::exitWithErrorCode(404);
@@ -95,6 +97,8 @@ class QuestionnaireController extends MyAppController
             $srch->addCondition('questionnaire_start_date', '<=', date('Y-m-d'));
             $srch->addCondition('questionnaire_end_date', '>=', date('Y-m-d'));
         }
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $questionnaire = FatApp::getDb()->fetch($srch->getResultset());
         if ($questionnaire == false) {
             FatUtility::exitWithErrorCode(404);
@@ -114,6 +118,8 @@ class QuestionnaireController extends MyAppController
         $srch = QuestionnaireFeedback::getSearchObject();
         $srch->addCondition('qfeedback.qfeedback_questionnaire_id', '=', $questionnaireId);
         $srch->addCondition('qfeedback.qfeedback_user_email', '=', $userEmail);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         return FatApp::getDb()->fetch($srch->getResultset());
     }
 

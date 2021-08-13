@@ -289,15 +289,4 @@ trait PluginHelper
     {
         return LibHelper::formatResponse($status, $msg, $data, $responseCode);
     }
-
-    /**
-     * dieWithJsonResponse
-     *
-     * @param  array $data
-     * @return void
-     */
-    public function dieWithJsonResponse(array $data = [])
-    {
-        LibHelper::dieJsonResponse($data, $this->langId);
-    }
 }
