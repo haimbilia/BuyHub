@@ -32,14 +32,20 @@ $(document).ready(function () {
         }
     }
 
+    checkEmpty = function (e) {
+        if (0 == e.detail.tagify.value.length) {
+            $(".submitBtnJs").attr('disabled', 'disabled');
+        }
+    }
+
     tagifyEmailAddress = function () {
         tagify = new Tagify($(".emailAddressJs")[0], {
             whitelist: [],
             delimiters: "#",
             editTags: true,
-        }).on('add', validateEmailAddress);
+        }).on('add', validateEmailAddress).on('remove', checkEmpty);
     };
-    tagifyEmailAddress();    
+    tagifyEmailAddress();
 });
 
 (function () {
