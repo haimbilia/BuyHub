@@ -220,6 +220,7 @@ Updates/Fixes :
     => 057264 - Admin: "Link to" field is not working while clicking on it and UI is also not correct on the "Badges request" section
     => 057261 - Admin: "Invalid Request" error is showing while clicking on the "Link" field after selecting "link type" in the Ribbons
     => 057258 - Admin: Back button linking is not correct for the Ribbons functionality
+    => 057257 - Seller: Blank Confirmation message is showing while deleting the Product from the ribbon
 
 New Features:  
     => Admin shipped products listing page
