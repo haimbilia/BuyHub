@@ -217,6 +217,7 @@ Updates/Fixes :
     => 057044 - Seller: UI design is not correct while uploading the Banner and Logo for the Shop
 ==========================TV-9.3.2.20210813=============================
     => 057270 - Seller: Badges requests list is not showing if the first request is for Badges
+    => 057264 - Admin: "Link to" field is not working while clicking on it and UI is also not correct on the "Badges request" section
 
 New Features:  
     => Admin shipped products listing page
