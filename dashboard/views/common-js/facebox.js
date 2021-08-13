@@ -13,7 +13,7 @@
 	$.extend($.facebox, {
 		element: Date.now(),
 		reveal: function (data, bodyClass) {
-            if (0 == $(data).find('modal-body').length) {
+            if (0 == $(data).find('modal-body').length && false === $(data).hasClass('modal-body')) {
                 data = '<div class="modal-body">' + data + '</div>'
             }
 
