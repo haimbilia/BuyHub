@@ -877,3 +877,6 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 -- ----------------------TV-9.3.2.20210810---------------------
 
 DELETE FROM `tbl_language_labels` WHERE label_key='LBL_EARNED_REWARD_POINTS_ON_PURCHASE.';
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_SHOP_PICKUP_INTERVAL_INFO', 1, 'The time gap (in hours) to be maintained before the first available time slot for pickup orders.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
