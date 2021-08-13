@@ -156,9 +156,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     };
 
     backToListing = function () {
-        /* $('.editRecord--js').html("");
-        $('.pagebody--js').fadeIn(); */
-        window.history.back();
+        window.location.href = fcom.makeUrl(controller, 'list', [badgeId , badgeType]);
     }
 
     setup = function (frm) {

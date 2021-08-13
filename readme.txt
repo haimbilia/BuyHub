@@ -219,6 +219,7 @@ Updates/Fixes :
     => 057270 - Seller: Badges requests list is not showing if the first request is for Badges
     => 057264 - Admin: "Link to" field is not working while clicking on it and UI is also not correct on the "Badges request" section
     => 057261 - Admin: "Invalid Request" error is showing while clicking on the "Link" field after selecting "link type" in the Ribbons
+    => 057258 - Admin: Back button linking is not correct for the Ribbons functionality
 
 New Features:  
     => Admin shipped products listing page
