@@ -423,3 +423,26 @@ a:hover {
 .slick-next {
     right: 0;
 }
+
+.browse-more {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    li {
+        a {
+            background: $bg-brand-light;
+            color: $brand-color;
+            border-radius: 30px;
+            padding: 0.5rem 1rem;
+            //border: $border;
+            font-size: 0.75rem;
+            display: block;
+            margin: 5px;
+            &:hover {
+                background: $brand-color;
+                color: $brand-color-inverse;
+                border-color: currentColor;
+            }
+        }
+    }
+}
