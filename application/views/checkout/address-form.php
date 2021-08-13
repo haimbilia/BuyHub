@@ -53,11 +53,13 @@ $cancelFld->setFieldTagAttribute('onclick', 'resetAddress(' . $addressType . ')'
         <div class="step_head">
             <h5 class="step_title"><?php echo Labels::getLabel('LBL_ADDRESS_DETAILS', $siteLangId); ?></h5>
         </div>
+        <div class="step_body">
+            <?php echo $addressFrm->getFormHtml(); ?>
+        </div>
     </div>
-    <?php echo $addressFrm->getFormHtml(); ?>
 </div>
 <script language="javascript">
-$(document).ready(function() {
-    getCountryStates($("#addr_country_id").val(), <?php echo $stateId; ?>, '#addr_state_id');
-});
+    $(document).ready(function() {
+        getCountryStates($("#addr_country_id").val(), <?php echo $stateId; ?>, '#addr_state_id');
+    });
 </script>
