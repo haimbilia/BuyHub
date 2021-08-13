@@ -139,6 +139,13 @@
         [dir="rtl"] & {
             background-position: calc(0% - -11px) center;
         }
+        &:disabled {
+            color: rgba(0, 0, 0, 0.38);
+            background-color: rgba(0, 0, 0, 0.12);
+            box-shadow: none;
+            cursor: initial;
+            border-color: transparent;
+        }
     }
     textarea {
         @include input;
