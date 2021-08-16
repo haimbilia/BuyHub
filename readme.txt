@@ -224,6 +224,7 @@ Updates/Fixes :
     => 057304 - Admin: An error message is not correct while adding the same Badges name
     => 057228 - Admin and Seller: Suggestion to give some indication regarding the "Display Time Slots After Order [Hours]", where it will be used? 
     => 057256 - on promotion add page time picker not coming
+    => 057269 - Seller: Text is not correct on the "Requests" section
 
 New Features:  
     => Admin shipped products listing page
