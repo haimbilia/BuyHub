@@ -17,7 +17,6 @@ $amount = CommonHelper::displayMoneyFormat($cartTotal - $cartAdjustableAmount - 
             </p>
         </div>
         <button class="close-layer" onClick="removePromoCode()"> </button>
-
     </div>
     <?php } else { ?>
     <div class="coupons">

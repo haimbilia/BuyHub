@@ -1,6 +1,6 @@
 <?php
 
-class SubscriptionCartController extends MyAppController
+class SubscriptionCartController extends DashboardBaseController
 {
     public function __construct($action)
     {

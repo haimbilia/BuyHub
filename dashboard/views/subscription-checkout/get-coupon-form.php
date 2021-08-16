@@ -2,7 +2,6 @@
 $btn = $PromoCouponsFrm->getField('btn_submit');
 $btn->addFieldTagAttribute('class', 'btn btn-brand');
 ?>
-<span class="gap"></span>
 <?php if (!empty($cartSummary['cartDiscounts']['coupon_code'])) { ?>
 <div class="alert alert--success">
     <a href="javascript:void(0)" class="close" onClick="removePromoCode()"></a>
@@ -33,7 +32,8 @@ $btn->addFieldTagAttribute('class', 'btn btn-brand');
     <div class="row">
         <?php if ($couponsList) { ?>
         <div>
-            <div class="heading3 align--center"><?php echo Labels::getLabel("LBL_Available_Coupons", $siteLangId); ?>
+            <div class="heading3 align--center">
+                <?php echo Labels::getLabel("LBL_Available_Coupons", $siteLangId); ?>
             </div>
             <ul class="coupon-offers">
                 <?php $counter = 1;
@@ -50,8 +50,10 @@ $btn->addFieldTagAttribute('class', 'btn btn-brand');
                     } ?>
             </ul>
         </div>
-        <?php } else {
-            echo Labels::getLabel("LBL_No_Copons_offer_is_available_now.", $siteLangId);
-        } ?>
+        <?php } else { ?>
+        <div class="col-md">
+            <?php echo Labels::getLabel("LBL_No_Copons_offer_is_available_now.", $siteLangId); ?>
+        </div>
+        <?php } ?>
     </div>
 </div>

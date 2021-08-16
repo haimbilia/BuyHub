@@ -77,6 +77,9 @@
 @import 'components/badges';
 @import 'components/scrollbar';
 @import 'components/packages';
+@import "../../../application/views/scss/components/product-profile";
+@import "../../../application/views/scss/components/list-cart";
+@import "../../../application/views/scss/components/cart-summary";
 //
 // @import 'vendors/animate';
 @import 'vendors/fontawesome';
@@ -94,4 +97,5 @@
 //
 @import 'pages/dashboard';
 @import 'pages/share-earn';
+@import "../../../application/views/scss/pages/checkout";
 //
