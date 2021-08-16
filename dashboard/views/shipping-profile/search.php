@@ -57,13 +57,13 @@
                         $li = $ul->appendElement("li");
 
                         if ($canEdit) {
-                            $li->appendElement('a', array('href' => UrlHelper::generateUrl('shippingProfile', 'form', array($row['shipprofile_id'])),  'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)), '<i class="fa fa-edit"></i>', true);
+                            $li->appendElement('a', array('href' => UrlHelper::generateUrl('shippingProfile', 'form', array($row['shipprofile_id'])),  'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)), '<i class="fa fa-edit"></i>', true);
                             if ($row['shipprofile_default'] != applicationConstants::YES) {
                                 $li = $ul->appendElement("li");
-                                $li->appendElement('a', array('href' => 'javascript::void(0)',  'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "deleteRecord(" . $row['shipprofile_id'] . ")"), '<i class="fa fa-trash"></i>', true);
+                                $li->appendElement('a', array('href' => 'javascript::void(0)',  'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "deleteRecord(" . $row['shipprofile_id'] . ")"), '<i class="fa fa-trash"></i>', true);
                             }
                         } else {
-                            $li->appendElement('a', array('href' => UrlHelper::generateUrl('shippingProfile', 'form', array($row['shipprofile_id'])),  'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_View', $siteLangId)), '<i class="fa fa-eye"></i>', true);
+                            $li->appendElement('a', array('href' => UrlHelper::generateUrl('shippingProfile', 'form', array($row['shipprofile_id'])),  'class' => '', 'title' => Labels::getLabel('LBL_View', $siteLangId)), '<i class="fa fa-eye"></i>', true);
                         }
 
                         break;
@@ -80,7 +80,7 @@
         $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
         echo $frm->getFormTag();
         echo $tbl->getHtml(); ?>
-        </form>
+    </form>
 </div>
 <?php $postedData['page'] = $page;
         echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmProfileSearchPaging'));
