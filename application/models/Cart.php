@@ -57,6 +57,7 @@ class Cart extends FatModel
         }
 
         $srch = new SearchBase('tbl_user_cart');
+        $srch->doNotCalculateRecords();
         $srch->addCondition('usercart_user_id', '=', $this->cart_user_id);
         $srch->addCondition('usercart_type', '=', CART::TYPE_PRODUCT);
         $rs = $srch->getResultSet();
