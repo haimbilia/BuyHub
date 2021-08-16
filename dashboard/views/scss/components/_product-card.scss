@@ -591,13 +591,14 @@
             color: currentColor;
             font-size: 0.7rem !important;
             // border: $border;
-            // border-radius: $radius2; 
-            border-radius: 50%;
+            border-radius: $radius2;
+            //border-radius: 50%;
             background: $bg-brand-light;
             color: $brand-color;
             display: flex;
             align-items: center;
             justify-content: center;
+            text-decoration: none;
             &.icn-highlighted {
                 border: none;
                 color: $brand-color;
@@ -612,13 +613,13 @@
                 height: 14px;
                 display: block;
                 margin: 0;
-                fill: currentColor;
             }
             &.is-active,
             &:hover {
                 background: $brand-color;
                 color: $brand-color-inverse;
                 border-color: $brand-color;
+                text-decoration: none;
             }
         }
     }
