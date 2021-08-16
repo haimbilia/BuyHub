@@ -252,6 +252,9 @@ $(document).on('change', '.icon-language-js', function () {
     };
 
     conditionType = function (element) {
+        if ('undefined' == typeof element) {
+            return;
+        }
         var approvalFld = $("select[name='badge_required_approval']");
         if ("" == $("input[name='badge_id']").val() || condAuto == element.value) {
             approvalFld.val("");
