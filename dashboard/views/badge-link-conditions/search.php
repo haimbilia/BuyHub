@@ -79,6 +79,7 @@ foreach ($arrListing as $sn => $row) {
                 if ($canEdit && Badge::COND_MANUAL == $badgeConditionType) {
                     $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
                     $td->appendElement('a', array('href' => $href, 'class' => 'btn btn-outline-brand btn-sm', 'title' => Labels::getLabel('LBL_EDIT', $siteLangId)), "<i class='far fa-edit icon'></i>", true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-outline-brand btn-sm', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId), "onclick" => "unlink(event, " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
                 } else {
                     $td->appendElement('plaintext', [], Labels::getLabel('LBL_N/A', $siteLangId), true);
                 }

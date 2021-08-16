@@ -14,6 +14,8 @@ class BadgeRequestsController extends AdminBaseController
     {
         $frmSearch = $this->getSearchForm();
         $this->set("canEdit", $this->objPrivilege->canEditBadgeRequests($this->admin_id, true));
+        $this->_template->addJs(array('js/select2.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->set("frmSearch", $frmSearch);
         $this->_template->render();
     }
@@ -292,7 +294,7 @@ class BadgeRequestsController extends AdminBaseController
             Message::addErrorMessage(Labels::getLabel("MSG_NOT_AVAILABLE_TO_DOWNLOAD", $this->adminLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('BadgeRequests'));
         }
-
+        
         if (!file_exists(CONF_UPLOADS_PATH . AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH . $res['afile_physical_path'])) {
             Message::addErrorMessage(Labels::getLabel('LBL_FILE_NOT_FOUND', $this->adminLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('BadgeRequests'));

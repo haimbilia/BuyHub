@@ -12,8 +12,7 @@ $data = [
     'otherButtons' => [
         [
             'attr' => [
-                'href' => 'javascript:void(0)',
-                'onclick' => 'window.history.back();',
+                'href' => UrlHelper::generateUrl('Badges', 'list', [$badgeType]),
                 'title' => Labels::getLabel('LBL_BACK', $adminLangId)
             ],
             'label' => '<i class="fas fa-arrow-left"></i>'
