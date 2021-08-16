@@ -1,0 +1,33 @@
+.cart-summary {
+    font-size: 0.85rem;
+    ul {
+        li {
+            padding: 1rem 0;
+            @include media-breakpoint-down(sm) {
+                padding: 0.5rem 0;
+            }
+            border-left: 0;
+            border-right: 0;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .label {
+                color: currentColor;
+                padding: 0;
+            }
+            .value {
+                font-weight: 500;
+                text-align:#{$end-direction};
+                margin-#{$start-direction}: auto;
+            }
+            &.hightlighted {
+                font-weight: 500;
+                border-top: $border;
+            }
+            &.text-success {
+                color: $success-color;
+            }
+        }
+    }
+}
