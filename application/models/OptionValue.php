@@ -39,6 +39,8 @@ class OptionValue extends MyAppModel
         $srch = static::getSearchObject();
         $srch->addCondition('ov.' . static::tblFld('option_id'), '=', $optionId);
         $srch->addCondition('ov.' . static::tblFld('id'), '=', $this->mainTableRecordId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs, static::DB_TBL_PREFIX . 'id');
 
@@ -71,7 +73,8 @@ class OptionValue extends MyAppModel
                 $srch->addFld($attr);
             }
         }
-
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
@@ -99,7 +102,8 @@ class OptionValue extends MyAppModel
                 $srch->addFld($attr);
             }
         }
-
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
@@ -144,6 +148,8 @@ class OptionValue extends MyAppModel
         $srch->addCondition('ov.' . static::DB_TBL_PREFIX . 'id', '=', $this->mainTableRecordId);
         $srch->addCondition('ov.' . static::DB_TBL_PREFIX . 'option_id', '=', $optionId);
         $srch->addFld('ov.' . static::DB_TBL_PREFIX . 'id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row) && $row[static::DB_TBL_PREFIX . 'id'] == $this->mainTableRecordId) {
@@ -159,6 +165,8 @@ class OptionValue extends MyAppModel
         $srch->joinTable(static::DB_TBL, 'INNER JOIN', static::DB_TBL_PREFIX . 'id = ' . SellerProduct::DB_TBL_SELLER_PROD_OPTIONS_PREFIX . 'optionvalue_id');
         $srch->addCondition(static::DB_TBL_PREFIX . 'id', '=', $this->mainTableRecordId);
         $srch->addFld('selprod_id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row)) {

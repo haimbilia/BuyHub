@@ -1,10 +1,10 @@
 var facebookScope = "email";
-jQuery.fn.reset = function () {
-    $(this).each(function () { this.reset(); });
+jQuery.fn.reset = function() {
+    $(this).each(function() { this.reset(); });
 }
-$(document).ready(function () {
+$(document).ready(function() {
 
-    $('form[rel=action]').submit(function (event) {
+    $('form[rel=action]').submit(function(event) {
         event.preventDefault();
         var me = $(this);
         var frm = this;
@@ -12,7 +12,7 @@ $(document).ready(function () {
         window[v].validate();
         if (!window[v].isValid()) return;
         var data = getFrmData(frm);
-        callAjax($(this).attr('action'), data, function (response) {
+        callAjax($(this).attr('action'), data, function(response) {
             var ans = parseJsonData(response);
             if (ans.status == true) {
                 $("#frmCustomShare").reset();
@@ -22,7 +22,7 @@ $(document).ready(function () {
         return false;
     });
 
-    validateEmailAddress = function (e) {
+    validateEmailAddress = function(e) {
         var email = e.detail.data.value;
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (false === re.test(String(email).toLowerCase())) {
@@ -32,30 +32,44 @@ $(document).ready(function () {
         }
     }
 
-    tagifyEmailAddress = function () {
+    checkEmpty = function(e) {
+        if (0 == e.detail.tagify.value.length) {
+            $(".submitBtnJs").attr('disabled', 'disabled');
+        }
+    }
+
+    focusOut = function(e) {
+        $(".submitBtnJs").addClass('disabled');
+    }
+
+    focusIn = function(e) {
+        $(".submitBtnJs").removeClass('disabled');
+    }
+
+    tagifyEmailAddress = function() {
         tagify = new Tagify($(".emailAddressJs")[0], {
             whitelist: [],
             delimiters: "#",
             editTags: true,
-        }).on('add', validateEmailAddress);
+        }).on('add', validateEmailAddress).on('remove', checkEmpty).on('blur', focusOut).on('focus', focusIn);
     };
-    tagifyEmailAddress();    
+    tagifyEmailAddress();
 });
 
-(function () {
-    sendMailShareEarn = function (frm) {
+(function() {
+    sendMailShareEarn = function(frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Buyer', 'sendMailShareEarn'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Buyer', 'sendMailShareEarn'), data, function(t) {
             frm.reset();
             tagify.removeAllTags();
             $(".submitBtnJs").attr('disabled', 'disabled');
         });
     };
 
-    copy = function (obj) {
+    copy = function(obj) {
         var copyText = obj.attr('title');
-        document.addEventListener('copy', function (e) {
+        document.addEventListener('copy', function(e) {
             e.clipboardData.setData('text/plain', copyText);
             e.preventDefault();
         }, true);
@@ -68,7 +82,7 @@ $(document).ready(function () {
 
 function fbSubmit2() {
     alert("called 1");
-    FB.getLoginStatus(function (response) {
+    FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
             alert("connected");
             //facebook_redirect(response);
@@ -80,17 +94,17 @@ function fbSubmit2() {
 }
 
 function fbSubmit() {
-    FB.getLoginStatus(function (response) {
+    FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
             facebook_redirect(response);
         } else if (response.status === 'not_authorized') {
-            FB.login(function (response) {
+            FB.login(function(response) {
                 facebook_redirect(response);
             }, {
                 scope: facebookScope
             });
         } else {
-            FB.login(function (response) {
+            FB.login(function(response) {
                 if (response.authResponse) {
 
                     //$(window.parent.document).find("#facebook_btn2").trigger("click");;

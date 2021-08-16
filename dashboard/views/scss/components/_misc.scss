@@ -362,6 +362,12 @@ a:hover {
 }
 
 .img-container {
-    min-height: 450px;
-    max-height: 450px;
+    min-height: 350px;
+}
+
+.cropper-body {
+    min-height: 350px;
+    display: flex;
+    align-items: center;
+    transition: 0.5s ease all;
 }

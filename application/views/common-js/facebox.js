@@ -1,38 +1,49 @@
 /* To override facebox functionality with bootstrap modal. */
 (function ($) {
-	$.facebox = function (data, klass) {
+	$.facebox = function (data, klass, bodyClass) {
 		init(klass);
 		if (data.ajax) fillFaceboxFromAjax(data.ajax)
 		else if (data.image) fillFaceboxFromImage(data.image)
 		else if (data.div) fillFaceboxFromHref(data.div)
 		else if ($.isFunction(data)) data.call($)
-		else $.facebox.reveal(data)
+		else $.facebox.reveal(data, bodyClass)
 	}
 
 
 	$.extend($.facebox, {
 		element: Date.now(),
-		reveal: function (data) {
-			$('body .' + $.facebox.element + ' .contentBody--js').html(data);
+		reveal: function (data, bodyClass) {
+            if (0 == $(data).find('modal-body').length) {
+                data = '<div class="modal-body">' + data + '</div>'
+            }
+
+            var contentBody = 'body .' + $.facebox.element + ' .contentBody--js';
+
+			$(contentBody).html(data);
 
 			var headerHtm = '<div class="modal-header">';
 			var closeBtnHtm = '<button type="button" class="close" data-dismiss="modal" aria-label="' + langLbl.close + '"><span aria-hidden="true">&times;</span></button>';
-			if (1 > $('body .' + $.facebox.element + ' .contentBody--js').find('.modal-header').length) {
-				$('body .' + $.facebox.element + ' .contentBody--js').prepend(headerHtm + closeBtnHtm + '</div>');
-			} else if (0 < $('body .' + $.facebox.element + ' .contentBody--js').find('.modal-header').length && 1 > $('body .' + $.facebox.element + ' .contentBody--js .modal-header').find('.close').length) {
+			if (1 > $(contentBody).find('.modal-header').length) {
+				$(contentBody).prepend(headerHtm + closeBtnHtm + '</div>');
+			} else if (0 < $(contentBody).find('.modal-header').length && 1 > $('body .' + $.facebox.element + ' .contentBody--js .modal-header').find('.close').length) {
 				$('body .' + $.facebox.element + ' .contentBody--js .modal-header').append(closeBtnHtm);
 			}
+            
+            if ('undefined' != typeof bodyClass && 0 == $(data).find(bodyClass).length) {
+                $(contentBody + " .modal-body").addClass(bodyClass);
+            }
 
 			$('.' + $.facebox.element).modal('show');
 		},
 
 		close: function () {
-			// $("." + $.facebox.element).modal('hide');
-			$("." + $.facebox.element + ', .modal-backdrop').remove();
-			return false
+			$("." + $.facebox.element).modal('hide');
+            setTimeout(() => {
+                $("." + $.facebox.element + ', .modal-backdrop').remove();
+            }, 500);
+			return false;
 		}
 	});
-
 	/* called one time to setup facebox on this page */
 	function init(klass) {
 		klass = ('undefined' == typeof klass ? '' : klass);

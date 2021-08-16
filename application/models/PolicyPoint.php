@@ -78,6 +78,8 @@ class PolicyPoint extends MyAppModel
         $srch->addCondition('ppoint_deleted', '=', applicationConstants::NO);
         $srch->addCondition('ppoint_id', '=', $ppointId);
         $srch->addFld('ppoint_id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row) && $row['ppoint_id'] == $ppointId) {

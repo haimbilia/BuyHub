@@ -261,6 +261,7 @@ $(document).on('change', '.language-js', function () {
 
     popupImage = function(inputBtn){
 		if (inputBtn.files && inputBtn.files[0]) {
+            $.facebox(fcom.getLoader(), '', 'cropper-body');
 	        fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function(t) {
 				$.facebox(t );
                 var file = inputBtn.files[0];

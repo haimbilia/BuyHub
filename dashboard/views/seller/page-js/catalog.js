@@ -300,8 +300,9 @@ $(document).on('change', '.language-js', function () {
 
 	popupImage = function (inputBtn) {
 		if (inputBtn.files && inputBtn.files[0]) {
+            // $.facebox(fcom.getLoader(), '', 'cropper-body');
 			fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
-				//$.facebox(t );
+				// $.facebox(t );
 				$('#cropperBox-js').html(t);
 				$('#cropperBox-js').css("display", "block");
 				$("#mediaForm-js").css("display", "none");
