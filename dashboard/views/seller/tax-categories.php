@@ -27,7 +27,7 @@
 ?>
 
 <?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
-<main id="main-area" class="main"   >
+<main id="main-area" class="main">
     <div class="content-wrapper content-space">
         <div class="content-header row">
             <div class="col">
@@ -38,12 +38,11 @@
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="card">
+                    <div class="card card-search">
                         <div class="card-body">
-                            <div class="replaced">
-                                <div class="row">
-                                    <div class="col-lg-8">
-                                        <?php
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <?php
                                         $submitFld = $frmSearch->getField('btn_submit');
                                         $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
 
@@ -51,10 +50,8 @@
                                         $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
                                         echo $frmSearch->getFormHtml();
                                         echo $frmSearch->getExternalJS();?>
-                                    </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -62,7 +59,6 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-
                         <div class="card-body">
                             <div id="listing"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
 
