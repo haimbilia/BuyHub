@@ -367,4 +367,12 @@ a:hover {
 
 .select2-container {
     font-size: 0.8rem;
+    min-height: 350px;
+}
+
+.cropper-body {
+    min-height: 350px;
+    display: flex;
+    align-items: center;
+    transition: 0.5s ease all;
 }

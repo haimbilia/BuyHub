@@ -877,3 +877,4 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 -- ----------------------TV-9.3.2.20210810---------------------
 
 DELETE FROM `tbl_language_labels` WHERE label_key='LBL_EARNED_REWARD_POINTS_ON_PURCHASE.';
+-- ----------------------TV-9.3.2.20210813-----------------------

@@ -42,3 +42,9 @@ if (!empty($frmSearch)) {
 }
 
 require_once (CONF_THEME_PATH . '_partial/index-page-common.php');
+
+?>
+<script>
+    var condManual = <?php echo Badge::COND_MANUAL; ?>;
+    var condAuto =  <?php echo Badge::COND_AUTO; ?>;
+</script>
