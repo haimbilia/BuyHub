@@ -222,6 +222,7 @@ Updates/Fixes :
     => 057258 - Admin: Back button linking is not correct for the Ribbons functionality
     => 057257 - Seller: Blank Confirmation message is showing while deleting the Product from the ribbon
     => 057304 - Admin: An error message is not correct while adding the same Badges name
+    => 057281 - Seller: There is no option to delete the ribbons and badges listing
 
 New Features:  
     => Admin shipped products listing page
