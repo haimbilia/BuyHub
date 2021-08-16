@@ -3698,12 +3698,9 @@ class AccountController extends LoggedUserController
     private function getCookiesPreferencesForm()
     {
         $frm = new Form('frmCookiesPreferences');
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Functional", $this->siteLangId), 'ucp_functional', 1, array(), true, 0);
-        $fld->htmlAfterField = '<div class="info">' . Labels::getLabel('LBL_Functional_Cookies_Information', $this->siteLangId) . '</div>';
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Statistical_Analysis", $this->siteLangId), 'ucp_statistical', 1, array(), false, 0);
-        $fld->htmlAfterField = '<div class="info">' . Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $this->siteLangId) . '</div>';
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Personalise_Experience", $this->siteLangId), 'ucp_personalized', 1, array(), false, 0);
-        $fld->htmlAfterField = '<div class="info">' . Labels::getLabel('LBL_Personalise_Cookies_Information', $this->siteLangId) . '</div>';;
+        $frm->addCheckBox(Labels::getLabel("LBL_Functional", $this->siteLangId), 'ucp_functional', 1, array(), true, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Statistical_Analysis", $this->siteLangId), 'ucp_statistical', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Personalise_Experience", $this->siteLangId), 'ucp_personalized', 1, array(), false, 0);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }

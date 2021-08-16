@@ -13,9 +13,10 @@
         margin-#{$end-direction}: 15px;
         img {
             min-width: 30px;
-            max-width: 40px;
+            max-width: 80px;
             border-radius: $radius4;
-            border: $border;
+            //border: $border;
+            border: none;
             @include media-breakpoint-down(sm) {
                 max-width: 50px;
             }

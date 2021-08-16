@@ -66,7 +66,7 @@ if (0 < $selProd_id) {
 						<div class="card-header">
                             <div class="card-title"></div>
 							<div class="btn-group">
-								<a class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css" title="<?php echo Labels::getLabel('LBL_Remove_Volume_Discount', $siteLangId); ?>" onclick="deleteVolumeDiscountRows()" href="javascript:void(0)"><?php echo Labels::getLabel('LBL_REMOVE', $siteLangId); ?></a>
+								<a class="btn btn-outline-brand btn-sm formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Remove_Volume_Discount', $siteLangId); ?>" onclick="deleteVolumeDiscountRows()" href="javascript:void(0)"><?php echo Labels::getLabel('LBL_REMOVE', $siteLangId); ?></a>
 							</div>
 						</div>
                         <div class="card-body">

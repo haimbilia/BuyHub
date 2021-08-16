@@ -167,8 +167,7 @@
         <div class="sidebar__content">
             <div id="order-summary" class="order-summary summary-listing-js">
                 <h5 class="mb-2"><?php echo Labels::getLabel('LBL_Order_Summary', $siteLangId); ?></h5>
-
-                <div class="order-summary_list scroll scroll-y">
+                <div class="order-summary_list">
                     <div class="cart-summary">
                         <ul class="">
                             <li>

@@ -579,7 +579,7 @@
     >li {
         display: inline-block;
         vertical-align: top;
-        margin: 0 4px 4px 0;
+        margin: 0 10px 10px 0;
         >a {
             display: block;
             background: none;
@@ -620,6 +620,9 @@
                 color: $brand-color-inverse;
                 border-color: $brand-color;
             }
+        }
+        &:last-child {
+            margin-#{$end-direction}: 0;
         }
     }
     &.actions--large {

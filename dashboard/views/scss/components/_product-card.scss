@@ -622,6 +622,9 @@
                 text-decoration: none;
             }
         }
+        &:last-child {
+            margin-#{$end-direction}: 0;
+        }
     }
     &.actions--large {
         li {

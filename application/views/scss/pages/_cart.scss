@@ -271,12 +271,17 @@
         &:hover {
             color: $brand-color;
         }
+        &.is-active {
+            color: $brand-color;
+            border-color: $brand-color;
+            border-width: 2px;
+        }
     }
     input {
         &[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            z-index: -1;
+            // position: absolute;
+            // opacity: 0;
+            // z-index: -1;
             &:checked+.control-label {
                 color: $brand-color;
                 border-color: $brand-color;
@@ -294,10 +299,10 @@
         }
     }
     .svg {
+        display: none;
         width: 24px;
         height: 24px;
         margin-#{$end-direction}: 10px;
-        fill: currentColor;
     }
     .disabled {
         cursor: not-allowed;
