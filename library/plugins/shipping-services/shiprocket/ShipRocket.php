@@ -755,6 +755,21 @@ class ShipRocket extends ShippingServicesBase
     }
 
     /**
+     * downloadLabel
+     *
+     * @param  array $labelData
+     * @return void
+     */
+    public function downloadLabel(array $labelData)
+    {
+        if (!array_key_exists('label_response', $labelData) || !isset($labelData['label_response']['label_url'])) {
+            return false;
+        }
+        FatApp::redirectUser($labelData['label_response']['label_url']);
+        return true;
+    }
+
+    /**
      * doRequest
      *
      * @param  int $requestType
