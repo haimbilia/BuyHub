@@ -559,7 +559,7 @@ class ShipRocket extends ShippingServicesBase
             return false;
         }
 
-        if (false === $this->doRequest(self::REQUEST_GENERATE_LABEL, ['shipment_id' => $orderShipment['shipment_id']])) {
+        if (false === $this->doRequest(self::REQUEST_GENERATE_LABEL, ['shipment_id' => [$orderShipment['shipment_id']]])) {
             return false;
         }
 
