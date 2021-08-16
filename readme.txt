@@ -216,6 +216,14 @@ Updates/Fixes :
     => 057227 - Admin and Seller: Suggestion to give some indication regarding the "Product Warranty" field is in Days or Months or Year while adding the product
     => 057044 - Seller: UI design is not correct while uploading the Banner and Logo for the Shop
 ==========================TV-9.3.2.20210813=============================
+    => 057270 - Seller: Badges requests list is not showing if the first request is for Badges
+    => 057264 - Admin: "Link to" field is not working while clicking on it and UI is also not correct on the "Badges request" section
+    => 057261 - Admin: "Invalid Request" error is showing while clicking on the "Link" field after selecting "link type" in the Ribbons
+    => 057258 - Admin: Back button linking is not correct for the Ribbons functionality
+    => 057257 - Seller: Blank Confirmation message is showing while deleting the Product from the ribbon
+    => 057304 - Admin: An error message is not correct while adding the same Badges name
+    => 057281 - Seller: There is no option to delete the ribbons and badges listing
+
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files

@@ -30,6 +30,7 @@ if (null != $iconFld) {
 $conditionType = $frm->getField('badge_condition_type');
 if (null != $conditionType) {
 	$conditionType->addFieldTagAttribute('onChange', 'conditionType(this)');
+	$conditionType->addFieldTagAttribute('class', 'badgeConditionTypeJs');
 }
 
 ?>

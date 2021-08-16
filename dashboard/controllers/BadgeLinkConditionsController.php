@@ -599,4 +599,36 @@ class BadgeLinkConditionsController extends SellerBaseController
 
         FatUtility::dieJsonSuccess($json);
     }
+
+    public function badgeUnlink()
+    {
+        $blinkcond_id = FatApp::getPostedData('blinkcond_id', FatUtility::VAR_INT, 0);
+
+        if (1 > $blinkcond_id) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_RECORD', $this->siteLangId));
+        }
+
+        if (!BadgeLinkCondition::getAttributesById($blinkcond_id, ['blinkcond_id'])) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_RECORD_ID', $this->siteLangId));
+        }
+
+        $this->unlink($blinkcond_id);
+        $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    private function unlink(int $blinkcond_id)
+    {
+        if (1 > $blinkcond_id) {
+            FatUtility::dieJsonError(
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+            );
+        }
+
+        $obj = new BadgeLinkCondition($blinkcond_id);
+        if (!$obj->deleteRecord(false)) {
+            FatUtility::dieJsonError($obj->getError());
+        }
+        $this->removeLinkRecord($blinkcond_id);
+    }
 }

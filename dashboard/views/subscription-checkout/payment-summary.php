@@ -3,46 +3,51 @@
     <main class="main">
         <div class="step">
             <div class="step_section">
-                <div class="step_head"><?php echo Labels::getLabel('LBL_Payment_Summary', $siteLangId); ?>
+                <div class="step_head">
+                    <h5 class="step_title">
+                        <?php echo Labels::getLabel('LBL_Payment_Summary', $siteLangId); ?>
+                    </h5>
                 </div>
-                <?php if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $canUseWalletForPayment) { ?>
-                <div class="wallet-balance">
-                    <label class="checkbox wallet">
-                        <input onChange="walletSelection(this)" type="checkbox"
-                            <?php echo ($cartSummary["cartWalletSelected"]) ? 'checked="checked"' : ''; ?>
-                            name="pay_from_wallet" id="pay_from_wallet" />
+                <div class="step_body">
 
-                        <span class="wallet__txt">
-                            <svg class="svg">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#wallet"
-                                    href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#wallet">
-                                </use>
-                            </svg>
-                            <div class="">
-                                <p><?php echo Labels::getLabel('LBL_AVAILABLE_BALANCE', $siteLangId); ?></p>
-                                <span class="currency-value" dir="ltr"><span class="currency-value" dir="ltr"><span
-                                            class="currency-symbol"><?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, false, true, false, true) ?></span>
-                            </div>
-                        </span>
-                    </label>
-                    <div class="wallet-balance_info">
-                        <?php if ($cartSummary["cartWalletSelected"]) {
+                    <?php if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $canUseWalletForPayment) { ?>
+                    <div class="wallet-balance">
+                        <label class="checkbox wallet">
+                            <input onChange="walletSelection(this)" type="checkbox"
+                                <?php echo ($cartSummary["cartWalletSelected"]) ? 'checked="checked"' : ''; ?>
+                                name="pay_from_wallet" id="pay_from_wallet" />
+
+                            <span class="wallet__txt">
+                                <svg class="svg">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#wallet"
+                                        href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#wallet">
+                                    </use>
+                                </svg>
+                                <div class="">
+                                    <p><?php echo Labels::getLabel('LBL_AVAILABLE_BALANCE', $siteLangId); ?></p>
+                                    <span class="currency-value" dir="ltr"><span class="currency-value" dir="ltr"><span
+                                                class="currency-symbol"><?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, false, true, false, true) ?></span>
+                                </div>
+                            </span>
+                        </label>
+                        <div class="wallet-balance_info">
+                            <?php if ($cartSummary["cartWalletSelected"]) {
                                 $remainingWalletBalance = ($userWalletBalance - $cartSummary['orderNetAmount']);
                                 $remainingWalletBalance = ($remainingWalletBalance < 0) ? 0 : $remainingWalletBalance;
                                 echo Labels::getLabel('LBL_Remaining_wallet_balance', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($remainingWalletBalance, true, false, true, false, true);
                             } else {
                                 echo Labels::getLabel('LBL_USE_MY_WALLET_BALANCE_TO_PAY_FOR_MY_ORDER', $siteLangId);
                             } ?>
+                        </div>
                     </div>
-                </div>
-                <?php } ?>
-                <?php if ($subscriptionType == SellerPackages::PAID_TYPE && $canUseWalletForPayment) { ?>
-                <p class="note">
-                    <?php echo Labels::getLabel('LBL_Note_Please_Maintain_Wallet_Balance_for_further_auto_renewal_payments', $siteLangId); ?>
-                </p>
-                <?php } ?>
+                    <?php } ?>
+                    <?php if ($subscriptionType == SellerPackages::PAID_TYPE && $canUseWalletForPayment) { ?>
+                    <p class="note">
+                        <?php echo Labels::getLabel('LBL_Note_Please_Maintain_Wallet_Balance_for_further_auto_renewal_payments', $siteLangId); ?>
+                    </p>
+                    <?php } ?>
 
-                <div class="">
+
                     <section id="payment" class="section-checkout">
                         <div class="align-items-center mb-4">
                             <?php if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $canUseWalletForPayment) { ?>
@@ -142,7 +147,7 @@
                                             } ?>
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane fade show active" role="tabpanel">
+                                <div class="tab-pane fade show active">
                                     <div class="tabs-container" id="tabs-container"></div>
                                 </div>
                             </div>
@@ -153,6 +158,7 @@
                         </div>
                         <?php } ?>
                     </section>
+
                 </div>
             </div>
         </div>

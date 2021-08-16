@@ -26,10 +26,8 @@ class SellerRequestsController extends SellerBaseController
         $reqProducts = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $srch = $this->getRequestedBadgeObj();
-        $srch->setPageSize(1);     
-        $srch->getResultSet()   ;
-     /*    $reqBadges = FatApp::getDb()->fetchAll($srch->getResultSet()); */
-        echo $srch->getError();
+        $srch->setPageSize(1);
+        $reqBadges = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $noRecordFound = false;
         if (empty($reqBrands) && empty($reqCategories) && empty($reqProducts) && empty($reqBadges)) {
