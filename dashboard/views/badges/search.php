@@ -67,8 +67,17 @@ foreach ($arrListing as $sn => $row) {
                 $class = (applicationConstants::YES == $row[$key] ? 'label-warning' : 'label-success');
                 $htm = ' <span class="label label-inline label-success rounded-pill">' . Labels::getLabel('LBL_NOT_REQUIRED', $siteLangId) . '</span>';;
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
-                    $lbl = (Badge::COND_AUTO == $row[Badge::DB_TBL_PREFIX . 'condition_type']) ? Labels::getLabel('LBL_NOT_ALLOWED', $siteLangId) : $approvalStatusArr[$row[$key]];
                     $class = (Badge::COND_AUTO == $row[Badge::DB_TBL_PREFIX . 'condition_type']) ? 'label-danger' : $class;
+                    
+                    if (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'] && 0 < (int) $row['canAccess'] && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED) {
+                        $lbl = Labels::getLabel('LBL_APPROVED', $siteLangId);
+                        $class = 'label-success';
+                    } else if (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'] && 0 < (int) $row['breq_id'] && BadgeRequest::REQUEST_PENDING == (int) $row['breq_status']) {
+                        $lbl = Labels::getLabel('LBL_REQUESTED', $siteLangId);
+                        $class = 'label-info';
+                    } else {
+                        $lbl = (Badge::COND_AUTO == $row[Badge::DB_TBL_PREFIX . 'condition_type']) ? Labels::getLabel('LBL_NOT_ALLOWED', $siteLangId) : $approvalStatusArr[$row[$key]];
+                    }
                     $htm = ' <span class="label label-inline ' . $class . ' rounded-pill">' . $lbl . '</span>';
                 }
 
@@ -79,8 +88,29 @@ foreach ($arrListing as $sn => $row) {
                 if ($canEdit && (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'])) {
                     if (0 < (int) $row['canAccess']) {
                         $td->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id'], $row[Badge::DB_TBL_PREFIX . 'type']]), 'class' => $btnClass, 'title' => Labels::getLabel('LBL_BIND_CONDITION', $siteLangId)), "<i class='fas fa-link icon'></i>", true);
+
+                        if (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'] && 0 < (int) $row['canAccess'] && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED) {
+                            $td->appendElement(
+                                'a',
+                                array('href' => 'javascript:void(0)', 'onclick' => "deleteBadgeRequest(" . $row['breq_id'] . ")", 'class' => 'btn btn-outline-brand btn-sm ', 'title' => Labels::getLabel('LBL_DELETE_REQUEST', $siteLangId)),
+                                '<i class="fa fa-trash"></i>',
+                                true
+                            );
+                        }
+
                     } else if (0 < (int) $row['breq_id'] && BadgeRequest::REQUEST_PENDING == (int) $row['breq_status']) {
-                        $td->appendElement('plaintext', [], Labels::getLabel('LBL_REQUESTED', $siteLangId), true);
+                        $td->appendElement(
+                            'a',
+                            array('href' => 'javascript:void(0)', 'onclick' => "addBadgeReqForm(" . $row['breq_id'] . ", " . $row['badge_id'] . ")", 'class' => 'btn btn-outline-brand btn-sm ', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
+                            '<i class="fa fa-edit"></i>',
+                            true
+                        );
+                        $td->appendElement(
+                            'a',
+                            array('href' => 'javascript:void(0)', 'onclick' => "deleteBadgeRequest(" . $row['breq_id'] . ")", 'class' => 'btn btn-outline-brand btn-sm ', 'title' => Labels::getLabel('LBL_DELETE_REQUEST', $siteLangId)),
+                            '<i class="fa fa-trash"></i>',
+                            true
+                        );
                     } else {
                         $icon = '<i class="icn shop">
                                     <svg class="svg">

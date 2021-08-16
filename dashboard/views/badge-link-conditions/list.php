@@ -16,7 +16,7 @@ $otherButtons = [
     ]
 ];
 
-if (Badge::COND_MANUAL == $conditionType) {
+if (Badge::COND_MANUAL == $conditionType && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_OPEN) {
     $otherButtons[] = [
         'attr' => [
             'href' => UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$badgeType, $badgeId]),

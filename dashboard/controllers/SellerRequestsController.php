@@ -799,12 +799,12 @@ class SellerRequestsController extends SellerBaseController
     {
         $badgeReqData = BadgeRequest::getAttributesById($badgeReqId, ['breq_user_id', 'breq_status']);
         if (empty($badgeReqData) || $badgeReqData['breq_user_id'] !== UserAuthentication::getLoggedUserId()) {
-            FatUtility::dieJsonError('MSG_INVALID_REQUEST', $this->siteLangId);
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
 
-        if ($badgeReqData['breq_status'] !== BadgeRequest::REQUEST_PENDING) {
+        /* if ($badgeReqData['breq_status'] !== BadgeRequest::REQUEST_PENDING) {
             FatUtility::dieJsonError('MSG_ALREADY_APPROVED/_REJECTED', $this->siteLangId);
-        }
+        } */
         $deleteQuery = "DELETE br, blc, blnk
         FROM tbl_badge_requests br
         LEFT JOIN tbl_badge_link_conditions blc ON br.breq_blinkcond_id = blc.blinkcond_id
