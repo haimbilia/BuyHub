@@ -172,7 +172,11 @@ class BadgesController extends AdminBaseController
         $record->setFldValue(Badge::DB_TBL_PREFIX . 'identifier', $identifier);
         $record->assignValues($post);
         if (!$record->save()) {
-            FatUtility::dieJsonError($record->getError());
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('MSG_DUPLICATE_RECORD_NAME', $this->adminLangId);
+            }
+            FatUtility::dieJsonError($msg);
         }
         $badgeId = $record->getMainTableRecordId();
 

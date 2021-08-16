@@ -563,6 +563,7 @@ class EmailHandler extends FatModel
         if (!self::sendMailTpl($d['credential_email'], $tpl, $langId, $vars)) {
             return false;
         }
+        
         $phone = !empty($d['user_phone']) ? ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'] : '';
         $this->sendSms($tpl, $phone, $vars, $langId);
         return true;
