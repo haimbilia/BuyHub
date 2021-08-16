@@ -14,11 +14,14 @@ class BadgeLinkConditionsController extends SellerBaseController
 
     public function list(int $badgeId, int $badgeType)
     {
-        $conditionType = Badge::getAttributesById($badgeId, 'badge_condition_type');
+        $userId = UserAuthentication::getLoggedUserId();
+        $row = Badge::getAttributesById($badgeId, ['badge_condition_type', 'badge_required_approval']);
+        $conditionType = $row['badge_condition_type'];
         $frmSearch = $this->getSearchForm($badgeType, $conditionType);
         $frmSearch->fill(['blinkcond_badge_id' => $badgeId, 'badge_type' => $badgeType]);
-        $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks(UserAuthentication::getLoggedUserId(), true));
+        $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks($userId, true));
 
+        $this->set('row', $row);
         $this->set('conditionType', $conditionType);
         $this->set('badgeName', $this->getBadgeName($badgeId));
         $this->set("frmSearch", $frmSearch);
@@ -261,6 +264,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         $frm->fill($dataToFill);
 
         $position = array_key_exists('blinkcond_position', $dataToFill) ? $dataToFill['blinkcond_position'] : Badge::RIBB_POS_TRIGHT;
+
         $this->set('position', $position);
         $this->set('recordCondition', $recordCondition);
         $this->set('badgeData', $this->getBadgeData($badgeId));
@@ -314,6 +318,8 @@ class BadgeLinkConditionsController extends SellerBaseController
             $frmSearch->fill(['blinkcond_id' => $badgeLinkCondId, 'blinkcond_badge_id' => $badgeId, 'badge_type' => $badgeType]);
         }
 
+        $canBindRecords = Badge::getAttributesById($badgeId, 'badge_required_approval');
+        $this->set('canBindRecords', $canBindRecords);
         $this->set('badgeName', $this->getBadgeName($badgeId));
         $this->set('badgeType', $badgeType);
         $this->set('badgeId', $badgeId);
