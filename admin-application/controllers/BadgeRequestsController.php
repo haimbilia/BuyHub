@@ -14,6 +14,8 @@ class BadgeRequestsController extends AdminBaseController
     {
         $frmSearch = $this->getSearchForm();
         $this->set("canEdit", $this->objPrivilege->canEditBadgeRequests($this->admin_id, true));
+        $this->_template->addJs(array('js/select2.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->set("frmSearch", $frmSearch);
         $this->_template->render();
     }

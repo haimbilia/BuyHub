@@ -183,6 +183,7 @@ class DashboardBaseController extends FatController
                 'cacheTimeStamp' => $cacheTimeStamp,
                 'close' => Labels::getLabel('LBL_CLOSE', $this->siteLangId),
                 'copiedText' => Labels::getLabel('LBL_COPIED_TEXT', $this->siteLangId),
+                'areYouSure' => Labels::getLabel('LBL_ARE_YOU_SURE?', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);

@@ -51,6 +51,7 @@ $(document).ready(function () {
             if (0 < badgeReqId) {
                 reloadRecordsList(badgeReqId, 1);
             }
+            bindRecordsSelect2();
         });
     };
 
