@@ -48,24 +48,14 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 $typeFld->setWrapperAttribute('class', 'col-lg-2');
                                 $typeFld->developerTags['col'] = 2;
 
-                                $fld = $frmSearchCatalogProduct->getField('badge_name');
-                                $fld->setWrapperAttribute('class', 'col-lg-3');
-                                $fld->developerTags['col'] = 3;
-
-                                $fld = $frmSearchCatalogProduct->getField('ribbon_name');
-                                $fld->setWrapperAttribute('class', 'col-lg-3');
-                                $fld->developerTags['col'] = 3;
-
                                 $submitFld = $frmSearchCatalogProduct->getField('btn_submit');
                                 $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
                                 $submitFld->developerTags['col'] = 2;
-                                $submitFld->developerTags['noCaptionTag'] = true;
 
                                 $fldClear = $frmSearchCatalogProduct->getField('btn_clear');
                                 $fldClear->setFieldTagAttribute('onclick', 'clearSearch()');
                                 $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
                                 $fldClear->developerTags['col'] = 2;
-                                $fldClear->developerTags['noCaptionTag'] = true;
                                 /* if( User::canAddCustomProductAvailableToAllSellers() ){
                                       $submitFld = $frmSearchCatalogProduct->getField('btn_submit');
                                       $submitFld->setFieldTagAttribute('class','btn-block');

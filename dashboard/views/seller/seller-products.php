@@ -3,8 +3,6 @@ $arr_flds = array(
     'select_all' => '',
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
     'name' => Labels::getLabel('LBL_Name', $siteLangId),
-    'badge' => Labels::getLabel('LBL_BADGE', $siteLangId),
-    'ribbon' => Labels::getLabel('LBL_RIBBON', $siteLangId),
     'selprod_price' => Labels::getLabel('LBL_Price', $siteLangId),
     'selprod_stock' => Labels::getLabel('LBL_Quantity', $siteLangId),
     'selprod_available_from' => Labels::getLabel('LBL_Available_From', $siteLangId),
@@ -71,24 +69,6 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                     }
                     $variantStr .= '</div></div>';
                     $td->appendElement('plaintext', array(), $variantStr, true);
-                    break;
-                case 'badge':
-                    $bdgSelProdId = $row['selprod_id'];
-                    $bdgSize = 20;
-                    $bdgExcludeCndType = [BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP];
-                    $frontReturn = true;
-                    include(CONF_FRONT_END_THEME_PATH . '_partial/get-badge.php');
-                    $html = empty($html) ? Labels::getLabel('LBL_N/A', $siteLangId) : $html;
-                    $td->appendElement('plaintext', [], $html, true);
-                    break;
-                case 'ribbon':
-                    $ribSelProdId = $row['selprod_id'];
-                    $frontReturn = true;
-
-                    include(CONF_FRONT_END_THEME_PATH . '_partial/get-ribbon.php');
-                    $html = empty($html) ? Labels::getLabel('LBL_N/A', $siteLangId) : $html;
-                    $html = '<div class="badge-wrap">' . $html . '</div>';
-                    $td->appendElement('plaintext', [], $html, true);
                     break;
                 case 'selprod_price':
                     $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true), true);
