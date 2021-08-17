@@ -16,5 +16,6 @@
     $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'siteLangId' => $siteLangId, 'callBackJsFunc' => 'reloadRecordsList', 'arguments' => $badgeLinkCondId);
     $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
 } else {
-    echo Labels::getLabel('MSG_NO_RECORD_FOUND', $siteLangId);
+    $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
+    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
 }

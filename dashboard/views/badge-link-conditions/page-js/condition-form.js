@@ -249,7 +249,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
         fcom.ajax(fcom.makeUrl(controller, recordsMethod, [blinkcond_id]), data, function (t) {
             $(dv).html(t);
             if (1 > $('.recordListing--js .recordRow--js').length) {
-                $(".listingSection--js, .searchform_filter").hide();
+                $(".searchform_filter").hide();
             }
         });
     };

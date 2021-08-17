@@ -46,7 +46,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         /* Bind Records */
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-
+        
         if (!empty($keyword)) {
             $srch->addHaving('record_name', 'LIKE', '%' . $keyword . '%');
         }
@@ -111,44 +111,45 @@ class BadgeLinkConditionsController extends SellerBaseController
         $frmDate = strtotime($condition['blinkcond_from_date']);
         $toDate = strtotime($condition['blinkcond_to_date']);
 
-        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        $page = ($page <= 0) ? 1 : $page;
-
-        $srch = SellerProduct::rateObj();
-        $srch->joinSellerProducts($this->siteLangId);
-        $srch->addFld(['selprod_id', 'selprod_title']);
-        $srch->addCondition('selprod_user_id', '=', UserAuthentication::getLoggedUserId());
-        $srch->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
-        $srch->addHaving('rating', 'BETWEEN', [$condition['blinkcond_condition_from'], $condition['blinkcond_condition_to']]);
-
-        if (!empty($keyword)) {
-            $srch->addHaving('selprod_title', 'LIKE', '%' . $keyword . '%');
-        }
-
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-        $result = (array) FatApp::getDb()->fetchAll($srch->getResultSet());
-        
         $records = [];
-        foreach ($result as $selProd) {
-            $recordName = $selProd['selprod_title'];
+        if ((time() >= $frmDate && time() <= $toDate) || (time() >= $frmDate && 1 > $toDate) || (1 > $frmDate && time() <= $toDate) || (1 > $frmDate && 1 > $toDate)) {
+            $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+            $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+            $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+            $page = ($page <= 0) ? 1 : $page;
 
-            $variantStr = " ";
-            $options = SellerProduct::getSellerProductOptions($selProd['selprod_id'], true, $this->siteLangId);
-            if (is_array($options) && count($options)) {
-                foreach ($options as $op) {
-                    $variantStr .= '(' . $op['option_name'] . ': ' . $op['optionvalue_name'] . ')';
-                }
+            $srch = SellerProduct::rateObj();
+            $srch->joinSellerProducts($this->siteLangId);
+            $srch->addFld(['selprod_id', 'selprod_title']);
+            $srch->addCondition('selprod_user_id', '=', UserAuthentication::getLoggedUserId());
+            $srch->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
+            $srch->addHaving('rating', 'BETWEEN', [$condition['blinkcond_condition_from'], $condition['blinkcond_condition_to']]);
+
+            if (!empty($keyword)) {
+                $srch->addHaving('selprod_title', 'LIKE', '%' . $keyword . '%');
             }
 
-            $records[] = [
-                'record_id' => $selProd['selprod_id'],
-                'record_name' => $recordName . $variantStr
-            ];
-        }
+            $srch->setPageNumber($page);
+            $srch->setPageSize($pagesize);
+            $result = (array) FatApp::getDb()->fetchAll($srch->getResultSet());
+            
+            foreach ($result as $selProd) {
+                $recordName = $selProd['selprod_title'];
 
+                $variantStr = " ";
+                $options = SellerProduct::getSellerProductOptions($selProd['selprod_id'], true, $this->siteLangId);
+                if (is_array($options) && count($options)) {
+                    foreach ($options as $op) {
+                        $variantStr .= '(' . $op['option_name'] . ': ' . $op['optionvalue_name'] . ')';
+                    }
+                }
+
+                $records[] = [
+                    'record_id' => $selProd['selprod_id'],
+                    'record_name' => $recordName . $variantStr
+                ];
+            }
+        }
         $this->set('badgeLinkCondId', $badgeLinkCondId);
         $this->set('records', $records);
         $this->set('page', $page);
