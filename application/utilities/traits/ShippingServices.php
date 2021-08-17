@@ -677,7 +677,7 @@ trait ShippingServices
                 if (!empty($shippingRates)) {
                     FatCache::set($cacheKey, serialize($shippingRates), '.txt');
                 } else {
-                    SystemLog::system($this->shippingService->getError());
+                    SystemLog::system($this->shippingService->getError(),'SelProd ID-'.$orderData['op_id']);
                     continue;
                 }
             }
