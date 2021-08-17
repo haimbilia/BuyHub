@@ -96,7 +96,7 @@ foreach ($arrListing as $sn => $row) {
                         $lbl = Labels::getLabel('LBL_N/A', $siteLangId);
                         $class = 'label-danger';
                         if (in_array($row['blinkcond_id'], $autoSatisfiedBadgesArr)) {
-                            $lbl = Labels::getLabel('LBL_SATISFIED', $siteLangId);
+                            $lbl = Labels::getLabel('LBL_TRUE', $siteLangId);
                             $class = 'label-success';
                         }
 
