@@ -45,9 +45,7 @@ class SmsTemplate extends MyAppModel
         if (empty($stpl_code)) {
             return false;
         }
-
-        $db = FatApp::getDb();
-
+       
         $srch = static::getSearchObject($langId);
         $srch->addCondition(static::DB_TBL_PREFIX . 'code', 'LIKE', $stpl_code);
         if ($langId > 0) {
@@ -61,12 +59,12 @@ class SmsTemplate extends MyAppModel
         $srch->addOrder(static::DB_TBL_PREFIX . 'lang_id', 'ASC');
         $srch->addGroupby(static::DB_TBL_PREFIX . 'code');
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         if (!$rs) {
             return false;
         }
-        $data = $db->fetch($rs);
+        $data = FatApp::getDb()->fetch($rs);
         if (!empty($attr) && is_string($attr)) {
             return isset($data[$attr]) ? $data[$attr] : '';
         }

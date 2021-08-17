@@ -47,8 +47,9 @@ foreach ($arrListing as $sn => $row) {
                 $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $row[BadgeRequest::DB_TBL_PREFIX . 'id']);
                 $fileName = Labels::getLabel('LBL_N/A', $adminLangId);
                 if ($res !== false && 0 < $res['afile_id']) {
-                    $fileName = '<a href="'.UrlHelper::generateUrl('BadgeRequests', 'downloadFile', array($row['breq_id'])).'">
-                    <i class="fas fa-download"></i></a>';
+                    $uploadedTime = AttachedFile::setTimeParam($res['afile_updated_at']);
+                    $fileName = '<a href="'.UrlHelper::generateUrl('BadgeRequests', 'downloadFile', array($row['breq_id'])).'" title = "' . Labels::getLabel('MSG_CLICK_TO_DOWNLOAD', $adminLangId) . '">
+                    <img src="' .  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeRequest', array($row['breq_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '"/></a>';
                 }
 
                 $td->appendElement('div', ['class' => "text-break"], $fileName, true);

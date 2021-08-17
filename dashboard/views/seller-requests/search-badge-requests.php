@@ -58,14 +58,14 @@
                         $li = $ul->appendElement("li");
                         $li->appendElement(
                             'a',
-                            array('href' => 'javascript:void(0)', 'onclick' => "addBadgeReqForm(" . $row['breq_id'] . ", " . $row['badge_id'] . ")", 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
+                            array('href' => 'javascript:void(0)', 'onclick' => "addBadgeReqForm(" . $row['breq_id'] . ", " . $row['badge_id'] . ")", 'class' => 'btn btn-outline-brand btn-sm ', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
                             '<i class="fa fa-edit"></i>',
                             true
                         );
                         $li = $ul->appendElement("li");
                         $li->appendElement(
                             'a',
-                            array('href' => 'javascript:void(0)', 'onclick' => "deleteBadgeRequest(" . $row['breq_id'] . ")", 'class' => '', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId)),
+                            array('href' => 'javascript:void(0)', 'onclick' => "deleteBadgeRequest(" . $row['breq_id'] . ")", 'class' => 'btn btn-outline-brand btn-sm ', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId)),
                             '<i class="fa fa-trash"></i>',
                             true
                         );

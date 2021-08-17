@@ -44,4 +44,26 @@ $(document).on('click', '.selectAll-js, .selectItem--js', function () {
         searchRecords(document.frmSearch);
         $('.searchHead--js').click();
     };
+    
+    unlink = function (e, blinkcond_id) {
+        if (!confirm(langLbl.areYouSure)) {
+            e.preventDefault();
+            return;
+        }
+
+        if (blinkcond_id < 1) {
+            fcom.displayErrorMessage(langLbl.invalidRequest);
+            return false;
+        }
+        data = 'blinkcond_id=' + blinkcond_id;
+        fcom.ajax(fcom.makeUrl(controller, 'badgeUnlink'), data, function (res) {
+            var ans = $.parseJSON(res);
+            if (ans.status == 1) {
+                fcom.displaySuccessMessage(ans.msg);
+                reloadList();
+            } else {
+                fcom.displayErrorMessage(ans.msg);
+            }
+        });
+    };
 })()

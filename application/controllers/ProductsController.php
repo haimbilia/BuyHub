@@ -1289,16 +1289,25 @@ class ProductsController extends MyAppController
             $catListingCount = 10 - count($brandArr);
             $srch = new SearchBase(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'cr');
 
-            $catSrch = clone $prodSrchObj;
+            $catSrch = new ProductSearch(0);
+            $catSrch->joinSellerProducts(0, '', $criteria, true);
+            $catSrch->unsetDefaultLangForJoins();
+            $catSrch->joinSellers();
+            $catSrch->setGeoAddress();
+            $catSrch->joinShops();
+            $catSrch->joinBrands(0);
+            $catSrch->joinSellerSubscription(0, false, true);
+            $catSrch->addSubscriptionValidCondition();
+            $catSrch->doNotCalculateRecords();            
 
-            $catSrch->joinProductToCategory();
+            $catSrch->joinProductToCategory($this->siteLangId);
             $catSrch->joinCategoryRelationWithChild();
             $catSrch->addMultipleFields(array('DISTINCT(prodcat_code)', 'cr.pcr_parent_id as qryProducts_prodcat_id'));
             $catSrch->removeFld('1 as availableInLocation');
             $catSrch->validateAndJoinDeliveryLocation(false, false);
             $catSrch->doNotCalculateRecords();
             $catSrch->doNotLimitRecords();
-            // echo $catSrch->getQuery();
+           
             $srch->joinTable('(' . $catSrch->getQuery() . ')', 'INNER JOIN', 'qryProducts.qryProducts_prodcat_id = cr.pcr_prodcat_id', 'qryProducts');
             $srch->addMultipleFields(array('prodcat_id', 'COALESCE(c_l.prodcat_name, c.prodcat_identifier) as prodcat_name', 'if(LOCATE("' . $keyword . '", COALESCE(c_l.prodcat_name, c.prodcat_identifier)) > 0, LOCATE("' . $keyword . '", COALESCE(c_l.prodcat_name, c.prodcat_identifier)), 99) as level'));
             $srch->joinTable(ProductCategory::DB_TBL, 'INNER JOIN', 'c.prodcat_id = cr.pcr_prodcat_id', 'c');
@@ -1312,6 +1321,7 @@ class ProductsController extends MyAppController
             $srch->setPageSize($catListingCount);
             $srch->addOrder('level');
             $srch->addGroupBy('prodcat_id');
+            
             $catRs = $srch->getResultSet();
             // $catArr = FatApp::getDb()->fetchAll($catRs);
             $catArr = [];

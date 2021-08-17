@@ -22,7 +22,7 @@ if (Badge::TYPE_RIBBON == $badgeType) {
 }
 
 if (Badge::COND_AUTO == $badgeConditionType) {
-    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type'], $arr_flds['action']);
+    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'record_type']);
 } else {
     unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type'], 
         $arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from'], 
@@ -76,9 +76,15 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $lbl, true);
                 break;
             case 'action':
-                if ($canEdit && Badge::COND_MANUAL == $badgeConditionType) {
+                if ($canEdit) {                    
                     $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
-                    $td->appendElement('a', array('href' => $href, 'class' => 'btn btn-outline-brand btn-sm', 'title' => Labels::getLabel('LBL_EDIT', $siteLangId)), "<i class='far fa-edit icon'></i>", true);
+
+                    $icon = (Badge::COND_AUTO == $badgeConditionType || $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED) ? "<i class='far fa-eye icon'></i>" : "<i class='far fa-edit icon'></i>";
+
+                    $td->appendElement('a', array('href' => $href, 'class' => 'btn btn-outline-brand btn-sm', 'title' => Labels::getLabel('LBL_EDIT', $siteLangId)), $icon, true);
+                    if (Badge::COND_MANUAL == $badgeConditionType && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_OPEN) {
+                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-outline-brand btn-sm', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId), "onclick" => "unlink(event, " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
+                    }
                 } else {
                     $td->appendElement('plaintext', [], Labels::getLabel('LBL_N/A', $siteLangId), true);
                 }

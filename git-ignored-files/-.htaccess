@@ -6,6 +6,9 @@ RewriteRule ^robots.txt$ user-uploads/robots.txt [L]
 RewriteRule ^BingSiteAuth.xml$ user-uploads/BingSiteAuth.xml [L]
 RewriteRule ^google(.*).html$ user-uploads/google-site-verification.html [L]
 RewriteRule ^favicon.ico image/favicon/1 [NC,L]
+RewriteRule ^home/index$ / [L,R=301]
+RewriteRule ^home$ / [L,R=301]
+RewriteRule ^dashboard/cache/(.*)$ /cache/$1 [L]
 
 <IfModule mod_headers.c>
 	Header unset ETag

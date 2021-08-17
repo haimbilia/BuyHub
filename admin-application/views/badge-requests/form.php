@@ -23,8 +23,10 @@ if (null != $fld) {
     $fld->developerTags['col'] = 2;
 	$fld->htmlAfterField = '<small class="form-text text-muted">' . Labels::getLabel('LBL_BADGE_REQUEST_REFERENCE_FILE', $adminLangId) . '</small>';
     if (0 < $badgeReqId && true === $fileFound) {
+        $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $badgeReqId);
+        $uploadedTime = AttachedFile::setTimeParam($res['afile_updated_at']);
         $fld->htmlAfterField .= '<a class="refFile--js" title="' . Labels::getLabel('LBL_DOWNLOAD_FILE', $adminLangId). '" href="'.UrlHelper::generateUrl('BadgeRequests', 'downloadFile', array($badgeReqId)).'">
-                                    <i class="fas fa-download"></i>
+                                    <img src="' .  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeRequest', array($badgeReqId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '"/>
                                 </a>';
     }
 }

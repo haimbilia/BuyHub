@@ -8,9 +8,9 @@ if (!empty($addresses)) { ?>
             <div class="pickup-option">
                 <ul class="pickup-option__list">
                     <?php foreach ($addresses as $key => $address) { ?>
-                        <li>
-                            <label class="radio">
-                                <input name="pickup_address" <?php echo (($key == 0 && $addrId == 0) || $addrId == $address['addr_id']) ? 'checked=checked' : ''; ?> onclick="displayCalendar();" type="radio" value="<?php echo $address['addr_id']; ?>">
+                        <li class="addrListJs">
+                            <label class="radio" for="<?php echo 'p-'.$address['addr_id']?>">
+                                <input name="pickup_address" <?php echo (($key == 0 && $addrId == 0) || $addrId == $address['addr_id']) ? 'checked=checked' : ''; ?> onclick="displayCalendar();" type="radio" value="<?php echo $address['addr_id']; ?>" id="<?php echo 'p-'.$address['addr_id']?>">
                                 
                                 <span class="lb-txt js-addr">
                                         <p><?php echo $address['addr_name'] . ', ' . $address['addr_address1']; ?>

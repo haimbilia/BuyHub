@@ -38,11 +38,13 @@ class BadgesController extends SellerBaseController
             FatUtility::dieJsonError(current($searchForm->getValidationErrors()));
         }
 
+        $userId = UserAuthentication::getLoggedUserId();
+
         $srch = new BadgeSearch($this->siteLangId);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $srch->joinTable(BadgeLinkCondition::DB_TBL, 'LEFT JOIN', 'blinkcond_badge_id = badge_id');
-        $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_blinkcond_id = blinkcond_id');
+        $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_blinkcond_id = blinkcond_id AND breq_user_id  = ' . $userId);
         $srch->addCondition('badge_active', '=', applicationConstants::YES);
 
         $keyword = $post['keyword'];
@@ -69,11 +71,11 @@ class BadgesController extends SellerBaseController
                 WHEN ' . Badge::DB_TBL_PREFIX . 'type = ' . Badge::TYPE_BADGE . ' AND ' . Badge::DB_TBL_PREFIX . 'condition_type = ' . Badge::COND_AUTO . '
                 THEN 0
                 WHEN SUM(
-                    IF(' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED  . ' AND ' . BadgeLinkCondition::DB_TBL_PREFIX . 'id > 0 AND ' . BadgeRequest::DB_TBL_PREFIX . 'id IS NULL AND ' .  BadgeRequest::DB_TBL_PREFIX . 'user_id = ' . UserAuthentication::getLoggedUserId() . ', 1, 0)
+                    IF(' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED  . ' AND ' . BadgeLinkCondition::DB_TBL_PREFIX . 'id > 0 AND ' . BadgeRequest::DB_TBL_PREFIX . 'id IS NULL AND ' .  BadgeRequest::DB_TBL_PREFIX . 'user_id = ' . $userId . ', 1, 0)
                     ) > 0
                 THEN 1
                 WHEN SUM(
-                    IF(' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'status = ' . BadgeRequest::REQUEST_APPROVED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'user_id = ' . UserAuthentication::getLoggedUserId() . ', 1, 0)
+                    IF(' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'status = ' . BadgeRequest::REQUEST_APPROVED . ' AND ' . BadgeRequest::DB_TBL_PREFIX . 'user_id = ' . $userId . ', 1, 0)
                     ) > 0
                 THEN 1
                 ELSE 0
@@ -92,7 +94,7 @@ class BadgesController extends SellerBaseController
         
         $this->set("badgeType", $badgeType);
         $this->set("approvalStatusArr", $approvalStatusArr);
-        $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks(UserAuthentication::getLoggedUserId(), true));
+        $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks($userId, true));
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());

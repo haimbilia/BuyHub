@@ -44,6 +44,11 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     };
 
     badgeForm = function (blinkcond_id, badgeId) {
+        if (APPROVAL_REQUIRED == canBindRecords) {
+            reloadRecordsList(blinkcond_id);
+            return;
+        }
+
         $('.listingSection--js, .searchform_filter').hide();
         $('#otherTopForm--js').html(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(controller, 'form', [TYPE_BADGE, badgeId, blinkcond_id]), '', function (t) {

@@ -14,11 +14,14 @@ class BadgeLinkConditionsController extends SellerBaseController
 
     public function list(int $badgeId, int $badgeType)
     {
-        $conditionType = Badge::getAttributesById($badgeId, 'badge_condition_type');
+        $userId = UserAuthentication::getLoggedUserId();
+        $row = Badge::getAttributesById($badgeId, ['badge_condition_type', 'badge_required_approval']);
+        $conditionType = $row['badge_condition_type'];
         $frmSearch = $this->getSearchForm($badgeType, $conditionType);
         $frmSearch->fill(['blinkcond_badge_id' => $badgeId, 'badge_type' => $badgeType]);
-        $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks(UserAuthentication::getLoggedUserId(), true));
+        $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks($userId, true));
 
+        $this->set('row', $row);
         $this->set('conditionType', $conditionType);
         $this->set('badgeName', $this->getBadgeName($badgeId));
         $this->set("frmSearch", $frmSearch);
@@ -261,6 +264,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         $frm->fill($dataToFill);
 
         $position = array_key_exists('blinkcond_position', $dataToFill) ? $dataToFill['blinkcond_position'] : Badge::RIBB_POS_TRIGHT;
+
         $this->set('position', $position);
         $this->set('recordCondition', $recordCondition);
         $this->set('badgeData', $this->getBadgeData($badgeId));
@@ -314,6 +318,8 @@ class BadgeLinkConditionsController extends SellerBaseController
             $frmSearch->fill(['blinkcond_id' => $badgeLinkCondId, 'blinkcond_badge_id' => $badgeId, 'badge_type' => $badgeType]);
         }
 
+        $canBindRecords = Badge::getAttributesById($badgeId, 'badge_required_approval');
+        $this->set('canBindRecords', $canBindRecords);
         $this->set('badgeName', $this->getBadgeName($badgeId));
         $this->set('badgeType', $badgeType);
         $this->set('badgeId', $badgeId);
@@ -598,5 +604,37 @@ class BadgeLinkConditionsController extends SellerBaseController
         ];
 
         FatUtility::dieJsonSuccess($json);
+    }
+
+    public function badgeUnlink()
+    {
+        $blinkcond_id = FatApp::getPostedData('blinkcond_id', FatUtility::VAR_INT, 0);
+
+        if (1 > $blinkcond_id) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_RECORD', $this->siteLangId));
+        }
+
+        if (!BadgeLinkCondition::getAttributesById($blinkcond_id, ['blinkcond_id'])) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_RECORD_ID', $this->siteLangId));
+        }
+
+        $this->unlink($blinkcond_id);
+        $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    private function unlink(int $blinkcond_id)
+    {
+        if (1 > $blinkcond_id) {
+            FatUtility::dieJsonError(
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+            );
+        }
+
+        $obj = new BadgeLinkCondition($blinkcond_id);
+        if (!$obj->deleteRecord(false)) {
+            FatUtility::dieJsonError($obj->getError());
+        }
+        $this->removeLinkRecord($blinkcond_id);
     }
 }
