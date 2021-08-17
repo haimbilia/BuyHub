@@ -149,13 +149,13 @@ class BadgeLinkConditionsController extends SellerBaseController
                     'record_name' => $recordName . $variantStr
                 ];
             }
+            $this->set('page', $page);
+            $this->set('pageSize', $pagesize);
+            $this->set('recordCount', $srch->recordCount());
+            $this->set('pageCount', $srch->pages());
         }
         $this->set('badgeLinkCondId', $badgeLinkCondId);
         $this->set('records', $records);
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('pageCount', $srch->pages());
         $this->set('postedData', FatApp::getPostedData());
         $this->_template->render(false, false);
     }
