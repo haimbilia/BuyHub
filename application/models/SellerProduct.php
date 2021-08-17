@@ -1326,7 +1326,7 @@ class SellerProduct extends MyAppModel
      *
      * @return object
      */
-    private static function rateObj(): object
+    public static function rateObj(): object
     {
         $avgRatingSrch = new SelProdReviewSearch();
         $avgRatingSrch->joinSelProdRating();

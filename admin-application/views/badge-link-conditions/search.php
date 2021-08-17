@@ -81,8 +81,11 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from':
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to':
-                $lbl = (in_array($row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type'], $nonPercElements) ? $row[$key] : $row[$key] . '%');
-                $td->appendElement('plaintext', [], $lbl, true);
+                $lbl = $row[$key];
+                if (!empty($lbl) && (in_array($row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type'], $nonPercElements))) {
+                    $lbl = $row[$key] . '%';    
+                }
+                $td->appendElement('plaintext', [], (!empty($lbl) ? $lbl : Labels::getLabel('LBL_N/A', $adminLangId)), true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'from_date':
             case BadgeLinkCondition::DB_TBL_PREFIX . 'to_date':

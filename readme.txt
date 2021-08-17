@@ -1,4 +1,17 @@
 
+Release Number : 
+Release Date : 
+
+New Feature :     
+    => 88083 : System Log Listing Page 
+    
+Updates: N/A
+	
+Fixes: N/A
+    
+    
+================================================================================
+
 Multivendor - Released Version : RV-9.3.1
     => IOS/Android Buyer APP version : 2.0.1
     => System API version : 2.3
@@ -224,6 +237,11 @@ Updates/Fixes :
     => 057304 - Admin: An error message is not correct while adding the same Badges name
     => 057281 - Seller: There is no option to delete the ribbons and badges listing
     => 057287 - Seller: There is no information regarding the seller satisfy the "Automatic badges" conditions
+    => 057228 - Admin and Seller: Suggestion to give some indication regarding the "Display Time Slots After Order [Hours]", where it will be used? 
+    => 057256 - on promotion add page time picker not coming
+    => 057269 - Seller: Text is not correct on the "Requests" section
+    => 057262 - Seller: More than two ribbons are showing for the products inventory
+
 
 New Features:  
     => Admin shipped products listing page

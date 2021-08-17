@@ -215,6 +215,7 @@ class AddressesController extends LoggedUserController
             $this->_template->render();
         }
         $this->_template->addJs(array('js/jquery.datetimepicker.js'));
+        $this->_template->addCss(array('css/jquery.datetimepicker.css'), false);
         $this->_template->render(false, false);
     }
 
