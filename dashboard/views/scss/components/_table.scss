@@ -46,7 +46,10 @@
     }
     tr {
         &.selected-row {
-            background: $bg-gray;
+            background: rgba(var(--brand-color-alpha), 0.05);
+            >td {
+                border-color: transparent;
+            }
         }
         &:last-child {
             td {

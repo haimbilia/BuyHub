@@ -46,13 +46,13 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         <div class="card-header">
                             <div class="card-title"></div>
                             <div class="btn-group">
-                                <a class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css" title="<?php echo Labels::getLabel('LBL_Activate', $siteLangId); ?>" onclick="toggleBulkStatues(1)" href="javascript:void(0)">
+                                <a class="btn btn-outline-brand btn-sm formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Activate', $siteLangId); ?>" onclick="toggleBulkStatues(1)" href="javascript:void(0)">
                                     <?php echo Labels::getLabel('LBL_Activate', $siteLangId); ?>
                                 </a>
-                                <a class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css" title="<?php echo Labels::getLabel('LBL_Deactivate', $siteLangId); ?>" onclick="toggleBulkStatues(0)" href="javascript:void(0)">
+                                <a class="btn btn-outline-brand btn-sm formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Deactivate', $siteLangId); ?>" onclick="toggleBulkStatues(0)" href="javascript:void(0)">
                                     <?php echo Labels::getLabel('LBL_Deactivate', $siteLangId); ?>
                                 </a>
-                                <a class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css" title="<?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>" onclick="deleteBulkSellerProducts()" href="javascript:void(0)">
+                                <a class="btn btn-outline-brand btn-sm formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>" onclick="deleteBulkSellerProducts()" href="javascript:void(0)">
                                     <?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>
                                 </a>
                             </div>

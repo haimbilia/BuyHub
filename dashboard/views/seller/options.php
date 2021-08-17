@@ -38,7 +38,7 @@
                         title="<?php echo Labels::getLabel('LBL_Add_Option', $siteLangId); ?>" onclick="optionForm(0)"
                         href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Add_Option', $siteLangId); ?></a>
                     <!-- <a href="#modal-popup" class="btn-block modaal-inline-content link" onclick="optionForm(0)"><?php echo Labels::getLabel('LBL_Add_Option', $siteLangId);?></a> -->
-                    <a class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css"
+                    <a class="btn btn-outline-brand btn-sm formActionBtn-js disabled"
                         title="<?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>" onclick="deleteOptions()"
                         href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?></a>
                 </div>

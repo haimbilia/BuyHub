@@ -63,7 +63,7 @@
 						<div class="card-header">
                             <div class="card-title"></div>
 							<div class="btn-group">
-								<a class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css" title="<?php echo Labels::getLabel('LBL_Delete_Special_Price', $siteLangId); ?>" onclick="deleteSpecialPriceRows()" href="javascript:void(0)">							
+								<a class="btn btn-outline-brand btn-sm formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Delete_Special_Price', $siteLangId); ?>" onclick="deleteSpecialPriceRows()" href="javascript:void(0)">							
 									<?php echo Labels::getLabel('LBL_REMOVE', $siteLangId); ?>
 								</a>
 							</div>

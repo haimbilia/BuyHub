@@ -1881,3 +1881,20 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
     cursor: grab;
     margin-#{$start-direction}: 10px;
 }
+
+.cookie-preferences {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(308px, 1fr));
+    margin-bottom: 1rem;
+    li {
+        border-radius: 4px;
+        border: $border;
+        padding: 1rem;
+        font-size: 0.8rem;
+        color: $txt-gray;
+    }
+    .data {
+        padding-top: 1rem;
+    }
+}

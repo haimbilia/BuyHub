@@ -21,19 +21,19 @@ if (true === $displayActions) {
             <div class="btn-group">
             <?php if (true == $isWishList) { ?>
                 <a title='<?php echo Labels::getLabel('LBL_Move_to_other_wishlist', $siteLangId); ?>'
-                    class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css"
+                    class="btn btn-outline-brand btn-sm formActionBtn-js disabled"
                     onclick="viewWishList(0,this,event, <?php echo !empty($wishListRow['uwlist_id']) ? $wishListRow['uwlist_id'] : 0; ?>);"
                     href="javascript:void(0)">
                     <i class="fa fa-heart"></i>&nbsp;&nbsp;<?php echo Labels::getLabel('LBL_Move', $siteLangId); ?>
                 </a>
             <?php } ?>
             <a title='<?php echo Labels::getLabel('LBL_Move_to_cart', $siteLangId); ?>'
-                class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css" onClick="addSelectedToCart(event, <?php echo ($isWishList ? 1 : 0); ?>);"
+                class="btn btn-outline-brand btn-sm formActionBtn-js disabled" onClick="addSelectedToCart(event, <?php echo ($isWishList ? 1 : 0); ?>);"
                 href="javascript:void(0)">
                 <i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;<?php echo Labels::getLabel('LBL_Cart', $siteLangId); ?>
             </a>
             <a title='<?php echo Labels::getLabel('LBL_Move_to_trash', $siteLangId); ?>'
-                class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css"
+                class="btn btn-outline-brand btn-sm formActionBtn-js disabled"
                 onClick="<?php echo $function; ?>"
                 href="javascript:void(0)">
                 <i class="fa fa-trash"></i>&nbsp;&nbsp;<?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>

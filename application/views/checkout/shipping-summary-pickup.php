@@ -102,7 +102,7 @@
                             data-level="<?php echo $pickUpBy; ?>"
                             value="<?php echo isset($seletedSlotDate) ? $seletedSlotDate : ''; ?>">
                         <?php if (count($levelItems['pickup_options']) > 0) { ?>
-                        <a class="text-link mr-2 pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0)"
+                        <a class="link pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0)"
                             onclick="displayPickupAddress(<?php echo $pickUpBy; ?>, 0)">
                             <?php
                                         if (!empty($levelItems['pickup_address'])) {

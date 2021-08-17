@@ -733,7 +733,7 @@ class AdvertiserController extends AdvertiserBaseController
         $records = FatApp::getDb()->fetchAll($rs, 'promotion_id');
 
         $this->_template->addJs(array('js/jquery.datetimepicker.js'), false);
-
+        $this->_template->addCss(array('css/jquery.datetimepicker.css'), false);
         $this->_template->addJs('js/cropper.js');
         $this->_template->addJs('js/cropper-main.js');
         $this->set('canEdit', $this->userPrivilege->canEditPromotions(0, true));
