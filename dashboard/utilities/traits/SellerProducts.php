@@ -1666,7 +1666,7 @@ trait SellerProducts
         $frm->addTextarea(Labels::getLabel("LBL_Meta_Keywords", $this->siteLangId), 'meta_keywords');
         $frm->addTextarea(Labels::getLabel("LBL_Meta_Description", $this->siteLangId), 'meta_description');
         $fld = $frm->addTextarea(Labels::getLabel("LBL_Other_Meta_Tags", $this->siteLangId), 'meta_other_meta_tags');
-        $fld->htmlAfterField = '<small class="text--small">' . Labels::getLabel('LBL_For_Example:', $this->siteLangId) . ' ' . htmlspecialchars('<meta name="copyright" content="text">') . '</small>';
+        $fld->htmlAfterField = '<small class="form-text text-muted">' . Labels::getLabel('LBL_For_Example:', $this->siteLangId) . ' ' . htmlspecialchars('<meta name="copyright" content="text">') . '</small>';
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 

@@ -31,8 +31,11 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0))
                                 <?php if (round($product['prod_rating']) > 0 && FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0))
 {
 ?> <div class="products__rating"><i class="icn"><svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
-                                            </svg> </i><span class="rate"><?php echo round($product['prod_rating'], 1); ?></span> </div> <?php
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"
+                                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                                            </use>
+                                        </svg> </i><span
+                                        class="rate"><?php echo round($product['prod_rating'], 1); ?></span> </div> <?php
 } ?>
                             </div>
                         </div>
@@ -49,7 +52,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0))
                     <h5 class="card-title"><?php echo Labels::getLabel('LBL_All_Sellers', $siteLangId); ?></h5>
                 </div>
                 <div class="card-body">
-                    <div class="js-scrollable table-wrap scroll scroll-x"> 
+                    <div class="js-scrollable table-wrap scroll scroll-x">
                         <?php
                         $arr_flds = array(
                             'shop_name' => Labels::getLabel('LBL_Seller', $siteLangId) ,
