@@ -165,8 +165,24 @@ class BadgeLinkConditionsController extends SellerBaseController
 
         $srch->addOrder(BadgeLinkCondition::DB_TBL_PREFIX . 'id', 'DESC');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-
         $recordCondition = Badge::getAttributesById($badgeId, 'badge_condition_type');
+        $shopId = Shop::getAttributesByUserId(UserAuthentication::getLoggedUserId(), 'shop_id');
+
+        /* Automatically satisfied badges. */
+        $obj = new Badge();
+        $autoSatisfiedBadgesArr = $obj->setRecordId(0, 0, $shopId)
+                           ->getRibbonOrBadge($this->siteLangId, Badge::TYPE_BADGE);
+        
+        $autoSatisfiedBadgesArr = array_filter($autoSatisfiedBadgesArr, function($item) {
+            return $item['blinkcond_condition_type'] > 0;
+        });
+
+        if (!empty($autoSatisfiedBadgesArr)) {
+            $autoSatisfiedBadgesArr = array_column($autoSatisfiedBadgesArr, 'blinkcond_id');
+        }
+        $this->set('autoSatisfiedBadgesArr', $autoSatisfiedBadgesArr);
+        /* Automatically satisfied badges. */
+
         $this->set('recordCondition', $recordCondition);
         $this->set('badgeConditionType', $badgeConditionType);
         $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks(UserAuthentication::getLoggedUserId(), true));
@@ -307,7 +323,7 @@ class BadgeLinkConditionsController extends SellerBaseController
 
     public function conditionForm(int $badgeType, int $badgeId, int $badgeLinkCondId = 0)
     {
-        if (Badge::TYPE_BADGE == $badgeType && 1 > Badge::canAccess($badgeId, UserAuthentication::getLoggedUserId())) {
+        if (Badge::TYPE_BADGE == $badgeType && 1 > Badge::canAccess($badgeId, UserAuthentication::getLoggedUserId()) && in_array($badgeLinkCondId, BadgeLinkCondition::SHOP_BADGES_COND_TYPES)) {
             Message::addErrorMessage(Labels::getLabel('MSG_ACCESS_RESTRICTED', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Badges', 'list', [Badge::TYPE_BADGE]));
         }

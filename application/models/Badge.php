@@ -220,10 +220,6 @@ class Badge extends MyAppModel
      */
     public function getRibbonOrBadge(int $langId, int $type = Badge::TYPE_RIBBON): array
     {
-        if (1 > $this->selProdId && 1 > $this->prodId && 1 > $this->shopId) {
-            return [];
-        }
-
         $sellerId = Shop::getAttributesById($this->shopId, 'shop_user_id');
 
         $avgRating = SellerProduct::getRating($this->selProdId);

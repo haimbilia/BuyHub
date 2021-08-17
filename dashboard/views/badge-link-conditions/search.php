@@ -8,7 +8,7 @@ $arr_flds = array(
     BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to' => Labels::getLabel('LBL_CONDITION_TO', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'from_date' => Labels::getLabel('LBL_VAILD_FROM', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'to_date' => Labels::getLabel('LBL_VALID_TO', $siteLangId),
-    'action' => '',
+    'action' => '#',
 );
 
 if (!$canEdit || 1 > count($arrListing)) {
@@ -77,13 +77,37 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 if ($canEdit) {                    
-                    $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
+                    if (Badge::COND_MANUAL == $badgeConditionType) {
+                        $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
 
-                    $icon = (Badge::COND_AUTO == $badgeConditionType || $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED) ? "<i class='far fa-eye icon'></i>" : "<i class='far fa-edit icon'></i>";
+                        $icon = "<i class='far fa-edit icon'></i>";
+                        $title = Labels::getLabel('LBL_EDIT', $siteLangId);
 
-                    $td->appendElement('a', array('href' => $href, 'class' => 'btn btn-outline-brand btn-sm', 'title' => Labels::getLabel('LBL_EDIT', $siteLangId)), $icon, true);
-                    if (Badge::COND_MANUAL == $badgeConditionType && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_OPEN) {
-                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-outline-brand btn-sm', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId), "onclick" => "unlink(event, " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
+                        if ($row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED) {
+                            $icon = "<i class='far fa-eye icon'></i>";
+                            $title = Labels::getLabel('LBL_VIEW', $siteLangId);
+                        }
+
+                        $td->appendElement('a', array('href' => $href, 'class' => 'btn btn-outline-brand btn-sm', 'title' => $title), $icon, true);
+                        if ($row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_OPEN) {
+                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-outline-brand btn-sm', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId), "onclick" => "unlink(event, " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
+                        }
+                    } else if (in_array($row['blinkcond_condition_type'], BadgeLinkCondition::SHOP_BADGES_COND_TYPES)) {
+                        $lbl = Labels::getLabel('LBL_N/A', $siteLangId);
+                        $class = 'label-danger';
+                        if (in_array($row['blinkcond_id'], $autoSatisfiedBadgesArr)) {
+                            $lbl = Labels::getLabel('LBL_SATISFIED', $siteLangId);
+                            $class = 'label-success';
+                        }
+
+                        $htm = ' <span class="label label-inline ' . $class . ' rounded-pill">' . $lbl . '</span>';
+
+                        $td->appendElement('plaintext', [], $htm, true);
+                    } else {
+                        $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
+                        $icon = "<i class='far fa-eye icon'></i>";
+                        $title = Labels::getLabel('LBL_VIEW', $siteLangId);
+                        $td->appendElement('a', array('href' => $href, 'class' => 'btn btn-outline-brand btn-sm', 'title' => $title), $icon, true);
                     }
                 } else {
                     $td->appendElement('plaintext', [], Labels::getLabel('LBL_N/A', $siteLangId), true);

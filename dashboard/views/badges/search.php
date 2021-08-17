@@ -87,9 +87,14 @@ foreach ($arrListing as $sn => $row) {
                 $btnClass = 'btn btn-outline-brand btn-sm ';
                 if ($canEdit && (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'])) {
                     if (0 < (int) $row['canAccess']) {
-                        $td->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id'], $row[Badge::DB_TBL_PREFIX . 'type']]), 'class' => $btnClass, 'title' => Labels::getLabel('LBL_BIND_CONDITION', $siteLangId)), "<i class='fas fa-link icon'></i>", true);
+                        $condManualReq = (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'] && 0 < (int) $row['canAccess'] && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED);
 
-                        if (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'] && 0 < (int) $row['canAccess'] && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED) {
+                        $icon = $condManualReq ? "<i class='fas fa-eye icon'></i>" : "<i class='fas fa-link icon'></i>";
+                        $title = $condManualReq ? Labels::getLabel('LBL_VIEW', $siteLangId) : Labels::getLabel('LBL_BIND_CONDITION', $siteLangId);
+
+                        $td->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id'], $row[Badge::DB_TBL_PREFIX . 'type']]), 'class' => $btnClass, 'title' => $title), $icon, true);
+
+                        if ($condManualReq) {
                             $td->appendElement(
                                 'a',
                                 array('href' => 'javascript:void(0)', 'onclick' => "deleteBadgeRequest(" . $row['breq_id'] . ")", 'class' => 'btn btn-outline-brand btn-sm ', 'title' => Labels::getLabel('LBL_DELETE_REQUEST', $siteLangId)),
