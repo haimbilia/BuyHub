@@ -36,8 +36,6 @@ $frmSearch->developerTags['fld_default_col'] = 4;
                         if ($canEdit) {
                             $data = [
                                 'adminLangId' => $adminLangId,
-                                'statusButtons' => false,
-                                'deleteButton' => false,
                                 'otherButtons' => [
                                     [
                                         'attr' => [

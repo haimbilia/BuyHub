@@ -32,7 +32,6 @@
                         <?php
                         $data = [
                             'adminLangId' => $adminLangId,
-                            'statusButtons' => false,
                             'deleteButton' => $canEdit,
                         ];
                         if ($canEdit) {

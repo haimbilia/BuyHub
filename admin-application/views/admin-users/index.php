@@ -27,7 +27,7 @@
                                     'label' => '<i class="fas fa-plus"></i>'
                                 ],
                             ];
-                            $this->includeTemplate('_partial/action-buttons.php', ['deleteButton' => false, 'otherButtons' => $otherButtons, 'adminLangId' => $adminLangId], false);
+                            $this->includeTemplate('_partial/action-buttons.php', ['statusButtons' => true, 'otherButtons' => $otherButtons, 'adminLangId' => $adminLangId], false);
                         }
                         ?>
                     </div>

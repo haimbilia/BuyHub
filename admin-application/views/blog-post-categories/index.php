@@ -30,11 +30,13 @@
                 </section>
                 <section class="section">
                     <div class="sectionhead">
-                        <h4>Blog Post Category List </h4>
+                        <h4><?php echo Labels::getLabel('LBL_BLOG_POST_CATEGORY_LIST', $adminLangId); ?> </h4>
                         <?php
                         if ($canEdit) {
                             $data = [
                                     'adminLangId' => $adminLangId,
+                                    'statusButtons' => true,
+                                    'deleteButton' => true,
                                     'otherButtons' => [
                                         [
                                             'attr' => [

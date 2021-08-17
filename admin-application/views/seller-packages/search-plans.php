@@ -6,8 +6,6 @@
         $url = UrlHelper::generateUrl('FaqCategories');
         $data = [
             'adminLangId' => $adminLangId,
-            'statusButtons' => false,
-            'deleteButton' => false,
             'otherButtons' => [
                 [
                     'attr' => [
