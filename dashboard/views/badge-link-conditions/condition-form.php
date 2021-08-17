@@ -25,14 +25,14 @@ if (!empty($frmSearch)) {
     $fld = $frmSearch->getField('btn_submit');
     if (null != $fld) {
         $fld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
-        $fld->developerTags['col'] = 3;
+        $fld->developerTags['col'] = 2;
     }
 
     $fld = $frmSearch->getField('btn_clear');
     if (null != $fld) {
         $fld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
         $fld->setFieldTagAttribute('onClick', 'clearSearch()');
-        $fld->developerTags['col'] = 3;
+        $fld->developerTags['col'] = 2;
     }
 }
 
@@ -67,4 +67,5 @@ require_once(CONF_THEME_PATH . '_partial/index-page-common.php'); ?>
     var badgeId = "<?php echo $badgeId; ?>";
     var blinkcond_id = "<?php echo $badgeLinkCondId; ?>";
     var canBindRecords = "<?php echo $canBindRecords; ?>";
+    var autoSelProdBadge = "<?php echo $autoSelProdBadge; ?>";
 </script>

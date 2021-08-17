@@ -374,7 +374,7 @@ class GuestAdvertiserController extends MyAppController
         $frm->setFormTagAttribute("class", "form invalid");
         $frm->addTextBox(Labels::getLabel('LBL_Company', $this->siteLangId), 'user_company', '');
         $fld = $frm->addTextArea(Labels::getLabel('LBL_BRIEF_PROFILE', $this->siteLangId), 'user_profile_info', '');
-        $fld->htmlAfterField = '<br/><small class="text--small">' . Labels::getLabel('MSG_Please_tell_us_something_about_yourself', $this->siteLangId) . '</small>';
+        $fld->htmlAfterField = '<br/><small class="form-text text-muted">' . Labels::getLabel('MSG_Please_tell_us_something_about_yourself', $this->siteLangId) . '</small>';
         $fld = $frm->addTextArea(Labels::getLabel('LBL_Products/services_you_wish_to_advertise?', $this->siteLangId), 'user_products_services', '');
         $frm->addHiddenField('', 'user_name');
         $frm->addHiddenField('', 'user_phone_dcode');

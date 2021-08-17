@@ -38,6 +38,8 @@
                         if ($canEdit) {
                             $data = [
                                 'adminLangId' => $adminLangId,
+                                'statusButtons' => true,
+                                'deleteButton' => true,
                                 'otherButtons' => [
                                     [
                                         'attr' => [

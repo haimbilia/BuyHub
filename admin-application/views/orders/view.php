@@ -38,8 +38,6 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                         <?php
                         $data = [
                             'adminLangId' => $adminLangId,
-                            'statusButtons' => false,
-                            'deleteButton' => false,
                             'otherButtons' => [
                                 [
                                     'attr' => [

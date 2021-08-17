@@ -79,7 +79,9 @@ $frmSearch->addHiddenField('', 'product_id', $product_id);
                                     'label' => '<i class="fas fa-percent"></i>'
                                 ],
                             ];
-                            $this->includeTemplate('_partial/action-buttons.php', ['otherButtons' => $otherButtons, 'adminLangId' => $adminLangId], false);
+                            $this->includeTemplate('_partial/action-buttons.php', ['otherButtons' => $otherButtons, 'adminLangId' => $adminLangId,
+                            'statusButtons' => true,
+                            'deleteButton' => true], false);
                         }
                         ?>
                     </div>
