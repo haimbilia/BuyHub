@@ -27,7 +27,7 @@ $clearFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
             </div>
         </div>
         <div class="content-body">
-            <div class="row">
+            <div class="row  mb-4">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
@@ -47,10 +47,16 @@ $clearFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
                                     <div class='dvFocus-js'></div>
                                 </form>
                                 <?php echo $frmSearch->getExternalJS(); ?>
-                            </div>
-                            <div id="listing">
-                                <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
-                            </div>
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="listing"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
                         </div>
                     </div>
                 </div>

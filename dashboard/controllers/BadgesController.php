@@ -112,7 +112,7 @@ class BadgesController extends SellerBaseController
 
         if (Badge::TYPE_BADGE == $badgeType) {
             $approvalArr = Badge::getApprovalStatusArr($this->siteLangId);
-            $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr);
+            $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr,'',[],Labels::getLabel('LBL_SELECT_APPROVAL', $this->siteLangId));
         }
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->siteLangId));
