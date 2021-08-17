@@ -849,6 +849,16 @@
                       </ul>
                   </li>
               <?php } ?>
+              
+              
+              <?php if ($objPrivilege->canViewSystemLog(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                  <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Log', $adminLangId); ?></a>
+                      <ul>
+                          <li><a href="<?php echo UrlHelper::generateUrl('SystemLog'); ?>"><?php echo Labels::getLabel('LBL_SystemLog', $adminLangId); ?></a>
+                          </li>
+                      </ul>
+                  </li>
+              <?php } ?>
 
               <?php if (CommonHelper::demoUrl()) { ?>
                   <li>
