@@ -849,82 +849,8 @@ if (!$print) { ?>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="order-block">
-                                    <h4 class="dropdown-toggle-custom collapsed" data-toggle="collapse"
-                                        data-target="#order-block6" aria-expanded="false" aria-controls="order-block6">
-                                        Verification Data <i class="dropdown-toggle-custom-arrow"></i></h4>
-                                    <div class="collapse" id="order-block6">
-                                        <div class="order-block-data">
-                                            <div class="list-specification">
-                                                <ul class="">
-                                                    <li>
-                                                        <span class="label">inactive </span>
-                                                        <span class="value">XXX XXX XXX</span>
-                                                    </li>
-                                                    <li>
-                                                        <span class="label">Single entry </span>
-                                                        <span class="value">XXX xxx </span>
-                                                    </li>
-                                                    <li>
-                                                        <span class="label">Driving License </span>
-                                                        <span class="value">XXX xxx XXX xxx XXX xxx </span>
-                                                    </li>
-                                                    <li>
-                                                        <span class="label">Pan Card </span>
-                                                        <span class="value">XXX xxx XXX xxx </span>
-                                                    </li>
-                                                    <li>
-                                                        <span class="label">Aadhar123 </span>
-                                                        <span class="value">XXX xxx XXX xxx XXX xxx </span>
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                                <div class="order-block">
-                                    <h4 class="dropdown-toggle-custom collapsed" data-toggle="collapse"
-                                        data-target="#order-block6" aria-expanded="false" aria-controls="order-block6">
-                                        Rental Agreement <i class="dropdown-toggle-custom-arrow"></i></h4>
-                                    <div class="collapse" id="order-block6">
-
-                                        <div class="order-block-data">
-
-                                            <div class="list-specification">
-                                                <ul class="">
-                                                    <li>
-                                                        <span class="label">Shop Name </span>
-                                                        <span class="value">Kanwar's Shop</span>
-                                                    </li>
-                                                    <li>
-                                                        <span class="label">Shop Agreement </span>
-                                                        <span class="value"><a href="#"> Koala.jpg</a> </span>
-                                                    </li>
-                                                    <li>
 
 
-                                                    </li>
-                                                    <li>
-
-
-                                                    </li>
-
-
-                                                </ul>
-
-                                                <h5>Signature </h5>
-                                                <img class="attached-img"
-                                                    src="http://localhost/yorent-v2.1/image/signature/87/0/ORIGINAL/2916/1"
-                                                    alt="">
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                </div>
                             </div>
                         </div>
                     </div>
