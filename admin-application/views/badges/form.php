@@ -153,7 +153,7 @@ if (null != $conditionType) {
 										$fld = $frm->getField('badge_required_approval');
 										echo $fld->getCaption();
 										?>
-                                    </label>
+									</label>
 								</div>
 								<div class="field-wraper">
 									<div class="field_cover">
@@ -199,17 +199,18 @@ if (null != $conditionType) {
 						</div>
 					<?php } ?>
 				</div>
-				<?php if (!empty($otherLangData)) {
-					foreach ($otherLangData as $langId => $data) { ?>
-						<div class="accordians_container accordians_container-categories" defaultLang="<?php echo $siteDefaultLangId; ?>" language="<?php echo $langId; ?>" id="accordion-language_<?php echo $langId; ?>" onClick="translateData(this)">
-							<div class="accordian_panel">
-								<span class="accordian_title accordianhead accordian_title mt-4 mb-0" id="collapse_<?php echo $langId; ?>">
-									<?php echo $data . " ";
-									echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
-								</span>
-								<div class="accordian_body accordiancontent" style="display: none;">
+				<div class="row">
+					
+				<div class="col-md-12">
+						<?php if (!empty($otherLangData)) {
+							foreach ($otherLangData as $langId => $data) { ?>
+								<div class="" defaultLang="<?php echo $siteDefaultLangId; ?>" language="<?php echo $langId; ?>" id="accordion-language_<?php echo $langId; ?>" onClick="translateData(this)">
+									<h3 class="mt-4 mb-2" id="collapse_<?php echo $langId; ?>">
+										<?php echo $data . " ";
+										echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
+									</h3>
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-12">
 											<div class="field-set">
 												<div class="caption-wraper">
 													<label class="field_label">
@@ -226,58 +227,57 @@ if (null != $conditionType) {
 										</div>
 									</div>
 								</div>
-							</div>
-						</div>
-				<?php }
-				} 
-				
-				if (Badge::TYPE_BADGE == $type) { ?>
-					<div class="accordians_container accordians_container-categories">
-						<div class="accordian_panel">
-							<span class="accordian_title accordianhead accordian_title mt-4 mb-0">
-								<?php echo Labels::getLabel('LBL_MEDIA', $adminLangId); ?>
-							</span>
-							<div class="accordian_body accordiancontent" style="display: none;">
-								<div class="row">
-									<div class="col-md-4">
-										<div class="field-set">
-											<div class="caption-wraper">
-												<label class="field_label">
-													<?php $fld = $frm->getField('icon_lang_id');
-													echo $fld->getCaption();
-													?>
-												</label>
-											</div>
-											<div class="field-wraper">
-												<div class="field_cover">
-													<?php echo $frm->getFieldHtml('icon_lang_id'); ?>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="col-md-8">
-										<div class="field-set">
-											<div class="caption-wraper">
-												<label class="field_label"></label>
-											</div>
-											<div class="field-wraper">
-												<div class="field_cover d-flex">
-													<?php echo $frm->getFieldHtml('icon_file_type');
-													echo $frm->getFieldHtml('badge_icon'); ?>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-4">
-										<div class="uploaded-img ml-2 uploadedImage--js"></div>
-									</div>
-								</div>
-							</div>
-						</div>
+						<?php }
+						} ?>
 					</div>
-				<?php }  ?>
+					<div class="col-md-12">
+						<?php
+						if (Badge::TYPE_BADGE == $type) { ?>
+							<h3 class=" mt-4 mb-2">
+								<?php echo Labels::getLabel('LBL_MEDIA', $adminLangId); ?>
+							</h3>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="field-set">
+										<div class="caption-wraper">
+											<label class="field_label">
+												<?php $fld = $frm->getField('icon_lang_id');
+												echo $fld->getCaption();
+												?>
+											</label>
+										</div>
+										<div class="field-wraper">
+											<div class="field_cover">
+												<?php echo $frm->getFieldHtml('icon_lang_id'); ?>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="field-set">
+										<div class="caption-wraper">
+											<label class="field_label"></label>
+										</div>
+										<div class="field-wraper">
+											<div class="field_cover">
+												<?php echo $frm->getFieldHtml('icon_file_type');
+												echo $frm->getFieldHtml('badge_icon'); ?>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<div class="uploaded-img ml-2 uploadedImage--js"></div>
+								</div>
+							</div>
+						<?php }  ?>
+					</div>
+
+				</div>
+
+
 				<div class="row mt-5">
 					<div class="col-auto">
 						<?php echo $frm->getFieldHtml('btn_submit'); ?>
