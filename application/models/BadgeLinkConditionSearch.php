@@ -3,7 +3,7 @@
 class BadgeLinkConditionSearch extends SearchBase
 {
     private $badgeLinksJoin = false;
-    
+
     /**
      * __construct
      *
@@ -13,7 +13,7 @@ class BadgeLinkConditionSearch extends SearchBase
     {
         parent::__construct(BadgeLinkCondition::DB_TBL, 'blnk');
     }
-    
+
     /**
      * joinBadge
      *
@@ -51,7 +51,7 @@ class BadgeLinkConditionSearch extends SearchBase
         }
         $this->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_id = badgelink_breq_id', 'breq');
     }
-    
+
     /**
      * joinProduct
      *
@@ -70,7 +70,7 @@ class BadgeLinkConditionSearch extends SearchBase
             $this->joinTable(Product::DB_TBL_LANG, 'LEFT JOIN', 'product_id = productlang_product_id AND productlang_lang_id = ' . $langId, 'p_l');
         }
     }
-    
+
     /**
      * joinSellerProduct
      *
@@ -123,5 +123,84 @@ class BadgeLinkConditionSearch extends SearchBase
     public function joinUser()
     {
         $this->joinTable(User::DB_TBL, 'LEFT JOIN', 'blnku.user_id = blnk.blinkcond_user_id', 'blnku');
+    }
+
+    /* TODO : need to replace newely build function */
+
+    /**
+     * joinBadge
+     *
+     * @param  int $langId
+     * @return void
+     */
+    public function joinBadges(int $langId = 0, int $type = 0, bool $active = true)
+    {
+        $cond = '';
+        if (true == $active) {
+            $cond .= ' AND bdg.badge_active = ' . applicationConstants::ACTIVE;
+        }
+
+        if (0 < $type) {
+            $cond .= ' AND bdg.badge_type = ' . $type;
+        }
+
+        $this->joinTable(Badge::DB_TBL, 'INNER JOIN', 'blnk.blinkcond_badge_id = bdg.badge_id ' . $cond, 'bdg');
+        if (0 < $langId) {
+            $this->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badge_id = badgelang_badge_id AND badgelang_lang_id = ' . $langId, 'bdg_l');
+        }
+    }
+
+    /**
+     * joinProduct
+     *
+     * @param  int $langId
+     * @return void
+     */
+    public function joinProducts(int $langId = 0)
+    {
+        if (false === $this->badgeLinksJoin) {
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_BADGE_LINKS', $langId), E_USER_ERROR);
+        }
+
+        $this->joinTable(Product::DB_TBL, 'LEFT JOIN', 'blc.badgelink_record_id = p.product_id AND blnk.blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_PRODUCT, 'p');
+        if (0 < $langId) {
+            $this->joinTable(Product::DB_TBL_LANG, 'LEFT JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $langId, 'p_l');
+        }
+    }
+
+    /**
+     * joinSellerProduct
+     *
+     * @param  int $langId
+     * @return void
+     */
+    public function joinSellerProducts(int $langId = 0)
+    {
+        if (false === $this->badgeLinksJoin) {
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_BADGE_LINKS', $langId), E_USER_ERROR);
+        }
+
+        $this->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'blc.badgelink_record_id = sp.selprod_id AND blnk.blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT, 'sp');
+        if (0 < $langId) {
+            $this->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT JOIN', 'sp.selprod_id = selprodlang_selprod_id AND selprodlang_lang_id = ' . $langId, 'sp_l');
+        }
+    }
+
+    /**
+     * joinShop
+     *
+     * @param  int $langId
+     * @return void
+     */
+    public function joinShops(int $langId = 0)
+    {
+        if (false === $this->badgeLinksJoin) {
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_BADGE_LINKS', $langId), E_USER_ERROR);
+        }
+
+        $this->joinTable(Shop::DB_TBL, 'LEFT JOIN', 'blc.badgelink_record_id = shp.shop_id AND blnk.blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT, 'shp');
+        if (0 < $langId) {
+            $this->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shp.shop_id = shoplang_shop_id AND shoplang_lang_id = ' . $langId, 'shp_l');
+        }
     }
 }
