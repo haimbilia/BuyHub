@@ -7,9 +7,9 @@ $commonHeadData = array(
 	'controllerName' => $controllerName,
 	'action' => $action,
 	'jsVariables' => $jsVariables,
-	'cacheTimeStamp' => $cacheTimeStamp,		
+	'cacheTimeStamp' => $cacheTimeStamp,
 	'currencySymbolLeft' => $currencySymbolLeft,
-	'currencySymbolRight' => $currencySymbolRight,	
+	'currencySymbolRight' => $currencySymbolRight,
 	'canonicalUrl' => isset($canonicalUrl) ? $canonicalUrl : '',
 );
 
@@ -35,13 +35,13 @@ $this->includeTemplate('_partial/header/commonHeadBottom.php', $commonHeadData, 
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-4 col-xs-6 d-none d-xl-block d-lg-block hide--mobile">
-						<div class="slogan"><?php // Labels::getLabel('LBL_Multi-vendor_Ecommerce_Marketplace_Solution', $siteLangId); ?></div>
+						<div class="slogan"><?php // Labels::getLabel('LBL_Multi-vendor_Ecommerce_Marketplace_Solution', $siteLangId); 
+											?></div>
 					</div>
 					<div class="col-lg-8 col-xs-12">
 						<div class="short-links">
 							<ul>
 								<?php $this->includeTemplate('_partial/headerTopNavigation.php'); ?>
-								<?php $this->includeTemplate('_partial/headerLanguageArea.php'); ?>
 							</ul>
 						</div>
 					</div>
@@ -62,11 +62,18 @@ $this->includeTemplate('_partial/header/commonHeadBottom.php', $commonHeadData, 
 							<img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>">
 						</a>
 					</div>
-					<div class="d-flex"><a class="seller_login_toggle" href="javascript:void(0)" data-trigger="yk-login--wrapper"><i class="fa fa-user-circle"></i></a>
-					</div>
+					<div class="short-links">
+						<ul>
+							<?php $this->includeTemplate('_partial/headerLanguageArea.php'); ?>
+							<li>
+								<div class="d-flex"><a class="seller_login_toggle" href="javascript:void(0)" data-trigger="yk-login--wrapper"><i class="fa fa-user-circle"></i></a>
+								</div>
 
-					<div class="yk-login--wrapper" id="yk-login--wrapper" data-close-on-click-outside="yk-login--wrapper">
-						<?php $this->includeTemplate('_partial/affiliate/affiliateHeaderLoginForm.php', $loginData, false); ?>
+								<div class="yk-login--wrapper" id="yk-login--wrapper" data-close-on-click-outside="yk-login--wrapper">
+									<?php $this->includeTemplate('_partial/affiliate/affiliateHeaderLoginForm.php', $loginData, false); ?>
+								</div>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</div>
