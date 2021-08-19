@@ -106,10 +106,3 @@ if (count($arrListing) == 0) {
 echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmReportSearchPaging'));
 $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToSearchPage');
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
-<script>
-    var x = $(".card-body").width();
-    var actualWidth = x / 6;
-    $('.datatable_cell_left').children('span').css('width', actualWidth + 'px');
-    $('.datatable_cell_left').children('span').css('display', 'block');
-    $('.datatable_cell_left').children('span').css('white-space', 'normal');
-</script>

@@ -172,11 +172,10 @@
         // height: auto;
         //background: $bg-gray;
         background: url(dashboard/images/retina/bg-dots.svg) no-repeat 0 0;
-        padding: 50px;
-        @include media-breakpoint-down(lg) {
-            & {
-                padding: 0;
-            }
+        background-image: linear-gradient( 21deg, rgba(64, 83, 206, 0.3697003234675773) 68%, rgba(255, 206, 196, 0.5) 163%), linear-gradient( 163deg, rgba(49, 146, 170, 0.07944489965716128) 86%, rgba(239, 112, 138, 0.5) 40%), linear-gradient( 30deg, rgba(76, 79, 173, 0.6173675716587805) 22%, rgba(237, 106, 134, 0.5) 169%), linear-gradient( 48deg, rgba(31, 85, 147, 0.7323890641868473) 64%, rgba(247, 126, 132, 0.5) 43%);
+        background-blend-mode: overlay, multiply, color, normal;
+        @media (min-width: 1600px) {
+            padding: 50px;
         }
         .demo-header {
             max-width: 1530px;
@@ -189,14 +188,12 @@
             z-index: 1;
             max-width: 1530px;
             min-height: 100%;
+            height: inherit;
             margin: 0 auto;
-            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0px 0px 166px 0px rgba(0, 0, 0, 0.3);
-            @include media-breakpoint-down(lg) {
-                & {
-                    border-radius: 0;
-                }
+            @media (min-width: 1600px) {
+                border-radius: 10px;
+                box-shadow: 0px 0px 166px 0px rgba(0, 0, 0, 0.3);
             }
         }
     }
@@ -517,11 +514,9 @@
     margin-#{$end-direction}: -15px;
     margin-bottom: 1rem;
     @include media-breakpoint-down(sm) {
-        & {
-            margin: 0;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-        }
+        margin: 0;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
     }
     .widget-stats {
         padding-#{$end-direction}: 15px;
@@ -535,8 +530,8 @@
             padding: 0 5px;
         }
         .icn svg {
-            width: 34px;
-            height: 34px;
+            width: 28px;
+            height: 28px;
             fill: $brand-color !important;
         }
         .card,
@@ -1679,6 +1674,10 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
         }
         &-sorted {
             color: $brand-color !important;
+            >span {
+                display: flex;
+                align-items: center;
+            }
         }
         &_top {
             background-color: hsla(0, 0%, 100%, .8);
@@ -1709,6 +1708,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
                 pointer-events: none;
                 box-shadow: inset 10px 0 8px -8px rgba(0, 0, 0, 0.05);
             }
+            >span {}
         }
         &_right {
             position: sticky;
@@ -1732,8 +1732,8 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
         }
     }
     &-sticky {
-        border-top: $border;
-        white-space: nowrap;
+        //border-top: $border;
+        //white-space: nowrap;
         position: relative;
         width: 100%;
         z-index: 1;
@@ -1742,7 +1742,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
         table {
             font-size: 0.8rem;
             width: 100%;
-            min-width: 1280px;
+            //min-width: 1280px;
             margin: auto;
             border-collapse: collapse;
             border-spacing: 0;
