@@ -12808,14 +12808,14 @@ form[name="frmShippingProfile"] {
 
 .badges-2 .text {
     font-weight: 600;
-    transform: rotate(45deg);
+    transform: rotate( 45deg);
     position: absolute;
-    left: 0;
+    left: 5px;
     right: 0;
-    top: 0px;
-    line-height: 30px;
+    top: 5px;
+    line-height: 20px;
     text-transform: uppercase;
-    width: 50px;
+    width: 40px;
 }
 
 .badges-3 {
@@ -12832,13 +12832,13 @@ form[name="frmShippingProfile"] {
 }
 
 .badges-4 .text {
-    transform: rotate(45deg);
-    left: 0;
+    transform: rotate( 45deg);
+    left: 8px;
     right: 0;
-    line-height: 27px;
-    width: 60px;
-    top: 2px;
-    margin-left: -6px;
+    line-height: 18px;
+    width: 40px;
+    top: 8px;
+    margin-left: 0;
 }
 
 .badges-5 {
@@ -12858,6 +12858,7 @@ form[name="frmShippingProfile"] {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 32px;
 }
 
 .badges-left {
@@ -12911,4 +12912,20 @@ form[name="frmShippingProfile"] {
 .link--arrow[aria-expanded="true"]:after {
     transform: rotate(135deg);
     top: 6px;
+}
+
+.badge-request-media {
+    max-width: 200px;
+    background: #f3f6f8;
+    border: 1px solid #d1d1d1;
+    border-radius: 5px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.badge-request-media img {
+    width: auto;
+    margin: auto;
+    min-height: 120px;
+    object-fit: contain;
 }

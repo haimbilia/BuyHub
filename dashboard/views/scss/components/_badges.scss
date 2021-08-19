@@ -1,16 +1,18 @@
 .badges {
-    position: absolute;
-    top: 10px;
+    position: relative;
+    top: 0;
     z-index: 9;
     font-size: 0.8rem;
+    width: 50px;
+    height: 50px;
     .svg {
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         fill: $brand-color;
-        width: 100%;
-        height: 100%;
+        width: 50px;
+        height: 50px;
     }
     .text {
         position: absolute;
@@ -28,25 +30,26 @@
         color: $brand-color-inverse;
         border-radius: $radius4;
         padding: 4px 8px;
+        width: auto;
+        height: auto;
+        display: inline-block;
         .text {
             position: static;
         }
     }
     &-2 {
-        top: 3px;
-        #{$end-direction}: 3px;
-        width: 70px;
-        height: 70px;
+        top: 0;
+        #{$end-direction}: 0;
         .text {
             font-weight: 600;
             transform: rotate( 45deg);
             position: absolute;
-            left: 0;
-            right: 0;
-            top: 8px;
+            #{$start-direction}: 5px;
+            #{$end-direction}: 0;
+            top: 5px;
             line-height: 30px;
             text-transform: uppercase;
-            width: 85px;
+            width: 50px;
         }
         &.badges-left {
             transform: rotate(-90deg);
@@ -61,30 +64,23 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 60px;
-        height: 60px;
     }
     &-4 {
-        width: 60px;
-        height: 60px;
         .text {
             transform: rotate( 45deg);
-            left: 0;
-            right: 0;
-            line-height: 27px;
-            width: 90px;
-            top: 7px;
-            margin-left: -6px;
+            #{$start-direction}: 10px;
+            #{$end-direction}: 0;
+            line-height: 25px;
+            width: 50px;
+            top: 10px;
         }
         &.badges-left {
             transform: rotate(-90deg);
         }
     }
     &-5 {
-        top: 1rem;
-        #{$end-direction}: 1rem;
-        width: 60px;
-        height: 60px;
+        top: 0;
+        #{$end-direction}: 1r0em;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -95,6 +91,8 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            top: 20px;
+            width: 40px;
         }
     }
     &-left {
