@@ -1252,6 +1252,7 @@
         if (form) {
             data = fcom.frmData(form);
         }
+        data+="&popup=1"
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('shippingPackages', 'search'), data, function (t) {
                 $.facebox(t );

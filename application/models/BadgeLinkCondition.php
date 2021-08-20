@@ -195,6 +195,7 @@ class BadgeLinkCondition extends MyAppModel
                 'COALESCE(' . Badge::DB_TBL_PREFIX . 'name, ' . Badge::DB_TBL_PREFIX . 'identifier) as ' . Badge::DB_TBL_PREFIX . 'name',
                 'blnku.user_name as cond_seller_name',
                 Badge::DB_TBL_PREFIX . 'type',
+                Badge::DB_TBL_PREFIX . 'condition_type',
                 Badge::DB_TBL_PREFIX . 'display_inside',
                 Badge::DB_TBL_PREFIX . 'shape_type',
                 Badge::DB_TBL_PREFIX . 'color',

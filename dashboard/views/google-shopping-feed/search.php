@@ -81,6 +81,16 @@ foreach ($arrListing as $sn => $row) {
             case 'action':
                 $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
                 if (AdsBatch::STATUS_PUBLISHED != $row['adsbatch_status']) {
+                    $li = $ul->appendElement('li');
+                    $li->appendElement(
+                        'a',
+                        [
+                            'href' => UrlHelper::generateUrl($keyName, 'bindProducts', [$row['adsbatch_id']]),
+                            'title' => Labels::getLabel('LBL_BIND_PRODUCTS', $siteLangId)
+                        ],
+                        '<i class="fa fa-link"></i>',
+                        true
+                    );
 
                     $li = $ul->appendElement('li');
                     $li->appendElement(
@@ -93,16 +103,7 @@ foreach ($arrListing as $sn => $row) {
                         '<i class="fa fa-rss"></i>',
                         true
                     );
-                    $li = $ul->appendElement('li');
-                    $li->appendElement(
-                        'a',
-                        [
-                            'href' => UrlHelper::generateUrl($keyName, 'bindProducts', [$row['adsbatch_id']]),
-                            'title' => Labels::getLabel('LBL_BIND_PRODUCTS', $siteLangId)
-                        ],
-                        '<i class="fa fa-link"></i>',
-                        true
-                    );
+                    
                     $li = $ul->appendElement('li');
                     $li->appendElement(
                         'a',

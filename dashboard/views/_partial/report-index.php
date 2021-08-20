@@ -62,7 +62,7 @@ if (!empty($fields)) {
         <div class="content-body">
             <div class="row mb-3">
                 <div class="col-lg-12">
-                    <div class="card">
+                    <div class="card card-search">
                         <div class="card-body">
                             <div class="replaced">
                                 <?php echo $frmSearch->getFormHtml(); ?>

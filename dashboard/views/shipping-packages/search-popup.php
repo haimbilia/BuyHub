@@ -1,4 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+
+<div class="modal-header">
+	<h5 class="modal-title"><?php echo Labels::getLabel('LBL_Shipping_packages',$siteLangId) ;?></h5>
+</div>
+<div class="modal-body">
+    <div class="js-scrollable table-wrap scroll scroll-x">
         <?php if (count($arrListing) == 0) {
             $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
         } else {
@@ -51,4 +57,4 @@
         $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToPackagesSearchPage', 'siteLangId' => $siteLangId);
         $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
     }?>
-
+</div>

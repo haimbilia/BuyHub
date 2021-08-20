@@ -2,7 +2,7 @@
 $frmSrch->setFormTagAttribute('onSubmit', 'searchReport(this); return false;');
 $frmSrch->setFormTagAttribute('class', 'form');
 $frmSrch->developerTags['colClassPrefix'] = 'col-md-';
-$frmSrch->developerTags['fld_default_col'] = 6;
+$frmSrch->developerTags['fld_default_col'] = 8;
 
 $keyFld = $frmSrch->getField('keyword');
 $keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $siteLangId));
@@ -10,12 +10,12 @@ $keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $si
 $submitBtnFld = $frmSrch->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
 $submitBtnFld->setWrapperAttribute('class', 'col-3');
-$submitBtnFld->developerTags['col'] = 3;
+$submitBtnFld->developerTags['col'] = 2;
 
 $cancelBtnFld = $frmSrch->getField('btn_clear');
 $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 $cancelBtnFld->setWrapperAttribute('class', 'col-3');
-$cancelBtnFld->developerTags['col'] = 3;
+$cancelBtnFld->developerTags['col'] = 2;
 $sortBy = $frmSrch->getField('sortBy');
 $sortBy->setFieldTagAttribute('id', 'sortBy');
 

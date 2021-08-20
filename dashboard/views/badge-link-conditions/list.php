@@ -31,11 +31,14 @@ if (!empty($frmSearch)) {
     $frmSearch->setFormTagAttribute('class', 'form formSearch--js');
     $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
     $frmSearch->developerTags['fld_default_col'] = 4;
+    $fld = $frmSearch->getField('blinkcond_record_type');
+    $fld->developerTags['noCaptionTag'] = true;
 
     $fld = $frmSearch->getField('btn_submit');
     if (null != $fld) {
         $fld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
         $fld->developerTags['col'] = 2;
+        $fld->developerTags['noCaptionTag'] = true;
     }
 
     $fld = $frmSearch->getField('btn_clear');
@@ -43,6 +46,7 @@ if (!empty($frmSearch)) {
         $fld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
         $fld->setFieldTagAttribute('onClick', 'clearSearch()');
         $fld->developerTags['col'] = 2;
+        $fld->developerTags['noCaptionTag'] = true;
     }
 }
 require_once(CONF_THEME_PATH . '_partial/index-page-common.php');

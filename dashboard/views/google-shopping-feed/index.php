@@ -13,7 +13,7 @@ $serviceAccInfo = isset($userData['service_account']) ? $userData['service_accou
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="card">
+                    <div class="card ">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <h6 class="m-0">
                                 <?php echo Labels::getLabel('Lbl_MERCHANT_ID', $siteLangId);?> : 

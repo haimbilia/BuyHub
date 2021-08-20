@@ -29,7 +29,7 @@ $clearFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
         <div class="content-body">
             <div class="row  mb-4">
                 <div class="col-md-12">
-                    <div class="card">
+                    <div class="card card-search">
                         <div class="card-body">
                             <div>
                                 <?php echo $frmSearch->getFormTag(); ?>

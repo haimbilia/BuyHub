@@ -7,7 +7,7 @@ $frmSrch->developerTags['fld_default_col'] = 12;
 $keyFld = $frmSrch->getField('keyword');
 $keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $siteLangId));
 $keyFld->setWrapperAttribute('class', 'col-sm-6');
-$keyFld->developerTags['col'] = 6;
+$keyFld->developerTags['col'] = 8;
 $keyFld->developerTags['noCaptionTag'] = true;
 
 $submitBtnFld = $frmSrch->getField('btn_submit');
@@ -34,7 +34,7 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="card">
+                    <div class="card card-search">
                         <div class="card-body">
                             <div id="withdrawalReqForm"></div>
                             <div class="replaced">

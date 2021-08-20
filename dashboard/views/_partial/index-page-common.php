@@ -28,7 +28,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             <?php if (!empty($frmSearch)) { ?>
             <div class="row mb-4 searchform_filter">
                 <div class="col-lg-12">
-                    <div class="card">
+                    <div class="card card-search">
                         <div class="card-body">
                             <div class="replaced">
                                 <?php echo $frmSearch->getFormHtml(); ?>
