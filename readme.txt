@@ -244,6 +244,7 @@ Updates/Fixes :
     => 057372 - Getting error while sending email from Users tab
     => 057408 - Buyer: "Undefined variable" error is showing while clicking on the Seller's collection
     => 057405 - Buyer: "Fatal error" is showing while clicking on the newly added Slides promotions
+    => 057403 - Seller: Suggestion to don't show the selected products in the drop-down while adding the collections
 
 
 New Features:  
