@@ -245,6 +245,7 @@ Updates/Fixes :
     => 057408 - Buyer: "Undefined variable" error is showing while clicking on the Seller's collection
     => 057405 - Buyer: "Fatal error" is showing while clicking on the newly added Slides promotions
     => 057403 - Seller: Suggestion to don't show the selected products in the drop-down while adding the collections
+    => 057396 - Advertiser: "404 error" is showing while clicking on the "Email Verification" link
 
 
 New Features:  

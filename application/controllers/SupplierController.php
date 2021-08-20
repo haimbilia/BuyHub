@@ -20,7 +20,7 @@ class SupplierController extends MyAppController
                 FatApp::redirectUser(UrlHelper::generateUrl('account', 'supplierApprovalForm', [], CONF_WEBROOT_DASHBOARD));
             }
             Message::addErrorMessage(Labels::getLabel('MSG_You_are_already_logged_in._Please_logout_and_register_for_seller.', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('account'));
+            FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD));
         }
         if (!FatApp::getConfig("CONF_ACTIVATE_SEPARATE_SIGNUP_FORM", FatUtility::VAR_INT, 1)) {
             FatApp::redirectUser(UrlHelper::generateUrl('guest-user', 'login-form', array(applicationConstants::YES)));
@@ -65,7 +65,7 @@ class SupplierController extends MyAppController
     public function account()
     {
         if (UserAuthentication::isUserLogged()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('account'));
+            FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD));
         }
         if (!FatApp::getConfig("CONF_ACTIVATE_SEPARATE_SIGNUP_FORM", FatUtility::VAR_INT, 1)) {
             FatApp::redirectUser(UrlHelper::generateUrl('guest-user', 'registration-form'));

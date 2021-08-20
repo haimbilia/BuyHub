@@ -594,8 +594,8 @@ class CustomController extends MyAppController
             $textMessage = str_replace(array_keys($searchReplaceArray), array_values($searchReplaceArray), $textMessage);
         } elseif ($orderInfo['order_type'] == Orders::ORDER_WALLET_RECHARGE) {
             $searchReplaceArray = array(
-                '{account}' => '<a href="' . UrlHelper::generateUrl('account') . '" class="link">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
-                '{credits}' => '<a href="' . UrlHelper::generateUrl('account', 'credits') . '" class="link">' . Labels::getLabel('MSG_My_Credits', $this->siteLangId) . '</a>',
+                '{account}' => '<a href="' . UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
+                '{credits}' => '<a href="' . UrlHelper::generateUrl('account', 'credits', [], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_My_Credits', $this->siteLangId) . '</a>',
             );
             $textMessage = Labels::getLabel('MSG_wallet_success_order_{account}_{credits}', $this->siteLangId);
             $textMessage = str_replace(array_keys($searchReplaceArray), array_values($searchReplaceArray), $textMessage);
