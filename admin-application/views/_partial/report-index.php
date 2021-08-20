@@ -61,8 +61,6 @@ if (!empty($fields)) {
                         $otherButton = isset($actionButtons['otherButtons']) ? $actionButtons['otherButtons'] : [];
                         $actionButtons = [
                             'adminLangId' => $adminLangId,
-                            'statusButtons' => false,
-                            'deleteButton' => false,
                             'htmlContent' => $htmlContent,
                             'otherButtons' => [
                                 [

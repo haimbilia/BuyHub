@@ -240,6 +240,8 @@ Updates/Fixes :
     => 057228 - Admin and Seller: Suggestion to give some indication regarding the "Display Time Slots After Order [Hours]", where it will be used? 
     => 057256 - on promotion add page time picker not coming
     => 057269 - Seller: Text is not correct on the "Requests" section
+    => 057262 - Seller: More than two ribbons are showing for the products inventory
+    => 057372 - Getting error while sending email from Users tab
 
 
 New Features:  

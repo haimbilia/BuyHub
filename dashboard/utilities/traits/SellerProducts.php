@@ -9,10 +9,7 @@ trait SellerProducts
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'badge_id');
         $frm->addHiddenField('', 'ribbon_id');
-        $frm->addTextBox(Labels::getLabel('LBL_Search_By', $this->siteLangId), 'keyword', '', array('id' => 'keyword'));
-        $frm->addSelectBox(Labels::getLabel('LBL_BADGE', $this->siteLangId), 'badge_name', [], '', array('class' => 'badge--js', 'placeholder' => Labels::getLabel('LBL_SEARCH_BADGE', $this->siteLangId)));
-
-        $frm->addSelectBox(Labels::getLabel('LBL_RIBBON', $this->siteLangId), 'ribbon_name', [], '', array('class' => 'ribbon--js', 'placeholder' => Labels::getLabel('LBL_SEARCH_RIBBON', $this->siteLangId)));
+        $frm->addTextBox(Labels::getLabel('LBL_Search_By', $this->siteLangId), 'keyword', '', array('id' => 'keyword'));        
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
         $frm->addButton("", "btn_clear", Labels::getLabel("LBL_Clear", $this->siteLangId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'product_id', $product_id);
@@ -82,10 +79,6 @@ trait SellerProducts
                 'selprod_available_from',
                 'IFNULL(product_name, product_identifier) as product_name',
                 'selprod_title',
-                'GROUP_CONCAT(COALESCE(badge_name, badge_identifier)) as badge_name',
-                'GROUP_CONCAT(badge_id) as badge_id',
-                'badge_shape_type',
-                'badge_color',
                 'product_updated_on'
             )
         );
@@ -103,40 +96,6 @@ trait SellerProducts
             $srch->setPageNumber($page);
             $srch->setPageSize($pageSize);
         }
-
-        $badgeId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
-        $ribbonId = FatApp::getPostedData('ribbon_id', FatUtility::VAR_INT, 0);
-
-        $badgeJoin = 'LEFT';
-        $condition = 'TRUE';
-        if (0 < $badgeId || 0 < $ribbonId) {
-            $badgeJoin = 'INNER';
-            $condition = '(';
-
-            if (0 < $badgeId && 0 < $ribbonId) {
-                $condition .= 'badge_type = ' . Badge::TYPE_BADGE . ' OR badge_type = ' . Badge::TYPE_RIBBON;
-                $srch->addHaving('badge_id', '=', implode(',', [$badgeId, $ribbonId]));
-            } else if (0 < $badgeId && 1 > $ribbonId) {
-                $condition .= 'badge_type = ' . Badge::TYPE_BADGE;
-                $srch->addCondition('badge_id', '=', $badgeId);
-            } else if (1 > $badgeId && 0 < $ribbonId) {
-                $condition .= 'badge_type = ' . Badge::TYPE_RIBBON;
-                $srch->addCondition('badge_id', '=', $ribbonId);
-            }
-
-            $condition .= ')';
-        }
-        $srch->joinTable(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $badgeJoin . ' JOIN', 'badgelink_record_id = selprod_id', 'bl');
-        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'LEFT JOIN', 'blinkcond_id = badgelink_blinkcond_id', 'blc');
-        $srch->joinTable(Badge::DB_TBL, 'LEFT JOIN', 'badge_id = blinkcond_badge_id', 'bdg');
-        $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $this->siteLangId, 'bdg_l');
-
-        $srch->addDirectCondition('(CASE 
-                                        WHEN badge_id IS NOT NULL
-                                        THEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . ' 
-                                            AND ' . $condition . '
-                                        ELSE TRUE
-                                    END)');
 
         $srch->addOrder('selprod_id', 'DESC');
         $srch->addGroupBy('selprod_id');
@@ -1666,7 +1625,7 @@ trait SellerProducts
         $frm->addTextarea(Labels::getLabel("LBL_Meta_Keywords", $this->siteLangId), 'meta_keywords');
         $frm->addTextarea(Labels::getLabel("LBL_Meta_Description", $this->siteLangId), 'meta_description');
         $fld = $frm->addTextarea(Labels::getLabel("LBL_Other_Meta_Tags", $this->siteLangId), 'meta_other_meta_tags');
-        $fld->htmlAfterField = '<small class="text--small">' . Labels::getLabel('LBL_For_Example:', $this->siteLangId) . ' ' . htmlspecialchars('<meta name="copyright" content="text">') . '</small>';
+        $fld->htmlAfterField = '<small class="form-text text-muted">' . Labels::getLabel('LBL_For_Example:', $this->siteLangId) . ' ' . htmlspecialchars('<meta name="copyright" content="text">') . '</small>';
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 

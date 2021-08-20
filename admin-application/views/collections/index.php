@@ -64,26 +64,6 @@
                                     'adminLangId' => $adminLangId
                                 ];
 
-                                /* if ($canEdit) {
-                                    $data['otherButtons'][] = [
-                                        'attr' => [
-                                            'href' => 'javascript:void(0)',
-                                            'onclick' => 'collectionForm(0)',
-                                            'title' => Labels::getLabel('Lbl_Add_Collection', $adminLangId)
-                                        ],
-                                        'label' => '<i class="fas fa-plus"></i>'
-                                    ];
-                                } */
-
-                                /* $data['otherButtons'][] = [
-                                    'attr' => [
-                                        'href' => 'javascript:void(0)',
-                                        'onclick' => 'collectionLayouts()',
-                                        'title' => Labels::getLabel('LBL_All_Layouts_Instructions', $adminLangId)
-                                    ],
-                                    'label' => '<i class="fas fa-file-image"></i>'
-                                ]; */
-
                                 $this->includeTemplate('_partial/action-buttons.php', $data, false);
                                 ?>
                             </div>

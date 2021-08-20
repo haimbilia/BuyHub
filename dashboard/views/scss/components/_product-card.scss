@@ -96,6 +96,9 @@
     .products {
         height: 100%;
     }
+    .badges {
+        position: absolute;
+    }
 }
 
 .products {
@@ -204,6 +207,9 @@
     &_foot {
         padding-bottom: 15px;
         color: $body-color;
+        .actions {
+            margin-top: 0.5rem;
+        }
     }
     .products_title {
         color: inherit;

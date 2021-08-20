@@ -46,8 +46,6 @@ $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $ord
                         if (!$print) {
                             $data = [
                                 'adminLangId' => $adminLangId,
-                                'statusButtons' => false,
-                                'deleteButton' => false,
                                 'otherButtons' => [
                                     [
                                         'attr' => [

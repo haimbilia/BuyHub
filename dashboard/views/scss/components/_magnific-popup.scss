@@ -84,7 +84,6 @@
 .mfp-arrow,
 .mfp-preloader,
 .mfp-counter {
-    
     user-select: none;
 }
 
@@ -130,7 +129,6 @@ button.mfp-arrow {
     cursor: pointer;
     background: transparent;
     border: 0;
-    
     display: block;
     outline: none;
     padding: 0;
@@ -307,7 +305,9 @@ button::-moz-focus-inner {
     background: black;
 }
 
+
 /* Main image in popup */
+
 img.mfp-img {
     width: auto;
     max-width: 100%;
@@ -320,7 +320,9 @@ img.mfp-img {
     margin: 0 auto;
 }
 
+
 /* The shadow behind the image */
+
 .mfp-figure {
     line-height: 0;
 }
@@ -375,7 +377,6 @@ img.mfp-img {
 
 @media screen and (max-width: 800px) and (orientation: landscape),
 screen and (max-height: 300px) {
-
     /**
        * Remove all paddings around the image on small screen
        */
@@ -383,25 +384,20 @@ screen and (max-height: 300px) {
         padding-#{$start-direction}: 0;
         padding-#{$end-direction}: 0;
     }
-
     .mfp-img-mobile img.mfp-img {
         padding: 0;
     }
-
     .mfp-img-mobile .mfp-figure {
         /* The shadow behind the image */
     }
-
     .mfp-img-mobile .mfp-figure:after {
         top: 0;
         bottom: 0;
     }
-
     .mfp-img-mobile .mfp-figure small {
         display: inline;
         margin-#{$start-direction}: 5px;
     }
-
     .mfp-img-mobile .mfp-bottom-bar {
         background: rgba(0, 0, 0, 0.6);
         bottom: 0;
@@ -412,16 +408,13 @@ screen and (max-height: 300px) {
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
     }
-
     .mfp-img-mobile .mfp-bottom-bar:empty {
         padding: 0;
     }
-
     .mfp-img-mobile .mfp-counter {
         #{$end-direction}: 5px;
         top: 3px;
     }
-
     .mfp-img-mobile .mfp-close {
         top: 0;
         #{$end-direction}: 0;
@@ -440,17 +433,14 @@ screen and (max-height: 300px) {
         -webkit-transform: scale(0.75);
         transform: scale(0.75);
     }
-
     .mfp-arrow-left {
         -webkit-transform-origin: 0;
         transform-origin: 0;
     }
-
     .mfp-arrow-right {
         -webkit-transform-origin: 100%;
         transform-origin: 100%;
     }
-
     .mfp-container {
         padding-#{$start-direction}: 6px;
         padding-#{$end-direction}: 6px;

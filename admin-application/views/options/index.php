@@ -62,7 +62,6 @@
                             
                             $data = [
                                 'adminLangId' => $adminLangId,
-                                'statusButtons' => false,
                                 'deleteButton' => true,
                                 'otherButtons' => [
                                     [

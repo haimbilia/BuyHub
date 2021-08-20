@@ -1,124 +1,131 @@
 .badges {
     position: relative;
     top: 0;
-    right: auto;
     z-index: 9;
     font-size: 0.8rem;
-    svg {
-        width: 40px;
-        height: 40px;
+    width: 50px;
+    height: 50px;
+    .svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        fill: $brand-color;
+        width: 50px;
+        height: 50px;
+    }
+    .text {
+        position: absolute;
+        top: auto;
+        text-transform: uppercase;
+        font-weight: 600;
+        text-align: center;
+        color: $brand-color-inverse;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     &-1 {
-        background: $secondary-color;
-        color: $secondary-color-inverse;
+        background: $brand-color;
+        color: $brand-color-inverse;
         border-radius: $radius4;
         padding: 4px 8px;
+        width: auto;
+        height: auto;
+        display: inline-block;
+        .text {
+            position: static;
+        }
     }
     &-2 {
-        background: url(images/retina/badges/bg-badges-1.svg) no-repeat center;
-        background-size: 70px;
-        color: #fff;
-        padding: 4px 8px;
         top: 0;
-        right: 0;
-        width: 40px;
-        height: 40px;
-        padding-top: 8px;
+        #{$end-direction}: 0;
         .text {
+            font-weight: 600;
             transform: rotate( 45deg);
             position: absolute;
-            left: 8px;
-            right: 0;
-            line-height: 28px;
+            #{$start-direction}: 5px;
+            #{$end-direction}: 0;
+            top: 5px;
+            line-height: 30px;
             text-transform: uppercase;
+            width: 50px;
+        }
+        &.badges-left {
+            transform: rotate(-90deg);
+        }
+        &.badges-right {
+            svg {
+                transform: scaleX($transform-direction);
+            }
+        }
+    }
+    &-3 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    &-4 {
+        .text {
+            transform: rotate( 45deg);
+            #{$start-direction}: 10px;
+            #{$end-direction}: 0;
+            line-height: 25px;
+            width: 50px;
+            top: 10px;
+        }
+        &.badges-left {
+            transform: rotate(-90deg);
+        }
+    }
+    &-5 {
+        top: 0;
+        #{$end-direction}: 1r0em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .text {
+            line-height: 1;
+            font-weight: 600;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            top: 20px;
+            width: 40px;
+        }
+    }
+    &-left {
+        #{$start-direction}: 10px;
+        top: 10px;
+    }
+    &-right {
+        #{$end-direction}: 10px;
+        top: 10px;
+        svg {
+            transform: scaleX($transform-direction);
         }
     }
 }
 
-.snip1326 {
-    font-family: 'Raleway', Arial, sans-serif;
-    position: relative;
-    color: #bdbdbd;
-    margin: 0px 15px 50px;
-    max-width: 300px;
-    width: 100%;
-    text-align: center;
-    font-size: 16px;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-.snip1326 h1,
-.snip1326 h5 {
-    margin: 0;
-    text-transform: uppercase;
-}
-
-.snip1326 h1 {
-    font-family: 'Fjalla One', Arial, sans-serif;
-    font-size: 2.4em;
-    position: relative;
-}
-
-.snip1326 h1:before {
-    content: '';
-    position: absolute;
-    width: 180px;
-    height: 180px;
-    border: 5px solid #bdbdbd;
-    left: 50%;
-    top: 50%;
-    -webkit-transform-origin: 0 0;
-    -ms-transform-origin: 0 0;
-    transform-origin: 0 0;
-    -webkit-transform: rotate(45deg) translate(-50%, -50%);
-    transform: rotate(45deg) translate(-50%, -50%);
-    border-radius: 10%;
-}
-
-.snip1326 h5 {
-    font-size: 0.7em;
-    font-weight: 800;
-    padding-bottom: 10px;
-    position: relative;
-}
-
-.snip1326 h5:after {
-    position: absolute;
-    content: '';
-    width: 135px;
-    height: 3px;
-    bottom: -15px;
-    background-color: #bdbdbd;
-    left: 50%;
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%);
-}
-
-.snip1326 .icon {
-    position: relative;
-    display: inline-block;
-}
-
-.snip1326 .icon:before,
-.snip1326 .icon:after {
-    position: absolute;
-    height: 3px;
-    content: '';
-    background: #bdbdbd;
-    width: 42px;
-    top: 50%;
-}
-
-.snip1326 .icon:before {
-    left: -50px;
-}
-
-.snip1326 .icon:after {
-    right: -50px;
-}
-
-.snip1326 i {
-    font-size: 3.6em;
-    color: #bdbdbd;
+[direction="rtl"] {
+    .badges {
+        &-4 {
+            .text {
+                #{$start-direction}: -10px;
+                top: 6px;
+                transform: rotate(-45deg);
+            }
+            &.badges-left {
+                transform: none;
+            }
+        }
+        &-2 {
+            .text {
+                #{$start-direction}: 0px;
+                top: 10px;
+                transform: rotate( -45deg);
+            }
+        }
+    }
 }

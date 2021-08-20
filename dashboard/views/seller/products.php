@@ -7,6 +7,8 @@ $frmSearch->developerTags['fld_default_col'] = 4;
 
 $keyFld = $frmSearch->getField('keyword');
 $keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $siteLangId));
+$keyFld->developerTags['noCaptionTag'] = true;
+
 
 $submitBtnFld = $frmSearch->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');

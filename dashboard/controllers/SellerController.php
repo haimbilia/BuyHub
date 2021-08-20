@@ -1460,56 +1460,14 @@ class SellerController extends SellerBaseController
         $post = $frmSearchCatalogProduct->getFormDataFromArray(FatApp::getPostedData());
 
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
-        /* echo $page; die; */
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
 
-        //$srch = Product::getSearchObject($this->siteLangId);
         $srch = new ProductSearch($this->siteLangId, null, null, false, false);
         $srch->joinProductShippedBySeller($this->userParentId);
         $srch->joinTable(AttributeGroup::DB_TBL, 'LEFT OUTER JOIN', 'product_attrgrp_id = attrgrp_id', 'attrgrp');
         $srch->joinTable(UpcCode::DB_TBL, 'LEFT OUTER JOIN', 'upc_product_id = product_id', 'upc');
 
 
-        $badgeId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
-        $ribbonId = FatApp::getPostedData('ribbon_id', FatUtility::VAR_INT, 0);
-
-        $badgeJoin = 'LEFT';
-        $condition = 'TRUE';
-        if (0 < $badgeId || 0 < $ribbonId) {
-            $badgeJoin = 'INNER';
-            $condition = '(';
-
-            if (0 < $badgeId && 0 < $ribbonId) {
-                $condition .= 'badge_type = ' . Badge::TYPE_BADGE . ' OR badge_type = ' . Badge::TYPE_RIBBON;
-                $srch->addHaving('badge_id', '=', implode(',', [$badgeId, $ribbonId]));
-            } elseif (0 < $badgeId && 1 > $ribbonId) {
-                $condition .= 'badge_type = ' . Badge::TYPE_BADGE;
-                $srch->addCondition('badge_id', '=', $badgeId);
-            } elseif (1 > $badgeId && 0 < $ribbonId) {
-                $condition .= 'badge_type = ' . Badge::TYPE_RIBBON;
-                $srch->addCondition('badge_id', '=', $ribbonId);
-            }
-
-            $condition .= ')';
-        }
-        $srch->joinTable(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $badgeJoin . ' JOIN', 'badgelink_record_id = product_id', 'bl');
-        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'LEFT JOIN', 'blinkcond_id = badgelink_blinkcond_id', 'blc');
-        $srch->joinTable(Badge::DB_TBL, 'LEFT JOIN', 'badge_id = blinkcond_badge_id', 'bdg');
-        $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $this->siteLangId, 'bdg_l');
-
-        $srch->addDirectCondition('(CASE 
-                                        WHEN badge_id IS NOT NULL
-                                        THEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_PRODUCT . ' 
-                                            AND ' . $condition . '
-                                        ELSE TRUE
-                                    END)');
-
-        /* $cnd = $srch->addCondition( 'product_seller_id', '=',0);
-          $cnd->attachCondition( 'product_added_by_admin_id', '=', applicationConstants::YES,'OR');
-
-          if( User::canAddCustomProduct() ){
-          $cnd->attachCondition('product_seller_id', '=', $this->userParentId,'OR');
-          } */
         $srch->addDirectCondition(
             '((CASE
                     WHEN product_seller_id = 0 THEN product_active = 1
@@ -1565,10 +1523,6 @@ class SellerController extends SellerBaseController
             'product_type',
             'product_active',
             'product_approved',
-            'GROUP_CONCAT(COALESCE(badge_name, badge_identifier)) as badge_name',
-            'GROUP_CONCAT(badge_id) as badge_id',
-            'badge_shape_type',
-            'badge_color',
             'product_updated_on'
         );
 
@@ -3900,10 +3854,6 @@ class SellerController extends SellerBaseController
 
         $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->siteLangId), 'product_type', array(-1 => Labels::getLabel('LBL_SELECT_PRODUCT_TYPE', $this->siteLangId)) + Product::getProductTypes($this->siteLangId), '-1', array(), '');
         /* }  */
-
-        $frm->addSelectBox(Labels::getLabel('LBL_BADGE', $this->siteLangId), 'badge_name', [], '', array('class' => 'badge--js', 'placeholder' => Labels::getLabel('LBL_SEARCH_BADGE', $this->siteLangId)));
-
-        $frm->addSelectBox(Labels::getLabel('LBL_RIBBON', $this->siteLangId), 'ribbon_name', [], '', array('class' => 'ribbon--js', 'placeholder' => Labels::getLabel('LBL_SEARCH_RIBBON', $this->siteLangId)));
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->siteLangId));
 
