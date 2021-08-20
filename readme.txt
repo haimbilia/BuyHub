@@ -243,6 +243,7 @@ Updates/Fixes :
     => 057262 - Seller: More than two ribbons are showing for the products inventory
     => 057372 - Getting error while sending email from Users tab
     => 057408 - Buyer: "Undefined variable" error is showing while clicking on the Seller's collection
+    => 057405 - Buyer: "Fatal error" is showing while clicking on the newly added Slides promotions
 
 
 New Features:  
