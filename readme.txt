@@ -205,8 +205,9 @@ Updates/Fixes :
     => 056954 - Seller: Country code is not showing while adding the Contact Number in the Seller Approval form
     => 056948 - Web Buyer: Getting a "404 error" while clicking on the "Open a Store" button on the front end
     => 057017 - importing seller products in german getting error invalid csv column
-    => 057091 - Buyer: Suggestion to make the Brands name clickable on the Product details page at the buyers end
-    => 057089 - Admin: Suggestion to override the images while uploading multiple images because we are showing only one image for the Brands at the buyers end    => 057045 - Seller: Shipping Packages icon is missing in the menu list
+    => 057089 - Admin: Suggestion to override the images while uploading multiple images because we are showing only one image for the Brands at the buyers end
+    => 057115 - Seller and Admin: "+" button is not showing while adding the pickup address' for "All days" Time Slots
+    => 057163 - while adding the option in catalog getting struck in ajax loop
 
 ===========================TV-9.3.2.20210810==================
     => 057137 - Getting error while stripe connect transfer seller part
@@ -248,6 +249,7 @@ Updates/Fixes :
     => 057396 - Advertiser: "404 error" is showing while clicking on the "Email Verification" link
     => 057391 - Buyer: A warning message is showing while clicking on the "Affiliate" option
     => 057384 - Admin: Information is missing regarding "Content Blocks
+    => 057444 - If brand is mandatory then while importing getting error
 
 
 New Features:  
