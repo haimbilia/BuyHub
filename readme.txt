@@ -241,6 +241,7 @@ Updates/Fixes :
     => 057256 - on promotion add page time picker not coming
     => 057269 - Seller: Text is not correct on the "Requests" section
     => 057262 - Seller: More than two ribbons are showing for the products inventory
+    => 057372 - Getting error while sending email from Users tab
 
 
 New Features:  
