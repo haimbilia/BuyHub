@@ -1,7 +1,4 @@
 <?php
-
-use PhpParser\Node\Stmt\Label;
-
 class SellerController extends SellerBaseController
 {
     // use Attributes;
@@ -526,7 +523,34 @@ class SellerController extends SellerBaseController
             }
         }
 
+        $orderProductStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingStatuses);
+
+        $orderTimeLine = [];
+        $currentStatus = Orders::ORDER_PAYMENT_PENDING == $orderDetail['order_payment_status'] ? Orders::ORDER_PAYMENT_PENDING : FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS");
+        $highlightEnabled = [];
+        if (!empty($orderDetail['comments'])) {
+            $currentStatus = current($orderDetail['comments'])['oshistory_orderstatus_id'];
+            foreach ($orderDetail['comments'] as $comment) {
+                $highlightEnabled[] = $comment['oshistory_orderstatus_id'];
+                $orderTimeLine[$comment['oshistory_orderstatus_id']][] = $comment;
+            }
+        }
+
+        if (Orders::ORDER_PAYMENT_PENDING == $orderDetail['order_payment_status'] && empty($orderTimeLine)) {
+            $currentStatus = Orders::ORDER_PAYMENT_PENDING;
+            $highlightEnabled[] = Orders::ORDER_PAYMENT_PENDING;
+            $orderProductStatusArr = [Orders::ORDER_PAYMENT_PENDING => Labels::getLabel('LBL_PAYMENT_PENDING', $this->siteLangId)] + $orderProductStatusArr;
+        }
+        $productType = !empty($orderDetail['selprod_product_id']) ? Product::getAttributesById($orderDetail['selprod_product_id'], 'product_type') : 0;
+
         $this->set('unitTypeArray', ShippingPackage::getUnitTypes($this->siteLangId));
+
+        $this->set('highlightEnabled', $highlightEnabled);
+        $this->set('currentStatus', $currentStatus);
+        $this->set('orderProductStatusArr', $orderProductStatusArr);
+        $this->set('orderTimeLine', $orderTimeLine);
+
+        $this->set('productType', $productType);
         $this->set('orderDetail', $orderDetail);
         $this->set('orderStatuses', $orderStatuses);
         $this->set('shippedBySeller', $shippedBySeller);

@@ -314,16 +314,17 @@ class BuyerController extends BuyerBaseController
             $highlightEnabled[] = Orders::ORDER_PAYMENT_PENDING;
             $orderProductStatusArr = [Orders::ORDER_PAYMENT_PENDING => Labels::getLabel('LBL_PAYMENT_PENDING', $this->siteLangId)] + $orderProductStatusArr;
         }
-
+        
         $frm = $this->getTransferBankForm($this->siteLangId, $orderId);
         $this->set('frm', $frm);
+
         $this->set('highlightEnabled', $highlightEnabled);
         $this->set('currentStatus', $currentStatus);
         $this->set('orderProductStatusArr', $orderProductStatusArr);
         $this->set('orderTimeLine', $orderTimeLine);
+        
         $this->set('orderDetail', $orderDetail);
         $this->set('childOrderDetail', $childOrderDetail);
-        $this->set('orderStatuses', $orderStatuses);  /* Need To Remove. already used $orderProductStatusArr */
         $this->set('primaryOrder', $primaryOrderDisplay);
         $this->set('childOrderProdCount', $childOrderProdCount);
         $this->set('digitalDownloads', $digitalDownloads);
