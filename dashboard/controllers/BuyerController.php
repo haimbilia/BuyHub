@@ -279,11 +279,51 @@ class BuyerController extends BuyerBaseController
         }
         $productType = !empty($childOrderDetail['selprod_product_id']) ? Product::getAttributesById($childOrderDetail['selprod_product_id'], 'product_type') : 0;
 
+        $orderProductStatusArr = [];
+        if (true === $primaryOrderDisplay) {
+            $orderObj = new Orders($childOrderDetail['order_id']);
+            if ($childOrderDetail['plugin_code'] == 'CashOnDelivery') {
+                $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(true);
+            } else if ($childOrderDetail['plugin_code'] == 'PayAtStore') {
+                $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, false, true);
+            } else {
+                $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $childOrderDetail['op_product_type']);
+            }
+
+            if ($childOrderDetail["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) {
+                $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0));
+            } else {
+                $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_PICKUP_READY_ORDER_STATUS", FatUtility::VAR_INT, 0));
+            }
+            $orderProductStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingStatuses);
+        }
+
+        $orderTimeLine = [];
+        $currentStatus = Orders::ORDER_PAYMENT_PENDING == $orderDetail['order_payment_status'] ? Orders::ORDER_PAYMENT_PENDING : FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS");
+        $highlightEnabled = [];
+        if (true === $primaryOrderDisplay && !empty($orderDetail['comments'])) {
+            $currentStatus = current($orderDetail['comments'])['oshistory_orderstatus_id'];
+            foreach ($orderDetail['comments'] as $comment) {
+                $highlightEnabled[] = $comment['oshistory_orderstatus_id'];
+                $orderTimeLine[$comment['oshistory_orderstatus_id']][] = $comment;
+            }
+        }
+
+        if (Orders::ORDER_PAYMENT_PENDING == $orderDetail['order_payment_status'] && empty($orderTimeLine)) {
+            $currentStatus = Orders::ORDER_PAYMENT_PENDING;
+            $highlightEnabled[] = Orders::ORDER_PAYMENT_PENDING;
+            $orderProductStatusArr = [Orders::ORDER_PAYMENT_PENDING => Labels::getLabel('LBL_PAYMENT_PENDING', $this->siteLangId)] + $orderProductStatusArr;
+        }
+
         $frm = $this->getTransferBankForm($this->siteLangId, $orderId);
         $this->set('frm', $frm);
+        $this->set('highlightEnabled', $highlightEnabled);
+        $this->set('currentStatus', $currentStatus);
+        $this->set('orderProductStatusArr', $orderProductStatusArr);
+        $this->set('orderTimeLine', $orderTimeLine);
         $this->set('orderDetail', $orderDetail);
         $this->set('childOrderDetail', $childOrderDetail);
-        $this->set('orderStatuses', $orderStatuses);
+        $this->set('orderStatuses', $orderStatuses);  /* Need To Remove. already used $orderProductStatusArr */
         $this->set('primaryOrder', $primaryOrderDisplay);
         $this->set('childOrderProdCount', $childOrderProdCount);
         $this->set('digitalDownloads', $digitalDownloads);
@@ -304,7 +344,7 @@ class BuyerController extends BuyerBaseController
 
         $this->_template->render();
     }
-    
+
     /**
      * downloadDigitalFiles : Used for APPs.
      *
@@ -326,7 +366,7 @@ class BuyerController extends BuyerBaseController
             case self::DIGITAL_LINKS_FILE:
                 $this->downloadDigitalLinksFile($opId);
                 break;
-            
+
             default:
                 Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_TYPE.', $this->siteLangId));
                 FatUtility::dieJsonError(Message::getHtml());
@@ -391,11 +431,11 @@ class BuyerController extends BuyerBaseController
         header('Content-disposition: attachment; filename=' . $downloads[0]['op_invoice_number'] . '.zip');
         header('Content-type: application/zip');
         readfile($tmp_file);
-        
+
         /* Remove Temp File from public folder. */
         unlink($tmp_file);
         /* Remove Temp File from public folder. */
-        
+
         /* Update downlod count */
         FatApp::getDb()->query("UPDATE " . AttachedFile::DB_TBL . " SET afile_downloaded_times = (afile_downloaded_times+1) where afile_record_id = " . $opId . " AND afile_id IN (" . implode(',', $fileId) . ")");
         /* Update downlod count */
@@ -476,7 +516,7 @@ class BuyerController extends BuyerBaseController
             }
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'MyDownloads'));
         }
-        
+
         $handle = fopen('php://memory', 'w');
 
         $linkId = [];
@@ -488,13 +528,13 @@ class BuyerController extends BuyerBaseController
         }
 
         CommonHelper::writeExportDataToCSV($handle, [], true, $downloads[0]['op_invoice_number'] . '.csv');
-        
+
         /* Update downlod count */
         FatApp::getDb()->query("UPDATE " . OrderProductDigitalLinks::DB_TBL . " SET opddl_downloaded_times = (opddl_downloaded_times+1) where opddl_op_id = " . $opId . " AND opddl_link_id IN (" . implode(',', $linkId) . ")");
         /* Update downlod count */
         exit;
     }
-    
+
     public function downloadDigitalProductFromLink($linkId, $opId)
     {
         $linkId = FatUtility::int($linkId);
@@ -779,7 +819,7 @@ class BuyerController extends BuyerBaseController
         $srch->joinOrderUser();
         $srch->joinDigitalDownloads();
         $srch->addDigitalDownloadCondition();
-       
+
         $attr = [
             'op_id',
             'op_selprod_id',
@@ -808,7 +848,7 @@ class BuyerController extends BuyerBaseController
         $srch->addOrder('order_date_added', 'desc');
         $srch->addOrder('afile_id', 'asc');
         $srch->setPageSize($pagesize);
-        
+
         if (0 < $opId) {
             $srch->addCondition('op_id', '=', $opId);
             $frm->fill(array('op_id' => $opId));
@@ -3035,5 +3075,58 @@ class BuyerController extends BuyerBaseController
 
         $msg = Labels::getLabel("MSG_REQUEST_SUBMITTED_SUCCESSFULLY", $this->siteLangId);
         FatUtility::dieJsonSuccess($msg);
+    }
+
+    private function getOrderProducts(string $orderId): array
+    {
+        $opSrch = new OrderProductSearch($this->siteLangId, false, true, true);
+        $opSrch->joinShippingCharges();
+        $opSrch->joinSellerProducts();
+        $opSrch->joinAddress();
+        $opSrch->joinOrderProductShipment();
+        $opSrch->addCountsOfOrderedProducts();
+        $opSrch->addOrderProductCharges();
+        $opSrch->joinOrderProductSpecifics();
+        $opSrch->doNotCalculateRecords();
+        $opSrch->doNotLimitRecords();
+        $opSrch->addCondition('op.op_order_id', '=', $orderId);
+
+        $opSrch->addMultipleFields(
+            [
+                'op_id', 'op_selprod_user_id', 'op_invoice_number', 'op_selprod_title', 'op_product_name',
+                'op_qty', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model',
+                'op_shop_name', 'op_shop_owner_name', 'op_shop_owner_email', 'op_shop_owner_phone', 'op_unit_price',
+                'totCombinedOrders as totOrders', 'op_shipping_duration_name', 'op_shipping_durations',  'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_other_charges', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'ts.state_code', 'tc.country_code', 'op_rounding_off',
+                'op_shop_owner_phone_dcode', 'op_selprod_price', 'op_special_price', 'opshipping_by_seller_user_id', 'op_is_batch', 'op_selprod_id', 'selprod_product_id'
+            ]
+        );
+
+        return (array) FatApp::getDb()->fetchAll($opSrch->getResultSet());
+    }
+
+    public function orderProductsCharges(string $orderId, int $chargeType = 0)
+    {
+        $opsShippingDetail = $this->getOrderProducts($orderId);
+        $oObj = new Orders();
+        foreach ($opsShippingDetail as &$op) {
+            $charges = $oObj->getOrderProductChargesArr($op['op_id']);
+            $op['charges'] = $charges;
+        }
+
+        $this->set('opsShippingDetail', $opsShippingDetail);
+        switch ($chargeType) {
+            case OrderProduct::CHARGE_TYPE_SHIPPING:
+                $this->_template->render(false, false, 'buyer/order-products-shipping.php');
+                break;
+            case OrderProduct::CHARGE_TYPE_TAX:
+                $this->_template->render(false, false, 'buyer/order-products-tax.php');
+                break;
+            
+            default:
+                Message::addErrorMessage(Labels::getLabel('MSG_INVALID_CHARGE_TYPE', $this->siteLangId));
+                FatUtility::dieWithError(Message::getHtml());
+                break;
+        }
+
     }
 }

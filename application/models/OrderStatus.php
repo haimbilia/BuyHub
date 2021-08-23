@@ -89,5 +89,35 @@ class OrderStatus extends MyAppModel
         }
         return false;
     }
+
+    public static function getOpStatusClass(int $status): string
+    {
+        $defaultPaid = FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS");
+        $defaultInProcess = FatApp::getConfig("CONF_DEFAULT_INPROCESS_ORDER_STATUS");
+        $defaultShipped = FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS");
+        $defaultDelivered = FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS");
+        $defaultCompleted = FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS");
+        switch ($status) {
+            case Orders::ORDER_PAYMENT_PENDING:
+            case $defaultPaid:
+            case self::ORDER_APPROVED:
+                return 'in-process';
+                break;
+            case $defaultInProcess:
+                return 'ready-for-shipping';
+                break;
+            case $defaultShipped:
+                return 'shipped';
+                break;
+            case $defaultDelivered:
+            case $defaultCompleted:
+                return 'delivered';
+                break;
+            
+            default:
+                return 'delivered';
+                break;
+        }
+    }
     
 }

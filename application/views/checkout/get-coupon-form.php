@@ -15,7 +15,7 @@ if (!empty($cartSummary['cartDiscounts']['coupon_code'])) { ?>
 </div>
 <div class="modal-body">
     <?php
-	$PromoCouponsFrm->setFormTagAttribute('class', 'form custom-form my-5');
+	$PromoCouponsFrm->setFormTagAttribute('class', 'form custom-form mb-2');
 	$PromoCouponsFrm->setFormTagAttribute('onsubmit', 'applyPromoCode(this); return false;');
 	$fld = $PromoCouponsFrm->getField('btn_submit');
 	$fld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
