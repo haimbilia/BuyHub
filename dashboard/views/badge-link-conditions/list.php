@@ -40,6 +40,11 @@ if (!empty($frmSearch)) {
         $fld->developerTags['col'] = 2;
         $fld->developerTags['noCaptionTag'] = true;
     }
+    
+    $fld = $frmSearch->getField('blinkcond_position');
+    if (null != $fld) {              
+        $fld->developerTags['noCaptionTag'] = true;
+    }
 
     $fld = $frmSearch->getField('btn_clear');
     if (null != $fld) {

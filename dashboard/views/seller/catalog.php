@@ -35,7 +35,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
                                 $keywordFld = $frmSearchCatalogProduct->getField('keyword');
                                 $keywordFld->setFieldTagAttribute('id', 'tour-step-3');                    
-                                $keywordFld->developerTags['col'] = 3;
+                                $keywordFld->developerTags['col'] = 4;
                                 $keywordFld->developerTags['noCaptionTag'] = true;
 
                                 // if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {
@@ -45,25 +45,19 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 // $dateFromFld->developerTags['col'] = 2;
                                 // }
                                 $typeFld = $frmSearchCatalogProduct->getField('product_type');                               
-                                $typeFld->developerTags['col'] = 3;
+                                $typeFld->developerTags['col'] = 4;
                                 $typeFld->developerTags['noCaptionTag'] = true;
-
-                                $fld = $frmSearchCatalogProduct->getField('badge_name');                                
-                                $fld->developerTags['col'] = 3;
-                                $fld->developerTags['noCaptionTag'] = true;
-
-                                $fld = $frmSearchCatalogProduct->getField('ribbon_name');                               
-                                $fld->developerTags['col'] = 3;
-                                $fld->developerTags['noCaptionTag'] = true;
 
                                 $submitFld = $frmSearchCatalogProduct->getField('btn_submit');
                                 $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
                                 $submitFld->developerTags['col'] = 2;
+                                $submitFld->developerTags['noCaptionTag'] = true;
 
                                 $fldClear = $frmSearchCatalogProduct->getField('btn_clear');
                                 $fldClear->setFieldTagAttribute('onclick', 'clearSearch()');
                                 $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
                                 $fldClear->developerTags['col'] = 2;
+                                $fldClear->developerTags['noCaptionTag'] = true;
                                 /* if( User::canAddCustomProductAvailableToAllSellers() ){
                                       $submitFld = $frmSearchCatalogProduct->getField('btn_submit');
                                       $submitFld->setFieldTagAttribute('class','btn-block');

@@ -7,6 +7,7 @@ $frmSearch->developerTags['fld_default_col'] = 4;
 
 $keyFld = $frmSearch->getField('keyword');
 $keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $siteLangId));
+$keyFld->developerTags['col'] = 8;
 $keyFld->developerTags['noCaptionTag'] = true;
 
 
@@ -20,8 +21,6 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 $cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->developerTags['noCaptionTag'] = true;
 $frmSearch->getField('keyword')->developerTags['noCaptionTag'] = true;
-$frmSearch->getField('badge_name')->developerTags['noCaptionTag'] = true;
-$frmSearch->getField('ribbon_name')->developerTags['noCaptionTag'] = true;
 
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 

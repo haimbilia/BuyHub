@@ -40,13 +40,9 @@
                 case 'select_all':
                     $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[' . $splPriceId . ']" value=' . $selProdId . '></label>', true);
                     break;
-                case 'product_name':
-                    // last Param of getProductDisplayTitle function used to get title in html form.
-                    $txt = '<div class="item__description">';
-                    $productName = SellerProduct::getProductDisplayTitle($selProdId, $siteLangId, true);
-                    $txt .= '<div class="item__title">' . $productName . '</div>';
-                    $txt .= '</div>';
-                    $td->appendElement('plaintext', array(), $txt, true);
+                case 'product_name':               
+                    $str = $this->includeTemplate('_partial/productProfile.php', ['product' => $row ,'siteLangId'=> $siteLangId], false, true);    
+                    $td->appendElement('plaintext', array(), $str, true);
                     break;
                 case 'selprod_price':
                     $price = CommonHelper::displayMoneyFormat($row[$column], true, true);

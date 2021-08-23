@@ -33,11 +33,7 @@
                     $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[' . $selProdId . ']" value=' . $selProdId . '></label>', true);
                     break;
                 case 'product_name':
-                    // last Param of getProductDisplayTitle function used to get title in html form.
-                    $txt = '<div class="item__description">';
-                    //$productName = "<span class='js-prod-name'>" . SellerProduct::getProductDisplayTitle($selProdId, $siteLangId, true) . "</span>";
-                    $txt .= '<div class="item__title js-prod-name">' . SellerProduct::getProductDisplayTitle($selProdId, $siteLangId, true) . '</div>';
-                    $txt .= '</div>';
+                    $txt = $this->includeTemplate('_partial/productProfile.php', ['product' => $linkedToroducts[$selProdId], 'siteLangId' => $siteLangId], false, true);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'upsell_products':

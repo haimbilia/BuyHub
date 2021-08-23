@@ -41,8 +41,8 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'product_name':
                 // last Param of getProductDisplayTitle function used to get title in html form.
-                $productName = SellerProduct::getProductDisplayTitle($selProdId, $siteLangId, true);
-                $td->appendElement('plaintext', array(), $productName, true);
+                $str = $this->includeTemplate('_partial/productProfile.php', ['product' => $row ,'siteLangId'=> $siteLangId], false, true);
+                $td->appendElement('plaintext', array(), $str, true);
                 break;
             case 'voldiscount_min_qty':
             case 'voldiscount_percentage':

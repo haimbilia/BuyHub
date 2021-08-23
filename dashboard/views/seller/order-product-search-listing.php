@@ -38,25 +38,8 @@
                     $txt .= '</a><br/>' . FatDate::format($order['order_date_added']);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
-                case 'product':
-                    $txt = '<div class="item__description">';
-                    if ($order['op_selprod_title'] != '') {
-                        $txt .= '<div class="item__title">' . $order['op_selprod_title'] . '</div>';
-                    }
-                    $txt .= '<div class="item__sub_title">' . $order['op_product_name'] . '</div>';
-
-                    $txt .= '<div class="item__brand">';
-                    if (!empty($order['op_brand_name'])) {
-                        $txt .=  Labels::getLabel('LBL_Brand', $siteLangId) . ': ' . $order['op_brand_name'];
-                    }
-                    if (!empty($order['op_brand_name']) && !empty($order['op_selprod_options'])) {
-                        $txt .= ' | ';
-                    }
-                    if ($order['op_selprod_options'] != '') {
-                        $txt .= $order['op_selprod_options'];
-                    }
-                    $txt .= '</div>';
-                    $txt .= '</div>';
+                case 'product':                      
+                    $txt = $this->includeTemplate('_partial/productProfile.php', ['order' => $order, 'siteLangId' => $siteLangId], false, true);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'total':
