@@ -293,6 +293,8 @@
                 align-items: center;
             }
             &_body {
+                max-height: 400px;
+                overflow-y: auto;
                 h6 {
                     font-weight: 600;
                     font-size: 0.85rem;
