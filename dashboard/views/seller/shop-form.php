@@ -38,7 +38,7 @@ $btnSubmit->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 
 $variables = array('language' => $language, 'siteLangId' => $siteLangId, 'shop_id' => $shop_id, 'action' => $action);
 $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false); ?>
-<div class="tabs__content tabs__content-js">
+<div class="tabs__content-js">
     <div class="card">
         <div class="card-body ">
             <div class="row">

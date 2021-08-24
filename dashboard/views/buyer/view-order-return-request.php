@@ -83,29 +83,7 @@
                                         <td><?php echo $request['op_invoice_number']; ?>
                                         </td>
                                         <td>
-                                            <div class="item__description">
-                                                <?php if ($request['op_selprod_title'] != '') { ?>
-                                                    <div class="item__title" title="<?php echo $request['op_selprod_title']; ?>"><?php echo $request['op_selprod_title']; ?></div>
-                                                    <div class="item__sub_title"><?php echo $request['op_product_name']; ?></div>
-                                                <?php } else { ?>
-                                                    <div class="item__title" title="<?php echo $request['op_product_name']; ?>"><?php echo $request['op_product_name']; ?></div>
-                                                <?php } ?>
-                                                <?php if (!empty($request['op_brand_name'])) { ?>
-                                                    <div class="item__brand"><?php echo Labels::getLabel('LBL_Brand', $siteLangId); ?>: <?php echo $request['op_brand_name']; ?></div>
-                                                <?php } ?>
-                                                <?php
-                                                if ($request['op_selprod_options'] != '') { ?>
-                                                    <div class="item__specification"><?php echo $request['op_selprod_options']; ?></div>
-                                                <?php }    ?>
-
-                                                <?php if ($request['op_selprod_sku'] != '') { ?>
-                                                    <div class="item__sku"><?php echo Labels::getLabel('LBL_SKU', $siteLangId) . ':  ' . $request['op_selprod_sku']; ?> </div>
-                                                <?php } ?>
-
-                                                <?php if ($request['op_product_model'] != '') { ?>
-                                                    <div class="item__model"><?php echo Labels::getLabel('LBL_Model', $siteLangId) . ':  ' . $request['op_product_model']; ?></div>
-                                                <?php }    ?>
-                                            </div>
+                                            <?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $request ,'siteLangId'=> $siteLangId], false, true);?>                                          
                                         </td>
                                         <td><?php echo $request['orrequest_qty']; ?></td>
                                         <td> <?php echo $returnRequestTypeArr[$request['orrequest_type']]; ?></td>

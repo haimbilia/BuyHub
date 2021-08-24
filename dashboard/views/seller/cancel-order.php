@@ -45,10 +45,10 @@
                         </div>
                         <div class="gap"></div>
                         <div class="js-scrollable table-wrap scroll scroll-x">
-                            <table class="table">
-                                <tbody>
-                                    <tr class="">
-                                        <th colspan="2"><?php echo Labels::getLabel('LBL_Order_Particulars', $siteLangId); ?></th>
+                            <table class="table table-justified">
+                                <thead>
+                                    <tr>
+                                        <th><?php echo Labels::getLabel('LBL_Order_Particulars', $siteLangId); ?></th>
                                         <?php if (!empty($orderDetail['shippingAddress'])) { ?>
                                             <th>
                                                 <?php echo Labels::getLabel('LBL_SHIPPING_METHOD', $siteLangId); ?>
@@ -63,38 +63,11 @@
 
                                         <th><?php echo Labels::getLabel('LBL_Total', $siteLangId); ?></th>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <?php
-                                            $prodOrBatchUrl = 'javascript:void(0)';
-                                            if ($orderDetail['op_is_batch']) {
-                                                $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($orderDetail['op_selprod_id']), CONF_WEBROOT_FRONTEND);
-                                                $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($orderDetail['op_selprod_id'], $siteLangId, "SMALL"), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
-                                            } else {
-                                                if (Product::verifyProductIsValid($orderDetail['op_selprod_id']) == true) {
-                                                    $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($orderDetail['op_selprod_id']), CONF_WEBROOT_FRONTEND);
-                                                }
-                                                $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($orderDetail['selprod_product_id'], "SMALL", $orderDetail['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
-                                            }  ?>
-                                            <figure class="item__pic"><a href="<?php echo $prodOrBatchUrl; ?>"><img src="<?php echo $prodOrBatchImgUrl; ?>" title="<?php echo $orderDetail['op_product_name']; ?>" alt="<?php echo $orderDetail['op_product_name']; ?>"></a></figure>
-                                        </td>
-                                        <td>
-                                            <div class="item__description">
-                                                <span class="item__title">
-                                                    <a title="<?php echo $orderDetail['op_product_name']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
-                                                        <?php if ($orderDetail['op_selprod_title'] != '') {
-                                                            echo  $orderDetail['op_selprod_title'] . '<br/>';
-                                                        } else {
-                                                            echo $orderDetail['op_product_name'];
-                                                        }
-                                                        ?>
-                                                    </a>
-                                                </span>
-                                                <p><?php echo Labels::getLabel('Lbl_Brand', $siteLangId) ?>: <?php echo CommonHelper::displayNotApplicable($siteLangId, $orderDetail['op_brand_name']); ?></p>
-                                                <?php if ($orderDetail['op_selprod_options'] != '') { ?>
-                                                    <p><?php echo $orderDetail['op_selprod_options']; ?></p>
-                                                <?php } ?>
-                                            </div>
+                                  </thead>
+                                <tbody>                                    
+                                    <tr>                                        
+                                        <td>                                           
+                                            <?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $orderDetail ,'siteLangId'=> $siteLangId], false, true);?>
                                         </td>
                                         <?php if (!empty($orderDetail['shippingAddress'])) { ?>
                                             <td>
@@ -238,14 +211,17 @@
                         <?php if (!empty($orderDetail['comments'])) { ?>
                             <div class="section--repeated js-scrollable table-wrap">
                                 <h5><?php echo Labels::getLabel('LBL_Posted_Comments', $siteLangId); ?></h5>
-                                <table class="table align--left">
-                                    <tbody>
-                                        <tr class="hide--mobile">
+                                <table class="table table-justified">
+                                    <thead>
+                                    <tr class="hide--mobile">
                                             <th><?php echo Labels::getLabel('LBL_Date_Added', $siteLangId); ?></th>
                                             <th><?php echo Labels::getLabel('LBL_Customer_Notified', $siteLangId); ?></th>
                                             <th><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?></th>
                                             <th><?php echo Labels::getLabel('LBL_Comments', $siteLangId); ?></th>
-                                        </tr>
+                                    </tr>
+                                  </thead>
+                                    
+                                    <tbody>                                        
                                         <?php
                                         foreach ($orderDetail['comments'] as $row) { ?>
                                             <tr>

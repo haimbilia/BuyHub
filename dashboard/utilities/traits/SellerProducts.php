@@ -1633,9 +1633,8 @@ trait SellerProducts
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId && count($languages) > 1) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-
-        $frm->addButton('', 'btn_next', Labels::getLabel("LBL_Save_&_Next", $this->siteLangId));
         $frm->addButton('', 'btn_exit', Labels::getLabel("LBL_Save_&_Exit", $this->siteLangId));
+        $frm->addButton('', 'btn_next', Labels::getLabel("LBL_Save_&_Next", $this->siteLangId));        
         return $frm;
     }
 

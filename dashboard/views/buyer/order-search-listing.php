@@ -71,6 +71,7 @@
                         $txt .= '<div class="item__specification">' . Labels::getLabel('LBL_Part_combined_order', $siteLangId) . ' <a title="' . Labels::getLabel('LBL_View_Order_Detail', $siteLangId) . '" href="' . UrlHelper::generateUrl('Buyer', 'viewOrder', array($order['order_id'])) . '">' . $order['order_id'] . '</div>';
                     }
                     $txt .= '</div>';
+                    $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $order ,'siteLangId'=> $siteLangId], false, true);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'total':

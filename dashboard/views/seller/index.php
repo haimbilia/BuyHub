@@ -295,91 +295,41 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                     <table class="table table-justified">
                                         <thead>
                                             <tr class="">
-                                                <th width="60%">
+                                                <th width="50%">
                                                     <?php echo Labels::getLabel('LBL_Order_Particulars', $siteLangId); ?>
                                                 </th>
-                                                <th width="20%"><?php echo Labels::getLabel('LBL_Amount', $siteLangId); ?>
+                                                <th width="15%"><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?>
+                                                <th width="15%"><?php echo Labels::getLabel('LBL_Amount', $siteLangId); ?>
                                                 </th>
                                                 <th width="20%"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php if (count($orders) > 0) {
-                                                foreach ($orders as $orderId => $row) {
-                                                    $orderDetailUrl = UrlHelper::generateUrl('seller', 'viewOrder', array($row['op_id']));
-                                                    $prodOrBatchUrl = 'javascript:void(0)';
-                                                    if ($row['op_is_batch']) {
-                                                        $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($row['op_selprod_id']), CONF_WEBROOT_FRONTEND);
-                                                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($row['op_selprod_id'], $siteLangId, "SMALL"), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
-                                                    } else {
-                                                        if (Product::verifyProductIsValid($row['op_selprod_id']) == true) {
-                                                            $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($row['op_selprod_id']), CONF_WEBROOT_FRONTEND);
-                                                        }
-                                                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($row['selprod_product_id'], "SMALL", $row['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
-                                                    }
-                                                    /* $prodName = '';
-                                                if($row['op_selprod_title']!=''){
-                $prodName.= $row['op_selprod_title'].'<br/>';
-                                                }
-                                                $prodName.= $row['op_product_name']; */ ?> <tr>
-
-                                                        <td>
-                                                            <div class="item">
-                                                                <figure class="item__pic"><a href="<?php echo $prodOrBatchUrl; ?>"><img src="<?php echo $prodOrBatchImgUrl; ?>" title="<?php echo $row['op_product_name']; ?>" alt="<?php echo $row['op_product_name']; ?>"></a>
-                                                                </figure>
-                                                                <div class="item__description">
-                                                                    <div class="item__date">
-                                                                        <?php echo FatDate::format($row['order_date_added']); ?>
-                                                                    </div>
-                                                                    <?php if ($row['op_selprod_title'] != '') { ?>
-                                                                        <div class="item__title">
-                                                                            <a title="<?php echo $row['op_selprod_title']; ?>" href="<?php echo $prodOrBatchUrl; ?>"><?php echo $row['op_selprod_title']; ?></a>
-                                                                        </div>
-                                                                    <?php } else { ?>
-                                                                        <div class="item__sub_title">
-                                                                            <?php echo $row['op_product_name']; ?>
-                                                                            <a title="<?php echo $row['op_product_name']; ?>" href="<?php echo $prodOrBatchUrl; ?>"><?php echo $row['op_product_name']; ?>
-                                                                            </a>
-                                                                        </div>
-                                                                    <?php } ?>
-                                                                    <div class="item__brand">
-                                                                        <?php echo Labels::getLabel('Lbl_Brand', $siteLangId) ?>:
-                                                                        <?php echo CommonHelper::displayNotApplicable($siteLangId, $row['op_brand_name']); ?>
-                                                                    </div>
-                                                                    <?php if ($row['op_selprod_options'] != '') { ?>
-                                                                        <div class="item__specification">
-                                                                            <?php echo $row['op_selprod_options']; ?></div>
-                                                                    <?php } ?>
-                                                                    <div class="item__specification">
-                                                                        <span class="label label-inline <?php echo $classArr[$row['orderstatus_color_class']]; ?>">
-                                                                            <?php
-                                                                            echo $row['orderstatus_name'];
-                                                                            /* $paymentMethodCode = Plugin::getAttributesById($row['order_pmethod_id'], 'plugin_code');
-                                                                            if (strtolower($paymentMethodCode) == 'cashondelivery' && $row['opshipping_fulfillment_type'] == Shipping::FULFILMENT_PICKUP) {
-                                                                                echo Labels::getLabel('LBL_PAY_ON_PICKUP', $siteLangId);
-                                                                            } else {
-                                                                                echo $row['orderstatus_name']; 
-                                                                            } */
-                                                                            ?>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="item__price">
-                                                                <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($row, 'netamount', false, User::USER_TYPE_SELLER)); ?>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <ul class="actions">
-                                                                <li><a title="<?php echo Labels::getLabel('LBL_View_Order', $siteLangId); ?>" href="<?php echo $orderDetailUrl; ?>"><i class="fa fa-eye"></i></a></li>
-                                                                <?php if (!in_array($row["op_status_id"], $notAllowedStatues)) { ?>
-                                                                    <li><a href="<?php echo UrlHelper::generateUrl('seller', 'cancelOrder', array($row['op_id'])); ?>" title="<?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId); ?>"><i class="fas fa-times"></i></a></li>
-                                                                <?php } ?>
-                                                            </ul>
-                                                        </td>
-                                                    </tr>
+                                                foreach ($orders as $orderId => $row) { ?> 
+                                            <tr>
+                                                    <td>
+                                                        <?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $row ,'siteLangId'=> $siteLangId, 'showDate'=> true], false, true);?>
+                                                    </td>
+                                                    <td>                                                           
+                                                        <span class="label label-inline <?php echo $classArr[$row['orderstatus_color_class']]; ?>">
+                                                            <?php  echo $row['orderstatus_name']; ?>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="item__price">
+                                                            <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($row, 'netamount', false, User::USER_TYPE_SELLER)); ?>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <ul class="actions">
+                                                            <li><a title="<?php echo Labels::getLabel('LBL_View_Order', $siteLangId); ?>" href="<?php echo $orderDetailUrl; ?>"><i class="fa fa-eye"></i></a></li>
+                                                            <?php if (!in_array($row["op_status_id"], $notAllowedStatues)) { ?>
+                                                                <li><a href="<?php echo UrlHelper::generateUrl('seller', 'cancelOrder', array($row['op_id'])); ?>" title="<?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId); ?>"><i class="fas fa-times"></i></a></li>
+                                                            <?php } ?>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
                                                 <?php }
                                             } else { ?>
                                                 <tr>
@@ -522,7 +472,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                                 <div class="item__title">
                                                                     <a title="<?php echo Labels::getLabel('LBL_Invoice_number', $siteLangId); ?>" href="<?php echo $orderDetailUrl; ?>"><?php echo $row['op_invoice_number']; ?></a>
                                                                 </div>
-                                                                <div class="item__title">
+                                                                <div class="item__sub_title">
                                                                     <?php if ($row['op_selprod_title'] != '') { ?>
                                                                         <a title="<?php echo $row['op_selprod_title']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
                                                                             <?php echo $row['op_selprod_title']; ?> </a>
@@ -531,7 +481,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                                             <?php echo $row['op_product_name']; ?> </a>
                                                                     <?php } ?>
                                                                 </div>
-                                                            </div>
+                                                            </div>                                                            
                                                         </td>
                                                         <td>
                                                             <div class="request__qty"> <?php echo $row['orrequest_qty']; ?> </div>
@@ -617,7 +567,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                                     <a title="<?php echo Labels::getLabel('Lbl_Invoice_number', $siteLangId) ?>" href="<?php echo $orderDetailUrl; ?>">
                                                                         <?php echo $row['op_invoice_number']; ?> </a>
                                                                 </div>
-                                                                <div class="item__title">
+                                                                <div class="item__sub_title">
                                                                     <?php if ($row['op_selprod_title'] != '') { ?>
                                                                         <a title="<?php echo $row['op_selprod_title']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
                                                                             <?php echo $row['op_selprod_title']; ?> </a>

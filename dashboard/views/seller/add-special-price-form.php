@@ -7,12 +7,12 @@
 
     $startDate = $frm->getField('splprice_start_date');
     $startDate->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Price_Start_Date', $siteLangId));
-    $startDate->setFieldTagAttribute('class', 'date_js');
+    $startDate->setFieldTagAttribute('class', 'date_js field--calender');
     $startDate->setFieldTagAttribute('disabled', 'disabled');
 
     $endDate = $frm->getField('splprice_end_date');
     $endDate->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Price_End_Date', $siteLangId));
-    $endDate->setFieldTagAttribute('class', 'date_js');
+    $endDate->setFieldTagAttribute('class', 'date_js field--calender');
     $endDate->setFieldTagAttribute('disabled', 'disabled');
 
     $splPrice = $frm->getField('splprice_price');

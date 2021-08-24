@@ -24,18 +24,16 @@
 <?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <div class="content-header row">
-            <div class="col">
-                <?php $this->includeTemplate('_partial/dashboardTop.php'); ?>
-                <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Seller_Options', $siteLangId); ?></h2>
+        <div class="content-header">
+            <div class="content-header-title">              
+                <h2><?php echo Labels::getLabel('LBL_Seller_Options', $siteLangId); ?></h2>
             </div>
             <?php if ($canEdit) { ?>
-            <div class="col-auto">
-                <div class="btn-group">
+            <div class="content-header-toolbar">
+                <div class="">
                     <a class="btn btn-outline-brand btn-sm"
                         title="<?php echo Labels::getLabel('LBL_Add_Option', $siteLangId); ?>" onclick="optionForm(0)"
-                        href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Add_Option', $siteLangId); ?></a>
-                    <!-- <a href="#modal-popup" class="btn-block modaal-inline-content link" onclick="optionForm(0)"><?php echo Labels::getLabel('LBL_Add_Option', $siteLangId);?></a> -->
+                        href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Add_Option', $siteLangId); ?></a>          
                     <a class="btn btn-outline-brand btn-sm formActionBtn-js disabled"
                         title="<?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>" onclick="deleteOptions()"
                         href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?></a>
