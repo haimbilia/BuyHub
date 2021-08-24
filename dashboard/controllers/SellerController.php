@@ -558,6 +558,7 @@ class SellerController extends SellerBaseController
         }
         $productType = !empty($orderDetail['selprod_product_id']) ? Product::getAttributesById($orderDetail['selprod_product_id'], 'product_type') : 0;
 
+        $this->set('arr', [$orderDetail]);
         $this->set('unitTypeArray', ShippingPackage::getUnitTypes($this->siteLangId));
 
         $this->set('highlightEnabled', $highlightEnabled);

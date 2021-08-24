@@ -1,6 +1,24 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $canViewShippingCharges = isset($canViewShippingCharges) ? $canViewShippingCharges : false;
 $canViewTaxCharges = isset($canViewTaxCharges) ? $canViewTaxCharges : false;
+$primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
+
+$transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderDetail['plugin_code']);
+$cartTotal = 0;
+$shippingCharges = 0;
+$totalTax = 0;
+
+foreach ($arr as $childOrder) {
+    $cartTotal = $cartTotal + CommonHelper::orderProductAmount($childOrder, 'cart_total');
+    $shippingCharges = $shippingCharges + CommonHelper::orderProductAmount($childOrder, 'shipping');
+    if (empty($childOrder['taxOptions'])) {
+        $totalTax = $totalTax + CommonHelper::orderProductAmount($childOrder, 'TAX');
+    } else {
+        foreach ($childOrder['taxOptions'] as $key => $val) {
+            $totalTax = $totalTax + $val['value'];
+        }
+    }
+}
 ?>
 <div class="col-md-4">
     <div class="ml-md-4">
@@ -123,8 +141,10 @@ $canViewTaxCharges = isset($canViewTaxCharges) ? $canViewTaxCharges : false;
                 <h4><?php echo Labels::getLabel('LBL_PACKAGE_DETAIL', $siteLangId); ?></h4>
                 <div class="order-block-data">
                     <?php 
-                        $unitType = $unitTypeArray[$orderDetail['op_product_dimension_unit']];
-                        include CONF_VIEW_DIR_PATH . '_partial/order/package-detail.php'; 
+                        $data = $this->variables + [
+                            'unitType' => $unitTypeArray[$orderDetail['op_product_dimension_unit']],
+                        ];
+                        $this->includeTemplate('_partial/order/package-detail.php', $data, false);
                     ?>
                 </div>
             </div>
@@ -134,9 +154,11 @@ $canViewTaxCharges = isset($canViewTaxCharges) ? $canViewTaxCharges : false;
             <div class="order-block">
                 <h4><?php echo Labels::getLabel('LBL_Shipping_ADDRESS', $siteLangId); ?></h4>
                 <div class="order-block-data">
-                    <?php
-                        $address = $orderDetail['shippingAddress'];
-                        include CONF_VIEW_DIR_PATH . '_partial/order/address.php';
+                    <?php 
+                        $data = $this->variables + [
+                            'address' => $orderDetail['shippingAddress'],
+                        ];
+                        $this->includeTemplate('_partial/order/address.php', $data, false);
                     ?>
                 </div>
             </div>
@@ -146,9 +168,11 @@ $canViewTaxCharges = isset($canViewTaxCharges) ? $canViewTaxCharges : false;
                 <?php echo Labels::getLabel('LBL_Billing_ADDRESS', $siteLangId); ?>: <i class="dropdown-toggle-custom-arrow"></i></h4>
             <div class="collapse" id="order-block2">
                 <div class="order-block-data">
-                    <?php
-                    $address = $orderDetail['billingAddress'];
-                    include CONF_VIEW_DIR_PATH . '_partial/order/address.php';
+                    <?php 
+                        $data = $this->variables + [
+                            'address' => $orderDetail['billingAddress'],
+                        ];
+                        $this->includeTemplate('_partial/order/address.php', $data, false);
                     ?>
                 </div>
             </div>
@@ -162,9 +186,11 @@ $canViewTaxCharges = isset($canViewTaxCharges) ? $canViewTaxCharges : false;
                 </h4>
                 <div class="collapse" id="order-block3">
                     <div class="order-block-data">
-                        <?php
-                        $address = $orderDetail['pickupAddress'];
-                        include CONF_VIEW_DIR_PATH . '_partial/order/address.php';
+                        <?php 
+                            $data = $this->variables + [
+                                'address' => $orderDetail['pickupAddress'],
+                            ];
+                            $this->includeTemplate('_partial/order/address.php', $data, false);
                         ?>
                     </div>
                 </div>

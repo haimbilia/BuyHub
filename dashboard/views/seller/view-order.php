@@ -139,11 +139,16 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                 <div class="card-body ">
                     <div class="row">
                         <?php
-                        $canViewShippingCharges = $canViewTaxCharges = true;
-                        $childOrderDetail = $orderDetail;
-                        include CONF_VIEW_DIR_PATH . '_partial/order/right-side-block.php';
-                        include CONF_VIEW_DIR_PATH . '_partial/order/left-side-block.php';
+                        $this->includeTemplate('_partial/order/right-side-block.php', $this->variables, false); 
+
+                        $data = $this->variables + [
+                            'canViewShippingCharges' => true,
+                            'canViewTaxCharges' => true,
+                            'childOrderDetail' => $orderDetail
+                        ];
+                        $this->includeTemplate('_partial/order/left-side-block.php', $data, false); 
                         ?>
+                        
                     </div>
 
                     <div class="row">

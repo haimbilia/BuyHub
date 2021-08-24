@@ -4,29 +4,6 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
 ?>
 <div class="col-md-8">
     <div class="table-wrap">
-        <?php
-        $cartTotal = 0;
-        $shippingCharges = 0;
-        $totalTax = 0;
-        $total = 0;
-        if (true == $primaryOrder) {
-            $arr[] = $childOrderDetail;
-        } else {
-            $arr = $childOrderDetail;
-        }
-        $taxOptionsTotal = array();
-        foreach ($arr as $childOrder) {
-            $shippingCharges = $shippingCharges + CommonHelper::orderProductAmount($childOrder, 'shipping');
-            if (empty($childOrder['taxOptions'])) {
-                $totalTax = $totalTax + CommonHelper::orderProductAmount($childOrder, 'TAX');
-            } else {
-                foreach ($childOrder['taxOptions'] as $key => $val) {
-                    $totalTax = $totalTax + $val['value'];
-                }
-            }
-        }
-        ?>
-
         <table class="table table-justified table-orders">
             <thead>
                 <tr>
@@ -38,8 +15,6 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
             <tbody>
                 <?php
                 foreach ($arr as $childOrder) {
-                    $cartTotal = $cartTotal + CommonHelper::orderProductAmount($childOrder, 'cart_total');
-
                     $prodOrBatchUrl = 'javascript:void(0)';
                     if ($childOrder['op_is_batch']) {
                         $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($childOrder['op_selprod_id']), CONF_WEBROOT_FRONTEND);
@@ -52,7 +27,8 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                     } ?>
                     <tr>
                         <td>
-                            <div class="item">
+                            <?php $this->includeTemplate('_partial/product/product-info-html.php', ['product' => $row ,'siteLangId'=> $siteLangId], false); ?>
+                            <?php /* <div class="item">
                                 <figure class="item__pic">
                                     <a href="<?php echo $prodOrBatchUrl; ?>">
                                         <img src="<?php echo $prodOrBatchImgUrl; ?>" title="<?php echo $childOrder['op_product_name']; ?>" alt="<?php echo $childOrder['op_product_name']; ?>">
@@ -89,7 +65,7 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                                         <?php echo Labels::getLabel('LBL_Sold_By', $siteLangId) . ': ' . $childOrder['op_shop_name']; ?>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */ ?>
                         </td>
                         <td><?php echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?></td>
                         <td><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder), true, false, true, false, true); ?></td>
@@ -102,7 +78,7 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
     if (true == $primaryOrder) { ?>
         <div class="timelines-wrap">
             <h5 class="card-title"><?php echo Labels::getLabel('MSG_ORDER_TIMELINE', $siteLangId); ?></h5>
-            <?php include CONF_VIEW_DIR_PATH . '_partial/order/timeline.php';  ?>
+            <?php $this->includeTemplate('_partial/order/timeline.php', $this->variables, false); ?>
         </div>
     <?php } ?>
 </div>

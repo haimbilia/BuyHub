@@ -36,10 +36,6 @@ if (true == $primaryOrder) {
     $totalSaving = $selProdTotalSpecialPrice + $firstOrderInfo['order_discount_total'] + $firstOrderInfo['order_volume_discount_total'];
 }
 
-$orderStatusArr = Orders::getOrderPaymentStatusArr($siteLangId);
-
-$transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderDetail['plugin_code']);
-
 $opshippingDate = $timeSlotFrom = $timeSlotTo = "";
 if (true == $primaryOrder) {
     $opshippingDate = isset($childOrderDetail['opshipping_date']) ? $childOrderDetail['opshipping_date'] . ' ' : '';
@@ -108,9 +104,13 @@ if (!$print) { ?>
                 <div class="card-body">
                     <div class="row">
                         <?php 
-                        $canViewShippingCharges = $canViewTaxCharges = true;
-                        include CONF_VIEW_DIR_PATH . '_partial/order/right-side-block.php'; 
-                        include CONF_VIEW_DIR_PATH . '_partial/order/left-side-block.php'; 
+                            $this->includeTemplate('_partial/order/right-side-block.php', $this->variables, false); 
+
+                            $data = $this->variables + [
+                                'canViewShippingCharges' => true,
+                                'canViewTaxCharges' => true,
+                            ];
+                            $this->includeTemplate('_partial/order/left-side-block.php', $data, false); 
                         ?>
                     </div>
 

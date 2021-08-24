@@ -315,6 +315,10 @@ class BuyerController extends BuyerBaseController
             $orderProductStatusArr = [Orders::ORDER_PAYMENT_PENDING => Labels::getLabel('LBL_PAYMENT_PENDING', $this->siteLangId)] + $orderProductStatusArr;
         }
 
+        $orderStatusArr = Orders::getOrderPaymentStatusArr($this->siteLangId);
+        $arr = (true == $primaryOrderDisplay) ? [$childOrderDetail] : $childOrderDetail;
+        $this->set('arr', $arr);
+
         $frm = $this->getTransferBankForm($this->siteLangId, $orderId);
         $this->set('frm', $frm);
 
@@ -322,6 +326,7 @@ class BuyerController extends BuyerBaseController
         $this->set('currentStatus', $currentStatus);
         $this->set('orderProductStatusArr', $orderProductStatusArr);
         $this->set('orderTimeLine', $orderTimeLine);
+        $this->set('orderStatusArr', $orderStatusArr);
 
         $this->set('orderDetail', $orderDetail);
         $this->set('childOrderDetail', $childOrderDetail);
