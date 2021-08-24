@@ -553,6 +553,7 @@ class ShopsController extends MyAppController
             'productSearchPageType' => SavedSearchProduct::PAGE_SHOP,
             'recordId' => $shop_id,
             'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'categories'),
+            'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId) 
         );
 
         if (false === MOBILE_APP_API_CALL) {
@@ -569,6 +570,7 @@ class ShopsController extends MyAppController
             $this->set('postedData', $get);
             $this->set('recordCount', $data['recordCount']);
             $this->set('siteLangId', $this->siteLangId);
+            $this->set('pageSizeArr', $data['pageSizeArr']);
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }

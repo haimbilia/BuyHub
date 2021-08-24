@@ -12,7 +12,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             if ($canEdit && !$noRecordFound) { ?>
                 <div class="col-auto">
                     <div class="dropdown dashboard-user">
-                        <button class="btn btn-outline-brand dropdown-toggle" type="button" id="dashboardDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-outline-brand dropdown-toggle btn-sm" type="button" id="dashboardDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <?php echo Labels::getLabel('LBL_New_Request', $siteLangId); ?>
                         </button>
                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dashboardDropdown">

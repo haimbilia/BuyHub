@@ -7,6 +7,7 @@ $frmSearch->developerTags['fld_default_col'] = 4;
 
 $keyFld = $frmSearch->getField('keyword');
 $keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $siteLangId));
+$keyFld->developerTags['col'] = 8;
 $keyFld->developerTags['noCaptionTag'] = true;
 
 
@@ -19,6 +20,7 @@ $cancelBtnFld = $frmSearch->getField('btn_clear');
 $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 $cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->developerTags['noCaptionTag'] = true;
+$frmSearch->getField('keyword')->developerTags['noCaptionTag'] = true;
 
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
@@ -33,7 +35,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="card">
+                    <div class="card card-search">
                         <div class="card-body">
                             <div class="replaced">
                                 <?php echo $frmSearch->getFormHtml(); ?>

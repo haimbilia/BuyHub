@@ -19,7 +19,8 @@
                         <h4><?php echo Labels::getLabel('LBL_Shipping_Methods_List', $adminLangId); ?> </h4>
                         <?php
                         if ($canEdit) {
-                            $this->includeTemplate('_partial/action-buttons.php', ['deleteButton' => false, 'adminLangId' => $adminLangId], false);
+                            $this->includeTemplate('_partial/action-buttons.php', ['adminLangId' => $adminLangId,
+                            'statusButtons' => true], false);
                         }
                         ?>
                     </div>

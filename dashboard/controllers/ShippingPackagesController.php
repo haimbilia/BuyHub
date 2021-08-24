@@ -51,6 +51,10 @@ class ShippingPackagesController extends SellerBaseController
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
         $this->set('canEdit', $this->userPrivilege->canEditShippingPackages(0, true));
+        if(FatApp::getPostedData('popup', FatUtility::VAR_INT, 0)){
+            $this->_template->render(false, false,'shipping-packages/search-popup.php');
+            return;
+        }
         $this->_template->render(false, false);
     }
     

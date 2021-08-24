@@ -1625,7 +1625,7 @@ trait SellerProducts
         $frm->addTextarea(Labels::getLabel("LBL_Meta_Keywords", $this->siteLangId), 'meta_keywords');
         $frm->addTextarea(Labels::getLabel("LBL_Meta_Description", $this->siteLangId), 'meta_description');
         $fld = $frm->addTextarea(Labels::getLabel("LBL_Other_Meta_Tags", $this->siteLangId), 'meta_other_meta_tags');
-        $fld->htmlAfterField = '<small class="text--small">' . Labels::getLabel('LBL_For_Example:', $this->siteLangId) . ' ' . htmlspecialchars('<meta name="copyright" content="text">') . '</small>';
+        $fld->htmlAfterField = '<small class="form-text text-muted">' . Labels::getLabel('LBL_For_Example:', $this->siteLangId) . ' ' . htmlspecialchars('<meta name="copyright" content="text">') . '</small>';
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
@@ -2677,6 +2677,11 @@ trait SellerProducts
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
         $arrListing = $db->fetchAll($rs);
+        if (count($arrListing)) {
+            foreach ($arrListing as &$arr) {
+                $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
+            }
+        }
 
         $this->set("arrListing", $arrListing);
         $this->set('canEdit', $this->userPrivilege->canEditVolumeDiscount(UserAuthentication::getLoggedUserId(), true));
@@ -2888,6 +2893,22 @@ trait SellerProducts
         foreach ($relatedProds as $key => $relatedProd) {
             $arrListing[$relatedProd['related_sellerproduct_id']][$key] = $relatedProd;
         }
+        if(count($arrListing)){
+            $prodSrch = new ProductSearch($this->siteLangId, null, null, false, false);
+            $prodSrch->joinSellerProducts(0, '', array(), false, false);          
+            $prodSrch->addCondition('selprod_id', 'IN', array_keys($arrListing));
+            $prodSrch->addMultipleFields(array('selprod_id', 'product_id', 'product_identifier', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title','product_updated_on','selprod_product_id'));
+            $prodSrch->addGroupBy('selprod_id');
+            $productRs = $prodSrch->getResultSet();
+            $products = FatApp::getDb()->fetchAll($productRs, 'selprod_id');
+            if (count($products)) {
+                foreach ($products as &$arr) {
+                    $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
+                }
+            }            
+            $this->set("linkedToProducts", $products);
+        }
+        
         $this->set("arrListing", $arrListing);
         $this->set('canEdit', $this->userPrivilege->canEditRelatedProducts(UserAuthentication::getLoggedUserId(), true));
         $this->set('page', $page);
@@ -3060,7 +3081,7 @@ trait SellerProducts
             $cnd->attachCondition('product_identifier', 'LIKE', '%' . $keyword . '%', 'OR');
         }
         $srch->addCondition('selprod_user_id', '=', $this->userParentId);
-        $srch->addFld('if(upsell_sellerproduct_id = ' . $selProdId . ', 1 , 0) as priority');
+        $srch->addFld('if(upsell_sellerproduct_id = ' . $selProdId . ', 1 , 0) as priority'); 
         $srch->addGroupBy('selprod_id');
         $srch->addGroupBy('upsell_sellerproduct_id');
         $srch->addOrder('priority', 'DESC');
@@ -3072,8 +3093,23 @@ trait SellerProducts
         // CommonHelper::printArray($upsellProds); die;
         foreach ($upsellProds as $key => $upsellProd) {
             $arrListing[$upsellProd['upsell_sellerproduct_id']][$key] = $upsellProd;
+        }        
+        if(count($arrListing)){
+            $prodSrch = new ProductSearch($this->siteLangId, null, null, false, false);
+            $prodSrch->joinSellerProducts(0, '', array(), false, false);          
+            $prodSrch->addCondition('selprod_id', 'IN', array_keys($arrListing));
+            $prodSrch->addMultipleFields(array('selprod_id', 'product_id', 'product_identifier', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title','product_updated_on','selprod_product_id'));
+            $prodSrch->addGroupBy('selprod_id');
+            $productRs = $prodSrch->getResultSet();
+            $products = FatApp::getDb()->fetchAll($productRs, 'selprod_id');
+            if (count($products)) {
+                foreach ($products as &$arr) {
+                    $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
+                }
+            }            
+            $this->set("linkedToProducts", $products);
         }
-
+        
         $this->set("arrListing", $arrListing);
         $this->set('canEdit', $this->userPrivilege->canEditBuyTogetherProducts(UserAuthentication::getLoggedUserId(), true));
         $this->set('page', $page);

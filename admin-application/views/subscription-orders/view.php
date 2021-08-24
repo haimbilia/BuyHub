@@ -15,8 +15,6 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');?>
                         <?php
                         $data = [
                             'adminLangId' => $adminLangId,
-                            'statusButtons' => false,
-                            'deleteButton' => false,
                             'otherButtons' => [
                                 [
                                     'attr' => [

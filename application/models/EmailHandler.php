@@ -252,8 +252,14 @@ class EmailHandler extends FatModel
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
 
-        $headers .= 'From: ' . FatApp::getConfig("CONF_FROM_NAME_" . $langId) . "<" . FatApp::getConfig("CONF_FROM_EMAIL") . ">";
-        if (is_array($extra_headers) && isset($extra_headers['ReplyTo'])) {
+        $fromName = FatApp::getConfig("CONF_FROM_NAME_" . $langId, FatUtility::VAR_STRING, '');
+        $fromEmail = FatApp::getConfig("CONF_FROM_EMAIL");
+        
+        $fromName = (empty($fromName) ? $fromEmail : $fromName);    
+
+        $headers .= 'From: ' . $fromName . "<" . $fromEmail . ">";
+        
+        if(is_array($extra_headers) && isset($extra_headers['ReplyTo'])){
             $headers .= "\r\nReply-to: " . $extra_headers['ReplyTo'];
         } else {
             $headers .= "\r\nReply-to: " . FatApp::getConfig("CONF_REPLY_TO_EMAIL");

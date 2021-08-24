@@ -16,8 +16,7 @@ class SlidesController extends MyAppController
         $srchSlide->doNotCalculateRecords();
         $srchSlide->joinPromotions($this->siteLangId, true);
         $srchSlide->addPromotionTypeCondition();
-        $srchSlide->joinUserWallet();
-        $srchSlide->addMinimiumWalletbalanceCondition();
+        $srchSlide->joinUserWallet();      
         $srchSlide->addSkipExpiredPromotionAndSlideCondition();
         $srchSlide->joinBudget();
         $srchSlide->addCondition('slide_id', '=', $slideId);

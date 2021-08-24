@@ -143,6 +143,8 @@ $frm->addHiddenField('', 'plugin_type', $pluginType); ?>
         } else if (in_array($pluginType, Plugin::getKingpinTypeArr()) && $pluginType == Plugin::TYPE_TAX_SERVICES && true === $activeTaxPluginFound) {
             $data = [
                 'adminLangId' => $adminLangId,
+                'statusButtons' => true,
+                'deleteButton' => true,
                 'otherButtons' => [
                     [
                         'attr' => [

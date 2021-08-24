@@ -288,15 +288,21 @@
 .product-detail-gallery {
     position: sticky;
     top: 180px;
-    display: flex;
     margin-#{$end-direction}: 2rem;
     margin-bottom: 2rem;
-    display: flex;
-    justify-content: space-between;
     @include media-breakpoint-down(lg) {
         display: block;
         position: relative;
         top: auto;
+    }
+    .badges-wrap {
+        position: absolute;
+        #{$end-direction}: 0;
+        width: 500px;
+    }
+    .product-gallery {
+        display: flex;
+        justify-content: space-between;
     }
     .slider-for {
         flex: 1;

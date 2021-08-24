@@ -15,7 +15,9 @@ html {
     }
 }
 
-body {}
+body {
+    height: inherit;
+}
 
 :focus {
     box-shadow: none !important;

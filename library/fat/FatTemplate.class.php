@@ -171,7 +171,7 @@ class FatTemplate
         return $str;
     }
 
-    public function includeTemplate($tplPath, $variables = array(), $convertVariablesToHtmlentities = true)
+    public function includeTemplate($tplPath, $variables = array(), $convertVariablesToHtmlentities = true, $return_content = false)
     {
         $template = new FatTemplate('', '');
 
@@ -181,7 +181,7 @@ class FatTemplate
             $template->set($key, $val);
         }
 
-        $template->render(false, false, $tplPath, false, $convertVariablesToHtmlentities);
+        return $template->render(false, false, $tplPath, $return_content, $convertVariablesToHtmlentities);        
     }
 
     /** Display Template **/

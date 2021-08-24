@@ -43,8 +43,6 @@
                     if (isset($canAddNew) && $canAddNew ==true) {
                         $data = [
                             'adminLangId' => $adminLangId,
-                            'statusButtons' => false,
-                            'deleteButton' => false,
                             'otherButtons' => [
                                 [
                                     'attr' => [

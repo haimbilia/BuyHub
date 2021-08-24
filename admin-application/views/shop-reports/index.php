@@ -25,8 +25,6 @@
                             <?php
                             $data = [
                                 'adminLangId' => $adminLangId,
-                                'statusButtons' => false,
-                                'deleteButton' => false,
                                 'otherButtons' => [
                                     [
                                         'attr' => [

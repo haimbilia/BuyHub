@@ -47,8 +47,6 @@ if (0 < $selProd_id) {
                         if ($canEdit) {
                             $data = [
                                 'adminLangId' => $adminLangId,
-                                'statusButtons' => false,
-                                'deleteButton' => false,
                                 'otherButtons' => [
                                     [
                                         'attr' => [

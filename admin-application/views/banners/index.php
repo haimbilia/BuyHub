@@ -29,7 +29,6 @@ $frmSearch->developerTags['fld_default_col'] = 4; */
                     <?php
                     $data = [
                         'statusButtons' => $canEdit,
-                        'deleteButton' => false,
                         'adminLangId' => $adminLangId
                     ];
                     $this->includeTemplate('_partial/action-buttons.php', $data, false);

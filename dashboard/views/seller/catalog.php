@@ -22,7 +22,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="card">
+                    <div class="card card-search">
                         <div class="card-body">
                             <div class="replaced">
                                 <?php
@@ -34,9 +34,9 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 $frmSearchCatalogProduct->developerTags['fld_default_col'] = 12;
 
                                 $keywordFld = $frmSearchCatalogProduct->getField('keyword');
-                                $keywordFld->setFieldTagAttribute('id', 'tour-step-3');
-                                $keywordFld->setWrapperAttribute('class', 'col-lg-4');
+                                $keywordFld->setFieldTagAttribute('id', 'tour-step-3');                    
                                 $keywordFld->developerTags['col'] = 4;
+                                $keywordFld->developerTags['noCaptionTag'] = true;
 
                                 // if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {
                                 // $dateFromFld = $frmSearchCatalogProduct->getField('type');
@@ -44,18 +44,20 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 // $dateFromFld->setWrapperAttribute('class', 'col-lg-2');
                                 // $dateFromFld->developerTags['col'] = 2;
                                 // }
-                                $typeFld = $frmSearchCatalogProduct->getField('product_type');
-                                $typeFld->setWrapperAttribute('class', 'col-lg-2');
-                                $typeFld->developerTags['col'] = 2;
+                                $typeFld = $frmSearchCatalogProduct->getField('product_type');                               
+                                $typeFld->developerTags['col'] = 4;
+                                $typeFld->developerTags['noCaptionTag'] = true;
 
                                 $submitFld = $frmSearchCatalogProduct->getField('btn_submit');
                                 $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
                                 $submitFld->developerTags['col'] = 2;
+                                $submitFld->developerTags['noCaptionTag'] = true;
 
                                 $fldClear = $frmSearchCatalogProduct->getField('btn_clear');
                                 $fldClear->setFieldTagAttribute('onclick', 'clearSearch()');
                                 $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
                                 $fldClear->developerTags['col'] = 2;
+                                $fldClear->developerTags['noCaptionTag'] = true;
                                 /* if( User::canAddCustomProductAvailableToAllSellers() ){
                                       $submitFld = $frmSearchCatalogProduct->getField('btn_submit');
                                       $submitFld->setFieldTagAttribute('class','btn-block');
