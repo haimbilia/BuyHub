@@ -779,6 +779,18 @@ class ProductsController extends MyAppController
             $displayProductNotAvailableLable = true;
         }
 
+        $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, [$selprod_id]);
+        $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, [$selprod_id]);
+
+        $selProdRibbons = [];
+        if (array_key_exists($selprod_id, $tLeftRibbons)) {
+            $selProdRibbons[] = $tLeftRibbons[$selprod_id];
+        }
+        if (array_key_exists($selprod_id, $tRightRibbons)) {
+            $selProdRibbons[] = $tRightRibbons[$selprod_id];
+        }
+        $this->set('selProdRibbons', $selProdRibbons);
+        
         $ratingAspects = SelProdRating::getAvgSelProdReviewsRating($selprod_id, $this->siteLangId);
 
         $this->set('ratingAspects', $ratingAspects);

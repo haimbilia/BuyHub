@@ -5,14 +5,12 @@ if (is_array($ribbRow) && !empty($ribbRow)) {
     $type = $ribbRow['badge_shape_type'];
     $color = $ribbRow['badge_color'];
     $text = $title = $ribbRow['badge_name'];
-    $displayInside = $ribbRow['badge_display_inside'];
-    if (applicationConstants::NO == $displayInside) {
+    if (applicationConstants::NO == $ribbRow['badge_display_inside']) {
         $text = "";
     }
-
     $class = '';
-    if (isset($position) && 0 < $position) {
-        $class = Badge::RIBB_POS_TLEFT == $position  ? 'badges-left' : 'badges-right';
+    if (array_key_exists('blinkcond_position', $ribbRow)) {        
+        $class = ( Badge::RIBB_POS_TLEFT == $ribbRow['blinkcond_position'])  ? 'badges-left' : 'badges-right';
     }
 
     switch ($type) {
@@ -32,3 +30,4 @@ if (is_array($ribbRow) && !empty($ribbRow)) {
             break;
     }
 }
+echo $ribbon;

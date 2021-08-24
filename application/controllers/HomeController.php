@@ -119,11 +119,17 @@ class HomeController extends MyAppController
                     }
                     break;
                 case Collections::TYPE_PRODUCT_LAYOUT1:
+                    $selProdIdsArr = array_keys($collection['products']);
+                    $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+                    $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
+
                     $homePageProdLayout1 = FatCache::get('homePageProdLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
                     if (!$homePageProdLayout1) {
                         $tpl = new FatTemplate('', '');
                         $tpl->set('siteLangId', $this->siteLangId);
                         $tpl->set('collection', $collection);
+                        $tpl->set('tLeftRibbons', $tLeftRibbons);
+                        $tpl->set('tRightRibbons', $tRightRibbons);
                         $tpl->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
                         $homePageProdLayout1 = $tpl->render(false, false, '_partial/collection/product-layout-1.php', true, true);
                         FatCache::set('homePageProdLayout1' . $collection['collection_id'] . $cacheKey, $homePageProdLayout1, '.txt');
@@ -131,6 +137,10 @@ class HomeController extends MyAppController
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageProdLayout1;
                     break;
                 case Collections::TYPE_PRODUCT_LAYOUT2:
+                    $selProdIdsArr = array_keys($collection['products']);
+                    $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+                    $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
+
                     $homePageProdLayout2 = FatCache::get('homePageProdLayout2' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
                     if (!$homePageProdLayout2) {
                         $tpl = new FatTemplate('', '');
@@ -143,6 +153,10 @@ class HomeController extends MyAppController
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageProdLayout2;
                     break;
                 case Collections::TYPE_PRODUCT_LAYOUT3:
+                    $selProdIdsArr = array_keys($collection['products']);
+                    $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+                    $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
+                    
                     $homePageProdLayout3 = FatCache::get('homePageProdLayout3' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
                     if (!$homePageProdLayout3) {
                         $tpl = new FatTemplate('', '');

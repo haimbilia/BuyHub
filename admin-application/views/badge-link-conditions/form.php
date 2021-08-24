@@ -21,8 +21,7 @@ if (Badge::TYPE_BADGE == $badgeType) {
 	$uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
 	$imageHtml = '<img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $badgeName . '" alt="' . $badgeName . '">';
 } else {
-	$ribbRow = $badgeData;
-	include CONF_THEME_PATH . '_partial/get-ribbon.php';
+    $ribbon = $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $badgeData], false, true);
 	$imageHtml = '<div class="badge-wrap">' . $ribbon . '</div>';
 }
 

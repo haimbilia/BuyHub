@@ -61,8 +61,7 @@ foreach ($arrListing as $sn => $row) {
                     $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
                     $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $name, 'alt' => $name], '', true);
                 } else {
-                    $ribbRow = $row;
-                    include CONF_THEME_PATH . '_partial/get-ribbon.php';
+                    $ribbon = $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $row], false, true);
                     $html = '<div class="badge-wrap">' . $ribbon . '</div>';
                     $td->appendElement('plaintext', [], $html, true);
                 }

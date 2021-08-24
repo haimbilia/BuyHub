@@ -1665,7 +1665,6 @@ class AccountController extends LoggedUserController
             }
         }
         /* $wishLists = array_merge($favouriteProducts,$wishLists); */
-
         $this->set('wishLists', $wishLists);
 
         if (true === MOBILE_APP_API_CALL) {
@@ -1771,12 +1770,20 @@ class AccountController extends LoggedUserController
         $rs = $srch->getResultSet();
         /* echo $srch->getQuery(); die; */
         $products = $db->fetchAll($rs);
+
+        $selprodIdsArr = $tLeftRibbons = $tRightRibbons = [];
         if (count($products)) {
             foreach ($products as &$arr) {
                 $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
+                $selprodIdsArr[] = $arr['selprod_id'];
             }
+            
+            $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selprodIdsArr);
+            $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selprodIdsArr);
         }
 
+        $this->set('tRightRibbons', $tRightRibbons);
+        $this->set('tLeftRibbons', $tLeftRibbons);
         $this->set('products', $products);
         $this->set('showProductShortDescription', false);
         $this->set('showProductReturnPolicy', false);
