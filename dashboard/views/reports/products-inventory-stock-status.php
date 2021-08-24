@@ -6,8 +6,7 @@ $frmSearch->developerTags['fld_default_col'] = 12;
 
 $keyFld = $frmSearch->getField('keyword');
 $keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $siteLangId));
-$keyFld->setWrapperAttribute('class', 'col-lg-6');
-$keyFld->developerTags['col'] = 6;
+$keyFld->developerTags['col'] = 8;
 $keyFld->developerTags['noCaptionTag'] = true;
 
 $sortOrder = $frmSearch->getField('sortOrder');
@@ -18,14 +17,12 @@ $sortBy->setFieldTagAttribute('id', 'sortBy');
 
 $submitBtnFld = $frmSearch->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
-$submitBtnFld->setWrapperAttribute('class', 'col-lg-3');
-$submitBtnFld->developerTags['col'] = 3;
+$submitBtnFld->developerTags['col'] = 2;
 $submitBtnFld->developerTags['noCaptionTag'] = true;
 
 $cancelBtnFld = $frmSearch->getField('btn_clear');
 $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
-$cancelBtnFld->setWrapperAttribute('class', 'col-lg-3');
-$cancelBtnFld->developerTags['col'] = 3;
+$cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->developerTags['noCaptionTag'] = true;
 
 $reportsData = [

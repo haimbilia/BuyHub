@@ -552,9 +552,9 @@ class BadgeLinkConditionsController extends SellerBaseController
         $frm->addHiddenField('', 'badge_type');
         $frm->addHiddenField('', 'record_condition', $conditionType);
         if (Badge::COND_MANUAL == $conditionType) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId), '', [], Labels::getLabel('LBL_SELECT_LINK_TYPE', $this->siteLangId));
         } else {
-            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION', $this->siteLangId), 'blinkcond_condition_type', BadgeLinkCondition::getConditionTypesArr($this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION', $this->siteLangId), 'blinkcond_condition_type', BadgeLinkCondition::getConditionTypesArr($this->siteLangId), '', [], Labels::getLabel('LBL_SELECT_CONDITION', $this->siteLangId));
         }
 
         if (Badge::TYPE_RIBBON == $badgeType) {

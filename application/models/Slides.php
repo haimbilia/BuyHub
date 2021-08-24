@@ -92,38 +92,7 @@ class Slides extends MyAppModel
         }
 
         return $srch;
-    }
-    /*
-    public function joinUserWallet()
-    {
-        $this->joinedUserWallet = true;
-        $txnObj = new Transactions();
-        $srch = $txnObj -> getSearchObject();
-        $srch->addMultipleFields(array('IFNULL(SUM(utxn.utxn_credit)-SUM(utxn.utxn_debit),0) AS userBalance', 'utxn_user_id'));
-        $srch->doNotCalculateRecords();
-        $srch->doNotlimitRecords();
-        $srch->addCondition('utxn_status', '=', applicationConstants::ACTIVE);
-        $srch->addGroupBy('utxn_user_id');
-
-        $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'pr.promotion_user_id = uw.utxn_user_id ', 'uw');
-    }
-
-    public function addMinimiumWalletbalanceCondition($langId = 0)
-    {
-        $langId = FatUtility::int($langId);
-        if ($this->langId) {
-            $langId = $this->langId;
-        }
-
-        if (!$this->joinedUserWallet) {
-            trigger_error(Labels::getLabel('ERR_please_join_user_wallet', $langId), E_USER_ERROR);
-        }
-
-        $this->addFld(array('IF(pr.promotion_id > 0, userBalance,' . FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE') . ') AS userBalance'));
-        $this->addHaving('userBalance', '>=', FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE'));
-    }
-     * 
-     */
+    }  
 
     public function joinBudget()
     {

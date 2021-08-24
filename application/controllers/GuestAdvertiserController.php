@@ -14,7 +14,7 @@ class GuestAdvertiserController extends MyAppController
         }
         if (UserAuthentication::isUserLogged()) {
             Message::addErrorMessage(Labels::getLabel('MSG_You_are_already_logged_in._Please_logout_and_register_for_advertiser.', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('account'));
+            FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD));
         }
 
         $obj = new Extrapage();

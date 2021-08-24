@@ -227,14 +227,13 @@ $(document).on('mouseout', "ul.list-tags li span i", function(){
 
 $(document).on('click', ".js-product-edit", function(){
     var selProdId = $(this).attr('row-id');
-    var prodHtml = $(this).find('.js-prod-name').html();
-    var prodName = prodHtml.split('<br>');
-    
+    var prodHtml = $(this).find('.prodNameJs:last').text();
+    var prodName = jQuery.trim(prodHtml)+" "+ jQuery.trim($(this).find('.prodOptionsJs').text());
     fcom.ajax(fcom.makeUrl('Seller', 'getUpsellProductsList', [selProdId]), '', function(t) {
         var ans = $.parseJSON(t);
         $("input[name='selprod_id']").val(selProdId);       
         $("select[name='product_name']").find('option').remove();
-        $("select[name='product_name']").append('<option value="-1">'+prodName[0]+'</option>').val(-1).trigger('change.select2');
+        $("select[name='product_name']").append('<option value="-1">'+prodName+'</option>').val(-1).trigger('change.select2');
         $('#upsell-products').empty();
         for (var key in ans.upsellProducts) {
             $("#upsell-products").append(

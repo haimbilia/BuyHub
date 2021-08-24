@@ -448,7 +448,7 @@ class Tax extends MyAppModel
 
             $error = '';
             if (false === PluginHelper::includePlugin($pluginKey, Plugin::getDirectory(Plugin::TYPE_TAX_SERVICES), $error, $langId)) {
-                SystemLog::system($error);
+                SystemLog::system($error, '( Product Id-' . $productId . ')');
                 $status = (!CONF_DEVELOPMENT_MODE) ? true : false;
                 return $data = [
                     'status' => $status,
@@ -496,7 +496,7 @@ class Tax extends MyAppModel
 
             $taxApi = new $pluginKey($langId, $fromAddress, $toAddress);
             if (false === $taxApi->init()) {
-                SystemLog::system($taxApi->getError());
+                SystemLog::system($taxApi->getError(), $pluginKey);
                 $status = (!CONF_DEVELOPMENT_MODE) ? true : false;
                 return $data = [
                     'status' => $status,
@@ -559,7 +559,7 @@ class Tax extends MyAppModel
         }
 
         if (0 < $activatedTaxServiceId) {
-            SystemLog::system(Labels::getLabel('MSG_INVALID_TAX_CATEGORY', $langId). '( Product Id-' . $productId . ')');
+            SystemLog::system(Labels::getLabel('MSG_INVALID_TAX_CATEGORY', $langId), '( Product Id-' . $productId . ')');
             $status = (!CONF_DEVELOPMENT_MODE) ? true : false;
 
             return $data = [

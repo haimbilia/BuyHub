@@ -17,11 +17,13 @@
     }
     .short-links {
         ul {
+            min-height: 27px;
+            font-size: 0.85rem;
             li {
                 margin-#{$start-direction}: 1rem;
                 a {
                     &:hover {
-                        color: $brand-color
+                        color: $brand-color-inverse
                     }
                 }
             }

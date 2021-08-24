@@ -986,6 +986,7 @@ class ImportexportCommon extends FatModel
         'CONF_USE_SHIPPING_PROFILE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_SHIPPING_PROFILE_ID', FatUtility::VAR_INT, 0) : false,
         'CONF_USE_SHIPPING_PACKAGE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_SHIPPING_PACKAGE_ID', FatUtility::VAR_INT, 0) : false,
         'CONF_USE_O_OR_1' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_O_OR_1', FatUtility::VAR_INT, 0) : false,
+        'CONF_PRODUCT_BRAND_MANDATORY' => ($siteConfiguration) ? FatApp::getConfig('CONF_PRODUCT_BRAND_MANDATORY', FatUtility::VAR_INT, false) : false,    
         );
     }
 

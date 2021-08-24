@@ -8,21 +8,18 @@
     $frmSearch->developerTags['noCaptionTag'] = true;
 
     $keyFld = $frmSearch->getField('keyword');
-    $keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $siteLangId));
-    $keyFld->setWrapperAttribute('class', 'col-lg-6');
-    $keyFld->developerTags['col'] = 6;
+    $keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $siteLangId)); 
+    $keyFld->developerTags['col'] = 8;
     $keyFld->developerTags['noCaptionTag'] = true;
 
     $submitBtnFld = $frmSearch->getField('btn_submit');
     $submitBtnFld->setFieldTagAttribute('class', 'btn-block');
-    $submitBtnFld->setWrapperAttribute('class', 'col-lg-3');
-    $submitBtnFld->developerTags['col'] = 3;
+    $submitBtnFld->developerTags['col'] = 2;
     $submitBtnFld->developerTags['noCaptionTag'] = true;
 
     $cancelBtnFld = $frmSearch->getField('btn_clear');
-    $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
-    $cancelBtnFld->setWrapperAttribute('class', 'col-lg-3');
-    $cancelBtnFld->developerTags['col'] = 3;
+    $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');  
+    $cancelBtnFld->developerTags['col'] = 2;
     $cancelBtnFld->developerTags['noCaptionTag'] = true;
 ?>
 
@@ -40,18 +37,15 @@
                 <div class="col-lg-12">
                     <div class="card card-search">
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-8">
-                                    <?php
-                                        $submitFld = $frmSearch->getField('btn_submit');
-                                        $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
+                            <?php
+                                $submitFld = $frmSearch->getField('btn_submit');
+                                $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
 
-                                        $fldClear= $frmSearch->getField('btn_clear');
-                                        $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
-                                        echo $frmSearch->getFormHtml();
-                                        echo $frmSearch->getExternalJS();?>
-                                </div>
-                            </div>
+                                $fldClear= $frmSearch->getField('btn_clear');
+                                $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
+                                echo $frmSearch->getFormHtml();
+                                echo $frmSearch->getExternalJS();
+                            ?>
                         </div>
                     </div>
                 </div>

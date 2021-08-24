@@ -3005,7 +3005,7 @@ class SellerController extends SellerBaseController
         //echo $srch->getQuery(); die();
         $rs = $srch->getResultSet();
         $requests = FatApp::getDb()->fetchAll($rs);
-
+        
         $this->set('sellerPage', true);
         $this->set('buyerPage', false);
 
@@ -3024,12 +3024,14 @@ class SellerController extends SellerBaseController
     {
         $srch = new OrderReturnRequestSearch($this->siteLangId);
         $srch->joinOrderProducts();
+        $srch->joinSellerProducts();
         $srch->addCondition('op_selprod_user_id', '=', $this->userParentId);
 
         $srch->addMultipleFields(
             array(
                 'orrequest_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type', 'orrequest_reference', 'orrequest_date', 'orrequest_status',
-                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_selprod_id', 'op_is_batch', 'op_id'
+                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_selprod_id', 'op_is_batch',
+                'op_id','selprod_product_id'
             )
         );
         $srch->addOrder('orrequest_date', 'DESC');
@@ -3892,7 +3894,7 @@ class SellerController extends SellerBaseController
             $frm->addHiddenField('', 'type', $type);
         }
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->siteLangId), 'product_type', array(-1 => Labels::getLabel('LBL_All', $this->siteLangId)) + Product::getProductTypes($this->siteLangId), '-1', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->siteLangId), 'product_type', array(-1 => Labels::getLabel('LBL_SELECT_PRODUCT_TYPE', $this->siteLangId)) + Product::getProductTypes($this->siteLangId), '-1', array(), '');
         /* }  */
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->siteLangId));
@@ -5091,8 +5093,12 @@ class SellerController extends SellerBaseController
 
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
-        $arrListing = $db->fetchAll($rs);
-
+        $arrListing = $db->fetchAll($rs);        
+        if (count($arrListing)) {
+            foreach ($arrListing as &$arr) {
+                $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
+            }
+        }
         $this->set("arrListing", $arrListing);
         $this->set('canEdit', $this->userPrivilege->canEditSpecialPrice(UserAuthentication::getLoggedUserId(), true));
         $this->set('page', $page);

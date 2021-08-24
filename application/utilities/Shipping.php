@@ -314,7 +314,7 @@ class Shipping
             }
 
             if (empty($carriers)) {
-                SystemLog::system(get_class($shippingApiObj)::KEY_NAME . "--" . $shippingApiObj->getError());
+                SystemLog::system(get_class($shippingApiObj)::KEY_NAME . "--" . $shippingApiObj->getError(),'SelProd ID-'.$product['selprod_id']);
                 continue;
             }
 
@@ -393,7 +393,7 @@ class Shipping
                 }
 
                 if ((false == $shippingRates || empty($shippingRates))) {
-                    SystemLog::system($shippingApiObj->getError());
+                    SystemLog::system($shippingApiObj->getError(),'SelProd ID-'.$product['selprod_id']);
                     continue;
                 }
                 unset($physicalSelProdIdArr[$product['selprod_id']]);
