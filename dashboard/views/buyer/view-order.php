@@ -93,7 +93,16 @@ if (!$print) { ?>
                     <h5 class="card-title">
                         <div class="order-number">
                             <small class="sm-txt"><?php echo Labels::getLabel('LBL_ORDER_#', $siteLangId); ?></small>
-                            <span class="numbers"> <?php echo (true == $primaryOrder) ? $childOrderDetail['op_invoice_number'] : $orderDetail['order_id']; ?>
+                            <span class="numbers"> 
+                                <?php echo (true == $primaryOrder) ? $childOrderDetail['op_invoice_number'] : $orderDetail['order_id']; ?>
+                                <?php 
+                                if (true == $primaryOrder && OrderStatus::ORDER_CANCELLED == $childOrderDetail['orderstatus_id']) { 
+                                    $statusName = isset($childOrderDetail['orderstatus_name']) ? $childOrderDetail['orderstatus_name'] : $childOrderDetail['orderstatus_identifier']; ?>
+                                    <span class="notice">
+                                        <?php echo $statusName; ?>
+                                    </span>
+                                <?php } ?>
+                            </span>
                         </div>
                     </h5>
                     <div class="btn-group orders-actions">

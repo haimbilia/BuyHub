@@ -1,7 +1,4 @@
 <?php
-
-use Aws\Crypto\Cipher\Cbc;
-
 class Orders extends MyAppModel
 {
     public const DB_TBL = 'tbl_orders';

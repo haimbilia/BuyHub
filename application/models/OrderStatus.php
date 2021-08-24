@@ -89,7 +89,13 @@ class OrderStatus extends MyAppModel
         }
         return false;
     }
-
+    
+    /**
+     * getOpStatusClass
+     *
+     * @param  int $status
+     * @return string
+     */
     public static function getOpStatusClass(int $status): string
     {
         $defaultPaid = FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS");
@@ -116,6 +122,49 @@ class OrderStatus extends MyAppModel
             
             default:
                 return 'delivered';
+                break;
+        }
+    }
+    
+    /**
+     * getDefaultOrderStausMsg
+     *
+     * @param  int $status
+     * @param  int $langId
+     * @return string
+     */
+    public static function getDefaultOrderStatusMsg(int $status, int $langId): string
+    {
+        $defaultPaid = FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS");
+        $defaultInProcess = FatApp::getConfig("CONF_DEFAULT_INPROCESS_ORDER_STATUS");
+        $defaultShipped = FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS");
+        $defaultDelivered = FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS");
+        $defaultCompleted = FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS");
+        switch ($status) {
+            case Orders::ORDER_PAYMENT_PENDING:
+                return Labels::getLabel('LBL_TIMELINE_ORDER_STATUS_PENDING', $langId);
+                break;
+            case $defaultPaid:
+                return Labels::getLabel('LBL_TIMELINE_ORDER_STATUS_PAID', $langId);
+                break;
+            case self::ORDER_APPROVED:
+                return Labels::getLabel('LBL_TIMELINE_ORDER_STATUS_APPROVED', $langId);
+                break;
+            case $defaultInProcess:
+                return Labels::getLabel('LBL_TIMELINE_ORDER_STATUS_IN_PROCESS', $langId);
+                break;
+            case $defaultShipped:
+                return Labels::getLabel('LBL_TIMELINE_ORDER_STATUS_SHIPPED', $langId);
+                break;
+            case $defaultDelivered:
+                return Labels::getLabel('LBL_TIMELINE_ORDER_STATUS_DELIVERED', $langId);
+                break;
+            case $defaultCompleted:
+                return Labels::getLabel('LBL_TIMELINE_ORDER_STATUS_COMPLETED', $langId);
+                break;
+            
+            default:
+                return '';
                 break;
         }
     }

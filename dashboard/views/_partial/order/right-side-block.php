@@ -14,58 +14,10 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
             </thead>
             <tbody>
                 <?php
-                foreach ($arr as $childOrder) {
-                    $prodOrBatchUrl = 'javascript:void(0)';
-                    if ($childOrder['op_is_batch']) {
-                        $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($childOrder['op_selprod_id']), CONF_WEBROOT_FRONTEND);
-                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($childOrder['op_selprod_id'], $siteLangId, "SMALL"), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
-                    } else {
-                        if (Product::verifyProductIsValid($childOrder['op_selprod_id']) == true) {
-                            $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($childOrder['op_selprod_id']), CONF_WEBROOT_FRONTEND);
-                        }
-                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($childOrder['selprod_product_id'], "SMALL", $childOrder['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
-                    } ?>
+                foreach ($arr as $childOrder) { ?>
                     <tr>
                         <td>
-                            <?php $this->includeTemplate('_partial/product/product-info-html.php', ['product' => $row ,'siteLangId'=> $siteLangId], false); ?>
-                            <?php /* <div class="item">
-                                <figure class="item__pic">
-                                    <a href="<?php echo $prodOrBatchUrl; ?>">
-                                        <img src="<?php echo $prodOrBatchImgUrl; ?>" title="<?php echo $childOrder['op_product_name']; ?>" alt="<?php echo $childOrder['op_product_name']; ?>">
-                                    </a>
-                                </figure>
-                                <div class="item__description">
-                                    <?php if ($childOrder['op_selprod_title'] != '') { ?>
-                                        <div class="item__title">
-                                            <a title="<?php echo $childOrder['op_selprod_title']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
-                                                <?php echo $childOrder['op_selprod_title'] . '<br>'; ?>
-                                            </a>
-                                        </div>
-                                        <div class="item__category">
-                                            <?php echo $childOrder['op_product_name']; ?>
-                                        </div>
-                                    <?php } else { ?>
-                                        <div class="item__category">
-                                            <a title="<?php echo $childOrder['op_product_name']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'view', array($childOrder['op_selprod_id']), CONF_WEBROOT_FRONTEND); ?>">
-                                                <?php echo $childOrder['op_product_name']; ?>
-                                            </a>
-                                        </div>
-                                    <?php } ?>
-                                    <div class="item__brand">
-                                        <?php echo Labels::getLabel('Lbl_Brand', $siteLangId) ?>:
-                                        <?php echo CommonHelper::displayNotApplicable($siteLangId, $childOrder['op_brand_name']); ?>
-                                    </div>
-                                    <div class="item__options">
-                                        <?php echo sprintf(Labels::getLabel('LBL_QTY:_%S', $siteLangId), $childOrder['op_qty']); ?>
-                                        <?php if ($childOrder['op_selprod_options'] != '') { ?>
-                                            <?php echo ' | ' . $childOrder['op_selprod_options']; ?>
-                                        <?php } ?>
-                                    </div>
-                                    <div class="item__sold_by">
-                                        <?php echo Labels::getLabel('LBL_Sold_By', $siteLangId) . ': ' . $childOrder['op_shop_name']; ?>
-                                    </div>
-                                </div>
-                            </div> */ ?>
+                            <?php $this->includeTemplate('_partial/product/product-info-html.php', $this->variables + ['order' => $childOrder], false); ?>
                         </td>
                         <td><?php echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?></td>
                         <td><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder), true, false, true, false, true); ?></td>

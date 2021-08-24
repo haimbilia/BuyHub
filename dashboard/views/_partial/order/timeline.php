@@ -2,16 +2,23 @@
 
 <ul class="timeline">
     <?php
+    $orderCancelled = (OrderStatus::ORDER_CANCELLED == $childOrderDetail['orderstatus_id']);
     $selectUpto = array_search($currentStatus, array_keys($orderProductStatusArr));
     $index = 0;
     foreach ($orderProductStatusArr as $statusId => $statusLabel) {
-        $current = $currentStatus == $statusId ? 'currently' : '';
-        $highlight = ($index <= $selectUpto || in_array($statusId, $highlightEnabled) ? 'enable' : 'disabled');
+        $current = $currentStatus == $statusId || $orderCancelled ? 'currently' : '';
+        $highlight = ($index <= $selectUpto || in_array($statusId, $highlightEnabled) || $orderCancelled ? 'enable' : 'disabled');
         $orderTimeLineRecords = !empty($orderTimeLine) && isset($orderTimeLine[$statusId]) ? $orderTimeLine[$statusId] : [];
+        $orderStatusClass = $orderCancelled && $index > $selectUpto ? 'shipped' : OrderStatus::getOpStatusClass($statusId);
     ?>
-        <li class="<?php echo $highlight . ' ' . $current . ' ' . OrderStatus::getOpStatusClass($statusId); ?>">
+        <li class="<?php echo $highlight . ' ' . $current . ' ' . $orderStatusClass; ?>">
             <?php if (Orders::ORDER_PAYMENT_PENDING != $orderDetail['order_payment_status'] && !empty($orderTimeLineRecords)) {
-                foreach (array_reverse($orderTimeLineRecords) as $i => $row) { ?>
+                foreach (array_reverse($orderTimeLineRecords) as $i => $row) {
+                    /* Same Status with no Comment.*/
+                    if (1 < count($orderTimeLineRecords) && 0 < $i && empty(trim($row['oshistory_comments']))) {
+                        continue;
+                    } ?>
+
                     <div class="timeline_data">
                         <div class="timeline_data_head">
                             <time class="timeline_date"><?php echo FatDate::format($row['oshistory_date_added']); ?></time>
@@ -61,25 +68,46 @@
                                     <?php } ?>
                                 </p>
                             <?php } ?>
-
-                            <?php if (isset($row['oshistory_comments']) && !empty(trim(($row['oshistory_comments'])))) { ?>
-                                <p><?php echo nl2br($row['oshistory_comments']); ?></p>
-                            <?php } ?>
+                            <p>
+                                <?php if (isset($row['oshistory_comments']) && !empty(trim(($row['oshistory_comments'])))) { ?>
+                                    <?php echo nl2br($row['oshistory_comments']); ?>
+                                <?php } else {
+                                    echo OrderStatus::getDefaultOrderStatusMsg($statusId, $siteLangId);
+                                } ?>
+                            </p>
                         </div>
                     </div>
                 <?php }
-            } else { ?>
+            } else { 
+                if ($orderCancelled) {
+                    $statusLabel = isset($childOrderDetail['orderstatus_name']) ? $childOrderDetail['orderstatus_name'] : $childOrderDetail['orderstatus_identifier']; 
+                }
+                ?>
                 <div class="timeline_data">
                     <div class="timeline_data_head">
                         <?php if (Orders::ORDER_PAYMENT_PENDING == $statusId) { ?>
                             <time class="timeline_date"><?php echo FatDate::format($orderDetail['order_date_added']); ?></time>
+                        <?php } else if ($orderCancelled) { ?>
+                            <time class="timeline_date"><?php echo FatDate::format($cancelledDate); ?></time>
                         <?php } ?>
                         <span class="order-status"> <em class="dot"></em>
                             <?php echo $statusLabel; ?>
                         </span>
                     </div>
+
+                    <?php if ($index <= $selectUpto) { ?>
+                        <div class="timeline_data_body">
+                            <p> <?php echo OrderStatus::getDefaultOrderStatusMsg($statusId, $siteLangId); ?></p>
+                        </div>
+                    <?php } else if ($orderCancelled) { ?>
+                        <p><?php echo Labels::getLabel('LBL_THE_ORDER_HAS_BEEN_CANCELLED_DUE_TO_CERTAIN_REASON.', $siteLangId); ?></p>
+                    <?php } ?>
                 </div>
-            <?php } ?>
+            <?php 
+                if ($orderCancelled) {
+                    break;   
+                }
+            } ?>
         </li>
     <?php
         $index++;

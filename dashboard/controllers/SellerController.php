@@ -537,6 +537,10 @@ class SellerController extends SellerBaseController
         } else {
             $opTimeLineStatus = array_diff($opTimeLineStatus, (array) FatApp::getConfig("CONF_PICKUP_READY_ORDER_STATUS", FatUtility::VAR_INT, 0));
         }
+        
+        if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
+            $opTimeLineStatus = array_diff($opTimeLineStatus, [OrderStatus::ORDER_APPROVED]);
+        }
 
         $orderProductStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $opTimeLineStatus);
 
@@ -558,6 +562,11 @@ class SellerController extends SellerBaseController
         }
         $productType = !empty($orderDetail['selprod_product_id']) ? Product::getAttributesById($orderDetail['selprod_product_id'], 'product_type') : 0;
 
+        $cancelledDate = "";
+        if (OrderStatus::ORDER_CANCELLED == $orderDetail['orderstatus_id']) {
+            $cancelledDate = current($orderTimeLine[$orderDetail['orderstatus_id']])['oshistory_date_added'];
+        }
+
         $this->set('arr', [$orderDetail]);
         $this->set('unitTypeArray', ShippingPackage::getUnitTypes($this->siteLangId));
 
@@ -565,6 +574,7 @@ class SellerController extends SellerBaseController
         $this->set('currentStatus', $currentStatus);
         $this->set('orderProductStatusArr', $orderProductStatusArr);
         $this->set('orderTimeLine', $orderTimeLine);
+        $this->set('cancelledDate', $cancelledDate);
 
         $this->set('productType', $productType);
         $this->set('orderDetail', $orderDetail);

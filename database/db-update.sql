@@ -883,3 +883,16 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 UPDATE `tbl_language_labels` SET `label_caption` = 'Submit new requests to admin by clicking on respective buttons.' WHERE label_key="LBL_Generate_requests_using_buttons_below";
+
+
+-- ---------Task 88911 Order Detail page ------ --
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_TIMELINE_ORDER_STATUS_PENDING', 1, 'Order Payment Has Not Been Confirmed Yet.', 1),
+('LBL_TIMELINE_ORDER_STATUS_PAID', 1, 'The Order Payment Has Been Confirmed.', 1),
+('LBL_TIMELINE_ORDER_STATUS_APPROVED', 1, 'The Digital Order Product Has Been Approved, And Available For Download.', 1),
+('LBL_TIMELINE_ORDER_STATUS_IN_PROCESS', 1, 'Order Is Being Prepared. All The Items Are Being Collected To Be Packed And Ready For Shipping.', 1),
+('LBL_TIMELINE_ORDER_STATUS_SHIPPED', 1, 'Order Has Been Collected By A Shipping Provider And Is Out For Delivery.', 1),
+('LBL_TIMELINE_ORDER_STATUS_DELIVERED', 1, 'Order Has Been Delivered.', 1),
+('LBL_TIMELINE_ORDER_STATUS_COMPLETED', 1, 'Order Has Been Marked As Completed. Henceforth, No Actions Ban Be Performed On This Order.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+-- ---------Task 88911 Order Detail page ------ -- 

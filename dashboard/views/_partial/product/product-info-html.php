@@ -14,11 +14,11 @@ if (isset($order)) {
         $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($order['selprod_product_id'], "SMALL", $order['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
     }
     $productName = $order['op_product_name'];
-    $productTitle = $product['op_selprod_title'];
-    $brandName = $product['op_brand_name'];
+    $productTitle = $order['op_selprod_title'];
+    $brandName = $order['op_brand_name'];
     $options = sprintf(Labels::getLabel('LBL_QTY:_%S', $siteLangId), $order['op_qty']);
     if ($order['op_selprod_options'] != '') {
-        $options += ' | ' . $order['op_selprod_options'];
+        $options .= ' | ' . $order['op_selprod_options'];
     }
     $shopName = $order['op_shop_name'];
 } else {

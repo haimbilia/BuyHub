@@ -295,6 +295,9 @@ class BuyerController extends BuyerBaseController
                 $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_PICKUP_READY_ORDER_STATUS", FatUtility::VAR_INT, 0));
             }
 
+            if ($childOrderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
+                $processingStatuses = array_diff($processingStatuses, [OrderStatus::ORDER_APPROVED]);
+            }
             $orderProductStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingStatuses);
         }
 
@@ -315,7 +318,13 @@ class BuyerController extends BuyerBaseController
             $orderProductStatusArr = [Orders::ORDER_PAYMENT_PENDING => Labels::getLabel('LBL_PAYMENT_PENDING', $this->siteLangId)] + $orderProductStatusArr;
         }
 
+        $cancelledDate = "";
+        if (true == $primaryOrderDisplay && OrderStatus::ORDER_CANCELLED == $childOrderDetail['orderstatus_id']) {
+            $cancelledDate = current($orderTimeLine[$childOrderDetail['orderstatus_id']])['oshistory_date_added'];
+        }
+
         $orderStatusArr = Orders::getOrderPaymentStatusArr($this->siteLangId);
+
         $arr = (true == $primaryOrderDisplay) ? [$childOrderDetail] : $childOrderDetail;
         $this->set('arr', $arr);
 
@@ -327,6 +336,7 @@ class BuyerController extends BuyerBaseController
         $this->set('orderProductStatusArr', $orderProductStatusArr);
         $this->set('orderTimeLine', $orderTimeLine);
         $this->set('orderStatusArr', $orderStatusArr);
+        $this->set('cancelledDate', $cancelledDate);
 
         $this->set('orderDetail', $orderDetail);
         $this->set('childOrderDetail', $childOrderDetail);

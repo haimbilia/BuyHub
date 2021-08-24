@@ -59,7 +59,16 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                     <h5 class="card-title">
                         <div class="order-number">
                             <small class="sm-txt"><?php echo Labels::getLabel('LBL_ORDER_#', $siteLangId); ?></small>
-                            <span class="numbers"> <?php echo $orderDetail['op_invoice_number'] ?>
+                            <span class="numbers">
+                                <?php echo $orderDetail['op_invoice_number'] ?>
+                                <?php 
+                                if (OrderStatus::ORDER_CANCELLED == $orderDetail['orderstatus_id']) {
+                                    $statusName = isset($orderDetail['orderstatus_name']) ? $orderDetail['orderstatus_name'] : $orderDetail['orderstatus_identifier']; ?>
+                                    <span class="notice">
+                                        <?php echo $statusName; ?>
+                                    </span>
+                                <?php } ?>
+                            </span>
                         </div>
                     </h5>
                     <?php if (!$print) { ?>
@@ -139,7 +148,8 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                 <div class="card-body ">
                     <div class="row">
                         <?php
-                        $this->includeTemplate('_partial/order/right-side-block.php', $this->variables, false); 
+                        $data = $this->variables + ['childOrderDetail' => $orderDetail];
+                        $this->includeTemplate('_partial/order/right-side-block.php', $data, false); 
 
                         $data = $this->variables + [
                             'canViewShippingCharges' => true,
