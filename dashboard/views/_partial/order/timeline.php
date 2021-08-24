@@ -2,7 +2,7 @@
 
 <ul class="timeline">
     <?php
-    $orderCancelled = (OrderStatus::ORDER_CANCELLED == $childOrderDetail['orderstatus_id']);
+    $orderCancelled = (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']);
     $selectUpto = array_search($currentStatus, array_keys($orderProductStatusArr));
     $index = 0;
     foreach ($orderProductStatusArr as $statusId => $statusLabel) {
@@ -30,7 +30,7 @@
                         </div>
                         <div class="timeline_data_body">
                             <?php
-                            if (isset($row['oshistory_orderstatus_id']) && $row['oshistory_orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED) {
+                            if (isset($row['oshistory_orderstatus_id']) && $row['oshistory_orderstatus_id'] ==  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {
                                 $trackingNumber = $row['oshistory_tracking_number'];
                                 $carrier = $row['oshistory_courier']; ?>
                                 <h6><?php echo Labels::getLabel('MSG_TRACKING_NUMBER', $siteLangId); ?></h6>

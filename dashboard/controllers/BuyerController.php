@@ -296,7 +296,7 @@ class BuyerController extends BuyerBaseController
             }
 
             if ($childOrderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
-                $processingStatuses = array_diff($processingStatuses, [OrderStatus::ORDER_APPROVED]);
+                $processingStatuses = array_diff($processingStatuses, [FatApp::getConfig("CONF_DEFAULT_APPROVED_ORDER_STATUS")]);
             }
             $orderProductStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingStatuses);
         }
@@ -319,7 +319,7 @@ class BuyerController extends BuyerBaseController
         }
 
         $cancelledDate = "";
-        if (true == $primaryOrderDisplay && OrderStatus::ORDER_CANCELLED == $childOrderDetail['orderstatus_id']) {
+        if (true == $primaryOrderDisplay && FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']) {
             $cancelledDate = current($orderTimeLine[$childOrderDetail['orderstatus_id']])['oshistory_date_added'];
         }
 

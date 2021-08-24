@@ -2814,7 +2814,7 @@ class Orders extends MyAppModel
         $srch->joinOrderProductShipment();
         $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
         $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = plugin.plugin_id', 'plugin');
-        $srch->addCondition('op_status_id', 'IN', array(OrderStatus::ORDER_SHIPPED));
+        $srch->addCondition('op_status_id', 'IN', array(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")));
         $srch->addCondition('opship_tracking_number', '!=', '');
         $srch->addCondition('opshipping_plugin_id', '>', 0);
         $srch->addMultipleFields(array('order_language_id', 'op_id', 'op_invoice_number', 'opship_tracking_number', 'opship_tracking_courier_code', 'opshipping_plugin_id', 'plugin.plugin_code as opshipping_plugin_name', 'opship_tracking_plugin_id', 'op_selprod_user_id', 'opshipping_by_seller_user_id'));
@@ -2855,7 +2855,7 @@ class Orders extends MyAppModel
     {
         $comment = Labels::getLabel("MSG_AUTOMATICALLY_MARKED_AS_Delivered_BY_SYSTEM.", $orderLangId);
         $order = new Orders();
-        $order->addChildProductOrderHistory($opId, $orderLangId, OrderStatus::ORDER_DELIVERED, $comment, true);
+        $order->addChildProductOrderHistory($opId, $orderLangId, FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"), $comment, true);
         $where = array('smt' => 'op_id = ? ', 'vals' => array($opId));
         FatApp::getDb()->updateFromArray(Orders::DB_TBL_ORDER_PRODUCTS, array('op_confirm_date' => date('Y-m-d H:i:s')), $where);
     }

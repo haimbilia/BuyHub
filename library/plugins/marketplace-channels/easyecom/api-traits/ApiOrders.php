@@ -148,7 +148,7 @@ trait ApiOrders
         $opSrch->setPageSize(1);
         $opSrch->addCondition('op.op_id', '=', $opId);
         $opSrch->addCondition('op_selprod_user_id', '=', $this->userId);
-        $opSrch->addCondition('oshistory_orderstatus_id', '=', OrderStatus::ORDER_SHIPPED);
+        $opSrch->addCondition('oshistory_orderstatus_id', '=', FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"));
         $opSrch->addCondition('opshipping_by_seller_user_id', '=', $this->userId);
 
         $opSrch->addMultipleFields([
@@ -252,7 +252,7 @@ trait ApiOrders
 
         $comment = Labels::getLabel('MSG_MARKED_AS_SHIPPED_BY_EASY_ECOM', $this->langId);
         $orderObj = new Orders();
-        if (false == $orderObj->addChildProductOrderHistory($opId, $this->langId, OrderStatus::ORDER_SHIPPED, $comment, true, $trackingNumber)) {
+        if (false == $orderObj->addChildProductOrderHistory($opId, $this->langId, FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"), $comment, true, $trackingNumber)) {
             return $this->formatOutput(false, $orderObj->getError());
         }
         $msg = Labels::getLabel("MSG_SUCCESS", $this->langId);

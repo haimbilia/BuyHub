@@ -39,7 +39,7 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                 <?php
                 $orderObj = new Orders();
                 $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses();
-                $processingStatuses = array_diff($processingStatuses, [OrderStatus::ORDER_DELIVERED]);
+                $processingStatuses = array_diff($processingStatuses, [FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")]);
                 $canCancelOrder = in_array($orderDetail['orderstatus_id'], $processingStatuses);
                 if ($canCancelOrder && $canEdit) { ?>
                     <div class="col-auto">
@@ -62,7 +62,7 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                             <span class="numbers">
                                 <?php echo $orderDetail['op_invoice_number'] ?>
                                 <?php 
-                                if (OrderStatus::ORDER_CANCELLED == $orderDetail['orderstatus_id']) {
+                                if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
                                     $statusName = isset($orderDetail['orderstatus_name']) ? $orderDetail['orderstatus_name'] : $orderDetail['orderstatus_identifier']; ?>
                                     <span class="notice">
                                         <?php echo $statusName; ?>
@@ -123,7 +123,7 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                                         <?php
                                         }
 
-                                        if ($orderDetail['orderstatus_id'] == OrderStatus::ORDER_SHIPPED && true === $shippingApiObj->canCreatePickup()) {
+                                        if ($orderDetail['orderstatus_id'] == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && true === $shippingApiObj->canCreatePickup()) {
                                         ?>
                                             <?php
                                             $pickUpDetails =  OrderProduct::getPickUpShedule($opId);
@@ -357,5 +357,5 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
         });
     });
     var canShipByPlugin = <?php echo (!empty($shippingApiObj) ? 1 : 0); ?>;
-    var orderShippedStatus = <?php echo OrderStatus::ORDER_SHIPPED; ?>;
+    var orderShippedStatus = <?php echo FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"); ?>;
 </script>

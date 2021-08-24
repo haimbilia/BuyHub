@@ -96,7 +96,7 @@ if (!$print) { ?>
                             <span class="numbers"> 
                                 <?php echo (true == $primaryOrder) ? $childOrderDetail['op_invoice_number'] : $orderDetail['order_id']; ?>
                                 <?php 
-                                if (true == $primaryOrder && OrderStatus::ORDER_CANCELLED == $childOrderDetail['orderstatus_id']) { 
+                                if (true == $primaryOrder && FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']) { 
                                     $statusName = isset($childOrderDetail['orderstatus_name']) ? $childOrderDetail['orderstatus_name'] : $childOrderDetail['orderstatus_identifier']; ?>
                                     <span class="notice">
                                         <?php echo $statusName; ?>

@@ -539,7 +539,7 @@ class SellerController extends SellerBaseController
         }
         
         if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
-            $opTimeLineStatus = array_diff($opTimeLineStatus, [OrderStatus::ORDER_APPROVED]);
+            $opTimeLineStatus = array_diff($opTimeLineStatus, [FatApp::getConfig("CONF_DEFAULT_APPROVED_ORDER_STATUS")]);
         }
 
         $orderProductStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $opTimeLineStatus);
@@ -563,7 +563,7 @@ class SellerController extends SellerBaseController
         $productType = !empty($orderDetail['selprod_product_id']) ? Product::getAttributesById($orderDetail['selprod_product_id'], 'product_type') : 0;
 
         $cancelledDate = "";
-        if (OrderStatus::ORDER_CANCELLED == $orderDetail['orderstatus_id']) {
+        if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
             $cancelledDate = current($orderTimeLine[$orderDetail['orderstatus_id']])['oshistory_date_added'];
         }
 
@@ -877,7 +877,7 @@ class SellerController extends SellerBaseController
             $activatedTrackPluginId = (false !== $activatedTrackPlugin && 0 < $activatedTrackPlugin['plugin_id']) ? $activatedTrackPlugin['plugin_id'] : 0;  
             $activatedTrackPluginCode = (false !== $activatedTrackPlugin && 0 < $activatedTrackPlugin['plugin_code']) ? $activatedTrackPlugin['plugin_code'] : 0;  
             
-            if ($post["op_status_id"] == OrderStatus::ORDER_SHIPPED &&  0 < $activatedTrackPluginId && in_array($activatedTrackPluginCode, ['AfterShipShipment'])) {
+            if ($post["op_status_id"] == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") &&  0 < $activatedTrackPluginId && in_array($activatedTrackPluginCode, ['AfterShipShipment'])) {
                 if (array_key_exists('manual_shipping', $post) && 0 < $post['manual_shipping']) {
                     $updateData = [
                         'opship_op_id' => $post['op_id'],
@@ -919,13 +919,13 @@ class SellerController extends SellerBaseController
         }
 
 
-        if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatshop']) && (OrderStatus::ORDER_DELIVERED == $post["op_status_id"] || OrderStatus::ORDER_COMPLETED == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
+        if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatshop']) && (FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") == $post["op_status_id"] || FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS") == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
             $orderProducts = new OrderProductSearch($this->siteLangId, true, true);
             $orderProducts->joinPaymentMethod();
             $orderProducts->addMultipleFields(['op_status_id']);
             $orderProducts->addCondition('op_order_id', '=', $orderDetail['order_id']);
-            $orderProducts->addCondition('op_status_id', '!=', OrderStatus::ORDER_DELIVERED);
-            $orderProducts->addCondition('op_status_id', '!=', OrderStatus::ORDER_COMPLETED);
+            $orderProducts->addCondition('op_status_id', '!=', FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"));
+            $orderProducts->addCondition('op_status_id', '!=', FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS"));
             $childOrders = FatApp::getDb()->fetchAll($orderProducts->getResultSet());
             if (empty($childOrders)) {
                 $updateArray = array('order_payment_status' => Orders::ORDER_PAYMENT_PAID);
@@ -1059,7 +1059,7 @@ class SellerController extends SellerBaseController
         }
 
         /* Update To Shipping Service */
-        if (OrderStatus::ORDER_SHIPPED == $orderDetail["op_status_id"]) {
+        if (FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") == $orderDetail["op_status_id"]) {
             $this->langId = $this->siteLangId;
             $this->refundShipment($op_id);
         }
@@ -3958,7 +3958,7 @@ class SellerController extends SellerBaseController
 
         $frm->addSelectBox(Labels::getLabel('LBL_Notify_Customer', $this->siteLangId), 'customer_notified', applicationConstants::getYesNoArr($this->siteLangId), applicationConstants::YES, array(), Labels::getLabel('Lbl_Select', $this->siteLangId))->requirements()->setRequired();
 
-        if (array_key_exists('opship_tracking_number', $orderData) && (empty($orderData['opship_tracking_number']) || $orderData['opshipping_plugin_code'] == 'ShipStationShipping') && $orderData['orderstatus_id'] !=  OrderStatus::ORDER_SHIPPED) {    
+        if (array_key_exists('opship_tracking_number', $orderData) && (empty($orderData['opship_tracking_number']) || $orderData['opshipping_plugin_code'] == 'ShipStationShipping') && $orderData['orderstatus_id'] !=  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {    
             $manualFld = $frm->addCheckBox(Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId), 'manual_shipping', 1, array(), false, 0);
 
             $manualShipUnReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId));
@@ -3966,8 +3966,8 @@ class SellerController extends SellerBaseController
             $manualShipReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId));
             $manualShipReqObj->setRequired(true);
 
-            $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, OrderStatus::ORDER_SHIPPED), 'eq', 'manual_shipping', $manualShipReqObj);
-            $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, OrderStatus::ORDER_SHIPPED), 'ne', 'manual_shipping', $manualShipUnReqObj);
+            $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")), 'eq', 'manual_shipping', $manualShipReqObj);
+            $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")), 'ne', 'manual_shipping', $manualShipUnReqObj);
 
 
             $frm->addTextBox(Labels::getLabel('LBL_Tracking_Number', $this->siteLangId), 'tracking_number');

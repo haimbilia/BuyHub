@@ -895,4 +895,8 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('LBL_TIMELINE_ORDER_STATUS_DELIVERED', 1, 'Order Has Been Delivered.', 1),
 ('LBL_TIMELINE_ORDER_STATUS_COMPLETED', 1, 'Order Has Been Marked As Completed. Henceforth, No Actions Ban Be Performed On This Order.', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES
+('CONF_DEFAULT_APPROVED_ORDER_STATUS', '15', 0)
+ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
 -- ---------Task 88911 Order Detail page ------ -- 

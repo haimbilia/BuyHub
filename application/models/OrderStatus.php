@@ -8,15 +8,7 @@ class OrderStatus extends MyAppModel
     public const DB_TBL_LANG = 'tbl_orders_status_lang';
     public const DB_TBL_LANG_PREFIX = 'orderstatuslang_';
 
-    public const ORDER_SHIPPED = 4;
-    public const ORDER_DELIVERED = 5;
-    public const ORDER_RETURN_REQUESTED = 6;
-    public const ORDER_COMPLETED = 7;
-    public const ORDER_CANCELLED = 8;
     public const ORDER_REFUNDED = 9;
-    public const ORDER_APPROVED = 15;
-    public const ORDER_COD = 16;
-
 
     public function __construct($id = 0)
     {
@@ -49,11 +41,11 @@ class OrderStatus extends MyAppModel
     public static function nonCancellableStatuses()
     {
         return array(
-            static::ORDER_SHIPPED,
-            static::ORDER_DELIVERED,
-            static::ORDER_RETURN_REQUESTED,
-            static::ORDER_COMPLETED,
-            static::ORDER_CANCELLED,
+            FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"),
+            FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"),
+            FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS"),
+            FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS"),
+            FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS"),
             static::ORDER_REFUNDED
         );
     }
@@ -99,6 +91,7 @@ class OrderStatus extends MyAppModel
     public static function getOpStatusClass(int $status): string
     {
         $defaultPaid = FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS");
+        $defaultApproved = FatApp::getConfig("CONF_DEFAULT_APPROVED_ORDER_STATUS");
         $defaultInProcess = FatApp::getConfig("CONF_DEFAULT_INPROCESS_ORDER_STATUS");
         $defaultShipped = FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS");
         $defaultDelivered = FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS");
@@ -106,7 +99,7 @@ class OrderStatus extends MyAppModel
         switch ($status) {
             case Orders::ORDER_PAYMENT_PENDING:
             case $defaultPaid:
-            case self::ORDER_APPROVED:
+            case $defaultApproved:
                 return 'in-process';
                 break;
             case $defaultInProcess:
@@ -136,6 +129,7 @@ class OrderStatus extends MyAppModel
     public static function getDefaultOrderStatusMsg(int $status, int $langId): string
     {
         $defaultPaid = FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS");
+        $defaultApproved = FatApp::getConfig("CONF_DEFAULT_APPROVED_ORDER_STATUS");
         $defaultInProcess = FatApp::getConfig("CONF_DEFAULT_INPROCESS_ORDER_STATUS");
         $defaultShipped = FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS");
         $defaultDelivered = FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS");
@@ -147,7 +141,7 @@ class OrderStatus extends MyAppModel
             case $defaultPaid:
                 return Labels::getLabel('LBL_TIMELINE_ORDER_STATUS_PAID', $langId);
                 break;
-            case self::ORDER_APPROVED:
+            case $defaultApproved:
                 return Labels::getLabel('LBL_TIMELINE_ORDER_STATUS_APPROVED', $langId);
                 break;
             case $defaultInProcess:
