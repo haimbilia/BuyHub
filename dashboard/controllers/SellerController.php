@@ -523,7 +523,22 @@ class SellerController extends SellerBaseController
             }
         }
 
-        $orderProductStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingStatuses);
+
+        if ($orderDetail['plugin_code'] == 'CashOnDelivery') {
+            $opTimeLineStatus = $orderObj->getAdminAllowedUpdateOrderStatuses(true);
+        } else if ($orderDetail['plugin_code'] == 'PayAtStore') {
+            $opTimeLineStatus = $orderObj->getAdminAllowedUpdateOrderStatuses(false, false, true);
+        } else {
+            $opTimeLineStatus = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $orderDetail['op_product_type']);
+        }
+
+        if ($orderDetail["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) {
+            $opTimeLineStatus = array_diff($opTimeLineStatus, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        } else {
+            $opTimeLineStatus = array_diff($opTimeLineStatus, (array) FatApp::getConfig("CONF_PICKUP_READY_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        }
+
+        $orderProductStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $opTimeLineStatus);
 
         $orderTimeLine = [];
         $currentStatus = Orders::ORDER_PAYMENT_PENDING == $orderDetail['order_payment_status'] ? Orders::ORDER_PAYMENT_PENDING : FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS");

@@ -52,4 +52,16 @@ $(document).ready(function () {
             });
         }
     };
+
+    copyContent = function (obj) {
+        var text = document.getElementById('trackingNumberJs').innerText;
+        var elem = document.createElement("textarea");
+        document.body.appendChild(elem);
+        elem.value = text;
+        elem.select();
+        document.execCommand("copy");
+        document.body.removeChild(elem);
+        var elOriginalText = $(obj).attr('data-original-title');
+        $(obj).attr('data-original-title', langLbl.copied).tooltip('show').attr('data-original-title', elOriginalText);
+    }
 })();

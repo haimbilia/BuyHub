@@ -210,64 +210,6 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                             </div>
                         <?php } ?>
                         <span class="gap"></span>
-                        <?php if (!empty($orderDetail['comments']) && !$print) { ?>
-                            <div class="col-md-12 section--repeated no-print js-scrollable table-wrap">
-                                <h5><?php echo Labels::getLabel('LBL_Posted_Comments', $siteLangId); ?></h5>
-                                <table class="table  table--orders">
-                                    <thead>
-
-                                        <tr class="">
-                                            <th><?php echo Labels::getLabel('LBL_Date_Added', $siteLangId); ?></th>
-                                            <th><?php echo Labels::getLabel('LBL_Customer_Notified', $siteLangId); ?></th>
-                                            <th><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?></th>
-                                            <th><?php echo Labels::getLabel('LBL_Comments', $siteLangId); ?></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        foreach ($orderDetail['comments'] as $row) { ?>
-                                            <tr>
-                                                <td><?php echo FatDate::format($row['oshistory_date_added'], true); ?></td>
-                                                <td><?php echo $yesNoArr[$row['oshistory_customer_notified']]; ?></td>
-                                                <td>
-                                                    <?php
-                                                    echo ($row['oshistory_orderstatus_id'] > 0) ? $orderStatuses[$row['oshistory_orderstatus_id']] : CommonHelper::displayNotApplicable($siteLangId, '');
-                                                    if ($row['oshistory_orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED) {
-                                                        if (empty($row['oshistory_courier'])) {
-                                                            $trackingNumber = $orderDetail['opship_tracking_number'];
-                                                            if (!empty($shippingApiObj) && true === $shippingApiObj->canFetchTrackingDetail()) {
-                                                                $trackingNumber =  '<a href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'" . $trackingNumber . "'" . ',' . "'" . $orderDetail['op_id'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $siteLangId) . '">' . $trackingNumber . '</a>';
-                                                            }
-                                                            $str = !empty($trackingNumber) ? ': ' . Labels::getLabel("LBL_Tracking_Number's", $siteLangId) . ' ( ' . $trackingNumber . ' )' : '';
-                                                            if (empty($orderDetail['opship_tracking_url']) && !empty($trackingNumber)) {
-                                                                $str .=  " VIA <em>" . CommonHelper::displayNotApplicable($siteLangId, $orderDetail["opshipping_label"]) . "</em>";
-                                                            } elseif (!empty($orderDetail['opship_tracking_url']) && !empty($trackingNumber)) {
-                                                                $trackingUrls = (array) explode(', ', $orderDetail['opship_tracking_url']);
-                                                                $str .= '<br>';
-                                                                foreach ($trackingUrls as $url) {
-                                                                    $str .=  " <a class='btn btn-outline-secondary btn-sm' href='" . $url . "' target='_blank'>" . Labels::getLabel("MSG_TRACK", $siteLangId) . "</a>";
-                                                                }
-                                                            }
-                                                            echo $str;
-                                                        } else {
-                                                            echo ($row['oshistory_tracking_number']) ? ': ' . Labels::getLabel('LBL_Tracking_Number', $siteLangId) : '';
-                                                            $trackingNumber = $row['oshistory_tracking_number'];
-                                                            $carrier = $row['oshistory_courier'];
-                                                    ?>
-                                                            <a href="javascript:void(0)" title="<?php echo Labels::getLabel('LBL_TRACK', $siteLangId); ?>" onClick="trackOrder('<?php echo trim($trackingNumber); ?>', '<?php echo trim($carrier); ?>', '<?php echo $orderDetail['op_invoice_number']; ?>')">
-                                                                <?php echo $trackingNumber; ?>
-                                                            </a>
-                                                            <?php echo Labels::getLabel('LBL_VIA', $siteLangId); ?> <em><?php echo CommonHelper::displayNotApplicable($siteLangId, $orderDetail["opshipping_label"]); ?></em>
-                                                    <?php }
-                                                    } ?>
-                                                </td>
-                                                <td><?php echo !empty($row['oshistory_comments']) ? nl2br($row['oshistory_comments']) : Labels::getLabel('LBL_N/A', $siteLangId); ?></td>
-                                            </tr>
-                                        <?php } ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <?php } ?>
                         <?php if (true === $canAttachMoreFiles) { ?>
                             <span class="gap"></span>
                             <div class="col-md-12 section--repeated no-print">

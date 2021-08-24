@@ -160,7 +160,6 @@ class BuyerController extends BuyerBaseController
         $primaryOrderDisplay = false;
 
         $orderObj = new Orders();
-        $orderStatuses = Orders::getOrderProductStatusArr($this->siteLangId);
         $userId = UserAuthentication::getLoggedUserId();
 
         $orderDetail = $orderObj->getOrderById($orderId, $this->siteLangId);
@@ -295,6 +294,7 @@ class BuyerController extends BuyerBaseController
             } else {
                 $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_PICKUP_READY_ORDER_STATUS", FatUtility::VAR_INT, 0));
             }
+
             $orderProductStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingStatuses);
         }
 
@@ -314,7 +314,7 @@ class BuyerController extends BuyerBaseController
             $highlightEnabled[] = Orders::ORDER_PAYMENT_PENDING;
             $orderProductStatusArr = [Orders::ORDER_PAYMENT_PENDING => Labels::getLabel('LBL_PAYMENT_PENDING', $this->siteLangId)] + $orderProductStatusArr;
         }
-        
+
         $frm = $this->getTransferBankForm($this->siteLangId, $orderId);
         $this->set('frm', $frm);
 
@@ -322,7 +322,7 @@ class BuyerController extends BuyerBaseController
         $this->set('currentStatus', $currentStatus);
         $this->set('orderProductStatusArr', $orderProductStatusArr);
         $this->set('orderTimeLine', $orderTimeLine);
-        
+
         $this->set('orderDetail', $orderDetail);
         $this->set('childOrderDetail', $childOrderDetail);
         $this->set('primaryOrder', $primaryOrderDisplay);
