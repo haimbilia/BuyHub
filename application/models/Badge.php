@@ -132,7 +132,7 @@ class Badge extends MyAppModel
             FatCache::set('getBadgeShapeTypesArr' . $langId, FatUtility::convertToJson($arr), '.txt');
             return $arr;
         }
-        
+
         return json_decode($arr, true);
     }
 
@@ -153,7 +153,7 @@ class Badge extends MyAppModel
             FatCache::set('getRibbonPostionArr' . $langId, FatUtility::convertToJson($arr), '.txt');
             return $arr;
         }
-    
+
         return json_decode($arr, true);
     }
 
@@ -174,7 +174,7 @@ class Badge extends MyAppModel
             FatCache::set('getBadgeApprovalStatusArr' . $langId, FatUtility::convertToJson($arr), '.txt');
             return $arr;
         }
-        
+
         return json_decode($arr, true);
     }
 
@@ -194,7 +194,7 @@ class Badge extends MyAppModel
         }
         return true;
     }
-    
+
     /**
      * setRecordId
      *
@@ -311,7 +311,7 @@ class Badge extends MyAppModel
         } else {
             $srchRecord->addGroupBy('blinkcond_id');
         }
-        
+
         $srchRecord->addOrder('blinkcond_id', 'DESC');
 
 
@@ -329,7 +329,7 @@ class Badge extends MyAppModel
             'blinkcond_record_type',
             'blc.badgelink_record_id',
         ];
-        
+
         $srch = new BadgeLinkConditionSearch();
         $srch->joinTable('(' . $srchRecord->getQuery() . ') as m_blnk', 'INNER JOIN', 'blnk.blinkcond_id = m_blnk.m_blinkcond_id');
         $srch->joinBadgeLinks();
@@ -377,7 +377,7 @@ class Badge extends MyAppModel
         }
         return $urls;
     }
-    
+
     /**
      * canAccess
      *
@@ -406,10 +406,38 @@ class Badge extends MyAppModel
                     ) > 0
                 THEN 1
                 ELSE 0
-            END) as canAccess', 
+            END) as canAccess',
         ]);
         $srch->addCondition(Badge::DB_TBL_PREFIX . 'id', '=', $badgeId);
         $record = FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         return current($record);
+    }
+
+
+    public function getRibbons(int $langId, int $position, array $selProdIdArr)
+    {
+        $date = date('Y-m-d H:i:s');
+
+        $srch = new BadgeLinkConditionSearch();
+        $srch->setSelProdIdArr($selProdIdArr);
+        $srch->joinBadges($langId, Badge::TYPE_RIBBON);
+        $srch->joinBadgeLinks();
+        $srch->joinProducts();
+        $srch->joinSellerProducts();
+        $srch->joinShops();
+        $srch->doNotCalculateRecords();
+
+        $srch->addMultipleFields(['blnk.blinkcond_id', 'blnk.blinkcond_badge_id', 'blnk.blinkcond_position', 'bdg.badge_display_inside', 'bdg.badge_shape_type', 'bdg.badge_color', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier)', 'blc.badgelink_id', 'blc.badgelink_record_id', 'COALESCE(sp.selprod_id,prod.product_selprod_id,shpprod.shop_selprod_id) as selprod_id']);
+        $srch->addCondition('blnk.blinkcond_from_date', '<=', $date);
+        $cnd = $srch->addCondition('blnk.blinkcond_to_date', '>=', $date);
+        $cnd->attachCondition('blnk.blinkcond_to_date', '=', '0000-00-00 00:00:00');
+        $srch->addCondition('bdg.badge_type', '=', Badge::TYPE_RIBBON);
+        $srch->addCondition('bdg.badge_active', '=', applicationConstants::ACTIVE);
+        $srch->addHaving('selprod_id', 'is NOT', 'mysql_func_NULL', 'AND', true);
+        $srch->addOrder('blinkcond_id');
+        $srch->addCondition('blnk.blinkcond_position', '=', $position);
+
+        $rs = $srch->getResultSet();
+        return FatApp::getDb()->fetchAll($rs, 'selprod_id');
     }
 }

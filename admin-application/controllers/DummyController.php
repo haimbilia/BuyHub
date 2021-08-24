@@ -5,6 +5,36 @@ class DummyController extends AdminBaseController
     public function index()
     {
 
+        $langId = 1;
+        $date = date('Y-m-d H:i:s');
+        $selProdIdArr = ['174'];
+
+        $srch = new BadgeLinkConditionSearch();
+        $srch->setSelProdIdArr($selProdIdArr);
+        $srch->joinBadges($langId, Badge::TYPE_RIBBON);
+        $srch->joinBadgeLinks();
+        $srch->joinProducts();
+        $srch->joinSellerProducts();
+        $srch->joinShops();
+        $srch->doNotCalculateRecords();
+
+        $srch->addMultipleFields(['blnk.blinkcond_id', 'blnk.blinkcond_badge_id', 'blnk.blinkcond_position', 'bdg.badge_display_inside', 'bdg.badge_shape_type', 'bdg.badge_color', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier)', 'blc.badgelink_id', 'blc.badgelink_record_id', 'COALESCE(sp.selprod_id,prod.product_selprod_id,shpprod.shop_selprod_id) as selprod_id']);
+        $srch->addCondition('blnk.blinkcond_from_date', '<=', $date);
+        $cnd = $srch->addCondition('blnk.blinkcond_to_date', '>=', $date);
+        $cnd->attachCondition('blnk.blinkcond_to_date', '=', '0000-00-00 00:00:00');
+        $srch->addCondition('bdg.badge_type', '=', Badge::TYPE_RIBBON);
+        $srch->addCondition('bdg.badge_active', '=', applicationConstants::ACTIVE);       
+        $srch->addHaving('selprod_id', 'is NOT', 'mysql_func_NULL','AND', true);
+        $srch->addOrder('blinkcond_id');
+        $srch->addCondition('blnk.blinkcond_position', '=', Badge::RIBB_POS_TRIGHT);
+        
+        $rs = $srch->getResultSet();
+        $rightSideRibbons = FatApp::getDb()->fetchAll($rs, 'selprod_id');
+        var_dump($rightSideRibbons);
+        exit;
+
+
+
         $prodSrchObj = new ProductSearch();
         $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
         $prodSrchObj->joinProductToCategory();
@@ -159,5 +189,4 @@ class DummyController extends AdminBaseController
     {
         echo $comments = sprintf(Labels::getLabel('LBL_ORDER_%S._CANCEL_REQUEST_APPROVED', 1), '#Opopopad');
     }
-
 }

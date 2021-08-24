@@ -10,6 +10,7 @@
 /admin-application/views/innovas
 /application/views/innovas
 /application/controllers/DummyController.php
+/admin-application/controllers/DummyController.php
 /conf
 /index.php
 /library/core
