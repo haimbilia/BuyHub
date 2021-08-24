@@ -41,7 +41,7 @@
                     $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[' . $splPriceId . ']" value=' . $selProdId . '></label>', true);
                     break;
                 case 'product_name':               
-                    $str = $this->includeTemplate('_partial/productProfile.php', ['product' => $row ,'siteLangId'=> $siteLangId], false, true);    
+                    $str = $this->includeTemplate('_partial/product/product-info-html.php', ['product' => $row ,'siteLangId'=> $siteLangId], false, true);    
                     $td->appendElement('plaintext', array(), $str, true);
                     break;
                 case 'selprod_price':

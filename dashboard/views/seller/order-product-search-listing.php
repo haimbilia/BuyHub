@@ -39,7 +39,7 @@
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'product':                      
-                    $txt = $this->includeTemplate('_partial/productProfile.php', ['order' => $order, 'siteLangId' => $siteLangId], false, true);
+                    $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $order, 'siteLangId' => $siteLangId], false, true);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'total':

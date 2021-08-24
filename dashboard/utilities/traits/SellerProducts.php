@@ -2893,6 +2893,22 @@ trait SellerProducts
         foreach ($relatedProds as $key => $relatedProd) {
             $arrListing[$relatedProd['related_sellerproduct_id']][$key] = $relatedProd;
         }
+        if(count($arrListing)){
+            $prodSrch = new ProductSearch($this->siteLangId, null, null, false, false);
+            $prodSrch->joinSellerProducts(0, '', array(), false, false);          
+            $prodSrch->addCondition('selprod_id', 'IN', array_keys($arrListing));
+            $prodSrch->addMultipleFields(array('selprod_id', 'product_id', 'product_identifier', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title','product_updated_on','selprod_product_id'));
+            $prodSrch->addGroupBy('selprod_id');
+            $productRs = $prodSrch->getResultSet();
+            $products = FatApp::getDb()->fetchAll($productRs, 'selprod_id');
+            if (count($products)) {
+                foreach ($products as &$arr) {
+                    $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
+                }
+            }            
+            $this->set("linkedToProducts", $products);
+        }
+        
         $this->set("arrListing", $arrListing);
         $this->set('canEdit', $this->userPrivilege->canEditRelatedProducts(UserAuthentication::getLoggedUserId(), true));
         $this->set('page', $page);
@@ -3091,7 +3107,7 @@ trait SellerProducts
                     $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
                 }
             }            
-            $this->set("linkedToroducts", $products);
+            $this->set("linkedToProducts", $products);
         }
         
         $this->set("arrListing", $arrListing);

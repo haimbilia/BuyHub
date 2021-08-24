@@ -46,7 +46,7 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                     $td->appendElement('plaintext', array(), $sr_no, true);
                     break;
                 case 'name':
-                    $str = $this->includeTemplate('_partial/productProfile.php', ['product' => $row ,'siteLangId'=> $siteLangId], false, true);
+                    $str = $this->includeTemplate('_partial/product/product-info-html.php', ['product' => $row ,'siteLangId'=> $siteLangId], false, true);
                     $td->appendElement('plaintext', array(), $str, true);
                     break;
                 case 'selprod_price':

@@ -39,7 +39,7 @@ foreach ($requests as $sn => $row) {
                 $td->appendElement('plaintext', array(), $returnRequestTypeArr[$row[$key]], true);
                 break;
             case 'products': 
-                $txt = $this->includeTemplate('_partial/productProfile.php', ['order' => $row, 'siteLangId' => $siteLangId], false, true);
+                $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $row, 'siteLangId' => $siteLangId], false, true);
                 $td->appendElement('plaintext', array(), $txt, true);
                 break;
             case 'orrequest_status':

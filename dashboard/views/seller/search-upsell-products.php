@@ -33,7 +33,7 @@
                     $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[' . $selProdId . ']" value=' . $selProdId . '></label>', true);
                     break;
                 case 'product_name':
-                    $txt = $this->includeTemplate('_partial/productProfile.php', ['product' => $linkedToroducts[$selProdId], 'siteLangId' => $siteLangId], false, true);
+                    $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['product' => $linkedToProducts[$selProdId], 'siteLangId' => $siteLangId], false, true);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'upsell_products':
