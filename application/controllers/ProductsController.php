@@ -2062,9 +2062,14 @@ class ProductsController extends MyAppController
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $products = $db->fetchAll($rs);
-
+        
+        $selProdIdsArr = array_column($products, 'selprod_id');
+        $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+        $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
         $data = array(
             'products' => $products,
+            'tLeftRibbons' => $tLeftRibbons,
+            'tRightRibbons' => $tRightRibbons,
             'page' => $page,
             'pageCount' => $srch->pages(),
             'pageSize' => $pageSize,
