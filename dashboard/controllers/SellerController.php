@@ -52,7 +52,11 @@ class SellerController extends SellerBaseController
         $srch->setPageSize(2);
 
         $srch->addMultipleFields(
-            array('order_id', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_id', 'op_qty', 'op_selprod_options', 'op_status_id', 'op_brand_name', 'op_shop_name', 'op_other_charges', 'op_unit_price', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_tax_collected_by_seller', 'op_selprod_user_id', 'opshipping_by_seller_user_id', 'orderstatus_color_class', 'order_pmethod_id', 'opshipping_fulfillment_type', 'op_rounding_off')
+            array('order_id', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added',
+                'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name',
+                'op_id', 'op_qty', 'op_selprod_options', 'op_status_id', 'op_brand_name', 'op_other_charges', 'op_unit_price',
+                'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_tax_collected_by_seller', 'op_selprod_user_id',
+                'opshipping_by_seller_user_id', 'orderstatus_color_class', 'order_pmethod_id', 'opshipping_fulfillment_type', 'op_rounding_off')
         );
 
         $rs = $srch->getResultSet();
@@ -3031,6 +3035,7 @@ class SellerController extends SellerBaseController
 
         $srch = new OrderReturnRequestSearch($this->siteLangId);
         $srch->joinOrderProducts();
+        $srch->joinSellerProducts();
         $srch->joinOrderProductSettings();
         $srch->joinOrders();
         $srch->joinOrderBuyerUser();
@@ -3047,7 +3052,10 @@ class SellerController extends SellerBaseController
                 'orrequest_id', 'orrequest_op_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type',
                 'orrequest_date', 'orrequest_status', 'orrequest_reference', 'op_invoice_number', 'op_selprod_title', 'op_product_name',
                 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_qty',
-                'op_unit_price', 'op_selprod_user_id', 'IFNULL(orreason_title, orreason_identifier) as orreason_title', 'op_shop_id', 'op_shop_name', 'op_shop_owner_name', 'buyer.user_name as buyer_name', 'order_tax_charged', 'op_other_charges', 'op_refund_shipping', 'op_refund_amount', 'op_commission_percentage', 'op_affiliate_commission_percentage', 'op_commission_include_tax', 'op_commission_include_shipping', 'op_free_ship_upto', 'op_actual_shipping_charges', 'op_rounding_off'
+                'op_unit_price', 'op_selprod_user_id', 'IFNULL(orreason_title, orreason_identifier) as orreason_title', 'op_shop_id', 'op_shop_name',
+                'op_shop_owner_name', 'buyer.user_name as buyer_name', 'order_tax_charged', 'op_other_charges', 'op_refund_shipping',
+                'op_refund_amount', 'op_commission_percentage', 'op_affiliate_commission_percentage', 'op_commission_include_tax',
+                'op_commission_include_shipping', 'op_free_ship_upto', 'op_actual_shipping_charges', 'op_rounding_off','op_selprod_id','selprod_product_id'
             )
         );
 

@@ -17,7 +17,7 @@
     <?php
     $productSeoLangForm->setFormTagAttribute('class', 'form form--horizontal layout--'.$formLayout);
     $productSeoLangForm->setFormTagAttribute('onsubmit', 'setupProductLangMetaTag(this, 0); return(false);');
-    $productSeoLangForm->developerTags['colClassPrefix'] = 'col-lg-';
+    $productSeoLangForm->developerTags['colClassPrefix'] = 'col-md-';
     $productSeoLangForm->developerTags['fld_default_col'] = 12;
     $langFld = $productSeoLangForm->getField('lang_id');
     $langFld->setfieldTagAttribute('onChange', "editProductMetaTagLangForm(" . $selprodId . ", this.value);");
@@ -29,24 +29,23 @@
     $mtagsFld->setfieldTagAttribute('class', "txtarea-height");
 
     $nextBtn = $productSeoLangForm->getField('btn_next');
-    $nextBtn->developerTags['col'] = 4;
-    $nextBtn->setfieldTagAttribute('class', "btn btn-brand btn-block");
+    $nextBtn->developerTags['col'] = 6;
+    $nextBtn->setfieldTagAttribute('class', "btn btn-brand");
     $nextBtn->setfieldTagAttribute('onClick', "setupProductLangMetaTag(this.closest('form'), 0)");
-    $nextBtn->setWrapperAttribute('class', "col-6");
+    $nextBtn->setWrapperAttribute('class', "text-right");
     $nextBtn->developerTags['noCaptionTag'] = true;
 
     $exitBtn = $productSeoLangForm->getField('btn_exit');
-    $exitBtn->setfieldTagAttribute('class', "btn btn-outline-brand btn-block");
+    $exitBtn->setfieldTagAttribute('class', "btn btn-outline-brand");
     $exitBtn->setfieldTagAttribute('onClick', "setupProductLangMetaTag(this.closest('form'), 1)");
-    $exitBtn->developerTags['col'] = 4;
-    $exitBtn->setWrapperAttribute('class', "col-6");
+    $exitBtn->developerTags['col'] = 6;
     $exitBtn->developerTags['noCaptionTag'] = true;
 
     end($languages);
     if (key($languages) == $selprod_lang_id) {
         $nextBtn->value = Labels::getLabel("LBL_Save", $siteLangId);
-        $nextBtn->setfieldTagAttribute('class', "btn btn-outline-brand btn-block");
-        $exitBtn->setfieldTagAttribute('class', "btn btn-brand btn-block");
+        $nextBtn->setfieldTagAttribute('class', "btn btn-outline-brand");
+        $exitBtn->setfieldTagAttribute('class', "btn btn-brand");
     }
     echo $productSeoLangForm->getFormHtml(); ?>
 </div>

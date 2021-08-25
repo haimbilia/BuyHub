@@ -125,11 +125,15 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                 <table class="table table-justified">
                                     <thead>
                                         <tr class="">
-                                            <th width="70%">
+                                            <th width="50%">
                                                 <?php echo Labels::getLabel('LBL_Order_Particulars', $siteLangId); ?>
                                             </th>
                                             <th width="20%">
-                                                <?php echo Labels::getLabel('LBL_Payment_Info', $siteLangId); ?></th>
+                                                <?php echo Labels::getLabel('LBL_Amount', $siteLangId); ?>
+                                            </th>
+                                            <th width="20%">
+                                                <?php echo Labels::getLabel('LBL_Status', $siteLangId); ?>
+                                            </th>
                                             <th width="10%"></th>
                                         </tr>
                                     </thead>
@@ -153,60 +157,16 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                                 $canSubmitFeedback = Orders::canSubmitFeedback($row['order_user_id'], $row['order_id'], $row['op_selprod_id']); ?>
                                                 <tr>
                                                     <td>
-
-                                                        <div class="item">
-                                                            <?php
-                                                            $prodOrBatchUrl = 'javascript:void(0)';
-                                                            if ($row['op_is_batch']) {
-                                                                $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($row['op_selprod_id']), CONF_WEBROOT_FRONTEND);
-                                                                $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($row['op_selprod_id'], $siteLangId, "SMALL"), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
-                                                            } else {
-                                                                if (Product::verifyProductIsValid($row['op_selprod_id']) == true) {
-                                                                    $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($row['op_selprod_id']), CONF_WEBROOT_FRONTEND);
-                                                                }
-                                                                $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($row['selprod_product_id'], "SMALL", $row['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
-                                                            } ?> <figure class="item__pic"><a href="<?php echo $prodOrBatchUrl; ?>"><img src="<?php echo $prodOrBatchImgUrl; ?>" title="<?php echo $row['op_product_name']; ?>" alt="<?php echo $row['op_product_name']; ?>"></a>
-                                                            </figure>
-
-                                                            <div class="item__description">
-                                                                <div class="item__date">
-                                                                    <?php echo FatDate::format($row['order_date_added']); ?>
-                                                                </div>
-                                                                <div class="item__title">
-                                                                    <?php $prodName = '';
-                                                                    if ($row['op_selprod_title'] != '') {
-                                                                        $prodName .= $row['op_selprod_title'] . '<br/>';
-                                                                    }
-                                                                    $prodName .= $row['op_product_name']; ?>
-                                                                    <a title="<?php echo $row['op_product_name']; ?>" href="<?php echo $prodOrBatchUrl; ?>"><?php echo $prodName; ?></a>
-                                                                </div>
-                                                                <!-- <div class="item__brand"><span><?php /*echo Labels::getLabel('Lbl_Brand', $siteLangId)?>:</span> <?php echo CommonHelper::displayNotApplicable($siteLangId, $row['op_brand_name']);*/ ?></div> -->
-                                                                <?php if ($row['op_selprod_options'] != '') { ?> <div class="item__specification">
-                                                                        <?php echo $row['op_selprod_options']; ?></div> <?php } ?>
-                                                                <?php if ($row['totOrders'] > 1) {
-                                                                    echo Labels::getLabel('LBL_Part_combined_order', $siteLangId) . ' <a title="' . Labels::getLabel('LBL_View_Order_Detail', $siteLangId) . '" href="' . UrlHelper::generateUrl('Buyer', 'viewOrder', array($row['order_id'])) . '">' . $row['order_id'] . '</a>';
-                                                                } ?>
-                                                            </div>
-                                                        </div>
-
-
+                                                        <?php 
+                                                        echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $row ,'siteLangId'=> $siteLangId, 'showDate'=> true], false, true);?>
                                                     </td>
-                                                    <td>
-                                                        <div class="item__specification">
-                                                            <span class="item__price"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($row)); ?></span>
-                                                            <br>
-                                                            <span class="label label-inline <?php echo $classArr[$row['orderstatus_color_class']]; ?>">
-                                                                <?php
-                                                                echo $row['orderstatus_name'];
-                                                                /* $paymentMethodCode = Plugin::getAttributesById($row['order_pmethod_id'], 'plugin_code');
-                                                                if (strtolower($paymentMethodCode) == 'cashondelivery' && $row['opshipping_fulfillment_type'] == Shipping::FULFILMENT_PICKUP) {
-                                                                    echo Labels::getLabel('LBL_PAY_ON_PICKUP', $siteLangId);
-                                                                } else {
-                                                                    echo $row['orderstatus_name'];
-                                                                } */
-                                                                ?>
-                                                            </span>
-                                                        </div>
+                                                    <td>                                                      
+                                                        <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($row)); ?>
+                                                    </td>
+                                                    <td>                                                                                                                  
+                                                        <span class="label label-inline <?php echo $classArr[$row['orderstatus_color_class']]; ?>">
+                                                            <?php echo $row['orderstatus_name']; ?>
+                                                        </span>                                                        
                                                     </td>
                                                     <td>
                                                         <ul class="actions">
@@ -334,7 +294,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                                             <div class="item__title">
                                                                 <a title="<?php echo Labels::getLabel('LBL_Invoice_number', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'viewOrder', array($row['order_id'], $row['op_id'])); ?>" href="<?php echo $orderDetailUrl; ?>"><?php echo $row['op_invoice_number']; ?></a>
                                                             </div>
-                                                            <div class="item__title">
+                                                            <div class="item__sub_title">
                                                                 <?php if ($row['op_selprod_title'] != '') { ?> <a title="<?php echo $row['op_selprod_title']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
                                                                         <?php echo $row['op_selprod_title']; ?>
                                                                     </a> <?php } else { ?> <a title="<?php echo $row['op_product_name']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
@@ -419,7 +379,7 @@ $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
                                                                 <a title="<?php echo Labels::getLabel('Lbl_Invoice_number', $siteLangId) ?>" href="<?php echo $orderDetailUrl; ?>">
                                                                     <?php echo $row['op_invoice_number']; ?> </a>
                                                             </div>
-                                                            <div class="item__title">
+                                                            <div class="item__sub_title">
                                                                 <?php if ($row['op_selprod_title'] != '') { ?> <a title="<?php echo $row['op_selprod_title']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
                                                                         <?php echo $row['op_selprod_title']; ?>
                                                                     </a> <?php } else { ?> <a title="<?php echo $row['op_product_name']; ?>" href="<?php echo $prodOrBatchUrl; ?>">
