@@ -581,7 +581,11 @@ $plugin = new Plugin();
                             <div class="menu__item__inner">
                                 <a title="<?php echo $name; ?>" href="<?php echo UrlHelper::generateUrl('sellerPlugins', 'index', [$type]); ?>">
                                     <i class="icn shop"><svg class="svg">
+<<<<<<< HEAD
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo $name; ?>"></use>
+=======
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#<?php echo PluginCommon::getPluginTypeIconClass($type); ?>"></use>
+>>>>>>> a922623f0edbc4d3bba0afdec5758a0a0c47ea8c
                                         </svg>
                                     </i>
                                     <span class="menu-item__title"><?php echo $name; ?></span>

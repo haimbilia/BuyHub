@@ -7,10 +7,14 @@ $(document).ready(function(){
 		if(fulfilmentType == 2){
             $( "#shipping" ).prop( "checked", true );
             $( "#pickup" ).prop( "checked", false );
+            $(".shippingLblJs").addClass("is-active");
+            $(".pickupLblJs").removeClass("is-active");
         }
         if(fulfilmentType == 1){
             $( "#pickup" ).prop( "checked", true );
             $( "#shipping" ).prop( "checked", false );
+            $(".pickupLblJs").addClass("is-active");
+            $(".shippingLblJs").removeClass("is-active");
         }
 		$('#cartList').html( fcom.getLoader() );
 		fcom.ajax(fcom.makeUrl('Cart','listing', [fulfilmentType]),'',function(res){

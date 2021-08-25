@@ -23,8 +23,8 @@ if ($vtype == 'list') {
         <div class="product-listing" data-view="<?php echo $colMdVal; ?>">
             <?php if ($products) {
                 $showActionBtns = !empty($showActionBtns) ? $showActionBtns : false;
-                $isWishList = isset($isWishList) ? $isWishList : 0; ?>
-                <?php foreach ($products as $product) {
+                $isWishList = isset($isWishList) ? $isWishList : 0;
+                foreach ($products as $product) {
                     $selProdRibbons = [];
                     if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
                         $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];

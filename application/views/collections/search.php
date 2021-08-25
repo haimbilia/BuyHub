@@ -1,10 +1,9 @@
 <?php
 if (!empty($collections)) {
     switch ($collection['collection_type']) {
-        case Collections::COLLECTION_TYPE_PRODUCT: ?>           
-                <?php $this->includeTemplate('products/products-list.php', array('products' => $collections, 'pageCount' => $pageCount, 'recordCount' => $recordCount, 'siteLangId' => $siteLangId, 'colMdVal' => 5), false);    ?>
-            
-        <?php break;
+        case Collections::COLLECTION_TYPE_PRODUCT:
+            $this->includeTemplate('products/products-list.php', array('products' => $collections, 'pageCount' => $pageCount, 'recordCount' => $recordCount, 'siteLangId' => $siteLangId, 'colMdVal' => 5), false);
+            break;
         case Collections::COLLECTION_TYPE_CATEGORY:
             $this->includeTemplate('category/categories-list.php', array('categoriesArr' => $collections, 'siteLangId' => $siteLangId), false);
             break;
