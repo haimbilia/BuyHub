@@ -11,7 +11,19 @@
                 <?php } */ ?>
             </div>
             <div class="product-listing" data-view="6" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
-                <?php foreach ($collection['products'] as $product) { ?>
+                <?php 
+                $tLeftRibbons = $collection['tLeftRibbons'];
+                $tRightRibbons = $collection['tRightRibbons'];
+                foreach ($collection['products'] as $product) { 
+                    $selProdRibbons = [];
+                    if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
+                        $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
+                    }
+
+                    if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
+                        $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
+                    }
+                ?>
                     <div class="items">
                         <?php
                         $displayProductNotAvailableLable = false;

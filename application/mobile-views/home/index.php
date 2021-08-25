@@ -3,68 +3,129 @@
 $appScreenType = CommonHelper::getAppScreenType();
 $resType = $appScreenType == applicationConstants::SCREEN_IPAD ? 'TABLET' : 'MOBILE';
 
-foreach ($slides as $index => $slideDetail) {
+foreach ($slides as &$slideDetail) {
     $uploadedTime = AttachedFile::setTimeParam($slideDetail['slide_img_updated_on']);
-    $slides[$index]['slide_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'slide', array($slideDetail['slide_id'], $appScreenType, $siteLangId, $resType)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $slideDetail['slide_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'slide', array($slideDetail['slide_id'], $appScreenType, $siteLangId, $resType)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $urlTypeData = CommonHelper::getUrlTypeData($slideDetail['slide_url']);
 
-    $slides[$index]['slide_url'] = $slides[$index]['slide_url_type'] = $slides[$index]['slide_url_title'] = "";
+    $slideDetail['slide_url'] = $slideDetail['slide_url_type'] = $slideDetail['slide_url_title'] = "";
     if (false != $urlTypeData) {
-        $slides[$index]['slide_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $slideDetail['slide_url'] : $urlTypeData['recordId']);
-        $slides[$index]['slide_url_type'] = $urlTypeData['urlType'];
+        $slideDetail['slide_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $slideDetail['slide_url'] : $urlTypeData['recordId']);
+        $slideDetail['slide_url_type'] = $urlTypeData['urlType'];
 
         switch ($urlTypeData['urlType']) {
             case applicationConstants::URL_TYPE_SHOP:
-                $slides[$index]['slide_url_title'] = Shop::getName($urlTypeData['recordId'], $siteLangId);
+                $slideDetail['slide_url_title'] = Shop::getName($urlTypeData['recordId'], $siteLangId);
                 break;
             case applicationConstants::URL_TYPE_PRODUCT:
-                $slides[$index]['slide_url_title'] = SellerProduct::getProductDisplayTitle($urlTypeData['recordId'], $siteLangId);
+                $slideDetail['slide_url_title'] = SellerProduct::getProductDisplayTitle($urlTypeData['recordId'], $siteLangId);
                 break;
             case applicationConstants::URL_TYPE_CATEGORY:
-                $slides[$index]['slide_url_title'] = ProductCategory::getProductCategoryName($urlTypeData['recordId'], $siteLangId);
+                $slideDetail['slide_url_title'] = ProductCategory::getProductCategoryName($urlTypeData['recordId'], $siteLangId);
                 break;
             case applicationConstants::URL_TYPE_BRAND:
-                $slides[$index]['slide_url_title'] = Brand::getBrandName($urlTypeData['recordId'], $siteLangId);
+                $slideDetail['slide_url_title'] = Brand::getBrandName($urlTypeData['recordId'], $siteLangId);
                 break;
         }
     }
 }
 
-foreach ($collections as $collectionIndex => $collectionData) {
+foreach ($collections as &$collectionData) {
     if (array_key_exists('products', $collectionData)) {
-        foreach ($collectionData['products'] as $index => $product) {
+        $tLeftRibbons = $collectionData['tLeftRibbons'];
+        $tRightRibbons = $collectionData['tRightRibbons'];
+
+        unset($collectionData['tLeftRibbons'], $collectionData['tRightRibbons']);
+
+        foreach ($collectionData['products'] as &$product) {
+            $selProdRibbons = [];
+            if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
+                $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
+            }
+
+            if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
+                $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
+            }
+
             $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-            $collections[$collectionIndex]['products'][$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-            $collections[$collectionIndex]['products'][$index]['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
-            $collections[$collectionIndex]['products'][$index]['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], true, true, true);
-            $collections[$collectionIndex]['products'][$index]['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
+            $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
+            $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
+            $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], true, true, true);
+            $product['ribbons'] = $selProdRibbons;
         }
     } elseif (array_key_exists('categories', $collectionData)) {
-        foreach ($collectionData['categories'] as $index => $category) {
+        foreach ($collectionData['categories'] as &$category) {
             $imgUpdatedOn = ProductCategory::getAttributesById($category['prodcat_id'], 'prodcat_updated_on');
             $uploadedTime = AttachedFile::setTimeParam($imgUpdatedOn);
-            $collections[$collectionIndex]['categories'][$index]['prodcat_name'] = html_entity_decode($category['prodcat_name'], ENT_QUOTES, 'utf-8');
-            $collections[$collectionIndex]['categories'][$index]['prodcat_description'] = strip_tags(html_entity_decode($category['prodcat_description'], ENT_QUOTES, 'utf-8'));
+            $category['prodcat_name'] = html_entity_decode($category['prodcat_name'], ENT_QUOTES, 'utf-8');
+            $category['prodcat_description'] = strip_tags(html_entity_decode($category['prodcat_description'], ENT_QUOTES, 'utf-8'));
 
-            $collections[$collectionIndex]['categories'][$index]['category_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'MOBILE', applicationConstants::SCREEN_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $category['category_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'MOBILE', applicationConstants::SCREEN_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            
+            if (array_key_exists('tLeftRibbons', $category) || array_key_exists('tRightRibbons', $category)) {
+                $tLeftRibbons = $category['tLeftRibbons'];
+                $tRightRibbons = $category['tRightRibbons'];
+                unset($category['tLeftRibbons'], $category['tRightRibbons']);
+                foreach ($category['products'] as &$product) {
+                    $selProdRibbons = [];
+                    if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
+                        $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
+                    }
+        
+                    if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
+                        $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
+                    }
+        
+                    $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
+                    $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
+                    $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
+                    $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], true, true, true);
+                    $product['ribbons'] = $selProdRibbons;
+                }
+            }
         }
     } elseif (array_key_exists('shops', $collectionData)) {
-        foreach ($collectionData['shops'] as $index => $shop) {
+        foreach ($collectionData['shops'] as &$shop) {
             $shopId = isset($shop['shopData']['shop_id']) ? $shop['shopData']['shop_id'] : $shop['shop_id'];
-            $collections[$collectionIndex]['shops'][$index]['shop_id'] = $shopId;
-            $collections[$collectionIndex]['shops'][$index]['shop_logo'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'shopLogo', array($shopId, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
-            $collections[$collectionIndex]['shops'][$index]['shop_banner'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'shopBanner', array($shopId, $siteLangId, 'MOBILE', 0, applicationConstants::SCREEN_MOBILE)), CONF_IMG_CACHE_TIME, '.jpg');
+            $shop['shop_id'] = $shopId;
+            $shop['shop_logo'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'shopLogo', array($shopId, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+            $shop['shop_banner'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'shopBanner', array($shopId, $siteLangId, 'MOBILE', 0, applicationConstants::SCREEN_MOBILE)), CONF_IMG_CACHE_TIME, '.jpg');
+
+            if (array_key_exists('tLeftRibbons', $shop) || array_key_exists('tRightRibbons', $shop)) {
+                $tLeftRibbons = $shop['tLeftRibbons'];
+                $tRightRibbons = $shop['tRightRibbons'];
+                unset($shop['tLeftRibbons'], $shop['tRightRibbons']);
+                foreach ($shop['products'] as &$product) {
+                    $selProdRibbons = [];
+                    if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
+                        $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
+                    }
+        
+                    if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
+                        $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
+                    }
+        
+                    $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
+                    $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                    $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
+                    $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
+                    $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], true, true, true);
+                    $product['ribbons'] = $selProdRibbons;
+                }
+            }
         }
     } elseif (array_key_exists('brands', $collectionData)) {
-        foreach ($collectionData['brands'] as $index => $shop) {
-            $collections[$collectionIndex]['brands'][$index]['brand_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'brand', array($shop['brand_id'], $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+        foreach ($collectionData['brands'] as &$shop) {
+            $shop['brand_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'brand', array($shop['brand_id'], $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
         }
     } elseif (array_key_exists('testimonials', $collectionData)) {
-        foreach ($collectionData['testimonials'] as $index => $testimonial) {
-            $collections[$collectionIndex]['testimonials'][$index]['user_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'testimonial', array($testimonial['testimonial_id'], $siteLangId, 'THUMB')), CONF_IMG_CACHE_TIME, '.jpg');
+        foreach ($collectionData['testimonials'] as &$testimonial) {
+            $testimonial['user_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'testimonial', array($testimonial['testimonial_id'], $siteLangId, 'THUMB')), CONF_IMG_CACHE_TIME, '.jpg');
         }
     } elseif (array_key_exists('banners', $collectionData) && 0 < count((array)$collectionData['banners']) && array_key_exists('banners', $collectionData['banners'])) {
-        foreach ($collectionData['banners']['banners'] as $index => $banner) {
+        foreach ($collectionData['banners']['banners'] as &$banner) {
             $uploadedTime = AttachedFile::setTimeParam($banner['banner_updated_on']);
             $urlTypeData = CommonHelper::getUrlTypeData($banner['banner_url']);
             if (false === $urlTypeData) {
@@ -75,23 +136,23 @@ foreach ($collections as $collectionIndex => $collectionData) {
                 );
             }
 
-            $collections[$collectionIndex]['banners']['banners'][$index]['banner_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Banner', 'HomePageBannerTopLayout', array($banner['banner_id'], $siteLangId, CommonHelper::getAppScreenType())) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $banner['banner_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Banner', 'HomePageBannerTopLayout', array($banner['banner_id'], $siteLangId, CommonHelper::getAppScreenType())) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
-            $collections[$collectionIndex]['banners']['banners'][$index]['banner_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $banner['banner_url'] : $urlTypeData['recordId']);
-            $collections[$collectionIndex]['banners']['banners'][$index]['banner_url_type'] = $urlTypeData['urlType'];
+            $banner['banner_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $banner['banner_url'] : $urlTypeData['recordId']);
+            $banner['banner_url_type'] = $urlTypeData['urlType'];
 
             switch ($urlTypeData['urlType']) {
                 case applicationConstants::URL_TYPE_SHOP:
-                    $collections[$collectionIndex]['banners']['banners'][$index]['banner_url_title'] = Shop::getName($urlTypeData['recordId'], $siteLangId);
+                    $banner['banner_url_title'] = Shop::getName($urlTypeData['recordId'], $siteLangId);
                     break;
                 case applicationConstants::URL_TYPE_PRODUCT:
-                    $collections[$collectionIndex]['banners']['banners'][$index]['banner_url_title'] = SellerProduct::getProductDisplayTitle($urlTypeData['recordId'], $siteLangId);
+                    $banner['banner_url_title'] = SellerProduct::getProductDisplayTitle($urlTypeData['recordId'], $siteLangId);
                     break;
                 case applicationConstants::URL_TYPE_CATEGORY:
-                    $collections[$collectionIndex]['banners']['banners'][$index]['banner_url_title'] = ProductCategory::getProductCategoryName($urlTypeData['recordId'], $siteLangId);
+                    $banner['banner_url_title'] = ProductCategory::getProductCategoryName($urlTypeData['recordId'], $siteLangId);
                     break;
                 case applicationConstants::URL_TYPE_BRAND:
-                    $collections[$collectionIndex]['banners']['banners'][$index]['banner_url_title'] = Brand::getBrandName($urlTypeData['recordId'], $siteLangId);
+                    $banner['banner_url_title'] = Brand::getBrandName($urlTypeData['recordId'], $siteLangId);
                     break;
             }
         }

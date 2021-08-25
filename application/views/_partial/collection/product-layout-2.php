@@ -11,7 +11,10 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
                 <?php } ?>
             </div>
             <div class="ft-products">
-                <?php foreach ($collection['products'] as $product) {
+                <?php 
+                $tLeftRibbons = $collection['tLeftRibbons'];
+                $tRightRibbons = $collection['tRightRibbons'];
+                foreach ($collection['products'] as $product) {
                     $selProdRibbons = [];
                     if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
                         $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
