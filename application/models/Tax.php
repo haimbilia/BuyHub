@@ -432,7 +432,7 @@ class Tax extends MyAppModel
         $cacheKey = self::TAX_RATE_CACHE_KEY_NAME . md5(json_encode($arr));
         global $taxRatesArr; 
       
-        if (0 < $activatedTaxServiceId && !empty($extraInfo) && isset($extraInfo['shippingAddress']) && count($extraInfo['shippingAddress'])) {        
+        if (0 < $activatedTaxServiceId && !empty($extraInfo) && !empty($extraInfo['shippingAddress'])) {        
             if (true == $useCache) {
                 $rates = FatCache::get('taxCharges' . $cacheKey, CONF_API_REQ_CACHE_TIME, '.txt'); 
                 if ($rates) {   
