@@ -3,33 +3,33 @@
 foreach (array_filter($upsellProducts) as $index => $btProduct) {
     $uploadedTime = AttachedFile::setTimeParam($btProduct['product_updated_on']);
     $upsellProducts[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($btProduct['product_id'], "MEDIUM", $btProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $upsellProducts[$index]['discount'] = ($btProduct['special_price_found'] && $btProduct['selprod_price'] > $btProduct['theprice']) ? CommonHelper::showProductDiscountedText($btProduct, $siteLangId) : '';
     $upsellProducts[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($btProduct['selprod_price'], false, false, false);
     $upsellProducts[$index]['theprice'] = CommonHelper::displayMoneyFormat($btProduct['theprice'], true, true, true);
-    $upsellProducts[$index]['discount'] = ($btProduct['special_price_found'] && $btProduct['selprod_price'] > $btProduct['theprice']) ? CommonHelper::showProductDiscountedText($btProduct, $siteLangId) : '';
 }
 
 foreach (array_filter($relatedProductsRs) as $index => $rProduct) {
     $uploadedTime = AttachedFile::setTimeParam($rProduct['product_updated_on']);
     $relatedProductsRs[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($rProduct['product_id'], "MEDIUM", $rProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $relatedProductsRs[$index]['discount'] = ($rProduct['special_price_found'] && $rProduct['selprod_price'] > $rProduct['theprice']) ? CommonHelper::showProductDiscountedText($rProduct, $siteLangId) : '';
     $relatedProductsRs[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($rProduct['selprod_price'], false, false, false);
     $relatedProductsRs[$index]['theprice'] = CommonHelper::displayMoneyFormat($rProduct['theprice'], true, true, true);
-    $relatedProductsRs[$index]['discount'] = ($rProduct['special_price_found'] && $rProduct['selprod_price'] > $rProduct['theprice']) ? CommonHelper::showProductDiscountedText($rProduct, $siteLangId) : '';
 }
 
 foreach (array_filter($recommendedProducts) as $index => $recProduct) {
     $uploadedTime = AttachedFile::setTimeParam($recProduct['product_updated_on']);
     $recommendedProducts[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($recProduct['product_id'], "MEDIUM", $recProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $recommendedProducts[$index]['discount'] = ($recProduct['special_price_found'] && $recProduct['selprod_price'] > $recProduct['theprice']) ? CommonHelper::showProductDiscountedText($recProduct, $siteLangId) : '';
     $recommendedProducts[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($recProduct['selprod_price'], false, false, false);
     $recommendedProducts[$index]['theprice'] = CommonHelper::displayMoneyFormat($recProduct['theprice'], true, true, true);
-    $recommendedProducts[$index]['discount'] = ($recProduct['special_price_found'] && $recProduct['selprod_price'] > $recProduct['theprice']) ? CommonHelper::showProductDiscountedText($recProduct, $siteLangId) : '';
 }
 
 foreach (array_filter($recentlyViewed) as $index => $recViewed) {
     $uploadedTime = AttachedFile::setTimeParam($recViewed['product_updated_on']);
     $recentlyViewed[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($recViewed['product_id'], "MEDIUM", $recViewed['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $recentlyViewed[$index]['discount'] = ($recViewed['special_price_found'] && $recViewed['selprod_price'] > $recViewed['theprice']) ? CommonHelper::showProductDiscountedText($recViewed, $siteLangId) : '';
     $recentlyViewed[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($recViewed['selprod_price'], false, false, false);
     $recentlyViewed[$index]['theprice'] = CommonHelper::displayMoneyFormat($recViewed['theprice'], true, true, true);
-    $recentlyViewed[$index]['discount'] = ($recViewed['special_price_found'] && $recViewed['selprod_price'] > $recViewed['theprice']) ? CommonHelper::showProductDiscountedText($recViewed, $siteLangId) : '';
 }
 
 foreach (array_filter($productImagesArr) as $afile_id => $image) {
@@ -83,9 +83,9 @@ foreach ($shippingRates as $sn => $row) {
 
 if (!empty($product)) {
     $product['productPolicies'] = [];
+    $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
     $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
     $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], true, true, true);
-    $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
     $product['inclusiveTax'] = FatUtility::int(FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId());
 
     if (!empty($product['selprod_return_age']) && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
@@ -191,9 +191,9 @@ $product['product_description'] = str_replace('/editor/editor-image/',FatUtility
 
 if (!empty($product['moreSellersArr']) && 0 < count($product['moreSellersArr'])) {
     foreach ($product['moreSellersArr'] as &$value) {
+        $value['discount'] = ($value['special_price_found'] && $value['selprod_price'] > $value['theprice']) ? CommonHelper::showProductDiscountedText($value, $siteLangId) : '';
         $value['selprod_price'] = CommonHelper::displayMoneyFormat($value['selprod_price'], false, false, false);
         $value['theprice'] = CommonHelper::displayMoneyFormat($value['theprice'], true, true, true);
-        $value['discount'] = ($value['special_price_found'] && $value['selprod_price'] > $value['theprice']) ? CommonHelper::showProductDiscountedText($value, $siteLangId) : '';
     }
 }
 

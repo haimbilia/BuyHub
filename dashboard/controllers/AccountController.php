@@ -1890,19 +1890,13 @@ class AccountController extends LoggedUserController
 
         $products = $db->fetchAll($rs);
 
-        /* $prodSrchObj = new ProductSearch();
-        if( $products ){
-        foreach($products as &$product){
-        $moreSellerSrch = clone $prodSrchObj;
-        $moreSellerSrch->addMoreSellerCriteria( $product['selprod_code'], $product['selprod_user_id'] );
-        $moreSellerSrch->addMultipleFields(array('count(selprod_id) as totalSellersCount','MIN(theprice) as theprice'));
-        $moreSellerSrch->addGroupBy('selprod_code');
-        $moreSellerRs = $moreSellerSrch->getResultSet();
-        $moreSellerRow = $db->fetch($moreSellerRs);
-        $product['moreSellerData'] =  ($moreSellerRow) ? $moreSellerRow : array();
-        }
-        } */
+        $selProdIdsArr = array_column($products, 'selprod_id');
+        $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+        $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
+
         $this->set('products', $products);
+        $this->set('tLeftRibbons', $tLeftRibbons);
+        $this->set('tRightRibbons', $tRightRibbons);
         $this->set('showProductShortDescription', false);
         $this->set('showProductReturnPolicy', false);
         $this->set('colMdVal', 5);
@@ -1934,7 +1928,6 @@ class AccountController extends LoggedUserController
         }
         $this->set('loadMoreBtnHtml', $this->_template->render(false, false, 'products/products-list-load-more-btn.php', true, false));
         $this->_template->render(false, false, 'json-success.php', true, false);
-        //$this->_template->render(false, false, 'products/products-list.php');
     }
 
     public function deleteWishList()
