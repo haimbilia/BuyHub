@@ -1714,7 +1714,7 @@ trait SellerProducts
         }
         $languages = Language::getAllNames();
 
-        $newTabLangId = $this->siteLangId;
+        $newTabLangId = $lang_id;
         $keys = array_keys($languages);
         $index = array_search($lang_id, $keys);
         if (count($languages) > $index + 1) {

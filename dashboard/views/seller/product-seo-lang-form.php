@@ -44,8 +44,8 @@
     end($languages);
     if (key($languages) == $selprod_lang_id) {
         $nextBtn->value = Labels::getLabel("LBL_Save", $siteLangId);
-        $nextBtn->setfieldTagAttribute('class', "btn btn-outline-brand");
-        $exitBtn->setfieldTagAttribute('class', "btn btn-brand");
+        $nextBtn->setfieldTagAttribute('class', "btn btn-brand");
+        $exitBtn->setfieldTagAttribute('class', "btn btn-outline-brand");
     }
     echo $productSeoLangForm->getFormHtml(); ?>
 </div>
