@@ -56,6 +56,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         $srch->addHaving('seller_id', '=', UserAuthentication::getLoggedUserId());
         $result = FatApp::getDb()->fetchAll($srch->getResultSet());
         $records = [];
+        $recordType = 0;
         foreach ($result as $badgeLink) {
             if (array_key_exists('badgelink_record_id', $badgeLink) && empty($badgeLink['badgelink_record_id'])) {
                 break;
@@ -65,10 +66,10 @@ class BadgeLinkConditionsController extends SellerBaseController
             $recordName = $badgeLink['record_name'];
             $optionName = explode('|', $badgeLink['option_name']);
             $optionValueName = explode('|', $badgeLink['option_value_name']);
-            $seller = $badgeLink['seller'];
             unset($badgeLink['badgelink_record_id'], $badgeLink['record_name'], $badgeLink['option_name'], $badgeLink['option_value_name'], $badgeLink['seller']);
 
-            if (BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT == $badgeLink['blinkcond_record_type']) {
+            $recordType = $badgeLink['blinkcond_record_type'];
+            if (BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT == $recordType) {
                 $name = $recordName;
                 if (isset($records[$recordId]['record_name'])) {
                     $name = $records[$recordId]['record_name'];
@@ -90,6 +91,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         $badgeDetail = !empty($result) ? current($result) : [];
         $this->set('canEditRecords', (!empty($badgeDetail) && Badge::COND_MANUAL == $badgeDetail['badge_condition_type'] && $badgeDetail['badge_required_approval'] == Badge::APPROVAL_OPEN));
         $this->set('badgeLinkCondId', $badgeLinkCondId);
+        $this->set('recordType', $recordType);
         $this->set('records', $records);
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
@@ -265,6 +267,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         $this->badgeLinkCondId = $badgeLinkCondId;
         
         $dataToFill = [];
+        $recordType = 0;
         $recordCondition = BadgeLinkCondition::REC_COND_AUTO;
 
         if ($this->badgeLinkCondId > 0) {
@@ -295,7 +298,8 @@ class BadgeLinkConditionsController extends SellerBaseController
                     $dataToFill = $badgeLink;
                 }
 
-                if (BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT == $badgeLink['blinkcond_record_type']) {
+                $recordType = $badgeLink['blinkcond_record_type'];
+                if (BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT == $recordType) {
                     $name = $recordName;
                     if (isset($dataToFill['records'][$recordId]['record_name'])) {
                         $name = $dataToFill['records'][$recordId]['record_name'];
@@ -345,6 +349,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         $position = array_key_exists('blinkcond_position', $dataToFill) ? $dataToFill['blinkcond_position'] : Badge::RIBB_POS_TRIGHT;
 
         $this->set('position', $position);
+        $this->set('recordType', $recordType);
         $this->set('recordCondition', $recordCondition);
         $this->set('badgeData', $this->getBadgeData($badgeId));
         $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks(UserAuthentication::getLoggedUserId(), true));
@@ -392,9 +397,13 @@ class BadgeLinkConditionsController extends SellerBaseController
         }
 
         $frmSearch = "";
+        $recordType = 0;
         if (0 < $badgeLinkCondId) {
-            $frmSearch = $this->getSearchConditionForm();
-            $frmSearch->fill(['blinkcond_id' => $badgeLinkCondId, 'blinkcond_badge_id' => $badgeId, 'badge_type' => $badgeType]);
+            $recordType = BadgeLinkCondition::getAttributesById($badgeLinkCondId, 'blinkcond_record_type');
+            if (BadgeLinkCondition::RECORD_TYPE_SHOP != $recordType) {
+                $frmSearch = $this->getSearchConditionForm();
+                $frmSearch->fill(['blinkcond_id' => $badgeLinkCondId, 'blinkcond_badge_id' => $badgeId, 'badge_type' => $badgeType]);
+            }
         }
 
         $canBindRecords = Badge::getAttributesById($badgeId, 'badge_required_approval');
@@ -402,6 +411,8 @@ class BadgeLinkConditionsController extends SellerBaseController
 
         $badgelinkConditionType = BadgeLinkCondition::getAttributesById($badgeLinkCondId, 'blinkcond_condition_type');
         $this->set('autoSelProdBadge', (int) (BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD == $badgelinkConditionType));
+
+        $this->set('recordType', $recordType);
         $this->set('badgeName', $this->getBadgeName($badgeId));
         $this->set('badgeType', $badgeType);
         $this->set('badgeId', $badgeId);
@@ -436,6 +447,9 @@ class BadgeLinkConditionsController extends SellerBaseController
         $badgeType = FatApp::getPostedData('badge_type', FatUtility::VAR_INT, 0);
         $badgeLinkCondId = FatApp::getPostedData('blinkcond_id', FatUtility::VAR_INT, 0);
         $position = FatApp::getPostedData('blinkcond_position', FatUtility::VAR_INT, 0);
+
+        $sellerId = UserAuthentication::getLoggedUserId();
+
         if (Badge::TYPE_BADGE == $badgeType) {
             $frm = $this->getBadgeForm($recordCondition);
         } else if (Badge::TYPE_RIBBON == $badgeType) {
@@ -449,9 +463,17 @@ class BadgeLinkConditionsController extends SellerBaseController
 
         $recordType = FatApp::getPostedData('blinkcond_record_type', FatUtility::VAR_INT, 0);
         $records = FatApp::getPostedData('record_ids', FatUtility::VAR_STRING, '');
+        
+        if (BadgeLinkCondition::RECORD_TYPE_SHOP == $recordType) {
+            $shopId = Shop::getAttributesByUserId($sellerId, 'shop_id');
+            if (false === $shopId || 1 > $shopId) {
+                FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_SHOP', $this->adminLangId));
+            }
+            $records = [$shopId];
+        }
 
-        if (BadgeLinkCondition::REC_COND_MANUAL == $recordCondition) {
-            if (empty($records)) {
+        if (BadgeLinkCondition::REC_COND_MANUAL == $recordCondition && BadgeLinkCondition::RECORD_TYPE_SHOP != $recordType) {
+            if (empty($records) || '[]' == $records) {
                 FatUtility::dieJsonError(Labels::getLabel('MSG_LINK_TO_IS_MANDATORY', $this->siteLangId));
             }
             $records = json_decode($records, true);
@@ -515,7 +537,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         }
 
         $newRecord = (1 > $badgeLinkCondId);
-        $post['blinkcond_user_id'] = UserAuthentication::getLoggedUserId();
+        $post['blinkcond_user_id'] = $sellerId;
 
         $record = new BadgeLinkCondition($badgeLinkCondId);
         $record->assignValues($post);
