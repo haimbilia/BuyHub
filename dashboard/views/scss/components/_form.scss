@@ -131,7 +131,7 @@
             padding-#{$end-direction}: 38px !important;
             background-image: url("data:image/svg+xml;base64,PHN2ZyAgIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDUxMiA1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgd2lkdGg9IjUxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8Zz4NCiAgICAgICAgPHBhdGggZmlsbD0iIzg4ODg4OCIgZD0ibTQ0NiA0MGgtNDZ2LTI0YzAtOC44MzYtNy4xNjMtMTYtMTYtMTZzLTE2IDcuMTY0LTE2IDE2djI0aC0yMjR2LTI0YzAtOC44MzYtNy4xNjMtMTYtMTYtMTZzLTE2IDcuMTY0LTE2IDE2djI0aC00NmMtMzYuMzkzIDAtNjYgMjkuNjA3LTY2IDY2djM0MGMwIDM2LjM5MyAyOS42MDcgNjYgNjYgNjZoMzgwYzM2LjM5MyAwIDY2LTI5LjYwNyA2Ni02NnYtMzQwYzAtMzYuMzkzLTI5LjYwNy02Ni02Ni02NnptLTM4MCAzMmg0NnYxNmMwIDguODM2IDcuMTYzIDE2IDE2IDE2czE2LTcuMTY0IDE2LTE2di0xNmgyMjR2MTZjMCA4LjgzNiA3LjE2MyAxNiAxNiAxNnMxNi03LjE2NCAxNi0xNnYtMTZoNDZjMTguNzQ4IDAgMzQgMTUuMjUyIDM0IDM0djM4aC00NDh2LTM4YzAtMTguNzQ4IDE1LjI1Mi0zNCAzNC0zNHptMzgwIDQwOGgtMzgwYy0xOC43NDggMC0zNC0xNS4yNTItMzQtMzR2LTI3MGg0NDh2MjcwYzAgMTguNzQ4LTE1LjI1MiAzNC0zNCAzNHoiLz4NCiAgICA8L2c+DQo8L3N2Zz4=");
             background-size: 16px;
-            background-color: $bg-white;
+            //background-color: $bg-white;
             background-repeat: no-repeat;
             background-position: calc(100% - 11px) center;
             [dir="rtl"] & {
