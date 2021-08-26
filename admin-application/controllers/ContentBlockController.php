@@ -226,7 +226,15 @@ class ContentBlockController extends AdminBaseController
     {
         $post = FatApp::getPostedData();
         $epage_id = FatUtility::int($post['epage_id']);
-        $lang_id = FatUtility::int($post['lang_id']);
+
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+            $lang_id = FatUtility::int($post['lang_id']);
+		} else  {
+			$lang_id = array_key_first($languages); 
+		}
+       
+
         if ($epage_id == 0 || $lang_id == 0) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieWithError(Message::getHtml());
@@ -432,7 +440,14 @@ class ContentBlockController extends AdminBaseController
     {
         $frm = new Form('frmBlockLang');
         $frm->addHiddenField('', 'epage_id', $epage_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+
         $frm->addRequiredField(Labels::getLabel('LBL_Page_Title', $this->adminLangId), 'epage_label');
 
         if (array_key_exists($epage_id, Extrapage::getContentBlockArrWithBg($this->adminLangId))) {

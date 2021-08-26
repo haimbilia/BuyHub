@@ -472,7 +472,15 @@ class CustomProductsController extends AdminBaseController
         $this->objPrivilege->canEditCustomProductRequests();
 
         $post = FatApp::getPostedData();
-        $lang_id = $post['lang_id'];
+		
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			$lang_id = $post['lang_id'];
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$post['lang_id'] = $lang_id;
+		}
+
         $preq_id = FatUtility::int($post['preq_id']);
 
         if ($preq_id == 0 || $lang_id == 0) {
@@ -1244,7 +1252,16 @@ class CustomProductsController extends AdminBaseController
         if (!$row = ProductRequest::getAttributesById($preq_id)) {
             Message::addErrorMessage($this->str_no_record);
         }
-        $product_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $preq_id, $option_id, $lang_id, false, 0, 0, true);
+		
+		$languages = Language::getAllNames();
+		if(count($languages) <= 1){
+			 $lang_id =  array_key_first($languages); 
+			 $product_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $preq_id, $option_id, $lang_id, true, 0, 0, true);
+		} else {
+			$product_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $preq_id, $option_id, $lang_id, false, 0, 0, true);
+		}
+		
+        
         $imgTypesArr = $this->getSeparateImageOptions($preq_id, $this->adminLangId);
 
         $this->set('images', $product_images);
@@ -1285,7 +1302,15 @@ class CustomProductsController extends AdminBaseController
 
         $preq_id = FatUtility::int($post['preq_id']);
         $option_id = FatUtility::int($post['option_id']);
-        $lang_id = FatUtility::int($post['lang_id']);
+		
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			$lang_id = FatUtility::int($post['lang_id']);
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$post['lang_id'] = $lang_id;
+		}
+       
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
             Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_File', $this->adminLangId));
@@ -1327,9 +1352,21 @@ class CustomProductsController extends AdminBaseController
         $imgTypesArr = $this->getSeparateImageOptions($preq_id, $lang_id);
         $frm = new Form('imageFrm', array('id' => 'imageFrm'));
         $frm->addSelectBox(Labels::getLabel('LBL_Image_File_Type', $this->adminLangId), 'option_id', $imgTypesArr, 0, array(), '');
+		
+		
         $languagesAssocArr = Language::getAllNames();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->adminLangId)) + $languagesAssocArr, '', array(), '');
-        $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Photo(s):', $this->adminLangId), 'prod_image', array('id' => 'prod_image'));
+       
+		$languages = Language::getAllNames();
+		if(count($languagesAssocArr) > 1){
+			$frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->adminLangId)) + $languagesAssocArr, '', array(), '');
+		} else  {
+			$lang_id = array_key_first($languagesAssocArr); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+	   
+		
+       
+	   $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Photo(s):', $this->adminLangId), 'prod_image', array('id' => 'prod_image'));
         $fldImg->htmlBeforeField = '<div class="filefield"><span class="filename"></span>';
         $fldImg->htmlAfterField = '<label class="filelabel">' . Labels::getLabel('LBL_Browse_File', $this->adminLangId) . '</label></div><br/><small>' . Labels::getLabel('LBL_Please_keep_image_dimensions_greater_than_500_x_500', $this->adminLangId) . '</small>';
         $frm->addHiddenField('', 'min_width', 500);
@@ -1377,7 +1414,17 @@ class CustomProductsController extends AdminBaseController
     {
         $frm = new Form('frmCustomProductLang');
         $frm->addHiddenField('', 'preq_id', $preqId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $langId, array(), '');
+		
+		$languages = Language::getAllNames();
+		if(count($languages) > 1){
+			$frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $langId, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+        
+		
+		
         $frm->addRequiredField(Labels::getLabel('LBL_Product_Name', $this->adminLangId), 'product_name');
         /* $frm->addRequiredField(Labels::getLabel('LBL_Seller_Product_Title', $this->adminLangId), 'selprod_title');
         $frm->addTextBox(Labels::getLabel('LBL_Any_extra_comment_for_buyer', $this->adminLangId), 'selprod_comments'); */

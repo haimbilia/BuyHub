@@ -68,7 +68,7 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
                                 </div>
                             </div>
                              <?php 
-                                if (!empty($languages)) {
+                                if (!empty($languages) && count($languages) > 1) {
                                 ?>
                                 <div class="accordion my-4" id="specification-accordion">
                                     <h6 class="dropdown-toggle" data-toggle="collapse" data-target="#collapse-1" aria-expanded="true" aria-controls="collapse-1">

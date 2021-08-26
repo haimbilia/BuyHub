@@ -95,6 +95,15 @@ class AbusiveWordsController extends AdminBaseController
 
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray($data);
+
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $lang_id = $post['abusive_lang_id'];
+		} else  {
+			$lang_id = array_key_first($languages); 
+			 $post['abusive_lang_id'] = $lang_id;
+		}
+
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
@@ -192,7 +201,15 @@ class AbusiveWordsController extends AdminBaseController
         $frm = new Form('frmAbusiveWord');
         $frm->addHiddenField('', 'abusive_id', $abusiveId);
         $languages = Language::getAllNames();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'abusive_lang_id', $languages, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
+		if(count($languages) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'abusive_lang_id', $languages, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'abusive_lang_id', $lang_id);
+		}
+
+        
+        
         $frm->addTextbox('Keyword', 'abusive_keyword');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
