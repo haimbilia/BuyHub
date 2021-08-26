@@ -43,9 +43,15 @@ $(document).on('change', formClass + '[name="blinkcond_record_type"]', function 
         $(this).val(RECORD_TYPE_SELLER_PRODUCT);
         return;
     }
-    var recordNameSelector = $(formClass + "select.recordIds--js");
-    if ("" == recordNameSelector.val() || "undefined" == recordNameSelector.val()) { return; }
-    $(formClass + "select.recordIds--js").val('').trigger('change');
+
+    $(formClass + "select.recordIds--js").removeAttr('disabled');
+    if (RECORD_TYPE_SHOP == $(this).val()) {
+        $(formClass + "select.recordIds--js").attr('disabled', 'disabled');
+    } else {
+        var recordNameSelector = $(formClass + "select.recordIds--js");
+        if ("" == recordNameSelector.val() || "undefined" == recordNameSelector.val()) { return; }
+        $(formClass + "select.recordIds--js").val('').trigger('change');
+    }
 });
 
 $(document).on('change', formClass + 'select[name="blinkcond_position"]', function () {
@@ -156,7 +162,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     };
 
     backToListing = function () {
-        window.location.href = fcom.makeUrl(controller, 'list', [badgeId , badgeType]);
+        window.location.href = fcom.makeUrl(controller, 'list', [badgeId, badgeType]);
     }
 
     setup = function (frm) {
@@ -184,6 +190,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
                     return {
                         keyword: params.term,
                         user_is_supplier: 1,
+                        joinShop: 1,
                         credential_active: 1,
                         credential_verified: 1,
                     };
@@ -213,7 +220,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
             $.systemMessage(langLbl.invalidSeller, 'alert--danger');
             return false;
         }
-        
+
         var searchSelector = $(formClass + "select.recordIds--js").siblings('.select2').find('[aria-owns]').attr('aria-owns');
         $("#" + searchSelector).html("");
         var recordType = $(formClass + '[name="blinkcond_record_type"]').val();
@@ -247,7 +254,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
             $.systemMessage(langLbl.invalidSeller, 'alert--danger');
             return false;
         }
-        var arr = {keyword: params.term};        
+        var arr = { keyword: params.term };
         var recordType = $(formClass + '[name="blinkcond_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
             arr['product_seller_id'] = sellerId;

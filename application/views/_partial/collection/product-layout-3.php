@@ -12,10 +12,10 @@ if (isset($collection['products']) && count($collection['products'])) { ?>
             </div>
             <div class="js-collection-corner collection-corner product-listing" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
-                $displayProductNotAvailableLable = false;
-                if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
-                    $displayProductNotAvailableLable = true;
-                }
+                $displayProductNotAvailableLable = (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0));
+
+                $tLeftRibbons = $collection['tLeftRibbons'];
+                $tRightRibbons = $collection['tRightRibbons'];
                 foreach ($collection['products'] as $product) {
                     $selProdRibbons = [];
                     if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {

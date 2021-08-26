@@ -135,7 +135,7 @@ if (Badge::TYPE_BADGE == $badgeType) {
 				</div>
 				<div class="row linkType--js">
 					<?php if (1 > $blinkcond_id) { ?>
-						<div class="col-md-3">
+						<div class="col-md-4">
 							<div class="field-set">
 								<div class="caption-wraper">
 									<label class="field_label">
@@ -153,23 +153,25 @@ if (Badge::TYPE_BADGE == $badgeType) {
 							</div>
 						</div>
 					<?php } ?>
-					<div class="col-md-<?php echo (1 > $blinkcond_id) ? '8' : '12'; ?>">
-						<div class="field-set">
-							<div class="caption-wraper">
-								<label class="field_label">
-									<?php
-									$fld = $frm->getField('badgelink_record_id');
-									echo $fld->getCaption();
-									?>
-								</label>
-							</div>
-							<div class="field-wraper">
-								<div class="field_cover">
-									<?php echo $frm->getFieldHtml('badgelink_record_id'); ?>
-								</div>
-							</div>
-						</div>
-					</div>
+                    <?php if (BadgeLinkCondition::RECORD_TYPE_SHOP != $recordType || 1 > $recordType) { ?>
+                        <div class="col-md-<?php echo (1 > $blinkcond_id) ? '8' : '12'; ?>">
+                            <div class="field-set">
+                                <div class="caption-wraper">
+                                    <label class="field_label">
+                                        <?php
+                                        $fld = $frm->getField('badgelink_record_id');
+                                        echo $fld->getCaption();
+                                        ?>
+                                    </label>
+                                </div>
+                                <div class="field-wraper">
+                                    <div class="field_cover">
+                                        <?php echo $frm->getFieldHtml('badgelink_record_id'); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
 				</div>
 				<?php if (Badge::TYPE_BADGE == $badgeType) { ?>
 					<div class="row conditionType--js">

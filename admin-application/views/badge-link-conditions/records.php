@@ -1,17 +1,27 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php if ($records) {
-    $tbl = '<table class="table table-responsive table--hovered recordListing--js"><tbody>';
-    foreach ($records as $record) {
-        $tbl .= '<tr class="recordRow--js" id="record-' . $badgeLinkCondId . "-" . $record['badgelink_record_id'] . '">';
-        $tbl .= '<td><a class="text-dark" href="javascript:void(0)" title="Remove" onClick="removeBadgeLinkRecord(event, ' . $badgeLinkCondId . ',' . $record['badgelink_record_id'] . ');"><i class=" icon ion-close"></i></a></id>';
-        $tbl .= '<td>' . $record['record_name'] . '</td>';
-        $tbl .= '</tr>';
-    }
-    $tbl .= '</tbody></table>';
-    echo $tbl;
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+if ($records) {
+    $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 
-    $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId, 'callBackJsFunc' => 'reloadRecordsList', 'arguments' => $badgeLinkCondId);
-    $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+    $tbl = new HtmlElement('table', array('class' => 'table table-responsive table--hovered recordListing--js'));
+    foreach ($records as $record) {
+        $tr = $tbl->appendElement('tr', ['class' => 'recordRow--js', 'id' => 'record-' . $badgeLinkCondId . '-' . $record['badgelink_record_id']]);
+        $tr->appendElement('td')->appendElement('plaintext', [], $sr_no, true);
+        $tr->appendElement('td')->appendElement('plaintext', [], $record['record_name'], true);
+
+        if (BadgeLinkCondition::RECORD_TYPE_SHOP != $recordType) {
+            $tr->appendElement('td')
+                ->appendElement('a', array('class' => 'text-dark', 'href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_REMOVE', $adminLangId), "onclick" => "removeBadgeLinkRecord(event, " . $badgeLinkCondId . "," . $record['badgelink_record_id'] . ")"), "<i class='icon ion-close'></i>", true);
+        }
+
+        $sr_no--;
+    }
+    echo $tbl->getHtml();
+    
+    if (BadgeLinkCondition::RECORD_TYPE_SHOP != $recordType) {
+        $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId, 'callBackJsFunc' => 'reloadRecordsList', 'arguments' => $badgeLinkCondId);
+        $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+    }
+
 } else {
     echo Labels::getLabel('MSG_NO_RECORD_FOUND', $adminLangId);
 }
