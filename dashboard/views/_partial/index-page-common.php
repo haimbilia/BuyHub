@@ -9,6 +9,7 @@ $pagesTabsData = ([
     'action' => $action,
     'canEdit' => $canEdit,
     'otherButtons' => $otherButtons,
+    'headingLabel' => $headingLabel,
 ] + $otherTabsData);
 
 $actionButtons = isset($data) && is_array($data) ? $data : [];
@@ -17,12 +18,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <div class="content-header row justify-content-between mb-3">
-            <div class="col-md-auto">
-                <h2 class="content-header-title"><?php echo $headingLabel; ?></h2>
-            </div>
-            <?php $this->includeTemplate('_partial/productPagesTabs.php', $pagesTabsData, false); ?>
-        </div>
+        <?php $this->includeTemplate('_partial/header/content-header.php', $pagesTabsData, false); ?>
         <div class="content-body pagebody--js">
             <div id="otherTopForm--js"></div>
             <?php if (!empty($frmSearch)) { ?>

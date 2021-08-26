@@ -2,20 +2,21 @@
 <?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 <main id="main-area" class="main"   >
     <div class="content-wrapper content-space">
-        <div class="content-header row">
-            <div class="col">
-                <?php $this->includeTemplate('_partial/dashboardTop.php'); ?>
-                <h2 class="content-header-title"><?php echo $taxCategory; ?></h2>
-            </div>
-            <div class="col-auto">
-                <div class="btn-group">
-                    <a href="<?php echo UrlHelper::generateUrl('seller', 'taxCategories'); ?>"
-                       class="btn btn-outline-brand btn-sm">
-                           <?php echo Labels::getLabel('LBL_Back_To_Tax_Categories', $siteLangId) ?>
-                    </a>
-                </div>
-            </div>
-        </div>
+        <?php 
+        $data = [
+            'headingLabel' => $taxCategory,
+            'siteLangId' => $siteLangId,
+            'otherButtons' => [
+                [
+                    'attr' => [
+                        'href' => UrlHelper::generateUrl('seller', 'taxCategories'),
+                        'title' => Labels::getLabel('LBL_Back_To_Tax_Categories', $siteLangId)
+                    ],
+                    'label' => Labels::getLabel('LBL_Back_To_Tax_Categories', $siteLangId)
+                ]
+            ]
+        ];
+        $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
             <div class="card">
                 <?php echo $frmSearch->getFormHtml(); ?>

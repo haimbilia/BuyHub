@@ -167,7 +167,7 @@ if (null != $fld) {
                     </div>
                 </div>
             <?php } ?>
-
+            <div id="cropperBox-js"></div>
             <?php $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
             if (!empty($translatorSubscriptionKey) && count($otherLangData) > 0) { ?>
                 <div class="row">
@@ -181,20 +181,33 @@ if (null != $fld) {
             <div class="p-4 mb-4 border rounded">
                 <h3 class="mb-4"><?php echo Labels::getLabel('LBL_Icon', $adminLangId); ?></h3>
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label">
-                                    <?php $fld = $prodCatFrm->getField('icon_lang_id');
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label></div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $prodCatFrm->getFieldHtml('icon_lang_id'); ?>
+                    <?php
+
+                    $fld = $prodCatFrm->getField('icon_lang_id');
+                     $iconLang = $fld->fldType;
+                    if ($iconLang != 'hidden') {
+                    ?>
+
+                        <div class="col-md-6">
+                            <div class="field-set">
+                                <div class="caption-wraper"><label class="field_label">
+                                        <?php
+                                        echo $fld->getCaption();
+                                        ?>
+                                    </label></div>
+                                <div class="field-wraper">
+                                    <div class="field_cover">
+                                        <?php echo $prodCatFrm->getFieldHtml('icon_lang_id'); ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <?php
+                    } else {
+                        echo $prodCatFrm->getFieldHtml('icon_lang_id');
+                    }
+                    ?>
+
                     <div class="col-md-6">
                         <div class="field-set">
                             <div class="caption-wraper">
@@ -218,10 +231,16 @@ if (null != $fld) {
                 <div class="divider"></div>
                 <h3 class="mb-4"><?php echo Labels::getLabel('LBL_Banner', $adminLangId); ?></h3>
                 <div class="row">
+                <?php
+
+                    $fld = $prodCatFrm->getField('banner_lang_id');
+                    $bannerLang = $fld->fldType;
+                    if ($bannerLang != 'hidden') {
+                    ?>
                     <div class="col-md-3">
                         <div class="field-set">
                             <div class="caption-wraper"><label class="field_label">
-                                    <?php $fld = $prodCatFrm->getField('banner_lang_id');
+                                    <?php 
                                     echo $fld->getCaption();
                                     ?>
                                 </label></div>
@@ -232,6 +251,10 @@ if (null != $fld) {
                             </div>
                         </div>
                     </div>
+                    <?php } else {
+                        echo $prodCatFrm->getFieldHtml('banner_lang_id');
+                    }
+                    ?>
                     <div class="col-md-3">
                         <div class="field-set">
                             <div class="caption-wraper"><label class="field_label">
@@ -385,7 +408,9 @@ foreach ($categories as $catId => $catName) {
         var ratingtype_name = e.detail.tag.title;
         var prodCatId = $("input[name='prodcat_id']").val();
         if (rt_id == '') {
-            if( !confirm(langLbl.addNewRatingType) ){ return; }
+            if (!confirm(langLbl.addNewRatingType)) {
+                return;
+            }
             var data = 'ratingtype_active=1&ratingtype_id=0&ratingtype_identifier=' + ratingtype_name
             fcom.ajax(fcom.makeUrl('RatingTypes', 'setup'), data, function(t) {
                 var ans = $.parseJSON(t);
@@ -407,25 +432,29 @@ foreach ($categories as $catId => $catName) {
     removeRatingType = function(e) {
         var rt_id = e.detail.tag.id;
         var prodCatId = $("input[name='prodcat_id']").val();
-        if('' == rt_id || '' == prodCatId){ return; }
+        if ('' == rt_id || '' == prodCatId) {
+            return;
+        }
         fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'removeRatingType'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + rt_id, function(t) {});
         tagifyRatingTypes();
     }
 
-    getRatingTypeAutoComplete = function(e){
+    getRatingTypeAutoComplete = function(e) {
         var keyword = e.detail.value;
         var list = [];
-        fcom.ajax(fcom.makeUrl('ProductCategories', 'ratingTypeAutoComplete'), {keyword:keyword}, function(t) {          
+        fcom.ajax(fcom.makeUrl('ProductCategories', 'ratingTypeAutoComplete'), {
+            keyword: keyword
+        }, function(t) {
             var ans = $.parseJSON(t);
-            for (i = 0; i < ans.length; i++) {            
+            for (i = 0; i < ans.length; i++) {
                 list.push({
-                    "id" : ans[i].id,
-                    "value" : ans[i].ratingtype_identifier, 
+                    "id": ans[i].id,
+                    "value": ans[i].ratingtype_identifier,
                 });
             }
             tagify.settings.whitelist = list;
             tagify.loading(false).dropdown.show.call(tagify, keyword);
-        });        
+        });
     }
 
     tagifyRatingTypes = function() {
@@ -433,12 +462,12 @@ foreach ($categories as $catId => $catName) {
         if ('undefined' !== typeof $(element).attr('disabled')) {
             return;
         }
-        $(element).siblings( ".tagify" ).remove();
+        $(element).siblings(".tagify").remove();
         tagify = new Tagify(document.querySelector('input[name=rating_type]'), {
-           whitelist : [],
-           delimiters : "#",
-           editTags : false,
-        }).on('add', addRatingType).on('remove', removeRatingType).on('input', getRatingTypeAutoComplete);  
+            whitelist: [],
+            delimiters: "#",
+            editTags: false,
+        }).on('add', addRatingType).on('remove', removeRatingType).on('input', getRatingTypeAutoComplete);
     };
     tagifyRatingTypes();
 </script>

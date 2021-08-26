@@ -4,22 +4,24 @@ $this->includeTemplate('_partial/dashboardNavigation.php');?>
 <main id="main-area" class="main"   >
     <input type='hidden' name='adsBatchId' value="<?php echo $adsBatchId; ?>">
     <div class="content-wrapper content-space">
-        <div class="content-header row">
-            <div class="col">
-                <h2 class="content-header-title">
-                    <?php
-                        $batchName = AdsBatch::getAttributesById($adsBatchId, 'adsbatch_name');
-                        $str = Labels::getLabel('LBL_ADD_PRODUCTS_TO_{BATCH}', $siteLangId);
-                        echo CommonHelper::replaceStringData($str, ['{BATCH}' => $batchName]);
-                    ?>
-                </h2>
-            </div>
-            <div class="col-auto">
-                <div class="btn-group">
-                    <a href="javascript:void(0)" onclick="window.history.back();" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_BACK', $siteLangId);?></a>
-                </div>
-            </div>
-        </div>
+        <?php 
+            $batchName = AdsBatch::getAttributesById($adsBatchId, 'adsbatch_name');
+            $str = Labels::getLabel('LBL_ADD_PRODUCTS_TO_{BATCH}', $siteLangId);
+            $data = [
+                'headingLabel' =>  CommonHelper::replaceStringData($str, ['{BATCH}' => $batchName]),
+                'siteLangId' => $siteLangId,
+                'otherButtons' => [
+                    [
+                        'attr' => [
+                            'onclick' => 'window.history.back();',
+                            'title' => Labels::getLabel('LBL_BACK', $siteLangId)
+                        ],
+                        'label' => Labels::getLabel('LBL_BACK', $siteLangId)
+                    ]
+                ]
+            ];
+            $this->includeTemplate('_partial/header/content-header.php', $data, false);
+        ?>
         <div class="content-body">
             <?php if(!isset($bindProductForm) || true === $bindProductForm) { ?>
                 <div class="row mb-4">

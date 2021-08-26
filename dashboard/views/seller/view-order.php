@@ -26,28 +26,28 @@ $daysSpent = round($datediff / (60 * 60 * 24));
 ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php if (!$print) { ?>
-            <div class="content-header row">
-                <div class="col">
-                    <?php $this->includeTemplate('_partial/dashboardTop.php'); ?>
-                    <h2 class="content-header-title">
-                        <?php echo Labels::getLabel('LBL_View_Sale_Order', $siteLangId); ?>
-                    </h2>
-                </div>
-                <?php                 
-                $orderObj = new Orders();
-                $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses();
-                $processingStatuses = array_diff($processingStatuses, [OrderStatus::ORDER_DELIVERED]);
-                $canCancelOrder = in_array($orderDetail['orderstatus_id'], $processingStatuses);
-                if ($canCancelOrder && $canEdit) { ?>
-                    <div class="col-auto">
-                        <div class="btn-group">
-                            <a href="<?php echo UrlHelper::generateUrl('seller', 'cancelOrder', array($orderDetail['op_id'])); ?>" class="btn btn-outline-brand btn-sm" title="<?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId); ?></a>
-                        </div>
-                    </div>
-                <?php } ?>
-            </div>
-        <?php } ?>
+        <?php if (!$print) {
+            $orderObj = new Orders();
+            $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses();
+            $processingStatuses = array_diff($processingStatuses, [OrderStatus::ORDER_DELIVERED]);
+            $canCancelOrder = in_array($orderDetail['orderstatus_id'], $processingStatuses);
+
+            $data = [
+                'headingLabel' => Labels::getLabel('LBL_View_Sale_Order', $siteLangId),
+                'siteLangId' => $siteLangId,
+            ];
+            
+            if ($canCancelOrder && $canEdit) {
+                $data['otherButtons'][] = [
+                    'attr' => [
+                        'href' => UrlHelper::generateUrl('seller', 'cancelOrder', array($orderDetail['op_id'])),
+                        'title' => Labels::getLabel('LBL_Cancel_Order', $siteLangId)
+                    ],
+                    'label' => Labels::getLabel('LBL_Cancel_Order', $siteLangId)
+                ];
+            }
+            $this->includeTemplate('_partial/header/content-header.php', $data, false);
+        } ?>
         <div class="content-body">
             <div class="card">
                 <div class="card-header">

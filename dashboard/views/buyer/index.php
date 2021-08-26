@@ -2,18 +2,29 @@
 $this->includeTemplate('_partial/buyerDashboardNavigation.php'); ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <div class="content-header row">
-            <div class="col"> <?php $this->includeTemplate('_partial/dashboardTop.php'); ?> <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Dashboard', $siteLangId); ?></h2>
-            </div>
-            <div class="col-auto">
-                <div class="btn-group">
-                    <a href="<?php echo UrlHelper::generateUrl('Account', 'wishlist'); ?>" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Favorites', $siteLangId); ?>
-                    </a>
-                    <a href="<?php echo UrlHelper::generateUrl('Account', 'myAddresses'); ?>" class="btn btn-outline-brand btn-sm">
-                        <?php echo Labels::getLabel('LBL_Manage_Addresses', $siteLangId); ?> </a>
-                </div>
-            </div>
-        </div>
+        <?php 
+        $data = [
+            'headingLabel' => Labels::getLabel('LBL_DASHBOARD', $siteLangId),
+            'siteLangId' => $siteLangId,
+            'otherButtons' => [
+                [
+                    'attr' => [
+                        'href' => UrlHelper::generateUrl('Account', 'wishlist'),
+                        'title' => Labels::getLabel('LBL_FAVORITES', $siteLangId)
+                    ],
+                    'label' => Labels::getLabel('LBL_FAVORITES', $siteLangId)
+                ],
+                [
+                    'attr' => [
+                        'href' => UrlHelper::generateUrl('Account', 'myAddresses'),
+                        'title' => Labels::getLabel('LBL_MANAGE_ADDRESSES', $siteLangId)
+                    ],
+                    'label' => Labels::getLabel('LBL_MANAGE_ADDRESSES', $siteLangId)
+                ],
+            ]
+        ];
+        $this->includeTemplate('_partial/header/content-header.php', $data); ?>
+        
         <div class="content-body">
             <div class="js-widget-scroll widget-scroll">
                 <div class="widget widget-stats">

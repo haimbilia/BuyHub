@@ -6,7 +6,7 @@ foreach ($images as $img) {
         <div class="profile__pic">
             <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', $imageFunction, array($img['afile_record_id'], $img['afile_lang_id'], 'PREVIEW', $img['afile_id']), CONF_WEBROOT_FRONTEND). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo Labels::getLabel('LBL_Shop_Banner', $siteLangId); ?>">
         </div>
-        <small class="form-text text-muted"><?php echo $languages[$img['afile_lang_id']]; ?></small>
+        <small class="form-text text-muted"><?php echo ($img['afile_lang_id'] > 0 ) ? $languages[$img['afile_lang_id']] : Labels::getLabel('LBL_All', $siteLangId); ?></small>
 
         <a class="btn btn-outline-brand btn-sm" href="javascript:void(0);" onClick="removeShopImage(<?php echo $img['afile_id']; ?>,<?php echo $img['afile_lang_id']; ?>,'<?php echo $imageType; ?>',<?php echo $img['afile_screen']; ?>)"><?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?></a>
 

@@ -1,33 +1,41 @@
-<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php $this->includeTemplate('_partial/advertiser/advertiserDashboardNavigation.php'); ?>
-<main id="main-area" class="main"   >
- <div class="content-wrapper content-space">
-    <div class="content-header row">
-        <div class="col">
-            <?php $this->includeTemplate('_partial/dashboardTop.php'); ?>
-            <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Promotions', $siteLangId);?></h2>
-        </div>
-        <div class="content-header-right col-auto">
-            <div class="btn-group">
-                <?php if ($canEdit) { ?>
-                    <a href="javascript:void(0)" onClick="promotionForm()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Add_Promotion', $siteLangId);?></a>
-                <?php }?>
-                <a href="javascript:void(0)" onClick="reloadList()" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_My_promotions', $siteLangId);?></a>
-            </div>
-        </div>
-    </div>
-    <div class="content-body">
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <!-- <h5 class="card-title "><?php echo Labels::getLabel('LBL_Promotions', $siteLangId);?></h5> -->
-                        <p class="note"><?php echo Labels::getLabel('MSG_Minimum_balance_Required_For_Promotions', $siteLangId).' : '. CommonHelper::displaymoneyformat(FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE'));?></p>
-                    </div>
-                    <div class="card-body ">
-                        <div id="promotionForm">
-                            <div class="replaced formshowhide-js">
-                                <?php
+<main id="main-area" class="main">
+    <div class="content-wrapper content-space">
+        <?php 
+        $data = [
+            'headingLabel' => Labels::getLabel('LBL_Promotions',$siteLangId),
+            'siteLangId' => $siteLangId,         
+        ];
+        if ($canEdit) {
+            $data['otherButtons'][] = [
+                'attr' => [
+                    'onclick' => 'promotionForm()',
+                    'title' => Labels::getLabel('LBL_Add_Promotion', $siteLangId)
+                ],
+                'label' => Labels::getLabel('LBL_Add_Promotion', $siteLangId)
+            ];
+        }
+        $data['otherButtons'][] = [
+            'attr' => [
+                'onclick' => 'reloadList()',
+                'title' => Labels::getLabel('LBL_My_promotions', $siteLangId)
+            ],
+            'label' => Labels::getLabel('LBL_My_promotions', $siteLangId)
+        ];
+        $this->includeTemplate('_partial/header/content-header.php', $data); ?>
+        <div class="content-body">
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <!-- <h5 class="card-title "><?php echo Labels::getLabel('LBL_Promotions', $siteLangId); ?></h5> -->
+                            <p class="note"><?php echo Labels::getLabel('MSG_Minimum_balance_Required_For_Promotions', $siteLangId) . ' : ' . CommonHelper::displaymoneyformat(FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE')); ?></p>
+                        </div>
+                        <div class="card-body ">
+                            <div id="promotionForm">
+                                <div class="replaced formshowhide-js">
+                                    <?php
                                     $frmSearchPromotions->setFormTagAttribute('id', 'frmSearchPromotions');
                                     $frmSearchPromotions->setFormTagAttribute('class', 'form');
                                     $frmSearchPromotions->setFormTagAttribute('onsubmit', 'searchPromotions(this); return(false);');
@@ -75,24 +83,24 @@
                                     $cancelBtnFld->developerTags['col'] = 2;
                                     $cancelBtnFld->developerTags['noCaptionTag'] = true;
                                     echo $frmSearchPromotions->getFormHtml();
-                                ?>
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="listing">
+                                <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div id="listing">
-                            <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
- </div>
 </main>
