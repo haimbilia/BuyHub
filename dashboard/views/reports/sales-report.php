@@ -18,7 +18,9 @@ $dateFrm = $frmSearch->getField('date_from');
 $dateFrm->developerTags['noCaptionTag'] = true;
 
 $dateTo = $frmSearch->getField('date_to');
-$dateTo->developerTags['noCaptionTag'] = true;
+if (null != $dateTo) {
+    $dateTo->developerTags['noCaptionTag'] = true;
+}
 
 $sortBy = $frmSearch->getField('sortBy');
 $sortBy->setFieldTagAttribute('id', 'sortBy');
@@ -57,7 +59,7 @@ if (!empty($orderDate)) {
             'onclick' => "redirectUrl('" . $url . "')",
             'title' => Labels::getLabel('LBL_Back', $siteLangId)
         ],
-        'label' => Labels::getLabel('LBL_Back', $siteLangId)
+        'label' => '<i class="fas fa-arrow-left"></i>'
     ];
 }
 

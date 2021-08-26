@@ -14,17 +14,22 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
 ?>
 <main id="main-area" class="main"   >
     <div class="content-wrapper content-space">
-        <div class="content-header row">
-            <div class="col">
-                <h5 class="content-header-title"><?php echo Labels::getLabel('LBL_Shipping_Profiles', $siteLangId); ?>
-                </h5>
-            </div>
-            <div class="col-auto">
-                <div class="content-header-right">
-                    <a href="<?php echo UrlHelper::generateUrl('shippingProfile'); ?>" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_back', $siteLangId); ?></a>
-                </div>
-            </div>
-        </div>
+        <?php 
+        $data = [
+            'headingLabel' => Labels::getLabel('LBL_Shipping_Profiles', $siteLangId),
+            'siteLangId' => $siteLangId,
+            'otherButtons' => [
+                [
+                    'attr' => [
+                        'href' => UrlHelper::generateUrl('shippingProfile'),
+                        'title' => Labels::getLabel('LBL_back', $siteLangId)
+                    ],
+                    'label' => Labels::getLabel('LBL_back', $siteLangId)
+                ]
+            ],
+        ];
+        $this->includeTemplate('_partial/header/content-header.php', $data, false);
+        ?>
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">

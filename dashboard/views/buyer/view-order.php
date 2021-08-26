@@ -36,41 +36,45 @@ if (!$print) { ?>
 <?php } ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php if (!$print) { ?>
-            <div class="content-header row">
-                <div class="col">
-                    <?php $this->includeTemplate('_partial/dashboardTop.php'); ?>
-                    <h2 class="content-header-title no-print">
-                        <?php echo Labels::getLabel('LBL_Order_Details', $siteLangId); ?>
-                    </h2>
-                </div>
-                <?php if (true == $primaryOrder) { ?>
-                    <div class="col-auto">
-                        <div class="btn-group">
-                            <?php if (!$print) { ?>
-                                <?php if ($canCancelOrder) { ?>
-                                        <a href="<?php echo UrlHelper::generateUrl('Buyer', 'orderCancellationRequest', array($childOrderDetail['op_id'])); ?>" class="btn btn-outline-brand btn-sm" title="<?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId); ?>">
-                                            <?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?>
-                                        </a>
-                                <?php }
-                                if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && $canReviewOrders && $canSubmitFeedback) {
-                                ?>
-                                        <a href="<?php echo UrlHelper::generateUrl('Buyer', 'orderFeedback', array($childOrderDetail['op_id'])); ?>" class="btn btn-outline-brand btn-sm" title="<?php echo Labels::getLabel('LBL_Feedback', $siteLangId); ?>">
-                                            <?php echo Labels::getLabel('LBL_Feedback', $siteLangId); ?>
-                                        </a>
-                                <?php
-                                }
-                                if ($canReturnRefund) { ?>
-                                        <a href="<?php echo UrlHelper::generateUrl('Buyer', 'orderReturnRequest', array($childOrderDetail['op_id'])); ?>" class="btn btn-outline-brand btn-sm" title="<?php echo Labels::getLabel('LBL_Refund', $siteLangId); ?>">
-                                            <?php echo Labels::getLabel('LBL_Refund', $siteLangId); ?>
-                                        </a>
-                                <?php } ?>
-                            <?php } ?>
-                        </div>
-                    </div>
-                <?php } ?>
-            </div>
-        <?php } ?>
+        <?php if (!$print) {    
+            $data = [
+                'headingLabel' => Labels::getLabel('LBL_Order_Details',$siteLangId),
+                'siteLangId' => $siteLangId,         
+            ];
+
+            if (true == $primaryOrder && !$print) {
+                if ($canCancelOrder) {
+                    $data['otherButtons'][] = [
+                        'attr' => [
+                            'href' => UrlHelper::generateUrl('Buyer', 'orderCancellationRequest', array($childOrderDetail['op_id'])),
+                            'title' => Labels::getLabel('LBL_Cancel_Order', $siteLangId)
+                        ],
+                        'label' => Labels::getLabel('LBL_Cancel', $siteLangId)
+                    ];
+                }
+
+                if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && $canReviewOrders && $canSubmitFeedback) {
+                    $data['otherButtons'][] = [
+                        'attr' => [
+                            'href' => UrlHelper::generateUrl('Buyer', 'orderFeedback', array($childOrderDetail['op_id'])),
+                            'title' => Labels::getLabel('LBL_Feedback', $siteLangId)
+                        ],
+                        'label' => Labels::getLabel('LBL_Feedback', $siteLangId)
+                    ];
+                }
+
+                if ($canReturnRefund) {
+                    $data['otherButtons'][] = [
+                        'attr' => [
+                            'href' => UrlHelper::generateUrl('Buyer', 'orderReturnRequest', array($childOrderDetail['op_id'])),
+                            'title' => Labels::getLabel('LBL_Refund', $siteLangId)
+                        ],
+                        'label' => Labels::getLabel('LBL_Refund', $siteLangId)
+                    ];
+                }
+            }
+            $this->includeTemplate('_partial/header/content-header.php', $data, false);
+        } ?>
         <div class="content-body">
             <div class="card">
                 <div class="card-header">
