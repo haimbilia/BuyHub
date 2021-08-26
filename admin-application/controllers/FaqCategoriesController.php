@@ -214,7 +214,13 @@ class FaqCategoriesController extends AdminBaseController
         $post = FatApp::getPostedData();
 
         $faqcat_id = $post['faqcat_id'];
-        $lang_id = $post['lang_id'];
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = $post['lang_id'];
+        } else {
+            $lang_id = array_key_first($languages);
+        }
 
         if ($faqcat_id == 0 || $lang_id == 0) {
             Message::addErrorMessage($this->str_invalid_request_id);
@@ -226,9 +232,9 @@ class FaqCategoriesController extends AdminBaseController
         unset($post['faqcat_id']);
         unset($post['lang_id']);
         $data = array(
-        'faqcatlang_lang_id' => $lang_id,
-        'faqcatlang_faqcat_id' => $faqcat_id,
-        'faqcat_name' => $post['faqcat_name'],
+            'faqcatlang_lang_id' => $lang_id,
+            'faqcatlang_faqcat_id' => $faqcat_id,
+            'faqcat_name' => $post['faqcat_name'],
         );
 
         $faqcatObj = new FaqCategory($faqcat_id);
@@ -236,7 +242,7 @@ class FaqCategoriesController extends AdminBaseController
             Message::addErrorMessage($faqcatObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
-        
+
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(FaqCategory::DB_TBL_LANG);
@@ -352,7 +358,7 @@ class FaqCategoriesController extends AdminBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $data = FaqCategory::getAttributesById($faqcatId, array( 'faqcat_id', 'faqcat_active'));
+        $data = FaqCategory::getAttributesById($faqcatId, array('faqcat_id', 'faqcat_active'));
 
         if ($data == false) {
             Message::addErrorMessage($this->str_invalid_request);
@@ -448,7 +454,7 @@ class FaqCategoriesController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $langId), 'faqcat_active', $activeInactiveArr, '', array(), '');
         $frm->addSelectBox(Labels::getLabel('LBL_Type', $langId), 'faqcat_type', $faqCatTypeArr, '', array(), '');
         /*$frm->addCheckBox(Labels::getLabel('LBL_featured',$langId), 'faqcat_featured', 1,array(),false,0);*/
-                
+
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
         return $frm;
     }
@@ -457,18 +463,26 @@ class FaqCategoriesController extends AdminBaseController
     {
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $lang_id = 1 > $lang_id ? $siteLangId : $lang_id;
-        
+
         $frm = new Form('frmFaqCatLang');
         $frm->addHiddenField('', 'faqcat_id');
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+        } else {
+            $lang_id = array_key_first($languages);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+
         $frm->addRequiredField(Labels::getLabel('LBL_Category_Name', $this->adminLangId), 'faqcat_name');
-                
+
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        
+
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
         return $frm;
     }
@@ -499,8 +513,8 @@ class FaqCategoriesController extends AdminBaseController
         $json = array();
         foreach ($posts as $key => $post) {
             $json[] = array(
-            'id' => $key,
-            'name' => strip_tags(html_entity_decode($post['faqcat_name'], ENT_QUOTES, 'UTF-8'))
+                'id' => $key,
+                'name' => strip_tags(html_entity_decode($post['faqcat_name'], ENT_QUOTES, 'UTF-8'))
             );
         }
         die(json_encode($json));

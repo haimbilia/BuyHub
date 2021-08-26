@@ -1326,7 +1326,13 @@ class UsersController extends AdminBaseController
         $post = FatApp::getPostedData();
 
         $sformfield_id = $post['sformfield_id'];
-        $lang_id = $post['sformfieldlang_lang_id'];
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $lang_id = $post['sformfieldlang_lang_id'];
+		} else  {
+			$lang_id = array_key_first($languages); 
+		}
+       
 
         if ($sformfield_id == 0 || $lang_id == 0) {
             Message::addErrorMessage($this->str_invalid_request_id);
@@ -2088,7 +2094,15 @@ class UsersController extends AdminBaseController
 
         $frm = new Form('frmSuppilerLang');
         $frm->addHiddenField('', 'sformfield_id', $sformfield_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'sformfieldlang_lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'sformfieldlang_lang_id', $languages, $lang_id, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'sformfieldlang_lang_id', $lang_id);
+		}
+
+        
         $frm->addRequiredField('Caption', 'sformfield_caption');
 
         $frm->addTextarea(Labels::getLabel('LBL_Comments', $this->adminLangId), 'sformfield_comment');

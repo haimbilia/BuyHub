@@ -190,8 +190,16 @@ class OrderStatusController extends AdminBaseController
         $post = FatApp::getPostedData();
 
         $orderStatusId = $post['orderstatus_id'];
-        $lang_id = $post['orderstatuslang_lang_id'];
+        $languages = Language::getAllNames();
+	
+        if(count($languages) > 1){
+			 $lang_id = $post['orderstatuslang_lang_id'];
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$post['orderstatuslang_lang_id'] = $lang_id;
+		}
 
+      
         if ($orderStatusId == 0 || $lang_id == 0) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieWithError(Message::getHtml());
@@ -273,7 +281,15 @@ class OrderStatusController extends AdminBaseController
         $this->objPrivilege->canViewOrderStatus();
         $frm = new Form('frmorderstatuslang');
         $frm->addHiddenField('', 'orderstatus_id', $orderStatusId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'orderstatuslang_lang_id', Language::getAllNames(), $lang_id, array(), '');
+
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'orderstatuslang_lang_id', $languages, $lang_id, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'orderstatuslang_lang_id', $lang_id);
+		}
+        
         $frm->addRequiredField(Labels::getLabel('LBL_orderstatus_Name', $this->adminLangId), 'orderstatus_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
