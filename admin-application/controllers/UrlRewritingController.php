@@ -31,11 +31,19 @@ class UrlRewritingController extends AdminBaseController
         $this->objPrivilege->canViewUrlRewrite();
 
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-
+        
         $searchForm = $this->getSearchForm();
         $data = FatApp::getPostedData();
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
+        
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			$lang_id = $post['lang_id'];
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$post['lang_id'] = $lang_id;
+		}
 
         $srch = UrlRewrite::getSearchObject($this->adminLangId);
         $srch->joinTable(Language::DB_TBL, 'LEFT OUTER JOIN', 'lng.language_id = ur.urlrewrite_lang_id', 'lng');
@@ -232,8 +240,15 @@ class UrlRewritingController extends AdminBaseController
             $langArr = [$defaultLangId => $langArr[$defaultLangId]];
         }
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $langArr, FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), [], Labels::getLabel('LBL_Select', $this->adminLangId));
+       
+		if(count($langArr) > 1){
+            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $langArr, FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), [], Labels::getLabel('LBL_Select', $this->adminLangId));
 
+		} else  {
+			$lang_id = array_key_first($langArr); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+ 
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);

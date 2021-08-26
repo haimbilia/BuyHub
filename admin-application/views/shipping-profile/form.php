@@ -72,7 +72,7 @@ $frm->setFormTagAttribute('onsubmit', 'setupProfile(this); return(false);');
                                         </div>
                                         
                                         <?php 
-                                            if (!empty($languages)) {
+                                            if (!empty($languages) && count($languages) > 1) {
                                             ?>
                                             <div class="accordians_container accordians_container-categories my-3" data-isdefaulthidden="1" >
                                                 <div class="accordian_panel">

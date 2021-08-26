@@ -93,6 +93,7 @@ class ShippingProfileController extends AdminBaseController
             if(empty($data['shipprofile_name'][$siteDefaultLangId])){
                 $data['shipprofile_name'][$siteDefaultLangId] = $data['shipprofile_identifier'];
             } 
+
             $frm->fill($data);
             $prodCountSrch = new SearchBase(ShippingProfileProduct::DB_TBL, 'selsppro');
             $prodCountSrch->doNotCalculateRecords();
@@ -258,13 +259,15 @@ class ShippingProfileController extends AdminBaseController
         $frm->addHiddenField('', 'shipprofile_user_id', 0);   
         $languages = Language::getAllNames();
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        
         foreach ($languages as $langId => $langName) {
             if ($langId == $siteDefaultLangId) {
                 $frm->addRequiredField(Labels::getLabel('LBL_Profile_Name', $this->adminLangId), 'shipprofile_name[' . $langId . ']');
             } else {
                 $frm->addTextBox(Labels::getLabel('LBL_Profile_Name', $this->adminLangId) . ' ' . $langName, 'shipprofile_name[' . $langId . ']');
             }
-        }        
+        }   
+
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }

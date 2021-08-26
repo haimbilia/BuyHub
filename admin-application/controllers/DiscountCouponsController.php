@@ -129,7 +129,13 @@ class DiscountCouponsController extends AdminBaseController
         $post = FatApp::getPostedData();
 
         $coupon_id = $post['coupon_id'];
-        $lang_id = $post['lang_id'];
+
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $lang_id = $post['lang_id'];
+		} else  {
+			$lang_id = array_key_first($languages); 
+		}
 
         if ($coupon_id == 0 || $lang_id == 0) {
             Message::addErrorMessage($this->str_invalid_request_id);
@@ -441,12 +447,18 @@ class DiscountCouponsController extends AdminBaseController
     {
         $coupon_id = FatUtility::int($coupon_id);
         $couponData = DiscountCoupons::getAttributesById($coupon_id);
+        $languages = Language::getAllNames();
+        if(count($languages) > 1){
+			$lang_id = FatUtility::int($lang_id);
+		} else  {
+			$lang_id = array_key_first($languages); 
+		}
 
         if (false == $couponData) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieWithError(Message::getHtml());
         }
-        $couponImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_DISCOUNT_COUPON_IMAGE, $coupon_id, 0, $lang_id, false);
+        $couponImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_DISCOUNT_COUPON_IMAGE, $coupon_id, 0, $lang_id, (count($languages) > 1) ? false : true);
         $this->set('coupon_id', $coupon_id);
         $this->set('images', $couponImages);
         $this->set('languages', Language::getAllNames());
@@ -895,7 +907,13 @@ class DiscountCouponsController extends AdminBaseController
         $this->objPrivilege->canEditDiscountCoupons();
 
         $coupon_id = FatUtility::int($coupon_id);
+        
         $lang_id = FatUtility::int($lang_id);
+
+        $languages = Language::getAllNames();
+		if(count($languages) <= 1){
+			 $lang_id =  array_key_first($languages); 
+		}
 
         if ($coupon_id == 0) {
             Message::addErrorMessage($this->str_invalid_request);
@@ -1106,7 +1124,14 @@ class DiscountCouponsController extends AdminBaseController
 
         $frm = new Form('frmCouponLang');
         $frm->addHiddenField('', 'coupon_id', $coupon_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+       
         $frm->addRequiredField(Labels::getLabel('LBL_Coupon_title', $this->adminLangId), 'coupon_title');
         $frm->addTextArea(Labels::getLabel('LBL_Coupon_Description', $this->adminLangId), 'coupon_description');
         
@@ -1127,7 +1152,14 @@ class DiscountCouponsController extends AdminBaseController
         $frm = new Form('frmCouponMedia');
         $frm->addHiddenField('', 'coupon_id', $coupon_id);
         $bannerTypeArr = applicationConstants::bannerTypeArr();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $bannerTypeArr, '', array(), '');
+       
+		if(count($bannerTypeArr) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $bannerTypeArr,'', array(), '');
+		} else  {
+			$lang_id = array_key_first($bannerTypeArr); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+       
         $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->adminLangId), 'coupon_image', array('accept' => 'image/*', 'data-frm' => 'frmCouponMedia'));
         return $frm;
     }
