@@ -1,36 +1,36 @@
-$(document).ready(function () {
+$(document).ready(function() {
     searchRecords(document.frmSearch);
 
     $('input[name=\'user_name\']').autocomplete({
         'classes': {
             "ui-autocomplete": "custom-ui-autocomplete"
         },
-        'source': function (request, response) {
+        'source': function(request, response) {
             $.ajax({
                 url: fcom.makeUrl('Users', 'autoCompleteJson'),
                 data: { keyword: request['term'], fIsAjax: 1 },
                 dataType: 'json',
                 type: 'post',
-                success: function (json) {
-                    response($.map(json, function (item) {
+                success: function(json) {
+                    response($.map(json, function(item) {
                         return { label: item['name'] + '(' + item['username'] + ')', value: item['name'] + '(' + item['username'] + ')', id: item['id'] };
                     }));
                 },
             });
         },
-        select: function (event, ul) {
+        select: function(event, ul) {
             $("input[name='user_id']").val(ul.item.id);
         }
     });
 });
 
-(function () {
+(function() {
     var dv = '#listing';
     var controller = 'BadgeRequests';
 
     var recordPage = 1;
 
-    goToSearchPage = function (page) {
+    goToSearchPage = function(page) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
@@ -39,50 +39,51 @@ $(document).ready(function () {
         searchRecords(frm);
     };
 
-    reloadList = function () {
+    reloadList = function() {
         var frm = document.frmSrchPaging;
         searchRecords(frm);
     };
 
-    form = function (badgeReqId) {
-        fcom.ajax(fcom.makeUrl(controller, 'form', [badgeReqId]), '', function (t) {
+    form = function(badgeReqId) {
+        fcom.ajax(fcom.makeUrl(controller, 'form', [badgeReqId]), '', function(t) {
             $('.pagebody--js').hide();
             $('.editRecord--js').html(t);
             if (0 < badgeReqId) {
                 reloadRecordsList(badgeReqId, 1);
             }
+            bindRecordsSelect2();
         });
     };
 
-    backToListing = function () {
+    backToListing = function() {
         $('.editRecord--js').html("");
         $('.pagebody--js').fadeIn();
     }
 
-    setup = function (frm) {
+    setup = function(frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl(controller, 'setup'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controller, 'setup'), data, function(t) {
             reloadList();
             backToListing();
         });
     };
 
-    searchRecords = function (frm) {
+    searchRecords = function(frm) {
         $(dv).html(fcom.getLoader());
         data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl(controller, 'search'), data, function (res) {
+        fcom.ajax(fcom.makeUrl(controller, 'search'), data, function(res) {
             $(dv).html(res);
         });
     }
 
-    clearSearch = function () {
+    clearSearch = function() {
         $('input[name="user_id"]').val("");
         document.frmSearch.reset();
         searchRecords(document.frmSearch);
     };
 
-    getRecordTypeURL = function () {
+    getRecordTypeURL = function() {
         var searchSelector = $("select.recordIds--js").siblings('.select2').find('[aria-owns]').attr('aria-owns');
         $("#" + searchSelector).html("");
         var recordType = $('input[name="breq_record_type"]').val();
@@ -90,7 +91,7 @@ $(document).ready(function () {
             return fcom.makeUrl('Products', 'autoComplete');
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
             return fcom.makeUrl('SellerProducts', 'autoCompleteProducts');
-        }else if (RECORD_TYPE_SHOP == recordType) {
+        } else if (RECORD_TYPE_SHOP == recordType) {
             return fcom.makeUrl('Shops', 'autoComplete');
         } else {
             $.systemMessage(langLbl.invalidRequest, 'alert--danger');
@@ -98,21 +99,36 @@ $(document).ready(function () {
         }
     }
 
-    getRecordData = function (data) {
+    getRecordData = function(data) {
         var recordType = $('input[name="breq_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
             return data
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
-            return data.suggestions;
+            return data.products;
         } else if (RECORD_TYPE_SHOP == recordType) {
-            return [data.shopData];
+            return data;
         } else {
             $.systemMessage(langLbl.invalidRequest, 'alert--danger');
             return false;
         }
     }
 
-    bindRecordsSelect2 = function () {
+    getRequestParams = function(params) {
+        var recordType = $('input[name="breq_record_type"]').val();
+        const requestParams = {
+            keyword: params.term,
+        };
+        if (RECORD_TYPE_PRODUCT == recordType) {
+            requestParams['product_seller_id'] = $("input[name='breq_user_id']").val();
+        } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
+            requestParams['selprod_user_id'] = $("input[name='breq_user_id']").val();
+        } else if (RECORD_TYPE_SHOP == recordType) {
+            requestParams['shop_user_id'] = $("input[name='breq_user_id']").val();
+        }
+        return requestParams;
+    }
+
+    bindRecordsSelect2 = function() {
         var selector = $("select.recordIds--js");
         selector.select2({
             tags: true,
@@ -121,28 +137,29 @@ $(document).ready(function () {
             dir: langLbl.layoutDirection,
             placeholder: selector.attr('placeholder'),
             ajax: {
-                url: function () {
+                url: function() {
                     return getRecordTypeURL()
                 },
                 dataType: 'json',
                 delay: 250,
                 method: 'post',
-                data: function (params) {
-                    return { keyword: params.term };
+                data: function(params) {
+                    return getRequestParams(params);
                 },
-                processResults: function (data, params) {
+                processResults: function(data, params) {
+                    console.log(getRecordData(data));
                     return { results: getRecordData(data) };
                 },
                 cache: true
             },
             minimumInputLength: 0,
-            templateResult: function (result) {
+            templateResult: function(result) {
                 return result.name || result.value;
             },
-            templateSelection: function (result) {
+            templateSelection: function(result) {
                 return result.name || result.value;
             }
-        }).on('select2:selecting', function (e) {
+        }).on('select2:selecting', function(e) {
             var badgeType = $('input[name="badge_type"]').val();
             var recordType = $('input[name="breq_record_type"]').val();
             var position = 0;
@@ -151,44 +168,44 @@ $(document).ready(function () {
             }
 
             // fcom.ajax(fcom.makeUrl(controller, 'isUnique', [badgeType, recordType, e.params.args.data.id, position]), '', function (t) {
-                /* var resp = JSON.parse(t);
-                if (1 > resp.status) {
-                    selector.val('').trigger('change');
-                    $.systemMessage(resp.msg, 'alert--danger');
-                    return false;
-                } */
+            /* var resp = JSON.parse(t);
+            if (1 > resp.status) {
+                selector.val('').trigger('change');
+                $.systemMessage(resp.msg, 'alert--danger');
+                return false;
+            } */
 
-                var recordIds = $("input[name='record_ids']");
-                var JSONObj = [e.params.args.data.id];
-                var badgeLinkRecordIds = recordIds.val();
-                if ('' != badgeLinkRecordIds) {
-                    JSONObj = JSON.parse(badgeLinkRecordIds);
-                    if (JSONObj.includes(e.params.args.data.id)) {
-                        selector.val('').trigger('change');
-                        $.systemMessage(langLbl.alreadySelected, 'alert--danger');
-                        return false;
-                    }
-                    JSONObj.push(e.params.args.data.id);
-                }
-                recordIds.val(JSON.stringify(JSONObj));
-                setTimeout(function () {
+            var recordIds = $("input[name='record_ids']");
+            var JSONObj = [e.params.args.data.id];
+            var badgeLinkRecordIds = recordIds.val();
+            if ('' != badgeLinkRecordIds) {
+                JSONObj = JSON.parse(badgeLinkRecordIds);
+                if (JSONObj.includes(e.params.args.data.id)) {
                     selector.val('').trigger('change');
-                }, 200);
-                var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="fas fa-times"></i></a></id><td>' +( e.params.args.data.value || e.params.args.data.name) + '</td></tr>';
-                var tbl = "";
-                if (1 > $('table.recordListing--js').length) {
-                    var tbl = '<table class="table table-responsive table--hovered recordListing--js"><tbody></tbody></table>';
-                    $('.recordsContainer--js').html(tbl);
+                    $.systemMessage(langLbl.alreadySelected, 'alert--danger');
+                    return false;
                 }
-                $('.recordListing--js').append(htm);
+                JSONObj.push(e.params.args.data.id);
+            }
+            recordIds.val(JSON.stringify(JSONObj));
+            setTimeout(function() {
+                selector.val('').trigger('change');
+            }, 200);
+            var htm = '<tr><td><a class="text-dark" href="javascript:void(0)" title="' + langLbl.remove + '" onClick="removeRecordRow(this, ' + e.params.args.data.id + ');"><i class="fas fa-times"></i></a></id><td>' + (e.params.args.data.value || e.params.args.data.name) + '</td></tr>';
+            var tbl = "";
+            if (1 > $('table.recordListing--js').length) {
+                var tbl = '<table class="table table-responsive table--hovered recordListing--js"><tbody></tbody></table>';
+                $('.recordsContainer--js').html(tbl);
+            }
+            $('.recordListing--js').append(htm);
             // });
-        }).on('select2:unselect', function (e) {
+        }).on('select2:unselect', function(e) {
             updateRecordIds(e.params.args.data.id);
         });
     }
 
 
-    updateRecordIds = function (removeRecordId = 0) {
+    updateRecordIds = function(removeRecordId = 0) {
         var selectedRecords = $("input[name='record_ids']").val();
         if ('' != selectedRecords && 'undefined' != typeof selectedRecords) {
             selectedRecords = $.parseJSON(selectedRecords);
@@ -202,16 +219,16 @@ $(document).ready(function () {
         }
     }
 
-    removeRecordRow = function (element, removeRecordId) {
+    removeRecordRow = function(element, removeRecordId) {
         $(element).closest('tr').remove();
         updateRecordIds(removeRecordId);
         var badgeReqId = $('input[name="breq_id"]').val();
-        fcom.updateWithAjax(fcom.makeUrl(controller, 'unlinkRecord', [badgeReqId, removeRecordId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controller, 'unlinkRecord', [badgeReqId, removeRecordId]), '', function(t) {
             reloadRecordsList(badgeReqId);
         });
     }
 
-    getRecordType = function (element) {
+    getRecordType = function(element) {
         var recordType = $('input[name="breq_record_type"]');
         var oldValue = $(element).data('oldvalue');
         if (oldValue != element.value) {
@@ -225,16 +242,16 @@ $(document).ready(function () {
             return false;
         }
 
-        fcom.ajax(fcom.makeUrl('BadgeLinkConditions', 'getRecordType', [element.value]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('BadgeLinkConditions', 'getRecordType', [element.value]), '', function(t) {
             var res = $.parseJSON(t);
             recordType.val(res.recordType);
         });
     }
 
-    reloadRecordsList = function (badgeReqId, page) {
+    reloadRecordsList = function(badgeReqId, page) {
         $(".recordsContainer--js").html(fcom.getLoader());
         var data = 'page=' + page;
-        fcom.ajax(fcom.makeUrl(controller, 'records', [badgeReqId]), data, function (t) {
+        fcom.ajax(fcom.makeUrl(controller, 'records', [badgeReqId]), data, function(t) {
             $(".recordsContainer--js").html(t);
         });
     };

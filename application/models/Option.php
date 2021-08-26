@@ -129,6 +129,8 @@ class Option extends MyAppModel
     {
         $srch = self::getSearchObject();
         $srch->addCondition('option_id', '=', $optionId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
         if ($record) {
@@ -183,6 +185,8 @@ class Option extends MyAppModel
         $srch = static::getSearchObject();
         $srch->addCondition('o.' . static::DB_TBL_PREFIX . 'id', '=', $id);
         $srch->addFld('o.' . static::DB_TBL_PREFIX . 'id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row) && $row[static::DB_TBL_PREFIX . 'id'] == $id) {
@@ -198,6 +202,8 @@ class Option extends MyAppModel
         $srch->joinTable(static::DB_TBL, 'INNER JOIN', static::DB_TBL_PREFIX . 'id = ' . Product::DB_PRODUCT_TO_OPTION_PREFIX . 'option_id');
         $srch->addCondition(static::DB_TBL_PREFIX . 'id', '=', $id);
         $srch->addFld('product_id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row)) {

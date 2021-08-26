@@ -1,4 +1,17 @@
 
+Release Number : 
+Release Date : 
+
+New Feature :     
+    => 88083 : System Log Listing Page 
+    
+Updates: N/A
+	
+Fixes: N/A
+    
+    
+================================================================================
+
 Multivendor - Released Version : RV-9.3.1
     => IOS/Android Buyer APP version : 2.0.1
     => System API version : 2.3
@@ -191,12 +204,58 @@ Updates/Fixes :
     => 056959 - on updating seller order getting error at admin end 
     => 056954 - Seller: Country code is not showing while adding the Contact Number in the Seller Approval form
     => 056948 - Web Buyer: Getting a "404 error" while clicking on the "Open a Store" button on the front end
-    => 057017 - importing seller products in german getting error invalid csv column 
+    => 057017 - importing seller products in german getting error invalid csv column
+    => 057089 - Admin: Suggestion to override the images while uploading multiple images because we are showing only one image for the Brands at the buyers end
+    => 057115 - Seller and Admin: "+" button is not showing while adding the pickup address' for "All days" Time Slots
+    => 057163 - while adding the option in catalog getting struck in ajax loop
+
+===========================TV-9.3.2.20210810==================
+    => 057137 - Getting error while stripe connect transfer seller part
+    => 057130 - Admin, Seller, and Buyer: Suggestion to give an "option" to Redirect to the Order details page on the Cancelled and Returned requests list
+    => 057117 - Seller and Admin: Shipping packages' details are not showing on the Order details page with the Product
+    => 057145 - Seller: Suggestion to dont allow the seller to add a Special Price greater than the Current Price
+    => 057160 - Uncaught TypeError: Cannot set property scrollTop of undefined
+    => 057112 - Seller: JSON error is receiving while adding the inventory for the Admin's products
+    => 057113 - on submitting product review getting error 
+    => 057109 - Buyer: Records are created in the "Reward Points" section with 0 value while placing an order
+    => 057115 - Seller and Admin: "+" button is not showing while adding the pickup address' for "All days"
+    => 057144 - Admin: "Complete" option is showing in the "User Gdpr Requests" section when the seller "Request to Remove My Data"
+    => 057171 - Buyer: Suggestion to show the "Order ID" with cancelled order under the "My Credit" section
+    => 057177 - Buyer: Suggestion to show the "Return Order Age" in the Order details page at the buyers end
+    => 057166 - Buyer: "Share and Earn" functionality is not working properly
+    => 057221 - Seller: "Categories and Tax Categories" listing is not showing when sellers click on these fields but, for brand listing is showing
+    => 057217 - Seller and Buyer: Suggestion to show the "Cancel Order" button instead of the "Cross" icon in the order details
+    => 057212 - The "same status" of order is updating when Seller clicks on the "Save Changes" button multiple times
+    => 057238 - Buyer: Order ID is not showing with the "Earned Reward Points On Purchase" under the reward points section
+    => 057227 - Admin and Seller: Suggestion to give some indication regarding the "Product Warranty" field is in Days or Months or Year while adding the product
+    => 057044 - Seller: UI design is not correct while uploading the Banner and Logo for the Shop
+==========================TV-9.3.2.20210813=============================
+    => 057270 - Seller: Badges requests list is not showing if the first request is for Badges
+    => 057264 - Admin: "Link to" field is not working while clicking on it and UI is also not correct on the "Badges request" section
+    => 057261 - Admin: "Invalid Request" error is showing while clicking on the "Link" field after selecting "link type" in the Ribbons
+    => 057258 - Admin: Back button linking is not correct for the Ribbons functionality
+    => 057257 - Seller: Blank Confirmation message is showing while deleting the Product from the ribbon
+    => 057304 - Admin: An error message is not correct while adding the same Badges name
+    => 057281 - Seller: There is no option to delete the ribbons and badges listing
+    => 057287 - Seller: There is no information regarding the seller satisfy the "Automatic badges" conditions
+    => 057228 - Admin and Seller: Suggestion to give some indication regarding the "Display Time Slots After Order [Hours]", where it will be used? 
+    => 057256 - on promotion add page time picker not coming
+    => 057269 - Seller: Text is not correct on the "Requests" section
+    => 057262 - Seller: More than two ribbons are showing for the products inventory
+    => 057372 - Getting error while sending email from Users tab
+    => 057408 - Buyer: "Undefined variable" error is showing while clicking on the Seller's collection
+    => 057405 - Buyer: "Fatal error" is showing while clicking on the newly added Slides promotions
+    => 057403 - Seller: Suggestion to don't show the selected products in the drop-down while adding the collections
+    => 057396 - Advertiser: "404 error" is showing while clicking on the "Email Verification" link
+    => 057391 - Buyer: A warning message is showing while clicking on the "Affiliate" option
+    => 057384 - Admin: Information is missing regarding "Content Blocks
+    => 057444 - If brand is mandatory then while importing getting error
+
 
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files
-    => task-85619 Adding files when digital order is delivered  
+    => task-85619 Adding files when digital order is delivered 
 
 Enhancements :
    => At shop level  pickup interval option given
@@ -207,7 +266,6 @@ Enhancements :
    => Price surge based on special price. 
    => Admin Reports.
    => Map listing for products & shops 
-   => Webp image support
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

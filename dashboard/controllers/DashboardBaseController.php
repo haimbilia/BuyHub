@@ -182,6 +182,8 @@ class DashboardBaseController extends FatController
                 'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->siteLangId),
                 'cacheTimeStamp' => $cacheTimeStamp,
                 'close' => Labels::getLabel('LBL_CLOSE', $this->siteLangId),
+                'copiedText' => Labels::getLabel('LBL_COPIED_TEXT', $this->siteLangId),
+                'areYouSure' => Labels::getLabel('LBL_ARE_YOU_SURE?', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);

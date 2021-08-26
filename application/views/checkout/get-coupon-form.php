@@ -49,8 +49,10 @@ if (!empty($cartSummary['cartDiscounts']['coupon_code'])) { ?>
 					} ?>
             </ul>
         </div>
-        <?php } else {
+        <div class="col-md-12">
+            <?php } else {
 			echo Labels::getLabel("LBL_No_Copons_offer_is_available_now.", $siteLangId);
 		} ?>
+        </div>
     </div>
 </div>

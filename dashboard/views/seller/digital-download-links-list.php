@@ -59,7 +59,7 @@ foreach ($links as $sn => $row) {
                 $td->appendElement(
                     "a",
                     array(
-                        'class' => 'btn btn-clean btn-sm btn-icon',
+                        'class' => '',
                         'title' => Labels::getLabel('LBL_Delete', $siteLangId),
                         'onclick' => 'deleteDigitallink(' . $row['pdl_id'] . ',' . $row['pdl_record_id'] . ')', 'href' => 'javascript:void(0);'
                     ),

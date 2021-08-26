@@ -37,7 +37,8 @@
                             // $productType = Importexport::TYPE_PRODUCTS;
 
                             if ($canEdit) {
-                                $this->includeTemplate('_partial/action-buttons.php', ['deleteButton' => false, 'adminLangId' => $adminLangId], false);
+                                $this->includeTemplate('_partial/action-buttons.php', ['deleteButton' => false, 'adminLangId' => $adminLangId,
+                                'statusButtons' => true], false);
                             }
                         ?>
                     </div>

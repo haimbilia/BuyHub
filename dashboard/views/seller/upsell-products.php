@@ -12,7 +12,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             <?php if ($canEdit) { ?>
                 <div class="row mb-4">
                     <div class="col-lg-12">
-                        <div class="card">
+                        <div class="card card-search">
                             <div class="card-body">
                                 <?php $relProdFrm->setFormTagAttribute('onsubmit', 'setUpSellerProductLinks(this); return(false);');
                                 $relProdFrm->setFormTagAttribute('class', 'form form--horizontal');

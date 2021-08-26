@@ -14,6 +14,8 @@ class BadgeRequestsController extends AdminBaseController
     {
         $frmSearch = $this->getSearchForm();
         $this->set("canEdit", $this->objPrivilege->canEditBadgeRequests($this->admin_id, true));
+        $this->_template->addJs(array('js/select2.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->set("frmSearch", $frmSearch);
         $this->_template->render();
     }
@@ -89,6 +91,8 @@ class BadgeRequestsController extends AdminBaseController
 
         if (0 < $badgeReqId) {
             $srch = $this->getRequestedBadgeObj();
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $srch->addCondition('breq_id', '=', $badgeReqId);
             $requestedBadge = FatApp::getDb()->fetch($srch->getResultSet());
             if ($requestedBadge === false) {
@@ -101,7 +105,6 @@ class BadgeRequestsController extends AdminBaseController
             $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $badgeReqId);
             $this->set('fileFound', (false !== $res && 0 < $res['afile_id']));
         }
-
         $this->set('blinkCondId', $blinkCondId);
         $this->set('frm', $frm);
         $this->set('badgeReqId', $badgeReqId);
@@ -137,6 +140,8 @@ class BadgeRequestsController extends AdminBaseController
             $msg = Labels::getLabel('MSG_YOUR_REQUEST_TO_THIS_BADGE_ID_ALREADY_APPROVED/REJECTED', $this->adminLangId);
             FatUtility::dieJsonError($msg);
         }
+
+        unset($post['breq_message']);
         
         $record = new BadgeRequest($badgeReqId);
         $record->assignValues($post);
@@ -145,8 +150,17 @@ class BadgeRequestsController extends AdminBaseController
             Message::addErrorMessage($record->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
-
         $badgeReqId = $record->getMainTableRecordId();
+
+        foreach ($recordIds as $recordId) {
+            $linkData = array(
+                'badgelink_blinkcond_id' => $badgeLinkCondId,
+                'badgelink_record_id' => $recordId,
+                'badgelink_breq_id' => $badgeReqId
+            );
+            FatApp::getDb()->insertFromArray(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $linkData, false, [], $linkData);
+        }
+
 
         $msg = Labels::getLabel("MSG_REQUEST_UPDATED_SUCCESSFULLY", $this->adminLangId);
         $this->set('msg', $msg);
@@ -290,7 +304,7 @@ class BadgeRequestsController extends AdminBaseController
             Message::addErrorMessage(Labels::getLabel("MSG_NOT_AVAILABLE_TO_DOWNLOAD", $this->adminLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('BadgeRequests'));
         }
-
+        
         if (!file_exists(CONF_UPLOADS_PATH . AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH . $res['afile_physical_path'])) {
             Message::addErrorMessage(Labels::getLabel('LBL_FILE_NOT_FOUND', $this->adminLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('BadgeRequests'));

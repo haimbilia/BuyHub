@@ -10,6 +10,7 @@
 // @import 'components/categories'; 
 @import 'components/tagify';
 @import 'components/auto-complete';
+@import 'components/uploaded-media';
 // @import 'components/avtar';
 // @import 'components/back-to-top';
 // @import 'components/breadcrumbs';
@@ -77,6 +78,9 @@
 @import 'components/badges';
 @import 'components/scrollbar';
 @import 'components/packages';
+@import "../../../application/views/scss/components/product-profile";
+@import "../../../application/views/scss/components/list-cart";
+@import "../../../application/views/scss/components/cart-summary";
 //
 // @import 'vendors/animate';
 @import 'vendors/fontawesome';
@@ -90,8 +94,9 @@
 // @import 'vendors/xzoom';
 @import 'vendors/tagify';
 @import 'vendors/intlTelInput.min';
-// @import 'vendors/nouislider.min';
+// @import 'vendors/nouislider.min'; 
 //
 @import 'pages/dashboard';
 @import 'pages/share-earn';
+@import "../../../application/views/scss/pages/checkout";
 //

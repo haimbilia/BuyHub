@@ -7,6 +7,9 @@ $frmSearch->developerTags['fld_default_col'] = 4;
 
 $keyFld = $frmSearch->getField('keyword');
 $keyFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Keyword', $siteLangId));
+$keyFld->developerTags['col'] = 8;
+$keyFld->developerTags['noCaptionTag'] = true;
+
 
 $submitBtnFld = $frmSearch->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
@@ -17,6 +20,7 @@ $cancelBtnFld = $frmSearch->getField('btn_clear');
 $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 $cancelBtnFld->developerTags['col'] = 2;
 $cancelBtnFld->developerTags['noCaptionTag'] = true;
+$frmSearch->getField('keyword')->developerTags['noCaptionTag'] = true;
 
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
@@ -31,7 +35,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="card">
+                    <div class="card card-search">
                         <div class="card-body">
                             <div class="replaced">
                                 <?php echo $frmSearch->getFormHtml(); ?>
@@ -46,13 +50,13 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         <div class="card-header">
                             <div class="card-title"></div>
                             <div class="btn-group">
-                                <a class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css" title="<?php echo Labels::getLabel('LBL_Activate', $siteLangId); ?>" onclick="toggleBulkStatues(1)" href="javascript:void(0)">
+                                <a class="btn btn-outline-brand btn-sm formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Activate', $siteLangId); ?>" onclick="toggleBulkStatues(1)" href="javascript:void(0)">
                                     <?php echo Labels::getLabel('LBL_Activate', $siteLangId); ?>
                                 </a>
-                                <a class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css" title="<?php echo Labels::getLabel('LBL_Deactivate', $siteLangId); ?>" onclick="toggleBulkStatues(0)" href="javascript:void(0)">
+                                <a class="btn btn-outline-brand btn-sm formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Deactivate', $siteLangId); ?>" onclick="toggleBulkStatues(0)" href="javascript:void(0)">
                                     <?php echo Labels::getLabel('LBL_Deactivate', $siteLangId); ?>
                                 </a>
-                                <a class="btn btn-outline-brand btn-sm formActionBtn-js formActions-css" title="<?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>" onclick="deleteBulkSellerProducts()" href="javascript:void(0)">
+                                <a class="btn btn-outline-brand btn-sm formActionBtn-js disabled" title="<?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>" onclick="deleteBulkSellerProducts()" href="javascript:void(0)">
                                     <?php echo Labels::getLabel('LBL_Delete', $siteLangId); ?>
                                 </a>
                             </div>

@@ -3,9 +3,10 @@
 <div class="product-description">
     <div class="product-description-inner">
         <?php if (!empty($product['brand_name'])) { ?>
-        <div class="brand-data"><span
-                class="txt-gray-light"><?php echo Labels::getLabel('LBL_Brand', $siteLangId); ?>:</span>
-            <?php echo $product['brand_name']; ?></div>
+            <div class="brand-data">
+                <span class="txt-gray-light"><?php echo Labels::getLabel('LBL_Brand', $siteLangId); ?>:</span>
+                <a class="link" href="<?php echo UrlHelper::generateUrl('Brands', 'view', [$product['brand_id']]); ?>"><?php echo $product['brand_name']; ?></a>
+            </div>
         <?php } ?>
         <div class="products_title">
 

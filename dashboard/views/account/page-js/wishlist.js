@@ -1,5 +1,5 @@
-$("document").ready(function() {
-    $(document).on("click", ".selectItem--js", function() {
+$("document").ready(function () {
+    $(document).on("click", ".selectItem--js", function () {
         if ($(this).prop("checked") == false) {
             $(".selectAll-js").prop("checked", false);
         }
@@ -10,71 +10,85 @@ $("document").ready(function() {
     });
 });
 
-(function() {
-    var dv = '#listingDiv';
-    searchWishList = function() {
-        $("#loadMoreBtnDiv").html('');
+(function () {
+    var dv = "#listingDiv";
+    searchWishList = function () {
+        $("#loadMoreBtnDiv").html("");
         $("#tab-wishlist").parents().children().removeClass("is-active");
         $("#tab-wishlist").addClass("is-active");
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Account', 'wishListSearch'), '', function(res) {
+        fcom.ajax(fcom.makeUrl("Account", "wishListSearch"), "", function (res) {
             $(dv).html(res);
         });
     };
 
-    setupWishList2 = function(frm, event) {
+    setupWishList2 = function (frm, event) {
         if (!$(frm).validate()) return false;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Account', 'setupWishList'), data, function(ans) {
-            if (ans.status) {
-                searchWishList();
+        fcom.updateWithAjax(
+            fcom.makeUrl("Account", "setupWishList"),
+            data,
+            function (ans) {
+                if (ans.status) {
+                    searchWishList();
+                }
             }
-        });
+        );
     };
 
-    deleteWishList = function(uwlist_id) {
+    deleteWishList = function (uwlist_id) {
         var agree = confirm(langLbl.confirmDelete);
-        if (!agree) { return false; };
-        fcom.updateWithAjax(fcom.makeUrl('Account', 'deleteWishList'), 'uwlist_id=' + uwlist_id, function(ans) {
-            if (ans.status) {
-                searchWishList();
+        if (!agree) {
+            return false;
+        }
+        fcom.updateWithAjax(
+            fcom.makeUrl("Account", "deleteWishList"),
+            "uwlist_id=" + uwlist_id,
+            function (ans) {
+                if (ans.status) {
+                    searchWishList();
+                }
             }
-        });
+        );
     };
 
-    viewWishListItems = function(uwlist_id, append) {
+    viewWishListItems = function (uwlist_id, append) {
         if (typeof append == undefined || append == null) {
             append = 0;
         }
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Account', 'viewWishListItems'), 'uwlist_id=' + uwlist_id, function(ans) {
-            if (append == 1) {
-                $(dv).find('.loader-yk').remove();
-                $(dv).append(ans);
-            } else {
-                $(dv).find('.loader-yk').remove();
-                $(dv).html(ans);
+        fcom.ajax(fcom.makeUrl("Account", "viewWishListItems"), "uwlist_id=" + uwlist_id,
+            function (ans) {
+                if (append == 1) {
+                    $(dv).find(".loader-yk").remove();
+                    $(dv).append(ans);
+                } else {
+                    $(dv).find(".loader-yk").remove();
+                    $(dv).html(ans);
+                }
             }
-        });
+        );
     };
 
-    viewFavouriteItems = function(append) {
+    viewFavouriteItems = function (append) {
         if (typeof append == undefined || append == null) {
             append = 0;
         }
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Account', 'viewFavouriteItems'), '', function(ans) {
-            if (append == 1) {
-                $(dv).find('.loader-yk').remove();
-                $(dv).append(ans);
-            } else {
-                $(dv).find('.loader-yk').remove();
-                $(dv).html(ans);
+        fcom.ajax(fcom.makeUrl("Account", "viewFavouriteItems"), "",
+            function (ans) {
+                if (append == 1) {
+                    $(dv).find(".loader-yk").remove();
+                    $(dv).append(ans);
+                } else {
+                    $(dv).find(".loader-yk").remove();
+                    $(dv).html(ans);
+                }
             }
-        });
+        );
     };
 
-    searchFavouriteListItems = function(frm, append) {
+    searchFavouriteListItems = function (frm, append) {
         var dv2 = "#favListItems";
         if (typeof append == undefined || append == null) {
             append = 0;
@@ -91,68 +105,74 @@ $("document").ready(function() {
             $(dv2).html(fcom.getLoader());
         }
 
-        fcom.updateWithAjax(fcom.makeUrl('Account', 'searchFavouriteListItems'), data, function(ans) {
-            $.mbsmessage.close();
-            if (append == 1) {
-                $(dv2).find('.loader-yk').remove();
-                $(dv2).append(ans.html);
-            } else {
-                $(dv2).html(ans.html);
+        fcom.ajax(fcom.makeUrl("Account", "searchFavouriteListItems"), data,
+            function (ans) {
+                ans = $.parseJSON(ans);
+                $.mbsmessage.close();
+                if (append == 1) {
+                    $(dv2).find(".loader-yk").remove();
+                    $(dv2).append(ans.html);
+                } else {
+                    $(dv2).html(ans.html);
+                }
+                $("#loadMoreBtnDiv").html(ans.loadMoreBtnHtml);
             }
-            $("#loadMoreBtnDiv").html(ans.loadMoreBtnHtml);
-        });
-    }
+        );
+    };
 
-    searchWishListItems = function(uwlist_id, append, page) {
+    searchWishListItems = function (uwlist_id, append, page) {
         var dv2 = "#favListItems";
-        append = (append == "undefined") ? 0 : append;
-        page = (page == "undefined") ? 0 : page;
+        append = append == "undefined" ? 0 : append;
+        page = page == "undefined" ? 0 : page;
         if (append == 1) {
             $(dv2).append(fcom.getLoader());
         } else {
             $(dv2).html(fcom.getLoader());
         }
 
-        fcom.updateWithAjax(fcom.makeUrl('Account', 'searchWishListItems'), 'uwlist_id=' + uwlist_id + '&page=' + page, function(ans) {
-            $.mbsmessage.close();
-            $(dv).find('.loader-yk').remove();
-            if (append == 1) {
-                $(dv2).find('.loader-Js').remove();
-                $(dv2).append(ans.html);
-            } else {
-                $(dv2).html(ans.html);
+        fcom.ajax(fcom.makeUrl("Account", "searchWishListItems"), "uwlist_id=" + uwlist_id + "&page=" + page,
+            function (ans) {
+                ans = $.parseJSON(ans);
+                $(dv).find(".loader-yk").remove();
+                
+                if (append == 1) {
+                    $(dv2).find(".loader-Js").remove();
+                    $(dv2).append(ans.html);
+                } else {
+                    $(dv2).html(ans.html);
+                }
+
+                /* for LoadMore[ */
+                $("#loadMoreBtnDiv").html(ans.loadMoreBtnHtml);
+                /* ] */
             }
+        );
+    };
 
-            /* for LoadMore[ */
-            $("#loadMoreBtnDiv").html(ans.loadMoreBtnHtml);
-            /* ] */
-        });
-    }
-
-    goToProductListingSearchPage = function(page) {
+    goToProductListingSearchPage = function (page) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
         /* var frm = document.frmProductSearchPaging;
-        $(frm.page).val(page);
-        $("form[name='frmProductSearchPaging']").remove(); */
+            $(frm.page).val(page);
+            $("form[name='frmProductSearchPaging']").remove(); */
         var uwlist_id = $("input[name='uwlist_id']").val();
         searchWishListItems(uwlist_id, 0, page);
         $(".selectAll-js").prop("checked", false);
-        $(".formActionBtn-js").addClass('formActions-css');
-    }
+        $(".formActionBtn-js").addClass("disabled");
+    };
 
-    goToFavouriteListingSearchPage = function(page) {
-        if (typeof page == 'undefined' || page == null) {
+    goToFavouriteListingSearchPage = function (page) {
+        if (typeof page == "undefined" || page == null) {
             page = 1;
         }
         var frm = document.favtlistForm;
         $(frm.page).val(page);
 
         searchFavouriteListItems(frm, 0, page);
-    }
+    };
 
-    searchFavoriteShop = function(frm) {
+    searchFavoriteShop = function (frm) {
         if (typeof frm == undefined || frm == null) {
             frm = document.frmFavShopSearchPaging;
         }
@@ -160,12 +180,16 @@ $("document").ready(function() {
         $("#tab-fav-shop").parents().children().removeClass("is-active");
         $("#tab-fav-shop").addClass("is-active");
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Account', 'favoriteShopSearch'), data, function(res) {
-            $(dv).html(res);
-        });
+        fcom.ajax(
+            fcom.makeUrl("Account", "favoriteShopSearch"),
+            data,
+            function (res) {
+                $(dv).html(res);
+            }
+        );
     };
 
-    goToFavoriteShopSearchPage = function(page) {
+    goToFavoriteShopSearchPage = function (page) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
@@ -174,13 +198,13 @@ $("document").ready(function() {
         searchFavoriteShop(frm);
     };
 
-    toggleShopFavorite2 = function(shop_id) {
+    toggleShopFavorite2 = function (shop_id) {
         toggleShopFavorite(shop_id);
         searchFavoriteShop();
     };
 
-    selectAll = function(obj) {
-        $(".selectItem--js").each(function() {
+    selectAll = function (obj) {
+        $(".selectItem--js").each(function () {
             if (obj.prop("checked") == false) {
                 $(this).prop("checked", false);
             } else {
@@ -190,84 +214,106 @@ $("document").ready(function() {
         showFormActionsBtns();
     };
 
-
-    removeFromWishlist = function(selprod_id, wish_list_id, event) {
-        if (!confirm(langLbl.confirmDelete)) { return false; };
+    removeFromWishlist = function (selprod_id, wish_list_id, event) {
+        if (!confirm(langLbl.confirmDelete)) {
+            return false;
+        }
         addRemoveWishListProduct(selprod_id, wish_list_id, event);
         viewWishListItems(wish_list_id);
     };
 
-    removeSelectedFromWishlist = function(wish_list_id, event) {
+    removeSelectedFromWishlist = function (wish_list_id, event) {
         event.stopPropagation();
-        if (!confirm(langLbl.confirmDelete)) { return false; };
+        if (!confirm(langLbl.confirmDelete)) {
+            return false;
+        }
         updateWishlist();
         viewWishListItems(wish_list_id);
     };
 
-    removeSelectedFromFavtlist = function(event, moveToCart = false) {
+    removeSelectedFromFavtlist = function (event, moveToCart = false) {
         event.stopPropagation();
         if (false === moveToCart) {
-            if (!confirm(langLbl.confirmDelete)) { return false; };
+            if (!confirm(langLbl.confirmDelete)) {
+                return false;
+            }
         }
-        if (0 < $('#wishlistForm').length) {
-            var data = $('#wishlistForm').serialize();
+        if (0 < $("#wishlistForm").length) {
+            var data = $("#wishlistForm").serialize();
         } else {
-            var data = $('#favtlistForm').serialize();
+            var data = $("#favtlistForm").serialize();
         }
-        fcom.updateWithAjax(fcom.makeUrl('Account', 'removeFromFavoriteArr'), data, function(ans) {
-            if (false === moveToCart) {
-                viewFavouriteItems();
-                if (ans.status) {
-                    $.mbsmessage.close();
-                    $.systemMessage(ans.msg, 'alert--success');
+        fcom.updateWithAjax(
+            fcom.makeUrl("Account", "removeFromFavoriteArr"),
+            data,
+            function (ans) {
+                if (false === moveToCart) {
+                    viewFavouriteItems();
+                    if (ans.status) {
+                        $.mbsmessage.close();
+                        $.systemMessage(ans.msg, "alert--success");
+                    }
                 }
             }
-        });
-
+        );
     };
 
-    updateWishlist = function() {
-        if (0 < $('#wishlistForm').length) {
-            var data = $('#wishlistForm').serialize();
+    updateWishlist = function () {
+        if (0 < $("#wishlistForm").length) {
+            var data = $("#wishlistForm").serialize();
         } else {
-            var data = $('#favtlistForm').serialize();
+            var data = $("#favtlistForm").serialize();
         }
-        fcom.updateWithAjax(fcom.makeUrl('Account', 'addRemoveWishListProductArr'), data, function(ans) {
-            if (ans.status) {
-                $.mbsmessage.close();
-                $.systemMessage(ans.msg, 'alert--success');
+        fcom.updateWithAjax(
+            fcom.makeUrl("Account", "addRemoveWishListProductArr"),
+            data,
+            function (ans) {
+                if (ans.status) {
+                    $.mbsmessage.close();
+                    $.systemMessage(ans.msg, "alert--success");
+                }
             }
-        });
+        );
     };
 
-    addToCart = function(obj, event, isWishlist = 0) {
+    addToCart = function (obj, event, isWishlist = 0) {
         event.stopPropagation();
 
-        $("#favListItems .selectItem--js").each(function() {
+        $("#favListItems .selectItem--js").each(function () {
             $(this).prop("checked", false);
         });
 
-        obj.parent().siblings('li').find('.selectItem--js').prop("checked", true);
+        obj.parent().siblings("li").find(".selectItem--js").prop("checked", true);
 
         addSelectedToCart(event, isWishlist);
     };
 
-    addSelectedToCart = function(event, isWishlist) {
+    addSelectedToCart = function (event, isWishlist) {
         event.stopPropagation();
-        $.mbsmessage(langLbl.processing, false, 'alert--process alert');
-        if (0 < $('#wishlistForm').length) {
-            var data = $('#wishlistForm').serialize();
+        $.mbsmessage(langLbl.processing, false, "alert--process alert");
+        if (0 < $("#wishlistForm").length) {
+            var data = $("#wishlistForm").serialize();
         } else {
-            var data = $('#favtlistForm').serialize();
+            var data = $("#favtlistForm").serialize();
         }
-        fcom.updateWithAjax(fcom.makeUrl('cart', 'addSelectedToCart', [], siteConstants.webrootfront), data, function(ans) {
-            if (0 < isWishlist) {
-                updateWishlist();
-            } else {
-                removeSelectedFromFavtlist(event, true);
+        fcom.updateWithAjax(
+            fcom.makeUrl("cart", "addSelectedToCart", [], siteConstants.webrootfront),
+            data,
+            function (ans) {
+                if (0 < isWishlist) {
+                    updateWishlist();
+                } else {
+                    removeSelectedFromFavtlist(event, true);
+                }
+                setTimeout(function () {
+                    location.href = fcom.makeUrl(
+                        "cart",
+                        "",
+                        [],
+                        siteConstants.webrootfront
+                    );
+                }, 1000);
             }
-            setTimeout(function() { location.href = fcom.makeUrl('cart', '', [], siteConstants.webrootfront); }, 1000);
-        });
+        );
     };
-
 })();

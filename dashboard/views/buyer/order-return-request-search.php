@@ -38,29 +38,8 @@ foreach ($requests as $sn => $row) {
             case 'orrequest_type':
                 $td->appendElement('plaintext', array(), $returnRequestTypeArr[$row[$key]], true);
                 break;
-            case 'products':
-                $txt = '<div class="item__description">';
-                if ($row['op_selprod_title'] != '') {
-                    $txt .= '<div class="item__title">'.$row['op_selprod_title'].'</div>';
-                }
-                $txt .= '<div class="item__sub_title">'.$row['op_product_name'].'</div>';
-                if(!empty($row['op_brand_name'])){
-                    $txt .= '<div class="item__brand">'.Labels::getLabel('LBL_Brand', $siteLangId).': '.$row['op_brand_name'];
-                }
-                if( !empty($row['op_brand_name']) && !empty($row['op_selprod_options']) ){
-                    $txt .= ' | ' ;
-                }
-                if ($row['op_selprod_options'] != '') {
-                    $txt .= $row['op_selprod_options'];
-                }
-                $txt .='</div>';
-                if ($row['op_selprod_sku'] != '') {
-                    $txt .= '<div class="item__sku">'.Labels::getLabel('LBL_SKU', $siteLangId).':  ' . $row['op_selprod_sku'].'</div>';
-                }
-                if ($row['op_product_model'] != '') {
-                    $txt .= '<div class="item__model">'.Labels::getLabel('LBL_Model', $siteLangId).':  ' . $row['op_product_model'].'</div>';
-                }
-                $txt .= '</div>';
+            case 'products': 
+                $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $row, 'siteLangId' => $siteLangId], false, true);
                 $td->appendElement('plaintext', array(), $txt, true);
                 break;
             case 'orrequest_status':

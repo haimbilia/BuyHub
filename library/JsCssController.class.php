@@ -56,9 +56,6 @@ class JsCssController
             $str = str_replace("\n", '', $str);
         }
 
-        $cacheKey = $_SERVER['REQUEST_URI'];
-        FatCache::set($cacheKey, $str, '.css');
-
         echo $str;
     }
 
@@ -122,11 +119,6 @@ class JsCssController
             $str = str_replace("\n", '', $str);
         }
 
-        $cacheKey = $_SERVER['REQUEST_URI'];
-
-
-        FatCache::set($cacheKey, $str, '.css');
-
         echo $str;
     }
     
@@ -145,9 +137,7 @@ class JsCssController
                 $str .= file_get_contents(CONF_THEME_PATH . $fl);
             }
         }
-        $cacheKey = $_SERVER['REQUEST_URI'];
-        FatCache::set($cacheKey, $str, '.js');
-
+   
         echo($str);
     }
 
@@ -192,10 +182,6 @@ class JsCssController
                 $str .=  '/* */'. file_get_contents(CONF_THEME_PATH . 'common-js' . DIRECTORY_SEPARATOR . $fl);
             }
         }
-
-        $cacheKey = $_SERVER['REQUEST_URI'];
-        FatCache::set($cacheKey, $str, '.js');
-
         echo($str);
     }
 }

@@ -121,6 +121,8 @@ class Brand extends MyAppModel
         $srch = $this->getSearchObject();
         $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'id', '=', $id);
         $srch->addFld('b.' . static::DB_TBL_PREFIX . 'id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row) && $row[static::DB_TBL_PREFIX . 'id'] == $id) {
@@ -194,6 +196,8 @@ class Brand extends MyAppModel
     {
         $srch = static::getListingObj($langId, null, $isActive);
         $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'id', '=', $brandId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if ($row) {

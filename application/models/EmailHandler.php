@@ -252,8 +252,14 @@ class EmailHandler extends FatModel
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
 
-        $headers .= 'From: ' . FatApp::getConfig("CONF_FROM_NAME_" . $langId) . "<" . FatApp::getConfig("CONF_FROM_EMAIL") . ">";
-        if (is_array($extra_headers) && isset($extra_headers['ReplyTo'])) {
+        $fromName = FatApp::getConfig("CONF_FROM_NAME_" . $langId, FatUtility::VAR_STRING, '');
+        $fromEmail = FatApp::getConfig("CONF_FROM_EMAIL");
+        
+        $fromName = (empty($fromName) ? $fromEmail : $fromName);    
+
+        $headers .= 'From: ' . $fromName . "<" . $fromEmail . ">";
+        
+        if(is_array($extra_headers) && isset($extra_headers['ReplyTo'])){
             $headers .= "\r\nReply-to: " . $extra_headers['ReplyTo'];
         } else {
             $headers .= "\r\nReply-to: " . FatApp::getConfig("CONF_REPLY_TO_EMAIL");
@@ -563,6 +569,7 @@ class EmailHandler extends FatModel
         if (!self::sendMailTpl($d['credential_email'], $tpl, $langId, $vars)) {
             return false;
         }
+        
         $phone = !empty($d['user_phone']) ? ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'] : '';
         $this->sendSms($tpl, $phone, $vars, $langId);
         return true;
@@ -1371,7 +1378,8 @@ class EmailHandler extends FatModel
             )
         );
         $srch->addCondition('tuwr.withdrawal_id', '=', $requestId);
-
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         if (!$rs) {
             return 'ERR_Invalid_Access';
@@ -1460,6 +1468,8 @@ class EmailHandler extends FatModel
         $srch->addMultipleFields(array('tth.*', 'ttm.message_text', 'ttm.message_to'));
         $srch->addCondition('ttm.message_deleted', '=', 0);
         $srch->addCondition('ttm.message_id', '=', $messageId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $message = FatApp::getDb()->fetch($rs);
         if ($message == false || empty($message)) {
@@ -1511,6 +1521,8 @@ class EmailHandler extends FatModel
         $ocRequestSrch->joinOrderCancelReasons($langId);
         $ocRequestSrch->addCondition('ocrequest_id', '=', $ocrequest_id);
         $ocRequestSrch->addMultipleFields(array('op_id', 'op_invoice_number', 'op_shop_owner_name', 'op_shop_owner_phone_dcode', 'op_shop_owner_phone', 'op_shop_owner_email', 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'ocrequest_message', 'seller.user_id as seller_id'));
+        $ocRequestSrch->doNotCalculateRecords();
+        $ocRequestSrch->setPageSize(1);
         $ocRequestRs = $ocRequestSrch->getResultSet();
         $ocRequestRow = FatApp::getDb()->fetch($ocRequestRs);
         if (!$ocRequestRow) {
@@ -2071,7 +2083,7 @@ class EmailHandler extends FatModel
         if (!$ocrequest_id || !$langId) {
             trigger_error(Labels::getLabel('MSG_Invalid_Argument_Passed.', $this->commonLangId), E_USER_ERROR);
         }
-        $db = FatApp::getDb();
+        
         $srch = new OrderCancelRequestSearch();
         $srch->joinOrderProducts();
         $srch->joinOrders();
@@ -2262,6 +2274,8 @@ class EmailHandler extends FatModel
         $schObj->addCondition('spreview_id', '=', $spreviewId);
         $schObj->addCondition('spreview_status', '!=', SelProdReview::STATUS_PENDING);
         $schObj->addMultipleFields(array('spreview_selprod_id', 'spreview_status', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'user_name', 'user_phone_dcode', 'user_phone', 'credential_email'));
+        $schObj->doNotCalculateRecords();
+        $schObj->setPageSize(1);
         $spreviewData = FatApp::getDb()->fetch($schObj->getResultSet());
 
         if (false == $spreviewData) {
@@ -2301,6 +2315,8 @@ class EmailHandler extends FatModel
         $schObj = new SelProdReviewSearch($langId);
         $schObj->joinUser();
         $schObj->addCondition('spreview_id', '=', $spreviewId);
+        $schObj->doNotCalculateRecords();
+        $schObj->setPageSize(1);
         $spreviewData = FatApp::getDb()->fetch($schObj->getResultSet());
         if (false == $spreviewData) {
             $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
@@ -2462,6 +2478,8 @@ class EmailHandler extends FatModel
         $srch = User::getSearchObject(true);
         $srch->addMultipleFields(array('u.user_phone_dcode', 'u.user_phone'));
         $srch->addCondition('uc.credential_email', '=', $receiverEmail);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $receiverData = FatApp::getDb()->fetch($rs);
         if (is_array($receiverData) && count($receiverData)) {
@@ -2535,6 +2553,8 @@ class EmailHandler extends FatModel
         $srch->joinOrderUser();
         $srch->addOrderProductCharges();
         $srch->addCondition('ossubs_order_id', '=', $orderId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $subsOrderDetail = FatApp::getDb()->fetch($rs);
         if ($orderDetail) {
@@ -2575,6 +2595,8 @@ class EmailHandler extends FatModel
         $srch->joinOrderUser();
         $srch->addOrderProductCharges();
         $srch->addCondition('ossubs_order_id', '=', $orderId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $orderDetail = FatApp::getDb()->fetch($rs);
 
@@ -2944,6 +2966,8 @@ class EmailHandler extends FatModel
 
         $userObj = new User($reqData['ureq_user_id']);
         $srch = $userObj->getUserSearchObj(array('credential_email', 'user_phone_dcode', 'user_phone', 'credential_username'), true, false);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $userInfo = FatApp::getDb()->fetch($rs);
         $vars = array(

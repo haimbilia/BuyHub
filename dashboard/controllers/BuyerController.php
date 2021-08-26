@@ -42,7 +42,7 @@ class BuyerController extends BuyerBaseController
         $srch->setPageSize(applicationConstants::DASHBOARD_PAGE_SIZE);
 
         $srch->addMultipleFields(
-            array('order_id', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_product_type', 'op_status_id', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_other_charges', 'op_unit_price', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class', 'order_pmethod_id', 'opshipping_fulfillment_type', 'op_rounding_off')
+            array('order_id', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_product_type', 'op_status_id', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_other_charges', 'op_unit_price', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class', 'order_pmethod_id', 'opshipping_fulfillment_type', 'op_rounding_off')
         );
         $rs = $srch->getResultSet();
         $orders = FatApp::getDb()->fetchAll($rs);
@@ -566,12 +566,8 @@ class BuyerController extends BuyerBaseController
             'LEFT OUTER JOIN',
             'ocr.ocrequest_op_id = op.op_id',
             'ocr'
-        );
-
-        if (true === MOBILE_APP_API_CALL) {
-            $srch->joinSellerProducts();
-            $srch->addfld('selprod_product_id');
-        }
+        );        
+        $srch->joinSellerProducts();           
 
         $srch->addCondition('order_user_id', '=', $user_id);
         $srch->joinPaymentMethod();
@@ -587,7 +583,7 @@ class BuyerController extends BuyerBaseController
                 'order_pmethod_id', 'order_status', 'plugin_name', 'IFNULL(orrequest_id, 0) as return_request',
                 'IFNULL(ocrequest_id, 0) as cancel_request', 'COALESCE(sps.selprod_return_age, ss.shop_return_age) as return_age',
                 'COALESCE(sps.selprod_cancellation_age, ss.shop_cancellation_age) as cancellation_age', 'order_payment_status',
-                'order_deleted', 'plugin_code', 'opshipping_fulfillment_type', 'op_rounding_off'
+                'order_deleted', 'plugin_code', 'opshipping_fulfillment_type', 'op_rounding_off','selprod_product_id'
             )
         );
 
@@ -1243,16 +1239,18 @@ class BuyerController extends BuyerBaseController
         $srch->addMultipleFields(
             array(
                 'orrequest_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type', 'orrequest_reference', 'orrequest_date', 'orrequest_status',
-                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model'
+                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model',               
             )
         );
-
+        
+        $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'selprod_id = op_selprod_id');
+        $srch->addFld(array('selprod_product_id'));
         if (true === MOBILE_APP_API_CALL) {
             $srch->joinTable(OrderReturnReason::DB_TBL, 'LEFT JOIN', 'orrequest_returnreason_id = orreason_id');
             $srch->joinTable(OrderReturnReason::DB_TBL_LANG, 'LEFT JOIN', 'orreasonlang_orreason_id = orreason_id AND orreasonlang_lang_id  = ' . $this->siteLangId);
-            $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'selprod_id = op_selprod_id');
+            
             $srch->joinTable(SellerProduct::DB_TBL_LANG, 'INNER JOIN', 'selprod_id = selprodlang_selprod_id AND selprodlang_lang_id = ' . $this->siteLangId);
-            $srch->addFld(array('selprod_product_id', 'selprod_title', 'IFNULL(orreason_title, orreason_identifier) as requestReason'));
+            $srch->addFld(array('selprod_title', 'IFNULL(orreason_title, orreason_identifier) as requestReason'));
         }
 
         $srch->addOrder('orrequest_date', 'DESC');
@@ -1332,7 +1330,7 @@ class BuyerController extends BuyerBaseController
         $srch->joinOrderProducts();
         $srch->joinOrderProductSettings();
         $srch->joinOrders();
-        //$srch->joinSellerProducts();
+        $srch->joinSellerProducts();
         $srch->joinOrderReturnReasons();
         $srch->addOrderProductCharges();
         $srch->doNotCalculateRecords();
@@ -1343,7 +1341,9 @@ class BuyerController extends BuyerBaseController
                 'orrequest_date', 'orrequest_status', 'orrequest_reference', 'op_invoice_number', 'op_selprod_title', 'op_product_name',
                 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_qty',
                 'op_unit_price', 'op_selprod_user_id', 'IFNULL(orreason_title, orreason_identifier) as orreason_title',
-                'op_shop_id', 'op_shop_name', 'op_shop_owner_name', 'order_tax_charged', 'op_other_charges', 'op_refund_amount', 'op_commission_percentage', 'op_affiliate_commission_percentage', 'op_commission_include_tax', 'op_commission_include_shipping', 'op_free_ship_upto', 'op_actual_shipping_charges', 'op_rounding_off'
+                'op_shop_id', 'op_shop_name', 'op_shop_owner_name', 'order_tax_charged', 'op_other_charges', 'op_refund_amount', 'op_commission_percentage',
+                'op_affiliate_commission_percentage', 'op_commission_include_tax', 'op_commission_include_shipping', 'op_free_ship_upto', 'op_actual_shipping_charges',
+                'op_rounding_off','op_selprod_id','selprod_product_id'
             )
         );
         $rs = $srch->getResultSet();
@@ -1885,6 +1885,7 @@ class BuyerController extends BuyerBaseController
 
         $orderProd = new OrderProduct($opId);
         $specifics = $orderProd->getSpecifics();
+        $ratingTypes = [];
         if (array_key_exists('op_prodcat_id', $specifics) && !empty($specifics['op_prodcat_id'])) {
             $srch = ProductCategory::getRatingTypesObj($this->siteLangId, applicationConstants::ACTIVE);
             $srch->addCondition('prt_prodcat_id', '=', $specifics['op_prodcat_id']);
@@ -2399,7 +2400,7 @@ class BuyerController extends BuyerBaseController
         $srch->addOrder('urp.urp_date_added', 'DESC');
         $srch->addOrder('urp.urp_id', 'DESC');
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         $srch->addMultipleFields(array('sum(urp_points) as totalRewardPoints', 'min(urp.urp_date_expiry) as expiredOn'));
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetch($rs);
@@ -2648,22 +2649,20 @@ class BuyerController extends BuyerBaseController
 
         $this->set('referralTrackingUrl', CommonHelper::referralTrackingUrl(UserAuthentication::getLoggedUserAttribute('user_referral_code')));
         $this->set('sharingFrm', $this->getFriendsSharingForm($this->siteLangId));
-        $this->_template->addJs('js/slick.min.js');
+
+        $this->_template->addJs(['js/slick.min.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js']);
         $this->_template->render(true, true);
     }
 
     public function sendMailShareEarn()
     {
         $post = FatApp::getPostedData();
-        $err = '';
-        if (!FatUtility::validateMultipleEmails($post["email"], $err)) {
-            Message::addErrorMessage($err);
-            FatUtility::dieJsonError(Message::getHtml());
+        $email = $post["email"];
+        if (empty($email)) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
-        $email = CommonHelper::multipleExplode(array(",", ";", "\t", "\n"), trim($post["email"], ","));
-        $email = array_unique($email);
+        $email = array_unique(array_column(json_decode($email, true), 'value'));
         if (count($email) && !empty($email)) {
-            $email = array_unique($email);
             $personalMessage = empty($post['message']) ? "" : "<b>" . Labels::getLabel('Lbl_Personal_Message_From_Sender', $this->siteLangId) . ":</b> " . nl2br($post['message']);
             $emailNotificationObj = new EmailHandler();
             foreach ($email as $email_id) {
@@ -2677,14 +2676,9 @@ class BuyerController extends BuyerBaseController
                     CommonHelper::redirectUserReferer();
                 }
                 /* ] */
-                /* EmailHandler::sendMailTpl($email_id, 'invitation_email', array(
-                '{Sender_Name}' => htmlentities($this->user_details['user_name']),
-                '{Tracking_URL}' => $this->referral_tracking_url($this->user_details['user_referral_code']),
-                '{Invitation_Message}' => $personalMessage,
-                )); */
             }
         }
-        $this->set('msg', Labels::getLabel('MSG_invitation_emails_sent_successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_INVITATION_EMAILS_SENT_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2693,7 +2687,7 @@ class BuyerController extends BuyerBaseController
         $langId = FatUtility::int($langId);
         $frm = new Form('frmShareEarn');
         $fld = $frm->addTextArea(Labels::getLabel('L_Friends_Email', $langId), 'email');
-        $fld->htmlAfterField = ' <small>(' . Labels::getLabel('L_Use_commas_separate_emails', $langId) . ')</small>';
+        // $fld->htmlAfterField = ' <small>(' . Labels::getLabel('L_Use_commas_separate_emails', $langId) . ')</small>';
         $fld->requirements()->setRequired();
         $frm->addTextArea(Labels::getLabel('L_Personal_Message', $langId), 'message');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('L_Invite_Your_Friends', $langId));

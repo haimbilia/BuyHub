@@ -988,13 +988,7 @@ class UsersController extends AdminBaseController
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
 
-        $rs = $srch->getResultSet();
-        if (!$rs) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $supplierRequest = FatApp::getDb()->fetch($rs);
+        $supplierRequest = FatApp::getDb()->fetch($srch->getResultSet());
 
         if ($supplierRequest == false) {
             Message::addErrorMessage($this->str_invalid_request);

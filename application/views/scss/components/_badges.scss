@@ -41,12 +41,12 @@
             font-weight: 600;
             transform: rotate( 45deg);
             position: absolute;
-            left: 0;
-            right: 0;
-            top: 8px;
+            #{$start-direction}: 20px;
+            #{$end-direction}: 0;
+            top: 10px;
             line-height: 30px;
             text-transform: uppercase;
-            width: 85px;
+            width: 50px;
         }
         &.badges-left {
             transform: rotate(-90deg);
@@ -69,12 +69,12 @@
         height: 60px;
         .text {
             transform: rotate( 45deg);
-            left: 0;
-            right: 0;
-            line-height: 27px;
-            width: 90px;
-            top: 7px;
-            margin-left: -6px;
+            #{$start-direction}: 10px;
+            #{$end-direction}: 0;
+            line-height: 30px;
+            width: 55px;
+            top: 8px;
+            margin-#{$start-direction}: 0;
         }
         &.badges-left {
             transform: rotate(-90deg);
@@ -95,6 +95,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            width: 45px;
         }
     }
     &-left {

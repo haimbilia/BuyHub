@@ -15,7 +15,9 @@ html {
     }
 }
 
-body {}
+body {
+    height: inherit;
+}
 
 :focus {
     box-shadow: none !important;
@@ -359,4 +361,20 @@ a:hover {
 .list-country-zone {
     max-height: 360px;
     overflow-y: auto;
+}
+
+.img-container {
+    min-height: 200px;
+}
+
+.select2-container {
+    font-size: 0.8rem;
+    //min-height: 350px;
+}
+
+.cropper-body {
+    min-height: 350px;
+    display: flex;
+    align-items: center;
+    transition: 0.5s ease all;
 }

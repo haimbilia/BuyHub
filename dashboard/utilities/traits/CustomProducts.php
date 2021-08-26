@@ -320,7 +320,8 @@ trait CustomProducts
         $optionSrch->addCondition('prodoption_option_id', '=', $optionId);
         $optionSrch->addCondition('selprodoption_option_id', '=', $optionId);
         $optionSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-
+        $optionSrch->doNotCalculateRecords();
+        $optionSrch->setPageSize(1);
         $rs = $optionSrch->getResultSet();
         $db = FatApp::getDb();
         $row = $db->fetch($rs);
@@ -358,6 +359,8 @@ trait CustomProducts
         $srch->addCondition('tspo.selprodoption_option_id', '=', $optionId);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addFld(array('selprod_id'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row)) {
@@ -472,52 +475,14 @@ trait CustomProducts
         /* Validate product belongs to current logged seller[ */
         if ($product_id) {
             $productRow = Product::getAttributesById($product_id, array('product_seller_id'));
-            if ($productRow['product_seller_id'] != $this->userParentId) {
+            $optionValues = Product::getSeparateImageOptions($product_id, $this->siteLangId);
+            if ($productRow['product_seller_id'] != $this->userParentId || !array_key_exists($option_id, $optionValues)) {
                 FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             }
         }
-        /* ] */
-
-        /* Check allowed images [ */
-        $productImagesArr = array();
-        $sellerId = $this->userParentId;
-
-        $subscription = false;
-        $allowed_images = -1;
-        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
-            $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($this->siteLangId, $sellerId, array('ossubs_images_allowed'));
-            $allowed_images = $currentPlanData['ossubs_images_allowed'];
-            $subscription = true;
-        }
-
-        /* Current Product option Values[ */
-        $options = Product::getProductOptions($product_id, $this->siteLangId, true, 1);
-        $productSelectedOptionValues = array();
-        $productGroupImages = array();
-
-        $productOptionId = ($option_id == 0) ? -1 : $option_id;
-
-        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product_id, $productOptionId, $lang_id, false, '', $allowed_images);
-        if ($images) {
-            $productImagesArr += $images;
-        }
-
-        if ($productImagesArr) {
-            foreach ($productImagesArr as $image) {
-                $afileId = $image['afile_id'];
-                if (!array_key_exists($afileId, $productGroupImages)) {
-                    $productGroupImages[$afileId] = array();
-                }
-                $productGroupImages[$afileId] = $image;
-            }
-        }
-        /* ] */
-
-        if ($allowed_images > 0 && count($productImagesArr) >= $allowed_images) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_Cant_upload_more_than_allowed_images", $this->siteLangId));
-        }
-        /* ] */
-
+        
+        $this->validateImageSubscriptionLimit($product_id, $option_id, $lang_id);
+       
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
             FatUtility::dieJsonError(Labels::getLabel("MSG_Please_select_a_file", $this->siteLangId));
         }
@@ -529,7 +494,48 @@ trait CustomProducts
 
         FatUtility::dieJsonSuccess(Labels::getLabel("MSG_Image_Uploaded_Successfully", $this->siteLangId));
     }
+    
+    private function validateImageSubscriptionLimit($product_id, $productOptionId, $lang_id)
+    {
+        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($this->siteLangId, $this->userParentId, array('ossubs_images_allowed'));
+            $allowed_images = $currentPlanData['ossubs_images_allowed'];
 
+            $optionValues = Product::getSeparateImageOptions($product_id, $this->siteLangId);
+            $srch = new SearchBase(AttachedFile::DB_TBL);
+            $srch->doNotCalculateRecords();
+            $srch->addCondition('afile_type', '=', AttachedFile::FILETYPE_PRODUCT_IMAGE);
+            $srch->addCondition('afile_record_id', '=', $product_id);
+            $srch->addCondition('afile_lang_id', 'IN', [$lang_id, 0]);
+            if (0 < $productOptionId) {
+                $srch->addCondition('afile_record_subid', 'IN', [$productOptionId, 0]);
+                $images = FatApp::getDb()->fetchAll($srch->getResultSet());
+                $allReadyAddedCount = count($images);
+            } else {
+                $srch->addCondition('afile_record_subid', 'IN', array_keys($optionValues));
+                $srch->addGroupBy('afile_record_subid');
+                $srch->addOrder('image_count', 'desc');
+                $srch->addMultipleFields(['count(afile_id) as image_count', 'afile_record_subid']);
+                $images = FatApp::getDb()->fetchAll($srch->getResultSet(), 'afile_record_subid');
+                $allReadyAddedCount = 0;
+                if ($images) {
+                    if (isset($images[0])) {
+                        $allReadyAddedCount += $images[0]['image_count'];
+                        unset($images[0]);
+                    }
+                    if (count($images)) {
+                        /* adding all option  + max count of other option */
+                        $allReadyAddedCount += current($images)['image_count'];
+                    }
+                }
+            }
+
+            if ($allowed_images > 0 && $allReadyAddedCount >= $allowed_images) {
+                FatUtility::dieJsonError(Labels::getLabel("MSG_Cant_upload_more_than_allowed_images", $this->siteLangId));
+            }
+        }
+    }
+    
     public function deleteCustomProductImage($product_id, $image_id)
     {
         if (!User::canAddCustomProduct()) {
@@ -825,6 +831,8 @@ trait CustomProducts
         $srch->addCondition('product_id', '=', $productId);
         $srch->addCondition('brand.brand_active', '=', applicationConstants::YES);
         $srch->addCondition('brand.brand_deleted', '=', applicationConstants::NO);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $product_row = FatApp::getDb()->fetch($rs);
         $prodObj = new Product();
@@ -1538,6 +1546,8 @@ trait CustomProducts
             $srch->addCondition('product_id', '=', $productId);
             $srch->addHaving('brand_active', '=', applicationConstants::YES);
             $srch->addHaving('brand_deleted', '=', applicationConstants::NO);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $brandData = FatApp::getDb()->fetch($rs);
             if (!empty($brandData)) {
@@ -1989,6 +1999,8 @@ trait CustomProducts
         $profSrch = ShippingProfileProduct::getSearchObject();
         $profSrch->addCondition('shippro_product_id', '=', $productId);
         $profSrch->addCondition('shippro_user_id', '=', $shippedByUserId);
+        $profSrch->doNotCalculateRecords();
+        $profSrch->setPageSize(1);
         $proRs = $profSrch->getResultSet();
         $profileData = FatApp::getDb()->fetch($proRs);
         if (!empty($profileData)) {

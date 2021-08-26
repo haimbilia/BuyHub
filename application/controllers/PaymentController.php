@@ -30,10 +30,7 @@ abstract class PaymentController extends MyAppController
             $msg = Labels::getLabel('MSG_INVALID_ORDER_CURRENCY_({CURRENCY})_PASSED_TO_GATEWAY', $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{CURRENCY}' => $this->systemCurrencyCode]);
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
-        }     
-        if ($action == 'charge') {
-            unset($_SESSION['shopping_cart']["order_id"]);
-        }
+        }    
         $this->set('systemCurrencyCode', $this->systemCurrencyCode);
         $this->loadPaymenMethod();
     }
@@ -51,10 +48,16 @@ abstract class PaymentController extends MyAppController
         }
     }
 
-    protected function setErrorAndRedirect(string $msg, bool $json = false, $redirect = true)
+    public function setErrorAndRedirect(string $msg, bool $json = false, $redirect = true)
     {
         $json = FatUtility::isAjaxCall() ? true : $json;
         LibHelper::exitWithError($msg, $json, $redirect);
         CommonHelper::redirectUserReferer();
     }
+    
+    protected function paymentInitiated($orderId)
+    {
+        unset($_SESSION['shopping_cart']["order_id"]);
+    }
+
 }

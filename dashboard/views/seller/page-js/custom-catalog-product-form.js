@@ -261,6 +261,7 @@ $(document).on('change', '.language-js', function () {
 
     popupImage = function(inputBtn){
 		if (inputBtn.files && inputBtn.files[0]) {
+            $.facebox(fcom.getLoader(), '', 'cropper-body');
 	        fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function(t) {
 				$.facebox(t );
                 var file = inputBtn.files[0];
@@ -1090,10 +1091,11 @@ $(document).on('change', '.language-js', function () {
     }
 	
 	shippingPackages = function (form) {
-		var data = '';
+        var data = '';
         if (form) {
             data = fcom.frmData(form);
         }
+        data+="&popup=1"
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('shippingPackages', 'search'), data, function (t) {
                 $.facebox(t );

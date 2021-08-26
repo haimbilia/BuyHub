@@ -44,6 +44,11 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     };
 
     badgeForm = function (blinkcond_id, badgeId) {
+        if (APPROVAL_REQUIRED == canBindRecords) {
+            reloadRecordsList(blinkcond_id);
+            return;
+        }
+
         $('.listingSection--js, .searchform_filter').hide();
         $('#otherTopForm--js').html(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(controller, 'form', [TYPE_BADGE, badgeId, blinkcond_id]), '', function (t) {
@@ -226,7 +231,8 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
 
     searchRecords = function (form) {
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl(controller, 'records', [$('.formSearch--js input[name="blinkcond_id"]').val()]), fcom.frmData(form), function (res) {
+        var recordsMethod = 0 < autoSelProdBadge ? 'automaticRecords' : 'records';
+        fcom.ajax(fcom.makeUrl(controller, recordsMethod, [$('.formSearch--js input[name="blinkcond_id"]').val()]), fcom.frmData(form), function (res) {
             $(dv).html(res);
         });
     };
@@ -239,10 +245,11 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     reloadRecordsList = function (blinkcond_id, page) {
         $(dv).html(fcom.getLoader());
         var data = 'page=' + page;
-        fcom.ajax(fcom.makeUrl(controller, 'records', [blinkcond_id]), data, function (t) {
+        var recordsMethod = 0 < autoSelProdBadge ? 'automaticRecords' : 'records';
+        fcom.ajax(fcom.makeUrl(controller, recordsMethod, [blinkcond_id]), data, function (t) {
             $(dv).html(t);
             if (1 > $('.recordListing--js .recordRow--js').length) {
-                $(".listingSection--js, .searchform_filter").hide();
+                $(".searchform_filter").hide();
             }
         });
     };

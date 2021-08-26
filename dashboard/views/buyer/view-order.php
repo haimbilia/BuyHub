@@ -48,31 +48,23 @@ if (!$print) { ?>
                     <div class="col-auto">
                         <div class="btn-group">
                             <?php if (!$print) { ?>
-                                <ul class="actions no-print">
-                                    <?php if ($canCancelOrder) { ?>
-                                        <li>
-                                            <a href="<?php echo UrlHelper::generateUrl('Buyer', 'orderCancellationRequest', array($childOrderDetail['op_id'])); ?>" class="icn-highlighted" title="<?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId); ?>">
-                                                <i class="fas fa-times"></i>
-                                            </a>
-                                        </li>
-                                    <?php }
-                                    if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && $canReviewOrders && $canSubmitFeedback) {
-                                    ?>
-                                        <li>
-                                            <a href="<?php echo UrlHelper::generateUrl('Buyer', 'orderFeedback', array($childOrderDetail['op_id'])); ?>" class="icn-highlighted" title="<?php echo Labels::getLabel('LBL_Feedback', $siteLangId); ?>">
-                                                <i class="fa fa-star"></i>
-                                            </a>
-                                        </li>
-                                    <?php
-                                    }
-                                    if ($canReturnRefund) { ?>
-                                        <li>
-                                            <a href="<?php echo UrlHelper::generateUrl('Buyer', 'orderReturnRequest', array($childOrderDetail['op_id'])); ?>" class="icn-highlighted" title="<?php echo Labels::getLabel('LBL_Refund', $siteLangId); ?>">
-                                                <i class="fas fa-dollar-sign"></i>
-                                            </a>
-                                        </li>
-                                    <?php } ?>
-                                </ul>
+                                <?php if ($canCancelOrder) { ?>
+                                        <a href="<?php echo UrlHelper::generateUrl('Buyer', 'orderCancellationRequest', array($childOrderDetail['op_id'])); ?>" class="btn btn-outline-brand btn-sm" title="<?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId); ?>">
+                                            <?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?>
+                                        </a>
+                                <?php }
+                                if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && $canReviewOrders && $canSubmitFeedback) {
+                                ?>
+                                        <a href="<?php echo UrlHelper::generateUrl('Buyer', 'orderFeedback', array($childOrderDetail['op_id'])); ?>" class="btn btn-outline-brand btn-sm" title="<?php echo Labels::getLabel('LBL_Feedback', $siteLangId); ?>">
+                                            <?php echo Labels::getLabel('LBL_Feedback', $siteLangId); ?>
+                                        </a>
+                                <?php
+                                }
+                                if ($canReturnRefund) { ?>
+                                        <a href="<?php echo UrlHelper::generateUrl('Buyer', 'orderReturnRequest', array($childOrderDetail['op_id'])); ?>" class="btn btn-outline-brand btn-sm" title="<?php echo Labels::getLabel('LBL_Refund', $siteLangId); ?>">
+                                            <?php echo Labels::getLabel('LBL_Refund', $siteLangId); ?>
+                                        </a>
+                                <?php } ?>
                             <?php } ?>
                         </div>
                     </div>
@@ -237,6 +229,18 @@ if (!$print) { ?>
                                         </strong>
                                         <?php echo FatDate::format($childOrderDetail['order_date_added']); ?>
                                     </p>
+                                    <p>
+                                        <strong>
+                                            <?php echo Labels::getLabel('LBL_RETURN_AGE', $siteLangId); ?>:
+                                        </strong>
+                                        <?php echo sprintf(Labels::getLabel('MSG_%S_DAYS', $siteLangId), $childOrderDetail['op_selprod_return_age']); ?>
+                                    </p>
+                                    <p>
+                                        <strong>
+                                            <?php echo Labels::getLabel('LBL_CANCELLATION_AGE', $siteLangId); ?>:
+                                        </strong>
+                                        <?php echo sprintf(Labels::getLabel('MSG_%S_DAYS', $siteLangId), $childOrderDetail['op_selprod_cancellation_age']); ?>
+                                    </p>
                                     <?php
                                     if ($childOrderDetail["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) { ?>
                                         <p>
@@ -259,7 +263,6 @@ if (!$print) { ?>
                                             <?php echo CommonHelper::displayMoneyFormat($totalSaving, true, false, true, false, true); ?>
                                         </p>
                                     <?php } ?>
-
                                 </div>
                             </div>
                         </div>

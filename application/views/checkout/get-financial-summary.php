@@ -20,21 +20,20 @@
 <?php } */ ?>
 
 
-<div class="order-summary_list scroll scroll-y">
-
-    <ul class="list-cart list-cart-checkout">
+<div class="order-summary_list">
+    <ul class="list-cart list-cart-summary">
         <?php foreach ($products as $product) {
             $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']));
             $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
             $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBPTHUMB", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
         ?>
-            <li>
-                <div class="cell cell_product">
-                    <div class="product-profile">
-                        <div class="product-profile__thumbnail">
-                            <a href="<?php echo $productUrl; ?>">
-                                <?php
+        <li>
+
+            <div class="product-profile">
+                <div class="product-profile__thumbnail">
+                    <a href="<?php echo $productUrl; ?>">
+                        <?php
                                     $pictureAttr = [
                                         'webpImageUrl' => $imageWebpUrl,
                                         'jpgImageUrl' => $imageUrl,
@@ -44,31 +43,33 @@
 
                                     $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
                                 ?>
-                            </a>
-                            <span class="product-qty"><?php echo $product['quantity']; ?></span>
-                        </div>
-                        <div class="product-profile__data">
-                            <div class="title"><a class="" href="<?php echo $productUrl; ?>" title="<?php echo $product['product_name'] ?>"><?php echo $product['selprod_title'] ?></a>
-                            </div>
-                            <div class="options">
-                                <p class="">
-                                    <?php if (isset($product['options']) && count($product['options'])) {
+                    </a>
+                    <span class="product-qty"><?php echo $product['quantity']; ?></span>
+                </div>
+                <div class="product-profile__data">
+                    <div class="title">
+                        <a class="" href="<?php echo $productUrl; ?>"
+                            title="<?php echo $product['product_name'] ?>"><?php echo $product['selprod_title'] ?></a>
+                    </div>
+                    <div class="options">
+                        <p class="">
+                            <?php if (isset($product['options']) && count($product['options'])) {
                                         $optionStr = '';
                                         foreach ($product['options'] as $key => $option) {
                                             $optionStr .= $option['optionvalue_name'] . '|';
                                         }
                                         echo rtrim($optionStr, '|');
                                     } ?></p>
-                            </div>
-                        </div>
                     </div>
                 </div>
-                <div class="cell cell_price">
-                    <div class="product-price">
-                        <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
-                    </div>
-                </div>
-            </li>
+            </div>
+
+
+            <div class="product-price">
+                <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
+            </div>
+
+        </li>
         <?php } ?>
     </ul>
 </div>
@@ -79,60 +80,65 @@
 <div class="cart-summary">
     <ul>
         <li>
-            <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span> <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span>
+            <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span> <span
+                class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span>
         </li>
         <?php if ($cartSummary['cartVolumeDiscount']) { ?>
-            <li>
-                <span class="label"><?php echo Labels::getLabel('LBL_Loyalty/Volume_Discount', $siteLangId); ?>
-                </span>
-                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount']); ?></span>
-            </li>
+        <li>
+            <span class="label"><?php echo Labels::getLabel('LBL_Loyalty/Volume_Discount', $siteLangId); ?>
+            </span>
+            <span
+                class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount']); ?></span>
+        </li>
         <?php } ?>
         <?php if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
-            <li>
-                <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
-                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
-            </li>
+        <li>
+            <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
+            <span
+                class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
+        </li>
         <?php } ?>
         <?php if (/* 0 < $shippingAddress && */isset($cartSummary['taxOptions'])) {
             foreach ($cartSummary['taxOptions'] as $taxName => $taxVal) { ?>
-                <li>
-                    <span class="label"><?php echo $taxVal['title']; ?></span>
-                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($taxVal['value']); ?></span>
-                </li>
+        <li>
+            <span class="label"><?php echo $taxVal['title']; ?></span>
+            <span class="value"><?php echo CommonHelper::displayMoneyFormat($taxVal['value']); ?></span>
+        </li>
         <?php }
         } ?>
         <?php if (!FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
-            <li class="">
-                <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
-                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
-            </li>
+        <li class="">
+            <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
+            <span
+                class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
+        </li>
         <?php } ?>
         <?php if ($cartSummary['originalShipping']) { ?>
-            <li class="">
-                <span class="label"><?php echo Labels::getLabel('LBL_Delivery_Charges', $siteLangId); ?></span>
-                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['shippingTotal']); ?></span>
-            </li>
+        <li class="">
+            <span class="label"><?php echo Labels::getLabel('LBL_Delivery_Charges', $siteLangId); ?></span>
+            <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['shippingTotal']); ?></span>
+        </li>
         <?php  } ?>
         <?php if (!empty($cartSummary['cartRewardPoints'])) {
             $appliedRewardPointsDiscount = CommonHelper::convertRewardPointToCurrency($cartSummary['cartRewardPoints']);
         ?>
-            <li class="">
-                <span class="label"><?php echo Labels::getLabel('LBL_Reward_point_discount', $siteLangId); ?></span>
-                <span class="value"><?php echo CommonHelper::displayMoneyFormat($appliedRewardPointsDiscount); ?></span>
-            </li>
+        <li class="">
+            <span class="label"><?php echo Labels::getLabel('LBL_Reward_point_discount', $siteLangId); ?></span>
+            <span class="value"><?php echo CommonHelper::displayMoneyFormat($appliedRewardPointsDiscount); ?></span>
+        </li>
         <?php } ?>
         <?php if (array_key_exists('roundingOff', $cartSummary) && $cartSummary['roundingOff'] != 0) { ?>
-            <li>
-                <span class="label"><?php echo (0 < $cartSummary['roundingOff']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId); ?></span>
-                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['roundingOff']); ?></span>
-            </li>
+        <li>
+            <span
+                class="label"><?php echo (0 < $cartSummary['roundingOff']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId); ?></span>
+            <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['roundingOff']); ?></span>
+        </li>
         <?php } ?>
         <?php if (0 < $cartSummary['totalSaving']) { ?>
-            <li class="text-success">
-                <span class="label"><?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?></span>
-                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['totalSaving']); ?></span>
-            </li>
+        <li class="text-success">
+            <span class="label"><?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?></span>
+            <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['totalSaving']); ?></span>
+        </li>
         <?php } ?>
         <?php $orderNetAmt = $cartSummary['orderNetAmount'];
         /* if (0 == $shippingAddress) $orderNetAmt = $orderNetAmt - $cartSummary['cartTaxTotal'];  */ ?>

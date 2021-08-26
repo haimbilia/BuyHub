@@ -91,7 +91,7 @@ class OmisePayController extends PaymentController
         $post = FatApp::getPostedData();
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         $orderPaymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
-
+        $this->paymentInitiated($orderId);
         if ($orderPaymentAmount > 0) {
             $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
             $orderActualPaid = ceil($orderPaymentAmount) * 100; /* payment accepted in satang. i.e. to charge ฿20.00, you should set amount=2000 (฿20.00). */

@@ -1665,7 +1665,6 @@ class AccountController extends LoggedUserController
             }
         }
         /* $wishLists = array_merge($favouriteProducts,$wishLists); */
-
         $this->set('wishLists', $wishLists);
 
         if (true === MOBILE_APP_API_CALL) {
@@ -1771,12 +1770,20 @@ class AccountController extends LoggedUserController
         $rs = $srch->getResultSet();
         /* echo $srch->getQuery(); die; */
         $products = $db->fetchAll($rs);
+
+        $selprodIdsArr = $tLeftRibbons = $tRightRibbons = [];
         if (count($products)) {
             foreach ($products as &$arr) {
                 $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
+                $selprodIdsArr[] = $arr['selprod_id'];
             }
+            
+            $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selprodIdsArr);
+            $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selprodIdsArr);
         }
 
+        $this->set('tRightRibbons', $tRightRibbons);
+        $this->set('tLeftRibbons', $tLeftRibbons);
         $this->set('products', $products);
         $this->set('showProductShortDescription', false);
         $this->set('showProductReturnPolicy', false);
@@ -2821,7 +2828,7 @@ class AccountController extends LoggedUserController
             Labels::getLabel('LBL_NEW_PASSWORD', $this->siteLangId),
             'new_password'
         );
-        $newPwd->htmlAfterField = '<span class="text--small">' . sprintf(Labels::getLabel('LBL_Example_password', $this->siteLangId), 'User@123') . '</span>';
+        $newPwd->htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Example_password', $this->siteLangId), 'User@123') . '</span>';
         $newPwd->requirements()->setRequired();
         $newPwd->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
         $newPwd->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_ATLEAST_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
@@ -3698,12 +3705,9 @@ class AccountController extends LoggedUserController
     private function getCookiesPreferencesForm()
     {
         $frm = new Form('frmCookiesPreferences');
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Functional", $this->siteLangId), 'ucp_functional', 1, array(), true, 0);
-        $fld->htmlAfterField = '<div class="info">' . Labels::getLabel('LBL_Functional_Cookies_Information', $this->siteLangId) . '</div>';
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Statistical_Analysis", $this->siteLangId), 'ucp_statistical', 1, array(), false, 0);
-        $fld->htmlAfterField = '<div class="info">' . Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $this->siteLangId) . '</div>';
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Personalise_Experience", $this->siteLangId), 'ucp_personalized', 1, array(), false, 0);
-        $fld->htmlAfterField = '<div class="info">' . Labels::getLabel('LBL_Personalise_Cookies_Information', $this->siteLangId) . '</div>';;
+        $frm->addCheckBox(Labels::getLabel("LBL_Functional", $this->siteLangId), 'ucp_functional', 1, array(), true, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Statistical_Analysis", $this->siteLangId), 'ucp_statistical', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Personalise_Experience", $this->siteLangId), 'ucp_personalized', 1, array(), false, 0);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }

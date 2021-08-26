@@ -18,7 +18,7 @@ class BadgesController extends AdminBaseController
             case 'list':
             case 'form':
                 $title = Labels::getLabel('LBL_BADGES', $this->adminLangId);
-                if ('badges/list/2' == current($_GET)) {
+                if ('badges/list/' . Badge::TYPE_RIBBON == current($_GET)) {
                     $title = Labels::getLabel('LBL_RIBBONS', $this->adminLangId);
                 }
                 $this->nodes = [
@@ -150,7 +150,10 @@ class BadgesController extends AdminBaseController
 
         $color = FatApp::getPostedData('badge_color', FatUtility::VAR_STRING, '');
         $badgeType = empty($color) ? Badge::TYPE_BADGE : Badge::TYPE_RIBBON;
-        $frm = $this->getForm(FatApp::getPostedData('badge_type', FatUtility::VAR_INT, $badgeType));
+        $badgeType = FatApp::getPostedData('badge_type', FatUtility::VAR_INT, $badgeType);
+        $approvalType = FatApp::getPostedData('badge_required_approval', FatUtility::VAR_INT, 0);
+
+        $frm = $this->getForm($badgeType, $approvalType);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
@@ -169,7 +172,11 @@ class BadgesController extends AdminBaseController
         $record->setFldValue(Badge::DB_TBL_PREFIX . 'identifier', $identifier);
         $record->assignValues($post);
         if (!$record->save()) {
-            FatUtility::dieJsonError($record->getError());
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('MSG_DUPLICATE_RECORD_NAME', $this->adminLangId);
+            }
+            FatUtility::dieJsonError($msg);
         }
         $badgeId = $record->getMainTableRecordId();
 
@@ -249,7 +256,7 @@ class BadgesController extends AdminBaseController
         return $frm;
     }
 
-    private function getForm(int $type)
+    private function getForm(int $type, int $conditionType = Badge::COND_MANUAL)
     {
         $frm = new Form('frm');
         $frm->addHiddenField('', 'badge_id');
@@ -286,7 +293,7 @@ class BadgesController extends AdminBaseController
         if (Badge::TYPE_BADGE == $type) {
             $requireApprovalArr = Badge::getApprovalStatusArr($this->adminLangId);
             $fld = $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->adminLangId), 'badge_required_approval', $requireApprovalArr);
-            $fld->requirement->setRequired(true);
+            $fld->requirement->setRequired(($conditionType == Badge::COND_MANUAL));
         }
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);

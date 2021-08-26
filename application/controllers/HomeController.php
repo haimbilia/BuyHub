@@ -13,24 +13,21 @@ class HomeController extends MyAppController
         $sponProdLayoutCount = count($sponsoredProdsInCollection);
         if (0 < $sponProdLayoutCount) {
             foreach ($sponsoredProdsInCollection as $indexId => $collectionId) {
+                $ind = (true === MOBILE_APP_API_CALL) ? $indexId : $collectionId;
                 $sponsoredProds = $this->getSponsoredProducts($productSrchObj);
 
                 if (empty($sponsoredProds)) {
-                    if (true === MOBILE_APP_API_CALL) {
-                        unset($collections[$indexId]);
-                    } else {
-                        unset($collections[$collectionId]);
-                    }
+                    unset($collections[$ind]);
                     continue;
                 }
+                $selProdIdsArr = array_column($sponsoredProds, 'selprod_id');
+                $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+                $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
 
-                if (true === MOBILE_APP_API_CALL) {
-                    $collections[$indexId]['products'] = $sponsoredProds;
-                    $collections[$indexId]['totProducts'] = count($sponsoredProds);
-                } else {
-                    $collections[$collectionId]['products'] = $sponsoredProds;
-                    $collections[$collectionId]['totProducts'] = count($sponsoredProds);
-                }
+                $collections[$ind]['products'] = $sponsoredProds;
+                $collections[$ind]['totProducts'] = count($sponsoredProds);
+                $collections[$ind]['tLeftRibbons'] = $tLeftRibbons;
+                $collections[$ind]['tRightRibbons'] = $tRightRibbons;
             }
         }
 
@@ -142,7 +139,7 @@ class HomeController extends MyAppController
                     }
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageProdLayout2;
                     break;
-                case Collections::TYPE_PRODUCT_LAYOUT3:
+                case Collections::TYPE_PRODUCT_LAYOUT3:                    
                     $homePageProdLayout3 = FatCache::get('homePageProdLayout3' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
                     if (!$homePageProdLayout3) {
                         $tpl = new FatTemplate('', '');
@@ -555,10 +552,8 @@ class HomeController extends MyAppController
         $collectionObj->joinCollectionRecords();
         $collectionObj->addMultipleFields(array('ctr_record_id', 'ctr_display_order'));
         $collectionObj->addCondition('ctr_record_id', '!=', 'NULL');
-        $i = 0;
-        /* $sponsoredShops = $this->getSponsoredShops($productSrchObj);
-        $sponsoredProds = $this->getSponsoredProducts($productSrchObj); */
 
+        $i = 0;
         foreach ($collectionsArr as $collection_id => $collection) {
             if ($collectionCache && !in_array($collection['collection_type'], [Collections::COLLECTION_TYPE_SPONSORED_SHOPS, Collections::COLLECTION_TYPE_SPONSORED_PRODUCTS, Collections::COLLECTION_TYPE_BANNER])) {
                 continue;
@@ -574,35 +569,26 @@ class HomeController extends MyAppController
                 continue;
             }
 
+            $ind = (true === MOBILE_APP_API_CALL) ? $i : $collection['collection_id'];
+
             switch ($collection['collection_type']) {
                 case Collections::COLLECTION_TYPE_SPONSORED_PRODUCTS:
-                    if (true === MOBILE_APP_API_CALL) {
-                        $collections[$i] = $collection;
-                        $sponsoredProdsInCollection[$i] = $collection['collection_id'];
-                    } else {
-                        $collections[$collection['collection_id']] = $collection;
-                        $sponsoredProdsInCollection[$collection['collection_id']] = $collection['collection_id'];
-                    }
+                    $collections[$ind] = $collection;
+                    $sponsoredProdsInCollection[$ind] = $collection['collection_id'];
                     break;
                 case Collections::COLLECTION_TYPE_SPONSORED_SHOPS:
-                    if (true === MOBILE_APP_API_CALL) {
-                        $collections[$i] = $collection;
-                        $sponsoredShopsInCollection[$i] = $collection['collection_id'];
-                    } else {
-                        $collections[$collection['collection_id']] = $collection;
-                        $sponsoredShopsInCollection[$collection['collection_id']] = $collection['collection_id'];
-                    }
+                    $collections[$ind] = $collection;
+                    $sponsoredShopsInCollection[$ind] = $collection['collection_id'];
 
                     break;
                 case Collections::COLLECTION_TYPE_BANNER:
                     /* $banners = $this->getBanners($collection_id); */
                     $banners = BannerLocation::getPromotionalBanners($collection_id, $langId);
+                    $collections[$ind] = $collection;
+
+                    $collections[$ind]['banners'] = $banners;
                     if (true === MOBILE_APP_API_CALL) {
-                        $collections[$i] = $collection;
-                        $collections[$i]['banners'] = is_array($banners) && 0 < count($banners) ? $banners : (object) [];
-                    } else {
-                        $collections[$collection['collection_id']] = $collection;
-                        $collections[$collection['collection_id']]['banners'] = $banners;
+                        $collections[$ind]['banners'] = is_array($banners) && 0 < count($banners) ? $banners : (object) [];
                     }
                     break;
                 case Collections::COLLECTION_TYPE_PRODUCT:
@@ -631,15 +617,18 @@ class HomeController extends MyAppController
                     if (empty($recordCount)) {
                         continue 2;
                     }
-                    if (true === MOBILE_APP_API_CALL) {
-                        $collections[$i] = $collection;
-                        $collections[$i]['products'] = $db->fetchAll($rs);
-                        $collections[$i]['totProducts'] = $recordCount;
-                    } else {
-                        $collections[$collection['collection_id']] = $collection;
-                        $collections[$collection['collection_id']]['products'] = $db->fetchAll($rs, 'selprod_id');
-                        $collections[$collection['collection_id']]['totProducts'] = $recordCount;
-                    }
+
+                    $products = $db->fetchAll($rs, 'selprod_id');
+                    $selProdIdsArr = array_keys($products);
+                    $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+                    $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
+
+                    $collections[$ind] = $collection;
+                    $collections[$ind]['products'] = (true === MOBILE_APP_API_CALL) ? array_values($products) : $products;
+                    $collections[$ind]['totProducts'] = $recordCount;
+                    $collections[$ind]['tLeftRibbons'] = $tLeftRibbons;
+                    $collections[$ind]['tRightRibbons'] = $tRightRibbons;
+
                     /* ] */
                     unset($tempObj);
                     unset($productSrchTempObj);
@@ -666,11 +655,7 @@ class HomeController extends MyAppController
                         continue 2;
                     }
                     /* ] */
-                    if (true === MOBILE_APP_API_CALL) {
-                        $collections[$i] = $collection;
-                    } else {
-                        $collections[$collection['collection_id']] = $collection;
-                    }
+                    $collections[$ind] = $collection;
                     $counter = 0;
                     if ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT2) {
                         while ($catData = $db->fetch($rs)) {
@@ -686,11 +671,10 @@ class HomeController extends MyAppController
                             $Catrs = $subCategorySrch->getResultSet();
 
                             if (true === MOBILE_APP_API_CALL) {
-                                $collections[$i]['categories'][$counter] = $catData;
-                                // $collections[$i]['categories'][$counter]['subCategories'] = $db->fetchAll($Catrs);
+                                $collections[$ind]['categories'][$counter] = $catData;
                             } else {
-                                $collections[$collection['collection_id']]['categories'][$catData['prodcat_id']] = $catData;
-                                $collections[$collection['collection_id']]['categories'][$catData['prodcat_id']]['subCategories'] = $db->fetchAll($Catrs);
+                                $collections[$ind]['categories'][$catData['prodcat_id']] = $catData;
+                                $collections[$ind]['categories'][$catData['prodcat_id']]['subCategories'] = $db->fetchAll($Catrs);
                             }
                             /* ] */
                             $counter++;
@@ -709,22 +693,29 @@ class HomeController extends MyAppController
                             if ($productShopSrchTempObj->recordCount() == 0) {
                                 continue;
                             }
+
+                            $prodData = $db->fetchAll($Prs);
+
+                            $selProdIdsArr = array_column($prodData, 'selprod_id');
+                            $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+                            $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
+
+                            $counterInd = (true === MOBILE_APP_API_CALL) ? $counter : $catData['prodcat_id'];
+
                             if (true === MOBILE_APP_API_CALL) {
-                                $collections[$i]['categories'][$counter] = $catData;
-                                // $collections[$i]['categories'][$counter]['products'] = $db->fetchAll($Prs);
+                                $collections[$ind]['categories'][$counter] = $catData;
                             } else {
-                                $collections[$collection['collection_id']]['categories'][$catData['prodcat_id']]['catData'] = $catData;
-                                $collections[$collection['collection_id']]['categories'][$catData['prodcat_id']]['products'] = $db->fetchAll($Prs);
+                                $collections[$ind]['categories'][$counterInd]['catData'] = $catData;
                             }
+                            
+                            $collections[$ind]['categories'][$counterInd]['products'] = $prodData;
+                            $collections[$ind]['categories'][$counterInd]['tLeftRibbons'] = $tLeftRibbons;
+                            $collections[$ind]['categories'][$counterInd]['tRightRibbons'] = $tRightRibbons;
                             /* ] */
                             $counter++;
                         }
                     }
-                    if (true === MOBILE_APP_API_CALL) {
-                        $collections[$i]['totCategories'] = $tempObj->recordCount();
-                    } else {
-                        $collections[$collection['collection_id']]['totCategories'] = $tempObj->recordCount();
-                    }
+                    $collections[$ind]['totCategories'] = $tempObj->recordCount();
                     unset($tempObj);
                     break;
                 case Collections::COLLECTION_TYPE_SHOP:
@@ -750,14 +741,8 @@ class HomeController extends MyAppController
                     if (empty($recordCount)) {
                         continue 2;
                     }
-                    if (true === MOBILE_APP_API_CALL) {
-                        $collections[$i] = $collection;
-                        $collections[$i]['totShops'] = $recordCount;
-                    } else {
-                        $collections[$collection['collection_id']] = $collection;
-                        $collections[$collection['collection_id']]['totShops'] = $recordCount;
-                    }
-                    //CommonHelper::printArray($shopsData, true);
+                    $collections[$ind] = $collection;
+                    $collections[$ind]['totShops'] = $recordCount;
                     $counter = 0;
                     while ($shopsData = $db->fetch($rs)) {                        
                         /* fetch Shop data[ */
@@ -774,18 +759,14 @@ class HomeController extends MyAppController
                         }
 
                         if (true === MOBILE_APP_API_CALL) {
-                            $collections[$i]['shops'][$counter] = $shopsData;
+                            $collections[$ind]['shops'][$counter] = $shopsData;
 
-                            $collections[$i]['shops'][$counter]['rating'] = $rating;
+                            $collections[$ind]['shops'][$counter]['rating'] = $rating;
                         } else {
-                            $collections[$collection['collection_id']]['shops'][$shopsData['shop_id']]['shopData'] = $shopsData;
+                            $collections[$ind]['shops'][$shopsData['shop_id']]['shopData'] = $shopsData;
 
-                            $collections[$collection['collection_id']]['rating'][$shopsData['shop_id']] = $rating;
+                            $collections[$ind]['rating'][$shopsData['shop_id']] = $rating;
                         }
-
-
-                        /*$collections[$collection['collection_layout_type']][$collection['collection_id']]['shops'][$shopsData['shop_id']]['products'] = $db->fetchAll($Prs);*/
-                        /* ] */
                         $counter++;
                     }
                     unset($tempObj);
@@ -813,15 +794,9 @@ class HomeController extends MyAppController
                     }
 
                     /* ] */
-                    if (true === MOBILE_APP_API_CALL) {
-                        $collections[$i] = $collection;
-                        $collections[$i]['totBrands'] = $brandSearchTempObj->recordCount();
-                        $collections[$i]['brands'] = $brands;
-                    } else {
-                        $collections[$collection['collection_id']] = $collection;
-                        $collections[$collection['collection_id']]['totBrands'] = $brandSearchTempObj->recordCount();
-                        $collections[$collection['collection_id']]['brands'] = $brands;
-                    }
+                    $collections[$ind] = $collection;
+                    $collections[$ind]['totBrands'] = $brandSearchTempObj->recordCount();
+                    $collections[$ind]['brands'] = $brands;
                     unset($brandSearchTempObj);
                     unset($tempObj);
                     break;
@@ -861,14 +836,10 @@ class HomeController extends MyAppController
                         array_walk($blogPostsDetail, function (&$value, &$key) {
                             $value['post_image'] = UrlHelper::generateFullUrl('Image', 'blogPostFront', array($value['post_id'], $this->siteLangId, ''));
                         });
-                        $collections[$i] = $collection;
-                        $collections[$i]['totBlogs'] = $blogSearchTempObj->recordCount();
-                        $collections[$i]['blogs'] = $blogPostsDetail;
-                    } else {
-                        $collections[$collection['collection_id']] = $collection;
-                        $collections[$collection['collection_id']]['totBlogs'] = $blogSearchTempObj->recordCount();
-                        $collections[$collection['collection_id']]['blogs'] = $blogPostsDetail;
                     }
+                    $collections[$ind] = $collection;
+                    $collections[$ind]['totBlogs'] = $blogSearchTempObj->recordCount();
+                    $collections[$ind]['blogs'] = $blogPostsDetail;
 
                     unset($blogSearchTempObj);
                     unset($tempObj);
@@ -904,15 +875,9 @@ class HomeController extends MyAppController
                         continue 2;
                     }
                     /* ] */
-                    if (true === MOBILE_APP_API_CALL) {
-                        $collections[$i] = $collection;
-                        $collections[$i]['totFaqs'] = $faqSearchTempObj->recordCount();
-                        $collections[$i]['faqs'] = $faqsDetail;
-                    } else {
-                        $collections[$collection['collection_id']] = $collection;
-                        $collections[$collection['collection_id']]['totFaqs'] = $faqSearchTempObj->recordCount();
-                        $collections[$collection['collection_id']]['faqs'] = $faqsDetail;
-                    }
+                    $collections[$ind] = $collection;
+                    $collections[$ind]['totFaqs'] = $faqSearchTempObj->recordCount();
+                    $collections[$ind]['faqs'] = $faqsDetail;
 
                     unset($faqSearchTempObj);
                     unset($tempObj);
@@ -944,15 +909,9 @@ class HomeController extends MyAppController
                     if (count($faqCats)) {
                         $faqMainCat = empty($faqMainCat) ? current($faqCats)['faqcat_id'] : $faqMainCat;
                     }
-                    if (true === MOBILE_APP_API_CALL) {
-                        $collections[$i] = $collection;
-                        $collections[$i]['faqMainCat'] = $faqMainCat;
-                        $collections[$i]['listCategories'] = $faqCats;
-                    } else {
-                        $collections[$collection['collection_id']] = $collection;
-                        $collections[$collection['collection_id']]['faqMainCat'] = $faqMainCat;
-                        $collections[$collection['collection_id']]['listCategories'] = $faqCats;
-                    }
+                    $collections[$ind] = $collection;
+                    $collections[$ind]['faqMainCat'] = $faqMainCat;
+                    $collections[$ind]['listCategories'] = $faqCats;
 
                     unset($faqSearchTempObj);
                     unset($tempObj);
@@ -982,40 +941,14 @@ class HomeController extends MyAppController
                         continue 2;
                     }
                     /* ] */
-                    if (true === MOBILE_APP_API_CALL) {
-                        $collections[$i] = $collection;
-                        $collections[$i]['totTestimonials'] = $testimonialSrchObj->recordCount();
-                        $collections[$i]['testimonials'] = $testimonialsDetail;
-                    } else {
-                        $collections[$collection['collection_id']] = $collection;
-                        $collections[$collection['collection_id']]['totTestimonials'] = $testimonialSrchObj->recordCount();
-                        $collections[$collection['collection_id']]['testimonials'] = $testimonialsDetail;
-                    }
+                    $collections[$ind] = $collection;
+                    $collections[$ind]['totTestimonials'] = $testimonialSrchObj->recordCount();
+                    $collections[$ind]['testimonials'] = $testimonialsDetail;
 
                     unset($testimonialSrchObj);
                     unset($tempObj);
                     break;
 
-                    /* case Collections::COLLECTION_TYPE_CONTENT_BLOCK:
-                    $srch = Extrapage::getSearchObject($langId, true);
-                    $srch->joinTable(
-                        Collections::DB_TBL_COLLECTION_TO_RECORDS, 'INNER JOIN', 'epage_id = ctr_record_id', 'ctr'
-                    );
-                    $srch->addCondition(Collections::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'collection_id', '=', $collection_id);
-                    $srch->addMultipleFields(array('epage_id', 'IFNULL(epage_label, epage_identifier) as epage_label', 'epage_content'));
-                    $res = $srch->getResultSet();
-                    $epageData = $db->fetch($res);
-                    if (true === MOBILE_APP_API_CALL) {
-                        $collections[$i] = $collection;
-                        $collections[$i]['epageContent'] = $epageData;
-                    } else {
-                        $collections[$collection['collection_id']] = $collection;
-                        $collections[$collection['collection_id']]['epageContent'] = $epageData;
-                    }
-
-                    unset($epageData);
-                    unset($tempObj);
-                    break; */
                 case Collections::COLLECTION_TYPE_REVIEWS:
                     $collections[$i] = $collection;
                     $collections[$i]['pendingForReviews'] = array();
@@ -1163,19 +1096,28 @@ class HomeController extends MyAppController
                 $rating = SelProdRating::getSellerRating($shops['shop_user_id']);
             }
 
+            $prodData = $db->fetchAll($Prs);
+            $selProdIdsArr = array_column($prodData, 'selprod_id');
+            $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+            $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
+
             if (true === MOBILE_APP_API_CALL) {
                 $sponsoredShops[$i]['shopData'] = $shops;
                 $sponsoredShops[$i]['shopData']['promotion_id'] = $shops['promotion_id'];
                 $sponsoredShops[$i]['shopData']['rating'] = $rating;
                 $sponsoredShops[$i]['shopData']['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', array($shops['shop_id'], $langId));
                 $sponsoredShops[$i]['shopData']['shop_banner'] = UrlHelper::generateFullUrl('image', 'shopBanner', array($shops['shop_id'], $langId));
-                $sponsoredShops[$i]['products'] = $db->fetchAll($Prs);
+                $sponsoredShops[$i]['products'] = $prodData;
+                $sponsoredShops[$i]['tLeftRibbons'] = $tLeftRibbons;
+                $sponsoredShops[$i]['tRightRibbons'] = $tRightRibbons;
             } else {
                 $sponsoredShops['shops'][$shops['shop_id']]['shopData'] = $shops;
                 $sponsoredShops['shops'][$shops['shop_id']]['shopData']['promotion_id'] = $shops['promotion_id'];
 
                 $sponsoredShops['rating'][$shops['shop_id']] = $rating;
-                $sponsoredShops['shops'][$shops['shop_id']]['products'] = $db->fetchAll($Prs);
+                $sponsoredShops['shops'][$shops['shop_id']]['products'] = $prodData;
+                $sponsoredShops['shops'][$shops['shop_id']]['tLeftRibbons'] = $tLeftRibbons;
+                $sponsoredShops['shops'][$shops['shop_id']]['tRightRibbons'] = $tRightRibbons;
             }
             /* ] */
             $i++;

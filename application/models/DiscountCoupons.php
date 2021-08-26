@@ -324,6 +324,8 @@ AND couponlang_lang_id = ' . $langId,
 
         $cnd1 = $srch->addCondition('coupon_end_date', '=', '0000-00-00', 'AND');
         $cnd1->attachCondition('coupon_end_date', '>=', $currDate, 'OR');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $couponData = FatApp::getDb()->fetch($rs);
 
@@ -728,6 +730,8 @@ AND couponlang_lang_id = ' . $langId,
 
         $cnd1 = $srch->addCondition('coupon_end_date', '=', '0000-00-00', 'AND');
         $cnd1->attachCondition('coupon_end_date', '>=', $currDate, 'OR');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $couponData = FatApp::getDb()->fetch($rs);
         if ($couponData == false) {

@@ -140,6 +140,8 @@ class ImageAttributesController extends AdminBaseController
                 $srch->addFld('IFNULL(prodcat_name, prodcat_identifier) AS prodcat_name');
                 $srch->addCondition('prodcat_id', '=', $recordId);
                 $srch->addOrder('prodcat_id', 'DESC');
+                $srch->doNotCalculateRecords();
+                $srch->setPageSize(1);
                 $rs = $srch->getResultSet();
                 $records = FatApp::getDb()->fetch($rs);
                 $title = $records['prodcat_name'];
@@ -149,6 +151,8 @@ class ImageAttributesController extends AdminBaseController
                 $srch->addFld('IFNULL(post_title, post_identifier) as post_title');
                 $srch->addCondition('post_id', '=', $recordId);
                 $srch->addOrder('post_id', 'DESC');
+                $srch->doNotCalculateRecords();
+                $srch->setPageSize(1);
                 $rs = $srch->getResultSet();
                 $records = FatApp::getDb()->fetch($rs);
 
@@ -158,6 +162,8 @@ class ImageAttributesController extends AdminBaseController
                 $srch = Brand::getListingObj($this->adminLangId, null, true);
                 $srch->addCondition('brand_id', '=', $recordId);
                 $srch->addOrder('brand_id', 'DESC');
+                $srch->doNotCalculateRecords();
+                $srch->setPageSize(1);
                 $rs = $srch->getResultSet();
                 $records = FatApp::getDb()->fetch($rs);
                 $title = $records['brand_name'];

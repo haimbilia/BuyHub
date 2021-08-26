@@ -1123,6 +1123,7 @@ class AttachedFile extends MyAppModel
             /* delete single file */
             $deleteStatementArr = array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_id=?', 'vals' => array($fileType, $recordId, $fileId));
         }
+        
         $db = FatApp::getDb();
         if (!$db->deleteRecords('tbl_attached_files', $deleteStatementArr)) {
             $this->error = $db->getError();

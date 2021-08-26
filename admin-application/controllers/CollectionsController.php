@@ -37,8 +37,10 @@ class CollectionsController extends AdminBaseController
     {
         $frm = new Form('frmSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-
-        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->adminLangId), 'collection_type', Collections::getTypeArr($this->adminLangId), '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
+        
+        $typeArr = Collections::getTypeArr($this->adminLangId);
+        unset($typeArr[Collections::COLLECTION_TYPE_CONTENT_BLOCK]);
+        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->adminLangId), 'collection_type', $typeArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
         $frm->addSelectBox(Labels::getLabel('LBL_Layout_Type', $this->adminLangId), 'collection_layout_type', array(-1 => Labels::getLabel('LBL_Does_Not_matter', $this->adminLangId)) + Collections::getLayoutTypeArr($this->adminLangId), '', array(), '');
 
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
@@ -640,7 +642,7 @@ class CollectionsController extends AdminBaseController
             $srch->addCondition('banner_id', '=', $bannerId);
             $srch->addOrder('banner_active', 'DESC');
             $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $data = FatApp::getDb()->fetch($rs);
             if ($data === false) {

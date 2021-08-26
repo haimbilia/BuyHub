@@ -105,6 +105,8 @@ class CheckuniqueController
         $srch->addCondition('ucfattempt_ip', '=', $ip);
         $srch->addCondition('ucfattempt_time', '>=', date('Y-m-d H:i:s', strtotime("-1 minutes")));
         $srch->addFld('COUNT(*) AS total');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
 
         $row = $db->fetch($rs);

@@ -588,6 +588,7 @@ class CustomProductsController extends AdminBaseController
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->adminLangId, 's_l');
         $srch->addCondition('preq_id', '=', $preqId);
         $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'credential_email', 'user_phone_dcode', 'user_phone', 'ifnull(shop_name, shop_identifier) as shop_name'));
+        $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
@@ -831,6 +832,8 @@ class CustomProductsController extends AdminBaseController
 
                     $optionSrch = clone $srch;
                     $optionSrch->addCondition('upc_options', '=', $options);
+                    $optionSrch->doNotCalculateRecords();
+                    $optionSrch->setPageSize(1);
                     $rs = $optionSrch->getResultSet();
                     $row = FatApp::getDb()->fetch($rs);
 

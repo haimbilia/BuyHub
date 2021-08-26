@@ -23,8 +23,17 @@ if ($vtype == 'list') {
         <div class="product-listing" data-view="<?php echo $colMdVal; ?>">
             <?php if ($products) {
                 $showActionBtns = !empty($showActionBtns) ? $showActionBtns : false;
-                $isWishList = isset($isWishList) ? $isWishList : 0; ?>
-                <?php foreach ($products as $product) {
+                $isWishList = isset($isWishList) ? $isWishList : 0;
+                foreach ($products as $product) {
+                    $selProdRibbons = [];
+                    if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
+                        $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
+                    }
+
+                    if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
+                        $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
+                    }
+
                     $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND); ?> <div class="items">
                         <!--product tile-->
                         <div class="products">
@@ -39,7 +48,6 @@ if ($vtype == 'list') {
                                             </use>
                                         </svg> <?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?></div>
                                 <?php } ?>
-                                <?php $this->includeTemplate('_partial/collection-ui.php', array('product' => $product,  'siteLangId' => $siteLangId, 'showActionBtns' => $showActionBtns, 'isWishList' => $isWishList), false); ?>
                                 <div class="products_img">
                                     <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
                                     <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id']), CONF_WEBROOT_FRONTEND) ?>">
@@ -67,6 +75,8 @@ if ($vtype == 'list') {
                                 </div>
                                 <div class="products_title"><a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND); ?>"><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']; ?>
                                     </a></div> <?php $this->includeTemplate('_partial/collection-product-price.php', array('product' => $product, 'siteLangId' => $siteLangId), false); ?>
+                                    
+                                    <?php $this->includeTemplate('_partial/collection-ui.php', array('product' => $product,  'siteLangId' => $siteLangId, 'showActionBtns' => $showActionBtns, 'isWishList' => $isWishList, 'selProdRibbons' => $selProdRibbons), false); ?>
                             </div>
                         </div>
                     </div>

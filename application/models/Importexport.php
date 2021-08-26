@@ -1613,6 +1613,7 @@ class Importexport extends ImportexportCommon
             $weightUnitsArr = applicationConstants::getWeightUnitsArr($langId);
             $weightUnitsArr = array_flip($weightUnitsArr);
         }
+        $isBrandMand  = $this->settings['CONF_PRODUCT_BRAND_MANDATORY'];
 
         $shippingProfileArr = ShippingProfile::getProfileArr($langId, 0, true, true, true);
         $adminDefaultShipProfileId =  array_key_first($shippingProfileArr);
@@ -1786,12 +1787,14 @@ class Importexport extends ImportexportCommon
                             $columnKey = 'product_brand_id';
                             $colValue = mb_strtolower($colValue);
                             if (!array_key_exists($colValue, $brandIdentifierArr)) {
-                                $res = $this->array_change_key_case_unicode($this->getAllBrandsArr(false, $colValue), CASE_LOWER);
-                                if (!$res) {
-                                    $invalid = true;
-                                } else {
-                                    $brandIdentifierArr = $brandIdentifierArr + $res;
-                                }
+                                if($isBrandMand || !empty($colValue)){
+                                    $res = $this->array_change_key_case_unicode($this->getAllBrandsArr(false, $colValue), CASE_LOWER);
+                                    if (!$res) {
+                                        $invalid = true;
+                                    } else {
+                                        $brandIdentifierArr = $brandIdentifierArr + $res;
+                                    }
+                                }                                
                             }
                             $colValue = isset($brandIdentifierArr[$colValue]) ? $brandIdentifierArr[$colValue] : 0;
                             break;

@@ -23,6 +23,7 @@ trait SellerUsers
             FatApp::redirectUser(UrlHelper::generateUrl('seller'));
         }
         $this->set('frmSearch', $this->getUserSearchForm());
+        $this->set('canEdit', true);
         $this->_template->render(true, true);
     }
 
@@ -106,6 +107,8 @@ trait SellerUsers
             $srch = User::getSearchObject(true, UserAuthentication::getLoggedUserId());
             $srch->addMultipleFields(array('user_id', 'user_parent', 'user_name', 'user_phone_dcode', 'user_phone', 'user_country_id', 'user_state_id', 'user_city', 'credential_username', 'credential_email', 'credential_active'));
             $srch->addCondition('user_id', '=', $userId);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $data = FatApp::getDb()->fetch($rs);
             if ($data === false) {
@@ -146,6 +149,8 @@ trait SellerUsers
 			$srch = User::getSearchObject(true, UserAuthentication::getLoggedUserId());
 			$srch->addMultipleFields(array('user_id', 'user_parent', 'credential_username'));
 			$srch->addCondition('user_id', '=', $userId);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
 			$rs = $srch->getResultSet();
 			$userData = FatApp::getDb()->fetch($rs);
             if (empty($userData) || $userData['user_parent'] != UserAuthentication::getLoggedUserId()) {

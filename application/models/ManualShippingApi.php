@@ -67,6 +67,8 @@ class ManualShippingApi extends MyAppModel
         $srch = self::getSearchObject();
         $srch->addCondition('msa.' . static::DB_TBL_PREFIX . 'id', '=', $id);
         $srch->addFld('msa.' . static::DB_TBL_PREFIX . 'id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         if ($rs) {
             $row = FatApp::getDb()->fetch($rs);

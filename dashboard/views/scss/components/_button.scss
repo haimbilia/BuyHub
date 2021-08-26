@@ -104,7 +104,6 @@
              height: 12px;
              margin-top: -4px;
              margin-#{$end-direction}: 5px;
-             fill: currentColor;
          }
      }
      &.btn-link {
@@ -132,11 +131,13 @@
      &:focus {
          outline: none !important;
      }
+     &.disabled {
+         filter: grayscale(1);
+     }
      .icn {
          svg {
              width: 16px;
              height: 16px;
-             fill: currentColor;
          }
      }
  }

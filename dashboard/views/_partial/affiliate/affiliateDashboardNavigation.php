@@ -24,7 +24,7 @@ $action = strtolower($action);
         ?>
         <div class="js-hamburger hamburger-toggle <?php echo $isOpened; ?>"><span class="bar-top"></span><span class="bar-mid"></span><span class="bar-bot"></span></div>
     </div>
-    <div class="sidebar__content custom-scrollbar scroll scroll-y" id="scrollElement-js" data-simplebar="init">
+    <div class="sidebar__content custom-scrollbar scroll scroll-y" id="scrollElement-js" >
         <nav class="dashboard-menu">
             <ul>
                 <?php if (User::canViewAffiliateTab()) { ?>

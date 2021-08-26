@@ -210,7 +210,7 @@ class BrandsController extends AdminBaseController
         } else {
             $urlSrch = UrlRewrite::getSearchObject();
             $urlSrch->doNotCalculateRecords();
-            $urlSrch->doNotLimitRecords();
+            $urlSrch->setPageSize(1);
             $urlSrch->addFld('urlrewrite_custom');
             $urlSrch->addCondition('urlrewrite_original', '=', $shopOriginalUrl);
             $rs = $urlSrch->getResultSet();
@@ -359,7 +359,7 @@ class BrandsController extends AdminBaseController
             /* url data[ */
             $urlSrch = UrlRewrite::getSearchObject();
             $urlSrch->doNotCalculateRecords();
-            $urlSrch->doNotLimitRecords();
+            $urlSrch->setPageSize(1);
             $urlSrch->addFld('urlrewrite_custom');
             $urlSrch->addCondition('urlrewrite_original', '=', $this->rewriteUrl . $brand_id);
             $rs = $urlSrch->getResultSet();
@@ -392,7 +392,7 @@ class BrandsController extends AdminBaseController
             /* url data[ */
             $urlSrch = UrlRewrite::getSearchObject();
             $urlSrch->doNotCalculateRecords();
-            $urlSrch->doNotLimitRecords();
+            $urlSrch->setPageSize(1);
             $urlSrch->addFld('urlrewrite_custom');
             $urlSrch->addCondition('urlrewrite_original', '=', $this->rewriteUrl . $brand_id);
             $rs = $urlSrch->getResultSet();
@@ -512,9 +512,9 @@ class BrandsController extends AdminBaseController
         }
 
         $fileHandlerObj = new AttachedFile();
-        $fileHandlerObj->deleteFile($file_type, $brand_id, 0, 0, $lang_id);
+        $fileHandlerObj->deleteFile($file_type, $brand_id, 0, 0, $lang_id, $slide_screen);
 
-        if (!$res = $fileHandlerObj->saveAttachment(
+        if (!$fileHandlerObj->saveAttachment(
             $_FILES['cropped_image']['tmp_name'],
             $file_type,
             $brand_id,

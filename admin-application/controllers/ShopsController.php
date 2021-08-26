@@ -168,9 +168,9 @@ class ShopsController extends AdminBaseController
             /* url data[ */
             $urlSrch = UrlRewrite::getSearchObject();
             $urlSrch->doNotCalculateRecords();
-            $urlSrch->doNotLimitRecords();
+            $urlSrch->setPageSize(1);
             $urlSrch->addFld('urlrewrite_custom');
-            $urlSrch->addCondition('urlrewrite_original', '=', 'shops/view/' . $shop_id);
+            $urlSrch->addCondition('urlrewrite_original', '=', 'shops/view/' . $shop_id);            
             $rs = $urlSrch->getResultSet();
             $urlRow = FatApp::getDb()->fetch($rs);
             if ($urlRow) {
@@ -879,7 +879,7 @@ class ShopsController extends AdminBaseController
             /* url data[ */
             $urlSrch = UrlRewrite::getSearchObject();
             $urlSrch->doNotCalculateRecords();
-            $urlSrch->doNotLimitRecords();
+            $urlSrch->setPageSize(1);
             $urlSrch->addFld('urlrewrite_custom');
 
             $orignalUrl = Shop::SHOP_COLLECTION_ORGINAL_URL . $shop_id . '/' . $scollection_id;

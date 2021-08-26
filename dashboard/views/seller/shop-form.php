@@ -29,13 +29,16 @@ $latFld->setFieldTagAttribute('id', "lat");
 $lngFld = $shopFrm->getField('shop_lng');
 $lngFld->setFieldTagAttribute('id', "lng");
 
+$fld = $shopFrm->getField('shop_pickup_interval');
+$fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('LBL_SHOP_PICKUP_INTERVAL_INFO', $siteLangId) . ' </span>';
+
 $btnSubmit = $shopFrm->getField('btn_submit');
 /* $btnSubmit->developerTags['noCaptionTag'] = true; */
 $btnSubmit->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 
 $variables = array('language' => $language, 'siteLangId' => $siteLangId, 'shop_id' => $shop_id, 'action' => $action);
 $this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false); ?>
-<div class="tabs__content tabs__content-js">
+<div class="tabs__content-js">
     <div class="card">
         <div class="card-body ">
             <div class="row">

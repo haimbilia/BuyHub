@@ -273,4 +273,10 @@ $(document).on('change', '.icon-language-js', function () {
             $(".recordsContainer--js").html(t);
         });
     };
+
+    deleteBadgeRequest = function (badgeReqId) {
+        if (!confirm(langLbl.confirmDelete)) { return; }
+        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'deleteBadgeRequest', [badgeReqId]), '', function (t) { searchRecords(document.frmSearch) });
+    }
+
 })()

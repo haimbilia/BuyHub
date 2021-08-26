@@ -39,10 +39,9 @@ foreach ($arrListing as $sn => $row) {
             case 'select_all':
                 $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[' . $volDiscountId . ']" value=' . $selProdId . '></label>', true);
                 break;
-            case 'product_name':
-                // last Param of getProductDisplayTitle function used to get title in html form.
-                $productName = SellerProduct::getProductDisplayTitle($selProdId, $siteLangId, true);
-                $td->appendElement('plaintext', array(), $productName, true);
+            case 'product_name':               
+                $str = $this->includeTemplate('_partial/product/product-info-html.php', ['product' => $row ,'siteLangId'=> $siteLangId], false, true);
+                $td->appendElement('plaintext', array(), $str, true);
                 break;
             case 'voldiscount_min_qty':
             case 'voldiscount_percentage':

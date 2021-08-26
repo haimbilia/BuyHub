@@ -38,6 +38,8 @@ class GuestUserController extends MyAppController
         $registerFrm = $this->getRegistrationForm(true, $signUpWithPhone);
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
+        $cPageSrch->doNotCalculateRecords();
+        $cPageSrch->setPageSize(1);
         $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
         if (!empty($cpage) && is_array($cpage)) {
             $termsAndConditionsLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
@@ -48,6 +50,8 @@ class GuestUserController extends MyAppController
         $privacyPolicyLinkHref = 'javascript:void(0)';
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_PRIVACY_POLICY_PAGE', FatUtility::VAR_INT, 0));
+        $cPageSrch->doNotCalculateRecords();
+        $cPageSrch->setPageSize(1);
         $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
         if (!empty($cpage) && is_array($cpage)) {
             $privacyPolicyLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
@@ -349,13 +353,15 @@ class GuestUserController extends MyAppController
         }
 
         if (UserAuthentication::isUserLogged()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('account'));
+            FatApp::redirectUser(UrlHelper::generateUrl('account','', [], CONF_WEBROOT_DASHBOARD));
         }
 
         $registerFrm = $this->getRegistrationForm();
 
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
+        $cPageSrch->doNotCalculateRecords();
+        $cPageSrch->setPageSize(1);
         $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
         if (!empty($cpage) && is_array($cpage)) {
             $termsAndConditionsLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
@@ -562,6 +568,8 @@ class GuestUserController extends MyAppController
         if ($userData['user_is_affiliate'] != applicationConstants::YES) {
             $srch = new SearchBase('tbl_user_credentials');
             $srch->addCondition('credential_user_id', '=', $userId);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $checkActiveRow = $db->fetch($rs);
             if ($checkActiveRow['credential_active'] != applicationConstants::ACTIVE) {
@@ -604,7 +612,7 @@ class GuestUserController extends MyAppController
                 Message::addErrorMessage(Labels::getLabel($authentication->getError(), $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
             }
-            FatApp::redirectUser(UrlHelper::generateUrl('Account'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD));
         }
 
         Message::addMessage(Labels::getLabel("MSG_EMAIL_VERIFIED", $this->siteLangId));
@@ -680,7 +688,7 @@ class GuestUserController extends MyAppController
                 Message::addErrorMessage(Labels::getLabel($authentication->getError(), $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
             }
-            FatApp::redirectUser(UrlHelper::generateUrl('Account'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD));
         }
 
         Message::addMessage(Labels::getLabel("MSG_EMAIL_VERIFIED", $this->siteLangId));
@@ -711,6 +719,7 @@ class GuestUserController extends MyAppController
         $this->set('pageData', $pageData);
         $this->set('frm', $frm);
         $this->set('siteLangId', $this->siteLangId);
+        
         if (1 > $withPhone && 0 < $includeHeaderAndFooter) {
             $this->_template->render();
             return;
@@ -854,6 +863,8 @@ class GuestUserController extends MyAppController
         /*Send verification email if email not verified[*/
         $srch = new SearchBase('tbl_user_credentials');
         $srch->addCondition('credential_user_id', '=', $row['user_id']);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $checkVerificationRow = $db->fetch($rs);
 
@@ -955,6 +966,8 @@ class GuestUserController extends MyAppController
         $db = FatApp::getDb();
         $srch = new SearchBase('tbl_user_credentials');
         $srch->addCondition('credential_email', '=', $row['user_email']);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $checkVerificationRow = $db->fetch($rs);
 
@@ -1207,6 +1220,8 @@ class GuestUserController extends MyAppController
 
         $userObj = new User(UserAuthentication::getLoggedUserId());
         $srch = $userObj->getUserSearchObj(array('user_id', 'credential_email', 'user_name', 'user_phone_dcode', 'user_phone'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
 
         if (!$rs) {

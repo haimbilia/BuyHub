@@ -316,7 +316,7 @@ SET afile.afile_record_id = pddr_id;
 DROP VIEW IF EXISTS pddr_files_view;
 --  Process links stored in tbl_seller_products table (selprod_downloadable_link) ---
 
-UPDATE tbl_seller_products SET selprod_downloadable_link = REPLACE(selprod_downloadable_link,'\n',',');
+UPDATE tbl_seller_products SET selprod_downloadable_link = REPLACE(selprod_downloadable_link,'\n',',') where selprod_downloadable_link != '';
 
 DROP VIEW IF EXISTS pddr_links_view;
 
@@ -874,6 +874,19 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('MSG_STRIPE_CONNECT_ACCOUNT_NOT_COMPLETE', 1, 'Your Account Setup Is Incomplete. {click-here} To Complete Your Account Setup.', '')
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 -- ---------Task 86672 Stripe Connect Changes ------ -- 
+
+
+-- ----------------------TV-9.3.2.20210810---------------------
+
+DELETE FROM `tbl_language_labels` WHERE label_key='LBL_EARNED_REWARD_POINTS_ON_PURCHASE.';
+-- ----------------------TV-9.3.2.20210813-----------------------
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_SHOP_PICKUP_INTERVAL_INFO', 1, 'The time gap (in hours) to be maintained before the first available time slot for pickup orders.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+UPDATE `tbl_language_labels` SET `label_caption` = 'Submit new requests to admin by clicking on respective buttons.' WHERE label_key="LBL_Generate_requests_using_buttons_below";
+
+
 
 
 -- --------- Added InActive Subscription Value ------ --

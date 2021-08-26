@@ -38,6 +38,8 @@ class BlogComment extends MyAppModel
         $srch->addCondition('bpcomment_deleted', '=', applicationConstants::NO);
         $srch->addCondition('bpcomment_id', '=', $bpcommentId);
         $srch->addFld('bpcomment_id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row) && $row['bpcomment_id'] == $bpcommentId) {

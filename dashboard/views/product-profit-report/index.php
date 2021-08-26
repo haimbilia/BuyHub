@@ -10,6 +10,14 @@ $frmSearch->developerTags['labelWidthClassesDefault'] = ['field_', 'field_', 'fi
 $frmSearch->developerTags['labelWidthValuesDefault'] = ['label', 'label', 'label', 'label'];
 $frmSearch->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
 
+$fld = $frmSearch->getField('date_from');
+$fld->setFieldTagAttribute('placeholder', $fld->getCaption());
+$fld->developerTags['noCaptionTag'] = true;
+
+$fld = $frmSearch->getField('date_to');
+$fld->setFieldTagAttribute('placeholder', $fld->getCaption());
+$fld->developerTags['noCaptionTag'] = true;
+
 $sortBy = $frmSearch->getField('sortBy');
 $sortBy->setFieldTagAttribute('id', 'sortBy');
 
@@ -19,10 +27,12 @@ $sortOrder->setFieldTagAttribute('id', 'sortOrder');
 $submitFld = $frmSearch->getField('btn_submit');
 $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
 $submitFld->developerTags['colWidthValues'] = [2, 2, null, null];
+$submitFld->developerTags['noCaptionTag'] = true;
 
 $fldClear = $frmSearch->getField('btn_clear');
 $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 $fldClear->developerTags['colWidthValues'] = [2, 2, null, null];
+$fldClear->developerTags['noCaptionTag'] = true;
 
 $reportsData = [
     'pageTitle' => Labels::getLabel('LBL_Product_Profit_Report', $siteLangId),

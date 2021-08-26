@@ -11,14 +11,15 @@
                     </div>
                     <div class="faqsearch">
                         <form name="frmSearchFaqs" class="form" action="javascript:void(0);">
-                            <input placeholder="Search" class="faq-input no-focus" data-field-caption="Enter your question" type="search" name="question" value="">
+                            <input placeholder="Search" class="faq-input no-focus"
+                                data-field-caption="Enter your question" type="search" name="question" value="">
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <section class="section bg--white">
+    <section class="section bg-white">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8">
@@ -30,11 +31,11 @@
             </div>
         </div>
     </section>
-<script>
+    <script>
     var $linkMoreText = '<?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?>';
     var $linkLessText = '<?php echo Labels::getLabel('Lbl_SHOW_LESS', $siteLangId); ?>';
-</script>
-<script>
+    </script>
+    <script>
     var clics = 0;
     $(document).ready(function() {
         $('.faqanswer').hide();
@@ -69,30 +70,35 @@
         $(document).on("keyup", '.faq-input', function() {
             // Get user input from search box
             var filter_text = $(this).val();
-            
-            <!--var re = new RegExp(filter_text, 'g'); -->
-            
+
+            <
+            !--
+            var re = new RegExp(filter_text, 'g');
+            -- >
+
             $('.faqlist h3').each(function() {
-                if ('' !== filter_text) { 
-                    var startAt = $(this).text().toLowerCase().indexOf(filter_text.toLowerCase());
-                    if ( startAt >= 0) {
-                        var endAt = filter_text.length;   
+                if ('' !== filter_text) {
+                    var startAt = $(this).text().toLowerCase().indexOf(filter_text
+                    .toLowerCase());
+                    if (startAt >= 0) {
+                        var endAt = filter_text.length;
                         var content = $(this).text();
-                        filter_text = content.substr(startAt, endAt);                      
-                        var replaceWith = "<span class='js--highlightText'>"+filter_text+"</span>";            
+                        filter_text = content.substr(startAt, endAt);
+                        var replaceWith = "<span class='js--highlightText'>" + filter_text +
+                            "</span>";
                         var content = $(this).text();
-                        $(this).siblings( ".faqanswer" ).slideDown();
+                        $(this).siblings(".faqanswer").slideDown();
                         $(this).html(content.replace(filter_text, replaceWith));
                     } else {
                         $(this).text($(this).text());
-                        $(this).siblings( ".faqanswer" ).slideUp();
+                        $(this).siblings(".faqanswer").slideUp();
                     }
                 } else {
                     $(this).text($(this).text());
-                    $('.faqlist h3').siblings( ".faqanswer" ).slideUp();
+                    $('.faqlist h3').siblings(".faqanswer").slideUp();
                 }
             })
         });
     });
-</script>
+    </script>
 </div>

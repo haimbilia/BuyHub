@@ -603,6 +603,7 @@ class User extends MyAppModel
             array(
                 'u.' . static::DB_TBL_PREFIX . 'id',
                 'u.' . static::DB_TBL_PREFIX . 'name',
+                'u.' . static::DB_TBL_PREFIX . 'phone_dcode',
                 'u.' . static::DB_TBL_PREFIX . 'phone',
                 'uc.' . static::DB_TBL_CRED_PREFIX . 'username',
                 'uc.' . static::DB_TBL_CRED_PREFIX . 'email',

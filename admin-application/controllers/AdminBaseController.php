@@ -178,6 +178,7 @@ class AdminBaseController extends FatController
                 'unlinkRecords' => Labels::getLabel('LBL_FIRST_UNLINK_ALL_RECORDS', $this->adminLangId),
                 'remove' => Labels::getLabel('LBL_REMOVE', $this->adminLangId),
                 'alreadySelected' => Labels::getLabel('MSG_ALREADY_SELECTED', $this->adminLangId),
+                'invalidSeller' => Labels::getLabel('MSG_PLEASE_SELECT_THE_SELLER_FIRST', $this->adminLangId),
             );
             $languages = Language::getAllNames(false);
             foreach ($languages as $val) {
@@ -199,6 +200,8 @@ class AdminBaseController extends FatController
         $notifyObject->addCondition('n.' . Notification::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
         $notifyObject->addCondition('n.' . Notification::DB_TBL_PREFIX . 'marked_read', '=', applicationConstants::NO);
         $notifyObject->addMultipleFields(array('count(notification_id) as countOfRec'));
+        $notifyObject->doNotCalculateRecords();
+        $notifyObject->setPageSize(1);
         $notifyCountResult = $db->fetch($notifyObject->getResultset());
         $notifyCount = FatUtility::int($notifyCountResult['countOfRec']);
 

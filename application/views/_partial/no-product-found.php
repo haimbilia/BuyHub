@@ -13,7 +13,8 @@
 <div class="container align--center">
     <div class="no-product">
         <div class="block--empty m-auto text-center">
-            <img class="block__img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/empty_cart.svg" alt="<?php echo Labels::getLabel('LBL_No_Product_found', $siteLangId);?>">
+            <img class="block__img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/empty_cart.svg"
+                alt="<?php echo Labels::getLabel('LBL_No_Product_found', $siteLangId);?>">
             <h3><?php echo Labels::getLabel('LBL_WE_COULD_NOT_FIND_ANY_MATCHES!', $siteLangId); ?></h3>
             <h6><?php echo Labels::getLabel('LBL_Please_check_if_you_misspelt_something_or_try_searching_again_with_fewer_keywords.', $siteLangId); ?>
             </h6><br>
@@ -31,19 +32,29 @@
             <?php
             $top_searched_keywords = SearchItem::getTopSearchedKeywords();
             if (count($top_searched_keywords) > 0) : ?>
-            <h6><br>
-                <strong><?php echo Labels::getLabel('LBL_OR', $siteLangId)?></strong><br>
-                <br> <?php echo Labels::getLabel('L_Popular_Searches', $siteLangId)?></strong> <br>
-                <br></h6>
-            <ul class="links--inline">
-                <?php $inc = 0; foreach ($top_searched_keywords as $record) {
+            <!-- <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="or">
+                        <span>
+                            <?php echo Labels::getLabel('LBL_OR', $siteLangId)?>
+                        </span>
+                    </div>
+                </div>
+            </div> -->
+            <div class="popular-searches my-5">
+                <h3 class=""><?php echo Labels::getLabel('L_Popular_Searches', $siteLangId)?> </h3>
+                <ul class="browse-more">
+                    <?php $inc = 0; foreach ($top_searched_keywords as $record) {
                     $inc++;
                     if ($inc >1) {
                         echo "";
                     } ?>
-                    <li><a href="<?php echo UrlHelper::generateUrl('products', 'search', array( 'keyword-'.$record['searchitem_keyword'])); ?>"><?php echo $record['searchitem_keyword']?> </a> </li>
-                <?php } ?>
-            </ul>
+                    <li><a
+                            href="<?php echo UrlHelper::generateUrl('products', 'search', array( 'keyword-'.$record['searchitem_keyword'])); ?>"><?php echo $record['searchitem_keyword']?>
+                        </a> </li>
+                    <?php } ?>
+                </ul>
+            </div>
             <?php endif; ?>
         </div>
     </div>

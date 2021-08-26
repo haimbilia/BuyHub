@@ -104,8 +104,9 @@ $(document).ready(function(){
 	}
 
 	popupImage = function(inputBtn){
-		if (inputBtn) {
-			if(inputBtn.files && inputBtn.files[0]){
+        if (inputBtn) {
+            if(inputBtn.files && inputBtn.files[0]){
+                $.facebox(fcom.getLoader(), '', 'cropper-body');
 				fcom.ajax(fcom.makeUrl('Account', 'imgCropper'), '', function(t) {
 					$.facebox(t);
 					var file = inputBtn.files[0];
@@ -123,6 +124,7 @@ $(document).ready(function(){
 				});
 			}
 		} else {
+            $.facebox(fcom.getLoader(), '', 'cropper-body');
 			fcom.ajax(fcom.makeUrl('Account', 'imgCropper'), '', function(t) {
 				$.facebox(t);
 				var container = document.querySelector('.img-container');

@@ -3,7 +3,7 @@
     <section class="section">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-xl-11" id="js-cart-listing">
+                <div class="col-xl-10" id="js-cart-listing">
                     <?php if($total > 0){ ?>
                     <div class="cart-page">
                         <main class="cart-page_main">
@@ -11,26 +11,30 @@
                             <div class="shiporpickup" id="js-shiporpickup">
                                 <ul>
                                     <li onclick="listCartProducts(<?php echo Shipping::FULFILMENT_SHIP;?>)">
-                                        <input class="control-input" type="radio" id="shipping" name="fulfillment_type"
-                                            value="<?php echo Shipping::FULFILMENT_SHIP;?>"
-                                            <?php if($pickUpProductsCount == 0) { echo "checked='true'";}?>>
-                                        <label class="control-label">
+
+                                        <label class="control-label radio is-active shippingLblJs">
+                                            <input class="control-input" type="radio" id="shipping"
+                                                name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_SHIP;?>"
+                                                <?php if($pickUpProductsCount == 0) { echo "checked='true'";}?>>
                                             <svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#shipping"
-                                                    href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#shipping">
+                                                <use
+                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#shipping">
                                                 </use>
-                                            </svg> <?php echo Labels::getLabel('LBL_SHIP_MY_ORDER', $siteLangId);?>
+                                            </svg>
+                                            <?php echo Labels::getLabel('LBL_SHIP_MY_ORDER', $siteLangId);?>
                                         </label>
 
                                     </li>
                                     <li onclick="listCartProducts(<?php echo Shipping::FULFILMENT_PICKUP;?>)">
-                                        <input class="control-input" type="radio" id="pickup" name="fulfillment_type"
-                                            value="<?php echo Shipping::FULFILMENT_PICKUP;?>"
-                                            <?php if($shipProductsCount == 0) { echo "checked='true'";}?>>
-                                        <label class="control-label">
+
+                                        <label class="control-label radio pickupLblJs">
+                                            <input class="control-input" type="radio" id="pickup"
+                                                name="fulfillment_type"
+                                                value="<?php echo Shipping::FULFILMENT_PICKUP;?>"
+                                                <?php if($shipProductsCount == 0) { echo "checked='true'";}?>>
                                             <svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#pickup"
-                                                    href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#pickup">
+                                                <use
+                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.svg#pickup">
                                                 </use>
                                             </svg> <?php echo Labels::getLabel('LBL_PICKUP_IN_STORE', $siteLangId);?>
                                         </label>

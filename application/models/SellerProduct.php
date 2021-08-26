@@ -1068,7 +1068,8 @@ class SellerProduct extends MyAppModel
 
         $srch->addMultipleFields(
             array(
-                'selprod_id', 'credential_username', 'selprod_price', 'date(splprice_start_date) as splprice_start_date', 'splprice_end_date', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_title', 'splprice_id', 'splprice_price'
+                'selprod_id', 'credential_username', 'selprod_price', 'date(splprice_start_date) as splprice_start_date', 'splprice_end_date', 'IFNULL(product_name, product_identifier) as product_name',
+                'selprod_title', 'splprice_id', 'splprice_price','selprod_product_id','product_updated_on'
             )
         );
 
@@ -1103,7 +1104,7 @@ class SellerProduct extends MyAppModel
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $langId, 'p_l');
         $srch->addMultipleFields(
             array(
-                'selprod_id', 'credential_username', 'voldiscount_min_qty', 'voldiscount_percentage', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_title', 'voldiscount_id'
+                'selprod_id', 'credential_username', 'voldiscount_min_qty', 'voldiscount_percentage', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_title', 'voldiscount_id','product_updated_on','selprod_product_id'
             )
         );
 
@@ -1326,7 +1327,7 @@ class SellerProduct extends MyAppModel
      *
      * @return object
      */
-    private static function rateObj(): object
+    public static function rateObj(): object
     {
         $avgRatingSrch = new SelProdReviewSearch();
         $avgRatingSrch->joinSelProdRating();

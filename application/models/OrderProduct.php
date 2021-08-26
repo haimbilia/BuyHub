@@ -373,6 +373,8 @@ class OrderProduct extends MyAppModel
     {
         $srch = new SearchBase(static::DB_TBL_SHIPMENT_PICKUP);
         $srch->addCondition('opsp_op_id', '=', $op_id);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
     
@@ -384,6 +386,8 @@ class OrderProduct extends MyAppModel
         }
         $srch->addCondition('opr_op_id', '=', $op_id);
         $srch->addCondition('opr_type', '=', $type); 
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
 

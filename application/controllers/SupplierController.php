@@ -20,7 +20,7 @@ class SupplierController extends MyAppController
                 FatApp::redirectUser(UrlHelper::generateUrl('account', 'supplierApprovalForm', [], CONF_WEBROOT_DASHBOARD));
             }
             Message::addErrorMessage(Labels::getLabel('MSG_You_are_already_logged_in._Please_logout_and_register_for_seller.', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('account'));
+            FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD));
         }
         if (!FatApp::getConfig("CONF_ACTIVATE_SEPARATE_SIGNUP_FORM", FatUtility::VAR_INT, 1)) {
             FatApp::redirectUser(UrlHelper::generateUrl('guest-user', 'login-form', array(applicationConstants::YES)));
@@ -65,7 +65,7 @@ class SupplierController extends MyAppController
     public function account()
     {
         if (UserAuthentication::isUserLogged()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('account'));
+            FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD));
         }
         if (!FatApp::getConfig("CONF_ACTIVATE_SEPARATE_SIGNUP_FORM", FatUtility::VAR_INT, 1)) {
             FatApp::redirectUser(UrlHelper::generateUrl('guest-user', 'registration-form'));
@@ -99,6 +99,8 @@ class SupplierController extends MyAppController
         } else {
             $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
             $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
+            $cPageSrch->doNotCalculateRecords();
+            $cPageSrch->setPageSize(1);
             $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
             if (!empty($cpage) && is_array($cpage)) {
                 $termsAndConditionsLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
@@ -292,6 +294,8 @@ class SupplierController extends MyAppController
 
         $srch = $userObj->getUserSupplierRequestsObj();
         $srch->addFld(array('usuprequest_attempts', 'usuprequest_id'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
 
         $rs = $srch->getResultSet();
         if (!$rs) {
@@ -338,7 +342,7 @@ class SupplierController extends MyAppController
         }
 
         $phoneKey = $dialCode = '';
-        foreach($post as $key => $val) {
+        foreach ($post as $key => $val) {
             if (false !== strpos($key, '_dcode')) {
                 $phoneKey = str_replace('_dcode', '', $key);
                 $dialCode = $val;
@@ -518,6 +522,7 @@ class SupplierController extends MyAppController
         } else {
             $srchFAQCat = FaqCategory::getSearchObject($this->siteLangId);
             $srchFAQCat->setPageSize(1);
+            $srchFAQCat->doNotCalculateRecords();
             $srchFAQCat->addFld('faqcat_id');
             $rs = $srchFAQCat->getResultSet();
             $faqCatId = FatApp::getDb()->fetch($rs, 'faqcat_id');
@@ -719,7 +724,7 @@ class SupplierController extends MyAppController
                     break;
 
                 case User::USER_FIELD_TYPE_PHONE:
-				    $frm->addHiddenField('', $fieldName . '_dcode');
+                    $frm->addHiddenField('', $fieldName . '_dcode');
                     $fld = $frm->addTextBox($field['sformfield_caption'], $fieldName, '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
                     $fld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
                     break;

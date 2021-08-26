@@ -21,16 +21,9 @@ $slotTypeFld = $frm->getField('tslot_availability');
 $slotTypeFld->setOptionListTagAttribute('class', 'list-inline-checkboxes');
 $slotTypeFld->developerTags['rdLabelAttributes'] = array('class' => 'radio');
 $slotTypeFld->developerTags['rdHtmlAfterRadio'] = '<i class="input-helper"></i>';
-$slotTypeFld->setFieldTagAttribute('onClick', 'displaySlotTimings(this);');
+$slotTypeFld->setFieldTagAttribute('onChange', 'displaySlotTimings(this);');
 $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
 
-$fromAllFld = $frm->getField('tslot_from_all');
-$fromAllFld->setFieldTagAttribute('onChange', 'validateTimeFields()');
-$fromAllFld->setFieldTagAttribute('class', 'selectAllFromTime-js');
-
-$toAllFld = $frm->getField('tslot_to_all');
-$toAllFld->setFieldTagAttribute('onChange', 'validateTimeFields()');
-$toAllFld->setFieldTagAttribute('class', 'selectAllToTime-js');
 ?>
 
 <div class="sectionbody space">
@@ -239,7 +232,7 @@ $toAllFld->setFieldTagAttribute('class', 'selectAllToTime-js');
                             </div>
                         </div>
 
-                        <div class="js-slot-individual <?php echo $availability == TimeSlot::DAY_ALL_DAYS ? 'd-none' : ''; ?>">
+                        <div class="js-slot-individual">
                             <?php
                             $daysArr = TimeSlot::getDaysArr($langId);
                             $row = 0;
@@ -273,9 +266,9 @@ $toAllFld->setFieldTagAttribute('class', 'selectAllToTime-js');
                                         $toFld->setFieldTagAttribute('onChange', 'displayAddRowField(' . $i . ', this)');
                                         $toFld->value = $toTime;
                             ?>
-                                        <div class="row row-<?php echo $row;
+                                        <div class="row jsDay-<?php echo $i;?> row-<?php echo $row;
                                                             echo ($key > 0) ? ' js-added-rows-' . $i : '' ?>">
-                                            <div class="col-md-2">
+                                            <div class="col-md-2 jsWeekDay">
                                                 <div class="field-set">
                                                     <div class="caption-wraper">
                                                         <label class="field_label"> </label>
@@ -359,8 +352,8 @@ $toAllFld->setFieldTagAttribute('class', 'selectAllToTime-js');
                                     $toFld->setFieldTagAttribute('class', 'js-slot-to-' . $i);
                                     $toFld->setFieldTagAttribute('onChange', 'displayAddRowField(' . $i . ', this)');
                                     ?>
-                                    <div class="row row-<?php echo $row; ?>">
-                                        <div class="col-md-2">
+                                    <div class="row jsDay-<?php echo $i;?> row-<?php echo $row; ?>">
+                                        <div class="col-md-2 jsWeekDay">
                                             <div class="field-set">
                                                 <div class="caption-wraper">
                                                     <label class="field_label">
@@ -424,41 +417,7 @@ $toAllFld->setFieldTagAttribute('class', 'selectAllToTime-js');
                                 }
                             }
                             ?>
-                        </div>
-                        <div class="row js-slot-all <?php echo $availability == TimeSlot::DAY_INDIVIDUAL_DAYS ? 'd-none' : ''; ?>">
-                            <div class="col-md-6">
-                                <div class="field-set">
-                                    <div class="caption-wraper">
-                                        <label class="field_label">
-                                            <?php $fld = $frm->getField('tslot_from_all');
-                                            echo $fld->getCaption();
-                                            ?>
-                                        </label>
-                                    </div>
-                                    <div class="field-wraper">
-                                        <div class="field_cover">
-                                            <?php echo $frm->getFieldHtml('tslot_from_all'); ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="field-set">
-                                    <div class="caption-wraper">
-                                        <label class="field_label">
-                                            <?php $fld = $frm->getField('tslot_to_all');
-                                            echo $fld->getCaption();
-                                            ?>
-                                        </label>
-                                    </div>
-                                    <div class="field-wraper">
-                                        <div class="field_cover">
-                                            <?php echo $frm->getFieldHtml('tslot_to_all'); ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </div>                       
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="field-set">
@@ -488,9 +447,12 @@ $toAllFld->setFieldTagAttribute('class', 'selectAllToTime-js');
 
 
 <script language="javascript">
+     var DAY_SUNDAY = <?php echo TimeSlot::DAY_SUNDAY; ?>;
     <?php if ($addressId > 0) { ?>
         $(document).ready(function() {
+            $('.availabilityType-js:checked').trigger('change');
             getCountryStates($("#addr_country_id").val(), <?php echo ($stateId) ? $stateId : 0; ?>, '#shop_state', <?php echo $langId; ?>);
+           
         });
     <?php } ?>
 </script>

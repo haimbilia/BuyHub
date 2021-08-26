@@ -34,7 +34,7 @@
                     $html = '<div class="item"><figure class="item__pic"><img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, "SMALL", 0 ), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $brandName . '" alt="' . $brandName . '"></figure>
 				<div class="item__description">
 					<div class="item__title">' . $brandName . '</div>
-					<div class="item__brand"> (' . $row['brand_identifier'] . ') </div>
+					<div class="item__sub_title"> (' . $row['brand_identifier'] . ') </div>
 				</div></div>';
                     $td->appendElement('plaintext', array(), $html, true);
                     break;

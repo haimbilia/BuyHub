@@ -1,25 +1,24 @@
 .card {
-     
-    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px 0 rgba(76, 87, 125, 0.1);
     background: #fff;
+    //border: $border;
+    border: none;
     position: relative;
     border-radius: $radius4;
-    margin-bottom: 0rem !important;
+    margin-bottom: 0 !important;
     height: 100%;
-    
-    animation: dropdown-menu-fade-in 0.3s ease 1, dropdown-menu-move-up 0.3s ease-out 1;
+    //animation: dropdown-menu-fade-in 0.3s ease 1, dropdown-menu-move-up 0.3s ease-out 1;
     display: flex;
     flex-direction: column;
     @include media-breakpoint-down(md) {
-        & {
-            word-break: normal;
-        }
+        word-break: normal;
     }
     &-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 1rem;
+        margin-bottom: 0.5rem;
         color: $body-color;
         background: none;
         border: none;
@@ -34,7 +33,7 @@
     &-footer {
         padding: 1rem;
         background: none;
-        border-top: $border; 
+        border-top: $border;
     }
     &-title {
         margin-bottom: 0;
@@ -43,5 +42,19 @@
         a {
             color: $body-color;
         }
+    }
+}
+
+.card-search {
+    position: relative;
+    // background: $border-color;
+    &:before {
+        // content: "";
+        // position: absolute;
+        // top: 0;
+        // left: 0;
+        // z-index: 1;
+        // background-size: 250px;
+        // background: url(../dashboard/images/retina/bg-p-product-marketing.svg) no-repeat 0 0;
     }
 }

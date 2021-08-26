@@ -1,36 +1,36 @@
-$(document).ready(function () {
+$(document).ready(function() {
     shopForm();
 });
 
-$(document).on('change', '.logo-language-js', function () {
+$(document).on('change', '.logo-language-js', function() {
     var lang_id = $(this).val();
     shopImages('logo', 0, lang_id);
 });
-$(document).on('change', '.banner-language-js', function () {
+$(document).on('change', '.banner-language-js', function() {
     var lang_id = $(this).val();
     var slide_screen = $(".prefDimensions-js").val();
     shopImages('banner', slide_screen, lang_id);
 });
-$(document).on('change', '.prefDimensions-js', function () {
+$(document).on('change', '.prefDimensions-js', function() {
     var slide_screen = $(this).val();
     var lang_id = $(".banner-language-js").val();
     shopImages('banner', slide_screen, lang_id);
 });
-$(document).on('change', '.bg-language-js', function () {
+$(document).on('change', '.bg-language-js', function() {
     var lang_id = $(this).val();
     shopImages('bg', 0, lang_id);
 });
-$(document).on('change', '.collection-language-js', function () {
+$(document).on('change', '.collection-language-js', function() {
     var lang_id = $(this).val();
     var scollection_id = document.frmCollectionMedia.scollection_id.value;
     shopCollectionImages(scollection_id, lang_id);
 });
 
-$(document).on("change", "select[name='business_type']", function () {
+$(document).on("change", "select[name='business_type']", function() {
     requiredFieldsForm();
 });
 
-$(document).on("change", ".country", function () {
+$(document).on("change", ".country", function() {
     if ('' == $(this).val()) {
         return;
     }
@@ -39,16 +39,16 @@ $(document).on("change", ".country", function () {
     getStatesByCountryCode($(this).val(), 0, "." + $state, 'state_code');
 });
 
-$(document).on("change", ".state", function () {
+$(document).on("change", ".state", function() {
     $(this).removeAttr("disabled");
 });
 
-(function () {
+(function() {
     var runningAjaxReq = false;
     var dv = '#shopFormBlock';
     var dvt = '#shopFormChildBlock';
 
-    checkRunningAjax = function () {
+    checkRunningAjax = function() {
         if (runningAjaxReq == true) {
             //console.log(runningAjaxMsg);
             return;
@@ -56,7 +56,7 @@ $(document).on("change", ".state", function () {
         runningAjaxReq = true;
     };
 
-    goToCategoryBannerSrchPage = function (page) {
+    goToCategoryBannerSrchPage = function(page) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
@@ -65,17 +65,17 @@ $(document).on("change", ".state", function () {
         searchCategoryBanners(frm);
     };
 
-    categoryBanners = function () {
+    categoryBanners = function() {
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'searchCategoryBanners'), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'searchCategoryBanners'), '', function(t) {
             $(dv).html(t);
         });
     };
 
-    addCategoryBanner = function (prodCatId) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Seller', 'addCategoryBanner', [prodCatId]), '', function (t) {
-                $.facebox(t );
+    addCategoryBanner = function(prodCatId) {
+        $.facebox(function() {
+            fcom.ajax(fcom.makeUrl('Seller', 'addCategoryBanner', [prodCatId]), '', function(t) {
+                $.facebox(t);
             });
         });
     };
@@ -88,34 +88,34 @@ $(document).on("change", ".state", function () {
         });
     } */
 
-    searchCategoryBanners = function (frm) {
+    searchCategoryBanners = function(frm) {
         /*[ this block should be written before overriding html of 'form's parent div/element, otherwise it will through exception in ie due to form being removed from div */
         var data = fcom.frmData(frm);
         /*]*/
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'searchCategoryBanners'), data, function (res) {
+        fcom.ajax(fcom.makeUrl('Seller', 'searchCategoryBanners'), data, function(res) {
             $(dv).html(res);
         });
     };
 
-    reloadCategoryBannerList = function () {
+    reloadCategoryBannerList = function() {
         searchCategoryBanners(document.frmCategoryBannerSrchPaging);
     };
 
-    removeCategoryBanner = function (prodCatId, lang_id) {
+    removeCategoryBanner = function(prodCatId, lang_id) {
         var agree = confirm(langLbl.confirmRemove);
         if (!agree) {
             return false;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'removeCategoryBanner', [prodCatId, lang_id]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'removeCategoryBanner', [prodCatId, lang_id]), '', function(t) {
             reloadCategoryBannerList();
             addCategoryBanner(prodCatId);
         });
     };
 
-    shopForm = function (tab = '') {
+    shopForm = function(tab = '') {
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'shopForm', [tab]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'shopForm', [tab]), '', function(t) {
             $(dv).html(t);
             if ('' != tab) {
                 $('.' + tab).click();
@@ -126,11 +126,11 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    setupShop = function (frm) {
+    setupShop = function(frm) {
         if (!$(frm).validate()) return;
         checkRunningAjax();
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupShop'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupShop'), data, function(t) {
             runningAjaxReq = false;
             if (t.langId > 0) {
                 shopLangForm(t.shopId, t.langId);
@@ -142,20 +142,20 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    shopLangForm = function (shopId, langId, autoFillLangData = 0) {
+    shopLangForm = function(shopId, langId, autoFillLangData = 0) {
         $(dv).html(fcom.getLoader());
 
-        fcom.ajax(fcom.makeUrl('Seller', 'shopLangForm', [shopId, langId, autoFillLangData]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'shopLangForm', [shopId, langId, autoFillLangData]), '', function(t) {
             $(dv).html(t);
             fcom.setEditorLayout(langId);
         });
     };
 
-    setupShopLang = function (frm) {
+    setupShopLang = function(frm) {
         if (!$(frm).validate()) return;
         checkRunningAjax();
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupShopLang'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupShopLang'), data, function(t) {
             runningAjaxReq = false;
             $.mbsmessage.close();
             if (t.langId > 0 && t.shopId > 0) {
@@ -166,9 +166,9 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    shopMediaForm = function (el) {
+    shopMediaForm = function(el) {
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'shopMediaForm'), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'shopMediaForm'), '', function(t) {
             $(dv).html(t);
             $(el).parent().siblings().removeClass('is-active');
             $(el).parent().addClass('is-active');
@@ -178,8 +178,8 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    shopImages = function (imageType, slide_screen, lang_id) {
-        fcom.ajax(fcom.makeUrl('Seller', 'shopImages', [imageType, lang_id, slide_screen]), '', function (t) {
+    shopImages = function(imageType, slide_screen, lang_id) {
+        fcom.ajax(fcom.makeUrl('Seller', 'shopImages', [imageType, lang_id, slide_screen]), '', function(t) {
             if (imageType == 'logo') {
                 $('#logo-image-listing').html(t);
             } else if (imageType == 'banner') {
@@ -190,44 +190,44 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    shopTemplates = function (el) {
+    shopTemplates = function(el) {
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'shopTemplate'), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'shopTemplate'), '', function(t) {
             $(dv).html(t);
             $(el).parent().siblings().removeClass('is-active');
             $(el).parent().addClass('is-active');
         });
     };
 
-    setTemplate = function (ltemplateId) {
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'setTemplate', [ltemplateId]), '', function (t) {
+    setTemplate = function(ltemplateId) {
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'setTemplate', [ltemplateId]), '', function(t) {
             shopTemplates();
         });
     };
-   
+
     removeShopImage = function(BannerId, langId, imageType, slide_screen) {
         var agree = confirm(langLbl.confirmRemove);
         if (!agree) {
             return false;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'removeShopImage', [BannerId, langId, imageType, slide_screen]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'removeShopImage', [BannerId, langId, imageType, slide_screen]), '', function(t) {
             shopImages(imageType, slide_screen, langId);
         });
     };
 
-    deleteShopCollection = function (scollection_id) {
+    deleteShopCollection = function(scollection_id) {
         if (!confirm(langLbl.confirmDelete)) {
             return;
         }
-        fcom.ajax(fcom.makeUrl('Seller', 'deleteShopCollection', [scollection_id]), '', function (res) {
+        fcom.ajax(fcom.makeUrl('Seller', 'deleteShopCollection', [scollection_id]), '', function(res) {
             searchShopCollections();
         });
     };
 
-    shopCollections = function (el) {
+    shopCollections = function(el) {
         $(dv).html(fcom.getLoader());
         // console.log($(el).parent());
-        fcom.ajax(fcom.makeUrl('Seller', 'shopCollections'), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'shopCollections'), '', function(t) {
             $(dv).html(t);
             $(el).parent().siblings().removeClass('is-active');
             $(el).parent().addClass('is-active');
@@ -235,19 +235,19 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    searchShopCollections = function (el) {
+    searchShopCollections = function(el) {
         $(dvt).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'searchShopCollections'), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'searchShopCollections'), '', function(t) {
             $(dvt).html(t);
             $(el).parent().siblings().removeClass('is-active');
             $(el).parent().addClass('is-active');
         });
     };
 
-    shopCollectionProducts = function (el) {
+    shopCollectionProducts = function(el) {
         $(dv).html(fcom.getLoader());
         // console.log($(el).parent());
-        fcom.ajax(fcom.makeUrl('Seller', 'shopCollection'), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'shopCollection'), '', function(t) {
             $(dv).html(t);
             $(el).parent().siblings().removeClass('is-active');
             $(el).parent().addClass('is-active');
@@ -255,17 +255,17 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    getShopCollectionGeneralForm = function (scollection_id) {
+    getShopCollectionGeneralForm = function(scollection_id) {
         $(dvt).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionGeneralForm', [scollection_id]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionGeneralForm', [scollection_id]), '', function(t) {
             $(dvt).html(t);
         });
     };
 
-    setupShopCollection = function (frm) {
+    setupShopCollection = function(frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('seller', 'setupShopCollection'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('seller', 'setupShopCollection'), data, function(t) {
             $.mbsmessage.close();
             if (t.langId > 0) {
                 editShopCollectionLangForm(t.collection_id, t.langId);
@@ -275,10 +275,10 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    setupShopCollectionlangForm = function (frm) {
+    setupShopCollectionlangForm = function(frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('seller', 'setupShopCollectionLang'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('seller', 'setupShopCollectionLang'), data, function(t) {
             $.mbsmessage.close();
             if (t.langId > 0) {
                 editShopCollectionLangForm(t.scollection_id, t.langId);
@@ -291,39 +291,39 @@ $(document).on("change", ".state", function () {
 
     };
 
-    editShopCollectionLangForm = function (scollection_id, langId, autoFillLangData = 0) {
-        if (typeof (scollection_id) == "undefined" || scollection_id < 0) {
+    editShopCollectionLangForm = function(scollection_id, langId, autoFillLangData = 0) {
+        if (typeof(scollection_id) == "undefined" || scollection_id < 0) {
             return false;
         }
-        if (typeof (langId) == "undefined" || langId < 0) {
+        if (typeof(langId) == "undefined" || langId < 0) {
             return false;
         }
         $(dvt).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('seller', 'shopCollectionLangForm', [scollection_id, langId, autoFillLangData]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('seller', 'shopCollectionLangForm', [scollection_id, langId, autoFillLangData]), '', function(t) {
             $(dvt).html(t);
         });
     };
 
-    sellerCollectionProducts = function (scollection_id) {
+    sellerCollectionProducts = function(scollection_id) {
         $(dvt).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionProductLinkFrm', [scollection_id]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionProductLinkFrm', [scollection_id]), '', function(t) {
             $(dvt).html(t);
             bindAutoComplete();
         });
     };
 
-    setUpSellerCollectionProductLinks = function (frm) {
+    setUpSellerCollectionProductLinks = function(frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'setUpSellerCollectionProductLinks'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'setUpSellerCollectionProductLinks'), data, function(t) {
             $.mbsmessage.close();
         });
     };
 
-    socialPlatforms = function (el) {
+    socialPlatforms = function(el) {
         $(dv).html(fcom.getLoader());
         // console.log($(el).parent());
-        fcom.ajax(fcom.makeUrl('Seller', 'socialPlatforms'), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'socialPlatforms'), '', function(t) {
             $(dv).html(t);
             $(el).parent().siblings().removeClass('is-active');
             $(el).parent().addClass('is-active');
@@ -331,25 +331,25 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    searchSocialPlatforms = function (el) {
+    searchSocialPlatforms = function(el) {
         $(dvt).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformSearch'), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformSearch'), '', function(t) {
             $('.btn-back').addClass('d-none');
             $(dvt).html(t);
         });
     };
 
-    addForm = function (id) {
-        fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformForm', [id]), '', function (t) {
+    addForm = function(id) {
+        fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformForm', [id]), '', function(t) {
             $('.btn-back').removeClass('d-none');
             $(dvt).html(t);
         });
     };
 
-    setup = function (frm) {
+    setup = function(frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformSetup'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformSetup'), data, function(t) {
             $.mbsmessage.close();
             /*reloadSocialPlatformsList();*/
             if (t.langId > 0) {
@@ -360,17 +360,17 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    addLangForm = function (splatformId, langId, autoFillLangData = 0) {
+    addLangForm = function(splatformId, langId, autoFillLangData = 0) {
         $(dvt).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformLangForm', [splatformId, langId, autoFillLangData]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'socialPlatformLangForm', [splatformId, langId, autoFillLangData]), '', function(t) {
             $(dvt).html(t);
         });
     };
 
-    setupLang = function (frm) {
+    setupLang = function(frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformLangSetup'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformLangSetup'), data, function(t) {
             $.mbsmessage.close();
             reloadSocialPlatformsList();
             if (t.langId > 0) {
@@ -380,19 +380,19 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    deleteRecord = function (id) {
+    deleteRecord = function(id) {
         if (!confirm(langLbl.confirmDelete)) { return; }
         data = 'splatformId=' + id;
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'deleteSocialPlatform'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'deleteSocialPlatform'), data, function(res) {
             reloadSocialPlatformsList();
         });
     };
 
-    reloadSocialPlatformsList = function () {
+    reloadSocialPlatformsList = function() {
         searchSocialPlatforms();
     };
 
-    toggleSocialPlatformStatus = function (e, obj) {
+    toggleSocialPlatformStatus = function(e, obj) {
         if (!confirm(langLbl.confirmUpdateStatus)) {
             e.preventDefault();
             return;
@@ -402,7 +402,7 @@ $(document).on("change", ".state", function () {
             return false;
         }
         data = 'socialPlatformId=' + socialPlatformId;
-        fcom.ajax(fcom.makeUrl('Seller', 'changeSocialPlatformStatus'), data, function (res) {
+        fcom.ajax(fcom.makeUrl('Seller', 'changeSocialPlatformStatus'), data, function(res) {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
                 $.mbsmessage(ans.msg, true, 'alert--success');
@@ -412,32 +412,32 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    returnAddressForm = function () {
+    returnAddressForm = function() {
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'returnAddressForm'), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'returnAddressForm'), '', function(t) {
             $(dv).html(t);
         });
     };
 
-    setReturnAddress = function (frm) {
+    setReturnAddress = function(frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'setReturnAddress'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'setReturnAddress'), data, function(t) {
             returnAddressLangForm(t.langId);
         });
     };
 
-    returnAddressLangForm = function (langId, autoFillLangData = 0) {
+    returnAddressLangForm = function(langId, autoFillLangData = 0) {
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'returnAddressLangForm', [langId, autoFillLangData]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'returnAddressLangForm', [langId, autoFillLangData]), '', function(t) {
             $(dv).html(t);
         });
     };
 
-    setReturnAddressLang = function (frm) {
+    setReturnAddressLang = function(frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'setReturnAddressLang'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'setReturnAddressLang'), data, function(t) {
             if (t.langId) {
                 returnAddressLangForm(t.langId);
             } else {
@@ -446,54 +446,49 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    pickupAddress = function () {
+    pickupAddress = function() {
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'pickupAddress'), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'pickupAddress'), '', function(t) {
             $(dv).html(t);
         });
     };
 
-    pickupAddressForm = function (id) {
+    pickupAddressForm = function(id) {
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'pickupAddressForm', [id]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'pickupAddressForm', [id]), '', function(t) {
             $(dv).html(t);
-            setTimeout(function () { $('.fromTime-js').change(); }, 500);
+            setTimeout(function() { $('.fromTime-js').change(); }, 500);
         });
     };
 
-    setPickupAddress = function (frm) {
+    setPickupAddress = function(frm) {
         if (!$(frm).validate()) return;
         if (1 == $(".availabilityType-js:checked").val()) {
-            if (1 > $(".slotDays-js:checked").length) {
+            if (1 > $(".slotDaysJs:checked").length) {
                 $.mbsmessage(langLbl.selectTimeslotDay, true, 'alert--danger');
-                return false;
-            }
-        } else {
-            if ('' == $(".selectAllFromTime-js option:selected").val() || '' == $(".selectAllToTime-js option:selected").val()) {
-                $.mbsmessage(langLbl.invalidTimeSlot, true, 'alert--danger');
                 return false;
             }
         }
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'setPickupAddress'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'setPickupAddress'), data, function(t) {
             pickupAddress();
         });
     };
 
-    removeAddress = function (id, type) {
+    removeAddress = function(id, type) {
         var agree = confirm(langLbl.confirmDelete);
         if (!agree) {
             return false;
         }
         data = 'id=' + id + '&type=' + type;
-        fcom.updateWithAjax(fcom.makeUrl('Addresses', 'deleteRecord'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('Addresses', 'deleteRecord'), data, function(res) {
             pickupAddress();
         });
     };
 
-    collectionMediaForm = function (el, scollection_id) {
+    collectionMediaForm = function(el, scollection_id) {
         $(dvt).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionMediaForm', [scollection_id]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionMediaForm', [scollection_id]), '', function(t) {
             $(dvt).html(t);
             $(el).parent().siblings().removeClass('is-active');
             $(el).parent().addClass('is-active');
@@ -501,23 +496,23 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    shopCollectionImages = function (scollection_id, lang_id) {
-        fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionImages', [scollection_id, lang_id]), '', function (t) {
+    shopCollectionImages = function(scollection_id, lang_id) {
+        fcom.ajax(fcom.makeUrl('Seller', 'shopCollectionImages', [scollection_id, lang_id]), '', function(t) {
             $('#imageListing').html(t);
         });
     };
 
-    removeCollectionImage = function (scollection_id, langId) {
+    removeCollectionImage = function(scollection_id, langId) {
         var agree = confirm(langLbl.confirmRemove);
         if (!agree) {
             return false;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Seller', 'removeCollectionImage', [scollection_id, langId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'removeCollectionImage', [scollection_id, langId]), '', function(t) {
             shopCollectionImages(scollection_id, langId);
         });
     };
 
-    toggleShopCollectionStatus = function (e, obj) {
+    toggleShopCollectionStatus = function(e, obj) {
         if (!confirm(langLbl.confirmUpdateStatus)) {
             e.preventDefault();
             return;
@@ -527,7 +522,7 @@ $(document).on("change", ".state", function () {
             return false;
         }
         data = 'scollection_id=' + scollection_id;
-        fcom.ajax(fcom.makeUrl('Seller', 'changeShopCollectionStatus'), data, function (res) {
+        fcom.ajax(fcom.makeUrl('Seller', 'changeShopCollectionStatus'), data, function(res) {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
                 $.mbsmessage(ans.msg, true, 'alert--success');
@@ -537,7 +532,7 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    toggleBulkCollectionStatues = function (status) {
+    toggleBulkCollectionStatues = function(status) {
         if (!confirm(langLbl.confirmUpdateStatus)) {
             return false;
         }
@@ -545,17 +540,18 @@ $(document).on("change", ".state", function () {
         $("#frmCollectionsListing").submit();
     };
 
-    deleteSelectedCollection = function () {
+    deleteSelectedCollection = function() {
         if (!confirm(langLbl.confirmDelete)) {
             return false;
         }
         $("#frmCollectionsListing").attr("action", fcom.makeUrl('Seller', 'deleteSelectedCollections')).submit();
     };
 
-    bannerPopupImage = function (inputBtn) {
+    bannerPopupImage = function(inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
-            fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
-                $.facebox(t );
+            $.facebox(fcom.getLoader(), '', 'cropper-body');
+            fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function(t) {
+                $.facebox(t);
                 var file = inputBtn.files[0];
                 var minWidth = document.frmShopBanner.banner_min_width.value;
                 var minHeight = document.frmShopBanner.banner_min_height.value;
@@ -577,10 +573,11 @@ $(document).on("change", ".state", function () {
         }
     };
 
-    logoPopupImage = function (inputBtn) {
+    logoPopupImage = function(inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
-            fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
-                $.facebox(t );
+            $.facebox(fcom.getLoader(), '', 'cropper-body');
+            fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function(t) {
+                $.facebox(t);
                 var file = inputBtn.files[0];
                 var minWidth = document.frmShopLogo.logo_min_width.value;
                 var minHeight = document.frmShopLogo.logo_min_height.value;
@@ -607,7 +604,7 @@ $(document).on("change", ".state", function () {
         }
     };
 
-    uploadShopImages = function (formData) {
+    uploadShopImages = function(formData) {
         var frmName = formData.get("frmName");
         if ('frmShopLogo' == frmName) {
             var langId = document.frmShopLogo.lang_id.value;
@@ -635,13 +632,13 @@ $(document).on("change", ".state", function () {
             cache: false,
             contentType: false,
             processData: false,
-            beforeSend: function () {
+            beforeSend: function() {
                 $('#loader-js').html(fcom.getLoader());
             },
-            complete: function () {
+            complete: function() {
                 $('#loader-js').html(fcom.getLoader());
             },
-            success: function (ans) {
+            success: function(ans) {
                 $.mbsmessage.close();
                 $('.text-danger').remove();
                 $('#input-field' + fileType).html(ans.msg);
@@ -658,16 +655,17 @@ $(document).on("change", ".state", function () {
                 }
                 $(document).trigger('close.facebox');
             },
-            error: function (xhr, ajaxOptions, thrownError) {
+            error: function(xhr, ajaxOptions, thrownError) {
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
             }
         });
     }
 
-    collectionPopupImage = function (inputBtn) {
+    collectionPopupImage = function(inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
-            fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function (t) {
-                $.facebox(t );
+            $.facebox(fcom.getLoader(), '', 'cropper-body');
+            fcom.ajax(fcom.makeUrl('Seller', 'imgCropper'), '', function(t) {
+                $.facebox(t);
                 var file = inputBtn.files[0];
                 var options = {
                     aspectRatio: 16 / 9,
@@ -687,7 +685,7 @@ $(document).on("change", ".state", function () {
         }
     };
 
-    uploadCollectionImage = function (formData) {
+    uploadCollectionImage = function(formData) {
         var scollection_id = document.frmCollectionMedia.scollection_id.value;
         var lang_id = document.frmCollectionMedia.lang_id.value;
 
@@ -702,13 +700,13 @@ $(document).on("change", ".state", function () {
             cache: false,
             contentType: false,
             processData: false,
-            beforeSend: function () {
+            beforeSend: function() {
                 $('#loader-js').html(fcom.getLoader());
             },
-            complete: function () {
+            complete: function() {
                 $('#loader-js').html(fcom.getLoader());
             },
-            success: function (ans) {
+            success: function(ans) {
                 $.mbsmessage.close();
                 var dv = '#mediaResponse';
                 $('.text-danger').remove();
@@ -724,16 +722,16 @@ $(document).on("change", ".state", function () {
                 }
                 $(document).trigger('close.facebox');
             },
-            error: function (xhr, ajaxOptions, thrownError) {
+            error: function(xhr, ajaxOptions, thrownError) {
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
             }
         });
     }
 
-    pluginPlatform = function (el) {
+    pluginPlatform = function(el) {
         $(dv + " .tabs__content-js").html(fcom.getLoader());
         var platformUrl = $(el).data('platformurl');
-        fcom.ajax(platformUrl, '', function (t) {
+        fcom.ajax(platformUrl, '', function(t) {
             t = $.parseJSON(t);
             htm = (1 > t.status) ? t.msg : t.html;
 
@@ -743,12 +741,12 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    requiredFieldsForm = function () {
+    requiredFieldsForm = function() {
         var businessType = $("select[name='business_type']").val();
         var contentDv = dv + " .tabs__content-js .row .requiredFieldsForm-js";
         $(contentDv).html(fcom.getLoader());
         var data = 'businessType=' + businessType;
-        fcom.ajax(fcom.makeUrl(keyName, 'requiredFieldsForm'), data, function (res) {
+        fcom.ajax(fcom.makeUrl(keyName, 'requiredFieldsForm'), data, function(res) {
             t = $.parseJSON(res);
             if (1 > t.status) {
                 $(contentDv).html(t.html);
@@ -761,12 +759,12 @@ $(document).on("change", ".state", function () {
         });
     };
 
-    bindMcc = function () {
+    bindMcc = function() {
         var selector = $(".mcc--js");
         if (0 < selector.length) {
             var valueFld = selector.data('valfld');
 
-            fcom.ajax(fcom.makeUrl(keyName, 'getMerchantCategory'), '', function (res) {
+            fcom.ajax(fcom.makeUrl(keyName, 'getMerchantCategory'), '', function(res) {
                 selector.select2({
                     closeOnSelect: true,
                     dir: langLbl.layoutDirection,
@@ -774,21 +772,21 @@ $(document).on("change", ".state", function () {
                     placeholder: selector.attr('placeholder'),
                     data: $.parseJSON(res),
                     minimumInputLength: 0,
-                }).on('select2:selecting', function (e) {
+                }).on('select2:selecting', function(e) {
                     var item = e.params.args.data;
                     $("." + valueFld).val(item.id);
-                }).on('select2:unselecting', function (e) {
+                }).on('select2:unselecting', function(e) {
                     $("." + valueFld).val("");
                 });
             });
         }
     }
 
-    clearForm = function () {
+    clearForm = function() {
         requiredFieldsForm();
     };
 
-    setupRequiredFields = function (frm) {
+    setupRequiredFields = function(frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         var attr = $(frm).attr('enctype');
@@ -796,55 +794,55 @@ $(document).on("change", ".state", function () {
             $(frm).attr('action', fcom.makeUrl(keyName, 'setupRequiredFields')).removeAttr("onsubmit").submit();
             return false;
         }
-        fcom.updateWithAjax(fcom.makeUrl(keyName, 'setupRequiredFields'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(keyName, 'setupRequiredFields'), data, function(t) {
             location.href = t.link;
         });
     }
 
-    register = function (el) {
+    register = function(el) {
         var href = $(el).data('href');
-        fcom.updateWithAjax(href, '', function (t) {
+        fcom.updateWithAjax(href, '', function(t) {
             $('.pluginPlatform-js').click();
         });
     }
 
-    completeAccount = function (el) {
+    completeAccount = function(el) {
         var href = $(el).data('href');
-        fcom.updateWithAjax(href, '', function (t) {
+        fcom.updateWithAjax(href, '', function(t) {
             if ('undefined' != typeof t.link) {
                 location.href = t.link;
             }
         });
     }
 
-    initialSetup = function (frm) {
+    initialSetup = function(frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl(keyName, 'initialSetup'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(keyName, 'initialSetup'), data, function(t) {
             $('.' + keyName).click();
         });
     }
 
-    deleteAccount = function (el) {
+    deleteAccount = function(el) {
         if (!confirm(langLbl.deleteAccount)) { return false; };
         var href = $(el).data('href');
-        fcom.updateWithAjax(href, '', function (t) {
+        fcom.updateWithAjax(href, '', function(t) {
             $('.pluginPlatform-js').click();
         });
     };
-    unlinkAccount = function (el) {
+    unlinkAccount = function(el) {
         if (!confirm(langLbl.unlinkAccount)) { return false; };
         var href = $(el).data('href');
-        fcom.updateWithAjax(href, '', function (t) {
+        fcom.updateWithAjax(href, '', function(t) {
             $('.pluginPlatform-js').click();
         });
     };
-    getUniqueSlugUrl = function (obj, str, recordId) {
+    getUniqueSlugUrl = function(obj, str, recordId) {
         if (str == '') {
             return;
         }
         var data = { url_keyword: str, recordId: recordId }
-        fcom.ajax(fcom.makeUrl('Seller', 'isShopRewriteUrlUnique'), data, function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'isShopRewriteUrlUnique'), data, function(t) {
             var ans = $.parseJSON(t);
             $(obj).next().html(ans.msg);
             if (ans.status == 0) {
@@ -867,16 +865,16 @@ function bindAutoComplete() {
             dataType: 'json',
             delay: 250,
             method: 'post',
-            data: function (params) {
+            data: function(params) {
                 return {
                     keyword: params.term, // search term
                     page: params.page,
                 };
             },
-            processResults: function (data, params) {
+            processResults: function(data, params) {
                 params.page = params.page || 1;
                 return {
-                    results: data.products,
+                    results: data.products.filter(function(item){ return 1 > $('#selprod-products [name="product_ids[]"][value="'+item.id+'"]').length }),
                     pagination: {
                         more: params.page < data.pageCount
                     }
@@ -885,26 +883,26 @@ function bindAutoComplete() {
             cache: true
         },
         minimumInputLength: 0,
-        templateResult: function (result) {
+        templateResult: function(result) {
             return (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
         },
-        templateSelection: function (result) {
+        templateSelection: function(result) {
             return (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
         }
-    }).on('select2:selecting', function (e) {
+    }).on('select2:selecting', function(e) {
         var item = e.params.args.data;
         $('input[name=\'scp_selprod_id\']').val('');
         $('#selprod-products' + item.id).remove();
         $('#selprod-products ul ').append('<li id="selprod-products' + item.id + '">' + item.name + '[' + item.product_identifier + ']' + '<i class="remove_link remove_param fa fa-times"></i> <input type="hidden" name="product_ids[]" value="' + item.id + '" /></li>');
 
-        setTimeout(function () {
+        setTimeout(function() {
             $('select[name=\'scp_selprod_id\']').val('').trigger('change.select2');
         }, 200);
     });
 
 }
 
-$(document).on('click', '.catFile-Js', function () {
+$(document).on('click', '.catFile-Js', function() {
     var node = this;
     $('#form-upload').remove();
     var prodcat_id = document.frmCategoryMedia.prodcat_id.value;
@@ -919,7 +917,7 @@ $(document).on('click', '.catFile-Js', function () {
     if (typeof timer != 'undefined') {
         clearInterval(timer);
     }
-    timer = setInterval(function () {
+    timer = setInterval(function() {
         if ($('#form-upload input[name=\'file\']').val() != '') {
             clearInterval(timer);
             $val = $(node).val();
@@ -931,13 +929,13 @@ $(document).on('click', '.catFile-Js', function () {
                 cache: false,
                 contentType: false,
                 processData: false,
-                beforeSend: function () {
+                beforeSend: function() {
                     $(node).val('loading..');
                 },
-                complete: function () {
+                complete: function() {
                     $(node).val($val);
                 },
-                success: function (ans) {
+                success: function(ans) {
                     $.mbsmessage.close();
                     //$.mbsmessage(ans.msg, true, 'alert--success');
                     var dv = '#mediaResponse';
@@ -954,7 +952,7 @@ $(document).on('click', '.catFile-Js', function () {
                         $(dv).addClass('text-danger');
                     }
                 },
-                error: function (xhr, ajaxOptions, thrownError) {
+                error: function(xhr, ajaxOptions, thrownError) {
                     alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
                 }
             });

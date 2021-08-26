@@ -66,6 +66,8 @@ class BadgeRequest extends MyAppModel
         $srch->addCondition(self::DB_TBL_PREFIX . 'user_id', '=', $sellerId);
         $srch->addCondition(self::DB_TBL_PREFIX . 'status', 'IN', [self::REQUEST_PENDING, self::REQUEST_APPROVED]);
         $srch->addFld(self::DB_TBL_PREFIX . 'status');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $row = (array) FatApp::getDb()->fetch($srch->getResultSet());
         return (int) (empty($row) ? -1 : $row[self::DB_TBL_PREFIX . 'status']);
     }

@@ -96,6 +96,9 @@
     .products {
         height: 100%;
     }
+    .badges {
+        position: absolute;
+    }
 }
 
 .products {
@@ -204,6 +207,9 @@
     &_foot {
         padding-bottom: 15px;
         color: $body-color;
+        .actions {
+            margin-top: 0.5rem;
+        }
     }
     .products_title {
         color: inherit;
@@ -591,13 +597,14 @@
             color: currentColor;
             font-size: 0.7rem !important;
             // border: $border;
-            // border-radius: $radius2; 
-            border-radius: 50%;
+            border-radius: $radius2;
+            //border-radius: 50%;
             background: $bg-brand-light;
             color: $brand-color;
             display: flex;
             align-items: center;
             justify-content: center;
+            text-decoration: none;
             &.icn-highlighted {
                 border: none;
                 color: $brand-color;
@@ -612,14 +619,17 @@
                 height: 14px;
                 display: block;
                 margin: 0;
-                fill: currentColor;
             }
             &.is-active,
             &:hover {
                 background: $brand-color;
                 color: $brand-color-inverse;
                 border-color: $brand-color;
+                text-decoration: none;
             }
+        }
+        &:last-child {
+            margin-#{$end-direction}: 0;
         }
     }
     &.actions--large {

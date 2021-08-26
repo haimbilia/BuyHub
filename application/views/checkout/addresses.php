@@ -11,13 +11,9 @@
                     }
                     ?>
                 </h5>
-                <a onClick="showAddressFormDiv(<?php echo $addressType; ?>);" name="addNewAddress" class="link-text"
+                <a onClick="showAddressFormDiv(<?php echo $addressType; ?>);" name="addNewAddress" class="link"
                     href="javascript:void(0)">
-                    <i class="icn"> <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#add"
-                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#add">
-                            </use>
-                        </svg> </i><?php echo Labels::getLabel('LBL_Add_New_Address', $siteLangId); ?></a>
+                    <?php echo Labels::getLabel('LBL_Add_New_Address', $siteLangId); ?></a>
             </div>
             <div class="step_body">
 
@@ -35,7 +31,7 @@
                                 }
                                 ?>
                         <li
-                            class="addrListJs s-<?php echo $address['addr_id']; ?> <?php echo ($checked == true) ? 'is-active' : ''?>">
+                            class="addrListJs s-<?php echo $address['addr_id']; ?> <?php echo ($checked == true) ? 'is-active' : '' ?>">
                             <label class="label-block" for="s-<?php echo $address['addr_id']; ?>">
 
                                 <div class="checkbox_wrap">
@@ -96,37 +92,44 @@
                     </ul>
                 </div>
                 <?php } ?>
+
+                <div id="addressFormDiv" style="display:none">
+                    <?php $tplDataArr = array(
+                        'siteLangId' => $siteLangId,
+                        'addressFrm' => $addressFrm,
+                        'labelHeading' => Labels::getLabel('LBL_Add_New_Address', $siteLangId),
+                        'stateId'    =>    $stateId,
+                    ); ?>
+                    <?php $this->includeTemplate('checkout/address-form.php', $tplDataArr, false);    ?>
+
+                </div>
+
             </div>
 
-            <div id="addressFormDiv" style="display:none">
-                <?php $tplDataArr = array(
-                    'siteLangId' => $siteLangId,
-                    'addressFrm' => $addressFrm,
-                    'labelHeading' => Labels::getLabel('LBL_Add_New_Address', $siteLangId),
-                    'stateId'    =>    $stateId,
-                ); ?>
-                <?php $this->includeTemplate('checkout/address-form.php', $tplDataArr, false);    ?>
+            <div class="step_foot">
+                <div class="checkout-actions">
+                    <?php if ($addressType == Address::ADDRESS_TYPE_BILLING) { ?>
+                    <a class="btn btn-outline-brand btn-wide" href="javascript:void(0);"
+                        onclick="loadPaymentSummary();">
+                        <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
+                    </a>
+                    <?php } else { ?>
+                    <a class="btn btn-outline-brand btn-wide" href="javascript:void(0);" onclick="goToBack();">
 
+                        <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
+                    </a>
+                    <?php } ?>
+                    <?php if ($addressType == Address::ADDRESS_TYPE_BILLING) { ?>
+                    <a href="javascript:void(0)" id="btn-continue-js" onClick="setUpBillingAddressSelection(this);"
+                        class="btn btn-brand btn-wide"><?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?></a>
+                    <?php } else { ?>
+                    <a href="javascript:void(0)" id="btn-continue-js" onClick="setUpAddressSelection();"
+                        class="btn btn-brand btn-wide"><?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?></a>
+                    <?php } ?>
+                </div>
             </div>
-        </div>
-        <div class="checkout-actions">
-            <?php if ($addressType == Address::ADDRESS_TYPE_BILLING) { ?>
-            <a class="btn btn-outline-brand btn-wide" href="javascript:void(0);" onclick="loadPaymentSummary();">
-                <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
-            </a>
-            <?php } else { ?>
-            <a class="btn btn-outline-brand btn-wide" href="javascript:void(0);" onclick="goToBack();">
 
-                <?php echo Labels::getLabel('LBL_Back', $siteLangId); ?>
-            </a>
-            <?php } ?>
-            <?php if ($addressType == Address::ADDRESS_TYPE_BILLING) { ?>
-            <a href="javascript:void(0)" id="btn-continue-js" onClick="setUpBillingAddressSelection(this);"
-                class="btn btn-brand btn-wide"><?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?></a>
-            <?php } else { ?>
-            <a href="javascript:void(0)" id="btn-continue-js" onClick="setUpAddressSelection();"
-                class="btn btn-brand btn-wide"><?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?></a>
-            <?php } ?>
         </div>
+
     </form>
 </div>

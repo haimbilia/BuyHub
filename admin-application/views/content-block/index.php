@@ -19,7 +19,7 @@
                             if ($canEdit) {
                                 $data = [
                                     'adminLangId' => $adminLangId,
-                                    'deleteButton' => false
+                                    'statusButtons' => true,
                                 ];
             
                                 $this->includeTemplate('_partial/action-buttons.php', $data, false);

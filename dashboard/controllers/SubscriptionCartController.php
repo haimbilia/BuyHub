@@ -1,6 +1,6 @@
 <?php
 
-class SubscriptionCartController extends MyAppController
+class SubscriptionCartController extends DashboardBaseController
 {
     public function __construct($action)
     {
@@ -62,6 +62,8 @@ class SubscriptionCartController extends MyAppController
                 'spplan_id'
             )
         );
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $sellerPlanRow = $db->fetch($rs);
