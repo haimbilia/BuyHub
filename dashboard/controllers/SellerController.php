@@ -2066,6 +2066,11 @@ class SellerController extends SellerBaseController
     {
         $userId = $this->userParentId;
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
+        
+        if(false == $shopDetails){
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml()); 
+        }
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
             Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
@@ -3242,6 +3247,10 @@ class SellerController extends SellerBaseController
         $this->userPrivilege->canViewShop(UserAuthentication::getLoggedUserId());
         $userId = $this->userParentId;
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
+        if(false == $shopDetails){
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml()); 
+        }
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
             Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
@@ -3251,15 +3260,7 @@ class SellerController extends SellerBaseController
             $shop_id = $shopDetails['shop_id'];
             $stateId = $shopDetails['shop_state_id'];
         }
-        $this->set('shop_id', $shop_id);
-        $this->set('siteLangId', $this->siteLangId);
-        $this->set('language', Language::getAllNames());
-        $this->_template->render(false, false);
-    }
-
-    public function socialPlatformSearch()
-    {
-        $this->userPrivilege->canViewShop(UserAuthentication::getLoggedUserId());
+        
         $srch = SocialPlatform::getSearchObject($this->siteLangId, false);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -3268,7 +3269,10 @@ class SellerController extends SellerBaseController
         $records = FatApp::getDb()->fetchAll($rs);
         $this->set('canEdit', $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId(), true));
         $this->set("arrListing", $records);
-        $this->_template->render(false, false, 'seller/social-platform-search.php');
+        $this->set('shop_id', $shop_id);
+        $this->set('siteLangId', $this->siteLangId);
+        $this->set('language', Language::getAllNames());
+        $this->_template->render(false, false);
     }
 
     public function socialPlatformForm($splatform_id = 0)
@@ -5553,6 +5557,10 @@ class SellerController extends SellerBaseController
         $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId());
         $userId = $this->userParentId;
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
+        if(!$shopDetails){
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml());
+        }
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
             Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));

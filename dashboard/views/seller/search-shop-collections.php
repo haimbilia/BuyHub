@@ -1,5 +1,4 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="card">
     <div class="card-header">
         <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shop_Collections', $siteLangId); ?></h5>
         <div class="btn-group">
@@ -111,7 +110,7 @@
 
                 $frm = new Form('frmCollectionsListing', array('id'=>'frmCollectionsListing'));
                 $frm->setFormTagAttribute('class', 'form');
-                $frm->setFormTagAttribute('onsubmit', 'formAction(this, searchShopCollections ); return(false);');
+                $frm->setFormTagAttribute('onsubmit', 'formAction(this, shopCollections ); return(false);');
                 $frm->setFormTagAttribute('action', UrlHelper::generateUrl('Seller', 'toggleBulkCollectionStatuses'));
                 $frm->addHiddenField('', 'collection_status', '');
 
@@ -133,4 +132,4 @@
             </div>
         </div>
     </div>
-</div>
+
