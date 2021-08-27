@@ -230,7 +230,15 @@ class MetaTagsController extends AdminBaseController
         $post = FatApp::getPostedData();
 
         $metaId = $post['meta_id'];
-        $langId = $post['lang_id'];
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $langId = $post['lang_id'];
+        } else {
+            $langId = array_key_first($languages);
+            $post['lang_id'] = $langId;
+        }
+   
 
         if ($langId == 0) {
             Message::addErrorMessage($this->str_invalid_request_id);
@@ -435,7 +443,14 @@ class MetaTagsController extends AdminBaseController
             }
         }
 
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $langId, array(), '');
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+        } else {
+            $lang_id = array_key_first($languages);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+
         $frm->addRequiredField(Labels::getLabel('LBL_Meta_Title', $this->adminLangId), 'meta_title');
         $frm->addTextarea(Labels::getLabel('LBL_Meta_Keywords', $this->adminLangId), 'meta_keywords');
         $frm->addTextarea(Labels::getLabel('LBL_Meta_Description', $this->adminLangId), 'meta_description');

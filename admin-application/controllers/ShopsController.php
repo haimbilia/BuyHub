@@ -478,20 +478,26 @@ class ShopsController extends AdminBaseController
     {
         $this->objPrivilege->canViewShops();
         $shop_id = FatUtility::int($shop_id);
-
+		
+		$languages = Language::getAllNames();
+		if(count($languages) <= 1){
+			 $lang_id =  array_key_first($languages); 
+		}
+		
+		
         if (!$shop_id) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
         if ($imageType == 'logo') {
-            $logoAttachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_LOGO, $shop_id, 0, $lang_id, false);
+            $logoAttachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_LOGO, $shop_id, 0, $lang_id, (count($languages) <= 1) ? true : false);
             $this->set('images', $logoAttachments);
             $this->set('imageFunction', 'shopLogo');
         } elseif ($imageType == 'banner') {
-            $bannerAttachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_BANNER, $shop_id, 0, $lang_id, false, $slide_screen);
+            $bannerAttachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_BANNER, $shop_id, 0, $lang_id, (count($languages) <= 1) ? true : false, $slide_screen);
             $this->set('images', $bannerAttachments);
             $this->set('imageFunction', 'shopBanner');
         } else {
-            $backgroundAttachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_BACKGROUND_IMAGE, $shop_id, 0, $lang_id, false);
+            $backgroundAttachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_BACKGROUND_IMAGE, $shop_id, 0, $lang_id, (count($languages) <= 1) ? true : false);
             $this->set('images', $backgroundAttachments);
             $this->set('imageFunction', 'shopBackgroundImage');
         }
