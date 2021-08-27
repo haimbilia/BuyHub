@@ -31,345 +31,341 @@ $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
 $btnSubmit->developerTags['col'] = 2;
 $btnSubmit->developerTags['noCaptionTag'] = true;
 
-$variables = array('language' => $language, 'siteLangId' => $siteLangId, 'shop_id' => $shop_id, 'action' => $action);
-$this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false);
 ?>
-<div class="card">
-    <div class="card-header">
-        <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shop_Pickup_Addresses', $siteLangId); ?></h5>
-        <div class="btn-group">
-            <a href="javascript:void(0)" onClick="pickupAddress()"
-               class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></a>
-        </div>
-    </div>
 
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-12">
-                <?php echo $frm->getFormTag(); ?>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="field-set">
-                            <div class="caption-wraper">
-                                <label class="field_label">
-                                    <?php
-                                    $fld = $frm->getField('addr_title');
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $frm->getFieldHtml('addr_title'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="field-set">
-                            <div class="caption-wraper">
-                                <label class="field_label">
-                                    <?php
-                                    $fld = $frm->getField('addr_name');
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label>
-                                <span class="spn_must_field">*</span>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $frm->getFieldHtml('addr_name'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="field-set">
-                            <div class="caption-wraper">
-                                <label class="field_label">
-                                    <?php
-                                    $fld = $frm->getField('addr_address1');
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label>
-                                <span class="spn_must_field">*</span>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $frm->getFieldHtml('addr_address1'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="field-set">
-                            <div class="caption-wraper">
-                                <label class="field_label">
-                                    <?php
-                                    $fld = $frm->getField('addr_address2');
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $frm->getFieldHtml('addr_address2'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="field-set">
-                            <div class="caption-wraper">
-                                <label class="field_label">
-                                    <?php
-                                    $fld = $frm->getField('addr_country_id');
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label>
-                                <span class="spn_must_field">*</span>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $frm->getFieldHtml('addr_country_id'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="field-set">
-                            <div class="caption-wraper">
-                                <label class="field_label">
-                                    <?php
-                                    $fld = $frm->getField('addr_state_id');
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label>
-                                <span class="spn_must_field">*</span>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $frm->getFieldHtml('addr_state_id'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="field-set">
-                            <div class="caption-wraper">
-                                <label class="field_label">
-                                    <?php
-                                    $fld = $frm->getField('addr_city');
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label>
-                                <span class="spn_must_field">*</span>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $frm->getFieldHtml('addr_city'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="field-set">
-                            <div class="caption-wraper">
-                                <label class="field_label">
-                                    <?php
-                                    $fld = $frm->getField('addr_zip');
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label>
-                                <span class="spn_must_field">*</span>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $frm->getFieldHtml('addr_zip'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="field-set">
-                            <div class="caption-wraper">
-                                <label class="field_label">
-                                    <?php
-                                    $fld = $frm->getField('addr_phone');
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label>
-                                <span class="spn_must_field">*</span>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php
-                                    echo $frm->getFieldHtml('addr_phone');
-                                    echo $frm->getFieldHtml('addr_phone_dcode');
-                                    ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="field-set">
-                            <div class="caption-wraper">
-                                <label class="field_label">
-                                    <?php
-                                    $fld = $frm->getField('tslot_availability');
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $frm->getFieldHtml('tslot_availability'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row js-slot-individual">
-                    <?php
-                    $daysArr = TimeSlot::getDaysArr($siteLangId);
-                    $row = 0;
-                    for ($i = 0; $i < count($daysArr); $i++) {
-                        $dayFld = $frm->getField('tslot_day[' . $i . ']');
-                        $dayFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-                        $dayFld->developerTags['cbHtmlAfterCheckbox'] = '';
-                        $dayFld->setFieldTagAttribute('onChange', 'displayFields( this)');
-                        $dayFld->setFieldTagAttribute('class', 'slotDaysJs');
-                        if (isset($slotData['tslot_day'][$i])) {
-                            $dayFld->setFieldTagAttribute('checked', 'true');
-                        }                     
-                        ?> 
-                        <div class="col-md-6 dayJs-<?php echo $i;?>">
-                            <div class="row ">
-                                <div class="col-md-12 weekDayParentRowJs">
-                                    <div class="field-set weekDayJs">
-                                        <div class="caption-wraper">
-                                            <label class="field_label">
-                                            </label>
-                                        </div>
-                                        <div class="field-wraper">
-                                            <div class="field_cover">
-                                                <?php echo $frm->getFieldHtml('tslot_day[' . $i . ']'); ?>
-                                                <label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <?php                                    
-                                    $fromTimeWeekDayArr = $slotData['tslot_from_time'][$i] ?? ['']; 
-                                    $toTimeWeekDayArr = $slotData['tslot_to_time'][$i] ?? [''];                                    
-                                    foreach ($fromTimeWeekDayArr as $key => $time) {
-
-                                        $fromTime = !empty($time) ? date('H:i', strtotime($time)) :'';
-                                        $toTime = !empty($toTimeWeekDayArr[$key]) ? date('H:i', strtotime($toTimeWeekDayArr[$key])):'';
-
-                                        $fromFld = $frm->getField('tslot_from_time[' . $i . '][]');
-                                        $fromFld->setFieldTagAttribute('class', 'fromTimeJs');
-                                        $fromFld->setFieldTagAttribute('data-row', $row);
-                                        $fromFld->setFieldTagAttribute('onChange', 'displayAddRowField(this)');
-                                        $fromFld->value = $fromTime;
-
-                                        $toFld = $frm->getField('tslot_to_time[' . $i . '][]');
-                                        $toFld->setFieldTagAttribute('class', 'toTimeJs');
-                                        $toFld->setFieldTagAttribute('data-row', $row);
-                                        $toFld->setFieldTagAttribute('onChange', 'displayAddRowField(this)');
-                                        $toFld->value = $toTime;
-                                        ?>              
-                                        <div class="row weekDayRowJs">
-                                            <div class="col-md-4">
-                                                <div class="field-set">
-                                                    <div class="caption-wraper">
-                                                        <label class="field_label"><?php $frm->getField('tslot_from_time[' . $i . '][]')->getCaption() ?></label>
-                                                    </div>
-                                                    <div class="field-wraper">
-                                                        <div class="field_cover">
-                                                            <?php echo $frm->getFieldHtml('tslot_from_time[' . $i . '][]'); ?>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="field-set">
-                                                    <div class="caption-wraper">
-                                                        <label class="field_label">
-                                                            <?php $frm->getField('tslot_to_time[' . $i . '][]')->getCaption() ?>
-                                                        </label>
-                                                    </div>
-                                                    <div class="field-wraper">
-                                                        <div class="field_cover">
-                                                            <?php echo $frm->getFieldHtml('tslot_to_time[' . $i . '][]'); ?> 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="col-md-4">
-                                                <div class="field-set">
-                                                    <div class="caption-wraper">
-                                                        <label class="field_label">
-                                                        </label>
-                                                    </div>
-                                                    <div class="field-wraper">
-                                                        <div class="field_cover btn-group">                                                    
-                                                            <button class="btn btn-outline-brand btn-sm removeButtonJs <?php echo $key == 0  ? 'd-none': ''?>" onClick="removeTimeSlotRow(this)"  type="button" >
-                                                                <i class="icn"><svg class="svg" width="16px" height="16px">
-                                                                    <use xlink:href="/dashboard/images/retina/sprite.svg#minus"></use></svg>
-                                                                </i>
-                                                            </button>                                                    
-                                                            <button class="btn btn-brand btn-sm addButtonJs <?php echo count($fromTimeWeekDayArr) - 1 == $key ? '' : 'd-none' ?>" type="button"
-                                                                onClick="addTimeSlotRow(this)" >
-                                                                <i class="icn">
-                                                                    <svg class="svg" width="16px" height="16px">
-                                                                        <use xlink:href="/dashboard/images/retina/sprite.svg#plus">
-                                                                        </use>
-                                                                    </svg>
-                                                                </i>
-                                                            </button>                                                        
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php } ?>
-                                </div>
-                            </div>
-                        </div>
-                    <?php } ?>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="field-set">
-                            <div class="caption-wraper">
-                                <label class="field_label">
-                                </label>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php
-                                    echo $frm->getFieldHtml('addr_id');
-                                    echo $frm->getFieldHtml('btn_submit');
-                                    ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </form>
-                <?php echo $frm->getExternalJS(); ?>
-            </div>
-        </div>
+<div class="card-header">
+    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shop_Pickup_Addresses', $siteLangId); ?></h5>
+    <div class="btn-group">
+        <a href="javascript:void(0)" onClick="pickupAddress()"
+           class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></a>
     </div>
 </div>
 
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-12">
+            <?php echo $frm->getFormTag(); ?>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="field-set">
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                                <?php
+                                $fld = $frm->getField('addr_title');
+                                echo $fld->getCaption();
+                                ?>
+                            </label>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                                <?php echo $frm->getFieldHtml('addr_title'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="field-set">
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                                <?php
+                                $fld = $frm->getField('addr_name');
+                                echo $fld->getCaption();
+                                ?>
+                            </label>
+                            <span class="spn_must_field">*</span>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                                <?php echo $frm->getFieldHtml('addr_name'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="field-set">
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                                <?php
+                                $fld = $frm->getField('addr_address1');
+                                echo $fld->getCaption();
+                                ?>
+                            </label>
+                            <span class="spn_must_field">*</span>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                                <?php echo $frm->getFieldHtml('addr_address1'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="field-set">
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                                <?php
+                                $fld = $frm->getField('addr_address2');
+                                echo $fld->getCaption();
+                                ?>
+                            </label>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                                <?php echo $frm->getFieldHtml('addr_address2'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="field-set">
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                                <?php
+                                $fld = $frm->getField('addr_country_id');
+                                echo $fld->getCaption();
+                                ?>
+                            </label>
+                            <span class="spn_must_field">*</span>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                                <?php echo $frm->getFieldHtml('addr_country_id'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="field-set">
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                                <?php
+                                $fld = $frm->getField('addr_state_id');
+                                echo $fld->getCaption();
+                                ?>
+                            </label>
+                            <span class="spn_must_field">*</span>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                                <?php echo $frm->getFieldHtml('addr_state_id'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="field-set">
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                                <?php
+                                $fld = $frm->getField('addr_city');
+                                echo $fld->getCaption();
+                                ?>
+                            </label>
+                            <span class="spn_must_field">*</span>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                                <?php echo $frm->getFieldHtml('addr_city'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="field-set">
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                                <?php
+                                $fld = $frm->getField('addr_zip');
+                                echo $fld->getCaption();
+                                ?>
+                            </label>
+                            <span class="spn_must_field">*</span>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                                <?php echo $frm->getFieldHtml('addr_zip'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="field-set">
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                                <?php
+                                $fld = $frm->getField('addr_phone');
+                                echo $fld->getCaption();
+                                ?>
+                            </label>
+                            <span class="spn_must_field">*</span>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                                <?php
+                                echo $frm->getFieldHtml('addr_phone');
+                                echo $frm->getFieldHtml('addr_phone_dcode');
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="field-set">
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                                <?php
+                                $fld = $frm->getField('tslot_availability');
+                                echo $fld->getCaption();
+                                ?>
+                            </label>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                                <?php echo $frm->getFieldHtml('tslot_availability'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row js-slot-individual">
+                <?php
+                $daysArr = TimeSlot::getDaysArr($siteLangId);
+                $row = 0;
+                for ($i = 0; $i < count($daysArr); $i++) {
+                    $dayFld = $frm->getField('tslot_day[' . $i . ']');
+                    $dayFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
+                    $dayFld->developerTags['cbHtmlAfterCheckbox'] = '';
+                    $dayFld->setFieldTagAttribute('onChange', 'displayFields( this)');
+                    $dayFld->setFieldTagAttribute('class', 'slotDaysJs');
+                    if (isset($slotData['tslot_day'][$i])) {
+                        $dayFld->setFieldTagAttribute('checked', 'true');
+                    }                     
+                    ?> 
+                    <div class="col-md-6 dayJs-<?php echo $i;?>">
+                        <div class="row ">
+                            <div class="col-md-12 weekDayParentRowJs">
+                                <div class="field-set weekDayJs">
+                                    <div class="caption-wraper">
+                                        <label class="field_label">
+                                        </label>
+                                    </div>
+                                    <div class="field-wraper">
+                                        <div class="field_cover">
+                                            <?php echo $frm->getFieldHtml('tslot_day[' . $i . ']'); ?>
+                                            <label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php                                    
+                                $fromTimeWeekDayArr = $slotData['tslot_from_time'][$i] ?? ['']; 
+                                $toTimeWeekDayArr = $slotData['tslot_to_time'][$i] ?? [''];                                    
+                                foreach ($fromTimeWeekDayArr as $key => $time) {
+
+                                    $fromTime = !empty($time) ? date('H:i', strtotime($time)) :'';
+                                    $toTime = !empty($toTimeWeekDayArr[$key]) ? date('H:i', strtotime($toTimeWeekDayArr[$key])):'';
+
+                                    $fromFld = $frm->getField('tslot_from_time[' . $i . '][]');
+                                    $fromFld->setFieldTagAttribute('class', 'fromTimeJs');
+                                    $fromFld->setFieldTagAttribute('data-row', $row);
+                                    $fromFld->setFieldTagAttribute('onChange', 'displayAddRowField(this)');
+                                    $fromFld->value = $fromTime;
+
+                                    $toFld = $frm->getField('tslot_to_time[' . $i . '][]');
+                                    $toFld->setFieldTagAttribute('class', 'toTimeJs');
+                                    $toFld->setFieldTagAttribute('data-row', $row);
+                                    $toFld->setFieldTagAttribute('onChange', 'displayAddRowField(this)');
+                                    $toFld->value = $toTime;
+                                    ?>              
+                                    <div class="row weekDayRowJs">
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label"><?php $frm->getField('tslot_from_time[' . $i . '][]')->getCaption() ?></label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover">
+                                                        <?php echo $frm->getFieldHtml('tslot_from_time[' . $i . '][]'); ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">
+                                                        <?php $frm->getField('tslot_to_time[' . $i . '][]')->getCaption() ?>
+                                                    </label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover">
+                                                        <?php echo $frm->getFieldHtml('tslot_to_time[' . $i . '][]'); ?> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="field-set">
+                                                <div class="caption-wraper">
+                                                    <label class="field_label">
+                                                    </label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover btn-group">                                                    
+                                                        <button class="btn btn-outline-brand btn-sm removeButtonJs <?php echo $key == 0  ? 'd-none': ''?>" onClick="removeTimeSlotRow(this)"  type="button" >
+                                                            <i class="icn"><svg class="svg" width="16px" height="16px">
+                                                                <use xlink:href="/dashboard/images/retina/sprite.svg#minus"></use></svg>
+                                                            </i>
+                                                        </button>                                                    
+                                                        <button class="btn btn-brand btn-sm addButtonJs <?php echo count($fromTimeWeekDayArr) - 1 == $key ? '' : 'd-none' ?>" type="button"
+                                                            onClick="addTimeSlotRow(this)" >
+                                                            <i class="icn">
+                                                                <svg class="svg" width="16px" height="16px">
+                                                                    <use xlink:href="/dashboard/images/retina/sprite.svg#plus">
+                                                                    </use>
+                                                                </svg>
+                                                            </i>
+                                                        </button>                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="field-set">
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                            </label>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                                <?php
+                                echo $frm->getFieldHtml('addr_id');
+                                echo $frm->getFieldHtml('btn_submit');
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
+            <?php echo $frm->getExternalJS(); ?>
+        </div>
+    </div>
+</div>
 <script language="javascript">
     var DAY_SUNDAY = <?php echo TimeSlot::DAY_SUNDAY; ?>;
     $(document).ready(function () {

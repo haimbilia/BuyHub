@@ -6,22 +6,31 @@ var  productCatId  =  <?php echo $prodCatId; ?>; */
 <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <main id="main-area" class="main"   >
     <div class="content-wrapper content-space">
-        <div class="content-header row">
-            <div class="col">
-                <?php $this->includeTemplate('_partial/dashboardTop.php'); ?>
-                <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Custom_Product_Setup', $siteLangId); ?></h2>
-            </div>
-            <div class="col-auto">
-                <div class="btn-group">
-                    <?php if (strtolower($previousAction) == 'catalog') { ?>
-                        <a href="<?php echo UrlHelper::generateUrl('seller', 'catalog'); ?>" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Back_To_My_Products', $siteLangId); ?></a>
-                    <?php } else { ?>
-                        <a href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Back_To_Inventory', $siteLangId); ?></a>
-                    <?php } ?>
-                    </a>
-                </div>
-            </div>
-        </div>
+        <?php 
+            $data = [
+                'headingLabel' => Labels::getLabel('LBL_Custom_Product_Setup', $siteLangId),
+                'siteLangId' => $siteLangId,
+            ];
+            if (strtolower($previousAction) == 'catalog') {
+                $data['otherButtons'][] = [
+                    'attr' => [
+                        'href' => UrlHelper::generateUrl('seller', 'catalog'),
+                        'title' => Labels::getLabel('LBL_Back_To_My_Products', $siteLangId),
+                    ],
+                    'label' => Labels::getLabel('LBL_Back_To_My_Products', $siteLangId),
+                ];
+            } else {
+                $data['otherButtons'][] = [
+                    'attr' => [
+                        'href' => UrlHelper::generateUrl('seller', 'products'),
+                        'title' => Labels::getLabel('LBL_Back_To_Inventory', $siteLangId),
+                    ],
+                    'label' => Labels::getLabel('LBL_Back_To_Inventory', $siteLangId),
+                ];
+            }
+
+            $this->includeTemplate('_partial/header/content-header.php', $data, false);
+        ?>
         <div class="content-body">
             <div class="tabs">
                 <ul class="tabs_nav-js">

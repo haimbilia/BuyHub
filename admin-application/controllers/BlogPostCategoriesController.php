@@ -211,8 +211,15 @@ class BlogPostCategoriesController extends AdminBaseController
         $post = FatApp::getPostedData();
 
         $bpcategory_id = $post['bpcategory_id'];
-        $lang_id = $post['lang_id'];
 
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $lang_id = $post['lang_id'];
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$post['lang_id'] = $lang_id;
+		}
+       
         if ($bpcategory_id == 0 || $lang_id == 0) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieWithError(Message::getHtml());
@@ -487,7 +494,14 @@ class BlogPostCategoriesController extends AdminBaseController
         $row = FatApp::getDb()->fetch($rs);
         $frm = new Form('frmBlogPostCatLang', array('id' => 'frmBlogPostCatLang'));
         $frm->addHiddenField('', 'bpcategory_id', $bpcategory_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+        
         $frm->addRequiredField(Labels::getLabel('LBL_Category_Name', $this->adminLangId), 'bpcategory_name');
         
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);

@@ -922,9 +922,15 @@ class AttachedFile extends MyAppModel
         // die(CONF_UPLOADS_PATH . $image_name);
         if (!empty($image_name) && file_exists(CONF_UPLOADS_PATH . $image_name)) {
             $image_name = CONF_UPLOADS_PATH . $image_name;
-            header("Content-type: application/octet-stream");
-            header('Content-Disposition: attachement; filename="' . basename($downloadFileName) . '"');
+            $mineType=  mime_content_type($image_name);            
+            header('Content-Description: File Transfer');
+            header("Content-type: $mineType");
+            header('Content-Disposition: attachment; filename="' . basename($downloadFileName) . '"');
             header('Content-Length: ' . filesize($image_name));
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: public');
+            header('Pragma: public');
             readfile($image_name);
         }
     }

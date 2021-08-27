@@ -218,5 +218,62 @@ class PluginCommon extends MyAppModel
             self::TYPE_REGULAR_PAYMENT_METHOD
         ];
     }
-    
+        
+    /**
+     * getPluginTypeIconClass
+     *
+     * @param  int $type
+     * @return string
+     */
+    public static function getPluginTypeIconClass(int $type): string
+    {
+        switch ($type) {
+            case self::TYPE_CURRENCY_CONVERTER:
+                return 'plugin-currency-converter';
+                break;
+            case self::TYPE_SOCIAL_LOGIN:
+                return 'plugin-social-login';
+                break;
+            case self::TYPE_PUSH_NOTIFICATION:
+                return 'plugin-push-notification';
+                break;
+            case self::TYPE_PAYOUTS:
+                return 'plugin-payouts';
+                break;
+            case self::TYPE_ADVERTISEMENT_FEED:
+                return 'plugin-advertisement-feed';
+                break;
+            case self::TYPE_SMS_NOTIFICATION:
+                return 'plugin-sms-notification';
+                break;
+            case self::TYPE_FULL_TEXT_SEARCH:
+                return 'plugin-full-text-search';
+                break;
+            case self::TYPE_SHIPPING_SERVICES:
+                return 'plugin-shipping-services';
+                break;
+            case self::TYPE_TAX_SERVICES:
+                return 'plugin-tax-services ';
+                break;
+            case self::TYPE_SPLIT_PAYMENT_METHOD:
+                return 'plugin-split-payment-method';
+                break;
+            case self::TYPE_MARKETPLACE_CHANNELS:
+                return 'plugin-marketplace-channels';
+                break;
+            case self::TYPE_REGULAR_PAYMENT_METHOD:
+                return 'plugin-regular-payment-method ';
+                break;
+            case self::TYPE_SHIPMENT_TRACKING:
+                return 'plugin-shipment-tracking';
+                break;
+            case self::TYPE_DATA_MIGRATION:
+                return 'plugin-data-migration';
+                break;
+            
+            default:
+                return 'plugin-default';
+                break;
+        }
+    }
 }

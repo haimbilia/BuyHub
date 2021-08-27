@@ -267,11 +267,11 @@ class ProductCategoriesController extends AdminBaseController
 		
         $catIcons = $catBanners = array();
         if ($imageType == 'icon') {
-            $catIcons = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $prodcat_id, 0, $lang_id, false);
+            $catIcons = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $prodcat_id, 0, $lang_id, (count($languages) > 1) ? false : true);
             $this->set('images', $catIcons);
             $this->set('imageFunction', 'icon');
         } elseif ($imageType == 'banner') {
-            $catBanners = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER, $prodcat_id, 0, $lang_id, false, $slide_screen);
+            $catBanners = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER, $prodcat_id, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
             $this->set('images', $catBanners);
             $this->set('imageFunction', 'banner');
         }

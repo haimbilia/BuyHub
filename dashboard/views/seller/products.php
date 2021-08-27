@@ -26,12 +26,17 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
 <main id="main-area" class="main"   >
     <div class="content-wrapper content-space">
-        <div class="content-header row justify-content-between mb-3">
-            <div class="col-md-auto">
-                <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_My_Inventory', $siteLangId); ?><i class="fa fa-question-circle" onClick="productInstructions(<?php echo Extrapage::SELLER_INVENTORY_INSTRUCTIONS; ?>)"></i></h2>
-            </div>
-            <?php $this->includeTemplate('_partial/productPagesTabs.php', array('siteLangId' => $siteLangId, 'controllerName' => $controllerName, 'action' => $action, 'canEdit' => $canEdit, 'adminCatalogs' => $adminCatalogs), false); ?>
-        </div>
+        <?php 
+        $title = Labels::getLabel('LBL_My_Inventory', $siteLangId);
+        $data = [
+            'headingLabel' => $title . '<i class="fa fa-question-circle" onClick="productInstructions('.  Extrapage::SELLER_INVENTORY_INSTRUCTIONS . ')"></i>',
+            'siteLangId' => $siteLangId,
+            'controllerName' => $controllerName,
+            'action' => $action,
+            'canEdit' => $canEdit,
+            'adminCatalogs' => $adminCatalogs,
+        ];
+        $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">

@@ -71,7 +71,7 @@ class BadgesController extends SellerBaseController
                 WHEN ' . Badge::DB_TBL_PREFIX . 'type = ' . Badge::TYPE_BADGE . ' AND ' . Badge::DB_TBL_PREFIX . 'condition_type = ' . Badge::COND_AUTO . '
                 THEN 0
                 WHEN SUM(
-                    IF(' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED  . ' AND ' . BadgeLinkCondition::DB_TBL_PREFIX . 'id > 0 AND ' . BadgeRequest::DB_TBL_PREFIX . 'id IS NULL AND ' .  BadgeRequest::DB_TBL_PREFIX . 'user_id = ' . $userId . ', 1, 0)
+                    IF(' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_REQUIRED  . ' AND ' . BadgeLinkCondition::DB_TBL_PREFIX . 'id > 0 AND ' . BadgeRequest::DB_TBL_PREFIX . 'id IS NULL AND ' .  BadgeLinkCondition::DB_TBL_PREFIX . 'user_id = ' . $userId . ', 1, 0)
                     ) > 0
                 THEN 1
                 WHEN SUM(

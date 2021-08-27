@@ -112,7 +112,16 @@ class EmailTemplatesController extends AdminBaseController
     {
         $this->objPrivilege->canEditEmailTemplates();
         $data = FatApp::getPostedData();
-        $lang_id = $data['lang_id'];
+
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $lang_id =$data['lang_id'];
+             
+		} else  {
+			$lang_id = array_key_first($languages); 
+            $data['lang_id'] = $lang_id;
+		}
+
         $frm = $this->getLangForm($data['etpl_code'], $lang_id);
         $post = $frm->getFormDataFromArray($data);
         if (false === $post) {
@@ -162,8 +171,16 @@ class EmailTemplatesController extends AdminBaseController
         $this->objPrivilege->canViewEmailTemplates();
         $frm = new Form('frmEtplLang');
         $frm->addHiddenField('', 'etpl_code', $etplCode);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Name', $this->adminLangId), 'etpl_name');
+        
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+
+		$frm->addRequiredField(Labels::getLabel('LBL_Name', $this->adminLangId), 'etpl_name');
         $frm->addRequiredField(Labels::getLabel('LBL_Subject', $this->adminLangId), 'etpl_subject');
         $fld = $frm->addHtmlEditor(Labels::getLabel('LBL_Body', $this->adminLangId), 'etpl_body');
         $fld->requirements()->setRequired(true);
@@ -308,7 +325,15 @@ class EmailTemplatesController extends AdminBaseController
     {
         $this->objPrivilege->canEditEmailTemplates();
         $data = FatApp::getPostedData();
-        $lang_id = $data['lang_id'];
+
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $lang_id = $data['lang_id'];
+             
+		} else  {
+			$lang_id = array_key_first($languages); 
+            $data['lang_id'] = $lang_id;
+		}
         $frm = $this->getSettingsForm($lang_id);
         $post = $frm->getFormDataFromArray($data);
         if (false === $post) {
@@ -332,8 +357,14 @@ class EmailTemplatesController extends AdminBaseController
 
         $frm = new Form('frmEtplSettingsForm');
 
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+       
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Header_Background_color', $this->adminLangId), 'CONF_EMAIL_TEMPLATE_COLOR_CODE' . $lang_id, FatApp::getConfig('CONF_EMAIL_TEMPLATE_COLOR_CODE' . $lang_id, FatUtility::VAR_STRING, ''));
         $fld->addFieldTagAttribute('class', 'jscolor');
 

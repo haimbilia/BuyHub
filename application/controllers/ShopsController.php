@@ -204,7 +204,7 @@ class ShopsController extends MyAppController
             $get = FatApp::getParameters();
             $get = array_filter(Product::convertArrToSrchFiltersAssocArr($get));
         }
-        // CommonHelper::printArray($get, true);
+
         if (array_key_exists('currency', $get)) {
             $get['currency_id'] = $get['currency'];
         }
@@ -216,10 +216,14 @@ class ShopsController extends MyAppController
         if (array_key_exists('includeShopData', $get) && 1 > FatUtility::int($get['includeShopData'])) {
             $includeShopData = false;
         }
-        //$get['join_price'] = 1;
+
         $get['shop_id'] = $shop_id;
 
         $data = $this->getListingData($get, $includeShopData);
+        $selProdIdsArr = array_column($data['products'], 'selprod_id');
+        $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+        $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
+
         if (false === MOBILE_APP_API_CALL) {
             $frm = $this->getProductSearchForm();
             $frm->fill($get);
@@ -230,7 +234,9 @@ class ShopsController extends MyAppController
                 'productSearchPageType' => SavedSearchProduct::PAGE_SHOP,
                 'recordId' => $shop_id,
                 'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'categories'),
-                'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId) 
+                'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId),
+                'tLeftRibbons' => $tLeftRibbons,
+                'tRightRibbons' => $tRightRibbons 
             );
             $data = array_merge($data, $arr);
 
@@ -243,6 +249,8 @@ class ShopsController extends MyAppController
                 $this->set('siteLangId', $this->siteLangId);
                 $this->set('pageSize', $data['pageSize']);
                 $this->set('pageSizeArr', $data['pageSizeArr']);
+                $this->set('tLeftRibbons', $tLeftRibbons);
+                $this->set('tRightRibbons', $tRightRibbons);
                 echo $this->_template->render(false, false, 'products/products-list.php', true);
                 exit;
             }
@@ -547,7 +555,13 @@ class ShopsController extends MyAppController
 
         $data = $this->getListingData($get);
 
+        $selProdIdsArr = array_column($data['products'], 'selprod_id');
+        $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+        $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
+
         $arr = array(
+            'tLeftRibbons' => $tLeftRibbons,
+            'tRightRibbons' => $tRightRibbons,
             'scollection_name' => $shopcolDetails['scollection_name'],
             'canonicalUrl' => UrlHelper::generateFullUrl('Shops', 'collection', array($shop_id, $scollectionId)),
             'productSearchPageType' => SavedSearchProduct::PAGE_SHOP,
