@@ -3,7 +3,7 @@
 class BadgeLinkConditionSearch extends SearchBase
 {
     private $badgeLinksJoin = false;
-    private $selProdArr = [];
+    private $selProdIdArr = [];
 
     /**
      * __construct
@@ -45,12 +45,18 @@ class BadgeLinkConditionSearch extends SearchBase
      *
      * @return void
      */
-    public function joinBadgeRequest()
+    public function joinBadgeRequest(int $status = 0)
     {
         if (false === $this->badgeLinksJoin) {
             trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_BADGE_LINKS', CommonHelper::getLangId()), E_USER_ERROR);
         }
-        $this->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_id = badgelink_breq_id', 'breq');
+
+        $cnd = '';
+        if (0 < $status) {
+            $cnd .= ' and breq.breq_status = ' . $status;
+        }
+
+        $this->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq.breq_id = blc.badgelink_breq_id ' . $cnd, 'breq');
     }
 
     /**
@@ -200,10 +206,10 @@ class BadgeLinkConditionSearch extends SearchBase
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
             $srch->addCondition('p.selprod_id', 'in', $this->selProdIdArr);
-            $srch->addMultipleFields(['p.selprod_id']);           
-            $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT JOIN', 'blc.badgelink_record_id = sp.selprod_id AND blnk.blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT, 'sp');  
+            $srch->addMultipleFields(['p.selprod_id']);
+            $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT JOIN', 'blc.badgelink_record_id = sp.selprod_id AND blnk.blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT, 'sp');
         } else {
-            $this->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'blc.badgelink_record_id = sp.selprod_id AND blnk.blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT, 'sp');           
+            $this->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'blc.badgelink_record_id = sp.selprod_id AND blnk.blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT, 'sp');
         }
 
         if (0 < $langId) {
@@ -240,6 +246,54 @@ class BadgeLinkConditionSearch extends SearchBase
         }
         $srch->addMultipleFields(['s.shop_id', 'sp.selprod_id as shop_selprod_id']);
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT JOIN', 'blc.badgelink_record_id = shpprod.shop_id AND blnk.blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP, 'shpprod');
+    }
+
+    /**
+     * joinShopsForBadges
+     *    
+     * @return void
+     */
+    public function joinShopsForBadges(array $shopIdArr = [])
+    {
+        if (false === $this->badgeLinksJoin) {
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_BADGE_LINKS', CommonHelper::getLangId()), E_USER_ERROR);
+        }
+
+        $srch = new SearchBase(Shop::DB_TBL, 's');
+        /*  $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'u.user_id = s.shop_user_id', 'u'); */
+        $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'c.credential_user_id = s.shop_user_id', 'c');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addMultipleFields(['s.shop_id']);
+        if (!empty($shopIdArr)) {
+            $srch->addCondition('s.shop_id', 'in', $this->shopIdArr);
+        }
+
+        //$srch->addCondition('u.user_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('c.credential_verified', '=', applicationConstants::YES);
+        $srch->addCondition('c.credential_active', '=', applicationConstants::ACTIVE);
+        $this->joinTable('(' . $srch->getQuery() . ')', 'INNER JOIN', 'blc.badgelink_record_id = shpprod.shop_id AND blnk.blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP, 'shpprod');
+    }
+
+    public function attachAutomaticConditions(array $shopIdArr = [])
+    {
+        /* Shop Rating */
+        $srch = new SelProdReviewSearch();
+        $srch->joinSelProdRating();
+        $srch->joinShops();
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addGroupBy('spr.spreview_selprod_id');
+        $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $srch->addMultipleFields(['shop.shop_id', 'ROUND(AVG(sprating_rating),2) as shopRating']);
+        // $srch->addCondition('spreview_seller_user_id', '=', $recordId);
+        $srch->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_SHOP);
+
+        if (!empty($shopIdArr)) {
+            $srch->addCondition('shop.shop_id', 'in', $this->shopIdArr);
+        }
+        
+        $query = '(' . $srch->getQuery() . ') union (' . $subSrch2->getQuery() . ')';
     }
 
     /**
