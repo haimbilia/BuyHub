@@ -197,8 +197,7 @@ class BadgeLinkConditionsController extends SellerBaseController
             $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
         }
 
-        $cnd = $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'user_id', '=', UserAuthentication::getLoggedUserId());
-        $cnd->attachCondition(Badge::DB_TBL_PREFIX . 'condition_type', '=', Badge::COND_AUTO);
+        $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'user_id', '=', UserAuthentication::getLoggedUserId());
 
         $recordType = FatApp::getPostedData('blinkcond_record_type'); //Link Type
         if (!empty($recordType)) {
@@ -215,15 +214,9 @@ class BadgeLinkConditionsController extends SellerBaseController
             $srch->addCondition('badge_condition_type', '=', $trigger);
         }
 
-        $conditionType = FatApp::getPostedData('blinkcond_condition_type');
-        if (!empty($conditionType)) {
-            $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type', '=',  $conditionType);
-        }
-
         $srch->addDirectCondition("(
             CASE 
-                WHEN breq_id IS NOT NULL
-                THEN breq_status = " . BadgeRequest::REQUEST_APPROVED . "
+                WHEN breq_id IS NOT NULL THEN breq_status = " . BadgeRequest::REQUEST_APPROVED . "
                 ELSE TRUE
             END
         )");
