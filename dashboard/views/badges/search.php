@@ -68,7 +68,7 @@ foreach ($arrListing as $sn => $row) {
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
                     $class = (Badge::COND_AUTO == $row[Badge::DB_TBL_PREFIX . 'condition_type']) ? 'label-danger' : $class;
                     
-                    if (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'] && 0 < (int) $row['canAccess'] && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED) {
+                    if (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'] && 0 < (int) $row['canAccess'] && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED && 0 < $row[BadgeRequest::DB_TBL_PREFIX . 'id']) {
                         $lbl = Labels::getLabel('LBL_APPROVED', $siteLangId);
                         $class = 'label-success';
                     } else if (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'] && 0 < (int) $row['breq_id'] && BadgeRequest::REQUEST_PENDING == (int) $row['breq_status']) {
@@ -94,7 +94,7 @@ foreach ($arrListing as $sn => $row) {
                         $li = $ul->appendElement("li"); 
                         $li->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id'], $row[Badge::DB_TBL_PREFIX . 'type']]), 'title' => $title), $icon, true);
 
-                        if ($condManualReq) {
+                        if ($condManualReq && 0 < $row[BadgeRequest::DB_TBL_PREFIX . 'id']) {
                             $li = $ul->appendElement("li"); 
                             $li->appendElement(
                                 'a',
