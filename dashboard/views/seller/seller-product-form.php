@@ -2,19 +2,23 @@
 <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <main id="main-area" class="main"   >
     <div class="content-wrapper content-space">
-        <div class="content-header row">
-            <div class="col">
-                <?php $this->includeTemplate('_partial/dashboardTop.php'); ?>
-                <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Inventory_Setup', $siteLangId); ?></h2>
-            </div>
-            <div class="col-auto">
-                <div class="btn-group">
-                    <a href="<?php echo UrlHelper::generateUrl('seller', 'products');?>" class="btn btn-outline-brand btn-sm">
-                    <?php echo Labels::getLabel('LBL_Back_To_My_Inventory', $siteLangId)?>
-                    </a>
-                </div>
-            </div>
-        </div>
+        <?php
+        $data = [
+            'headingLabel' => Labels::getLabel('LBL_Inventory_Setup', $siteLangId),
+            'siteLangId' => $siteLangId,
+            'otherButtons' => [
+                [
+                    'attr' => [
+                        'href' => UrlHelper::generateUrl('seller', 'products'),
+                        'title' => Labels::getLabel('LBL_Back_To_My_Inventory', $siteLangId)
+                    ],
+                    'label' => Labels::getLabel('LBL_Back_To_My_Inventory', $siteLangId)
+                ],
+            ]
+        ];
+
+        $this->includeTemplate('_partial/header/content-header.php', $data, false);
+        ?>
         <div class="content-body">
             <?php if ($product_type == Product::PRODUCT_TYPE_DIGITAL) { ?>
                 <div class="tabs">

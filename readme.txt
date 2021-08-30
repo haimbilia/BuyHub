@@ -250,6 +250,9 @@ Updates/Fixes :
     => 057391 - Buyer: A warning message is showing while clicking on the "Affiliate" option
     => 057384 - Admin: Information is missing regarding "Content Blocks
     => 057444 - If brand is mandatory then while importing getting error
+    => 057684 - in apple app mp4 tried to run instead of download
+    => 057715 - Badge condition listing for automatic case.
+    => 057725 - Multiple first time purchase discount coupons are getting created by the system for one user
 
 
 New Features:  

@@ -5,9 +5,15 @@ $(document).on('change', formClass + '[name="blinkcond_record_type"]', function 
         $(this).val(RECORD_TYPE_SELLER_PRODUCT);
         return;
     }
-    var recordNameSelector = $(formClass + "select.recordIds--js");
-    if ("" == recordNameSelector.val() || "undefined" == recordNameSelector.val()) { return; }
-    $(formClass + "select.recordIds--js").val('').trigger('change');
+
+    $(formClass + "select.recordIds--js").removeAttr('disabled');
+    if (RECORD_TYPE_SHOP == $(this).val()) {
+        $(formClass + "select.recordIds--js").attr('disabled', 'disabled');
+    } else {
+        var recordNameSelector = $(formClass + "select.recordIds--js");
+        if ("" == recordNameSelector.val() || "undefined" == recordNameSelector.val()) { return; }
+        $(formClass + "select.recordIds--js").val('').trigger('change');
+    }
 });
 
 $(document).on('change', formClass + 'select[name="blinkcond_position"]', function () {
@@ -30,7 +36,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     var controller = 'BadgeLinkConditions';
 
     hideSearchFormFilter = function (blinkcond_id) {
-        if (0 < blinkcond_id)  {
+        if (0 < blinkcond_id) {
             $(".listingSection--js, .searchform_filter").show();
         }
     }
@@ -65,7 +71,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
             } else {
                 $(formClass + ".conditionType--js").hide();
                 $(formClass + '[name="blinkcond_record_type"]').trigger('change');
-                
+
                 hideSearchFormFilter(blinkcond_id);
             }
 
@@ -113,7 +119,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     };
 
     backToListing = function () {
-        window.location.href = fcom.makeUrl(controller, 'list', [badgeId , badgeType]);
+        window.location.href = fcom.makeUrl(controller, 'list', [badgeId, badgeType]);
     }
 
     setup = function (frm) {
@@ -129,10 +135,10 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
         $("#" + searchSelector).html("");
         var recordType = $('[name="blinkcond_record_type"]').val();
         if (RECORD_TYPE_PRODUCT == recordType) {
-            return fcom.makeUrl('Products', 'autoComplete',[], siteConstants.webrootfront);
+            return fcom.makeUrl('Products', 'autoComplete', [], siteConstants.webrootfront);
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
             return fcom.makeUrl('Seller', 'sellerProductsAutoComplete');
-        }else if (RECORD_TYPE_SHOP == recordType) {
+        } else if (RECORD_TYPE_SHOP == recordType) {
             return fcom.makeUrl('Seller', 'getShopDetail', [1]);
         } else {
             $.systemMessage(langLbl.invalidRequest, 'alert--danger');

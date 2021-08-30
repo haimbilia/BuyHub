@@ -13,6 +13,10 @@ trait SellerCollections
     {
         $userId = $this->userParentId;
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
+        if(false == $shopDetails){
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml()); 
+        }
         $records = ShopCollection::getCollectionGeneralDetail($shopDetails['shop_id']);
         $this->set('canEdit', $this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId(), true));
         $this->set("arrListing", $records);

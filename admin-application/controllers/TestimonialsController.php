@@ -158,7 +158,14 @@ class TestimonialsController extends AdminBaseController
         $post = FatApp::getPostedData();
 
         $testimonialId = $post['testimonial_id'];
-        $lang_id = $post['lang_id'];
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = $post['lang_id'];
+        } else {
+            $lang_id = array_key_first($languages);
+            $post['lang_id'] = $lang_id;
+        }
+
 
         if ($testimonialId == 0 || $lang_id == 0) {
             Message::addErrorMessage($this->str_invalid_request_id);
@@ -171,10 +178,10 @@ class TestimonialsController extends AdminBaseController
         unset($post['lang_id']);
 
         $data = array(
-        'testimoniallang_lang_id' => $lang_id,
-        'testimoniallang_testimonial_id' => $testimonialId,
-        'testimonial_title' => $post['testimonial_title'],
-        'testimonial_text' => $post['testimonial_text']
+            'testimoniallang_lang_id' => $lang_id,
+            'testimoniallang_testimonial_id' => $testimonialId,
+            'testimonial_title' => $post['testimonial_title'],
+            'testimonial_text' => $post['testimonial_text']
         );
 
         $obj = new Testimonial($testimonialId);
@@ -183,7 +190,7 @@ class TestimonialsController extends AdminBaseController
             Message::addErrorMessage($obj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
-        
+
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Testimonial::DB_TBL_LANG);
@@ -388,8 +395,7 @@ class TestimonialsController extends AdminBaseController
             -1,
             $unique_record = false,
             $lang_id
-        )
-        ) {
+        )) {
             FatUtility::dieJsonError($fileHandlerObj->getError());
         }
 
@@ -439,18 +445,26 @@ class TestimonialsController extends AdminBaseController
         $this->objPrivilege->canViewTestimonial();
         $frm = new Form('frmTestimonialLang');
         $frm->addHiddenField('', 'testimonial_id', $testimonialId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+        } else {
+            $lang_id = array_key_first($languages);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+
         $frm->addRequiredField(Labels::getLabel('LBL_Testimonial_Title', $this->adminLangId), 'testimonial_title');
         $fld = $frm->addTextarea(Labels::getLabel('LBL_Testimonial_Text', $this->adminLangId), 'testimonial_text');
         $fld->requirements()->setRequired();
-        
+
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        
+
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
@@ -489,8 +503,8 @@ class TestimonialsController extends AdminBaseController
         $json = array();
         foreach ($posts as $key => $post) {
             $json[] = array(
-            'id' => $key,
-            'name' => strip_tags(html_entity_decode($post['testimonial_title'], ENT_QUOTES, 'UTF-8'))
+                'id' => $key,
+                'name' => strip_tags(html_entity_decode($post['testimonial_title'], ENT_QUOTES, 'UTF-8'))
             );
         }
         die(json_encode($json));

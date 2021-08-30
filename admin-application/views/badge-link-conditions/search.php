@@ -64,7 +64,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $sr_no, true);
                 break;
             case 'cond_seller_name':
-                $td->appendElement('plaintext', [], $row[$key], true);
+                $sellerName = $row[$key] . ' (' . $row['shop_name'] . ')';
+                $td->appendElement('plaintext', [], $sellerName , true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'record_type':
                 $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/A", $adminLangId) : $recordTypeArr[$row[$key]];

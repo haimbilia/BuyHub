@@ -2,29 +2,44 @@
 $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <div class="content-header row">
-            <div class="col"> <?php $this->includeTemplate('_partial/dashboardTop.php'); ?>
-                <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Account_Settings', $siteLangId); ?>
-                </h2>
-            </div>
-            <?php if (0 == $userParentId) { ?>
-            <div class="col-auto">
-                <div class="btn-group">
-                    <a class="btn btn-outline-brand btn-sm" href="javascript:void(0)"
-                        onclick="truncateDataRequestPopup()"><?php echo Labels::getLabel('LBL_Request_to_remove_my_data', $siteLangId); ?></a>
-                    <a class="btn btn-outline-brand btn-sm" href="javascript:void(0)"
-                        onclick="requestData()"><?php echo Labels::getLabel('LBL_Request_My_Data', $siteLangId); ?></a>
-                    <?php if ($showSellerActivateButton) { ?>
-                    <a href="<?php echo UrlHelper::generateUrl('Seller'); ?>"
-                        class="btn btn-outline-brand btn-sm panel__head_action"
-                        title="<?php echo Labels::getLabel('LBL_Activate_Seller_Account', $siteLangId); ?>">
-                        <strong> <?php echo Labels::getLabel('LBL_Activate_Seller_Account', $siteLangId); ?></strong>
-                    </a>
-                    <?php } ?>
-                </div>
-            </div>
-            <?php } ?>
-        </div>
+        <?php 
+        $data = [
+            'headingLabel' => Labels::getLabel('LBL_ACCOUNT_SETTINGS', $siteLangId),
+            'siteLangId' => $siteLangId,
+        ];
+
+        if (0 == $userParentId) {
+            $data['otherButtons'] = [
+                [
+                    'attr' => [
+                        'onclick' => 'truncateDataRequestPopup()',
+                        'class' => 'btn-outline-brand',
+                        'title' => Labels::getLabel('LBL_Request_to_remove_my_data', $siteLangId)
+                    ],
+                    'label' => Labels::getLabel('LBL_Request_to_remove_my_data', $siteLangId)
+                ],
+                [
+                    'attr' => [
+                        'onclick' => 'requestData()',
+                        'class' => 'btn-outline-brand',
+                        'title' => Labels::getLabel('LBL_Request_My_Data', $siteLangId)
+                    ],
+                    'label' => Labels::getLabel('LBL_Request_My_Data', $siteLangId)
+                ],
+            ];
+            if ($showSellerActivateButton) {
+                $data['otherButtons'] = array_merge($data['otherButtons'], [
+                    'attr' => [
+                        'href' => UrlHelper::generateUrl('Seller'),
+                        'class' => 'btn-outline-brand panel__head_action',
+                        'title' => Labels::getLabel('LBL_Activate_Seller_Account', $siteLangId)
+                    ],
+                    'label' => Labels::getLabel('LBL_Activate_Seller_Account', $siteLangId)
+                ]);
+            }
+        }
+
+        $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
             <div class="row">
                 <div class="col-lg-12">

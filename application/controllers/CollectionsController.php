@@ -355,8 +355,16 @@ class CollectionsController extends MyAppController
                         $this->set('collections', $collections);
                     }
                     break;
+                default:            
+                    if (true === MOBILE_APP_API_CALL) {
+                        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_COLLECTION', $this->siteLangId));
+                    }
+                    break;
             }
+        } else if (true === MOBILE_APP_API_CALL) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_COLLECTION', $this->siteLangId));
         }
+
         $this->set('collection', $collection);
         $this->set('siteLangId', CommonHelper::getLangId());
 

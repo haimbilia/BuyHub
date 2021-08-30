@@ -2,27 +2,36 @@
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <div class="content-header row">
-            <div class="col"> <?php $this->includeTemplate('_partial/dashboardTop.php'); ?>
-                <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Dashboard', $siteLangId); ?></h2>
-            </div>
-            <div class="col-auto">
-                <div class="btn-group">
-                    <?php if (!$isShopActive) { ?>
-                        <a href="<?php echo  UrlHelper::generateUrl('Seller', 'shop'); ?>" class="btn btn-outline-brand btn-sm">
-                            <?php echo Labels::getLabel('LBL_Create_Shop', $siteLangId); ?>
-                        </a>
-                    <?php } ?>
-                    <?php if ($userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true)) { ?>
-                        <?php if (User::canAddCustomProduct() && $userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId(), true)) { ?>
-                            <a href="<?php echo UrlHelper::generateUrl('seller', 'customProductForm'); ?>" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Add_new_catalog', $siteLangId); ?></a>
-                        <?php } ?>
-                        <a href="<?php echo UrlHelper::generateUrl('seller', 'catalog'); ?>" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_My_products', $siteLangId); ?></a>
-                        <a href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Shop_Inventory', $siteLangId); ?></a>
-                    <?php } ?>
-                </div>
-            </div>
-        </div>
+        <?php 
+        $data = [
+            'canEdit ' => $userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId(), true),
+            'headingLabel' => Labels::getLabel('LBL_DASHBOARD', $siteLangId),
+            'action' => 'products',
+            'siteLangId' => $siteLangId
+        ];
+
+        if (!$isShopActive) {
+            $data['otherButtons'][] = [
+                'attr' => [
+                    'href' => UrlHelper::generateUrl('Seller', 'shop'),
+                    'class' => 'btn-outline-brand',
+                    'title' => Labels::getLabel('LBL_CREATE_SHOP', $siteLangId)
+                ],
+                'label' => Labels::getLabel('LBL_CREATE_SHOP', $siteLangId)
+            ];
+        }
+
+        if ($userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true)) {
+            $data['otherButtons'][] = [
+                'attr' => [
+                    'href' => UrlHelper::generateUrl('seller', 'products'),
+                    'class' => 'btn-outline-brand',
+                    'title' => Labels::getLabel('LBL_SHOP_INVENTORY', $siteLangId)
+                ],
+                'label' => Labels::getLabel('LBL_SHOP_INVENTORY', $siteLangId)
+            ];
+        }
+        $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
             <?php if (
                 $userPrivilege->canViewSales(UserAuthentication::getLoggedUserId(), true) ||
@@ -306,30 +315,30 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                         </thead>
                                         <tbody>
                                             <?php if (count($orders) > 0) {
-                                                foreach ($orders as $orderId => $row) { ?> 
-                                            <tr>
-                                                    <td>
-                                                        <?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $row ,'siteLangId'=> $siteLangId, 'showDate'=> true], false, true);?>
-                                                    </td>
-                                                    <td>                                                           
-                                                        <span class="label label-inline <?php echo $classArr[$row['orderstatus_color_class']]; ?>">
-                                                            <?php  echo $row['orderstatus_name']; ?>
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <div class="item__price">
-                                                            <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($row, 'netamount', false, User::USER_TYPE_SELLER)); ?>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <ul class="actions">
-                                                            <li><a title="<?php echo Labels::getLabel('LBL_View_Order', $siteLangId); ?>" href="<?php echo $orderDetailUrl; ?>"><i class="fa fa-eye"></i></a></li>
-                                                            <?php if (!in_array($row["op_status_id"], $notAllowedStatues)) { ?>
-                                                                <li><a href="<?php echo UrlHelper::generateUrl('seller', 'cancelOrder', array($row['op_id'])); ?>" title="<?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId); ?>"><i class="fas fa-times"></i></a></li>
-                                                            <?php } ?>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
+                                                foreach ($orders as $orderId => $row) { ?>
+                                                    <tr>
+                                                        <td>
+                                                            <?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $row, 'siteLangId' => $siteLangId, 'showDate' => true], false, true); ?>
+                                                        </td>
+                                                        <td>
+                                                            <span class="label label-inline <?php echo $classArr[$row['orderstatus_color_class']]; ?>">
+                                                                <?php echo $row['orderstatus_name']; ?>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <div class="item__price">
+                                                                <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($row, 'netamount', false, User::USER_TYPE_SELLER)); ?>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <ul class="actions">
+                                                                <li><a title="<?php echo Labels::getLabel('LBL_View_Order', $siteLangId); ?>" href="<?php echo $orderDetailUrl; ?>"><i class="fa fa-eye"></i></a></li>
+                                                                <?php if (!in_array($row["op_status_id"], $notAllowedStatues)) { ?>
+                                                                    <li><a href="<?php echo UrlHelper::generateUrl('seller', 'cancelOrder', array($row['op_id'])); ?>" title="<?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId); ?>"><i class="fas fa-times"></i></a></li>
+                                                                <?php } ?>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
                                                 <?php }
                                             } else { ?>
                                                 <tr>
@@ -481,7 +490,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                                             <?php echo $row['op_product_name']; ?> </a>
                                                                     <?php } ?>
                                                                 </div>
-                                                            </div>                                                            
+                                                            </div>
                                                         </td>
                                                         <td>
                                                             <div class="request__qty"> <?php echo $row['orrequest_qty']; ?> </div>

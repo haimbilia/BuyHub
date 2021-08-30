@@ -1,12 +1,13 @@
 <?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <div class="content-header row">
-            <div class="col">
-                <?php $this->includeTemplate('_partial/dashboardTop.php'); ?>
-                <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Cancel_Order', $siteLangId); ?></h2>
-            </div>
-        </div>
+        <?php 
+            $data = [
+                'headingLabel' => Labels::getLabel('LBL_Cancel_Order', $siteLangId),
+                'siteLangId' => $siteLangId,
+            ];
+            $this->includeTemplate('_partial/header/content-header.php', $data, false);
+        ?>
         <div class="content-body">
             <div class="card">
                 <div class="card-header">

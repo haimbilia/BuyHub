@@ -12,6 +12,7 @@ $(document).ready(function() {
     loadForm = function(formType) {
         $(dv).html(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('ImportExport', 'loadForm', [formType]), '', function(t) {
+			
             $(dv).html(t);
             if ( 'bulk_media' == formType ) {
                 searchFiles();
@@ -38,6 +39,7 @@ $(document).ready(function() {
             location.href = fcom.makeUrl('seller', 'exportInventory');
         } else {
             fcom.ajax(fcom.makeUrl('ImportExport', 'exportForm', [actionType]), '', function(t) {
+				console.log(t);
                 $(exportDv).html(t);
             });
         }

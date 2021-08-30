@@ -333,10 +333,11 @@ class Orders extends MyAppModel
         }
         
         if (!empty($data['order_id'])) {
-            if (Orders::ORDER_PAYMENT_PENDING != Orders::getAttributesById($data['order_id'], 'order_payment_status')) {
+            $oldOrderData = Orders::getAttributesById($data['order_id'], ['order_payment_status','order_user_id']);            
+            if (Orders::ORDER_PAYMENT_PENDING != $oldOrderData['order_payment_status'] ||  $data['order_user_id'] != $oldOrderData['order_user_id']) {
                 $data['order_id'] = false;
             }
-        }        
+        }       
         if (!$data['order_id']) {
             $order_id = $this->generateOrderId();
             $data['order_id'] = $order_id;
@@ -764,6 +765,12 @@ class Orders extends MyAppModel
         $subscrCharges = $data['subscrCharges'];
         unset($data['subscrCharges']);
 
+        if (!empty($data['order_id'])) {
+            $oldOrderData = Orders::getAttributesById($data['order_id'], ['order_payment_status','order_user_id']);            
+            if (Orders::ORDER_PAYMENT_PENDING != $oldOrderData['order_payment_status'] ||  $data['order_user_id'] != $oldOrderData['order_user_id']) {
+                $data['order_id'] = false;
+            }
+        }
         if (!$data['order_id']) {
             $order_id = $this->generateOrderId();
             $data['order_id'] = $order_id;
@@ -922,6 +929,13 @@ class Orders extends MyAppModel
 
         $extras = $data['extra'];
         unset($data['extra']);
+        
+        if (!empty($data['order_id'])) {
+            $oldOrderData = Orders::getAttributesById($data['order_id'], ['order_payment_status','order_user_id']);            
+            if (Orders::ORDER_PAYMENT_PENDING != $oldOrderData['order_payment_status'] ||  $data['order_user_id'] != $oldOrderData['order_user_id']) {
+                $data['order_id'] = false;
+            }
+        }        
 
         if (!$data['order_id']) {
             $order_id = $this->generateOrderId();

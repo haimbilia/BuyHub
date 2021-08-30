@@ -1,5 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
 $actionButtons = isset($actionButtons) ? $actionButtons : true;
+$listingLabel = isset($listingLabel) ? $listingLabel : "";
 ?>
 <div class='page'>
     <div class='container container-fluid'>
@@ -38,7 +39,7 @@ $actionButtons = isset($actionButtons) ? $actionButtons : true;
                                 } else { ?>
                                     <ul class="actions actions--centered">
                                         <li class="droplink">
-                                            <a href="javascript:void(0)" class="button small green" title="Edit">
+                                            <a href="javascript:void(0)" class="button small green" title="<?php echo Labels::getLabel('LBL_EDIT', $adminLangId); ?>">
                                                 <i class="ion-android-more-horizontal icon"></i>
                                             </a>
                                             <div class="dropwrap">

@@ -206,7 +206,9 @@ class ContentPagesController extends AdminBaseController
             }
             $blockLangFrm->fill($langData);
         }
-        $bgImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE, $cpage_id, 0, $lang_id);
+        $languages = Language::getAllNames();
+        $bgImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE, $cpage_id, 0, $lang_id,(count($languages) > 1) ? false : true);
+       
         $bannerTypeArr = applicationConstants::bannerTypeArr();
         $this->set('bgImages', $bgImages);
         $this->set('bannerTypeArr', $bannerTypeArr);
@@ -225,7 +227,14 @@ class ContentPagesController extends AdminBaseController
         $post = FatApp::getPostedData();
         /* CommonHelper::printArray($post); die; */
         $cpage_id = $post['cpage_id'];
-        $lang_id = $post['lang_id'];
+
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $lang_id = $post['lang_id'];
+		} else  {
+			$lang_id = array_key_first($languages); 
+		}
+     
         $cpage_layout = $post['cpage_layout'];
 
         if ($cpage_id == 0 || $lang_id == 0) {
@@ -421,7 +430,15 @@ class ContentPagesController extends AdminBaseController
     {
         $frm = new Form('frmBlockLang');
         $frm->addHiddenField('', 'cpage_id', $cpage_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+
+        
         $frm->addHiddenField('', 'cpage_layout', $cpage_layout);
         $frm->addRequiredField(Labels::getLabel('LBL_Page_Title', $this->adminLangId), 'cpage_title');
         if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {

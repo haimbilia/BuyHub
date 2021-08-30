@@ -32,7 +32,14 @@ if (!empty($frmSearch)) {
     $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
     $frmSearch->developerTags['fld_default_col'] = 4;
     $fld = $frmSearch->getField('blinkcond_record_type');
-    $fld->developerTags['noCaptionTag'] = true;
+    if (null != $fld) {
+        $fld->developerTags['noCaptionTag'] = true;
+    }
+
+    $fld = $frmSearch->getField('blinkcond_condition_type');
+    if (null != $fld) {
+        $fld->developerTags['noCaptionTag'] = true;
+    }
 
     $fld = $frmSearch->getField('btn_submit');
     if (null != $fld) {

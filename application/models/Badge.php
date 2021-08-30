@@ -440,4 +440,89 @@ class Badge extends MyAppModel
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs, 'selprod_id');
     }
+
+    public static function getSelprodBadges(int $langId, array $selprodIdArr = [])
+    {
+        $date = date('Y-m-d H:i:s');
+        $srch = new BadgeLinkConditionSearch();
+        $srch->setSelProdIdArr($selprodIdArr);
+        $srch->joinBadges($langId, Badge::TYPE_BADGE);
+        $srch->joinBadgeLinks();
+        $srch->joinProducts();
+        $srch->joinSellerProducts();
+        $srch->joinBadgeRequest();
+
+        $srch->addCondition('blnk.blinkcond_from_date', '<=', $date);
+        $cnd = $srch->addCondition('blnk.blinkcond_to_date', '>=', $date);
+        $cnd->attachCondition('blnk.blinkcond_to_date', '=', '0000-00-00 00:00:00');
+        $srch->addCondition('bdg.badge_type', '=', Badge::TYPE_BADGE);
+        $srch->addCondition('bdg.badge_condition_type', '=', Badge::COND_MANUAL);
+        $srch->addDirectCondition('(bdg.badge_required_approval = ' . Badge::APPROVAL_OPEN . ' or (if(breq.breq_id > 0, breq.breq_status = ' . BadgeRequest::REQUEST_APPROVED . ', bdg.badge_required_approval = ' . Badge::APPROVAL_REQUIRED . ')))');
+
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addMultipleFields(['blnk.blinkcond_id', 'blnk.blinkcond_badge_id', 'bdg.badge_display_inside', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name', 'blc.badgelink_id', 'blc.badgelink_record_id', 'breq.breq_id', 'COALESCE(sp.selprod_id,prod.product_selprod_id) as selprod_id']);
+        $srch->addHaving('selprod_id', 'is NOT', 'mysql_func_NULL', 'AND', true);
+        $srch->addGroupBy('bdg.badge_id');
+        $rs = $srch->getResultSet();
+        return FatApp::getDb()->fetchAll($rs);
+    }
+
+
+    /**
+     * getShopBadges
+     *
+     * @param  int $langId
+     * @param  array $shopIdArr
+     * @return void
+     */
+    public static function getShopBadges(int $langId, array $shopIdArr = [])
+    {
+        $manualBadges = self::getManualShopBadges($langId, $shopIdArr);
+        $autoBadges = self::getAutoShopBadges($langId, $shopIdArr);
+        return $manualBadges + $autoBadges;
+    }
+
+    /**
+     * getManualBadges
+     *
+     * @param  int $langId
+     * @param  array $shopIdArr   
+     * @return array
+     */
+    public static function getManualShopBadges(int $langId, array $shopIdArr = []): array
+    {
+        $date = date('Y-m-d H:i:s');
+        $srch = new BadgeLinkConditionSearch();
+        $srch->joinBadges($langId, Badge::TYPE_BADGE);
+        $srch->joinBadgeLinks();
+        $srch->joinBadgeRequest();
+        $srch->joinShopsForBadges($shopIdArr);
+
+        $srch->addCondition('blnk.blinkcond_from_date', '<=', $date);
+        $cnd = $srch->addCondition('blnk.blinkcond_to_date', '>=', $date);
+        $cnd->attachCondition('blnk.blinkcond_to_date', '=', '0000-00-00 00:00:00');
+        $srch->addCondition('bdg.badge_type', '=', Badge::TYPE_BADGE);
+        $srch->addCondition('bdg.badge_condition_type', '=', Badge::COND_MANUAL);
+        $srch->addDirectCondition('(bdg.badge_required_approval = ' . Badge::APPROVAL_OPEN . ' or (if(breq.breq_id > 0, breq.breq_status = ' . BadgeRequest::REQUEST_APPROVED . ', bdg.badge_required_approval = ' . Badge::APPROVAL_REQUIRED . ')))');
+
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addMultipleFields(['blnk.blinkcond_id', 'blnk.blinkcond_badge_id', 'bdg.badge_display_inside', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name', 'blc.badgelink_id', 'blc.badgelink_record_id', 'breq.breq_id', 'shpprod.shop_id']);
+
+        $rs = $srch->getResultSet();
+        return FatApp::getDb()->fetchAll($rs);
+    }
+
+    /**
+     * getAutomaticShopBadges
+     *
+     * @param  int $langId
+     * @param  array $shopIdArr   
+     * @return void
+     */
+    public static function getAutoShopBadges(int $langId, array $shopIdArr = []): array
+    {
+        return [];
+    }
 }
