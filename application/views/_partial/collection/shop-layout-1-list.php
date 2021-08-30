@@ -24,11 +24,12 @@
                         <?php echo $shop['shopData']['state_name']; ?><?php echo ($shop['shopData']['country_name'] && $shop['shopData']['state_name']) ? ', ' : ''; ?><?php echo $shop['shopData']['country_name']; ?>
                     </div>
                 </div>
-                <?php 
-                    $bdgShopId = $shop['shopData']['shop_id'];
-                    $bdgExcludeCndType = [BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD];
-                    include (CONF_THEME_PATH . '_partial/get-badge.php'); 
-                ?>
+                <!-- Shop Badge  -->
+                <?php
+                    $badgesArr = Badge::getShopBadges($siteLangId, [$shop['shopData']['shop_id']]);
+                    $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
+                    ?>
+                <!-- Shop Badge  -->
             </div>
             <div class="featured-item__foot">                
                     <?php if (round($collection['rating'][$shop['shopData']['shop_id']]) > 0) { ?>

@@ -26,10 +26,12 @@
                 </div>
             </div>
 
+            <!-- Shop Badge  -->
             <?php
-                    $bdgShopId = $shop['shop_id'];
-                    $bdgExcludeCndType = [BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD];
-                    include(CONF_FRONT_END_THEME_PATH . '_partial/get-badge.php'); ?>
+                $badgesArr = Badge::getShopBadges($siteLangId, [$shop['shop_id']]);
+                $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
+            ?>
+            <!-- Shop Badge  --> 
 
         </div>
         <div class="featured-item__foot">

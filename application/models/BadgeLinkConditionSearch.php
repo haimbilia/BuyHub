@@ -266,7 +266,7 @@ class BadgeLinkConditionSearch extends SearchBase
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(['s.shop_id']);
         if (!empty($shopIdArr)) {
-            $srch->addCondition('s.shop_id', 'in', $this->shopIdArr);
+            $srch->addCondition('s.shop_id', 'in', $shopIdArr);
         }
 
         //$srch->addCondition('u.user_deleted', '=', applicationConstants::NO);

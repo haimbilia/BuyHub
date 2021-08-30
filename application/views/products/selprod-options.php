@@ -20,7 +20,7 @@ if (!empty($optionRows)) {
                 }
 
                 if ($displayCount == ($count + 1) && (0 < count($option['values']) - $displayCount)) {
-                    $ul .= '<li class="more">+' . (count($option['values']) - $displayCount) . Labels::getLabel('LBL_MORE', $siteLangId).' </li>';
+                    $ul .= '<li class="more">+' . (count($option['values']) - $displayCount) . ' ' . Labels::getLabel('LBL_MORE', $siteLangId).' </li>';
                     break;
                 }
                 $count++;

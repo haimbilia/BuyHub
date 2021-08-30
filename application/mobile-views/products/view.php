@@ -1,5 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$product['ribbons'] = $selProdRibbons;
+
 $btTLeftRibbons = $upsellProductsRibbons['tLeftRibbons'];
 $btTRightRibbons = $upsellProductsRibbons['tRightRibbons'];
 foreach (array_filter($upsellProducts) as $index => $btProduct) {

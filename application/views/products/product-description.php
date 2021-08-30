@@ -43,13 +43,15 @@
                     <del class="products_price_old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></del>
                     <span class="products_price_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                 <?php } ?>
+                <!-- Shop and SelProd Badge  -->
+                    <?php
+                    $selProdBadge = Badge::getSelprodBadges($siteLangId, [$product['selprod_id']]);
+                    $shopBadge = Badge::getShopBadges($siteLangId, [$product['shop_id']]);
+                    $badgesArr = array_merge($selProdBadge, $shopBadge);
 
-                <?php
-                $bdgSelProdId = $product['selprod_id'];
-                $bdgProdId = $product['product_id'];
-                $bdgShopId = $product['shop_id'];
-                $bdgExcludeCndType = BadgeLinkCondition::SHOP_BADGES_COND_TYPES;
-                include(CONF_THEME_PATH . '_partial/get-badge.php'); ?>
+                    $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
+                    ?>
+                <!-- Shop and SelProd Badge  -->
             </div>
             <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId()) { ?>
                 <p class="tax-inclusive">
