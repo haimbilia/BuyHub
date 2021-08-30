@@ -118,6 +118,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                                                 'webpImageUrl' => $imageWebpUrl,
                                                 'jpgImageUrl' => $imageUrl,
                                                 'alt' => $data['op_selprod_title'],
+                                                'siteLangId' => $siteLangId,
                                             ];
 
                                             $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);

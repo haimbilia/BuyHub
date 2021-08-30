@@ -62,6 +62,7 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
                         'jpgImageUrl' => $mobileUrl . $tabletUrl . $desktopUrl,
                         'ratio' => '10:3',
                         'alt' => $val['banner_title'],
+                        'siteLangId' => $siteLangId,
                     ];
 
                     $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 

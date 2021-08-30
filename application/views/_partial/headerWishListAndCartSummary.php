@@ -48,6 +48,7 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                                 <a href="<?php echo $productUrl; ?>">
                                     <?php
                                                         $pictureAttr = [
+                                                            'siteLangId' => $siteLangId,
                                                             'webpImageUrl' => $imageWebpUrl,
                                                             'jpgImageUrl' => $imageUrl,
                                                             'alt' => $product['product_name'],

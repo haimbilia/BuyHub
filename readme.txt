@@ -252,6 +252,7 @@ Updates/Fixes :
     => 057444 - If brand is mandatory then while importing getting error
     => 057684 - in apple app mp4 tried to run instead of download
     => 057715 - Badge condition listing for automatic case.
+    => 057716 - Notice: Undefined variable: siteLangId in application/views/_partial/picture-tag.php
 
 
 New Features:  

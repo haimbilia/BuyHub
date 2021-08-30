@@ -57,6 +57,7 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
                                 'jpgImageUrl' => $imageUrl,
                                 'ratio' => '3:4',
                                 'alt' => $product['product_name'],
+                                'siteLangId' => $siteLangId,
                             ];
 
                             $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 

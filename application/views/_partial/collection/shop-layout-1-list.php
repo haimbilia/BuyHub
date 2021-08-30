@@ -10,6 +10,7 @@
                             'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shopData']['shop_id'], $siteLangId, "WEBPTHUMB", 0, false), CONF_WEBROOT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
                             'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shopData']['shop_id'], $siteLangId, "THUMB", 0, false), CONF_WEBROOT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                             'alt' => $shop['shopData']['shop_name'],
+                            'siteLangId' => $siteLangId,
                         ];
 
                         $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
