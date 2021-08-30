@@ -9,20 +9,9 @@ class CategoryController extends MyAppController
 
     public function index()
     {
-        $productCategory = new ProductCategory();
-        $result = $productCategory->getCategoriesByLevel($this->siteLangId, [0, 1]);
-        
-        $catWithChild = [];
-        foreach ($result as $catDetail) {
-            if (0 == $catDetail['pcr_level']) {
-                $catDetail['childrens'] = [];
-                $catWithChild[$catDetail['pcr_parent_id']] = $catDetail;
-            } else {
-                $catWithChild[$catDetail['pcr_parent_id']]['childrens'][] = $catDetail;
-            }
-        }
+        $headerCategories = ProductCategory::getArray($this->siteLangId, 0, false, true, false, CONF_USE_FAT_CACHE);
         $this->_template->addJs('js/imagesloaded.pkgd.min.js');
-        $this->set('categoriesArr', $catWithChild);
+        $this->set('categoriesArr', $headerCategories);
         $this->_template->render();
     }
 
@@ -142,7 +131,7 @@ class CategoryController extends MyAppController
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }
-        
+
         $this->set('data', $data);
         if (false === MOBILE_APP_API_CALL) {
             $this->includeProductPageJsCss();
