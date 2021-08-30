@@ -137,22 +137,41 @@ class Cronjob extends FatModel
         $userId = FatUtility::int($userId);
 
         $orderSrch = new OrderSearch();
-        $orderSrch->addMultipleFields(array('order_language_id', 'order_date_added'));
+        $orderSrch->joinOrderProduct();
+        $orderSrch->addMultipleFields(array('order_language_id', 'order_date_added', 'op_status_id', 'op_qty', 'op_refund_qty'));
         $orderSrch->addCondition('order_id', '=', $orderId);
         $orderSrch->addCondition('order_user_id', '=', $userId);
-        $orderRs = $orderSrch->getResultSet();
-        $orderData = FatApp::getDb()->fetch($orderRs);
-
-        if ($orderData == false) {
+        $orderProductsData = FatApp::getDb()->fetchAll($orderSrch->getResultSet());
+        if ($orderProductsData == false) {
             return Labels::getLabel('MSG_No_Record_Found', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
         }
+
+        $completedOrder = 0;
+        if ($orderProductsData) {
+            foreach ($orderProductsData as $op) {
+                if (in_array($op['op_status_id'], (array) Orders::getVendorOrderPaymentCreditedStatuses())) {
+                    if ($op['op_status_id'] == FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS")) {
+                        if ($op['op_qty'] > $op['op_refund_qty']) {
+                            $completedOrder++;
+                        }
+                    } else {
+                        $completedOrder++;
+                    }
+                }
+            }
+        }
+
+        if ($completedOrder != 1) {
+            return;
+        }
+        $orderLangId = current($orderProductsData)['order_language_id'];
 
         $srch = new OrderSearch();
         $srch->joinOrderBuyerUser();
         $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
         $srch->addCondition('order_user_id', '=', $userId);
         $srch->addCondition('order_id', '!=', $orderId);
-        $srch->addCondition('order_date_added', '<=', $orderData['order_date_added']);
+        $srch->addCondition('order_date_added', '<=', current($orderProductsData)['order_date_added']);
         $srch->addMultipleFields(array('count(order_id) as paidOrderCount'));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -164,10 +183,9 @@ class Cronjob extends FatModel
         }
 
         $couponValidaity = FatApp::getConfig('CONF_FIRST_TIME_BUYER_COUPON_VALIDITY', FatUtility::VAR_INT, 0);
-
-        $defaultLangId = $orderData['order_language_id'];
+       
         $couponData = array(
-        'coupon_identifier' => Labels::getLabel('LBL_Discount_On_First_Purchase', $defaultLangId),
+        'coupon_identifier' => Labels::getLabel('LBL_Discount_On_First_Purchase', $orderLangId),
         'coupon_type' => DiscountCoupons::TYPE_DISCOUNT,
         'coupon_code' => uniqid() . base64_encode($userId),
         'coupon_discount_in_percent' => FatApp::getConfig('CONF_FIRST_TIME_BUYER_COUPON_IN_PERCENT'),
@@ -217,7 +235,7 @@ class Cronjob extends FatModel
             }
 
             $emailNotificationObj = new EmailHandler();
-            $emailNotificationObj->sendDiscountCouponNotification($couponId, $userId, $orderData['order_language_id']);
+            $emailNotificationObj->sendDiscountCouponNotification($couponId, $userId, $orderLangId);
         }
 
         return Labels::getLabel('MSG_Success', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
