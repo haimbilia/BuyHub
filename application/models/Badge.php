@@ -416,8 +416,7 @@ class Badge extends MyAppModel
 
     public static function getRibbons(int $langId, int $position, array $selProdIdArr)
     {
-        $date = date('Y-m-d H:i:s');
-
+        $date = date('Y-m-d H:i:00');
         $srch = new BadgeLinkConditionSearch();
         $srch->setSelProdIdArr($selProdIdArr);
         $srch->joinBadges($langId, Badge::TYPE_RIBBON);
@@ -443,7 +442,7 @@ class Badge extends MyAppModel
 
     public static function getSelprodBadges(int $langId, array $selprodIdArr = [])
     {
-        $date = date('Y-m-d H:i:s');
+        $date = date('Y-m-d H:i:00');
         $srch = new BadgeLinkConditionSearch();
         $srch->setSelProdIdArr($selprodIdArr);
         $srch->joinBadges($langId, Badge::TYPE_BADGE);
@@ -492,7 +491,7 @@ class Badge extends MyAppModel
      */
     public static function getManualShopBadges(int $langId, array $shopIdArr = []): array
     {
-        $date = date('Y-m-d H:i:s');
+        $date = date('Y-m-d H:i:00');
         $srch = new BadgeLinkConditionSearch();
         $srch->joinBadges($langId, Badge::TYPE_BADGE);
         $srch->joinBadgeLinks();
