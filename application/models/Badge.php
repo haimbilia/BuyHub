@@ -476,7 +476,7 @@ class Badge extends MyAppModel
      * @param  array $shopIdArr
      * @return void
      */
-    public static function getShopBadges(int $langId, array $shopIdArr = [])
+    public static function getShopBadges(int $langId, array $shopIdArr = []): array
     {
         $manualBadges = self::getManualShopBadges($langId, $shopIdArr);
         $autoBadges = self::getAutoShopBadges($langId, $shopIdArr);

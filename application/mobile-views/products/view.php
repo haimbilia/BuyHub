@@ -2,6 +2,24 @@
 
 $product['ribbons'] = $selProdRibbons;
 
+/* Shop and SelProd Badge */
+$selProdBadge = Badge::getSelprodBadges($siteLangId, [$product['selprod_id']]);
+$shopBadge = Badge::getShopBadges($siteLangId, [$product['shop_id']]);
+$badgesArr = array_merge($selProdBadge, $shopBadge);
+$badges = [];
+foreach ($badgesArr as $bdgRow) {
+    $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $bdgRow[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, $siteLangId);
+    $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
+    $url = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $siteLangId, 'MINI', $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $badges[] = [
+        'url' => $url,
+        Badge::DB_TBL_PREFIX . 'name' => $bdgRow[Badge::DB_TBL_PREFIX . 'name'],
+    ];
+}
+
+$product['badges'] = $badges;
+/* Shop and SelProd Badge */
+
 $btTLeftRibbons = $upsellProductsRibbons['tLeftRibbons'];
 $btTRightRibbons = $upsellProductsRibbons['tRightRibbons'];
 foreach (array_filter($upsellProducts) as $index => $btProduct) {
@@ -234,13 +252,34 @@ if (Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
 }
 
 $product['product_description'] = html_entity_decode($product['product_description'], ENT_QUOTES, 'utf-8');
-$product['product_description'] = str_replace('/editor/editor-image/',FatUtility::generateFullUrl().'editor/editor-image/',$product['product_description']);
+$product['product_description'] = str_replace('/editor/editor-image/', FatUtility::generateFullUrl() . 'editor/editor-image/', $product['product_description']);
 
 if (!empty($product['moreSellersArr']) && 0 < count($product['moreSellersArr'])) {
+
+    /* Shop and SelProd Badge */
+    $shopIdsArr = array_column($product['moreSellersArr'], 'shop_id');
+    $shopBadges = Badge::getShopBadges($siteLangId, $shopIdsArr);
+    $shopBadgesArr = [];
+    foreach ($shopBadges as $bdgRow) {
+        $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $bdgRow[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, $siteLangId);
+        $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
+        $url = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $siteLangId, 'MINI', $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $shopBadgesArr[$bdgRow['shop_id']] = [
+            'url' => $url,
+            Badge::DB_TBL_PREFIX . 'name' => $bdgRow[Badge::DB_TBL_PREFIX . 'name'],
+        ];
+    }
+
+    $product['badges'] = $badges;
+    /* Shop and SelProd Badge */
     foreach ($product['moreSellersArr'] as &$value) {
         $value['discount'] = ($value['special_price_found'] && $value['selprod_price'] > $value['theprice']) ? CommonHelper::showProductDiscountedText($value, $siteLangId) : '';
         $value['selprod_price'] = CommonHelper::displayMoneyFormat($value['selprod_price'], false, false, false);
         $value['theprice'] = CommonHelper::displayMoneyFormat($value['theprice'], true, true, true);
+        $value['badges'] = [];
+        if (isset($shopBadgesArr[$value['shop_id']])) {
+            $value['badges'][] = $shopBadgesArr[$value['shop_id']];
+        }
     }
 }
 

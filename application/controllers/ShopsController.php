@@ -194,8 +194,6 @@ class ShopsController extends MyAppController
 
     public function view($shop_id)
     {
-        $db = FatApp::getDb();
-
         $this->shopDetail($shop_id);
 
         if (true === MOBILE_APP_API_CALL) {
@@ -220,9 +218,10 @@ class ShopsController extends MyAppController
         $get['shop_id'] = $shop_id;
 
         $data = $this->getListingData($get, $includeShopData);
+
         $selProdIdsArr = array_column($data['products'], 'selprod_id');
-        $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
-        $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
+        $data['tLeftRibbons'] = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+        $data['tRightRibbons'] = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
 
         if (false === MOBILE_APP_API_CALL) {
             $frm = $this->getProductSearchForm();
@@ -235,8 +234,6 @@ class ShopsController extends MyAppController
                 'recordId' => $shop_id,
                 'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'categories'),
                 'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId),
-                'tLeftRibbons' => $tLeftRibbons,
-                'tRightRibbons' => $tRightRibbons 
             );
             $data = array_merge($data, $arr);
 
@@ -249,8 +246,8 @@ class ShopsController extends MyAppController
                 $this->set('siteLangId', $this->siteLangId);
                 $this->set('pageSize', $data['pageSize']);
                 $this->set('pageSizeArr', $data['pageSizeArr']);
-                $this->set('tLeftRibbons', $tLeftRibbons);
-                $this->set('tRightRibbons', $tRightRibbons);
+                $this->set('tLeftRibbons', $data['tLeftRibbons']);
+                $this->set('tRightRibbons', $data['tRightRibbons']);
                 echo $this->_template->render(false, false, 'products/products-list.php', true);
                 exit;
             }
@@ -260,6 +257,7 @@ class ShopsController extends MyAppController
             $this->_template->addJs('js/shop-nav.js');
             $this->_template->addJs('js/jquery.colourbrightness.min.js');
         }
+
         if (true === MOBILE_APP_API_CALL && true === $includeShopData) {
             $shopInfo = $this->shopPoliciesData($this->getShopInfo($shop_id));
             $data['shop'] = array_merge($data['shop'], $shopInfo);
@@ -270,6 +268,22 @@ class ShopsController extends MyAppController
             $data['shop']['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', array($data['shop']['shop_id'], $this->siteLangId));
             $data['shop']['shop_banner'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'shopBanner', array($data['shop']['shop_id'], $this->siteLangId, 'MOBILE', 0, applicationConstants::SCREEN_MOBILE)), CONF_IMG_CACHE_TIME, '.jpg');
         }
+
+        /* Shop and SelProd Badge */
+        if (true === MOBILE_APP_API_CALL) {
+            $shopBadgesArr = Badge::getShopBadges($this->siteLangId, [$shop_id]);
+            $data['shop']['badges'] = [];
+            foreach ($shopBadgesArr as $bdgRow) {
+                $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $bdgRow[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, $this->siteLangId);
+                $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
+                $url = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $this->siteLangId, 'MINI', $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $data['shop']['badges'][] = [
+                    'url' => $url,
+                    Badge::DB_TBL_PREFIX . 'name' => $bdgRow[Badge::DB_TBL_PREFIX . 'name'],
+                ];
+            }
+        }
+        /* Shop and SelProd Badge */
 
         $this->set('data', $data);
 
@@ -575,6 +589,7 @@ class ShopsController extends MyAppController
         }
 
         $data = array_merge($data, $arr);
+
         $this->set('data', $data);
 
         if (FatUtility::isAjaxCall()) {

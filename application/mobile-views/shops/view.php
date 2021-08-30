@@ -1,9 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-
 if (array_key_exists('products', $data)) {
     $tLeftRibbons = $data['tLeftRibbons'];
     $tRightRibbons = $data['tRightRibbons'];
+    unset($data['tLeftRibbons'], $data['tRightRibbons']);
+
     foreach ($data['products'] as $index => &$product) {
         $selProdRibbons = [];
         if (isset($tLeftRibbons) || isset($tRightRibbons)) {
@@ -25,6 +26,7 @@ if (array_key_exists('products', $data)) {
         $product['ribbons'] = $selProdRibbons;
     }
 }
+
 if (!empty($data['shop'])) {
     if (isset($data['shop']['shop_payment_policy']) && !empty(array_filter((array)$data['shop']['shop_payment_policy']))) {
         $data['shop']['policies'][] = $data['shop']['shop_payment_policy'];
