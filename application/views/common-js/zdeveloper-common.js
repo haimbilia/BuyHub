@@ -2040,3 +2040,15 @@ $.extend(fcom, {
         return succeed;
     },
 });
+
+copyText = function (obj) {
+    var copyText =  $(obj).siblings('.clipboardTextJs').text();
+
+    document.addEventListener('copy', function(e) {
+        e.clipboardData.setData('text/plain', copyText);
+        e.preventDefault();
+    }, true);
+    document.execCommand('copy');
+    var elOriginalText = $(obj).attr('data-original-title');
+    $(obj).attr('data-original-title', langLbl.copied).tooltip('show').attr('data-original-title', elOriginalText);
+}

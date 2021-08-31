@@ -68,7 +68,7 @@ $(document).ready(function() {
     };
 
     copy = function(obj) {
-        var copyText = obj.attr('title');
+        var copyText = obj.data('url');
         document.addEventListener('copy', function(e) {
             e.clipboardData.setData('text/plain', copyText);
             e.preventDefault();
