@@ -256,6 +256,7 @@ Updates/Fixes :
     => 057725 - Multiple first time purchase discount coupons are getting created by the system for one user
     => 057749 - Category with no product is also listing on view all category
     => 057717 - Admin: "Undefined variable" error is showing while searching on the "Catalog Report" section
+    => 057775 - Fatal error: Uncaught TypeError: Argument (Checkout listing)
 
 
 New Features:  
