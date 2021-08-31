@@ -2098,14 +2098,12 @@ trait CustomProducts
                     'shippro_user_id' => $shipBy
                 );
             }
-        } else {
-            if (isset($post['shipping_profile']) && $post['shipping_profile'] > 0) {
-                $shipProProdData = array(
-                    'shippro_shipprofile_id' => $post['shipping_profile'],
-                    'shippro_product_id' => $productId,
-                    'shippro_user_id' => $shipBy
-                );
-            }
+        } else {    
+            $shipProProdData = array(
+                'shippro_shipprofile_id' => isset($post['shipping_profile']) && !empty($post['shipping_profile']) ? $post['shipping_profile'] : ShippingProfile::getDefaultProfileId($prodSellerId),
+                'shippro_product_id' => $productId,
+                'shippro_user_id' => $shipBy
+            );            
         }
 
         if (!empty($shipProProdData)) {
