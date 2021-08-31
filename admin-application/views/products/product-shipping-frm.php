@@ -5,8 +5,9 @@ $productFrm->developerTags['colClassPrefix'] = 'col-md-';
 $productFrm->developerTags['fld_default_col'] = 12;
 
 $spProfileFld = $productFrm->getField('shipping_profile');
-$spProfileFld->developerTags['col'] = 6;
-
+if ($spProfileFld != null) {
+    $spProfileFld->developerTags['col'] = 6;
+}
 if (FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) {
     $spPackageFld = $productFrm->getField('product_ship_package');
     $spPackageFld->developerTags['col'] = 6;

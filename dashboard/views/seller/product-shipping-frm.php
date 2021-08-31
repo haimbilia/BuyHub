@@ -24,27 +24,26 @@ $btnSubmitFld->setFieldTagAttribute('class', "btn btn-brand");
         <div class="row">
             <?php 
             $dimenEnabled = FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1);
-            $shippedByAdminOnly = FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0);
-            if (!$shippedByAdminOnly) { ?>
+            $profileFld = $productFrm->getField('shipping_profile');
+            if ($profileFld != null) { ?>
                 <div class="col-md-<?php echo (1 > $dimenEnabled ? '12' : '6'); ?>">
                     <div class="field-set">
                         <div class="caption-wraper">
                             <label class="field_label">
-                                <?php $fld = $productFrm->getField('shipping_profile');
-                                echo $fld->getCaption(); ?>
+                                <?php echo $profileFld->getCaption(); ?>
                                 <span class="spn_must_field">*</span>
                             </label>
                         </div>
                         <div class="field-wraper">
                             <div class="field_cover">
-                                <?php echo $productFrm->getFieldHtml('shipping_profile'); ?>
+                                <?php echo $profileFld->getHtml(); ?>
                             </div>
                         </div>
                     </div>
                 </div>
             <?php } ?>
             <?php if (FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) { ?>
-                <div class="col-md-<?php echo (1 > $shippedByAdminOnly ? '6' : '12'); ?>">
+                <div class="col-md-<?php echo ( null != $profileFld ? '6' : '12'); ?>">
                     <div class="field-set">
                         <div class="caption-wraper d-flex justify-content-between">
                             <label class="field_label">
