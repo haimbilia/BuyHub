@@ -68,15 +68,15 @@ $(document).ready(function() {
     };
 
     copy = function(obj) {
-        var copyText = obj.attr('title');
+        var copyText = obj.data('url');
         document.addEventListener('copy', function(e) {
             e.clipboardData.setData('text/plain', copyText);
             e.preventDefault();
         }, true);
         document.execCommand('copy');
-        $.mbsmessage(langLbl.copiedText + " : " + copyText, true, 'alert--info');
+        var elOriginalText = $(obj).attr('data-original-title');
+        $(obj).attr('data-original-title', langLbl.copied).tooltip('show').attr('data-original-title', elOriginalText);
     }
-
 })();
 
 

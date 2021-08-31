@@ -49,7 +49,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         </div>
                         <ul class="social-invites ">
                             <li>
-                                <a href="javascript:void(0);" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>" onclick="copy($(this))" data-url="" data-val="" data-code="" title="Copy link" class="btn">
+                                <a href="javascript:void(0);" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>" onclick="copy($(this))" data-url="<?php echo $referralTrackingUrl; ?>" data-toggle="tooltip" data-placement="top"  class="btn">
                                     <span class="icon">
                                         <i class="svg--icon">
                                             <svg class="svg">

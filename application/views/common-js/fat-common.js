@@ -60,6 +60,12 @@ var fcom = {
 		var dvdebug = $('<div />').append(dbmsg);
 		dvdebug.appendTo($('#dv-bg-processes'));
 
+        if (0 < $('.alert.alert--process').length) {
+            $('.alert.alert--process').show()
+        } else {
+            fcom.displayProcessing();
+        }
+
 		$.ajax({
 			method: "POST",
 			url: url,

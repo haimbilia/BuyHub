@@ -184,6 +184,8 @@ class MyAppController extends FatController
                 'currentSearchLocation' => Labels::getLabel('LBL_CURRENT_SEARCH_LOCATION', $this->siteLangId),
                 'cacheTimeStamp' => $cacheTimeStamp,
                 'close' => Labels::getLabel('LBL_CLOSE', $this->siteLangId),
+                'copiedText' => Labels::getLabel('LBL_COPIED_TEXT', $this->siteLangId),
+                'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);

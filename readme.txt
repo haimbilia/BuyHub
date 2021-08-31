@@ -257,6 +257,9 @@ Updates/Fixes :
     => 057749 - Category with no product is also listing on view all category
     => 057717 - Admin: "Undefined variable" error is showing while searching on the "Catalog Report" section
     => 057775 - Fatal error: Uncaught TypeError: Argument (Checkout listing)
+    => 057381 - Admin: Noting is showing under the "Banner Layouts" listing
+    => 057778 - Product Detail and Shop View Page Copy link not working and invalid URL to copy
+    => 057781 - Display processing if call ajax from fcom ajax
 
 
 New Features:  
