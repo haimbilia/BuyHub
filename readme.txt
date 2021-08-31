@@ -259,6 +259,7 @@ Updates/Fixes :
     => 057775 - Fatal error: Uncaught TypeError: Argument (Checkout listing)
     => 057381 - Admin: Noting is showing under the "Banner Layouts" listing
     => 057778 - Product Detail and Shop View Page Copy link not working and invalid URL to copy
+    => 057781 - Display processing if call ajax from fcom ajax
 
 
 New Features:  

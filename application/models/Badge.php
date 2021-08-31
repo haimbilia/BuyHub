@@ -462,9 +462,8 @@ class Badge extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(['blnk.blinkcond_id', 'blnk.blinkcond_badge_id', 'bdg.badge_display_inside', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name', 'blc.badgelink_id', 'blc.badgelink_record_id', 'breq.breq_id', 'COALESCE(sp.selprod_id,prod.product_selprod_id) as selprod_id']);
         $srch->addHaving('selprod_id', 'is NOT', 'mysql_func_NULL', 'AND', true);
-        $srch->addGroupBy('bdg.badge_id');
         $rs = $srch->getResultSet();
-        return FatApp::getDb()->fetchAll($rs);
+        return FatApp::getDb()->fetchAll($rs , 'blinkcond_badge_id');
     }
 
 
