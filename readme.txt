@@ -255,6 +255,7 @@ Updates/Fixes :
     => 057716 - Notice: Undefined variable: siteLangId in application/views/_partial/picture-tag.php
     => 057725 - Multiple first time purchase discount coupons are getting created by the system for one user
     => 057749 - Category with no product is also listing on view all category
+    => 057717 - Admin: "Undefined variable" error is showing while searching on the "Catalog Report" section
 
 
 New Features:  
