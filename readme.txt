@@ -260,7 +260,7 @@ Updates/Fixes :
     => 057381 - Admin: Noting is showing under the "Banner Layouts" listing
     => 057778 - Product Detail and Shop View Page Copy link not working and invalid URL to copy
     => 057781 - Display processing if call ajax from fcom ajax
-
+    => 057783 - while exporting file in russin language file name coming with unwanted string
 
 New Features:  
     => Admin shipped products listing page
