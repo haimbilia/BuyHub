@@ -77,8 +77,12 @@ class Settings
         }
         $filename = $download_dir . "/" . $file;
         header('Content-Description: File Transfer');
-        header("Content-Type: application/force-download");
-        header("Content-Disposition: attachment; filename=\"" . basename($filename) . "\";");
+        header("Content-Type: application/force-download");       
+        if (strpos($_SERVER ['HTTP_USER_AGENT'], "MSIE") > 0) {
+            header('Content-Disposition: attachment; filename="' . rawurlencode(basename($filename)) . '"');
+        } else {
+            header('Content-Disposition: attachment; filename*=UTF-8\'\'' . rawurlencode(basename($filename)));
+        }
         header('Content-Length: ' . filesize($filename));
         readfile($filename);
         return true;

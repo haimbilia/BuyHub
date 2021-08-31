@@ -768,8 +768,12 @@ class CommonHelper extends FatUtility
         /* header('Content-Transfer-Encoding: binary');
         header('Content-Type: application/octet-stream'); */
         header('Content-Encoding: UTF-8');
-        header('Content-type: application/csv; charset=UTF-8; encoding=UTF-8');
-        header('Content-Disposition: attachement; filename="' . $output_file_name . '";');
+        header('Content-type: application/csv; charset=UTF-8; encoding=UTF-8');      
+        if (strpos($_SERVER ['HTTP_USER_AGENT'], "MSIE") > 0) {
+            header('Content-Disposition: attachment; filename="' . rawurlencode($output_file_name) . '"');
+        } else {
+            header('Content-Disposition: attachment; filename*=UTF-8\'\'' . rawurlencode($output_file_name));
+        }
         /** Send file to browser for download */
 
         //echo "\xEF\xBB\xBF";
@@ -805,8 +809,12 @@ class CommonHelper extends FatUtility
             /** modify header to be downloadable csv file **/
             header('Content-Description: File Transfer');
             header('Content-Encoding: UTF-8');
-            header('Content-type: application/csv; charset=UTF-8; encoding=UTF-8');
-            header('Content-Disposition: attachement; filename="' . $output_file_name . '";');
+            header('Content-type: application/csv; charset=UTF-8; encoding=UTF-8');           
+            if (strpos($_SERVER ['HTTP_USER_AGENT'], "MSIE") > 0) {
+                header('Content-Disposition: attachment; filename="' . rawurlencode($output_file_name) . '"');
+            } else {
+                header('Content-Disposition: attachment; filename*=UTF-8\'\'' . rawurlencode($output_file_name));
+            }
             /** Send file to browser for download */
 
             header("Cache-Control: cache, must-revalidate");
