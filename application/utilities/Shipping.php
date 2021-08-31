@@ -394,7 +394,9 @@ class Shipping
 
                 if ((false == $shippingRates || empty($shippingRates))) {
                     $msg = (string) $shippingApiObj->getError();
-                    SystemLog::system($msg, 'SelProd ID-' . $product['selprod_id']);
+                    if (!empty($msg)) {
+                        SystemLog::system($msg, 'SelProd ID-' . $product['selprod_id']);
+                    }
                     continue;
                 }
                 unset($physicalSelProdIdArr[$product['selprod_id']]);
