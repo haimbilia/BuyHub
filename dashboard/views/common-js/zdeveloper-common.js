@@ -1348,3 +1348,21 @@ function loadMoreImages(obj) {
     $(obj).removeClass("more-media").removeAttr("onclick");
     $(obj).nextAll().removeClass("d-none");
 }
+
+function getImageTemplate(fileName, src) {     
+
+    return  `<li class="uploaded" id="${src.substring(src.lastIndexOf('/') + 1)}">
+                <i class="uploaded-file">
+                    <img class="" src="${src}">
+                </i>
+                <div class="file">
+                    <div class="file_name">
+                        ${fileName}
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" style="width:0%">
+                        </div>
+                    </div> 
+                </div>
+            </li>`;
+}

@@ -2621,7 +2621,7 @@ class SellerController extends SellerBaseController
 
     /* public function CategoryBanners(){
       $this->_template->render(true,false);
-      } */
+      } 
 
     public function addCategoryBanner($prodCatId)
     {
@@ -2660,8 +2660,7 @@ class SellerController extends SellerBaseController
         $attachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_CATEGORY_BANNER_SELLER, $shop_id, $prodCatId, -1);
         $mediaFrm = $this->getCategoryMediaForm($prodCatId);
 
-        $this->set('mediaFrm', $mediaFrm);
-        /* $this->set('mode', $mode);         */
+        $this->set('mediaFrm', $mediaFrm);     
         $this->set('userId', $userId);
         $this->set('shop_id', $shop_id);
         $this->set('prodCatId', $prodCatId);
@@ -2712,7 +2711,7 @@ class SellerController extends SellerBaseController
       $this->set( 'languages', Language::getAllNames() );
       $this->set( 'formLangId', $langId );
       $this->_template->render( false, false );
-      } */
+    }
 
     public function setUpCategoryBanner()
     {
@@ -2775,8 +2774,6 @@ class SellerController extends SellerBaseController
 
         Message::addMessage(Labels::getLabel('MSG_File_uploaded_successfully', $this->siteLangId));
         FatUtility::dieJsonSuccess(Message::getHtml());
-        /* $this->set('msg', Labels::getLabel('MSG_File_uploaded_successfully',$this->siteLangId));
-          $this->_template->render(false, false, 'json-success.php'); */
     }
 
     public function removeCategoryBanner($prodCatId, $langId)
@@ -2848,7 +2845,7 @@ class SellerController extends SellerBaseController
         $this->set('siteLangId', $this->siteLangId);
         $this->set('language', Language::getAllNames());
         $this->_template->render(false, false);
-    }
+    }*/    
 
     public function orderCancellationRequests()
     {
