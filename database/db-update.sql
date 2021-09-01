@@ -892,3 +892,16 @@ UPDATE `tbl_language_labels` SET `label_caption` = 'Submit new requests to admin
 -- --------- Added InActive Subscription Value ------ --
 INSERT IGNORE INTO tbl_configurations (conf_name, conf_val, conf_common) VALUES ('CONF_SUBSCRIPTION_INACTIVE_ORDER_STATUS', 10, 0) ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val)
 -- ---------Added InActive Subscription Value------ -- 
+
+CREATE TABLE `tbl_shop_stats`(
+    `sstats_shop_id` INT NOT NULL,
+    `sstats_avg_rating` DECIMAL(10, 2) NOT NULL,
+    `sstats_completion_rate` DECIMAL(10, 2) NOT NULL,
+    `sstats_completed_orders` INT NOT NULL,
+    `sstats_return_acceptance_rate` DECIMAL(10, 2) NOT NULL,
+    `sstats_cancellation_rate` DECIMAL(10, 2) NOT NULL,
+    `sstats_updated_on` DATETIME NOT NULL,
+    PRIMARY KEY(`sstats_shop_id`)
+) ENGINE = InnoDB;
+
+INSERT IGNORE INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Shop Stats', 'ShopSpecifics/updateStats', '1440', '1');

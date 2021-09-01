@@ -10,12 +10,10 @@ class CronController extends FatController
 
     public function index($id = 0)
     {
-        $db = FatApp::getDb();
-
         $allCrons = Cron::getAllRecords(true, $id);
 
         foreach ($allCrons as $row) {
-            $cron = new Cron($row ['cron_id']);
+            $cron = new Cron($row['cron_id']);
             $cron->loadFromDb();
 
             $logId = $cron->markStarted();
@@ -24,8 +22,8 @@ class CronController extends FatController
             }
 
             $arr = explode('/', $row['cron_command']);
-
             $class = $arr[0];
+            
             $obj = new $class();
             array_shift($arr);
             $action = $arr[0];
@@ -50,7 +48,7 @@ class CronController extends FatController
 
         foreach ($allCrons as $row) {
             if (strtolower($row['cron_command']) == strtolower('cronjob/' . $cron_command)) {
-                $cron = new Cron($row ['cron_id']);
+                $cron = new Cron($row['cron_id']);
                 $found = true;
 
                 $arr = explode('/', $row['cron_command']);

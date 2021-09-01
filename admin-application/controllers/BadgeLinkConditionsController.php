@@ -430,7 +430,12 @@ class BadgeLinkConditionsController extends AdminBaseController
         }
 
         $badgeId = FatApp::getPostedData('blinkcond_badge_id', FatUtility::VAR_INT, 0);
-        if (false === BadgeLinkCondition::isUnique($badgeId, $sellerId, $recordType, $position, $badgeLinkCondId)) {
+        $conditionType = FatApp::getPostedData('blinkcond_condition_type', FatUtility::VAR_INT, 0);
+
+        if (BadgeLinkCondition::REC_COND_AUTO == $recordCondition && false === BadgeLinkCondition::isUniqueAuto($badgeId, $conditionType, $badgeLinkCondId)) {
+            $msg = Labels::getLabel('MSG_BADGE_CONDITION_ALREADY_BOUND_FOR_CONDITION_TYPE.', $this->adminLangId);
+            FatUtility::dieJsonError($msg);
+        } else if (false === BadgeLinkCondition::isUnique($badgeId, $sellerId, $recordType, $position, $badgeLinkCondId)) {
             $msg = Labels::getLabel('MSG_BADGE_CONDITION_ALREADY_BOUND_FOR_SAME_LINK_TYPE.', $this->adminLangId);
             if (Badge::TYPE_RIBBON == $badgeType) {
                 $msg = Labels::getLabel('MSG_RIBBON_CONDITION_ALREADY_BOUND_FOR_SAME_LINK_TYPE_AND_SAME_POSITION.', $this->adminLangId);
@@ -441,8 +446,6 @@ class BadgeLinkConditionsController extends AdminBaseController
         if (Badge::TYPE_BADGE == $badgeType) {
             if (BadgeLinkCondition::REC_COND_AUTO == $recordCondition) {
                 $records = []; /* Records Binding Not Required. */
-
-                $conditionType = FatApp::getPostedData('blinkcond_condition_type', FatUtility::VAR_INT, 0);
                 switch ($conditionType) {
                     case BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS:
                     case BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD:
