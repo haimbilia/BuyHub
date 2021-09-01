@@ -254,7 +254,14 @@ Updates/Fixes :
     => 057715 - Badge condition listing for automatic case.
     => 057716 - Notice: Undefined variable: siteLangId in application/views/_partial/picture-tag.php
     => 057725 - Multiple first time purchase discount coupons are getting created by the system for one user
-
+    => 057749 - Category with no product is also listing on view all category
+    => 057717 - Admin: "Undefined variable" error is showing while searching on the "Catalog Report" section
+    => 057775 - Fatal error: Uncaught TypeError: Argument (Checkout listing)
+    => 057381 - Admin: Noting is showing under the "Banner Layouts" listing
+    => 057778 - Product Detail and Shop View Page Copy link not working and invalid URL to copy
+    => 057781 - Display processing if call ajax from fcom ajax
+    => 057783 - while exporting file in russin language file name coming with unwanted string
+    => 057535 - Advertiser: Remove the "My Message" icon for the Advertiser
 
 New Features:  
     => Admin shipped products listing page

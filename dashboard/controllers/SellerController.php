@@ -5478,8 +5478,8 @@ class SellerController extends SellerBaseController
         if (true == $forCatalogReq) {
             $userId = 0;
         }
-
-        if (!FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
+        $shippingObj = new Shipping($this->siteLangId);
+        if (!FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && !$shippingObj->getShippingApiObj($userId)) {
             $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, $userId, true, true);
             $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->siteLangId), 'shipping_profile', $shipProfileArr)->requirements()->setRequired();
         }

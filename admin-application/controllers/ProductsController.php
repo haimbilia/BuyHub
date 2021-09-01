@@ -1451,9 +1451,11 @@ class ProductsController extends AdminBaseController
                 $codFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_COD_option_is_disabled_in_payment_gateway_settings', $this->adminLangId) . '</small>';
             }
             /* ] */            
-            
-            $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, $shippedByUserId, true, true);            
-            $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
+            $shippingObj = new Shipping($this->adminLangId);
+            $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, $shippedByUserId, true, true);        
+            if(!$shippingObj->getShippingApiObj($shippedByUserId)){
+                $shippingFld = $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
+            }            
             if (!$shippedByUserId) {
                 $profileUnReqObj = new FormFieldRequirement('shipping_profile', Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId));
                 $profileUnReqObj->setRequired(false);
@@ -1479,7 +1481,21 @@ class ProductsController extends AdminBaseController
     {
         $this->objPrivilege->canEditProducts();
         $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
-        $frm = $this->getProductShippingFrm($productId);
+        
+        $productData = Product::getAttributesById($productId, ['product_seller_id','product_type']);
+        if(empty($productData)){
+            Message::addErrorMessage($this->str_invalid_request);
+            FatUtility::dieWithError(Message::getHtml());
+        }       
+        if (Product::PRODUCT_TYPE_DIGITAL == $productData['product_type']) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_DIGITAL_PRODUCTS_ARE_NOT_ALLOWED', $this->adminLangId));
+        }      
+        $shippedByUserId = $productData['product_seller_id'];
+        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
+            $shippedByUserId = 0;
+        }
+        
+        $frm = $this->getProductShippingFrm($productId, $shippedByUserId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
@@ -1487,28 +1503,22 @@ class ProductsController extends AdminBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $prodType = Product::getAttributesById($productId, 'product_type');
-        if (!empty($prodType) && Product::PRODUCT_TYPE_DIGITAL == $prodType) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_DIGITAL_PRODUCTS_ARE_NOT_ALLOWED', $this->adminLangId));
-        }
-
         $prod = new Product($productId);
         if (!$prod->saveProductData($post)) {
             Message::addErrorMessage($prod->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
-
-        $prodSellerId = Product::getAttributesById($productId, 'product_seller_id');
+     
         $psFree = isset($post['ps_free']) ? $post['ps_free'] : 0;
 
-        if (!$prod->saveProductSellerShipping($prodSellerId, $psFree, $post['ps_from_country_id'])) {
+        if (!$prod->saveProductSellerShipping($productData['product_seller_id'], $psFree, $post['ps_from_country_id'])) {
             Message::addErrorMessage($prod->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        if (isset($post['shipping_profile']) && $post['shipping_profile'] > 0) {
+        if (isset($post['shipping_profile'])) {
             $shipProProdData = array(
-                'shippro_shipprofile_id' => $post['shipping_profile'],
+                'shippro_shipprofile_id' => !empty($post['shipping_profile']) ? $post['shipping_profile'] : ShippingProfile::getDefaultProfileId($productData['product_seller_id']),
                 'shippro_product_id' => $productId
             );
             $spObj = new ShippingProfileProduct();

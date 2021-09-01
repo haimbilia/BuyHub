@@ -59,7 +59,7 @@ var fcom = {
 		var dbmsg = o.dbmsg || '<img src="' + fcom.makeUrl() + 'img/loading.gif" alt="Processing..">';
 		var dvdebug = $('<div />').append(dbmsg);
 		dvdebug.appendTo($('#dv-bg-processes'));
-
+        
 		$.ajax({
 			method: "POST",
 			url: url,

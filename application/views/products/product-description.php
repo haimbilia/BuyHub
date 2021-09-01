@@ -48,7 +48,6 @@
                     $selProdBadge = Badge::getSelprodBadges($siteLangId, [$product['selprod_id']]);
                     $shopBadge = Badge::getShopBadges($siteLangId, [$product['shop_id']]);
                     $badgesArr = array_merge($selProdBadge, $shopBadge);
-
                     $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
                     ?>
                 <!-- Shop and SelProd Badge  -->
