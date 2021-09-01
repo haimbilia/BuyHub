@@ -522,6 +522,28 @@ class Badge extends MyAppModel
      */
     public static function getAutoShopBadges(int $langId, array $shopIdArr = []): array
     {
+        /* $date = date('Y-m-d H:i:00');
+        $srch = new BadgeLinkConditionSearch();
+        $srch->joinBadges($langId, Badge::TYPE_BADGE);
+        $srch->joinBadgeLinks();
+        $srch->attachAutomaticConditions($shopIdArr);
+
+        $srch->addCondition('blnk.blinkcond_from_date', '<=', $date);
+        $cnd = $srch->addCondition('blnk.blinkcond_to_date', '>=', $date);
+        $cnd->attachCondition('blnk.blinkcond_to_date', '=', '0000-00-00 00:00:00');
+        $srch->addCondition('bdg.badge_type', '=', Badge::TYPE_BADGE);
+        $srch->addCondition('bdg.badge_condition_type', '=', Badge::COND_AUTO);
+        $srch->addDirectCondition('');
+
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addMultipleFields(['blnk.blinkcond_id', 'blnk.blinkcond_badge_id', 'bdg.badge_display_inside', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name', 'blc.badgelink_id', 'blc.badgelink_record_id', 'shpprod.*']);
+
+        $rs = $srch->getResultSet();
+        return FatApp::getDb()->fetchAll($rs); */
+
         return [];
     }
+
+   
 }

@@ -275,27 +275,6 @@ class BadgeLinkConditionSearch extends SearchBase
         $this->joinTable('(' . $srch->getQuery() . ')', 'INNER JOIN', 'blc.badgelink_record_id = shpprod.shop_id AND blnk.blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP, 'shpprod');
     }
 
-    public function attachAutomaticConditions(array $shopIdArr = [])
-    {
-        /* Shop Rating */
-        $srch = new SelProdReviewSearch();
-        $srch->joinSelProdRating();
-        $srch->joinShops();
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addGroupBy('spr.spreview_selprod_id');
-        $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
-        $srch->addMultipleFields(['shop.shop_id', 'ROUND(AVG(sprating_rating),2) as shopRating']);
-        // $srch->addCondition('spreview_seller_user_id', '=', $recordId);
-        $srch->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_SHOP);
-
-        if (!empty($shopIdArr)) {
-            $srch->addCondition('shop.shop_id', 'in', $this->shopIdArr);
-        }
-        
-        $query = '(' . $srch->getQuery() . ') union (' . $subSrch2->getQuery() . ')';
-    }
-
     /**
      * setSelProdIdArr
      *
