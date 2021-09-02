@@ -342,7 +342,7 @@ class Shopify extends DataMigrationBase
 
             foreach ($order->fulfillments as $fulfillment) {
                 foreach ($fulfillment->line_items as $lineItem) {
-                    $products[$lineItem->variant_id]['status'] = OrderStatus::ORDER_COMPLETED;
+                    $products[$lineItem->variant_id]['status'] = FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS");
                 }
             }
 

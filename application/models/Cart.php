@@ -14,6 +14,10 @@ class Cart extends FatModel
     private $selectedShippingService = [];
     private static $cartData = [];
 
+    private $hasPhysicalProduct = -1;
+    private $hasDigitalProduct = -1;
+    private $isAnyOutOfStock = -1;
+
     public const DB_TBL = 'tbl_user_cart';
     public const DB_TBL_PREFIX = 'usercart_';
 
@@ -195,63 +199,83 @@ class Cart extends FatModel
 
     public function hasStock()
     {
-        $stock = true;
+        if (-1 != $this->isAnyOutOfStock) {
+            return $this->isAnyOutOfStock;
+        }
+
         foreach ($this->getBasketProducts($this->cart_lang_id) as $product) {
+            if (-1 != $this->isAnyOutOfStock) {
+                return $this->isAnyOutOfStock;
+            }
+
             if (!$product['in_stock']) {
-                $stock = false;
-                break;
+                return false;
             }
         }
-        return $stock;
+        return true;
     }
 
     public function hasDigitalProduct()
     {
-        $isDigital = false;
+        if (-1 !== $this->hasDigitalProduct) {
+            return $this->hasDigitalProduct;
+        }
+
         foreach ($this->getBasketProducts($this->cart_lang_id) as $product) {
+            if (-1 !== $this->hasDigitalProduct) {
+                return $this->hasDigitalProduct;
+            }
+            if (isset($product['is_digital_product']) && $product['is_digital_product']) {
+                return true;
+            }
+
             if ($product['is_batch'] && !empty($product['products'])) {
                 foreach ($product['products'] as $pgproduct) {
                     if ($pgproduct['is_digital_product']) {
-                        $isDigital = true;
-                        break;
+                        return true;
                     }
-                }
-            } else {
-                if ($product['is_digital_product']) {
-                    $isDigital = true;
-                    break;
                 }
             }
         }
-        $this->products = array();
-        return $isDigital;
+
+        $this->products = [];
+        return false;
     }
 
     public function hasPhysicalProduct()
     {
-        $isPhysical = false;
+        if (-1 !== $this->hasPhysicalProduct) {
+            return $this->hasPhysicalProduct;
+        }
+
         foreach ($this->getBasketProducts($this->cart_lang_id) as $product) {
+            if (-1 !== $this->hasPhysicalProduct) {
+                return $this->hasPhysicalProduct;
+            }
+
+            if (isset($product['is_physical_product']) && !empty($product['is_physical_product'])) {
+                return true;
+            }
+
             if ($product['is_batch'] && !empty($product['products'])) {
                 foreach ($product['products'] as $pgproduct) {
                     if ($pgproduct['is_physical_product']) {
-                        $isPhysical = true;
-                        break;
+                        return true;
                     }
-                }
-            } else {
-                if (!empty($product['is_physical_product'])) {
-                    $isPhysical = true;
-                    break;
                 }
             }
         }
-        $this->products = array();
-        return $isPhysical;
+        $this->products = [];
+        return false;
     }
 
     public function getBasketProducts($siteLangId = 0)
     {
         if (!$this->products) {
+            $this->isAnyOutOfStock = true;
+            $this->hasDigitalProduct = false;
+            $this->hasPhysicalProduct = false;
+
             $loggedUserId = 0;
             if (UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged()) {
                 $loggedUserId = UserAuthentication::getLoggedUserId();
@@ -299,6 +323,36 @@ class Cart extends FatModel
                     'is_shipping_selected' => false,
                     'volume_discount_total' => 0
                 ];
+                
+                /* Has Stock */
+                if (!$sellerProductRow['in_stock'] && true === $this->isAnyOutOfStock) {
+                    $this->isAnyOutOfStock = false;
+                }
+                /* Has Stock */
+
+                /* Has Digital Product */
+                if (isset($sellerProductRow['is_digital_product']) && $sellerProductRow['is_digital_product'] && false === $this->hasDigitalProduct) {
+                    $this->hasDigitalProduct = true;
+                }
+                /* Has Digital Product */
+
+                /* Has Physical Product */
+                if (isset($sellerProductRow['is_physical_product']) && !empty($sellerProductRow['is_physical_product']) && false === $this->hasPhysicalProduct) {
+                    $this->hasPhysicalProduct = true;
+                }
+                /* Has Physical Product */
+
+                if (isset($sellerProductRow['is_batch']) && !empty($sellerProductRow['products']) && (false === $this->hasDigitalProduct || false === $this->hasPhysicalProduct)) {
+                    foreach ($sellerProductRow['products'] as $pgproduct) {
+                        if ($pgproduct['is_digital_product'] && false === $this->hasDigitalProduct) {
+                            $this->hasDigitalProduct = true;
+                        }
+
+                        if ($pgproduct['is_physical_product'] && false === $this->hasPhysicalProduct) {
+                            $this->hasPhysicalProduct = true;
+                        }
+                    }
+                }
 
                 $this->products[$key] = $sellerProductRow;
                 $this->products[$key]['key'] = $key;
@@ -321,6 +375,9 @@ class Cart extends FatModel
     public function getProducts($siteLangId = 0)
     {
         if (!$this->products) {
+            $this->isAnyOutOfStock = true;
+            $this->hasDigitalProduct = false;
+            $this->hasPhysicalProduct = false;
             //$this->getBasketProducts($siteLangId);
 
             $productSelectedShippingMethodsArr = $this->getProductShippingMethod();
@@ -398,6 +455,36 @@ class Cart extends FatModel
                     if ($this->valdateCheckoutType && isset($fulfilmentType) && $fulfilmentType > 0 && $sellerProductRow['selprod_fulfillment_type'] != Shipping::FULFILMENT_ALL && $sellerProductRow['selprod_fulfillment_type'] != $fulfilmentType && $sellerProductRow['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
                         unset($this->products[$key]);
                         continue;
+                    }
+
+                    /* Has Stock */
+                    if (!$sellerProductRow['in_stock'] && true === $this->isAnyOutOfStock) {
+                        $this->isAnyOutOfStock = false;
+                    }
+                    /* Has Stock */
+
+                    /* Has Digital Product */
+                    if (isset($sellerProductRow['is_digital_product']) && $sellerProductRow['is_digital_product'] && false === $this->hasDigitalProduct) {
+                        $this->hasDigitalProduct = true;
+                    }
+                    /* Has Digital Product */
+
+                    /* Has Physical Product */
+                    if (isset($sellerProductRow['is_physical_product']) && !empty($sellerProductRow['is_physical_product']) && false === $this->hasPhysicalProduct) {
+                        $this->hasPhysicalProduct = true;
+                    }
+                    /* Has Physical Product */
+
+                    if (isset($sellerProductRow['is_batch']) && !empty($sellerProductRow['products']) && (false === $this->hasDigitalProduct || false === $this->hasPhysicalProduct)) {
+                        foreach ($sellerProductRow['products'] as $pgproduct) {
+                            if ($pgproduct['is_digital_product'] && false === $this->hasDigitalProduct) {
+                                $this->hasDigitalProduct = true;
+                            }
+
+                            if ($pgproduct['is_physical_product'] && false === $this->hasPhysicalProduct) {
+                                $this->hasPhysicalProduct = true;
+                            }
+                        }
                     }
 
                     $this->products[$key] = $sellerProductRow;

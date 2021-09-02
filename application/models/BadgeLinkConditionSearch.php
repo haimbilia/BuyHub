@@ -132,8 +132,6 @@ class BadgeLinkConditionSearch extends SearchBase
         $this->joinTable(User::DB_TBL, 'LEFT JOIN', 'blnku.user_id = blnk.blinkcond_user_id', 'blnku');
     }
 
-    /* TODO : need to replace newely build function */
-
     /**
      * joinBadges
      *

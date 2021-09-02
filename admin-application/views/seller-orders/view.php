@@ -24,6 +24,9 @@ if (!empty($order['opship_tracking_url'])) {
     $orderStatusLbl = Labels::getLabel('LBL_SHIPPED', $adminLangId);
 }
 $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $order['opshipping_plugin_id'] ? OrderProduct::getPickUpShedule($order['op_id']) : NULL;
+$shippedOrderStatus = FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS");
+
+$returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS");
 ?>
 <div class="page">
     <div class="container container-fluid">
@@ -97,8 +100,8 @@ $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $ord
                                                 'label' => '<i class="fas fa-file-download"></i>'
                                             ];
                                         } elseif (!empty($order['opr_response'])) {
-                                            $method = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'previewReturnLabel' : 'previewLabel';
-                                            $title = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'LBL_PREVIEW_RETURN_LABEL' : 'LBL_PREVIEW_LABEL';
+                                            $method = ($returnRequestApproved == $order["op_status_id"]) ? 'previewReturnLabel' : 'previewLabel';
+                                            $title = ($returnRequestApproved == $order["op_status_id"]) ? 'LBL_PREVIEW_RETURN_LABEL' : 'LBL_PREVIEW_LABEL';
                                             $data['otherButtons'][] = [
                                                 'attr' => [
                                                     'href' => UrlHelper::generateUrl("ShippingServices", $method, [$order['op_id']]),
@@ -125,7 +128,7 @@ $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $ord
                                             ];
                                         }                                    
 
-                                        if ($order['orderstatus_id'] == OrderStatus::ORDER_SHIPPED &&  true === $shippingApiObj->canCreatePickup()) {
+                                        if ($order['orderstatus_id'] == $shippedOrderStatus &&  true === $shippingApiObj->canCreatePickup()) {
                                             if (!$pickUpDetails || 1 > $pickUpDetails['opsp_scheduled']) {
                                                 $data['otherButtons'][] = [
                                                     'attr' => [
@@ -649,7 +652,7 @@ $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $ord
                                             <?php
                                             echo nl2br($row['oshistory_comments']);
                                             echo ' ' . (($row['oshistory_orderstatus_id'] > 0) ? $orderStatuses[$row['oshistory_orderstatus_id']] : CommonHelper::displayNotApplicable($adminLangId, '')) . ' ';
-                                            if ($row['oshistory_orderstatus_id'] ==  OrderStatus::ORDER_SHIPPED) {
+                                            if ($row['oshistory_orderstatus_id'] ==  $shippedOrderStatus) {
                                                 if (empty($row['oshistory_courier'])) {
                                                     $trackingNumber = $row['oshistory_tracking_number'];
                                                     if (!empty($shippingApiObj) && $shippingApiObj->getKey('plugin_id') == $order['opshipping_plugin_id'] && true === $shippingApiObj->canFetchTrackingDetail()) {
@@ -779,7 +782,7 @@ $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $ord
 
 <script>
     var canShipByPlugin = <?php echo (!empty($shippingApiObj) ? 1 : 0); ?>;
-    var orderShippedStatus = <?php echo OrderStatus::ORDER_SHIPPED; ?>;
+    var orderShippedStatus = <?php echo $shippedOrderStatus; ?>;
     trackOrder = function(trackingNumber, courier, orderNumber) {
         $.mbsmessage(langLbl.processing, false, 'alert--process');
         fcom.ajax(fcom.makeUrl('SellerOrders', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function(res) {

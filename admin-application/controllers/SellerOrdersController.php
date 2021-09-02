@@ -223,7 +223,7 @@ class SellerOrdersController extends AdminBaseController
                 FatApp::getConfig("CONF_DEFAULT_INPROCESS_ORDER_STATUS", FatUtility::VAR_INT, 0),
                 FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0),
                 FatApp::getConfig("CONF_COD_ORDER_STATUS", FatUtility::VAR_INT, 0),
-                OrderStatus::ORDER_APPROVED,
+                FatApp::getConfig("CONF_DEFAULT_APPROVED_ORDER_STATUS"),
             ];
 
             $shipmentTracking = new ShipmentTracking();
@@ -664,7 +664,7 @@ class SellerOrdersController extends AdminBaseController
         if (in_array($orderDetail["op_status_id"], $processingStatuses) && in_array($post["op_status_id"], $processingStatuses)) {
             $trackingCourierCode = '';
             $opship_tracking_url = FatApp::getPostedData('opship_tracking_url', FatUtility::VAR_STRING, '');
-            if ($post["op_status_id"] == OrderStatus::ORDER_SHIPPED && !empty($shippingApiObj) && in_array($shippingApiObj->keyName, ['AfterShipShipment'])) {
+            if ($post["op_status_id"] == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && !empty($shippingApiObj) && in_array($shippingApiObj->keyName, ['AfterShipShipment'])) {
                 $activatedTrackPluginId = (new Plugin())->getDefaultPluginData(Plugin::TYPE_SHIPMENT_TRACKING, 'plugin_id') ?? 0;
                 if (0 < $manualShipping) {
                     $updateData = [
@@ -706,13 +706,13 @@ class SellerOrdersController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && (OrderStatus::ORDER_DELIVERED == $post["op_status_id"] || OrderStatus::ORDER_COMPLETED == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
+        if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && (FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") == $post["op_status_id"] || FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS") == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
             $orderProducts = new OrderProductSearch($this->adminLangId, true, true);
             $orderProducts->joinPaymentMethod();
             $orderProducts->addMultipleFields(['op_status_id']);
             $orderProducts->addCondition('op_order_id', '=', $orderDetail['order_id']);
-            $orderProducts->addCondition('op_status_id', '!=', OrderStatus::ORDER_DELIVERED);
-            $orderProducts->addCondition('op_status_id', '!=', OrderStatus::ORDER_COMPLETED);
+            $orderProducts->addCondition('op_status_id', '!=', FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"));
+            $orderProducts->addCondition('op_status_id', '!=', FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS"));
             $rs = $orderProducts->getResultSet();
             if ($rs) {
                 $childOrders = FatApp::getDb()->fetchAll($rs);
@@ -871,7 +871,7 @@ class SellerOrdersController extends AdminBaseController
         }
 
         /* Update To Shipping Service */
-        if (OrderStatus::ORDER_SHIPPED == $orderDetail["op_status_id"]) {
+        if (FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") == $orderDetail["op_status_id"]) {
             $this->langId = $this->adminLangId;
             $this->refundShipment($op_id);
         }
@@ -935,7 +935,7 @@ class SellerOrdersController extends AdminBaseController
         $fld->requirements()->setRequired();
 
         $frm->addSelectBox(Labels::getLabel('LBL_Notify_Customer', $this->adminLangId), 'customer_notified', applicationConstants::getYesNoArr($this->adminLangId), '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
-        if (array_key_exists('opship_tracking_number', $orderData) && (empty($orderData['opship_tracking_number']) || $orderData['opshipping_plugin_code'] == 'ShipStationShipping') && $orderData['orderstatus_id'] !=  OrderStatus::ORDER_SHIPPED) {
+        if (array_key_exists('opship_tracking_number', $orderData) && (empty($orderData['opship_tracking_number']) || $orderData['opshipping_plugin_code'] == 'ShipStationShipping') && $orderData['orderstatus_id'] !=  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {
             $manualFld = $frm->addCheckBox(Labels::getLabel('LBL_SELF_SHIPPING', $this->adminLangId), 'manual_shipping', 1, array(), false, 0);
             $manualShipUnReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->adminLangId));
             $manualShipUnReqObj->setRequired(false);

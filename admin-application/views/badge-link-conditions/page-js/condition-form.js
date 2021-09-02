@@ -2,7 +2,7 @@ var formClass = '.addUpdateForm--js ';
 
 $(document).on('change', formClass + 'select[name="blinkcond_condition_type"]', function () {
     if ("" == $(this).val() && REC_COND_AUTO == $(formClass + ".recCond--js").val()) {
-        $(this).val(COND_TYPE_AVG_RATING_SELPROD).trigger('change');
+        $(this).val(COND_TYPE_AVG_RATING_SHOP).trigger('change');
         return;
     }
 

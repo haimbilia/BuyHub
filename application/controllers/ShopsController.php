@@ -146,8 +146,11 @@ class ShopsController extends MyAppController
             $allShops[$val['shop_id']]['shopRating'] = SelProdRating::getSellerRating($val['shop_user_id']);
             $allShops[$val['shop_id']]['shopTotalReviews'] = SelProdReview::getSellerTotalReviews($val['shop_user_id']);
             $allShops[$val['shop_id']]['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', [$val['shop_id'], $this->siteLangId, 'SMALL']);
+
+            $selProdIdsArr = array_column($allShops[$val['shop_id']]['products'], 'selprod_id');
+            $allShops[$val['shop_id']]['tLeftRibbons'] = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+            $allShops[$val['shop_id']]['tRightRibbons'] = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
         }
-        /* CommonHelper::printArray($allShops[4]['products']); */
         $this->set('allShops', $allShops);
         $this->set('totalProdCountToDisplay', $totalProdCountToDisplay);
         $this->set('pageCount', $srch->pages());
