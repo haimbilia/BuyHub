@@ -16,10 +16,11 @@ if (isset($order)) {
     $productName = $order['op_product_name'];
     $productTitle = $order['op_selprod_title'];
     $brandName = $order['op_brand_name'];
-    $options = isset($order['op_qty']) ? sprintf(Labels::getLabel('LBL_QTY:_%S', $siteLangId), $order['op_qty']) . " | " : '';
+    
+    $options = isset($order['op_qty']) ? sprintf(Labels::getLabel('LBL_QTY:_%S', $siteLangId), $order['op_qty']) : '';
 
     if ($order['op_selprod_options'] != '') {
-        $options .= $order['op_selprod_options'];
+        $options .= ' | ' . $order['op_selprod_options'];
     }
     $shopName = $order['op_shop_name'] ?? '';
     if (isset($order['totOrders']) && $order['totOrders'] > 1) {

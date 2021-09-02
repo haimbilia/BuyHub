@@ -22,7 +22,7 @@
     $sr_no = 0;
     $orderObj = new Orders();
     $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses();
-    $processingStatuses = array_diff($processingStatuses, [OrderStatus::ORDER_DELIVERED]);
+    $processingStatuses = array_diff($processingStatuses, [FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")]);
 
     foreach ($orders as $sn => $order) {
         $sr_no++;
@@ -60,7 +60,7 @@
                         $labelClass = 'label-danger';
                     } else {
                         $txt = $order['orderstatus_name'];
-                        if (OrderStatus::ORDER_CANCELLED != $order['orderstatus_id'] && in_array(strtolower($order['plugin_code']), ['cashondelivery', 'payatstore'])) {
+                        if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") != $order['orderstatus_id'] && in_array(strtolower($order['plugin_code']), ['cashondelivery', 'payatstore'])) {
                             $txt .= ' (' . $order['plugin_name']  . ')';
                         }
                         $labelClass = isset($classArr[$order['orderstatus_color_class']]) ? $classArr[$order['orderstatus_color_class']] : 'label-info';
