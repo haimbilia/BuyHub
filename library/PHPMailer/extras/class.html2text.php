@@ -170,245 +170,251 @@ class Html2Text
      */
     protected $callback_search = array(
         '/<(a) [^>]*href=("|\')([^"\']+)\2([^>]*)>(.*?)<\/a>/i', // <a href="">
-        '/<(h)[123456]( [^>]*)?>(.*?)<\/h[123456]>/i',           // h1 - h6
-        '/<(b)( [^>]*)?>(.*?)<\/b>/i',                           // <b>
-        '/<(strong)( [^>]*)?>(.*?)<\/strong>/i',                 // <strong>
-        '/<(th)( [^>]*)?>(.*?)<\/th>/i',                         // <th> and </th>
-    );
+        '/<(h)[123456]( [^>]*)?>(.*?)<\ /h[123456]>/i', // h1 - h6
+    '/<(b)( [^>]*)?>(.*?)<\ /b>/i', // <b>
+                '/<(strong)( [^>]*)?>(.*?)<\ /strong>/i', // <strong>
+                            '/<(th)( [^>]*)?>(.*?)<\ /th>/i', // <th> and </th>
+                                    );
 
-    /**
-     * List of preg* regular expression patterns to search for in PRE body,
-     * used in conjunction with $pre_replace.
-     *
-     * @type array
-     * @see $pre_replace
-     */
-    protected $pre_search = array(
-        "/\n/",
-        "/\t/",
-        '/ /',
-        '/<pre[^>]*>/',
-        '/<\/pre>/'
-    );
+                                    /**
+                                    * List of preg* regular expression patterns to search for in PRE body,
+                                    * used in conjunction with $pre_replace.
+                                    *
+                                    * @type array
+                                    * @see $pre_replace
+                                    */
+                                    protected $pre_search = array(
+                                    "/\n/",
+                                    "/\t/",
+                                    '/ /',
+                                    '/<pre[^>]*>/',
+                                        '/<\ /pre>/'
+                                            );
 
-    /**
-     * List of pattern replacements corresponding to patterns searched for PRE body.
-     *
-     * @type array
-     * @see $pre_search
-     */
-    protected $pre_replace = array(
-        '<br>',
-        '&nbsp;&nbsp;&nbsp;&nbsp;',
-        '&nbsp;',
-        '',
-        ''
-    );
+                                            /**
+                                            * List of pattern replacements corresponding to patterns searched for PRE
+                                            body.
+                                            *
+                                            * @type array
+                                            * @see $pre_search
+                                            */
+                                            protected $pre_replace = array(
+                                            '<br>',
+                                            '&nbsp;&nbsp;&nbsp;&nbsp;',
+                                            '&nbsp;',
+                                            '',
+                                            ''
+                                            );
 
-    /**
-     * Temporary workspace used during PRE processing.
-     *
-     * @type string
-     */
-    protected $pre_content = '';
+                                            /**
+                                            * Temporary workspace used during PRE processing.
+                                            *
+                                            * @type string
+                                            */
+                                            protected $pre_content = '';
 
-    /**
-     * Contains a list of HTML tags to allow in the resulting text.
-     *
-     * @type string
-     * @see set_allowed_tags()
-     */
-    protected $allowed_tags = '';
+                                            /**
+                                            * Contains a list of HTML tags to allow in the resulting text.
+                                            *
+                                            * @type string
+                                            * @see set_allowed_tags()
+                                            */
+                                            protected $allowed_tags = '';
 
-    /**
-     * Contains the base URL that relative links should resolve to.
-     *
-     * @type string
-     */
-    protected $url;
+                                            /**
+                                            * Contains the base URL that relative links should resolve to.
+                                            *
+                                            * @type string
+                                            */
+                                            protected $url;
 
-    /**
-     * Indicates whether content in the $html variable has been converted yet.
-     *
-     * @type boolean
-     * @see $html, $text
-     */
-    protected $_converted = false;
+                                            /**
+                                            * Indicates whether content in the $html variable has been converted yet.
+                                            *
+                                            * @type boolean
+                                            * @see $html, $text
+                                            */
+                                            protected $_converted = false;
 
-    /**
-     * Contains URL addresses from links to be rendered in plain text.
-     *
-     * @type array
-     * @see _build_link_list()
-     */
-    protected $_link_list = array();
+                                            /**
+                                            * Contains URL addresses from links to be rendered in plain text.
+                                            *
+                                            * @type array
+                                            * @see _build_link_list()
+                                            */
+                                            protected $_link_list = array();
 
-    /**
-     * Various configuration options (able to be set in the constructor)
-     *
-     * @type array
-     */
-    protected $_options = array(
-        // 'none'
-        // 'inline' (show links inline)
-        // 'nextline' (show links on the next line)
-        // 'table' (if a table of link URLs should be listed after the text.
-        'do_links' => 'inline',
-        //  Maximum width of the formatted text, in columns.
-        //  Set this value to 0 (or less) to ignore word wrapping
-        //  and not constrain text to a fixed-width column.
-        'width' => 70,
-    );
+                                            /**
+                                            * Various configuration options (able to be set in the constructor)
+                                            *
+                                            * @type array
+                                            */
+                                            protected $_options = array(
+                                            // 'none'
+                                            // 'inline' (show links inline)
+                                            // 'nextline' (show links on the next line)
+                                            // 'table' (if a table of link URLs should be listed after the text.
+                                            'do_links' => 'inline',
+                                            // Maximum width of the formatted text, in columns.
+                                            // Set this value to 0 (or less) to ignore word wrapping
+                                            // and not constrain text to a fixed-width column.
+                                            'width' => 70,
+                                            );
 
-    /**
-     * Constructor.
-     *
-     * If the HTML source string (or file) is supplied, the class
-     * will instantiate with that source propagated, all that has
-     * to be done it to call get_text().
-     *
-     * @param string $source HTML content
-     * @param boolean $from_file Indicates $source is a file to pull content from
-     * @param array $options Set configuration options
-     */
-    public function __construct($source = '', $from_file = false, $options = array())
-    {
-        $this->_options = array_merge($this->_options, $options);
+                                            /**
+                                            * Constructor.
+                                            *
+                                            * If the HTML source string (or file) is supplied, the class
+                                            * will instantiate with that source propagated, all that has
+                                            * to be done it to call get_text().
+                                            *
+                                            * @param string $source HTML content
+                                            * @param boolean $from_file Indicates $source is a file to pull content from
+                                            * @param array $options Set configuration options
+                                            */
+                                            public function __construct($source = '', $from_file = false, $options =
+                                            array())
+                                            {
+                                            $this->_options = array_merge($this->_options, $options);
 
-        if (!empty($source)) {
-            $this->set_html($source, $from_file);
-        }
+                                            if (!empty($source)) {
+                                            $this->set_html($source, $from_file);
+                                            }
 
-        $this->set_base_url();
-    }
+                                            $this->set_base_url();
+                                            }
 
-    /**
-     * Loads source HTML into memory, either from $source string or a file.
-     *
-     * @param string $source HTML content
-     * @param boolean $from_file Indicates $source is a file to pull content from
-     */
-    public function set_html($source, $from_file = false)
-    {
-        if ($from_file && file_exists($source)) {
-            $this->html = file_get_contents($source);
-        } else {
-            $this->html = $source;
-        }
+                                            /**
+                                            * Loads source HTML into memory, either from $source string or a file.
+                                            *
+                                            * @param string $source HTML content
+                                            * @param boolean $from_file Indicates $source is a file to pull content from
+                                            */
+                                            public function set_html($source, $from_file = false)
+                                            {
+                                            if ($from_file && file_exists($source)) {
+                                            $this->html = file_get_contents($source);
+                                            } else {
+                                            $this->html = $source;
+                                            }
 
-        $this->_converted = false;
-    }
+                                            $this->_converted = false;
+                                            }
 
-    /**
-     * Returns the text, converted from HTML.
-     *
-     * @return string
-     */
-    public function get_text()
-    {
-        if (!$this->_converted) {
-            $this->_convert();
-        }
+                                            /**
+                                            * Returns the text, converted from HTML.
+                                            *
+                                            * @return string
+                                            */
+                                            public function get_text()
+                                            {
+                                            if (!$this->_converted) {
+                                            $this->_convert();
+                                            }
 
-        return $this->text;
-    }
+                                            return $this->text;
+                                            }
 
-    /**
-     * Prints the text, converted from HTML.
-     */
-    public function print_text()
-    {
-        print $this->get_text();
-    }
+                                            /**
+                                            * Prints the text, converted from HTML.
+                                            */
+                                            public function print_text()
+                                            {
+                                            print $this->get_text();
+                                            }
 
-    /**
-     * Alias to print_text(), operates identically.
-     *
-     * @see print_text()
-     */
-    public function p()
-    {
-        print $this->get_text();
-    }
+                                            /**
+                                            * Alias to print_text(), operates identically.
+                                            *
+                                            * @see print_text()
+                                            */
+                                            public function p()
+                                            {
+                                            print $this->get_text();
+                                            }
 
-    /**
-     * Sets the allowed HTML tags to pass through to the resulting text.
-     *
-     * Tags should be in the form "<p>", with no corresponding closing tag.
-     * @param string $allowed_tags
-     */
-    public function set_allowed_tags($allowed_tags = '')
-    {
-        if (!empty($allowed_tags)) {
-            $this->allowed_tags = $allowed_tags;
-        }
-    }
+                                            /**
+                                            * Sets the allowed HTML tags to pass through to the resulting text.
+                                            *
+                                            * Tags should be in the form "<p>", with no corresponding closing tag.
+                                                * @param string $allowed_tags
+                                                */
+                                                public function set_allowed_tags($allowed_tags = '')
+                                                {
+                                                if (!empty($allowed_tags)) {
+                                                $this->allowed_tags = $allowed_tags;
+                                                }
+                                                }
 
-    /**
-     * Sets a base URL to handle relative links.
-     *
-     * @param string $url
-     */
-    public function set_base_url($url = '')
-    {
-        if (empty($url)) {
-            if (!empty($_SERVER['HTTP_HOST'])) {
-                $this->url = 'http://' . $_SERVER['HTTP_HOST'];
-            } else {
-                $this->url = '';
-            }
-        } else {
-            // Strip any trailing slashes for consistency (relative
-            // URLs may already start with a slash like "/file.html")
-            if (substr($url, -1) == '/') {
-                $url = substr($url, 0, -1);
-            }
-            $this->url = $url;
-        }
-    }
+                                                /**
+                                                * Sets a base URL to handle relative links.
+                                                *
+                                                * @param string $url
+                                                */
+                                                public function set_base_url($url = '')
+                                                {
+                                                if (empty($url)) {
+                                                if (!empty($_SERVER['HTTP_HOST'])) {
+                                                $this->url = 'http://' . $_SERVER['HTTP_HOST'];
+                                                } else {
+                                                $this->url = '';
+                                                }
+                                                } else {
+                                                // Strip any trailing slashes for consistency (relative
+                                                // URLs may already start with a slash like "/file.html")
+                                                if (substr($url, -1) == '/') {
+                                                $url = substr($url, 0, -1);
+                                                }
+                                                $this->url = $url;
+                                                }
+                                                }
 
-    /**
-     * Workhorse function that does actual conversion (calls _converter() method).
-     */
-    protected function _convert()
-    {
-        // Variables used for building the link list
-        $this->_link_list = array();
+                                                /**
+                                                * Workhorse function that does actual conversion (calls _converter()
+                                                method).
+                                                */
+                                                protected function _convert()
+                                                {
+                                                // Variables used for building the link list
+                                                $this->_link_list = array();
 
-        $text = trim(stripslashes($this->html));
+                                                $text = trim(stripslashes($this->html));
 
-        // Convert HTML to TXT
-        $this->_converter($text);
+                                                // Convert HTML to TXT
+                                                $this->_converter($text);
 
-        // Add link list
-        if (!empty($this->_link_list)) {
-            $text .= "\n\nLinks:\n------\n";
-            foreach ($this->_link_list as $idx => $url) {
-                $text .= '[' . ($idx + 1) . '] ' . $url . "\n";
-            }
-        }
+                                                // Add link list
+                                                if (!empty($this->_link_list)) {
+                                                $text .= "\n\nLinks:\n------\n";
+                                                foreach ($this->_link_list as $idx => $url) {
+                                                $text .= '[' . ($idx + 1) . '] ' . $url . "\n";
+                                                }
+                                                }
 
-        $this->text = $text;
+                                                $this->text = $text;
 
-        $this->_converted = true;
-    }
+                                                $this->_converted = true;
+                                                }
 
-    /**
-     * Workhorse function that does actual conversion.
-     *
-     * First performs custom tag replacement specified by $search and
-     * $replace arrays. Then strips any remaining HTML tags, reduces whitespace
-     * and newlines to a readable format, and word wraps the text to
-     * $this->_options['width'] characters.
-     *
-     * @param string $text Reference to HTML content string
-     */
-    protected function _converter(&$text)
-    {
-        // Convert <BLOCKQUOTE> (before PRE!)
-        $this->_convert_blockquotes($text);
+                                                /**
+                                                * Workhorse function that does actual conversion.
+                                                *
+                                                * First performs custom tag replacement specified by $search and
+                                                * $replace arrays. Then strips any remaining HTML tags, reduces
+                                                whitespace
+                                                * and newlines to a readable format, and word wraps the text to
+                                                * $this->_options['width'] characters.
+                                                *
+                                                * @param string $text Reference to HTML content string
+                                                */
+                                                protected function _converter(&$text)
+                                                {
+                                                // Convert
+                                            <BLOCKQUOTE> (before PRE!)
+                                                $this->_convert_blockquotes($text);
 
-        // Convert <PRE>
+                                                // Convert
+                                                <PRE>
         $this->_convert_pre($text);
 
         // Run our defined tags search-and-replace
@@ -570,108 +576,111 @@ class Html2Text
                         // Add citation markers and create PRE block
                         $body = preg_replace('/((^|\n)>*)/', '\\1> ', trim($body));
                         $body = '<pre>' . htmlspecialchars($body) . '</pre>';
-                        // Re-set text width
-                        $this->_options['width'] = $p_width;
-                        // Replace content
-                        $text = substr($text, 0, $start - $diff)
-                            . $body . substr($text, $end + strlen($m[0]) - $diff);
+                                                // Re-set text width
+                                                $this->_options['width'] = $p_width;
+                                                // Replace content
+                                                $text = substr($text, 0, $start - $diff)
+                                                . $body . substr($text, $end + strlen($m[0]) - $diff);
 
-                        $diff = $len + $taglen + strlen($m[0]) - strlen($body);
-                        unset($body);
-                    }
-                } else {
-                    if ($level == 0) {
-                        $start = $m[1];
-                        $taglen = strlen($m[0]);
-                    }
-                    $level++;
-                }
-            }
-        }
-    }
+                                                $diff = $len + $taglen + strlen($m[0]) - strlen($body);
+                                                unset($body);
+                                                }
+                                                } else {
+                                                if ($level == 0) {
+                                                $start = $m[1];
+                                                $taglen = strlen($m[0]);
+                                                }
+                                                $level++;
+                                                }
+                                                }
+                                                }
+                                                }
 
-    /**
-     * Callback function for preg_replace_callback use.
-     *
-     * @param array $matches PREG matches
-     * @return string
-     */
-    protected function _preg_callback($matches)
-    {
-        switch (strtolower($matches[1])) {
-            case 'b':
-            case 'strong':
-                return $this->_toupper($matches[3]);
-            case 'th':
-                return $this->_toupper("\t\t" . $matches[3] . "\n");
-            case 'h':
-                return $this->_toupper("\n\n" . $matches[3] . "\n\n");
-            case 'a':
-                // override the link method
-                $link_override = null;
-                if (preg_match('/_html2text_link_(\w+)/', $matches[4], $link_override_match)) {
-                    $link_override = $link_override_match[1];
-                }
-                // Remove spaces in URL (#1487805)
-                $url = str_replace(' ', '', $matches[3]);
+                                                /**
+                                                * Callback function for preg_replace_callback use.
+                                                *
+                                                * @param array $matches PREG matches
+                                                * @return string
+                                                */
+                                                protected function _preg_callback($matches)
+                                                {
+                                                switch (strtolower($matches[1])) {
+                                                case 'b':
+                                                case 'strong':
+                                                return $this->_toupper($matches[3]);
+                                                case 'th':
+                                                return $this->_toupper("\t\t" . $matches[3] . "\n");
+                                                case 'h':
+                                                return $this->_toupper("\n\n" . $matches[3] . "\n\n");
+                                                case 'a':
+                                                // override the link method
+                                                $link_override = null;
+                                                if (preg_match('/_html2text_link_(\w+)/', $matches[4],
+                                                $link_override_match)) {
+                                                $link_override = $link_override_match[1];
+                                                }
+                                                // Remove spaces in URL (#1487805)
+                                                $url = str_replace(' ', '', $matches[3]);
 
-                return $this->_build_link_list($url, $matches[5], $link_override);
-        }
-        return '';
-    }
+                                                return $this->_build_link_list($url, $matches[5], $link_override);
+                                                }
+                                                return '';
+                                                }
 
-    /**
-     * Callback function for preg_replace_callback use in PRE content handler.
-     *
-     * @param array $matches PREG matches
-     * @return string
-     */
-    protected function _preg_pre_callback(
-        /** @noinspection PhpUnusedParameterInspection */
-        $matches)
-    {
-        return $this->pre_content;
-    }
+                                                /**
+                                                * Callback function for preg_replace_callback use in PRE content
+                                                handler.
+                                                *
+                                                * @param array $matches PREG matches
+                                                * @return string
+                                                */
+                                                protected function _preg_pre_callback(
+                                                /** @noinspection PhpUnusedParameterInspection */
+                                                $matches)
+                                                {
+                                                return $this->pre_content;
+                                                }
 
-    /**
-     * Strtoupper function with HTML tags and entities handling.
-     *
-     * @param string $str Text to convert
-     * @return string Converted text
-     */
-    private function _toupper($str)
-    {
-        // string can contain HTML tags
-        $chunks = preg_split('/(<[^>]*>)/', $str, null, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+                                                /**
+                                                * Strtoupper function with HTML tags and entities handling.
+                                                *
+                                                * @param string $str Text to convert
+                                                * @return string Converted text
+                                                */
+                                                private function _toupper($str)
+                                                {
+                                                // string can contain HTML tags
+                                                $chunks = preg_split('/(<[^>]*>)/', $str, null, PREG_SPLIT_NO_EMPTY |
+                                                    PREG_SPLIT_DELIM_CAPTURE);
 
-        // convert toupper only the text between HTML tags
-        foreach ($chunks as $idx => $chunk) {
-            if ($chunk[0] != '<') {
-                $chunks[$idx] = $this->_strtoupper($chunk);
-            }
-        }
+                                                    // convert toupper only the text between HTML tags
+                                                    foreach ($chunks as $idx => $chunk) {
+                                                    if ($chunk[0] != '<') { $chunks[$idx]=$this->_strtoupper($chunk);
+                                                        }
+                                                        }
 
-        return implode($chunks);
-    }
+                                                        return implode($chunks);
+                                                        }
 
-    /**
-     * Strtoupper multibyte wrapper function with HTML entities handling.
-     * Forces mb_strtoupper-call to UTF-8.
-     *
-     * @param string $str Text to convert
-     * @return string Converted text
-     */
-    private function _strtoupper($str)
-    {
-        $str = html_entity_decode($str, ENT_COMPAT);
+                                                        /**
+                                                        * Strtoupper multibyte wrapper function with HTML entities
+                                                        handling.
+                                                        * Forces mb_strtoupper-call to UTF-8.
+                                                        *
+                                                        * @param string $str Text to convert
+                                                        * @return string Converted text
+                                                        */
+                                                        private function _strtoupper($str)
+                                                        {
+                                                        $str = html_entity_decode($str, ENT_COMPAT);
 
-        if (function_exists('mb_strtoupper'))
-            $str = mb_strtoupper($str, 'UTF-8');
-        else
-            $str = strtoupper($str);
+                                                        if (function_exists('mb_strtoupper'))
+                                                        $str = mb_strtoupper($str, 'UTF-8');
+                                                        else
+                                                        $str = strtoupper($str);
 
-        $str = htmlspecialchars($str, ENT_COMPAT);
+                                                        $str = htmlspecialchars($str, ENT_COMPAT);
 
-        return $str;
-    }
-}
+                                                        return $str;
+                                                        }
+                                                        }
