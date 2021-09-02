@@ -640,24 +640,30 @@ $(document).on("change", ".state", function() {
 
     uploadShopImages = function(formData) {
         var frmName = formData.get("frmName");
+        var imageDivId='banner-image-listing';
         if ('frmShopLogo' == frmName) {
             var langId = document.frmShopLogo.lang_id.value;
             var fileType = document.frmShopLogo.file_type.value;
             var imageType = 'logo';
             var ratio_type = $('input[name="ratio_type"]:checked').val();
+            imageDivId = '#logo-image-listing';
         } else {
             var langId = document.frmShopBanner.lang_id.value;
             var slideScreen = document.frmShopBanner.slide_screen.value;
             var fileType = document.frmShopBanner.file_type.value;
             var imageType = 'banner';
             var ratio_type = 0;
-        }
-
+            imageDivId = '#banner-image-listing';
+        }   
+        
+        let blobUrl = URL.createObjectURL(formData.get('cropped_image'));
+         
         formData.append('slide_screen', slideScreen);
         formData.append('lang_id', langId);
         formData.append('file_type', fileType);
         formData.append('ratio_type', ratio_type);
-        formData.append('fIsAjax', 1);
+        formData.append('fIsAjax', 1); 
+        
         $.ajax({
             url: fcom.makeUrl('Seller', 'uploadShopImages'),
             type: 'post',
@@ -666,12 +672,16 @@ $(document).on("change", ".state", function() {
             cache: false,
             contentType: false,
             processData: false,
-            beforeSend: function() {
-                $('#loader-js').html(fcom.getLoader());
+            uploadProgress:  function(e) {          
+                if (e.lengthComputable) {
+                    let percentComplete = (e.loaded * 100) / e.total;
+                    $("#" + blobUrl.substring(blobUrl.lastIndexOf('/') + 1) + " .progress-bar").width(percentComplete + "%");
+                } 
             },
-            complete: function() {
-                $('#loader-js').html(fcom.getLoader());
-            },
+            beforeSend: function () {
+                $(document).trigger('close.facebox');
+                $(imageDivId).html(getImageTemplate(formData.get('cropped_image').name, blobUrl));
+            },            
             success: function(ans) {
                 $.mbsmessage.close();
                 $('.text-danger').remove();
@@ -686,8 +696,7 @@ $(document).on("change", ".state", function() {
                     $.mbsmessage(ans.msg, true, 'alert--danger');
                     $('#input-field' + fileType).removeClass('text-success');
                     $('#input-field' + fileType).addClass('text-danger');
-                }
-                $(document).trigger('close.facebox');
+                }              
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);

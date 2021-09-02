@@ -36,7 +36,12 @@
           <small class="form-text text-muted preferredDimensions-js"><?php echo sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500'); ?></small>
            <div class="gap"></div>
             <?php echo $shopBannerFrm->getFormHtml();?>
-            <div id="banner-image-listing" class="row"></div>
+           <div class="row">
+               <div class="col-md-12">
+                    <ul class="uploaded-media" id="banner-image-listing">                       
+                    </ul>
+                </div>   
+           </div>
         </div>
     </div>
     <div class="col-md-6">
@@ -45,7 +50,12 @@
             <small class="form-text text-muted logoPreferredDimensions-js"><?php echo sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '150 x 150'); ?></small>
             <div class="gap"></div>
             <?php echo $shopLogoFrm->getFormHtml();?>
-               <div id="logo-image-listing" class="row" ></div>
+            <div  class="row">
+               <div class="col-md-12">
+                    <ul class="uploaded-media" id="logo-image-listing">                       
+                    </ul>
+                </div>   
+            </div>           
         </div>
     </div>
 </div>
