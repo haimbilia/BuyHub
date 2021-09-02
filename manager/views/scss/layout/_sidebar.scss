@@ -1,0 +1,134 @@
+.sidebar {
+    //overflow-y: auto;
+    background-color: $brand-color;
+    color: $brand-color-inverse;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 98;
+    width: 100px;
+    transition: width .3s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 80px 50px rgba(206, 213, 225, 0.12);
+    &-logo {
+        max-width: 50px;
+        margin: 2rem auto;
+    }
+    &-menu {
+        flex: 1;
+        .menu {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            &-item {
+                text-align: center;
+            }
+            &-link {
+                background: transparent;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 6px;
+                margin: 1rem auto;
+                padding: 10px;
+                &:hover,
+                &:focus {
+                    outline: none;
+                    border: none;
+                    background-color: rgba(255, 255, 255, 0.185);
+                }
+            }
+            &-icon {
+                display: flex;
+                align-items: center;
+                width: 20px;
+                height: 20px;
+                color: $brand-color-inverse;
+            }
+        }
+    }
+    &-dropdown-menu {
+        #{$start-direction}: 100% !important;
+        top: 0 !important;
+        h6 {
+            padding: 0 1rem;
+        }
+        .nav {
+            padding: 0 1rem;
+            display: flex;
+            flex-direction: column;
+            &_item {
+                font-size: 0.8rem;
+                padding: 0.5rem 0;
+                color: $txt-gray;
+                position: relative;
+                &::before {
+                    content: "";
+                    width: 7px;
+                    height: 7px;
+                    background: currentColor;
+                    display: block;
+                    border-radius: 50%;
+                    position: absolute;
+                    #{$start-direction}: 0;
+                    top: 15px;
+                }
+            }
+            &_link {
+                color: currentColor;
+                padding: 0 1rem;
+            }
+            &:not(.collapsed) {
+                .nav_arrow {
+                    &:before {
+                        transform: translate(2px, 0) rotate( 45deg);
+                    }
+                    &:after {
+                        transform: translate(-2px, 0) rotate( -45deg);
+                    }
+                }
+            }
+            &_arrow {
+                position: absolute;
+                transform: translate(-6px, 0);
+                top: 15px;
+                #{$end-direction}: 0;
+                &:after,
+                &:before {
+                    content: "";
+                    position: absolute;
+                    background-color: currentColor;
+                    width: 1px;
+                    height: 6px;
+                    transition: all 0.25s ease-in-out;
+                }
+                &:before {
+                    transform: translate(-2px, 0) rotate(45deg);
+                }
+                &:after {
+                    transform: translate(2px, 0) rotate(-45deg);
+                }
+            }
+        }
+    }
+    &-foot {
+        text-align: center;
+        >ul {
+            li {
+                a {
+                    padding: 10px;
+                    color: $brand-color-inverse;
+                    display: inline-block;
+                }
+            }
+        }
+        .svg {
+            width: 20px;
+            height: 20px;
+            margin: 0 auto;
+        }
+    }
+}

@@ -1,0 +1,21 @@
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    &-item {
+        display: flex;
+        align-items: center;
+        padding-left: 0;
+        padding-right: 0.5rem;
+        font-size: .85rem;
+        font-weight: 600;
+        a {
+            color: #a1a5b7;
+        }
+        &:last-child {
+            color: #181c32;
+        }
+    }
+}
