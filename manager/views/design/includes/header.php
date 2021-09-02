@@ -1,9 +1,3 @@
-<?php   
-define('BASE_URL', 'http://localhost/yokart/'); 
-define('CSS_PATH', '/yokart/public/manager.php?url=js-css/css&f=css%2F');   
-define('JS_PATH', '/yokart/public/manager.php?url=js-css/js-common&f='); 
-?>
-
 <div id="particles-js"></div>
 <!-- begin:: Header -->
 <div id="header" class="header header--fixed" data-FATbitheader-minimize="on">

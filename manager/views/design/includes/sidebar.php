@@ -1,8 +1,3 @@
-<?php   
-define('BASE_URL', 'http://localhost/yokart/'); 
-define('CSS_PATH', '/yokart/public/manager.php?url=js-css/css&f=css%2F');   
-define('JS_PATH', '/yokart/public/manager.php?url=js-css/js-common&f='); 
-?>
 <sidebar class="sidebar">
     <div class="sidebar-logo">
         <a href="#">

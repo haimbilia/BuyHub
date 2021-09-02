@@ -14,7 +14,7 @@
 
    
     
-    <link href="/yokart/public/manager.php?url=js-css/css&f=css%2Fmain-ltr.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
     
     <link rel="shortcut icon" href="images/favicon.ico" />
 
