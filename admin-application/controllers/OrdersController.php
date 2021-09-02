@@ -178,7 +178,6 @@ class OrdersController extends AdminBaseController
 
         $opRs = $opSrch->getResultSet();
         $order['products'] = FatApp::getDb()->fetchAll($opRs, 'op_id');
-        // CommonHelper::printArray($order['products'], true);
         $orderObj = new Orders($order['order_id']);
 
         $charges = $orderObj->getOrderProductChargesByOrderId($order['order_id']);

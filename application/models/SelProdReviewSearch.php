@@ -30,7 +30,7 @@ class SelProdReviewSearch extends SearchBase
         if ($this->langId) {
             $langId = $this->langId;
         }
-        $this->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'us.user_id = shop.shop_user_id', 'shop');
+        $this->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'spr.spreview_seller_user_id = shop.shop_user_id', 'shop');
 
         if ($isActive) {
             $this->addCondition('shop.shop_active', '=', applicationConstants::ACTIVE);

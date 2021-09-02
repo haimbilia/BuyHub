@@ -12,8 +12,8 @@ class BadgeLinkCondition extends MyAppModel
     public const RECORD_TYPE_PRODUCT = 2;
     public const RECORD_TYPE_SHOP = 3;
 
-    public const COND_TYPE_DATE = 1;
-    public const COND_TYPE_AVG_RATING_SELPROD = 2;
+    // public const COND_TYPE_DATE = 1; /* Not In use. */
+    public const COND_TYPE_AVG_RATING_SELPROD = 2; /* Not Require For Not 01-09-2021 */
     public const COND_TYPE_AVG_RATING_SHOP = 3;
     public const COND_TYPE_ORDER_COMPLETION_RATE = 4;
     public const COND_TYPE_COMPLETED_ORDERS = 5;
@@ -39,7 +39,7 @@ class BadgeLinkCondition extends MyAppModel
     /* Require Range Element(From, To) for the these condition types. */
     public const RANGE_COND_TYPE_ELEMENT = [
         self::COND_TYPE_COMPLETED_ORDERS,
-        self::COND_TYPE_AVG_RATING_SELPROD,
+        // self::COND_TYPE_AVG_RATING_SELPROD,
         self::COND_TYPE_AVG_RATING_SHOP,
         self::COND_TYPE_ORDER_COMPLETION_RATE
     ];
@@ -98,7 +98,7 @@ class BadgeLinkCondition extends MyAppModel
         $arr = FatCache::get('getBadgeLinkConditionTypesArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$arr) {
             $arr = [
-                self::COND_TYPE_AVG_RATING_SELPROD => Labels::getLabel('LBL_AVERAGE_RATING_SELLER_PRODUCT_(%)', $langId),
+                // self::COND_TYPE_AVG_RATING_SELPROD => Labels::getLabel('LBL_AVERAGE_RATING_SELLER_PRODUCT_(%)', $langId),
                 self::COND_TYPE_AVG_RATING_SHOP => Labels::getLabel('LBL_AVERAGE_RATING_SHOP_(%)', $langId),
                 self::COND_TYPE_ORDER_COMPLETION_RATE => Labels::getLabel('LBL_ORDER_COMPLETION_RATE_(%)', $langId),
                 self::COND_TYPE_COMPLETED_ORDERS => Labels::getLabel('LBL_COMPLETED_ORDERS', $langId),
@@ -215,7 +215,7 @@ class BadgeLinkCondition extends MyAppModel
     }
     
     /**
-     * isUnique : Used for Badge
+     * isUnique : Used for Manual Badge Conditions
      *
      * @param  int $badgeId
      * @param  int $userId
@@ -245,6 +245,30 @@ class BadgeLinkCondition extends MyAppModel
                 ELSE TRUE
             END
         )');
+        $srch->getResultSet();
+        return (1 > $srch->recordCount());
+    }
+    
+    /**
+     * isUnique : Used for Automatic Badge Conditions
+     *
+     * @param  int $badgeId
+     * @param  int $blinkcondConditionType
+     * @param  int $badgeLinkCondId : Other than this id.
+     * @return void
+     */
+    public static function isUniqueAuto(int $badgeId, int $blinkcondConditionType, int $badgeLinkCondId = 0): bool
+    {
+        $srch = new BadgeSearch();
+        $srch->setPageSize(1);
+        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'LEFT JOIN', 'blinkcond_badge_id = badge_id');
+        $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_blinkcond_id = blinkcond_id');
+        $srch->addCondition('badge_id', '=', $badgeId);
+        $srch->addCondition('badge_condition_type', '=', Badge::COND_AUTO);
+        $srch->addCondition('blinkcond_condition_type', '=', $blinkcondConditionType);
+        if (0 < $badgeLinkCondId) {
+            $srch->addCondition('blinkcond_id', '!=', $badgeLinkCondId);
+        }
         $srch->getResultSet();
         return (1 > $srch->recordCount());
     }

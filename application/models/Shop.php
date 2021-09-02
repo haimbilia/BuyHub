@@ -7,6 +7,9 @@ class Shop extends MyAppModel
 
     public const DB_TBL_LANG = 'tbl_shops_lang';
     public const DB_TBL_LANG_PREFIX = 'shoplang_';
+    
+    public const DB_TBL_STATS = 'tbl_shop_stats';
+    public const DB_TBL_STATS_PREFIX = 'sstats_';
 
     public const DB_TBL_SHOP_FAVORITE = 'tbl_user_favourite_shops';
     public const DB_TBL_SHOP_THEME_COLOR = 'tbl_shops_to_theme';
@@ -234,13 +237,13 @@ class Shop extends MyAppModel
         if ($this->mainTableRecordId < 1) {
             return false;
         }
-        $originalUrl = $this->getRewriteOriginalUrl($type, $collectionId);        
-        $seoUrl = $this->sanitizeSeoUrl($keyword,$type);
-        
+        $originalUrl = $this->getRewriteOriginalUrl($type, $collectionId);
+        $seoUrl = $this->sanitizeSeoUrl($keyword, $type);
+
         $customUrl = UrlRewrite::getValidSeoUrl($seoUrl, $originalUrl, $this->mainTableRecordId);
         return UrlRewrite::update($originalUrl, $customUrl);
     }
-    
+
     private function getRewriteOriginalUrl($type = 'shop', $collectionId = 0)
     {
         if ($this->mainTableRecordId < 1) {
@@ -273,31 +276,31 @@ class Shop extends MyAppModel
     {
         $seoUrl = CommonHelper::seoUrl($keyword);
         switch (strtolower($type)) {
-            case 'top-products':                
+            case 'top-products':
                 $seoUrl = preg_replace('/-top-products$/', '', $seoUrl);
                 $seoUrl .= '-top-products';
                 break;
-            case 'reviews':               
+            case 'reviews':
                 $seoUrl = preg_replace('/-reviews$/', '', $seoUrl);
                 $seoUrl .= '-reviews';
                 break;
-            case 'contact':                
+            case 'contact':
                 $seoUrl = preg_replace('/-contact$/', '', $seoUrl);
                 $seoUrl .= '-contact';
                 break;
-            case 'policy':                
+            case 'policy':
                 $seoUrl = preg_replace('/-policy$/', '', $seoUrl);
                 $seoUrl .= '-policy';
                 break;
-            case 'collection':               
+            case 'collection':
                 $shopUrl = static::getRewriteCustomUrl($this->mainTableRecordId);
                 $seoUrl = preg_replace('/-' . $shopUrl . '$/', '', $seoUrl);
                 $seoUrl .= '-' . $shopUrl;
                 break;
-            default:                
+            default:
                 break;
         }
-        return $seoUrl;        
+        return $seoUrl;
     }
 
     public function setupCollectionUrl($keyword, $collectionId)
@@ -309,8 +312,9 @@ class Shop extends MyAppModel
     {
         return $this->_rewriteUrl($keyword);
     }
-    
-    public function getRewriteShopOriginalUrl(){
+
+    public function getRewriteShopOriginalUrl()
+    {
         return $this->getRewriteOriginalUrl('shop');
     }
 

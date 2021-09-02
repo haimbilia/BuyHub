@@ -81,7 +81,7 @@
                                     </svg></i></a></li>
                     <?php } ?>
                 </ul>
-                <?php if ($userPrivilege->canViewMessages(0, true)) { ?>
+                <?php if ($userPrivilege->canViewMessages(0, true) && $activeTab != 'Ad') { ?>
                     <div class="c-header-icon bell">
                         <a data-org-url="<?php echo UrlHelper::generateUrl('Account', 'Messages', array(), '', null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>" title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>">
                             <i class="icn"><svg class="svg bell-shake-delay">

@@ -892,3 +892,31 @@ UPDATE `tbl_language_labels` SET `label_caption` = 'Submit new requests to admin
 -- --------- Added InActive Subscription Value ------ --
 INSERT IGNORE INTO tbl_configurations (conf_name, conf_val, conf_common) VALUES ('CONF_SUBSCRIPTION_INACTIVE_ORDER_STATUS', 10, 0) ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val)
 -- ---------Added InActive Subscription Value------ -- 
+
+CREATE TABLE `tbl_shop_stats`(
+    `sstats_shop_id` INT NOT NULL,
+    `sstats_avg_rating` DECIMAL(10, 2) NOT NULL,
+    `sstats_completion_rate` DECIMAL(10, 2) NOT NULL,
+    `sstats_completed_orders` INT NOT NULL,
+    `sstats_return_acceptance_rate` DECIMAL(10, 2) NOT NULL,
+    `sstats_cancellation_rate` DECIMAL(10, 2) NOT NULL,
+    `sstats_updated_on` DATETIME NOT NULL,
+    PRIMARY KEY(`sstats_shop_id`)
+) ENGINE = InnoDB;
+
+INSERT IGNORE INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Shop Stats', 'ShopSpecifics/updateStats', '1440', '1');
+-- ---------Task 88911 Order Detail page ------ --
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_TIMELINE_ORDER_STATUS_PENDING', 1, 'Order Payment Has Not Been Confirmed Yet.', 1),
+('LBL_TIMELINE_ORDER_STATUS_PAID', 1, 'The Order Payment Has Been Confirmed.', 1),
+('LBL_TIMELINE_ORDER_STATUS_APPROVED', 1, 'The Digital Order Product Has Been Approved, And Available For Download.', 1),
+('LBL_TIMELINE_ORDER_STATUS_IN_PROCESS', 1, 'Order Is Being Prepared. All The Items Are Being Collected To Be Packed And Ready For Shipping.', 1),
+('LBL_TIMELINE_ORDER_STATUS_SHIPPED', 1, 'Order Has Been Collected By A Shipping Provider And Is Out For Delivery.', 1),
+('LBL_TIMELINE_ORDER_STATUS_DELIVERED', 1, 'Order Has Been Delivered.', 1),
+('LBL_TIMELINE_ORDER_STATUS_COMPLETED', 1, 'Order Has Been Marked As Completed. Henceforth, No Actions Ban Be Performed On This Order.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES
+('CONF_DEFAULT_APPROVED_ORDER_STATUS', '15', 0)
+ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
+-- ---------Task 88911 Order Detail page ------ -- 

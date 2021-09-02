@@ -173,6 +173,8 @@ class BadgeLinkConditionsController extends SellerBaseController
             FatUtility::dieJsonError($msg);
         }
         $badgeConditionType = Badge::getAttributesById($badgeId, 'badge_condition_type');
+        
+        $badgeLinkConditionType = FatApp::getPostedData('blinkcond_condition_type', FatUtility::VAR_INT, 0);
 
         $searchForm = $this->getSearchForm($badgeType, $badgeConditionType);
 
@@ -192,6 +194,9 @@ class BadgeLinkConditionsController extends SellerBaseController
         $srch->setPageSize($pagesize);
 
         $srch->addCondition('blinkcond_badge_id', '=', $badgeId);
+        if (0 < $badgeLinkConditionType) {
+            $srch->addCondition('blinkcond_condition_type', '=', $badgeLinkConditionType);
+        }
 
         if (!empty($badgeType)) {
             $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
@@ -228,16 +233,10 @@ class BadgeLinkConditionsController extends SellerBaseController
         $shopId = Shop::getAttributesByUserId(UserAuthentication::getLoggedUserId(), 'shop_id');
 
         /* Automatically satisfied badges. */
-        $obj = new Badge();
-        $autoSatisfiedBadgesArr = $obj->setRecordId(0, 0, $shopId)
-                           ->getRibbonOrBadge($this->siteLangId, Badge::TYPE_BADGE);
-        
-        $autoSatisfiedBadgesArr = array_filter($autoSatisfiedBadgesArr, function($item) {
-            return $item['blinkcond_condition_type'] > 0;
-        });
-
-        if (!empty($autoSatisfiedBadgesArr)) {
-            $autoSatisfiedBadgesArr = array_column($autoSatisfiedBadgesArr, 'blinkcond_id');
+        $autoMaticBadgeConditions = Badge::getAutoShopBadges($this->siteLangId, [$shopId], false);
+        $autoSatisfiedBadgesArr = [];
+        if (!empty($autoMaticBadgeConditions)) {
+            $autoSatisfiedBadgesArr = array_column($autoMaticBadgeConditions, 'blinkcond_id');
         }
         $this->set('autoSatisfiedBadgesArr', $autoSatisfiedBadgesArr);
         /* Automatically satisfied badges. */

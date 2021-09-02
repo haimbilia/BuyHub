@@ -8,7 +8,7 @@ $arr_flds = array(
     BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to' => Labels::getLabel('LBL_CONDITION_TO', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'from_date' => Labels::getLabel('LBL_VAILD_FROM', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'to_date' => Labels::getLabel('LBL_VALID_TO', $siteLangId),
-    'action' => '#',
+    'action' => '',
 );
 
 if (!$canEdit || 1 > count($arrListing)) {
