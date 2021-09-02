@@ -18,22 +18,21 @@ $card:'card';
         justify-content: space-between;
         position: relative;
         padding: 20px 25px;
-        color: $txt-body;
         &-label {
+            color: $txt-body;
+            font-size: 1.5rem;
+            font-weight: 500;
             display: flex;
-            align-items: center;
-            align-content: flex-start;
+            flex-direction: column;
         }
         &-title {
+            line-height: 1.5;
             margin: 0;
             padding: 0;
-            font-size: 1rem;
-            font-weight: 500;
-            color: currentColor;
-            .text-muted {
-                font-size: 0.8rem;
-                color: $txt-gray;
-            }
+        }
+        .text-muted {
+            font-size: 0.8rem;
+            color: $txt-gray;
         }
     }
     &-icon {

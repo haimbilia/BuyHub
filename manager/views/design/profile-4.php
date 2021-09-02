@@ -804,7 +804,7 @@
                                                 <div class="widget3__item">
                                                     <div class="widget3__header">
                                                         <div class="widget3__user-img">
-                                                            <img class="widget3__img" src="media/users/user1.jpg" alt="">
+                                                            <img class="widget3__img" src="<?php echo CONF_WEBROOT_URL;?>images/users/user1.jpg" alt="">
                                                         </div>
                                                         <div class="widget3__info">
                                                             <a href="#" class="widget3__username">
@@ -827,7 +827,7 @@
                                                 <div class="widget3__item">
                                                     <div class="widget3__header">
                                                         <div class="widget3__user-img">
-                                                            <img class="widget3__img" src="media/users/user4.jpg" alt="">
+                                                            <img class="widget3__img" src="<?php echo CONF_WEBROOT_URL;?>images/users/user4.jpg" alt="">
                                                         </div>
                                                         <div class="widget3__info">
                                                             <a href="#" class="widget3__username">
@@ -850,7 +850,7 @@
                                                 <div class="widget3__item">
                                                     <div class="widget3__header">
                                                         <div class="widget3__user-img">
-                                                            <img class="widget3__img" src="media/users/user5.jpg" alt="">
+                                                            <img class="widget3__img" src="<?php echo CONF_WEBROOT_URL;?>images/users/user5.jpg" alt="">
                                                         </div>
                                                         <div class="widget3__info">
                                                             <a href="#" class="widget3__username">

@@ -492,7 +492,7 @@
                                 <div class="section-scroll">
                                     <div class="d-flex mb-4">
                                         <div class="symbol-document">
-                                            <img src="media/icons/doc.svg">
+                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/icons/doc.svg">
                                         </div>
                                         <div class="search-list-text">
                                             <a href="#" class="font-weight-bold text-dark">AirPlus Requirements</a>
@@ -501,7 +501,7 @@
                                     </div>
                                     <div class="d-flex mb-4">
                                         <div class="symbol-document">
-                                            <img src="media/icons/pdf.svg">
+                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/icons/pdf.svg">
                                         </div>
                                         <div class="search-list-text">
                                             <a href="#" class="font-weight-bold text-dark">TechNav Documentation</a>
@@ -510,7 +510,7 @@
                                     </div>
                                     <div class="d-flex mb-4">
                                         <div class="symbol-document">
-                                            <img src="media/icons/doc.svg">
+                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/icons/doc.svg">
                                         </div>
                                         <div class="search-list-text">
                                             <a href="#" class="font-weight-bold text-dark">All Framework Docs</a>
@@ -519,7 +519,7 @@
                                     </div>
                                     <div class="d-flex mb-4">
                                         <div class="symbol-document">
-                                            <img src="media/icons/xml.svg">
+                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/icons/xml.svg">
                                         </div>
                                         <div class="search-list-text">
                                             <a href="#" class="font-weight-bold text-dark">TechNav Documentation</a>
@@ -528,7 +528,7 @@
                                     </div>
                                     <div class="d-flex mb-4">
                                         <div class="symbol-document">
-                                            <img src="media/icons/pdf.svg">
+                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/icons/pdf.svg">
                                         </div>
                                         <div class="search-list-text">
                                             <a href="#" class="font-weight-bold text-dark">All Framework Docs</a>
@@ -1080,7 +1080,7 @@
                     <div class="widget__items">
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="media/users/300_9.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_9.jpg" alt="image">
                             </span>
                             <div class="widget__info">
                                 <div class="widget__section">
@@ -1100,7 +1100,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="media/users/100_7.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1122,7 +1122,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="media/users/100_12.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1143,7 +1143,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="media/users/100_4.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1163,7 +1163,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="media/users/100_8.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_8.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1183,7 +1183,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="media/users/300_10.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_10.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1203,7 +1203,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="media/users/300_13.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_13.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1223,7 +1223,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="media/users/300_21.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1243,7 +1243,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="media/users/300_9.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_9.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1265,7 +1265,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="media/users/100_7.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1287,7 +1287,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="media/users/100_12.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1308,7 +1308,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="media/users/100_4.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1328,7 +1328,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="media/users/100_8.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_8.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1348,7 +1348,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="media/users/300_10.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_10.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1368,7 +1368,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="media/users/300_13.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_13.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1388,7 +1388,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="media/users/300_21.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">

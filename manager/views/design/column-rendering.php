@@ -358,7 +358,7 @@
 											<td class="datatable__cell--sorted datatable__cell--center datatable__cell" data-field="RecordID"><span style="width: 30px;">5</span></td>
 											<td data-field="OrderID" class="datatable__cell"><span style="width: 148px;">
 													<div class="user-card-v2">
-														<div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_11.jpg"> </div>
+														<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg"> </div>
 														<div class="user-card-v2__details"> <span class="user-card-v2__name">Tierney St. Louis</span> <a class="user-card-v2__email link" href="#">tst4@msn.com</a> </div>
 													</div>
 												</span></td>
@@ -377,7 +377,7 @@
 											<td class="datatable__cell--sorted datatable__cell--center datatable__cell" data-field="RecordID"><span style="width: 30px;">6</span></td>
 											<td data-field="OrderID" class="datatable__cell"><span style="width: 148px;">
 													<div class="user-card-v2">
-														<div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_12.jpg"> </div>
+														<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg"> </div>
 														<div class="user-card-v2__details"> <span class="user-card-v2__name">Gerhard Reinhard</span> <a class="user-card-v2__email link" href="#">greinhard5@instagram.com</a> </div>
 													</div>
 												</span></td>
@@ -438,7 +438,7 @@
 											<td class="datatable__cell--sorted datatable__cell--center datatable__cell" data-field="RecordID"><span style="width: 30px;">9</span></td>
 											<td data-field="OrderID" class="datatable__cell"><span style="width: 148px;">
 													<div class="user-card-v2">
-														<div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_10.jpg"> </div>
+														<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_10.jpg"> </div>
 														<div class="user-card-v2__details"> <span class="user-card-v2__name">Freida Morby</span> <a class="user-card-v2__email link" href="#">fmorby8@surveymonkey.com</a> </div>
 													</div>
 												</span></td>
@@ -457,7 +457,7 @@
 											<td class="datatable__cell--sorted datatable__cell--center datatable__cell" data-field="RecordID"><span style="width: 30px;">10</span></td>
 											<td data-field="OrderID" class="datatable__cell"><span style="width: 148px;">
 													<div class="user-card-v2">
-														<div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_13.jpg"> </div>
+														<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_13.jpg"> </div>
 														<div class="user-card-v2__details"> <span class="user-card-v2__name">Obed Helian</span> <a class="user-card-v2__email link" href="#">ohelian9@usatoday.com</a> </div>
 													</div>
 												</span></td>

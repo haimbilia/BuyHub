@@ -92,7 +92,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden" src="media/users/300_21.jpg" alt="image">
+                                                <img class="widget__img hidden" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
 
                                                 <div class="widget__pic widget__pic--success font-success font-boldest font-light hidden-">
                                                     MP
@@ -242,7 +242,7 @@
                                             <div class="widget widget--user-profile-2">
                                                 <div class="widget__head">
                                                     <div class="widget__media">
-                                                        <img class="widget__img hidden-" src="media/users/300_21.jpg" alt="image">
+                                                        <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
                                                         <div class="widget__pic widget__pic--success font-success font-boldest hidden">
                                                             ChS
                                                         </div>
@@ -346,7 +346,7 @@
                                             <div class="widget widget--user-profile-2">
                                                 <div class="widget__head">
                                                     <div class="widget__media">
-                                                        <img class="widget__img hidden-" src="media/users/300_19.jpg" alt="image">
+                                                        <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_19.jpg" alt="image">
                                                         <div class="widget__pic widget__pic--danger font-danger font-boldest  hidden">
                                                             MP
                                                         </div>
@@ -449,7 +449,7 @@
                                             <div class="widget widget--user-profile-2">
                                                 <div class="widget__head">
                                                     <div class="widget__media">
-                                                        <img class="widget__img hidden-" src="media/users/100_3.jpg" alt="image">
+                                                        <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
                                                         <div class="widget__pic widget__pic--brand font-brand font-boldest hidden">
                                                             JM
                                                         </div>
@@ -557,7 +557,7 @@
                                             <div class="widget widget--user-profile-2">
                                                 <div class="widget__head">
                                                     <div class="widget__media">
-                                                        <img class="widget__img hidden-" src="media/users/100_7.jpg" alt="image">
+                                                        <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg" alt="image">
                                                         <div class="widget__pic widget__pic--warning font-warning font-boldest hidden">
                                                             TF
                                                         </div>
@@ -661,7 +661,7 @@
                                             <div class="widget widget--user-profile-2">
                                                 <div class="widget__head">
                                                     <div class="widget__media">
-                                                        <img class="hidden" src="media/users/100_1.jpg" alt="image">
+                                                        <img class="hidden" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
                                                         <div class="widget__pic widget__pic--info font-info font-boldest  hidden-">
                                                             GN
                                                         </div>
@@ -765,7 +765,7 @@
                                             <div class="widget widget--user-profile-2">
                                                 <div class="widget__head">
                                                     <div class="widget__media">
-                                                        <img class="widget__img hidden-" src="media/users/100_4.jpg" alt="image">
+                                                        <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="image">
                                                         <div class="widget__pic widget__pic--danger font-danger font-boldest hidden">
                                                             LM
                                                         </div>
@@ -873,7 +873,7 @@
                                             <div class="widget widget--user-profile-2">
                                                 <div class="widget__head">
                                                     <div class="widget__media">
-                                                        <img class="widget__img hidden-" src="media/users/300_22.jpg" alt="image">
+                                                        <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_22.jpg" alt="image">
                                                         <div class="widget__pic widget__pic--success font-success font-boldest hidden">
                                                             CD
                                                         </div>
@@ -977,7 +977,7 @@
                                             <div class="widget widget--user-profile-2">
                                                 <div class="widget__head">
                                                     <div class="widget__media">
-                                                        <img class="widget__img hidden-" src="media/users/300_18.jpg" alt="image">
+                                                        <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_18.jpg" alt="image">
                                                         <div class="widget__pic widget__pic--danger font-danger font-boldest  hidden">
                                                             LD
                                                         </div>
@@ -1080,7 +1080,7 @@
                                             <div class="widget widget--user-profile-2">
                                                 <div class="widget__head">
                                                     <div class="widget__media">
-                                                        <img class="widget__img hidden-" src="media/users/100_8.jpg" alt="image">
+                                                        <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_8.jpg" alt="image">
                                                         <div class="widget__pic widget__pic--brand font-brand font-boldest hidden">
                                                             CR
                                                         </div>
@@ -1188,7 +1188,7 @@
                                             <div class="widget widget--user-profile-2">
                                                 <div class="widget__head">
                                                     <div class="widget__media">
-                                                        <img class="widget__img hidden-" src="media/users/100_10.jpg" alt="image">
+                                                        <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_10.jpg" alt="image">
                                                         <div class="widget__pic widget__pic--warning font-warning font-boldest hidden">
                                                             AL
                                                         </div>
@@ -1292,7 +1292,7 @@
                                             <div class="widget widget--user-profile-2">
                                                 <div class="widget__head">
                                                     <div class="widget__media">
-                                                        <img class="hidden" src="media/users/100_1.jpg" alt="image">
+                                                        <img class="hidden" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
                                                         <div class="widget__pic widget__pic--info font-info font-boldest  hidden-">
                                                             GN
                                                         </div>
@@ -1396,7 +1396,7 @@
                                             <div class="widget widget--user-profile-2">
                                                 <div class="widget__head">
                                                     <div class="widget__media">
-                                                        <img class="widget__img hidden-" src="media/users/100_11.jpg" alt="image">
+                                                        <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg" alt="image">
                                                         <div class="widget__pic widget__pic--danger font-danger font-boldest hidden">
                                                             AD
                                                         </div>

@@ -32,7 +32,7 @@
 		<div class="login__wrapper">
 			<div class="login-aside bg-light">
 				<div class="login-aside__head">
-					<a href="#" class="login_logo"><img src="media/logos/logo-coloured.png" /></a>
+					<a href="#" class="login_logo"><img src="<?php echo CONF_WEBROOT_URL;?>images/logos/logo-coloured.png" /></a>
 				</div>
 				<div class="login-aside___body">
 					<div class="login-main">

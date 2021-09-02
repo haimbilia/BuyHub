@@ -257,7 +257,7 @@
 
               <div class="widget33__items">
                 <div class="widget33__item">
-                  <img class="widget33__pic" src="media/product15.jpg" alt="image">
+                  <img class="widget33__pic" src="<?php echo CONF_WEBROOT_URL;?>images/product15.jpg" alt="image">
                   <div class="widget33__content">
                     <span class="widget33__subtitle">
                         Three friends
@@ -274,7 +274,7 @@
                 </div>
 
                 <div class="widget33__item">
-                  <img class="widget33__pic" src="media/product15.jpg" alt="image">
+                  <img class="widget33__pic" src="<?php echo CONF_WEBROOT_URL;?>images/product15.jpg" alt="image">
                   <div class="widget33__content">
                     <span class="widget33__subtitle">
                         Chica &amp; Mica
@@ -291,7 +291,7 @@
                 </div>
 
                 <div class="widget33__item">
-                  <img class="widget33__pic" src="media/product16.jpg" alt="image">
+                  <img class="widget33__pic" src="<?php echo CONF_WEBROOT_URL;?>images/product16.jpg" alt="image">
                   <div class="widget33__content">
                     <span class="widget33__subtitle">
                         Little Lover
@@ -346,7 +346,7 @@
 									<div class="widget19__wrapper">
 										<div class="widget19__content">
 											<div class="widget19__userpic">
-												<img src="media/users/user1.jpg" alt="">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/user1.jpg" alt="">
 											</div>
 											<div class="widget19__info">
 												<a href="#" class="widget19__username">
@@ -439,7 +439,7 @@
 										</div>
 										<div class="widget7__content">
 											<div class="widget7__userpic">
-												<img src="media/users/100_5.jpg" alt="">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_5.jpg" alt="">
 											</div>
 											<div class="widget7__info">
 												<h3 class="widget7__username">
@@ -642,7 +642,7 @@
 										</div>
 										<div class="widget7__content">
 											<div class="widget7__userpic">
-												<img src="media/users/100_4.jpg" alt="">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="">
 											</div>
 											<div class="widget7__info">
 												<h3 class="widget7__username">
@@ -829,7 +829,7 @@
 								<div class="card-body">
 									<div class="widget27">
 										<div class="widget27__visual">
-											<img src="media/bg-4.jpg" alt="">
+											<img src="<?php echo CONF_WEBROOT_URL;?>images/bg-4.jpg" alt="">
 											<h3 class="widget27__title">
 												<span><span>$</span>256,100</span>
 											</h3>
@@ -1349,7 +1349,7 @@
 									<div class="widget widget--user-profile-1">
 										<div class="widget__head">
 											<div class="widget__media">
-												<img src="media/users/100_1.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
 											</div>
 											<div class="widget__content">
 												<div class="widget__section">
@@ -1523,7 +1523,7 @@
 									<div class="widget widget--user-profile-4">
 										<div class="widget__head">
 											<div class="widget__media">
-												<img class="widget__img hidden-" src="media/users/300_21.jpg" alt="image">
+												<img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
 
 												<div class="widget__pic widget__pic--danger font-danger font-boldest font-light hidden">
 													JD
@@ -1635,7 +1635,7 @@
 									<div class="widget widget--user-profile-2">
 										<div class="widget__head">
 											<div class="widget__media">
-												<img class="widget__img hidden-" src="media/users/100_1.jpg" alt="image">
+												<img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
 												<div class="widget__pic widget__pic--danger font-danger font-boldest font-light hidden">
 													MP
 												</div>
@@ -1751,7 +1751,7 @@
 									<div class="widget widget--user-profile-3">
 										<div class="widget__top">
 											<div class="widget__media hidden-">
-												<img src="media/users/100_1.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
 											</div>
 											<div class="widget__pic widget__pic--danger font-danger font-boldest font-light hidden">
 												JM
@@ -1853,19 +1853,19 @@
 													<div class="section__content section__content--solid">
 														<div class="media-group">
 															<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
-																<img src="media/users/100_1.jpg" alt="image">
+																<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
 															</a>
 															<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
-																<img src="media/users/100_10.jpg" alt="image">
+																<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_10.jpg" alt="image">
 															</a>
 															<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
-																<img src="media/users/100_11.jpg" alt="image">
+																<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg" alt="image">
 															</a>
 															<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Luke Walls">
-																<img src="media/users/100_2.jpg" alt="image">
+																<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_2.jpg" alt="image">
 															</a>
 															<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
-																<img src="media/users/100_3.jpg" alt="image">
+																<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
 															</a>
 															<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
 																<span>+3</span>
@@ -2000,7 +2000,7 @@
 											<div class="widget__label">
 												<div class="widget__media">
 													<span class="media media--lg media--circle">
-														<img src="media/client-logos/1.png" alt="image">
+														<img src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/1.png" alt="image">
 													</span>
 												</div>
 												<div class="widget__info">
@@ -2107,19 +2107,19 @@
 
 													<div class="media-group">
 														<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
-															<img src="media/users/100_1.jpg" alt="image">
+															<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
 														</a>
 														<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
-															<img src="media/users/100_10.jpg" alt="image">
+															<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_10.jpg" alt="image">
 														</a>
 														<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
-															<img src="media/users/100_11.jpg" alt="image">
+															<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg" alt="image">
 														</a>
 														<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Luke Walls">
-															<img src="media/users/100_2.jpg" alt="image">
+															<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_2.jpg" alt="image">
 														</a>
 														<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
-															<img src="media/users/100_3.jpg" alt="image">
+															<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
 														</a>
 														<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
 															<span>+3</span>

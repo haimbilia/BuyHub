@@ -224,8 +224,8 @@
                                 </form>
                                 <div class="card">
                                     <div class="card-head">
-                                        <h3 class="card-title">
-                                            <span class="card-label">New Products</span>
+                                        <h3 class="card-head-label">
+                                            <span class="card-head-title">New Products</span>
                                             <span class="text-muted">Over 500 new products</span>
                                         </h3>
                                         <div class="card-toolbar">

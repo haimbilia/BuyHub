@@ -380,7 +380,7 @@
                     <div class="notes__items">
                         <div class="notes__item"> 
                             <div class="notes__media">
-                                <img class="hidden-" src="media/users/100_3.jpg" alt="image">
+                                <img class="hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
                                 <span class="notes__icon font-boldest hidden">
                                     <i class="flaticon2-cup"></i>                                    
                                 </span> 
@@ -565,7 +565,7 @@
                         </div> 
                         <div class="notes__item notes__item--clean"> 
                             <div class="notes__media">
-                                <img class="hidden" src="media/users/100_1.jpg" alt="image">
+                                <img class="hidden" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
                                 <span class="notes__icon font-boldest hidden">
                                     <i class="flaticon2-cup"></i>                                    
                                 </span> 
@@ -594,7 +594,7 @@
                         </div> 
                         <div class="notes__item notes__item--clean"> 
                             <div class="notes__media">
-                                <img class="hidden" src="media/users/100_1.jpg" alt="image">
+                                <img class="hidden" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
                                 <span class="notes__icon font-boldest hidden">
                                     <i class="flaticon2-cup"></i>                                    
                                 </span> 

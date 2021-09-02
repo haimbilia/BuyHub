@@ -83,7 +83,7 @@
                                     <div class="widget widget--user-profile-3">
                                         <div class="widget__top">
                                             <div class="widget__media hidden-">
-                                                <img src="media/users/100_13.jpg" alt="image">
+                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_13.jpg" alt="image">
                                             </div>
                                             <div class="widget__pic widget__pic--danger font-danger font-boldest font-light hidden">
                                                 JM
@@ -185,19 +185,19 @@
                                                     <div class="section__content section__content--solid">
                                                         <div class="media-group">
                                                             <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
-                                                                <img src="media/users/100_1.jpg" alt="image">
+                                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
                                                             </a>
                                                             <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
-                                                                <img src="media/users/100_10.jpg" alt="image">
+                                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_10.jpg" alt="image">
                                                             </a>
                                                             <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
-                                                                <img src="media/users/100_11.jpg" alt="image">
+                                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg" alt="image">
                                                             </a>
                                                             <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Luke Walls">
-                                                                <img src="media/users/100_2.jpg" alt="image">
+                                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_2.jpg" alt="image">
                                                             </a>
                                                             <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
-                                                                <img src="media/users/100_3.jpg" alt="image">
+                                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
                                                             </a>
                                                             <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
                                                                 <span>+3</span>
@@ -536,7 +536,7 @@
                                                 <div class="widget31__item">
                                                     <div class="widget31__content">
                                                         <div class="widget31__pic">
-                                                            <img src="media/users/100_4.jpg" alt="">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="">
                                                         </div>
                                                         <div class="widget31__info">
                                                             <a href="#" class="widget31__username">
@@ -565,7 +565,7 @@
                                                 <div class="widget31__item">
                                                     <div class="widget31__content">
                                                         <div class="widget31__pic">
-                                                            <img src="media/users/100_14.jpg" alt="">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_14.jpg" alt="">
                                                         </div>
                                                         <div class="widget31__info">
                                                             <a href="#" class="widget31__username">
@@ -594,7 +594,7 @@
                                                 <div class="widget31__item">
                                                     <div class="widget31__content">
                                                         <div class="widget31__pic widget4__pic--pic">
-                                                            <img src="media/users/100_11.jpg" alt="">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg" alt="">
                                                         </div>
                                                         <div class="widget31__info">
                                                             <a href="#" class="widget31__username">
@@ -622,7 +622,7 @@
                                                 <div class="widget31__item">
                                                     <div class="widget31__content">
                                                         <div class="widget31__pic widget4__pic--pic">
-                                                            <img src="media/users/100_1.jpg" alt="">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="">
                                                         </div>
                                                         <div class="widget31__info">
                                                             <a href="#" class="widget31__username">
@@ -650,7 +650,7 @@
                                                 <div class="widget31__item">
                                                     <div class="widget31__content">
                                                         <div class="widget31__pic">
-                                                            <img src="media/users/100_6.jpg" alt="">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg" alt="">
                                                         </div>
                                                         <div class="widget31__info">
                                                             <a href="#" class="widget31__username">
@@ -681,7 +681,7 @@
                                                 <div class="widget31__item">
                                                     <div class="widget31__content">
                                                         <div class="widget31__pic widget4__pic--pic">
-                                                            <img src="media/users/100_11.jpg" alt="">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg" alt="">
                                                         </div>
                                                         <div class="widget31__info">
                                                             <a href="#" class="widget31__username">
@@ -709,7 +709,7 @@
                                                 <div class="widget31__item">
                                                     <div class="widget31__content">
                                                         <div class="widget31__pic widget4__pic--pic">
-                                                            <img src="media/users/100_1.jpg" alt="">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="">
                                                         </div>
                                                         <div class="widget31__info">
                                                             <a href="#" class="widget31__username">
@@ -737,7 +737,7 @@
                                                 <div class="widget31__item">
                                                     <div class="widget31__content">
                                                         <div class="widget31__pic">
-                                                            <img src="media/users/100_14.jpg" alt="">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_14.jpg" alt="">
                                                         </div>
                                                         <div class="widget31__info">
                                                             <a href="#" class="widget31__username">
@@ -766,7 +766,7 @@
                                                 <div class="widget31__item">
                                                     <div class="widget31__content">
                                                         <div class="widget31__pic">
-                                                            <img src="media/users/100_6.jpg" alt="">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg" alt="">
                                                         </div>
                                                         <div class="widget31__info">
                                                             <a href="#" class="widget31__username">
@@ -794,7 +794,7 @@
                                                 <div class="widget31__item">
                                                     <div class="widget31__content">
                                                         <div class="widget31__pic">
-                                                            <img src="media/users/100_4.jpg" alt="">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="">
                                                         </div>
                                                         <div class="widget31__info">
                                                             <a href="#" class="widget31__username">

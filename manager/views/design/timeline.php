@@ -115,12 +115,12 @@
                                 </div>
                                 <div class="timeline-v1__item-body">
                                     <div class="list-pics margin-b-10">
-                                        <a href="#"><img src="media/users/100_4.jpg" title=""></a>
-                                        <a href="#"><img src="media/users/100_13.jpg" title=""></a>
-                                        <a href="#"><img src="media/users/100_11.jpg" title=""></a>
-                                        <a href="#"><img src="media/users/100_14.jpg" title=""></a>
-                                        <a href="#"><img src="media/users/100_7.jpg" title=""></a>
-                                        <a href="#"><img src="media/users/100_3.jpg" title=""></a>
+                                        <a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" title=""></a>
+                                        <a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_13.jpg" title=""></a>
+                                        <a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg" title=""></a>
+                                        <a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_14.jpg" title=""></a>
+                                        <a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg" title=""></a>
+                                        <a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" title=""></a>
                                     </div>
                                     <p>
                                         Lorem ipsum dolor sit amit,consectetur eiusmdd tempors labore et dolore. Lorem ipsum dolor sit amit,consectetur eiusmdd
@@ -145,7 +145,7 @@
                                     <div class="widget4">
                                         <div class="widget4__item">
                                             <div class="widget4__pic">
-                                                <img src="media/users/100_4.jpg" alt="">
+                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="">
                                             </div>
                                             <div class="widget4__info">
                                                 <a href="#" class="widget4__username">
@@ -159,7 +159,7 @@
                                         </div>
                                         <div class="widget4__item">
                                             <div class="widget4__pic">
-                                                <img src="media/users/100_5.jpg" alt="">
+                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_5.jpg" alt="">
                                             </div>
                                             <div class="widget4__info">
                                                 <a href="#" class="widget4__username">
@@ -192,7 +192,7 @@
                                     <div class="widget4">
                                         <div class="widget4__item">
                                             <div class="widget4__pic widget4__pic--icon">
-                                                <img src="media/files/doc.svg" alt="">
+                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/files/doc.svg" alt="">
                                             </div>
                                             <a href="#" class="widget4__title">
                                                         Metronic Documentation
@@ -205,7 +205,7 @@
                                         </div>
                                         <div class="widget4__item">
                                             <div class="widget4__pic widget4__pic--icon">
-                                                <img src="media/files/jpg.svg" alt="">
+                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/files/jpg.svg" alt="">
                                             </div>
                                             <a href="#" class="widget4__title">
                                                         Project Specifications(product2019_v4.pdf)
@@ -328,12 +328,12 @@
                                 </div>
                                 <div class="timeline-v1__item-body">
                                     <div class="list-pics margin-b-10">
-                                        <a href="#"><img src="media/users/100_4.jpg" title=""></a>
-                                        <a href="#"><img src="media/users/100_13.jpg" title=""></a>
-                                        <a href="#"><img src="media/users/100_11.jpg" title=""></a>
-                                        <a href="#"><img src="media/users/100_14.jpg" title=""></a>
-                                        <a href="#"><img src="media/users/100_7.jpg" title=""></a>
-                                        <a href="#"><img src="media/users/100_3.jpg" title=""></a>
+                                        <a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" title=""></a>
+                                        <a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_13.jpg" title=""></a>
+                                        <a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg" title=""></a>
+                                        <a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_14.jpg" title=""></a>
+                                        <a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg" title=""></a>
+                                        <a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" title=""></a>
                                     </div>
                                     <p>
                                         Lorem ipsum dolor sit amit,consectetur eiusmdd tempors labore et dolore. Lorem ipsum dolor sit amit,consectetur eiusmdd
@@ -360,7 +360,7 @@
                                     <div class="widget4">
                                         <div class="widget4__item">
                                             <div class="widget4__pic">
-                                                <img src="media/users/100_4.jpg" alt="">
+                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="">
                                             </div>
                                             <div class="widget4__info">
                                                 <a href="#" class="widget4__username">
@@ -374,7 +374,7 @@
                                         </div>
                                         <div class="widget4__item">
                                             <div class="widget4__pic">
-                                                <img src="media/users/100_5.jpg" alt="">
+                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_5.jpg" alt="">
                                             </div>
                                             <div class="widget4__info">
                                                 <a href="#" class="widget4__username">
@@ -407,7 +407,7 @@
                                     <div class="widget4">
                                         <div class="widget4__item">
                                             <div class="widget4__pic widget4__pic--icon">
-                                                <img src="media/files/doc.svg" alt="">
+                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/files/doc.svg" alt="">
                                             </div>
                                             <a href="#" class="widget4__title">
                                                         Metronic Documentation
@@ -420,7 +420,7 @@
                                         </div>
                                         <div class="widget4__item">
                                             <div class="widget4__pic widget4__pic--icon">
-                                                <img src="media/files/jpg.svg" alt="">
+                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/files/jpg.svg" alt="">
                                             </div>
                                             <a href="#" class="widget4__title">
                                                         Project Specifications(product2019_v4.pdf)
@@ -585,10 +585,10 @@
                                     AEOL Meeting With 
                                 </div>
                                 <div class="list-pics list-pics--sm padding-l-20">
-                                    <a href="#"><img src="media/users/100_4.jpg" title=""></a>
-                                    <a href="#"><img src="media/users/100_13.jpg" title=""></a>
-                                    <a href="#"><img src="media/users/100_11.jpg" title=""></a>
-                                    <a href="#"><img src="media/users/100_14.jpg" title=""></a>
+                                    <a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" title=""></a>
+                                    <a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_13.jpg" title=""></a>
+                                    <a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg" title=""></a>
+                                    <a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_14.jpg" title=""></a>
                                 </div>
                             </div>
                             <div class="timeline-v2__item">
