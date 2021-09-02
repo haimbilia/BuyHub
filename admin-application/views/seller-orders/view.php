@@ -25,6 +25,8 @@ if (!empty($order['opship_tracking_url'])) {
 }
 $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $order['opshipping_plugin_id'] ? OrderProduct::getPickUpShedule($order['op_id']) : NULL;
 $shippedOrderStatus = FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS");
+
+$returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS");
 ?>
 <div class="page">
     <div class="container container-fluid">
@@ -98,8 +100,8 @@ $shippedOrderStatus = FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS");
                                                 'label' => '<i class="fas fa-file-download"></i>'
                                             ];
                                         } elseif (!empty($order['opr_response'])) {
-                                            $method = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'previewReturnLabel' : 'previewLabel';
-                                            $title = (OrderStatus::ORDER_REFUNDED == $order["op_status_id"]) ? 'LBL_PREVIEW_RETURN_LABEL' : 'LBL_PREVIEW_LABEL';
+                                            $method = ($returnRequestApproved == $order["op_status_id"]) ? 'previewReturnLabel' : 'previewLabel';
+                                            $title = ($returnRequestApproved == $order["op_status_id"]) ? 'LBL_PREVIEW_RETURN_LABEL' : 'LBL_PREVIEW_LABEL';
                                             $data['otherButtons'][] = [
                                                 'attr' => [
                                                     'href' => UrlHelper::generateUrl("ShippingServices", $method, [$order['op_id']]),

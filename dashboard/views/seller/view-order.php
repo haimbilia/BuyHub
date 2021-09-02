@@ -31,7 +31,7 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
         <?php if (!$print) {
             $orderObj = new Orders();
             $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses();
-            $processingStatuses = array_diff($processingStatuses, [OrderStatus::ORDER_DELIVERED]);
+            $processingStatuses = array_diff($processingStatuses, [FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")]);
             $canCancelOrder = in_array($orderDetail['orderstatus_id'], $processingStatuses);
 
             $data = [
@@ -106,7 +106,7 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                                             <a href="javascript:void(0)" onclick='generateLabel(<?php echo $opId; ?>)' class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId); ?>"><i class="fas fa-file-download"></i></a>
                                             <?php
                                         } elseif (!empty($orderDetail['opr_response'])) {
-                                            if (OrderStatus::ORDER_REFUNDED == $orderDetail["op_status_id"]) {
+                                            if (FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS") == $orderDetail["op_status_id"]) {
                                             ?>
                                                 <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewReturnLabel', [$orderDetail['op_id']]); ?>" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_RETURN_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
                                             <?php } else { ?>
