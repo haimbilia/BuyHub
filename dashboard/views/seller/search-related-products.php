@@ -33,10 +33,9 @@
                 case 'select_all':
                     $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[' . $selProdId . ']" value=' . $selProdId . '></label>', true);
                     break;
-                case 'product_name':
-                    // last Param of getProductDisplayTitle function used to get title in html form.
-                    $productName = "<span class='js-prod-name'>" . SellerProduct::getProductDisplayTitle($selProdId, $siteLangId, true) . "</span>";
-                    $td->appendElement('plaintext', array(), $productName, true);
+                case 'product_name':        
+                    $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['product' => $linkedToProducts[$selProdId], 'siteLangId' => $siteLangId], false, true);
+                    $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'related_products':
                     $div = $td->appendElement('div', array("class" => "list-tag-wrapper scroll scroll-y"));

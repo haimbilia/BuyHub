@@ -54,14 +54,13 @@ foreach ($sellers as $sellerDetail) {
                         <a href="<?php echo UrlHelper::generateUrl('shops', 'View', array($sellerDetail['shop_id'])); ?>">
                             <?php echo $sellerDetail['shop_name']; ?>
                         </a>
-                        <?php 
-                        /* Get Badge */
-                        $bdgSelProdId = $sellerDetail['selprod_id'];
-                        $bdgProdId = $sellerDetail['product_id'];
-                        $bdgShopId = $sellerDetail['shop_id'];
-                        $bdgSize = 20;
-                        $bdgExcludeCndType = [BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD];
-                        include (CONF_THEME_PATH . '_partial/get-badge.php'); ?>
+                        <!-- Shop Badge  -->
+                            <?php
+                            $badgesArr = Badge::getShopBadges($siteLangId, [$sellerDetail['shop_id']]);
+                            $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
+                            ?>
+                        <!-- Shop Badge  -->
+
                     </div>
 
                     <div class="item__location">
@@ -81,14 +80,14 @@ foreach ($sellers as $sellerDetail) {
                                 </use>
                             </svg>
                         </i>
-                        <?php 
-                            $shop_rating = 0;
-                            if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
-                                $shop_rating = SelProdRating::getSellerRating($sellerDetail['selprod_user_id']);
-                                ?>
-                                    <span class="rate"><?php echo round($shop_rating, 1); ?></span>
-                                <?php
-                            }
+                        <?php
+                        $shop_rating = 0;
+                        if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
+                            $shop_rating = SelProdRating::getSellerRating($sellerDetail['selprod_user_id']);
+                        ?>
+                            <span class="rate"><?php echo round($shop_rating, 1); ?></span>
+                        <?php
+                        }
                         ?>
                     </div>
                 </div>
@@ -109,7 +108,7 @@ foreach ($sellers as $sellerDetail) {
             </div>
         </div>
 
-        <?php $optionRows = isset($optionRows) ? $optionRows : SellerProduct::getFormattedOptions($sellerDetail['selprod_id'], $siteLangId); 
+        <?php $optionRows = isset($optionRows) ? $optionRows : SellerProduct::getFormattedOptions($sellerDetail['selprod_id'], $siteLangId);
         if (!empty($optionRows)) { ?>
             <div class="cell cell-3" data-label="<?php echo Labels::getLabel('LBL_OPTIONS', $siteLangId); ?>">
                 <?php include('selprod-options.php'); ?>
@@ -121,10 +120,10 @@ foreach ($sellers as $sellerDetail) {
                 <?php include(CONF_THEME_PATH . '_partial/product/shipping-rates.php'); ?>
             </div>
         <?php } ?>
-        <?php 
-            $canAskQuestion = (!UserAuthentication::isUserLogged() || (UserAuthentication::isUserLogged() && ((User::isBuyer()) || (User::isSeller())) && (UserAuthentication::getLoggedUserId() != $sellerDetail['selprod_user_id'])));
+        <?php
+        $canAskQuestion = (!UserAuthentication::isUserLogged() || (UserAuthentication::isUserLogged() && ((User::isBuyer()) || (User::isSeller())) && (UserAuthentication::getLoggedUserId() != $sellerDetail['selprod_user_id'])));
 
-            $canViewDetail = (!isset($currSelprodId) || $currSelprodId != $sellerDetail['selprod_id']);
+        $canViewDetail = (!isset($currSelprodId) || $currSelprodId != $sellerDetail['selprod_id']);
 
         ?>
         <div class="cell cell-5" data-label="">

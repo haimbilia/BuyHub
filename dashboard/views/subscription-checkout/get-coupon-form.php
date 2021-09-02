@@ -17,7 +17,7 @@ $btn->addFieldTagAttribute('class', 'btn btn-brand');
 </div>
 <div class="modal-body">
     <?php
-        $PromoCouponsFrm->setFormTagAttribute('class', 'form custom-form my-5');
+        $PromoCouponsFrm->setFormTagAttribute('class', 'form custom-form mb-2');
         $PromoCouponsFrm->setFormTagAttribute('onsubmit', 'applyPromoCode(this); return false;');
         $PromoCouponsFrm->getField('onsubmit', 'applyPromoCode(this); return false;');
         $PromoCouponsFrm->developerTags['colClassPrefix'] = 'col-lg-6 col-md-6 col-sm-';

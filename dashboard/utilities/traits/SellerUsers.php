@@ -23,6 +23,7 @@ trait SellerUsers
             FatApp::redirectUser(UrlHelper::generateUrl('seller'));
         }
         $this->set('frmSearch', $this->getUserSearchForm());
+        $this->set('canEdit', true);
         $this->_template->render(true, true);
     }
 

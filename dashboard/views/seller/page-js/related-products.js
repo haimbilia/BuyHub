@@ -210,8 +210,8 @@ $(document).on('mouseout', "ul.list-tags li span i", function(){
 
 $(document).on('click', ".js-product-edit", function(){
     var selProdId = $(this).attr('row-id');
-    var prodHtml = $(this).children('.js-prod-name').html();        
-    var prodName = prodHtml.replace(/<br>/g, " | ");
+    var prodHtml = $(this).find('.prodNameJs:last').text();
+    var prodName = jQuery.trim(prodHtml)+" "+ jQuery.trim($(this).find('.prodOptionsJs').text());
     
     fcom.ajax(fcom.makeUrl('Seller', 'getRelatedProductsList', [selProdId]), '', function(t) {       
         

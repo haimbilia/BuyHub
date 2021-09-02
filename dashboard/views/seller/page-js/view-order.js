@@ -34,7 +34,7 @@ $(document).ready(function () {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('Seller', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function (res) {
                 $.mbsmessage.close();
-                $.facebox(res );
+                $.facebox(res);
             });
         });
     };
@@ -42,7 +42,7 @@ $(document).ready(function () {
     /* ShippingServices */
     generateLabel = function (opId) {
         fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'generateLabel', [opId]), '', function (t) {
-            setTimeout(function(){ window.location.href = fcom.makeUrl('Seller', 'viewOrder',[opId]) }, 300);
+            setTimeout(function () { window.location.href = fcom.makeUrl('Seller', 'viewOrder', [opId]) }, 300);
         });
     }
 
@@ -96,13 +96,13 @@ $(document).ready(function () {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {
                 $.mbsmessage.close();
-                $.facebox(res );
+                $.facebox(res);
             });
         });
     }
 
     pageRedirect = function (op_id) {
-        window.location.replace(fcom.makeUrl('Seller', 'viewOrder', [op_id]));    
+        window.location.replace(fcom.makeUrl('Seller', 'viewOrder', [op_id]));
     }
 
     uploadAdditionalAttachment = function () {
@@ -142,25 +142,25 @@ $(document).ready(function () {
     getPickupForm = function (opId) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('ShippingServices', 'pickupForm', [opId]), '', function (res) {
-                $.facebox(res );
+                $.facebox(res);
                 if (0 < $('.date--js').length) {
                     $('.date--js').datepicker({
                         minDate: new Date(),
-                        dateFormat:'yy-mm-dd'
+                        dateFormat: 'yy-mm-dd'
                     });
-                } 
-                
+                }
+
                 if (0 < $('.dateTime--js').length) {
                     $('.dateTime--js').datetimepicker({
                         minDate: new Date(),
-                        format:'Y-m-d H:i'
+                        format: 'Y-m-d H:i'
                     });
-                } 
+                }
 
                 if (0 < $('.time--js').length) {
                     $('.time--js').datetimepicker({
                         datepicker: false,
-                        format:'H:i',
+                        format: 'H:i',
                         step: 30
                     });
                 }
@@ -180,25 +180,25 @@ $(document).ready(function () {
                 return;
             }
             $.mbsmessage(t.msg, false, 'alert--success');
-            window.location.reload();            
+            window.location.reload();
         });
     };
     cancelPickup = function (opId) {
-        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'cancelPickup', [opId]), '', function (t) { 
-            setTimeout(function(){ window.location.href = fcom.makeUrl('Seller', 'viewOrder',[opId]) }, 300);
+        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'cancelPickup', [opId]), '', function (t) {
+            setTimeout(function () { window.location.href = fcom.makeUrl('Seller', 'viewOrder', [opId]) }, 300);
         });
     };
     shippingRatesForm = function (opId) {
         $.facebox(function () {
             fcom.ajax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (res) {
-                $.facebox(res);               
+                $.facebox(res);
             });
         });
     }
     setUpShippingRate = function (frm) {
         if (!$(frm).validate()) {
             return;
-        }        
+        }
         $.mbsmessage(langLbl.processing, false, 'alert--process');
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl('ShippingServices', 'setUpShippingRate'), data, function (t) {
@@ -208,8 +208,19 @@ $(document).ready(function () {
                 return;
             }
             $.mbsmessage(t.msg, false, 'alert--success');
-            setTimeout(function(){ window.location.href = fcom.makeUrl('Seller', 'viewOrder',[frm.op_id.value]) }, 300);
+            setTimeout(function () { window.location.href = fcom.makeUrl('Seller', 'viewOrder', [frm.op_id.value]) }, 300);
         });
     };
-    
+
+    copyContent = function (obj) {
+        var text = document.getElementById('trackingNumberJs').innerText;
+        var elem = document.createElement("textarea");
+        document.body.appendChild(elem);
+        elem.value = text;
+        elem.select();
+        document.execCommand("copy");
+        document.body.removeChild(elem);
+        var elOriginalText = $(obj).attr('data-original-title');
+        $(obj).attr('data-original-title', langLbl.copied).tooltip('show').attr('data-original-title', elOriginalText);
+    }
 })();

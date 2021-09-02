@@ -21,16 +21,16 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
 ?>
 <main id="main-area" class="main"   >
     <div class="content-wrapper content-space">
-        <div class="content-header row ">
-            <div class="col">
-                <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Shipping_Packages', $siteLangId); ?>
-                </h2>
-            </div>
-        </div>
+        <?php 
+        $data = [
+            'headingLabel' => Labels::getLabel('LBL_Shipping_Packages', $siteLangId),
+            'siteLangId' => $siteLangId,
+        ];
+        $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="card">
+                    <div class="card card-search">
                         <div class="card-body">
                             <div class="replaced">
                                 <?php

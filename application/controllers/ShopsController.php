@@ -146,8 +146,11 @@ class ShopsController extends MyAppController
             $allShops[$val['shop_id']]['shopRating'] = SelProdRating::getSellerRating($val['shop_user_id']);
             $allShops[$val['shop_id']]['shopTotalReviews'] = SelProdReview::getSellerTotalReviews($val['shop_user_id']);
             $allShops[$val['shop_id']]['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', [$val['shop_id'], $this->siteLangId, 'SMALL']);
+
+            $selProdIdsArr = array_column($allShops[$val['shop_id']]['products'], 'selprod_id');
+            $allShops[$val['shop_id']]['tLeftRibbons'] = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+            $allShops[$val['shop_id']]['tRightRibbons'] = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
         }
-        /* CommonHelper::printArray($allShops[4]['products']); */
         $this->set('allShops', $allShops);
         $this->set('totalProdCountToDisplay', $totalProdCountToDisplay);
         $this->set('pageCount', $srch->pages());
@@ -194,8 +197,6 @@ class ShopsController extends MyAppController
 
     public function view($shop_id)
     {
-        $db = FatApp::getDb();
-
         $this->shopDetail($shop_id);
 
         if (true === MOBILE_APP_API_CALL) {
@@ -204,7 +205,7 @@ class ShopsController extends MyAppController
             $get = FatApp::getParameters();
             $get = array_filter(Product::convertArrToSrchFiltersAssocArr($get));
         }
-        // CommonHelper::printArray($get, true);
+
         if (array_key_exists('currency', $get)) {
             $get['currency_id'] = $get['currency'];
         }
@@ -216,10 +217,15 @@ class ShopsController extends MyAppController
         if (array_key_exists('includeShopData', $get) && 1 > FatUtility::int($get['includeShopData'])) {
             $includeShopData = false;
         }
-        //$get['join_price'] = 1;
+
         $get['shop_id'] = $shop_id;
 
         $data = $this->getListingData($get, $includeShopData);
+
+        $selProdIdsArr = array_column($data['products'], 'selprod_id');
+        $data['tLeftRibbons'] = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+        $data['tRightRibbons'] = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
+
         if (false === MOBILE_APP_API_CALL) {
             $frm = $this->getProductSearchForm();
             $frm->fill($get);
@@ -230,7 +236,7 @@ class ShopsController extends MyAppController
                 'productSearchPageType' => SavedSearchProduct::PAGE_SHOP,
                 'recordId' => $shop_id,
                 'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'categories'),
-                'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId) 
+                'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId),
             );
             $data = array_merge($data, $arr);
 
@@ -243,6 +249,8 @@ class ShopsController extends MyAppController
                 $this->set('siteLangId', $this->siteLangId);
                 $this->set('pageSize', $data['pageSize']);
                 $this->set('pageSizeArr', $data['pageSizeArr']);
+                $this->set('tLeftRibbons', $data['tLeftRibbons']);
+                $this->set('tRightRibbons', $data['tRightRibbons']);
                 echo $this->_template->render(false, false, 'products/products-list.php', true);
                 exit;
             }
@@ -252,6 +260,7 @@ class ShopsController extends MyAppController
             $this->_template->addJs('js/shop-nav.js');
             $this->_template->addJs('js/jquery.colourbrightness.min.js');
         }
+
         if (true === MOBILE_APP_API_CALL && true === $includeShopData) {
             $shopInfo = $this->shopPoliciesData($this->getShopInfo($shop_id));
             $data['shop'] = array_merge($data['shop'], $shopInfo);
@@ -262,6 +271,22 @@ class ShopsController extends MyAppController
             $data['shop']['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', array($data['shop']['shop_id'], $this->siteLangId));
             $data['shop']['shop_banner'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'shopBanner', array($data['shop']['shop_id'], $this->siteLangId, 'MOBILE', 0, applicationConstants::SCREEN_MOBILE)), CONF_IMG_CACHE_TIME, '.jpg');
         }
+
+        /* Shop and SelProd Badge */
+        if (true === MOBILE_APP_API_CALL) {
+            $shopBadgesArr = Badge::getShopBadges($this->siteLangId, [$shop_id]);
+            $data['shop']['badges'] = [];
+            foreach ($shopBadgesArr as $bdgRow) {
+                $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $bdgRow[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, $this->siteLangId);
+                $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
+                $url = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $this->siteLangId, 'MINI', $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $data['shop']['badges'][] = [
+                    'url' => $url,
+                    Badge::DB_TBL_PREFIX . 'name' => $bdgRow[Badge::DB_TBL_PREFIX . 'name'],
+                ];
+            }
+        }
+        /* Shop and SelProd Badge */
 
         $this->set('data', $data);
 
@@ -547,12 +572,19 @@ class ShopsController extends MyAppController
 
         $data = $this->getListingData($get);
 
+        $selProdIdsArr = array_column($data['products'], 'selprod_id');
+        $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+        $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
+
         $arr = array(
+            'tLeftRibbons' => $tLeftRibbons,
+            'tRightRibbons' => $tRightRibbons,
             'scollection_name' => $shopcolDetails['scollection_name'],
             'canonicalUrl' => UrlHelper::generateFullUrl('Shops', 'collection', array($shop_id, $scollectionId)),
             'productSearchPageType' => SavedSearchProduct::PAGE_SHOP,
             'recordId' => $shop_id,
             'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'categories'),
+            'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId) 
         );
 
         if (false === MOBILE_APP_API_CALL) {
@@ -560,6 +592,7 @@ class ShopsController extends MyAppController
         }
 
         $data = array_merge($data, $arr);
+
         $this->set('data', $data);
 
         if (FatUtility::isAjaxCall()) {
@@ -569,6 +602,7 @@ class ShopsController extends MyAppController
             $this->set('postedData', $get);
             $this->set('recordCount', $data['recordCount']);
             $this->set('siteLangId', $this->siteLangId);
+            $this->set('pageSizeArr', $data['pageSizeArr']);
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }

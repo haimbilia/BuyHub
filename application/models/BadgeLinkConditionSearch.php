@@ -3,7 +3,8 @@
 class BadgeLinkConditionSearch extends SearchBase
 {
     private $badgeLinksJoin = false;
-    
+    private $selProdIdArr = [];
+
     /**
      * __construct
      *
@@ -13,7 +14,7 @@ class BadgeLinkConditionSearch extends SearchBase
     {
         parent::__construct(BadgeLinkCondition::DB_TBL, 'blnk');
     }
-    
+
     /**
      * joinBadge
      *
@@ -44,14 +45,20 @@ class BadgeLinkConditionSearch extends SearchBase
      *
      * @return void
      */
-    public function joinBadgeRequest()
+    public function joinBadgeRequest(int $status = 0)
     {
         if (false === $this->badgeLinksJoin) {
             trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_BADGE_LINKS', CommonHelper::getLangId()), E_USER_ERROR);
         }
-        $this->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_id = badgelink_breq_id', 'breq');
+
+        $cnd = '';
+        if (0 < $status) {
+            $cnd .= ' and breq.breq_status = ' . $status;
+        }
+
+        $this->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq.breq_id = blc.badgelink_breq_id ' . $cnd, 'breq');
     }
-    
+
     /**
      * joinProduct
      *
@@ -70,7 +77,7 @@ class BadgeLinkConditionSearch extends SearchBase
             $this->joinTable(Product::DB_TBL_LANG, 'LEFT JOIN', 'product_id = productlang_product_id AND productlang_lang_id = ' . $langId, 'p_l');
         }
     }
-    
+
     /**
      * joinSellerProduct
      *
@@ -123,5 +130,157 @@ class BadgeLinkConditionSearch extends SearchBase
     public function joinUser()
     {
         $this->joinTable(User::DB_TBL, 'LEFT JOIN', 'blnku.user_id = blnk.blinkcond_user_id', 'blnku');
+    }
+
+    /**
+     * joinBadges
+     *
+     * @param  int $langId
+     * @return void
+     */
+    public function joinBadges(int $langId = 0, int $type = 0, bool $active = true)
+    {
+        $cond = '';
+        if (true == $active) {
+            $cond .= ' AND bdg.badge_active = ' . applicationConstants::ACTIVE;
+        }
+
+        if (0 < $type) {
+            $cond .= ' AND bdg.badge_type = ' . $type;
+        }
+
+        $this->joinTable(Badge::DB_TBL, 'INNER JOIN', 'blnk.blinkcond_badge_id = bdg.badge_id ' . $cond, 'bdg');
+        if (0 < $langId) {
+            $this->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badge_id = badgelang_badge_id AND badgelang_lang_id = ' . $langId, 'bdg_l');
+        }
+    }
+
+    /**
+     * joinProducts
+     *
+     * @param  int $langId
+     * @return void
+     */
+    public function joinProducts(int $langId = 0, $includeSelProds = true)
+    {
+        if (false === $this->badgeLinksJoin) {
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_BADGE_LINKS', $langId), E_USER_ERROR);
+        }
+
+        $srch = new SearchBase(Product::DB_TBL, 'p');
+        if (0 < $langId) {
+            $srch->joinTable(Product::DB_TBL_LANG, 'LEFT JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $langId, 'p_l');
+        }
+
+        if (true == $includeSelProds) {
+            $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'psp.selprod_product_id = p.product_id and psp.selprod_deleted = ' . applicationConstants::NO, 'psp');
+
+            if (!empty($this->selProdIdArr)) {
+                $srch->addCondition('psp.selprod_id', 'in', $this->selProdIdArr);
+            }
+        }
+        $srch->addMultipleFields(['p.product_id', 'psp.selprod_id as product_selprod_id']);
+        $srch->addCondition('p.product_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('p.product_deleted', '=', applicationConstants::NO);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT JOIN', 'blc.badgelink_record_id = prod.product_id AND blnk.blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_PRODUCT, 'prod');
+    }
+
+    /**
+     * joinSellerProducts
+     *
+     * @param  int $langId
+     * @return void
+     */
+    public function joinSellerProducts(int $langId = 0)
+    {
+        if (false === $this->badgeLinksJoin) {
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_BADGE_LINKS', $langId), E_USER_ERROR);
+        }
+
+        if (!empty($this->selProdIdArr)) {
+            $srch = new SearchBase(SellerProduct::DB_TBL, 'p');
+            $srch->doNotCalculateRecords();
+            $srch->doNotLimitRecords();
+            $srch->addCondition('p.selprod_id', 'in', $this->selProdIdArr);
+            $srch->addMultipleFields(['p.selprod_id']);
+            $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT JOIN', 'blc.badgelink_record_id = sp.selprod_id AND blnk.blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT, 'sp');
+        } else {
+            $this->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'blc.badgelink_record_id = sp.selprod_id AND blnk.blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT, 'sp');
+        }
+
+        if (0 < $langId) {
+            $this->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT JOIN', 'sp.selprod_id = selprodlang_selprod_id AND sp_l.selprodlang_lang_id = ' . $langId, 'sp_l');
+        }
+    }
+
+    /**
+     * joinShops
+     *
+     * @param  int $langId
+     * @return void
+     */
+    public function joinShops(int $langId = 0, $includeSelProds = true)
+    {
+        if (false === $this->badgeLinksJoin) {
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_BADGE_LINKS', $langId), E_USER_ERROR);
+        }
+
+        $srch = new SearchBase(Shop::DB_TBL, 's');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+
+        // $this->joinTable(Shop::DB_TBL, 'LEFT JOIN', 'blc.badgelink_record_id = shp.shop_id AND blnk.blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP, 'shp');
+        if (0 < $langId) {
+            $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 's.shop_id = s_l.shoplang_shop_id AND s_l.shoplang_lang_id = ' . $langId, 's_l');
+        }
+
+        if (true == $includeSelProds) {
+            $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'sp.selprod_user_id = s.shop_user_id and sp.selprod_deleted = ' . applicationConstants::NO, 'sp');
+            if (!empty($this->selProdIdArr)) {
+                $srch->addCondition('sp.selprod_id', 'in', $this->selProdIdArr);
+            }
+        }
+        $srch->addMultipleFields(['s.shop_id', 'sp.selprod_id as shop_selprod_id']);
+        $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT JOIN', 'blc.badgelink_record_id = shpprod.shop_id AND blnk.blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP, 'shpprod');
+    }
+
+    /**
+     * joinShopsForBadges
+     *    
+     * @return void
+     */
+    public function joinShopsForBadges(array $shopIdArr = [])
+    {
+        if (false === $this->badgeLinksJoin) {
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_BADGE_LINKS', CommonHelper::getLangId()), E_USER_ERROR);
+        }
+
+        $srch = new SearchBase(Shop::DB_TBL, 's');
+        /*  $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'u.user_id = s.shop_user_id', 'u'); */
+        $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'c.credential_user_id = s.shop_user_id', 'c');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addMultipleFields(['s.shop_id']);
+        if (!empty($shopIdArr)) {
+            $srch->addCondition('s.shop_id', 'in', $shopIdArr);
+        }
+
+        //$srch->addCondition('u.user_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('c.credential_verified', '=', applicationConstants::YES);
+        $srch->addCondition('c.credential_active', '=', applicationConstants::ACTIVE);
+        $this->joinTable('(' . $srch->getQuery() . ')', 'INNER JOIN', 'blc.badgelink_record_id = shpprod.shop_id AND blnk.blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP, 'shpprod');
+    }
+
+    /**
+     * setSelProdIdArr
+     *
+     * @param  array $arr
+     * @return void
+     */
+    public function setSelProdIdArr(array $arr)
+    {
+        $this->selProdIdArr = $arr;
     }
 }

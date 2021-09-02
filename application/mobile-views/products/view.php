@@ -1,35 +1,100 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$product['ribbons'] = $selProdRibbons;
+
+/* Shop and SelProd Badge */
+$selProdBadge = Badge::getSelprodBadges($siteLangId, [$product['selprod_id']]);
+$shopBadge = Badge::getShopBadges($siteLangId, [$product['shop_id']]);
+$badgesArr = array_merge($selProdBadge, $shopBadge);
+$badges = [];
+foreach ($badgesArr as $bdgRow) {
+    $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $bdgRow[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, $siteLangId);
+    $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
+    $url = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $siteLangId, 'MINI', $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $badges[] = [
+        'url' => $url,
+        Badge::DB_TBL_PREFIX . 'name' => $bdgRow[Badge::DB_TBL_PREFIX . 'name'],
+    ];
+}
+
+$product['badges'] = $badges;
+/* Shop and SelProd Badge */
+
+$btTLeftRibbons = $upsellProductsRibbons['tLeftRibbons'];
+$btTRightRibbons = $upsellProductsRibbons['tRightRibbons'];
 foreach (array_filter($upsellProducts) as $index => $btProduct) {
+    $selProdRibbons = [];
+    if (array_key_exists($btProduct['selprod_id'], $btTLeftRibbons)) {
+        $selProdRibbons[] = $btTLeftRibbons[$btProduct['selprod_id']];
+    }
+
+    if (array_key_exists($btProduct['selprod_id'], $btTRightRibbons)) {
+        $selProdRibbons[] = $btTRightRibbons[$btProduct['selprod_id']];
+    }
+
     $uploadedTime = AttachedFile::setTimeParam($btProduct['product_updated_on']);
     $upsellProducts[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($btProduct['product_id'], "MEDIUM", $btProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $upsellProducts[$index]['discount'] = ($btProduct['special_price_found'] && $btProduct['selprod_price'] > $btProduct['theprice']) ? CommonHelper::showProductDiscountedText($btProduct, $siteLangId) : '';
     $upsellProducts[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($btProduct['selprod_price'], false, false, false);
     $upsellProducts[$index]['theprice'] = CommonHelper::displayMoneyFormat($btProduct['theprice'], true, true, true);
-    $upsellProducts[$index]['discount'] = ($btProduct['special_price_found'] && $btProduct['selprod_price'] > $btProduct['theprice']) ? CommonHelper::showProductDiscountedText($btProduct, $siteLangId) : '';
+    $upsellProducts[$index]['ribbons'] = $selProdRibbons;
 }
 
+$relTLeftRibbons = $relatedProductsRibbons['tLeftRibbons'];
+$relTRightRibbons = $relatedProductsRibbons['tRightRibbons'];
 foreach (array_filter($relatedProductsRs) as $index => $rProduct) {
+    $selProdRibbons = [];
+    if (array_key_exists($rProduct['selprod_id'], $relTLeftRibbons)) {
+        $selProdRibbons[] = $relTLeftRibbons[$rProduct['selprod_id']];
+    }
+
+    if (array_key_exists($rProduct['selprod_id'], $relTRightRibbons)) {
+        $selProdRibbons[] = $relTRightRibbons[$rProduct['selprod_id']];
+    }
     $uploadedTime = AttachedFile::setTimeParam($rProduct['product_updated_on']);
     $relatedProductsRs[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($rProduct['product_id'], "MEDIUM", $rProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $relatedProductsRs[$index]['discount'] = ($rProduct['special_price_found'] && $rProduct['selprod_price'] > $rProduct['theprice']) ? CommonHelper::showProductDiscountedText($rProduct, $siteLangId) : '';
     $relatedProductsRs[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($rProduct['selprod_price'], false, false, false);
     $relatedProductsRs[$index]['theprice'] = CommonHelper::displayMoneyFormat($rProduct['theprice'], true, true, true);
-    $relatedProductsRs[$index]['discount'] = ($rProduct['special_price_found'] && $rProduct['selprod_price'] > $rProduct['theprice']) ? CommonHelper::showProductDiscountedText($rProduct, $siteLangId) : '';
+    $relatedProductsRs[$index]['ribbons'] = $selProdRibbons;
 }
 
+$recTLeftRibbons = $recommendedProductsRibbons['tLeftRibbons'];
+$recTRightRibbons = $recommendedProductsRibbons['tRightRibbons'];
 foreach (array_filter($recommendedProducts) as $index => $recProduct) {
+    $selProdRibbons = [];
+    if (array_key_exists($recProduct['selprod_id'], $recTLeftRibbons)) {
+        $selProdRibbons[] = $recTLeftRibbons[$recProduct['selprod_id']];
+    }
+
+    if (array_key_exists($recProduct['selprod_id'], $recTRightRibbons)) {
+        $selProdRibbons[] = $recTRightRibbons[$recProduct['selprod_id']];
+    }
     $uploadedTime = AttachedFile::setTimeParam($recProduct['product_updated_on']);
     $recommendedProducts[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($recProduct['product_id'], "MEDIUM", $recProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $recommendedProducts[$index]['discount'] = ($recProduct['special_price_found'] && $recProduct['selprod_price'] > $recProduct['theprice']) ? CommonHelper::showProductDiscountedText($recProduct, $siteLangId) : '';
     $recommendedProducts[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($recProduct['selprod_price'], false, false, false);
     $recommendedProducts[$index]['theprice'] = CommonHelper::displayMoneyFormat($recProduct['theprice'], true, true, true);
-    $recommendedProducts[$index]['discount'] = ($recProduct['special_price_found'] && $recProduct['selprod_price'] > $recProduct['theprice']) ? CommonHelper::showProductDiscountedText($recProduct, $siteLangId) : '';
+    $recommendedProducts[$index]['ribbons'] = $selProdRibbons;
 }
 
+$recentTLeftRibbons = $recentlyViewedRibbons['tLeftRibbons'];
+$recentTRightRibbons = $recentlyViewedRibbons['tRightRibbons'];
 foreach (array_filter($recentlyViewed) as $index => $recViewed) {
+    $selProdRibbons = [];
+    if (array_key_exists($recViewed['selprod_id'], $recentTLeftRibbons)) {
+        $selProdRibbons[] = $recentTLeftRibbons[$recViewed['selprod_id']];
+    }
+
+    if (array_key_exists($recViewed['selprod_id'], $recentTRightRibbons)) {
+        $selProdRibbons[] = $recentTRightRibbons[$recViewed['selprod_id']];
+    }
     $uploadedTime = AttachedFile::setTimeParam($recViewed['product_updated_on']);
     $recentlyViewed[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($recViewed['product_id'], "MEDIUM", $recViewed['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $recentlyViewed[$index]['discount'] = ($recViewed['special_price_found'] && $recViewed['selprod_price'] > $recViewed['theprice']) ? CommonHelper::showProductDiscountedText($recViewed, $siteLangId) : '';
     $recentlyViewed[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($recViewed['selprod_price'], false, false, false);
     $recentlyViewed[$index]['theprice'] = CommonHelper::displayMoneyFormat($recViewed['theprice'], true, true, true);
-    $recentlyViewed[$index]['discount'] = ($recViewed['special_price_found'] && $recViewed['selprod_price'] > $recViewed['theprice']) ? CommonHelper::showProductDiscountedText($recViewed, $siteLangId) : '';
+    $recentlyViewed[$index]['ribbons'] = $selProdRibbons;
 }
 
 foreach (array_filter($productImagesArr) as $afile_id => $image) {
@@ -83,9 +148,9 @@ foreach ($shippingRates as $sn => $row) {
 
 if (!empty($product)) {
     $product['productPolicies'] = [];
+    $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
     $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
     $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], true, true, true);
-    $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
     $product['inclusiveTax'] = FatUtility::int(FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId());
 
     if (!empty($product['selprod_return_age']) && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
@@ -187,13 +252,34 @@ if (Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
 }
 
 $product['product_description'] = html_entity_decode($product['product_description'], ENT_QUOTES, 'utf-8');
-$product['product_description'] = str_replace('/editor/editor-image/',FatUtility::generateFullUrl().'editor/editor-image/',$product['product_description']);
+$product['product_description'] = str_replace('/editor/editor-image/', FatUtility::generateFullUrl() . 'editor/editor-image/', $product['product_description']);
 
 if (!empty($product['moreSellersArr']) && 0 < count($product['moreSellersArr'])) {
+
+    /* Shop and SelProd Badge */
+    $shopIdsArr = array_column($product['moreSellersArr'], 'shop_id');
+    $shopBadges = Badge::getShopBadges($siteLangId, $shopIdsArr);
+    $shopBadgesArr = [];
+    foreach ($shopBadges as $bdgRow) {
+        $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $bdgRow[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, $siteLangId);
+        $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
+        $url = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $siteLangId, 'MINI', $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $shopBadgesArr[$bdgRow['shop_id']] = [
+            'url' => $url,
+            Badge::DB_TBL_PREFIX . 'name' => $bdgRow[Badge::DB_TBL_PREFIX . 'name'],
+        ];
+    }
+
+    $product['badges'] = $badges;
+    /* Shop and SelProd Badge */
     foreach ($product['moreSellersArr'] as &$value) {
+        $value['discount'] = ($value['special_price_found'] && $value['selprod_price'] > $value['theprice']) ? CommonHelper::showProductDiscountedText($value, $siteLangId) : '';
         $value['selprod_price'] = CommonHelper::displayMoneyFormat($value['selprod_price'], false, false, false);
         $value['theprice'] = CommonHelper::displayMoneyFormat($value['theprice'], true, true, true);
-        $value['discount'] = ($value['special_price_found'] && $value['selprod_price'] > $value['theprice']) ? CommonHelper::showProductDiscountedText($value, $siteLangId) : '';
+        $value['badges'] = [];
+        if (isset($shopBadgesArr[$value['shop_id']])) {
+            $value['badges'][] = $shopBadgesArr[$value['shop_id']];
+        }
     }
 }
 

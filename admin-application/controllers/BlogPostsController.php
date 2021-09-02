@@ -182,7 +182,7 @@ class BlogPostsController extends AdminBaseController
         /* url data[ */
         $blogOriginalUrl = BlogPost::REWRITE_URL_PREFIX . $post_id;
         if ($post['urlrewrite_custom'] == '') {
-            FatApp::getDb()->deleteRecords(UrlRewrite::DB_TBL, array( 'smt' => 'urlrewrite_original = ?', 'vals' => array($blogOriginalUrl)));
+            FatApp::getDb()->deleteRecords(UrlRewrite::DB_TBL, array('smt' => 'urlrewrite_original = ?', 'vals' => array($blogOriginalUrl)));
         } else {
             $record->rewriteUrl($post['urlrewrite_custom']);
         }
@@ -219,7 +219,14 @@ class BlogPostsController extends AdminBaseController
         $this->objPrivilege->canEditBlogPosts();
         $post = FatApp::getPostedData();
         $post_id = $post['post_id'];
-        $lang_id = $post['lang_id'];
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = $post['lang_id'];
+        } else {
+            $lang_id = array_key_first($languages);
+            $post['lang_id'] = $lang_id;
+        }
 
         if ($post_id == 0 || $lang_id == 0) {
             Message::addErrorMessage($this->str_invalid_request_id);
@@ -231,11 +238,11 @@ class BlogPostsController extends AdminBaseController
         unset($post['post_id']);
         unset($post['lang_id']);
         $data = array(
-        'postlang_lang_id' => $lang_id,
-        'postlang_post_id' => $post_id,
-        'post_title' => $post['post_title'],
-        'post_author_name' => $post['post_author_name'],
-        'post_description' => $post['post_description'],
+            'postlang_lang_id' => $lang_id,
+            'postlang_post_id' => $post_id,
+            'post_title' => $post['post_title'],
+            'post_author_name' => $post['post_author_name'],
+            'post_description' => $post['post_description'],
         );
 
         $bpCatObj = new BlogPost($post_id);
@@ -243,7 +250,7 @@ class BlogPostsController extends AdminBaseController
             Message::addErrorMessage($bpCatObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
-        
+
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(BlogPost::DB_TBL_LANG);
@@ -397,6 +404,12 @@ class BlogPostsController extends AdminBaseController
     public function images($post_id, $lang_id = 0)
     {
         $this->objPrivilege->canViewBlogPosts();
+
+        
+        $languages = Language::getAllNames();
+        if(count($languages) <= 1){
+            $lang_id =  array_key_first($languages); 
+        }
         $post_id = FatUtility::int($post_id);
         if (!$post_id) {
             FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->adminLangId));
@@ -405,7 +418,7 @@ class BlogPostsController extends AdminBaseController
         if (!$row = BlogPost::getAttributesById($post_id)) {
             FatUtility::dieWithError($this->str_no_record);
         }
-        $post_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $post_id, 0, $lang_id, false);
+        $post_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $post_id, 0, $lang_id, (count($languages) > 1) ? false : true);
         $this->set('languages', Language::getAllNames());
         $this->set('images', $post_images);
         $this->set('post_id', $post_id);
@@ -436,6 +449,11 @@ class BlogPostsController extends AdminBaseController
         $this->objPrivilege->canEditBlogPosts();
         $post_id = FatUtility::int($post_id);
         $lang_id = FatUtility::int($lang_id);
+        $languages = Language::getAllNames();
+		if(count($languages) <= 1){
+			 $lang_id =  array_key_first($languages); 
+		}
+        
         if ($post_id < 1) {
             Message::addErrorMessage($this->str_invalid_request);
             FatUtility::dieJsonError(Message::getHtml());
@@ -447,7 +465,7 @@ class BlogPostsController extends AdminBaseController
         }
 
         $file_type = $post['file_type'];
-        $allowedFileTypeArr = array( AttachedFile::FILETYPE_BLOG_POST_IMAGE );
+        $allowedFileTypeArr = array(AttachedFile::FILETYPE_BLOG_POST_IMAGE);
 
         if (!in_array($file_type, $allowedFileTypeArr)) {
             Message::addErrorMessage($this->str_invalid_request);
@@ -470,8 +488,7 @@ class BlogPostsController extends AdminBaseController
             -1,
             false,
             $lang_id
-        )
-        ) {
+        )) {
             Message::addErrorMessage($fileHandlerObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
@@ -503,7 +520,13 @@ class BlogPostsController extends AdminBaseController
 
         $frm = new Form('frmBlogPostImage', array('id' => 'imageFrm'));
         $frm->addHiddenField('', 'post_id', $post_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $bannerTypeArr, '', array(), '');
+
+		if(count($bannerTypeArr) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $bannerTypeArr, '', array(), '');
+		} else  {
+			$lang_id = array_key_first($bannerTypeArr); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BLOG_POST_IMAGE);
         $frm->addHiddenField('', 'min_width');
         $frm->addHiddenField('', 'min_height');
@@ -531,7 +554,7 @@ class BlogPostsController extends AdminBaseController
     {
         $postId = FatUtility::int($postId);
 
-       /*  $srch = BlogPost::getSearchObject(true);
+        /*  $srch = BlogPost::getSearchObject(true);
         $srch->addCondition('bp.post_id', '=', $postId);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -540,21 +563,29 @@ class BlogPostsController extends AdminBaseController
         $row = FatApp::getDb()->fetch($rs); */
         $frm = new Form('frmBlogPostCatLang', array('id' => 'frmBlogPostCatLang'));
         $frm->addHiddenField('', 'post_id', $postId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+        } else {
+            $lang_id = array_key_first($languages);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+
         $frm->addRequiredField(Labels::getLabel('LBL_Title', $this->adminLangId), 'post_title');
         $frm->addRequiredField(Labels::getLabel('LBL_Post_Author_Name', $this->adminLangId), 'post_author_name');
         /* $fld = $frm->addTextarea(Labels::getLabel('LBL_Short_Description', $this->adminLangId), 'post_short_description');
         $fld->requirements()->setRequired(true);
         $fld->htmlAfterField = '<small>' . Labels::getLabel("LBL_only_250_characters_will_be_shown_on_frontend", $this->adminLangId) . '</small>'; */
         $frm->addHtmlEditor(Labels::getLabel('LBL_Description', $this->adminLangId), 'post_description')->requirements()->setRequired(true);
-        
+
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        
+
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
         return $frm;
     }
@@ -623,8 +654,8 @@ class BlogPostsController extends AdminBaseController
         $json = array();
         foreach ($posts as $key => $post) {
             $json[] = array(
-            'id' => $key,
-            'name' => strip_tags(html_entity_decode($post['post_title'], ENT_QUOTES, 'UTF-8'))
+                'id' => $key,
+                'name' => strip_tags(html_entity_decode($post['post_title'], ENT_QUOTES, 'UTF-8'))
             );
         }
         die(json_encode($json));

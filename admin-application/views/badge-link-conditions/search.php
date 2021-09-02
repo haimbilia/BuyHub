@@ -35,9 +35,6 @@ if (Badge::COND_AUTO == $badgeConditionType) {
 $conditionTypeArr = BadgeLinkCondition::getConditionTypesArr($adminLangId);
 $recordTypeArr = BadgeLinkCondition::getRecordTypeArr($adminLangId);
 $recordConditionArr = BadgeLinkCondition::getRecordConditionArr($adminLangId);
-$nonPercElements =  [
-    BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS
-];
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive'));
 
@@ -64,7 +61,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $sr_no, true);
                 break;
             case 'cond_seller_name':
-                $td->appendElement('plaintext', [], $row[$key], true);
+                $sellerName = $row[$key] . ' (' . $row['shop_name'] . ')';
+                $td->appendElement('plaintext', [], $sellerName , true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'record_type':
                 $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/A", $adminLangId) : $recordTypeArr[$row[$key]];
@@ -82,7 +80,7 @@ foreach ($arrListing as $sn => $row) {
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from':
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to':
                 $lbl = $row[$key];
-                if (!empty($lbl) && (in_array($row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type'], $nonPercElements))) {
+                if (!empty($lbl) && BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS != $row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type']) {
                     $lbl = $row[$key] . '%';    
                 }
                 $td->appendElement('plaintext', [], (!empty($lbl) ? $lbl : Labels::getLabel('LBL_N/A', $adminLangId)), true);

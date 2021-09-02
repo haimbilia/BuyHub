@@ -115,20 +115,30 @@ $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR
 		<div class="p-4 mb-4 border rounded">
 			<h3 class="mb-4"><?php echo Labels::getLabel('LBL_Banner', $adminLangId); ?></h3>
 			<div class="row">
-				<div class="col-md-6">
-					<div class="field-set">
-						<div class="caption-wraper"><label class="field_label">
-						<?php  $fld = $frm->getField('banner_lang_id');
-							echo $fld->getCaption();
+					<?php $fld = $frm->getField('banner_lang_id');
+					if($fld->fldType != 'hidden'){
 						?>
-						</label></div>
-						<div class="field-wraper">
-							<div class="field_cover">
-							<?php echo $frm->getFieldHtml('banner_lang_id'); ?>
+						
+							<div class="col-md-6">
+								<div class="field-set">
+									<div class="caption-wraper"><label class="field_label">
+									<?php  
+										echo $fld->getCaption();
+									?>
+									</label></div>
+									<div class="field-wraper">
+										<div class="field_cover">
+										<?php echo $frm->getFieldHtml('banner_lang_id'); ?>
+										</div>
+									</div>
+								</div>
 							</div>
-						</div>
-					</div>
-				</div>
+						<?php
+					} else {
+						echo $frm->getFieldHtml('banner_lang_id'); 
+					}
+					?>
+
 				<div class="col-md-6">
 					<div class="field-set">
 						<div class="caption-wraper"><label class="field_label">

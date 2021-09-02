@@ -46,11 +46,12 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
 ?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <div class="content-header row">
-            <div class="col"> <?php $this->includeTemplate('_partial/dashboardTop.php'); ?> <h2
-                    class="content-header-title"><?php echo Labels::getLabel('LBL_My_Credits', $siteLangId); ?></h2>
-            </div>
-        </div>
+        <?php 
+        $data = [
+            'headingLabel' => Labels::getLabel('LBL_MY_CREDITS', $siteLangId),
+            'siteLangId' => $siteLangId
+        ];
+        $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
@@ -66,7 +67,7 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
                             <div id="credits-info"></div>
                             <div class="row">
                                 <div class="col-lg-6 mb-3 mb-lg-0">
-                                    <div class="balancebox border h-100 rounded text-center p-3">
+                                    <div class="balancebox border h-100 rounded text-center p-3 form">
                                         <p><?php echo Labels::getLabel('LBL_Available_Balance', $siteLangId); ?>: </p>
                                         <h3><?php echo CommonHelper::displayMoneyFormat($userWalletBalance); ?></h3>
                                         <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>

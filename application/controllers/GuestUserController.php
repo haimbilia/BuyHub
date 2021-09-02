@@ -353,7 +353,7 @@ class GuestUserController extends MyAppController
         }
 
         if (UserAuthentication::isUserLogged()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('account'));
+            FatApp::redirectUser(UrlHelper::generateUrl('account','', [], CONF_WEBROOT_DASHBOARD));
         }
 
         $registerFrm = $this->getRegistrationForm();
@@ -612,7 +612,7 @@ class GuestUserController extends MyAppController
                 Message::addErrorMessage(Labels::getLabel($authentication->getError(), $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
             }
-            FatApp::redirectUser(UrlHelper::generateUrl('Account'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD));
         }
 
         Message::addMessage(Labels::getLabel("MSG_EMAIL_VERIFIED", $this->siteLangId));
@@ -688,7 +688,7 @@ class GuestUserController extends MyAppController
                 Message::addErrorMessage(Labels::getLabel($authentication->getError(), $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
             }
-            FatApp::redirectUser(UrlHelper::generateUrl('Account'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD));
         }
 
         Message::addMessage(Labels::getLabel("MSG_EMAIL_VERIFIED", $this->siteLangId));

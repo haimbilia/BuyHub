@@ -487,7 +487,17 @@ class PromotionsController extends AdminBaseController
         $post = FatApp::getPostedData();
         /* CommonHelper::printArray($post); */
         $promotionId = FatUtility::int($post['promotion_id']);
-        $langId = FatUtility::int($post['lang_id']);
+        
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+            $langId = FatUtility::int($post['lang_id']);
+			
+		} else  {
+			$langId  = array_key_first($languages); 
+		}
+      
+
+
         $promotionType = FatUtility::int($post['promotion_type']);
         $bannerScreen = FatUtility::int($post['banner_screen']);
 
@@ -569,7 +579,13 @@ class PromotionsController extends AdminBaseController
         $post = FatApp::getPostedData();
 
         $promotionId = $post['promotion_id'];
-        $langId = $post['lang_id'];
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+            $langId = $post['lang_id'];
+		} else  {
+			$langId = array_key_first($languages); 
+		}
+       
 
         if ($promotionId == 0 || $langId == 0) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $this->adminLangId));
@@ -726,6 +742,11 @@ class PromotionsController extends AdminBaseController
         if (1 > $promotionId) {
             FatUtility::dieWithError(Labels::getLabel('Lbl_Invalid_request', $this->adminLangId));
         }
+
+        $languages = Language::getAllNames();
+		if(count($languages) <= 1){
+			 $lang_id =  array_key_first($languages); 
+		}
         $promotionType = 0;
         $srch = new PromotionSearch($this->adminLangId);
         $srch->joinBannersAndLocation($this->adminLangId, Promotion::TYPE_BANNER, 'b');
@@ -743,7 +764,7 @@ class PromotionsController extends AdminBaseController
 
         $recordId = 0;
         $attachedFileType = 0;
-
+        $imgDetail = false;
         switch ($promotionType) {
         case Promotion::TYPE_BANNER:
             $imgDetail = Banner::getAttributesById($promotionDetails['banner_id']);
@@ -766,7 +787,8 @@ class PromotionsController extends AdminBaseController
         }
 
         if (!false == $imgDetail) {
-            $bannerImgArr = AttachedFile::getMultipleAttachments($attachedFileType, $recordId, 0, $lang_id, false, $screen);
+
+            $bannerImgArr = AttachedFile::getMultipleAttachments($attachedFileType, $recordId, 0, $lang_id, (count($languages) > 1) ? false : true, $screen);
             $this->set('bannerImgArr', $bannerImgArr);
         }
 
@@ -876,7 +898,14 @@ class PromotionsController extends AdminBaseController
     {
         $frm = new Form('frmPromotionLang');
         $frm->addHiddenField('', 'promotion_id', $promotionId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $langId, array(), '');
+
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $langId, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
         $frm->addRequiredField(Labels::getLabel('LBL_promotion_name', $this->adminLangId), 'promotion_name');
         
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
@@ -1025,7 +1054,7 @@ class PromotionsController extends AdminBaseController
                 $locationArr[$key] = $val['blocation_name'] . ' ( ' . CommonHelper::displayMoneyFormat($val['blocation_promotion_cost']) . ' )';
             }
         }
-        $frm->addSelectBox(Labels::getLabel('LBL_Location', $this->adminLangId), 'banner_blocation_id', $locationArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LAYOUT_TYPE', $this->adminLangId), 'banner_blocation_id', $locationArr, '', array(), '');
 
 
         $fld = $frm->addTextBox(Labels::getLabel('Lbl_Budget', $this->adminLangId), 'promotion_budget');
@@ -1057,7 +1086,15 @@ class PromotionsController extends AdminBaseController
         $frm->addHiddenField('', 'promotion_type', $promotionType);
 
         $bannerTypeArr = applicationConstants::bannerTypeArr();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $bannerTypeArr, '', array(), '');
+     
+		if(count($bannerTypeArr) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $bannerTypeArr, '', array(), '');
+		} else  {
+			$lang_id = array_key_first($bannerTypeArr); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+       
+
         $screenArr = applicationConstants::getDisplaysArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->adminLangId), 'banner_screen', $screenArr, '', array(), '');
         $fld = $frm->addButton(Labels::getLabel('LBL_Banner_Image', $this->adminLangId), 'banner_image', Labels::getLabel('LBL_Upload_File', $this->adminLangId), array('class' => 'bannerFile-Js', 'id' => 'banner_image'));

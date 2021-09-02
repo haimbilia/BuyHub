@@ -39,6 +39,7 @@
                                         'jpgImageUrl' => $imageUrl,
                                         'ratio' => '1:1',
                                         'alt' => $product['product_name'],
+                                        'siteLangId' => $siteLangId,
                                     ];
 
                                     $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 

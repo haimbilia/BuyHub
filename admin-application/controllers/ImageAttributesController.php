@@ -199,8 +199,15 @@ class ImageAttributesController extends AdminBaseController
             $imgTypesArr = Product::getSeparateImageOptions($recordId, $this->adminLangId);
             $frm->addSelectBox(Labels::getLabel('LBL_Image_File_Type', $this->adminLangId), 'option_id', $imgTypesArr, $optionId, array(), '');
         }
-        $languagesAssocArr = Language::getAllNames();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->adminLangId)) + $languagesAssocArr, $langId, array(), '');
+        
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+
         foreach ($images as $afileId => $afileData) {
             $frm->addTextBox(Labels::getLabel('LBL_Image_Title', $this->adminLangId), 'image_title' . $afileId);
             $frm->addTextBox(Labels::getLabel('LBL_Image_Alt', $this->adminLangId), 'image_alt' . $afileId);

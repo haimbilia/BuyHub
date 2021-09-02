@@ -14,12 +14,12 @@ $email->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_EMAIL_ADDRESS'
 $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <div class="content-header row">
-            <div class="col">
-                <?php $this->includeTemplate('_partial/dashboardTop.php'); ?>
-                <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Share_and_Earn', $siteLangId); ?></h2>
-            </div>
-        </div>
+        <?php 
+        $data = [
+            'headingLabel' => Labels::getLabel('LBL_Share_and_Earn',$siteLangId),
+            'siteLangId' => $siteLangId,         
+        ];
+        $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
             <div class="card">
                 <div class="card-body">
@@ -49,7 +49,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         </div>
                         <ul class="social-invites ">
                             <li>
-                                <a href="javascript:void(0);" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>" onclick="copy($(this))" data-url="" data-val="" data-code="" title="Copy link" class="btn">
+                                <a href="javascript:void(0);" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>" onclick="copy($(this))" data-url="<?php echo $referralTrackingUrl; ?>" data-toggle="tooltip" data-placement="top"  class="btn">
                                     <span class="icon">
                                         <i class="svg--icon">
                                             <svg class="svg">

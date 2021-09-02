@@ -184,6 +184,7 @@ class DashboardBaseController extends FatController
                 'close' => Labels::getLabel('LBL_CLOSE', $this->siteLangId),
                 'copiedText' => Labels::getLabel('LBL_COPIED_TEXT', $this->siteLangId),
                 'areYouSure' => Labels::getLabel('LBL_ARE_YOU_SURE?', $this->siteLangId),
+                'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
             );
 
             $languages = Language::getAllNames(false);

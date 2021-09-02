@@ -13,13 +13,13 @@ if (!isset($showAddToFavorite)) {
 }
 
 if ($showAddToFavorite) {
-    if (!isset($includeRibbon) || true === $includeRibbon) {
-        $ribSelProdId = $product['selprod_id'];
-        $ribProdId = $product['product_id'];
-        $ribShopId = $product['shop_id'];
-        include(CONF_FRONT_END_THEME_PATH . '_partial/get-ribbon.php');
-    } ?>
-
+    /* Get Ribbon */
+    if ((!isset($includeRibbon) || true === $includeRibbon) && !empty($selProdRibbons)) {
+        foreach ($selProdRibbons as $ribbRow) {
+            $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
+        }
+    }
+    ?>
 
     <?php if (true ==  $showActionBtns) { ?>
 

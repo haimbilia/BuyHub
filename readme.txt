@@ -205,8 +205,9 @@ Updates/Fixes :
     => 056954 - Seller: Country code is not showing while adding the Contact Number in the Seller Approval form
     => 056948 - Web Buyer: Getting a "404 error" while clicking on the "Open a Store" button on the front end
     => 057017 - importing seller products in german getting error invalid csv column
-    => 057091 - Buyer: Suggestion to make the Brands name clickable on the Product details page at the buyers end
-    => 057089 - Admin: Suggestion to override the images while uploading multiple images because we are showing only one image for the Brands at the buyers end    => 057045 - Seller: Shipping Packages icon is missing in the menu list
+    => 057089 - Admin: Suggestion to override the images while uploading multiple images because we are showing only one image for the Brands at the buyers end
+    => 057115 - Seller and Admin: "+" button is not showing while adding the pickup address' for "All days" Time Slots
+    => 057163 - while adding the option in catalog getting struck in ajax loop
 
 ===========================TV-9.3.2.20210810==================
     => 057137 - Getting error while stripe connect transfer seller part
@@ -242,7 +243,25 @@ Updates/Fixes :
     => 057269 - Seller: Text is not correct on the "Requests" section
     => 057262 - Seller: More than two ribbons are showing for the products inventory
     => 057372 - Getting error while sending email from Users tab
-
+    => 057408 - Buyer: "Undefined variable" error is showing while clicking on the Seller's collection
+    => 057405 - Buyer: "Fatal error" is showing while clicking on the newly added Slides promotions
+    => 057403 - Seller: Suggestion to don't show the selected products in the drop-down while adding the collections
+    => 057396 - Advertiser: "404 error" is showing while clicking on the "Email Verification" link
+    => 057391 - Buyer: A warning message is showing while clicking on the "Affiliate" option
+    => 057384 - Admin: Information is missing regarding "Content Blocks
+    => 057444 - If brand is mandatory then while importing getting error
+    => 057684 - in apple app mp4 tried to run instead of download
+    => 057715 - Badge condition listing for automatic case.
+    => 057716 - Notice: Undefined variable: siteLangId in application/views/_partial/picture-tag.php
+    => 057725 - Multiple first time purchase discount coupons are getting created by the system for one user
+    => 057749 - Category with no product is also listing on view all category
+    => 057717 - Admin: "Undefined variable" error is showing while searching on the "Catalog Report" section
+    => 057775 - Fatal error: Uncaught TypeError: Argument (Checkout listing)
+    => 057381 - Admin: Noting is showing under the "Banner Layouts" listing
+    => 057778 - Product Detail and Shop View Page Copy link not working and invalid URL to copy
+    => 057781 - Display processing if call ajax from fcom ajax
+    => 057783 - while exporting file in russin language file name coming with unwanted string
+    => 057535 - Advertiser: Remove the "My Message" icon for the Advertiser
 
 New Features:  
     => Admin shipped products listing page

@@ -13,8 +13,8 @@ class Shipping
     public const RATE_CACHE_KEY_NAME = "shipRateCache_";
     public const CARRIER_CACHE_KEY_NAME = "shipCarrierCache_";
 
-    private $langId;   
-    private $error = '';   
+    private $langId;
+    private $error = '';
     private $successMsg = '';
     private $shippedByArr = [];
     private $selProdShipRates = [];
@@ -228,9 +228,9 @@ class Shipping
                 $temp[] = $row['selprod_id'];
             }
 
-            if (0 < $row['shiippingBySeller']) {                
+            if (0 < $row['shiippingBySeller']) {
                 $row['shopAddress'] = $this->getShopAddress($row['shop_id']);
-            } else {                
+            } else {
                 $row['shopAddress'] = $this->getShopAddress(0);
             }
 
@@ -244,14 +244,14 @@ class Shipping
         }
         return $res = array_merge($res, []);
     }
-    
+
     private function getShopAddress($shopId)
     {
         if (0 < $shopId) {
             $fields = array('shop_postalcode as postalCode', 'shop_address_line_1 as line1', 'shop_address_line_2 as line2', 'shop_city as city', 'state_name as state', 'state_code as stateCode', 'country_code as countryCode', 'shop_phone as phone', 'shop_name', 'shop_id');
             return Shop::getShopAddress($shopId, true, $this->langId, $fields);
         }
-        
+
         $adminAddress = Admin::getAddress($this->langId);
         $adminAddress['phone'] = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, 0);
         $adminAddress['shop_name'] = FatApp::getConfig('CONF_SITE_OWNER_' . $this->langId, FatUtility::VAR_STRING, '');
@@ -271,19 +271,19 @@ class Shipping
     {
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);
         $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
-        
-       
+
+
         foreach ($productInfo as $selprod_id => $product) {
             if (!in_array($selprod_id, $physicalSelProdIdArr)) {
                 continue;
-            }        
-            
+            }
+
             $isProductShippedBySeller = $product['isProductShippedBySeller'];
-            
-            if(0 < FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)){
+
+            if (0 < FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
                 $isProductShippedBySeller = 0;
             }
-            
+
             $useManualShipping = FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_ADMIN', FatUtility::VAR_INT, 0);
             if (0 < $isProductShippedBySeller) {
                 $useManualShipping = ShopSpecifics::getAttributesById($product['shop_id'], 'shop_use_manual_shipping_rates');
@@ -314,7 +314,7 @@ class Shipping
             }
 
             if (empty($carriers)) {
-                SystemLog::system(get_class($shippingApiObj)::KEY_NAME . "--" . $shippingApiObj->getError());
+                SystemLog::system(get_class($shippingApiObj)::KEY_NAME . "--" . $shippingApiObj->getError(), 'SelProd ID-' . $product['selprod_id']);
                 continue;
             }
 
@@ -393,7 +393,10 @@ class Shipping
                 }
 
                 if ((false == $shippingRates || empty($shippingRates))) {
-                    SystemLog::system($shippingApiObj->getError());
+                    $msg = (string) $shippingApiObj->getError();
+                    if (!empty($msg)) {
+                        SystemLog::system($msg, 'SelProd ID-' . $product['selprod_id']);
+                    }
                     continue;
                 }
                 unset($physicalSelProdIdArr[$product['selprod_id']]);
@@ -438,13 +441,13 @@ class Shipping
      * @return bool
      */
     private function fetchShippingRatesFromSystem(array $productInfo, array &$physicalSelProdIdArr): bool
-    {        
-              
-        foreach ($this->selProdShipRates as $rateId => $rates) {            
+    {
+
+        foreach ($this->selProdShipRates as $rateId => $rates) {
             if (!empty($this->systemRatesToFetchSelprodIds) && !in_array($rates['selprod_id'], $this->systemRatesToFetchSelprodIds)) {
                 continue;
-            } 
-            
+            }
+
             $product = $productInfo[$rates['selprod_id']];
             $shippedBy = -1; /*Shipped by admin */
             $shippingLevel = self::LEVEL_PRODUCT;
@@ -517,19 +520,19 @@ class Shipping
         $shipToStateId = isset($shippingAddressDetail['addr_state_id']) ? $shippingAddressDetail['addr_state_id'] : 0;
 
         $this->selProdShipRates = $this->getSellerProductShippingRates($physicalSelProdIdArr, $shipToCountryId, $shipToStateId);
-       
+
         $this->fetchShippingRatesFromApi($shippingAddressDetail, $productInfo, $physicalSelProdIdArr);
         if (count($this->systemRatesToFetchSelprodIds)) {
             $this->fetchShippingRatesFromSystem($productInfo, $physicalSelProdIdArr);
         }
-        
+
         /*Include Physical products whose shipping rates not defined */
         foreach ($physicalSelProdIdArr as $selProdId) {
             $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['products'][$selProdId] = $productInfo[$selProdId];
             $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['shipping_options'][$selProdId] = [];
             $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['rates'][$selProdId] = [];
         }
-        
+
         return $this->formatOutput(applicationConstants::SUCCESS, $this->shippedByArr);
     }
 
@@ -786,7 +789,7 @@ class Shipping
 
         return Fatutility::float($productWeight * $coversionRate);
     }
-    
+
     /**
      * setSelectedShipping
      *
@@ -797,7 +800,7 @@ class Shipping
     {
         $this->selectedShippingService = $selectedShippingService;
     }
-    
+
     /**
      * 
      * @param type $adminApi
@@ -805,7 +808,7 @@ class Shipping
      * 
      * $sellerId = 0 - Admin plugin else seller plugin
      */
-    
+
     public function getShippingApiObj(int $sellerId = 0)
     {
         if (isset($this->shippingServicesArr[$sellerId])) {
@@ -816,7 +819,7 @@ class Shipping
 
         if (0 < $sellerId) {
             $sellerPluginObj = new SellerPlugin(0, $sellerId);
-            $pluginData = $sellerPluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES);            
+            $pluginData = $sellerPluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES);
             if (!empty($pluginData)) {
                 $isSellerPluginObjActive = true;
                 $pluginObj = $sellerPluginObj;

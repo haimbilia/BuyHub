@@ -65,6 +65,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                             'jpgImageUrl' => $imageUrl,
                                             'ratio' => '1:1',
                                             'alt' => $productTitle,
+                                            'siteLangId' => $siteLangId,
                                         ];
 
                                         $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
@@ -137,6 +138,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                     'jpgImageUrl' => $imageUrl,
                                     'ratio' => '1:1',
                                     'alt' => $productTitle,
+                                    'siteLangId' => $siteLangId,
                                 ];
 
                                 $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
@@ -297,6 +299,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                         'jpgImageUrl' => $imageUrl,
                                         'ratio' => '1:1',
                                         'alt' => $productTitle,
+                                        'siteLangId' => $siteLangId,
                                     ];
 
                                     $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);

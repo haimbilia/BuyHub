@@ -21,8 +21,7 @@ if (Badge::TYPE_BADGE == $badgeType) {
 	$uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
 	$imageHtml = '<img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $badgeName . '" alt="' . $badgeName . '">';
 } else {
-	$ribbRow = $badgeData;
-	include CONF_THEME_PATH . '_partial/get-ribbon.php';
+    $ribbon = $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $badgeData], false, true);
 	$imageHtml = '<div class="badge-wrap">' . $ribbon . '</div>';
 }
 
@@ -136,7 +135,7 @@ if (Badge::TYPE_BADGE == $badgeType) {
 				</div>
 				<div class="row linkType--js">
 					<?php if (1 > $blinkcond_id) { ?>
-						<div class="col-md-3">
+						<div class="col-md-4">
 							<div class="field-set">
 								<div class="caption-wraper">
 									<label class="field_label">
@@ -154,23 +153,25 @@ if (Badge::TYPE_BADGE == $badgeType) {
 							</div>
 						</div>
 					<?php } ?>
-					<div class="col-md-<?php echo (1 > $blinkcond_id) ? '8' : '12'; ?>">
-						<div class="field-set">
-							<div class="caption-wraper">
-								<label class="field_label">
-									<?php
-									$fld = $frm->getField('badgelink_record_id');
-									echo $fld->getCaption();
-									?>
-								</label>
-							</div>
-							<div class="field-wraper">
-								<div class="field_cover">
-									<?php echo $frm->getFieldHtml('badgelink_record_id'); ?>
-								</div>
-							</div>
-						</div>
-					</div>
+                    <?php if (BadgeLinkCondition::RECORD_TYPE_SHOP != $recordType || 1 > $recordType) { ?>
+                        <div class="col-md-<?php echo (1 > $blinkcond_id) ? '8' : '12'; ?>">
+                            <div class="field-set">
+                                <div class="caption-wraper">
+                                    <label class="field_label">
+                                        <?php
+                                        $fld = $frm->getField('badgelink_record_id');
+                                        echo $fld->getCaption();
+                                        ?>
+                                    </label>
+                                </div>
+                                <div class="field-wraper">
+                                    <div class="field_cover">
+                                        <?php echo $frm->getFieldHtml('badgelink_record_id'); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
 				</div>
 				<?php if (Badge::TYPE_BADGE == $badgeType) { ?>
 					<div class="row conditionType--js">

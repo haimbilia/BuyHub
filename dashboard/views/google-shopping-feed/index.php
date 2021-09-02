@@ -5,15 +5,17 @@ $serviceAccInfo = isset($userData['service_account']) ? $userData['service_accou
 ?>
 <main id="main-area" class="main"   >
     <div class="content-wrapper content-space">
-        <div class="content-header row">
-            <div class="col">
-                <h2 class="content-header-title"><?php echo $pluginName;?></h2>
-            </div>
-        </div>
+        <?php 
+            $data = [
+                'headingLabel' =>  $pluginName,
+                'siteLangId' => $siteLangId,
+            ];
+            $this->includeTemplate('_partial/header/content-header.php', $data, false);
+        ?>
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="card">
+                    <div class="card ">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <h6 class="m-0">
                                 <?php echo Labels::getLabel('Lbl_MERCHANT_ID', $siteLangId);?> : 

@@ -149,7 +149,14 @@ class OrderCancelReasonsController extends AdminBaseController
         $post = FatApp::getPostedData();
 
         $reasonId = $post['ocreason_id'];
-        $lang_id = $post['lang_id'];
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = $post['lang_id'];
+        } else {
+            $lang_id = array_key_first($languages);
+            $post['lang_id'] = $lang_id;
+        }
 
         if ($reasonId == 0 || $lang_id == 0) {
             Message::addErrorMessage($this->str_invalid_request_id);
@@ -162,10 +169,10 @@ class OrderCancelReasonsController extends AdminBaseController
         unset($post['lang_id']);
 
         $data = array(
-        'ocreasonlang_lang_id' => $lang_id,
-        'ocreasonlang_ocreason_id' => $reasonId,
-        'ocreason_title' => $post['ocreason_title'],
-        // 'ocreason_description'=>$post['ocreason_description']
+            'ocreasonlang_lang_id' => $lang_id,
+            'ocreasonlang_ocreason_id' => $reasonId,
+            'ocreason_title' => $post['ocreason_title'],
+            // 'ocreason_description'=>$post['ocreason_description']
         );
 
         $reasonObj = new OrderCancelReason($reasonId);
@@ -174,7 +181,7 @@ class OrderCancelReasonsController extends AdminBaseController
             Message::addErrorMessage($reasonObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
-        
+
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(OrderCancelReason::DB_TBL_LANG);
@@ -217,17 +224,25 @@ class OrderCancelReasonsController extends AdminBaseController
         $this->objPrivilege->canViewOrderCancelReasons();
         $frm = new Form('frmOrderCancelReasonLang');
         $frm->addHiddenField('', 'ocreason_id', $reasonId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+        } else {
+            $lang_id = array_key_first($languages);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+
         $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->adminLangId), 'ocreason_title');
         // $frm->addTextarea('Reason Description', 'ocreason_description');
-        
+
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        
+
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }

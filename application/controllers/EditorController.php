@@ -84,8 +84,12 @@ class EditorController extends FatController
 
     private function loadAttachment($pth)
     {
-        header("Content-type: application/octet-stream");
-        header('Content-Disposition: attachement; filename="' . basename($pth) . '"');
+        header("Content-type: application/octet-stream");      
+        if (strpos($_SERVER ['HTTP_USER_AGENT'], "MSIE") > 0) {
+            header('Content-Disposition: attachment; filename="' . rawurlencode(basename($pth)) . '"');
+        } else {
+            header('Content-Disposition: attachment; filename*=UTF-8\'\'' . rawurlencode(basename($pth)));
+        }
         header('Content-Length: ' . filesize($pth));
         readfile($pth);
         exit;

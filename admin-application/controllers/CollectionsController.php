@@ -37,8 +37,10 @@ class CollectionsController extends AdminBaseController
     {
         $frm = new Form('frmSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-
-        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->adminLangId), 'collection_type', Collections::getTypeArr($this->adminLangId), '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
+        
+        $typeArr = Collections::getTypeArr($this->adminLangId);
+        unset($typeArr[Collections::COLLECTION_TYPE_CONTENT_BLOCK]);
+        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->adminLangId), 'collection_type', $typeArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
         $frm->addSelectBox(Labels::getLabel('LBL_Layout_Type', $this->adminLangId), 'collection_layout_type', array(-1 => Labels::getLabel('LBL_Does_Not_matter', $this->adminLangId)) + Collections::getLayoutTypeArr($this->adminLangId), '', array(), '');
 
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
@@ -685,6 +687,10 @@ class CollectionsController extends AdminBaseController
         if (1 > $collection_id) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
+        $languages = Language::getAllNames();
+		if(count($languages) <= 1){
+			 $lang_id =  array_key_first($languages); 
+		}
 
         $collectionDetails = Collections::getAttributesById($collection_id);
         if (false != $collectionDetails && ($collectionDetails['collection_active'] != applicationConstants::ACTIVE || $collectionDetails['collection_deleted'] == applicationConstants::YES)) {
@@ -695,7 +701,7 @@ class CollectionsController extends AdminBaseController
         $bannerLocation = BannerLocation::getDataByCollectionId($collection_id);
         $blocation_id = $bannerLocation['blocation_id'];
 
-        $bannerImgArr = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $banner_id, 0, $lang_id, false, $screen);
+        $bannerImgArr = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $banner_id, 0, $lang_id, (count($languages) > 1) ? false : true, $screen);
         /* $bannerDetail = Banner::getAttributesById($banner_id);
         $bannerImgArr = [];
         if (!false == $bannerDetail) {
@@ -903,8 +909,17 @@ class CollectionsController extends AdminBaseController
         foreach ($langData as $langId => $data) {
             $frm->addTextBox(Labels::getLabel('LBL_Banner_Title', $this->adminLangId), 'banner_title[' . $langId . ']');
         }
+
         $mediaLanguages = applicationConstants::bannerTypeArr();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'banner_lang_id', $mediaLanguages, '', array(), '');
+       
+		if(count($mediaLanguages) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'banner_lang_id', $mediaLanguages, '', array(), '');
+		} else  {
+			$lang_id = array_key_first($mediaLanguages); 
+			$frm->addHiddenField('', 'banner_lang_id', $lang_id);
+		}
+      
+        
         $screenArr = applicationConstants::getDisplaysArr($this->adminLangId);
         $displayFor = ($collectionDetails && $collectionDetails['collection_layout_type'] == Collections::TYPE_BANNER_LAYOUT3) ? applicationConstants::SCREEN_MOBILE : '';
         $frm->addSelectBox(Labels::getLabel("LBL_Device", $this->adminLangId), 'banner_screen', $screenArr, $displayFor, array(), '');

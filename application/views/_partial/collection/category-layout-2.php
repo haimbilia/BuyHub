@@ -26,6 +26,7 @@
                                     'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'] , $siteLangId, 'MEDIUM', applicationConstants::SCREEN_DESKTOP)).$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                     'ratio' => '4:1',
                                     'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $category['prodcat_name'],
+                                    'siteLangId' => $siteLangId,
                                 ];
 
                                 $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 

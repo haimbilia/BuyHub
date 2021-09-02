@@ -20,7 +20,7 @@
         tr {
             td:last-child {
                 text-align: #{$end-direction};
-                padding-#{$end-direction}: 0;
+                //padding-#{$end-direction}: 0;
             }
         }
     }

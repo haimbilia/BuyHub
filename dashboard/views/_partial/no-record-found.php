@@ -15,3 +15,6 @@
         }
     }?>
 </div>
+<script>
+    $('.formActionBtn-js').hide();
+</script>

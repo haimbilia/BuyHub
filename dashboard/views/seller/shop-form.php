@@ -1,4 +1,5 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php
+defined('SYSTEM_INIT') or die('Invalid Usage.');
 $shopFrm->setFormTagAttribute('onsubmit', 'setupShop(this); return(false);');
 $shopFrm->setFormTagAttribute('class', 'form form--horizontal');
 
@@ -35,28 +36,13 @@ $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel(
 $btnSubmit = $shopFrm->getField('btn_submit');
 /* $btnSubmit->developerTags['noCaptionTag'] = true; */
 $btnSubmit->setFieldTagAttribute('class', "btn btn-brand btn-wide");
-
-$variables = array('language' => $language, 'siteLangId' => $siteLangId, 'shop_id' => $shop_id, 'action' => $action);
-$this->includeTemplate('seller/_partial/shop-navigation.php', $variables, false); ?>
-<div class="tabs__content tabs__content-js">
-    <div class="card">
-        <div class="card-body ">
-            <div class="row">
-                <div class="col-lg-12 col-md-12" id="shopFormBlock"> <?php echo $shopFrm->getFormHtml(); ?>
-                    <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
-                        <div class="col-lg-12 col-md-12" id="map" style="width:1500px; height:500px"></div>
-                    <?php } ?>
-                </div>
-            </div>
-        </div>
-    </div>
+?>
+<div class="card-body "> 
+    <?php echo $shopFrm->getFormHtml(); ?>
+    <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
+        <div class="g-map" id="map"></div>
+    <?php } ?>
 </div>
-<script language="javascript">
-    /* $(document).ready(function() {
-        getCountryStates($("#shop_country_id")
-            .val(), <?php //echo $stateId; ?> , '#shop_state');
-    }); */
-</script>
 <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
     <script>
         var lat = (!$('#lat').val()) ? 0 : $('#lat').val();

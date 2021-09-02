@@ -48,10 +48,6 @@ class Badge extends MyAppModel
 
     public const REMOVED_OLD_IMAGE_TIME = 4;
 
-    private $selProdId = 0;  //Priority 1
-    private $prodId = 0;  //Priority 2
-    private $shopId = 0;  //Priority 3
-
     public const APPROVAL_REQUIRED = 1;
     public const APPROVAL_OPEN = 0;
 
@@ -132,7 +128,7 @@ class Badge extends MyAppModel
             FatCache::set('getBadgeShapeTypesArr' . $langId, FatUtility::convertToJson($arr), '.txt');
             return $arr;
         }
-        
+
         return json_decode($arr, true);
     }
 
@@ -153,7 +149,7 @@ class Badge extends MyAppModel
             FatCache::set('getRibbonPostionArr' . $langId, FatUtility::convertToJson($arr), '.txt');
             return $arr;
         }
-    
+
         return json_decode($arr, true);
     }
 
@@ -174,7 +170,7 @@ class Badge extends MyAppModel
             FatCache::set('getBadgeApprovalStatusArr' . $langId, FatUtility::convertToJson($arr), '.txt');
             return $arr;
         }
-        
+
         return json_decode($arr, true);
     }
 
@@ -194,190 +190,7 @@ class Badge extends MyAppModel
         }
         return true;
     }
-    
-    /**
-     * setRecordId
-     *
-     * @param  int $selProdId
-     * @param  int $prodId
-     * @param  int $shopId
-     * @return void
-     */
-    public function setRecordId(int $selProdId = 0, int $prodId = 0, int $shopId = 0): object
-    {
-        $this->selProdId = $selProdId;
-        $this->prodId = $prodId;
-        $this->shopId = $shopId;
-        return $this;
-    }
 
-    /**
-     * getBadges
-     *
-     * @param  int $langId
-     * @param  int $type
-     * @return array
-     */
-    public function getRibbonOrBadge(int $langId, int $type = Badge::TYPE_RIBBON): array
-    {
-        $sellerId = Shop::getAttributesById($this->shopId, 'shop_user_id');
-
-        $avgRating = SellerProduct::getRating($this->selProdId);
-        $shopAvgRating = SellerProduct::getShopRating($sellerId);
-        $completionRate = OrderProduct::getCompletionRate($sellerId);
-        $completedOrders = OrderProduct::getCompltedOrderCount($sellerId);
-        $returnAcceptanceRate = OrderProduct::getReturnAcceptanceRate($sellerId);
-        $orderCancellationRate = OrderProduct::getCancellationRate($sellerId);
-
-        $srchRecord = new BadgeLinkConditionSearch();
-        $srchRecord->doNotCalculateRecords();
-
-        if ($type == Badge::TYPE_BADGE) {
-            $srchRecord->doNotLimitRecords();
-        }
-
-        if ($type == Badge::TYPE_RIBBON) {
-            $srchRecord->setPageSize(count(self::getRibbonPostionArr($langId)));
-        }
-
-        $srchRecord->joinBadgeLinks();
-        $srchRecord->joinBadgeRequest();
-        $srchRecord->joinBadge();
-        $srchRecord->addMultipleFields(['MAX(blinkcond_id) as m_blinkcond_id, badgelink_record_id as record']);
-
-        $recordCondition = 'WHEN blinkcond_condition_type = 0
-                            THEN badgelink_record_id = 
-                                (CASE 
-                                    WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT . ' THEN ' . $this->selProdId . '
-                                    WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_PRODUCT . ' THEN ' . $this->prodId . '
-                                    WHEN blinkcond_record_type = ' . BadgeLinkCondition::RECORD_TYPE_SHOP . ' THEN ' . $this->shopId . '
-                                    ELSE 0 
-                                END)
-                            ELSE FALSE END';
-
-        if ($type == Badge::TYPE_BADGE) {
-            $srchRecord->addFld('blinkcond_condition_type');
-            $srchRecord->addDirectCondition(
-                '(CASE 
-                    WHEN blinkcond_condition_type > 0
-                    THEN 
-                        (CASE 
-                            WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD . ' 
-                                THEN ' . $avgRating . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
-                            WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP . ' 
-                                THEN ' . $shopAvgRating . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
-                            WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_ORDER_COMPLETION_RATE . ' 
-                                THEN ' . $completionRate . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
-                            WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS . ' 
-                                THEN ' . $completedOrders . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
-                            WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE . ' 
-                                THEN ' . $returnAcceptanceRate . ' = blinkcond_condition_from
-                            WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED . ' 
-                                THEN ' . $orderCancellationRate . ' = blinkcond_condition_from
-                            ELSE FALSE
-                        END)
-                    ' . $recordCondition . ')'
-            );
-        }
-
-        if ($type == Badge::TYPE_RIBBON) {
-            $srchRecord->addDirectCondition('(CASE ' . $recordCondition . ')');
-        }
-
-        $srchRecord->addDirectCondition(
-            '(CASE 
-                WHEN blinkcond_from_date != 0 AND blinkcond_to_date != 0
-                THEN "' . date('Y-m-d H:i:s') . '" BETWEEN blinkcond_from_date AND blinkcond_to_date 
-                WHEN blinkcond_from_date != 0 AND blinkcond_to_date = 0
-                THEN "' . date('Y-m-d H:i:s') . '" >= blinkcond_from_date
-                WHEN blinkcond_from_date = 0 AND blinkcond_to_date != 0
-                THEN "' . date('Y-m-d H:i:s') . '" <= blinkcond_to_date 
-                ELSE TRUE 
-            END)'
-        );
-
-        $srchRecord->addDirectCondition(
-            '(CASE 
-                WHEN breq_id IS NOT NULL
-                THEN breq_status = ' . BadgeRequest::REQUEST_APPROVED . ' 
-                ELSE TRUE 
-            END)'
-        );
-
-        $srchRecord->addCondition('badge_type', '=', $type);
-        $srchRecord->addCondition('badge_active', '=', applicationConstants::ACTIVE);
-        if ($type == Badge::TYPE_RIBBON) {
-            $srchRecord->addGroupBy('blinkcond_position');
-        } else {
-            $srchRecord->addGroupBy('blinkcond_id');
-        }
-        
-        $srchRecord->addOrder('blinkcond_id', 'DESC');
-
-
-        $attr = [
-            'blinkcond_id',
-            'blinkcond_badge_id',
-            'badge_display_inside',
-            'blinkcond_position',
-            'badge_type',
-            'COALESCE(badge_name, badge_identifier) as badge_name',
-            'breq_id',
-            'badge_shape_type',
-            'badge_color',
-            'blnk.blinkcond_condition_type',
-            'blinkcond_record_type',
-            'blc.badgelink_record_id',
-        ];
-        
-        $srch = new BadgeLinkConditionSearch();
-        $srch->joinTable('(' . $srchRecord->getQuery() . ') as m_blnk', 'INNER JOIN', 'blnk.blinkcond_id = m_blnk.m_blinkcond_id');
-        $srch->joinBadgeLinks();
-        $srch->joinBadgeRequest();
-        $srch->joinBadge($langId);
-        $srch->addMultipleFields($attr);
-        $srch->addDirectCondition(
-            '(CASE 
-                WHEN blnk.blinkcond_condition_type > 0 AND m_blnk.record IS NULL
-                THEN TRUE
-                ELSE blc.badgelink_record_id = m_blnk.record
-            END)'
-        );
-        return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
-    }
-
-    /**
-     * getBadgeUrl
-     *
-     * @param  int $langId
-     * @param  string|int $size
-     * @return array
-     */
-    public function getBadgeUrl(int $langId, $size = 'MINI'): array
-    {
-        if (1 > $this->selProdId && 1 > $this->prodId && 1 > $this->shopId) {
-            return [];
-        }
-
-        $badgeDetail = $this->getRibbonOrBadge($langId, Badge::TYPE_BADGE);
-        if (!is_array($badgeDetail) || empty($badgeDetail)) {
-            return [];
-        }
-
-        $urls = [];
-
-        foreach ($badgeDetail as $row) {
-            $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, $langId);
-            $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
-            $urls[] = [
-                'url' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $langId, $size, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
-                'name' => $row['badge_name'],
-                'conditionType' => $row['blinkcond_condition_type'],
-            ];
-        }
-        return $urls;
-    }
-    
     /**
      * canAccess
      *
@@ -406,10 +219,183 @@ class Badge extends MyAppModel
                     ) > 0
                 THEN 1
                 ELSE 0
-            END) as canAccess', 
+            END) as canAccess',
         ]);
         $srch->addCondition(Badge::DB_TBL_PREFIX . 'id', '=', $badgeId);
         $record = FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         return current($record);
+    }
+
+    public static function getRibbons(int $langId, int $position, array $selProdIdArr)
+    {
+        $date = date('Y-m-d H:i:00');
+        $srch = new BadgeLinkConditionSearch();
+        $srch->setSelProdIdArr($selProdIdArr);
+        $srch->joinBadges($langId, Badge::TYPE_RIBBON);
+        $srch->joinBadgeLinks();
+        $srch->joinProducts();
+        $srch->joinSellerProducts();
+        $srch->joinShops();
+        $srch->doNotCalculateRecords();
+
+        $srch->addMultipleFields(['blnk.blinkcond_id', 'blnk.blinkcond_badge_id', 'blnk.blinkcond_position', 'bdg.badge_display_inside', 'bdg.badge_shape_type', 'bdg.badge_color', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name', 'blc.badgelink_id', 'blc.badgelink_record_id', 'COALESCE(sp.selprod_id,prod.product_selprod_id,shpprod.shop_selprod_id) as selprod_id']);
+        $srch->addCondition('blnk.blinkcond_from_date', '<=', $date);
+        $cnd = $srch->addCondition('blnk.blinkcond_to_date', '>=', $date);
+        $cnd->attachCondition('blnk.blinkcond_to_date', '=', '0000-00-00 00:00:00');
+        $srch->addCondition('bdg.badge_type', '=', Badge::TYPE_RIBBON);
+        $srch->addCondition('bdg.badge_active', '=', applicationConstants::ACTIVE);
+        $srch->addHaving('selprod_id', 'is NOT', 'mysql_func_NULL', 'AND', true);
+        $srch->addOrder('blinkcond_id');
+        $srch->addCondition('blnk.blinkcond_position', '=', $position);
+
+        $rs = $srch->getResultSet();
+        return FatApp::getDb()->fetchAll($rs, 'selprod_id');
+    }
+
+    public static function getSelprodBadges(int $langId, array $selprodIdArr = [])
+    {
+        $date = date('Y-m-d H:i:00');
+        $srch = new BadgeLinkConditionSearch();
+        $srch->setSelProdIdArr($selprodIdArr);
+        $srch->joinBadges($langId, Badge::TYPE_BADGE);
+        $srch->joinBadgeLinks();
+        $srch->joinProducts();
+        $srch->joinSellerProducts();
+        $srch->joinBadgeRequest();
+
+        $srch->addCondition('blnk.blinkcond_from_date', '<=', $date);
+        $cnd = $srch->addCondition('blnk.blinkcond_to_date', '>=', $date);
+        $cnd->attachCondition('blnk.blinkcond_to_date', '=', '0000-00-00 00:00:00');
+        $srch->addCondition('bdg.badge_type', '=', Badge::TYPE_BADGE);
+        $srch->addCondition('bdg.badge_condition_type', '=', Badge::COND_MANUAL);
+        $srch->addDirectCondition('(bdg.badge_required_approval = ' . Badge::APPROVAL_OPEN . ' or (if(breq.breq_id > 0, breq.breq_status = ' . BadgeRequest::REQUEST_APPROVED . ', bdg.badge_required_approval = ' . Badge::APPROVAL_REQUIRED . ')))');
+
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addMultipleFields(['blnk.blinkcond_id', 'blnk.blinkcond_badge_id', 'bdg.badge_display_inside', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name', 'blc.badgelink_id', 'blc.badgelink_record_id', 'breq.breq_id', 'COALESCE(sp.selprod_id,prod.product_selprod_id) as selprod_id']);
+        $srch->addHaving('selprod_id', 'is NOT', 'mysql_func_NULL', 'AND', true);
+        $rs = $srch->getResultSet();
+        return FatApp::getDb()->fetchAll($rs, 'blinkcond_badge_id');
+    }
+
+    /**
+     * getShopBadges
+     *
+     * @param  int $langId
+     * @param  array $shopIdArr
+     * @return void
+     */
+    public static function getShopBadges(int $langId, array $shopIdArr = []): array
+    {
+        $manualBadges = self::getManualShopBadges($langId, $shopIdArr);
+        $autoBadges = self::getAutoShopBadges($langId, $shopIdArr);
+        return array_merge($manualBadges, $autoBadges);
+    }
+
+    /**
+     * getManualBadges
+     *
+     * @param  int $langId
+     * @param  array $shopIdArr   
+     * @return array
+     */
+    public static function getManualShopBadges(int $langId, array $shopIdArr = []): array
+    {
+        $date = date('Y-m-d H:i:00');
+        $srch = new BadgeLinkConditionSearch();
+        $srch->joinBadges($langId, Badge::TYPE_BADGE);
+        $srch->joinBadgeLinks();
+        $srch->joinBadgeRequest();
+        $srch->joinShopsForBadges($shopIdArr);
+
+        $srch->addCondition('blnk.blinkcond_from_date', '<=', $date);
+        $cnd = $srch->addCondition('blnk.blinkcond_to_date', '>=', $date);
+        $cnd->attachCondition('blnk.blinkcond_to_date', '=', '0000-00-00 00:00:00');
+        $srch->addCondition('bdg.badge_type', '=', Badge::TYPE_BADGE);
+        $srch->addCondition('bdg.badge_condition_type', '=', Badge::COND_MANUAL);
+        $srch->addDirectCondition('(bdg.badge_required_approval = ' . Badge::APPROVAL_OPEN . ' or (if(breq.breq_id > 0, breq.breq_status = ' . BadgeRequest::REQUEST_APPROVED . ', bdg.badge_required_approval = ' . Badge::APPROVAL_REQUIRED . ')))');
+
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addMultipleFields(['blnk.blinkcond_id', 'blnk.blinkcond_badge_id', 'bdg.badge_display_inside', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name', 'blc.badgelink_id', 'blc.badgelink_record_id', 'breq.breq_id', 'shpprod.shop_id']);
+
+        $rs = $srch->getResultSet();
+        return FatApp::getDb()->fetchAll($rs);
+    }
+
+    /**
+     * getAutomaticShopBadges
+     *
+     * @param  int $langId
+     * @param  array $shopIdArr   
+     * @return array
+     */
+    public static function getAutoShopBadges(int $langId, array $shopIdArr = [], bool $addGroupBy = true): array
+    {
+        $srch = new SearchBase(Shop::DB_TBL_STATS, 'stats');
+        if (!empty($shopIdArr)) {
+            $srch->addCondition('sstats_shop_id', 'IN', $shopIdArr);
+        }
+        $shopStats = FatApp::getDb()->fetchAll($srch->getResultSet());
+        if (empty($shopStats)) {
+            return [];
+        }
+
+        $shopAutoBadges = [];
+        $now = date('Y-m-d H:i:s');
+        foreach ($shopStats as $ss) {
+            $shopAvgRating = $ss['sstats_avg_rating'];
+            $completionRate = $ss['sstats_completion_rate'];
+            $completedOrders = $ss['sstats_completed_orders'];
+            $returnAcceptanceRate = $ss['sstats_return_acceptance_rate'];
+            $orderCancellationRate = $ss['sstats_cancellation_rate'];
+
+            $srch = new BadgeLinkConditionSearch();
+            $srch->joinBadge($langId);
+            $srch->doNotCalculateRecords();
+            $srch->doNotLimitRecords();
+            $srch->addMultipleFields(['blinkcond_badge_id', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name']);
+            if (false === $addGroupBy) {
+                $srch->addFld('blinkcond_id');
+            }
+
+            $srch->addDirectCondition(
+                '(CASE 
+                    WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP . ' 
+                        THEN ' . $shopAvgRating . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
+                    WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_ORDER_COMPLETION_RATE . ' 
+                        THEN ' . $completionRate . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
+                    WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS . ' 
+                        THEN ' . $completedOrders . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
+                    WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE . ' 
+                        THEN ' . $returnAcceptanceRate . ' = blinkcond_condition_from
+                    WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED . ' 
+                        THEN ' . $orderCancellationRate . ' = blinkcond_condition_from
+                    ELSE FALSE
+                END)');
+
+            $srch->addDirectCondition(
+                '(CASE 
+                    WHEN blinkcond_from_date != 0 AND blinkcond_to_date != 0
+                    THEN "' . $now . '" BETWEEN blinkcond_from_date AND blinkcond_to_date 
+                    WHEN blinkcond_from_date != 0 AND blinkcond_to_date = 0
+                    THEN "' . $now . '" >= blinkcond_from_date
+                    WHEN blinkcond_from_date = 0 AND blinkcond_to_date != 0
+                    THEN "' . $now . '" <= blinkcond_to_date 
+                    ELSE TRUE 
+                END)'
+            );
+
+            $srch->addCondition('badge_condition_type', '=', Badge::COND_AUTO);
+            $srch->addCondition('badge_type', '=', Badge::TYPE_BADGE);
+            $srch->addCondition('badge_active', '=', applicationConstants::ACTIVE);
+
+            if (true === $addGroupBy) {
+                $srch->addGroupBy('blinkcond_badge_id');
+            }
+
+            $shopAutoBadges[$ss['sstats_shop_id']] = FatApp::getDb()->fetchAll($srch->getResultSet());
+        }
+        return (1 == count($shopIdArr) ? current($shopAutoBadges) : $shopAutoBadges);
     }
 }

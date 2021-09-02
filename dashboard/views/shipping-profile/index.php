@@ -21,23 +21,27 @@ $cancelBtnFld->developerTags['noCaptionTag'] = true;
 ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <div class="content-header row ">
-            <div class="col">
-                <h2 class="content-header-title"><?php echo Labels::getLabel('LBL_Shipping_Profiles', $siteLangId); ?>
-                </h2>
-            </div>
-            <?php if ($canEdit) { ?>
-                <div class="col-auto">
-                    <div class="content-header-right">
-                        <a href="<?php echo UrlHelper::generateUrl('shippingProfile', 'form', [0]); ?>" class="btn btn-outline-brand btn-sm"><?php echo Labels::getLabel('LBL_Create_Profile', $siteLangId); ?></a>
-                    </div>
-                </div>
-            <?php } ?>
-        </div>
+        <?php 
+        $data = [
+            'headingLabel' => Labels::getLabel('LBL_Shipping_Profiles', $siteLangId),
+            'siteLangId' => $siteLangId
+        ];
+        if ($canEdit) {
+            $data['otherButtons'] = [
+                [
+                    'attr' => [
+                        'href' => UrlHelper::generateUrl('shippingProfile', 'form', [0]),
+                        'title' => Labels::getLabel('LBL_Create_Profile', $siteLangId)
+                    ],
+                    'label' => Labels::getLabel('LBL_Create_Profile', $siteLangId)
+                ]
+            ];
+        }
+        $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
             <div class="row mb-4">
                 <div class="col-lg-12">
-                    <div class="card">
+                    <div class="card card-search">
                         <div class="card-body">
                             <div class="replaced">
                                 <?php

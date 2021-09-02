@@ -1,8 +1,7 @@
 <?php
 if (!empty($allShops)) {
     $i = 0;
-    foreach ($allShops as $shop) { /* CommonHelper::printArray($shop); die; */ ?>
-
+    foreach ($allShops as $shop) { ?>
         <div class="ftshops row <?php echo ($i % 2 != 0) ? 'ftshops-rtl' : ''; ?>">
             <div class="col-md-12 mb-4">
                 <div class="ftshops_item">
@@ -21,11 +20,12 @@ if (!empty($allShops)) {
                                     <div class="ftshops_location"><?php echo $shop['state_name']; ?><?php echo ($shop['country_name'] && $shop['state_name']) ? ', ' : ''; ?><?php echo $shop['country_name']; ?></div>
                                 </div>
                             </div>
-                            <?php 
-                                $bdgShopId = $shop['shop_id'];
-                                $bdgExcludeCndType = [BadgeLinkCondition::COND_TYPE_AVG_RATING_SELPROD];
-                                include (CONF_THEME_PATH . '_partial/get-badge.php'); 
-                            ?>
+                            <!-- Shop Badge  -->
+                            <?php
+                                $badgesArr = Badge::getShopBadges($siteLangId, [$shop['shop_id']]);
+                                $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
+                                ?>
+                            <!-- Shop Badge  -->    
                             <div class="ftshops_item_head_right">
                                 <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && round($shop['shopRating']) > 0) { ?>
                                     <div class="products__rating"> <i class="icn"><svg class="svg">
@@ -40,11 +40,20 @@ if (!empty($allShops)) {
                     <div class="product-wrapper">
                         <div class="row">
                             <?php
-                            $displayProductNotAvailableLable = false;
-                            if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
-                                $displayProductNotAvailableLable = true;
-                            }
-                            foreach ($shop['products'] as $product) { ?>
+                            $displayProductNotAvailableLable = (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0));
+
+                            $tLeftRibbons = $shop['tLeftRibbons'];
+                            $tRightRibbons = $shop['tRightRibbons'];
+                            foreach ($shop['products'] as $product) {
+                                $selProdRibbons = [];
+                                if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
+                                    $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
+                                }
+
+                                if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
+                                    $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
+                                }
+                            ?>
                                 <div class="col-6 col-lg-3 mb-3 mb-md-0">
                                     <?php include(CONF_THEME_PATH . '_partial/collection/product-layout-1-list.php'); ?>
                                 </div>

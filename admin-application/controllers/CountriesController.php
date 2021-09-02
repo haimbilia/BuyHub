@@ -109,6 +109,17 @@ class CountriesController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $lang_id = $post['country_language_id'];
+		} else  {
+			$lang_id = array_key_first($languages); 
+            $post['country_language_id'] = $lang_id;
+
+		}
+
+
+
         $countryId = $post['country_id'];
         unset($post['country_id']);
 
@@ -182,7 +193,15 @@ class CountriesController extends AdminBaseController
         $post = FatApp::getPostedData();
 
         $countryId = $post['country_id'];
-        $lang_id = $post['lang_id'];
+        $languages = Language::getAllNames();
+        
+		if(count($languages) > 1){
+			 $lang_id = $post['lang_id'];
+		} else  {
+			$lang_id = array_key_first($languages); 
+            $post['lang_id'] = $lang_id;
+		}
+     
 
         if ($countryId == 0 || $lang_id == 0) {
             Message::addErrorMessage($this->str_invalid_request_id);
@@ -247,9 +266,19 @@ class CountriesController extends AdminBaseController
         $currencyArr = Currency::getCurrencyNameWithCode($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Currency', $this->adminLangId), 'country_currency_id', $currencyArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
 
-        $languageArr = Language::getAllNames();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'country_language_id', array(0 => 'Site Default') + $languageArr, '', array(), '');
 
+        $languageArr = Language::getAllNames();
+      
+		if(count($languageArr) > 1){
+            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'country_language_id', $languageArr, '', array(), '');
+
+		} else  {
+			$lang_id = array_key_first($languageArr); 
+			$frm->addHiddenField('', 'country_language_id', $lang_id);
+		}
+
+
+       
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
 
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'country_active', $activeInactiveArr, '', array(), '');
@@ -262,7 +291,16 @@ class CountriesController extends AdminBaseController
         $this->objPrivilege->canViewCountries();
         $frm = new Form('frmCountryLang');
         $frm->addHiddenField('', 'country_id', $countryId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+
+       
+        $languages = Language::getAllNames();
+		if(count($languages) > 1){
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+		} else  {
+			$lang_id = array_key_first($languages); 
+			$frm->addHiddenField('', 'lang_id', $lang_id);
+		}
+       
         $frm->addRequiredField(Labels::getLabel('LBL_Country_Name', $this->adminLangId), 'country_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);

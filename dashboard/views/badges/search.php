@@ -5,7 +5,7 @@ $arr_flds = array(
     Badge::DB_TBL_PREFIX . 'name' => (Badge::TYPE_RIBBON == $badgeType) ? Labels::getLabel('LBL_RIBBON_NAME', $siteLangId) : Labels::getLabel('LBL_BADGE_NAME', $siteLangId),
     Badge::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $siteLangId),
     Badge::DB_TBL_PREFIX . 'required_approval' => Labels::getLabel('LBL_APPROVAL', $siteLangId),
-    'action' => '#',
+    'action' => '',
 );
 
 if (!$canEdit) {
@@ -57,8 +57,7 @@ foreach ($arrListing as $sn => $row) {
                     $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
                     $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $name, 'alt' => $name], '', true);
                 } else {
-                    $ribbRow = $row;
-                    include CONF_FRONT_END_THEME_PATH . '_partial/get-ribbon.php';
+                    $ribbon = $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $row], false, true);
                     $html = '<div class="badge-wrap">' . $ribbon . '</div>';
                     $td->appendElement('plaintext', [], $html, true);
                 }
@@ -69,7 +68,7 @@ foreach ($arrListing as $sn => $row) {
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
                     $class = (Badge::COND_AUTO == $row[Badge::DB_TBL_PREFIX . 'condition_type']) ? 'label-danger' : $class;
                     
-                    if (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'] && 0 < (int) $row['canAccess'] && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED) {
+                    if (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'] && 0 < (int) $row['canAccess'] && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED && 0 < $row[BadgeRequest::DB_TBL_PREFIX . 'id']) {
                         $lbl = Labels::getLabel('LBL_APPROVED', $siteLangId);
                         $class = 'label-success';
                     } else if (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'] && 0 < (int) $row['breq_id'] && BadgeRequest::REQUEST_PENDING == (int) $row['breq_status']) {
@@ -84,35 +83,39 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $htm, true);
                 break;
             case 'action':
-                $btnClass = 'btn btn-outline-brand btn-sm ';
+                $ul = $td->appendElement("ul", array("class"=>"actions"));           
                 if ($canEdit && (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'])) {
                     if (0 < (int) $row['canAccess']) {
                         $condManualReq = (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'] && 0 < (int) $row['canAccess'] && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED);
 
                         $icon = $condManualReq ? "<i class='fas fa-eye icon'></i>" : "<i class='fas fa-link icon'></i>";
                         $title = $condManualReq ? Labels::getLabel('LBL_VIEW', $siteLangId) : Labels::getLabel('LBL_BIND_CONDITION', $siteLangId);
+                        
+                        $li = $ul->appendElement("li"); 
+                        $li->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id'], $row[Badge::DB_TBL_PREFIX . 'type']]), 'title' => $title), $icon, true);
 
-                        $td->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id'], $row[Badge::DB_TBL_PREFIX . 'type']]), 'class' => $btnClass, 'title' => $title), $icon, true);
-
-                        if ($condManualReq) {
-                            $td->appendElement(
+                        if ($condManualReq && 0 < $row[BadgeRequest::DB_TBL_PREFIX . 'id']) {
+                            $li = $ul->appendElement("li"); 
+                            $li->appendElement(
                                 'a',
-                                array('href' => 'javascript:void(0)', 'onclick' => "deleteBadgeRequest(" . $row['breq_id'] . ")", 'class' => 'btn btn-outline-brand btn-sm ', 'title' => Labels::getLabel('LBL_DELETE_REQUEST', $siteLangId)),
+                                array('href' => 'javascript:void(0)', 'onclick' => "deleteBadgeRequest(" . $row['breq_id'] . ")", 'title' => Labels::getLabel('LBL_DELETE_REQUEST', $siteLangId)),
                                 '<i class="fa fa-trash"></i>',
                                 true
                             );
                         }
 
                     } else if (0 < (int) $row['breq_id'] && BadgeRequest::REQUEST_PENDING == (int) $row['breq_status']) {
-                        $td->appendElement(
+                        $li = $ul->appendElement("li"); 
+                        $li->appendElement(
                             'a',
-                            array('href' => 'javascript:void(0)', 'onclick' => "addBadgeReqForm(" . $row['breq_id'] . ", " . $row['badge_id'] . ")", 'class' => 'btn btn-outline-brand btn-sm ', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
+                            array('href' => 'javascript:void(0)', 'onclick' => "addBadgeReqForm(" . $row['breq_id'] . ", " . $row['badge_id'] . ")", 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
                             '<i class="fa fa-edit"></i>',
                             true
                         );
-                        $td->appendElement(
+                        $li = $ul->appendElement("li"); 
+                        $li->appendElement(
                             'a',
-                            array('href' => 'javascript:void(0)', 'onclick' => "deleteBadgeRequest(" . $row['breq_id'] . ")", 'class' => 'btn btn-outline-brand btn-sm ', 'title' => Labels::getLabel('LBL_DELETE_REQUEST', $siteLangId)),
+                            array('href' => 'javascript:void(0)', 'onclick' => "deleteBadgeRequest(" . $row['breq_id'] . ")", 'title' => Labels::getLabel('LBL_DELETE_REQUEST', $siteLangId)),
                             '<i class="fa fa-trash"></i>',
                             true
                         );
@@ -123,10 +126,12 @@ foreach ($arrListing as $sn => $row) {
                                     </svg>
                                 </i>';
                         $function = "addBadgeReqForm(0, " . $row[Badge::DB_TBL_PREFIX . 'id'] . ")";
-                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => $function, 'class' => $btnClass, 'title' => Labels::getLabel('LBL_REQUEST', $siteLangId)), $icon, true);
+                        $li = $ul->appendElement("li"); 
+                        $li->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => $function, 'title' => Labels::getLabel('LBL_REQUEST', $siteLangId)), $icon, true);
                     }
                 } else {
-                    $td->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id'], $row[Badge::DB_TBL_PREFIX . 'type']]), 'class' => $btnClass, 'title' => Labels::getLabel('LBL_VIEW', $siteLangId)), "<i class='fas fa-eye icon'></i>", true);
+                    $li = $ul->appendElement("li"); 
+                    $li->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id'], $row[Badge::DB_TBL_PREFIX . 'type']]), 'title' => Labels::getLabel('LBL_VIEW', $siteLangId)), "<i class='fas fa-eye icon'></i>", true);
                 }
                 break;
         }

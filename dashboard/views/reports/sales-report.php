@@ -15,7 +15,12 @@ $frmSearch->developerTags['labelWidthValuesDefault'] = ['label', 'label', 'label
 $frmSearch->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
 
 $dateFrm = $frmSearch->getField('date_from');
+$dateFrm->developerTags['noCaptionTag'] = true;
+
 $dateTo = $frmSearch->getField('date_to');
+if (null != $dateTo) {
+    $dateTo->developerTags['noCaptionTag'] = true;
+}
 
 $sortBy = $frmSearch->getField('sortBy');
 $sortBy->setFieldTagAttribute('id', 'sortBy');
@@ -27,11 +32,13 @@ $submitFld = $frmSearch->getField('btn_submit');
 $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block ');
 $submitFld->developerTags['colWidthClasses'] = ['col-lg-', 'col-md-', null, null];
 $submitFld->developerTags['colWidthValues'] = [2, 2, null, null];
+$submitFld->developerTags['noCaptionTag'] = true;
 
 $fldClear = $frmSearch->getField('btn_clear');
 $fldClear->setFieldTagAttribute('class', 'btn btn-outline-brand btn-block');
 $fldClear->developerTags['colWidthClasses'] = ['col-lg-', 'col-md-', null, null];
 $fldClear->developerTags['colWidthValues'] = [2, 2, null, null];
+$fldClear->developerTags['noCaptionTag'] = true;
 if (!empty($orderDate)) {
     $keyword = $frmSearch->getField('keyword');
     $keyword->setFieldTagAttribute('placeholder', Labels::getLabel("LBL_Keyword", $siteLangId));
@@ -52,7 +59,7 @@ if (!empty($orderDate)) {
             'onclick' => "redirectUrl('" . $url . "')",
             'title' => Labels::getLabel('LBL_Back', $siteLangId)
         ],
-        'label' => Labels::getLabel('LBL_Back', $siteLangId)
+        'label' => '<i class="fas fa-arrow-left"></i>'
     ];
 }
 
