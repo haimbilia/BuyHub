@@ -262,6 +262,7 @@ Updates/Fixes :
     => 057781 - Display processing if call ajax from fcom ajax
     => 057783 - while exporting file in russin language file name coming with unwanted string
     => 057535 - Advertiser: Remove the "My Message" icon for the Advertiser
+    => 057971 - Review/Feedback image is not visible when we click on any image on frontend
 
 New Features:  
     => Admin shipped products listing page
