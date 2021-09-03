@@ -165,7 +165,7 @@
 									<div class="widget widget--user-profile-1">
 										<div class="widget__head">
 											<div class="widget__media">
-												<img src="media/users/100_1.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
 											</div>
 											<div class="widget__content">
 												<div class="widget__section">

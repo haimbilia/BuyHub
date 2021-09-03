@@ -43,7 +43,7 @@
 
 <body>
     <div class="not-found">
-	    <img src="media/retina/error-404.svg"/>
+	    <img src="<?php echo CONF_WEBROOT_URL;?>images/retina/error-404.svg"/>
         <h3>404. Page not found.</h3>
         <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae amet nesciunt eos velit omnis cumque quos, repellendus...
         </p>

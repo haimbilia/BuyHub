@@ -49,7 +49,11 @@
 			</div>
 			<div class="login-aside bg-light">
 				<div class="login-aside__head">
+<<<<<<< HEAD
 					<a href="#" class="login_logo"><img src="/manager/images/logos/logo-coloured.png" /></a>
+=======
+					<a href="#" class="login_logo"><img src="<?php echo CONF_WEBROOT_URL;?>images/logos/logo-coloured.png" /></a>
+>>>>>>> 1c200c0d018e4a8fbd4f08429e1491e5fd866f58
 				</div>
 				<div class="login-aside___body">
 					<div class="login-main">

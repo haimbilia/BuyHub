@@ -32,7 +32,11 @@
 		<div class="login__wrapper">
 			<div class="login-aside" style="background-image: url(./media/bg/bg-page-section.png)">
 				<div class="login-aside__head">
+<<<<<<< HEAD
 					<a href="#" class="login-aside__logo"><img src="/manager/images/logos/logo-icon-sm.png" /></a>
+=======
+					<a href="#" class="login-aside__logo"><img src="<?php echo CONF_WEBROOT_URL;?>images/logos/logo-icon-sm.png" /></a>
+>>>>>>> 1c200c0d018e4a8fbd4f08429e1491e5fd866f58
 				</div>
 				<div class="login-aside___body">
 					<div class="login-aside__content">

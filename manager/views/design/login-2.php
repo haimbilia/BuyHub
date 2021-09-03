@@ -31,7 +31,7 @@
 <body class="is-login login-2">
 	<div id="particles-js"></div>
 	<figure class="logo">
-		<a href="index.php"><img title="Yo!Kart" src="media/logos/logo.png" alt="Yo!Kart"></a></figure>
+		<a href="index.php"><img title="Yo!Kart" src="<?php echo CONF_WEBROOT_URL;?>images/logos/logo.png" alt="Yo!Kart"></a></figure>
 	<div class="login-page">
 		<div class="container">
 			<div class="row align-item-center justify-content-center">

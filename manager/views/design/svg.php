@@ -126,7 +126,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Rain#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Rain#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -186,7 +186,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Thunder.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Thunder.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -246,7 +246,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Rain#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Rain#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -306,7 +306,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Night-rain.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Night-rain.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -366,7 +366,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Celcium.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Celcium.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -426,7 +426,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Sun-fog.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Sun-fog.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -488,7 +488,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Storm.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Storm.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -548,7 +548,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Cloud-fog.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Cloud-fog.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -608,7 +608,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Snow#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Snow#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -668,7 +668,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Suset#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Suset#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -728,7 +728,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Snow.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Snow.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -788,7 +788,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Night-fog.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Night-fog.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -850,7 +850,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Snow#3.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Snow#3.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -909,7 +909,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Temperature-half.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Temperature-half.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -969,7 +969,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Cloud-wind.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Cloud-wind.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1029,7 +1029,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Temperature-full.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Temperature-full.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1088,7 +1088,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Fahrenheit.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Fahrenheit.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1148,7 +1148,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Cloud#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Cloud#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1209,7 +1209,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Temperature-empty.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Temperature-empty.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1268,7 +1268,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Rain#5.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Rain#5.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1328,7 +1328,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Snow#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Snow#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1388,7 +1388,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Thunder-night.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Thunder-night.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1448,7 +1448,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Wind.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Wind.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1508,7 +1508,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Suset#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Suset#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1571,7 +1571,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Rainbow.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Rainbow.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1632,7 +1632,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Sun.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Sun.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1692,7 +1692,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Day-rain.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Day-rain.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1751,7 +1751,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Cloud#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Cloud#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1810,7 +1810,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Cloud-sun.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Cloud-sun.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1870,7 +1870,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Umbrella.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Umbrella.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1931,7 +1931,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Moon.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Moon.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1990,7 +1990,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Cloudy.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Cloudy.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -2054,7 +2054,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Fog.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Fog.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -2118,7 +2118,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Weather/Cloudy-night.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Weather/Cloudy-night.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -2182,7 +2182,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Toilet.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Toilet.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -2242,7 +2242,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Commode#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Commode#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -2302,7 +2302,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Wood#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Wood#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -2363,7 +2363,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Lamp#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Lamp#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -2424,7 +2424,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Deer.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Deer.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -2484,7 +2484,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Fireplace.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Fireplace.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -2548,7 +2548,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Bulb#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Bulb#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -2610,7 +2610,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Home-heart.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Home-heart.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -2670,7 +2670,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Box.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Box.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -2730,7 +2730,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Weight#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Weight#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -2791,7 +2791,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Building.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Building.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -2853,7 +2853,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Alarm-clock.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Alarm-clock.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -2916,7 +2916,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Mailbox.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Mailbox.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -2976,7 +2976,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Curtains.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Curtains.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -3036,7 +3036,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Chair#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Chair#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -3096,7 +3096,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Clock.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Clock.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -3156,7 +3156,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Earth.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Earth.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -3216,7 +3216,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Wood#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Wood#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -3280,7 +3280,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Book.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Book.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -3343,7 +3343,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Bed.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Bed.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -3404,7 +3404,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Commode#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Commode#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -3464,7 +3464,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Flashlight.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Flashlight.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -3526,7 +3526,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Bulb#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Bulb#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -3588,7 +3588,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Trash.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Trash.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -3650,7 +3650,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Broom.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Broom.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -3712,7 +3712,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Picture.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Picture.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -3774,7 +3774,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Air-ballon.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Air-ballon.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -3836,7 +3836,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Timer.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Timer.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -3897,7 +3897,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Wood-horse.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Wood-horse.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -3956,7 +3956,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Book-open.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Book-open.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4018,7 +4018,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Couch.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Couch.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4078,7 +4078,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Ladder.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Ladder.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4140,7 +4140,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Flower#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Flower#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4202,7 +4202,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Armchair.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Armchair.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4264,7 +4264,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Lamp#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Lamp#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4326,7 +4326,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Bath.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Bath.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4387,7 +4387,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Ruller.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Ruller.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4446,7 +4446,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Key.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Key.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4506,7 +4506,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Cupboard.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Cupboard.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4565,7 +4565,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Stairs.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Stairs.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4624,7 +4624,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Weight#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Weight#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4684,7 +4684,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Bag-chair.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Bag-chair.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4746,7 +4746,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Mirror.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Mirror.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4807,7 +4807,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Water-mixer.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Water-mixer.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4871,7 +4871,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Flower#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Flower#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4935,7 +4935,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Flower#3.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Flower#3.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -4996,7 +4996,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Chair#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Chair#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5056,7 +5056,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Library.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Library.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5117,7 +5117,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Home.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Home.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5175,7 +5175,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Towel.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Towel.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5234,7 +5234,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Globe.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Globe.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5294,7 +5294,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Home/Door-open.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Home/Door-open.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5358,7 +5358,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Baking-glove.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Baking-glove.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5420,7 +5420,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Knife&amp;fork#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Knife&amp;fork#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5483,7 +5483,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Spoon.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Spoon.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5544,7 +5544,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Grater.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Grater.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5604,7 +5604,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Rolling-pin.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Rolling-pin.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5667,7 +5667,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Cooking-book.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Cooking-book.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5732,7 +5732,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Knife#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Knife#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5792,7 +5792,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Saucepan.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Saucepan.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5852,7 +5852,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Dishes.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Dishes.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5912,7 +5912,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Ladle.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Ladle.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5976,7 +5976,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Fork-spoon-knife.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Fork-spoon-knife.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -6040,7 +6040,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Dish.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Dish.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -6102,7 +6102,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Shovel.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Shovel.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -6164,7 +6164,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Knife&amp;fork#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Knife&amp;fork#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -6226,7 +6226,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Cutting board.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Cutting board.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -6288,7 +6288,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Fork-spoon.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Fork-spoon.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -6350,7 +6350,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Bowl.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Bowl.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -6410,7 +6410,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Sieve.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Sieve.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -6472,7 +6472,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Chef.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Chef.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -6532,7 +6532,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Cooking-pot.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Cooking-pot.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -6592,7 +6592,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Knife#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Knife#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -6652,7 +6652,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Frying-pan.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Frying-pan.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -6715,7 +6715,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Dinner.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Dinner.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -6778,7 +6778,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Fork.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Fork.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -6840,7 +6840,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Cooking/Kitchen-scale.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Cooking/Kitchen-scale.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -6904,7 +6904,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Color-profile.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Color-profile.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -6964,7 +6964,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Sketch.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Sketch.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7024,7 +7024,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Select.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Select.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7083,7 +7083,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Adjust.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Adjust.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7141,7 +7141,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Triangle.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Triangle.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7201,7 +7201,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Patch.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Patch.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7263,7 +7263,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Cap-2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Cap-2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7322,7 +7322,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Join-1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Join-1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7383,7 +7383,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Zoom minus.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Zoom minus.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7443,7 +7443,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Image.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Image.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7502,7 +7502,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Pen-tool-vector.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Pen-tool-vector.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7562,7 +7562,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Vertical.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Vertical.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7624,7 +7624,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Picker.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Picker.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7684,7 +7684,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Join-3.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Join-3.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7744,7 +7744,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Edit.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Edit.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7804,7 +7804,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Pen&amp;ruller.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Pen&amp;ruller.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7863,7 +7863,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Polygon.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Polygon.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7923,7 +7923,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Line.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Line.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -7989,7 +7989,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Anchor-right.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Anchor-right.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -8052,7 +8052,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Target.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Target.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -8112,7 +8112,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Difference.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Difference.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -8172,7 +8172,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Layers.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Layers.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -8231,7 +8231,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Position.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Position.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -8294,7 +8294,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Pixels.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Pixels.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -8360,7 +8360,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Interselect.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Interselect.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -8420,7 +8420,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Anchor-center.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Anchor-center.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -8480,7 +8480,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Flatten.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Flatten.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -8543,7 +8543,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Anchor-right-down.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Anchor-right-down.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -8609,7 +8609,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Anchor-left-up.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Anchor-left-up.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -8672,7 +8672,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Cap-3.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Cap-3.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -8737,7 +8737,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Anchor-left-down.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Anchor-left-down.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -8800,7 +8800,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Brush.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Brush.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -8859,7 +8859,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Eraser.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Eraser.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -8918,7 +8918,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Mask.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Mask.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -8978,7 +8978,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Horizontal.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Horizontal.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -9039,7 +9039,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Flip-horizontal.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Flip-horizontal.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -9102,7 +9102,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Magic.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Magic.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -9161,7 +9161,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Circle.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Circle.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -9219,7 +9219,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Border.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Border.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -9278,7 +9278,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Arrows.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Arrows.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -9338,7 +9338,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Crop.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Crop.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -9399,7 +9399,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Zoom plus.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Zoom plus.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -9461,7 +9461,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Union.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Union.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -9523,7 +9523,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Anchor-right-up.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Anchor-right-up.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -9587,7 +9587,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Flip-vertical.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Flip-vertical.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -9651,7 +9651,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Anchor-center-up.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Anchor-center-up.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -9714,7 +9714,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Substract.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Substract.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -9774,7 +9774,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Saturation.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Saturation.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -9839,7 +9839,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Anchor-center-down.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Anchor-center-down.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -9901,7 +9901,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Color.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Color.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -9960,7 +9960,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Bucket.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Bucket.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10020,7 +10020,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Pencil.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Pencil.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10079,7 +10079,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Rectangle.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Rectangle.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10141,7 +10141,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Anchor-left.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Anchor-left.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10206,7 +10206,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Cap-1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Cap-1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10265,7 +10265,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Component.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Component.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10324,7 +10324,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Stamp.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Stamp.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10384,7 +10384,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Join-2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Join-2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10444,7 +10444,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Design/Bezier-curve.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Design/Bezier-curve.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10510,7 +10510,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Share.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Share.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10572,7 +10572,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Media-folder.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Media-folder.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10632,7 +10632,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Music.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Music.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10692,7 +10692,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Cloud-upload.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Cloud-upload.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10752,7 +10752,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Downloaded file.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Downloaded file.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10812,7 +10812,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Downloads-folder.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Downloads-folder.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10874,7 +10874,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Upload-folder.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Upload-folder.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10934,7 +10934,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/File-cloud.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/File-cloud.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -10995,7 +10995,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/User-folder.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/User-folder.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -11057,7 +11057,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Import.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Import.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -11117,7 +11117,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Folder.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Folder.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -11176,7 +11176,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Folder-star.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Folder-star.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -11238,7 +11238,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Media.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Media.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -11300,7 +11300,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Pictures#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Pictures#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -11362,7 +11362,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Folder-minus.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Folder-minus.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -11422,7 +11422,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Folder-heart.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Folder-heart.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -11483,7 +11483,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Upload.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Upload.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -11544,7 +11544,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Selected-file.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Selected-file.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -11606,7 +11606,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Folder-check.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Folder-check.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -11670,7 +11670,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Pictures#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Pictures#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -11737,7 +11737,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Compilation.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Compilation.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -11800,7 +11800,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/File-plus.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/File-plus.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -11860,7 +11860,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Deleted-file.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Deleted-file.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -11920,7 +11920,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/File-done.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/File-done.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -11983,7 +11983,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Download.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Download.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -12043,7 +12043,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Folder-solid.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Folder-solid.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -12103,7 +12103,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Export.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Export.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -12164,7 +12164,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Folder-error.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Folder-error.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -12224,7 +12224,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Folder-thunder.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Folder-thunder.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -12284,7 +12284,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Protected-file.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Protected-file.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -12346,7 +12346,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Cloud-download.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Cloud-download.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -12406,7 +12406,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Folder-cloud.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Folder-cloud.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -12466,7 +12466,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Deleted-folder.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Deleted-folder.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -12527,7 +12527,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/File.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/File.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -12588,7 +12588,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Uploaded-file.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Uploaded-file.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -12648,7 +12648,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Group-folders.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Group-folders.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -12713,7 +12713,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Compiled-file.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Compiled-file.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -12776,7 +12776,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/File-minus.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/File-minus.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -12836,7 +12836,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Locked-folder.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Locked-folder.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -12896,7 +12896,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Files/Folder-plus.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Files/Folder-plus.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -12959,7 +12959,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Music.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Music.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13017,7 +13017,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Pause.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Pause.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13076,7 +13076,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Movie-Lane #2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Movie-Lane #2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13136,7 +13136,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Next.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Next.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13196,7 +13196,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Forward.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Forward.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13256,7 +13256,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/DVD.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/DVD.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13318,7 +13318,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Media-library#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Media-library#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13377,7 +13377,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Play.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Play.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13436,7 +13436,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Repeat-one.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Repeat-one.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13496,7 +13496,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Back.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Back.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13558,7 +13558,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Media-library#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Media-library#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13620,7 +13620,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Airplay.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Airplay.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13682,7 +13682,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Add-music.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Add-music.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13742,7 +13742,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Eject.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Eject.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13802,7 +13802,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Airplay-video.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Airplay-video.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13862,7 +13862,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Repeat.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Repeat.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13921,7 +13921,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Music-note.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Music-note.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -13980,7 +13980,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Youtube.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Youtube.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -14042,7 +14042,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Volume-full.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Volume-full.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -14102,7 +14102,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Music-cloud.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Music-cloud.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -14164,7 +14164,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Equalizer.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Equalizer.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -14226,7 +14226,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Volume-down.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Volume-down.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -14286,7 +14286,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Playlist#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Playlist#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -14346,7 +14346,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Shuffle.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Shuffle.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -14407,7 +14407,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Rec.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Rec.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -14466,7 +14466,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Playlist#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Playlist#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -14526,7 +14526,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Mute.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Mute.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -14586,7 +14586,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Volume-half.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Volume-half.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -14646,7 +14646,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Volume-up.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Volume-up.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -14706,7 +14706,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Backward.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Backward.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -14768,7 +14768,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Movie-lane#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Movie-lane#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -14828,7 +14828,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/CD.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/CD.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -14891,7 +14891,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Media-library#3.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Media-library#3.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -14954,7 +14954,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Media/Vynil.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Media/Vynil.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15019,7 +15019,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Coffee#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Coffee#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15080,7 +15080,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Miso-soup.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Miso-soup.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15142,7 +15142,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Chicken.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Chicken.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15204,7 +15204,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Cheese.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Cheese.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15266,7 +15266,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Pizza.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Pizza.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15328,7 +15328,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Two-bottles.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Two-bottles.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15393,7 +15393,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Beer.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Beer.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15458,7 +15458,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Carrot.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Carrot.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15521,7 +15521,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Cake.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Cake.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15582,7 +15582,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Ice-cream#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Ice-cream#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15644,7 +15644,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Cookie.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Cookie.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15709,7 +15709,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Coffee#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Coffee#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15774,7 +15774,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Ice-cream#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Ice-cream#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15834,7 +15834,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Sushi.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Sushi.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15894,7 +15894,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Bottle#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Bottle#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15954,7 +15954,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Bottle#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Bottle#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16014,7 +16014,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Bread.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Bread.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16075,7 +16075,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Burger.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Burger.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16138,7 +16138,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Dinner.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Dinner.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16198,7 +16198,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Bucket.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Bucket.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16258,7 +16258,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Orange.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Orange.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16318,7 +16318,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Fish.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Fish.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16378,7 +16378,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Glass-martini.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Glass-martini.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16437,7 +16437,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/French Bread.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/French Bread.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16498,7 +16498,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Food/Wine.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Food/Wine.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16562,7 +16562,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/ATM.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/ATM.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16622,7 +16622,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Bag#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Bag#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16684,7 +16684,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Sale#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Sale#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16746,7 +16746,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Barcode.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Barcode.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16806,7 +16806,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Bag#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Bag#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16866,7 +16866,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Sale#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Sale#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16929,7 +16929,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Wallet.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Wallet.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -16991,7 +16991,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Bitcoin.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Bitcoin.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -17052,7 +17052,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Cart#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Cart#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -17112,7 +17112,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Sort#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Sort#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -17172,7 +17172,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Settings.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Settings.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -17233,7 +17233,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Barcode-scan.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Barcode-scan.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -17296,7 +17296,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Cart#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Cart#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -17356,7 +17356,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Calculator.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Calculator.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -17416,7 +17416,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Chart-pie.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Chart-pie.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -17476,7 +17476,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Money.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Money.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -17537,7 +17537,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Wallet#3.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Wallet#3.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -17601,7 +17601,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Price #2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Price #2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -17665,7 +17665,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Sort#3.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Sort#3.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -17724,7 +17724,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Box#3.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Box#3.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -17784,7 +17784,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Box#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Box#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -17844,7 +17844,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Gift.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Gift.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -17904,7 +17904,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Safe.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Safe.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -17964,7 +17964,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Wallet#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Wallet#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18026,7 +18026,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Euro.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Euro.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18087,7 +18087,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Dollar.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Dollar.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18148,7 +18148,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Pound.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Pound.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18208,7 +18208,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/MC.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/MC.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18267,7 +18267,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Sort#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Sort#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18326,7 +18326,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Cart#3.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Cart#3.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18388,7 +18388,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Rouble.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Rouble.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18448,7 +18448,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Barcode-read.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Barcode-read.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18508,7 +18508,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Chart-line#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Chart-line#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18568,7 +18568,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Box#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Box#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18628,7 +18628,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Chart-line#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Chart-line#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18687,7 +18687,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Price #1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Price #1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18747,7 +18747,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Ticket.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Ticket.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18808,7 +18808,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Chart-bar#3.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Chart-bar#3.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18872,7 +18872,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Chart-bar#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Chart-bar#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18935,7 +18935,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Loader.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Loader.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -18997,7 +18997,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Credit-card.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Credit-card.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -19060,7 +19060,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Shopping/Chart-bar#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Shopping/Chart-bar#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -19125,7 +19125,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Cursor.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Cursor.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -19184,7 +19184,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Shield-check.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Shield-check.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -19245,7 +19245,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Other#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Other#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -19305,7 +19305,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Notifications#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Notifications#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -19363,7 +19363,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Thunder.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Thunder.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -19422,7 +19422,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Half-star.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Half-star.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -19483,7 +19483,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Update.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Update.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -19542,7 +19542,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Dislike.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Dislike.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -19601,7 +19601,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Folder.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Folder.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -19659,7 +19659,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Edit.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Edit.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -19720,7 +19720,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Clipboard.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Clipboard.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -19782,7 +19782,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/User.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/User.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -19846,7 +19846,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Attachment#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Attachment#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -19908,7 +19908,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Shield-protected.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Shield-protected.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -19968,7 +19968,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Notification#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Notification#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20028,7 +20028,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Smile.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Smile.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20089,7 +20089,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Other#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Other#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20150,7 +20150,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Expand-arrows.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Expand-arrows.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20211,7 +20211,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Bookmark.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Bookmark.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20270,7 +20270,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Half-heart.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Half-heart.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20330,7 +20330,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Size.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Size.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20390,7 +20390,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Shield-disabled.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Shield-disabled.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20450,7 +20450,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Trash.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Trash.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20510,7 +20510,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Thunder-move.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Thunder-move.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20572,7 +20572,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Visible.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Visible.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20632,7 +20632,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Duplicate.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Duplicate.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20694,7 +20694,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Unlock.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Unlock.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20756,7 +20756,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Settings#3.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Settings#3.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20815,7 +20815,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Fire.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Fire.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20874,7 +20874,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Settings-1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Settings-1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20936,7 +20936,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Save.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Save.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -20995,7 +20995,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Settings-2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Settings-2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -21054,7 +21054,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Like.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Like.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -21115,7 +21115,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Hidden.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Hidden.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -21175,7 +21175,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Heart.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Heart.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -21234,7 +21234,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Attachment#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Attachment#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -21296,7 +21296,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Search.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Search.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -21355,7 +21355,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Star.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Star.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -21414,7 +21414,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Scissors.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Scissors.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -21476,7 +21476,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Lock.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Lock.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -21538,7 +21538,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Sad.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Sad.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -21598,7 +21598,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Scale.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Scale.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -21659,7 +21659,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Clip.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Clip.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -21717,7 +21717,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/General/Binocular.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/General/Binocular.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -21780,7 +21780,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Share.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Share.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -21839,7 +21839,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Archive.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Archive.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -21898,7 +21898,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Outgoing-mail.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Outgoing-mail.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -21957,7 +21957,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Send.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Send.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22017,7 +22017,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Shield-user.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Shield-user.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22078,7 +22078,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Mail-notification.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Mail-notification.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22140,7 +22140,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Sending mail.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Sending mail.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22199,7 +22199,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Forward.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Forward.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22258,7 +22258,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Add-user.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Add-user.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22325,7 +22325,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Dial-numbers.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Dial-numbers.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22392,7 +22392,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Missed-call.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Missed-call.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22452,7 +22452,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Flag.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Flag.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22514,7 +22514,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Outgoing-call.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Outgoing-call.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22574,7 +22574,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Mail-box.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Mail-box.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22633,7 +22633,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Mail-@.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Mail-@.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22692,7 +22692,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Safe-chat.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Safe-chat.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22752,7 +22752,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Mail-opened.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Mail-opened.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22813,7 +22813,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/RSS.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/RSS.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22876,7 +22876,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Chat-locked.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Chat-locked.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22936,7 +22936,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Readed-mail.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Readed-mail.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22995,7 +22995,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Right.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Right.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23053,7 +23053,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Call.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Call.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23112,7 +23112,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Chat#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Chat#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23172,7 +23172,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Chat-check.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Chat-check.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23234,7 +23234,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Mail-unocked.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Mail-unocked.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23293,7 +23293,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Call#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Call#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23351,7 +23351,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Address-card.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Address-card.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23410,7 +23410,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Thumbtack.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Thumbtack.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23469,7 +23469,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Reply.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Reply.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23528,7 +23528,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Chat-smile.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Chat-smile.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23596,7 +23596,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Clipboard-list.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Clipboard-list.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23662,7 +23662,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Write.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Write.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23722,7 +23722,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Incoming-call.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Incoming-call.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23781,7 +23781,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Mail.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Mail.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23840,7 +23840,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Group-chat.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Group-chat.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23901,7 +23901,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Clipboard-check.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Clipboard-check.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -23964,7 +23964,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Chat#5.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Chat#5.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24024,7 +24024,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Chat#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Chat#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24084,7 +24084,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Mail-locked.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Mail-locked.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24145,7 +24145,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Incoming-box.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Incoming-box.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24206,7 +24206,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Urgent-mail.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Urgent-mail.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24266,7 +24266,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Group.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Group.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24328,7 +24328,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Mail-heart.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Mail-heart.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24388,7 +24388,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Shield-thunder.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Shield-thunder.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24447,7 +24447,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Spam.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Spam.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24506,7 +24506,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Adress-book#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Adress-book#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24567,7 +24567,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Outgoing-box.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Outgoing-box.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24628,7 +24628,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Incoming-mail.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Incoming-mail.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24690,7 +24690,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Mail-attachment.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Mail-attachment.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24750,7 +24750,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Chat#6.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Chat#6.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24810,7 +24810,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Sending.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Sending.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24870,7 +24870,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Chat-error.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Chat-error.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24930,7 +24930,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Active-call.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Active-call.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -24990,7 +24990,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Delete-user.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Delete-user.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25052,7 +25052,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Snoozed-mail.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Snoozed-mail.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25112,7 +25112,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Mail-error.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Mail-error.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25171,7 +25171,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Chat#4.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Chat#4.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25230,7 +25230,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Contact#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Contact#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25290,7 +25290,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Adress-book#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Adress-book#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25350,7 +25350,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Communication/Reply-all.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Communication/Reply-all.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25415,7 +25415,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Arrow-from-top.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Arrow-from-top.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25477,7 +25477,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Arrow-from-left.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Arrow-from-left.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25540,7 +25540,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Up-down.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Up-down.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25601,7 +25601,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Angle-up.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Angle-up.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25661,7 +25661,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Arrows-v.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Arrows-v.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25722,7 +25722,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Right 3.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Right 3.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25785,7 +25785,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Arrow-to-right.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Arrow-to-right.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25845,7 +25845,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Check.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Check.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25904,7 +25904,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Right-2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Right-2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25964,7 +25964,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Down-left.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Down-left.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26024,7 +26024,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Left 3.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Left 3.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26085,7 +26085,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Arrow-to-left.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Arrow-to-left.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26148,7 +26148,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Angle-double-left.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Angle-double-left.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26207,7 +26207,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Angle-down.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Angle-down.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26267,7 +26267,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Arrow-to-up.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Arrow-to-up.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26328,7 +26328,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Double-check.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Double-check.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26388,7 +26388,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Arrow-up.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Arrow-up.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26448,7 +26448,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Angle-double-right.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Angle-double-right.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26512,7 +26512,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Exchange.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Exchange.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26572,7 +26572,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Minus.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Minus.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26631,7 +26631,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Arrow-from-bottom.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Arrow-from-bottom.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26692,7 +26692,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Arrow-left.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Arrow-left.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26751,7 +26751,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Plus.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Plus.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26810,7 +26810,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Up-left.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Up-left.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26872,7 +26872,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Up-2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Up-2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26931,7 +26931,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Angle-left.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Angle-left.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -26990,7 +26990,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Down-2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Down-2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27050,7 +27050,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Angle-double-down.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Angle-double-down.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27111,7 +27111,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Arrow-to-bottom.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Arrow-to-bottom.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27173,7 +27173,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Arrows-h.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Arrows-h.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27235,7 +27235,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Angle-right.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Angle-right.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27295,7 +27295,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Sign-in.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Sign-in.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27355,7 +27355,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Waiting.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Waiting.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27415,7 +27415,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Close.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Close.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27477,7 +27477,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Route.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Route.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27539,7 +27539,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Arrow-from-right.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Arrow-from-right.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27602,7 +27602,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Left-2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Left-2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27662,7 +27662,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Arrow-right.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Arrow-right.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27722,7 +27722,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Angle-double-up.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Angle-double-up.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27783,7 +27783,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Sign-out.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Sign-out.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27844,7 +27844,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Down-right.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Down-right.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27904,7 +27904,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Arrow-down.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Arrow-down.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27966,7 +27966,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Navigation/Up-right.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Navigation/Up-right.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28029,7 +28029,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Map/Marker#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Map/Marker#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28087,7 +28087,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Map/Direction#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Map/Direction#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28147,7 +28147,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Map/Position.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Map/Position.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28207,7 +28207,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Map/Direction#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Map/Direction#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28265,7 +28265,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Map/Compass.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Map/Compass.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28323,7 +28323,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Map/Marker#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Map/Marker#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28383,7 +28383,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Map/Location-arrow.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Map/Location-arrow.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28446,7 +28446,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Layout/Layout-grid.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Layout/Layout-grid.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28506,7 +28506,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Layout/Layout-top-panel-1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Layout/Layout-top-panel-1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28566,7 +28566,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Layout/Layout-top-panel-6.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Layout/Layout-top-panel-6.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28626,7 +28626,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Layout/Layout-right-panel-1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Layout/Layout-right-panel-1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28686,7 +28686,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Layout/Layout-vertical.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Layout/Layout-vertical.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28746,7 +28746,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Layout/Layout-left-panel-1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Layout/Layout-left-panel-1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28808,7 +28808,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Layout/Layout-top-panel-4.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Layout/Layout-top-panel-4.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28868,7 +28868,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Layout/Layout-right-panel-2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Layout/Layout-right-panel-2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28928,7 +28928,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Layout/Layout-top-panel-5.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Layout/Layout-top-panel-5.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -28988,7 +28988,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Layout/Layout-4-blocks.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Layout/Layout-4-blocks.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29048,7 +29048,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Layout/Layout-3d.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Layout/Layout-3d.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29108,7 +29108,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Layout/Layout-top-panel-2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Layout/Layout-top-panel-2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29170,7 +29170,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Layout/Layout-top-panel-3.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Layout/Layout-top-panel-3.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29230,7 +29230,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Layout/Layout-horizontal.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Layout/Layout-horizontal.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29290,7 +29290,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Layout/Layout-left-panel-2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Layout/Layout-left-panel-2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29350,7 +29350,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Layout/Layout-arrange.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Layout/Layout-arrange.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29413,7 +29413,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Electric/Socket-eu.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Electric/Socket-eu.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29472,7 +29472,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Electric/Range-hood.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Electric/Range-hood.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29532,7 +29532,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Electric/Iron.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Electric/Iron.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29592,7 +29592,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Electric/air-dryer.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Electric/air-dryer.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29652,7 +29652,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Electric/Outlet.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Electric/Outlet.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29711,7 +29711,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Electric/Highvoltage.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Electric/Highvoltage.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29772,7 +29772,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Electric/Shutdown.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Electric/Shutdown.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29832,7 +29832,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Electric/Washer.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Electric/Washer.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29892,7 +29892,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Electric/Gas-stove.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Electric/Gas-stove.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29951,7 +29951,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Electric/Blender.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Electric/Blender.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30009,7 +30009,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Electric/Fridge.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Electric/Fridge.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30069,7 +30069,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Electric/Fan.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Electric/Fan.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30132,7 +30132,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Electric/Kettle.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Electric/Kettle.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30191,7 +30191,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Electric/Socket-us.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Electric/Socket-us.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30250,7 +30250,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Electric/Mixer.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Electric/Mixer.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30310,7 +30310,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Electric/Air-conditioning.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Electric/Air-conditioning.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30375,7 +30375,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Cassete.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Cassete.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30438,7 +30438,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Generator.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Generator.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30501,7 +30501,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Camera.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Camera.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30562,7 +30562,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Tablet.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Tablet.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30622,7 +30622,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Gamepad#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Gamepad#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30682,7 +30682,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Battery-half.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Battery-half.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30744,7 +30744,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/LTE#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/LTE#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30805,7 +30805,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/TV#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/TV#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30866,7 +30866,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Battery-empty.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Battery-empty.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30926,7 +30926,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Hard-drive.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Hard-drive.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -30987,7 +30987,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Server.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Server.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31050,7 +31050,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Airpods.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Airpods.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31114,7 +31114,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Battery-full.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Battery-full.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31174,7 +31174,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Gameboy.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Gameboy.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31234,7 +31234,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Usb-storage.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Usb-storage.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31294,7 +31294,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/iPhone-X.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/iPhone-X.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31354,7 +31354,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Mic.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Mic.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31413,7 +31413,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/SD-card.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/SD-card.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31474,7 +31474,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Speaker.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Speaker.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31534,7 +31534,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Printer.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Printer.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31594,7 +31594,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Router#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Router#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31656,7 +31656,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Watch#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Watch#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31718,7 +31718,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Router#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Router#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31778,7 +31778,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/LTE#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/LTE#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31841,7 +31841,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Phone.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Phone.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31902,7 +31902,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Video-camera.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Video-camera.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31963,7 +31963,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Display#3.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Display#3.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32025,7 +32025,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/USB.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/USB.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32086,7 +32086,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Display#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Display#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32146,7 +32146,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Homepod.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Homepod.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32209,7 +32209,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Display#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Display#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32270,7 +32270,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Headphones.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Headphones.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32330,7 +32330,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Bluetooth.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Bluetooth.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32390,7 +32390,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Laptop-macbook.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Laptop-macbook.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32451,7 +32451,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Mouse.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Mouse.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32513,7 +32513,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/iMac.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/iMac.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32576,7 +32576,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Apple-Watch.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Apple-Watch.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32636,7 +32636,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/TV#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/TV#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32696,7 +32696,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Keyboard.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Keyboard.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32762,7 +32762,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/CPU#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/CPU#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32830,7 +32830,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Watch#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Watch#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32891,7 +32891,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/iPhone-back.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/iPhone-back.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32952,7 +32952,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Gamepad#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Gamepad#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -33024,7 +33024,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/CPU#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/CPU#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -33099,7 +33099,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Radio.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Radio.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -33161,7 +33161,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/iPhone-x-back.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/iPhone-x-back.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -33225,7 +33225,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Midi.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Midi.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -33290,7 +33290,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Cardboard-vr.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Cardboard-vr.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -33353,7 +33353,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Diagnostics.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Diagnostics.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -33415,7 +33415,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Battery-charging.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Battery-charging.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -33476,7 +33476,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Laptop.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Laptop.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -33536,7 +33536,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Wi-fi.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Wi-fi.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -33596,7 +33596,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Devices/Android.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Devices/Android.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -33660,7 +33660,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Clothes/Shoes.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Clothes/Shoes.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -33719,7 +33719,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Clothes/Panties.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Clothes/Panties.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -33777,7 +33777,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Clothes/Shorts.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Clothes/Shorts.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -33835,7 +33835,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Clothes/Brassiere.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Clothes/Brassiere.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -33894,7 +33894,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Clothes/Socks.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Clothes/Socks.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -33954,7 +33954,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Clothes/Tie.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Clothes/Tie.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34015,7 +34015,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Clothes/Hanger.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Clothes/Hanger.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34074,7 +34074,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Clothes/Shirt.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Clothes/Shirt.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34134,7 +34134,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Clothes/Hat.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Clothes/Hat.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34194,7 +34194,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Clothes/Crown.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Clothes/Crown.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34253,7 +34253,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Clothes/T-Shirt.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Clothes/T-Shirt.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34312,7 +34312,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Clothes/Sun-glasses.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Clothes/Sun-glasses.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34374,7 +34374,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Clothes/Briefcase.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Clothes/Briefcase.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34434,7 +34434,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Clothes/Sneakers.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Clothes/Sneakers.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34494,7 +34494,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Clothes/Cap.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Clothes/Cap.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34554,7 +34554,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Clothes/Dress.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Clothes/Dress.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34619,7 +34619,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Tools/Pantone.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Tools/Pantone.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34680,7 +34680,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Tools/Swiss-knife.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Tools/Swiss-knife.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34741,7 +34741,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Tools/Hummer#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Tools/Hummer#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34802,7 +34802,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Tools/Axe.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Tools/Axe.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34863,7 +34863,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Tools/Roller.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Tools/Roller.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34924,7 +34924,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Tools/Shovel.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Tools/Shovel.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -34986,7 +34986,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Tools/Brush.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Tools/Brush.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -35046,7 +35046,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Tools/Compass.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Tools/Compass.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -35106,7 +35106,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Tools/Roulette.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Tools/Roulette.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -35167,7 +35167,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Tools/Angle Grinder.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Tools/Angle Grinder.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -35228,7 +35228,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Tools/Hummer.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Tools/Hummer.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -35288,7 +35288,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Tools/Screwdriver.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Tools/Screwdriver.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -35350,7 +35350,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Tools/Road-Cone.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Tools/Road-Cone.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -35410,7 +35410,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Tools/Spatula.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Tools/Spatula.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -35470,7 +35470,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Tools/Tools.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Tools/Tools.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -35534,7 +35534,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Align-justify.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Align-justify.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -35593,7 +35593,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Paragraph.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Paragraph.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -35652,7 +35652,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Quote#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Quote#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -35711,7 +35711,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Itallic.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Itallic.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -35770,7 +35770,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Underline.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Underline.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -35830,7 +35830,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Text-height.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Text-height.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -35892,7 +35892,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Text-width.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Text-width.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -35952,7 +35952,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Font.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Font.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36011,7 +36011,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Undo.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Undo.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36070,7 +36070,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Align-center.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Align-center.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36130,7 +36130,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Quote#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Quote#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36190,7 +36190,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Align-auto.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Align-auto.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36251,7 +36251,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Text.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Text.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36310,7 +36310,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Align-right.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Align-right.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36370,7 +36370,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Menu.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Menu.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36430,7 +36430,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Article.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Article.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36489,7 +36489,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Code.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Code.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36547,7 +36547,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Filter.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Filter.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36608,7 +36608,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Edit-text.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Edit-text.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36668,7 +36668,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/H1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/H1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36727,7 +36727,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Bold.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Bold.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36785,7 +36785,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Redo.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Redo.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36845,7 +36845,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Align-left.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Align-left.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36906,7 +36906,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Strikethrough.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Strikethrough.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -36968,7 +36968,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/H2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/H2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37028,7 +37028,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Text/Bullet-list.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Text/Bullet-list.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37092,7 +37092,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Lock-circle.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Lock-circle.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37151,7 +37151,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Control.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Control.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37211,7 +37211,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Info-circle.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Info-circle.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37272,7 +37272,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Compiling.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Compiling.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37332,7 +37332,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Lock-overturning.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Lock-overturning.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37393,7 +37393,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Warning-1-circle.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Warning-1-circle.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37456,7 +37456,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Settings#4.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Settings#4.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37515,7 +37515,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/CMD.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/CMD.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37576,7 +37576,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Git#4.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Git#4.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37638,7 +37638,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Error-circle.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Error-circle.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37698,7 +37698,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Thunder-circle.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Thunder-circle.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37758,7 +37758,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Commit.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Commit.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37820,7 +37820,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Right-circle.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Right-circle.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37880,7 +37880,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Left-circle.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Left-circle.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37940,7 +37940,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Question-circle.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Question-circle.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38001,7 +38001,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Loading.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Loading.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38062,7 +38062,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Backspace.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Backspace.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38122,7 +38122,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Done-circle.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Done-circle.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38184,7 +38184,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Spy.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Spy.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38244,7 +38244,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Code.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Code.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38304,7 +38304,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Option.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Option.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38363,7 +38363,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Stop.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Stop.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38422,7 +38422,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Minus.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Minus.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38481,7 +38481,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Shift.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Shift.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38541,7 +38541,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Puzzle.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Puzzle.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38600,7 +38600,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Plus.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Plus.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38661,7 +38661,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Git#1.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Git#1.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38722,7 +38722,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Time-schedule.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Time-schedule.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38783,7 +38783,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Warning-2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Warning-2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38848,7 +38848,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Git#2.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Git#2.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38914,7 +38914,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Terminal.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Terminal.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -38976,7 +38976,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Git#3.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Git#3.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -39038,7 +39038,7 @@
 																</button>
 															</div>
 															<div class="modal-body">
-																<pre>&lt;img src="media/icons/svg/Code/Github.svg"/&gt;</pre>
+																<pre>&lt;img src="<?php echo CONF_WEBROOT_URL;?>images/icons/svg/Code/Github.svg"/&gt;</pre>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

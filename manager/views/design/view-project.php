@@ -87,7 +87,7 @@ include 'includes/header.php';
                     <div class="widget widget--user-profile-3">
                         <div class="widget__top">
                             <div class="widget__media hidden-">
-                                <img src="media/users/100_1.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
                             </div>
                             <div class="widget__pic widget__pic--danger font-danger font-boldest font-light hidden">JM</div>
                             <div class="widget__content">
@@ -199,16 +199,16 @@ include 'includes/header.php';
                                     <div class="section__content section__content--solid">
                                         <div class="media-group">
                                             <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
-                                                <img src="media/users/100_1.jpg" alt="image">
+                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
                                             </a>
                                             <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
-                                                <img src="media/users/100_10.jpg" alt="image">
+                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_10.jpg" alt="image">
                                             </a>
                                             <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
-                                                <img src="media/users/100_11.jpg" alt="image">
+                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg" alt="image">
                                             </a>
                                             <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
-                                                <img src="media/users/100_3.jpg" alt="image">
+                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
                                             </a>
                                             <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
                                                 <span>+5</span>
@@ -459,7 +459,7 @@ include 'includes/header.php';
 <!-- MARK START -->
 <div class="product-mark mr-15">
 <div class="product-mark-label">
-<img src="media/project/mark-symbol.jpg">
+<img src="<?php echo CONF_WEBROOT_URL;?>images/project/mark-symbol.jpg">
 </div>
 </div>
 <!-- MARK END -->
@@ -486,7 +486,7 @@ include 'includes/header.php';
 <!-- MARK START -->
 <div class="product-mark mr-15">
 <div class="product-mark-label">
-<img src="media/project/mark-symbol.jpg">
+<img src="<?php echo CONF_WEBROOT_URL;?>images/project/mark-symbol.jpg">
 </div>
 </div>
 <!-- MARK END -->
@@ -512,7 +512,7 @@ include 'includes/header.php';
 <!-- MARK START -->
 <div class="product-mark mr-15">
 <div class="product-mark-label">
-<img src="media/project/mark-symbol.jpg">
+<img src="<?php echo CONF_WEBROOT_URL;?>images/project/mark-symbol.jpg">
 </div>
 </div>
 <!-- MARK END -->
@@ -538,7 +538,7 @@ include 'includes/header.php';
 <!-- MARK START -->
 <div class="product-mark mr-15">
 <div class="product-mark-label">
-<img src="media/project/mark-symbol.jpg">
+<img src="<?php echo CONF_WEBROOT_URL;?>images/project/mark-symbol.jpg">
 </div>
 </div>
 <!-- MARK END -->
@@ -564,7 +564,7 @@ include 'includes/header.php';
 <!-- MARK START -->
 <div class="product-mark mr-15">
 <div class="product-mark-label">
-<img src="media/project/mark-symbol.jpg">
+<img src="<?php echo CONF_WEBROOT_URL;?>images/project/mark-symbol.jpg">
 </div>
 </div>
 <!-- MARK END -->
@@ -721,7 +721,7 @@ include 'includes/header.php';
 <!-- MARK START -->
 <div class="product-mark mr-15">
 <div class="product-mark-label-sm">
-<img src="media/project/plurk.svg">
+<img src="<?php echo CONF_WEBROOT_URL;?>images/project/plurk.svg">
 </div>
 </div>
 <!-- MARK END -->
@@ -742,7 +742,7 @@ include 'includes/header.php';
 <!-- MARK START -->
 <div class="product-mark mr-15">
 <div class="product-mark-label-sm">
-<img src="media/project/plurk.svg">
+<img src="<?php echo CONF_WEBROOT_URL;?>images/project/plurk.svg">
 </div>
 </div>
 <!-- MARK END -->
@@ -763,7 +763,7 @@ include 'includes/header.php';
 <!-- MARK START -->
 <div class="product-mark mr-15">
 <div class="product-mark-label-sm">
-<img src="media/project/plurk.svg">
+<img src="<?php echo CONF_WEBROOT_URL;?>images/project/plurk.svg">
 </div>
 </div>
 <!-- MARK END -->
@@ -784,7 +784,7 @@ include 'includes/header.php';
 <!-- MARK START -->
 <div class="product-mark mr-15">
 <div class="product-mark-label-sm">
-<img src="media/project/plurk.svg">
+<img src="<?php echo CONF_WEBROOT_URL;?>images/project/plurk.svg">
 </div>
 </div>
 <!-- MARK END -->

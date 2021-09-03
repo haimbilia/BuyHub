@@ -194,22 +194,22 @@
                                             <h2>Example Gallery</h2>
                                         </div>
                                         <div class="col-lg-2">
-                                            <a class="thumbnail gallery" href="media/products/product1.jpg"><img src="media/products/product1.jpg" /></a>
+                                            <a class="thumbnail gallery" href="media/products/product1.jpg"><img src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg" /></a>
                                         </div>
                                         <div class="col-lg-2">
-                                            <a class="thumbnail gallery" href="media/products/product2.jpg"><img src="media/products/product2.jpg" /></a>
+                                            <a class="thumbnail gallery" href="media/products/product2.jpg"><img src="<?php echo CONF_WEBROOT_URL;?>images/products/product2.jpg" /></a>
                                         </div>
                                         <div class="col-lg-2">
-                                            <a class="thumbnail gallery" href="media/products/product3.jpg"><img src="media/products/product3.jpg" /></a>
+                                            <a class="thumbnail gallery" href="media/products/product3.jpg"><img src="<?php echo CONF_WEBROOT_URL;?>images/products/product3.jpg" /></a>
                                         </div>
                                         <div class="col-lg-2">
-                                            <a class="thumbnail gallery" href="media/products/product4.jpg"><img src="media/products/product4.jpg" /></a>
+                                            <a class="thumbnail gallery" href="media/products/product4.jpg"><img src="<?php echo CONF_WEBROOT_URL;?>images/products/product4.jpg" /></a>
                                         </div>
                                         <div class="col-lg-2">
-                                            <a class="thumbnail gallery" href="media/products/product5.jpg"><img src="media/products/product5.jpg" /></a>
+                                            <a class="thumbnail gallery" href="media/products/product5.jpg"><img src="<?php echo CONF_WEBROOT_URL;?>images/products/product5.jpg" /></a>
                                         </div>
                                         <div class="col-lg-2">
-                                            <a class="thumbnail gallery" href="media/products/product6.jpg"><img src="media/products/product6.jpg" /></a>
+                                            <a class="thumbnail gallery" href="media/products/product6.jpg"><img src="<?php echo CONF_WEBROOT_URL;?>images/products/product6.jpg" /></a>
                                         </div>
                                     </div>
 
@@ -228,19 +228,19 @@
                                             </a>
                                         </div>
                                         <div class="col-lg-2">
-                                            <a class="thumbnail gallery2" href="media/products/product1.jpg"><img src="media/products/product1.jpg" /></a>
+                                            <a class="thumbnail gallery2" href="media/products/product1.jpg"><img src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg" /></a>
                                         </div>
                                         <div class="col-lg-2">
-                                            <a class="thumbnail gallery2" href="media/products/product1.jpg"><img src="media/products/product1.jpg" /></a>
+                                            <a class="thumbnail gallery2" href="media/products/product1.jpg"><img src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg" /></a>
                                         </div>
                                         <div class="col-lg-2">
-                                            <a class="thumbnail gallery2" href="media/products/product1.jpg"><img src="media/products/product1.jpg" /></a>
+                                            <a class="thumbnail gallery2" href="media/products/product1.jpg"><img src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg" /></a>
                                         </div>
                                         <div class="col-lg-2">
-                                            <a class="thumbnail gallery2" href="media/products/product1.jpg"><img src="media/products/product1.jpg" /></a>
+                                            <a class="thumbnail gallery2" href="media/products/product1.jpg"><img src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg" /></a>
                                         </div>
                                         <div class="col-lg-2">
-                                            <a class="thumbnail gallery2" href="media/products/product1.jpg"><img src="media/products/product1.jpg" /></a>
+                                            <a class="thumbnail gallery2" href="media/products/product1.jpg"><img src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg" /></a>
                                         </div>
                                     </div>
 

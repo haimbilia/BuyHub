@@ -117,7 +117,7 @@
                                             <div class="widget__items">
                                                 <div class="widget__item">
                                                     <span class="media media--circle">
-                                                        <img src="media/users/300_9.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_9.jpg" alt="image">
                                                     </span>
                                                     <div class="widget__info">
                                                         <div class="widget__section">
@@ -137,7 +137,7 @@
 
                                                 <div class="widget__item">
                                                     <span class="media media--circle">
-                                                        <img src="media/users/100_7.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg" alt="image">
                                                     </span>
 
                                                     <div class="widget__info">
@@ -159,7 +159,7 @@
 
                                                 <div class="widget__item">
                                                     <span class="media media--circle">
-                                                        <img src="media/users/100_12.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg" alt="image">
                                                     </span>
 
                                                     <div class="widget__info">
@@ -180,7 +180,7 @@
 
                                                 <div class="widget__item">
                                                     <span class="media media--circle">
-                                                        <img src="media/users/100_4.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="image">
                                                     </span>
 
                                                     <div class="widget__info">
@@ -200,7 +200,7 @@
 
                                                 <div class="widget__item">
                                                     <span class="media media--circle">
-                                                        <img src="media/users/100_8.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_8.jpg" alt="image">
                                                     </span>
 
                                                     <div class="widget__info">
@@ -220,7 +220,7 @@
 
                                                 <div class="widget__item">
                                                     <span class="media media--circle">
-                                                        <img src="media/users/300_10.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_10.jpg" alt="image">
                                                     </span>
 
                                                     <div class="widget__info">
@@ -240,7 +240,7 @@
 
                                                 <div class="widget__item">
                                                     <span class="media media--circle">
-                                                        <img src="media/users/300_13.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_13.jpg" alt="image">
                                                     </span>
 
                                                     <div class="widget__info">
@@ -260,7 +260,7 @@
 
                                                 <div class="widget__item">
                                                     <span class="media media--circle">
-                                                        <img src="media/users/300_21.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
                                                     </span>
 
                                                     <div class="widget__info">
@@ -280,7 +280,7 @@
 
                                                 <div class="widget__item">
                                                     <span class="media media--circle">
-                                                        <img src="media/users/300_9.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_9.jpg" alt="image">
                                                     </span>
 
                                                     <div class="widget__info">
@@ -302,7 +302,7 @@
 
                                                 <div class="widget__item">
                                                     <span class="media media--circle">
-                                                        <img src="media/users/100_7.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg" alt="image">
                                                     </span>
 
                                                     <div class="widget__info">
@@ -324,7 +324,7 @@
 
                                                 <div class="widget__item">
                                                     <span class="media media--circle">
-                                                        <img src="media/users/100_12.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg" alt="image">
                                                     </span>
 
                                                     <div class="widget__info">
@@ -345,7 +345,7 @@
 
                                                 <div class="widget__item">
                                                     <span class="media media--circle">
-                                                        <img src="media/users/100_4.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="image">
                                                     </span>
 
                                                     <div class="widget__info">
@@ -365,7 +365,7 @@
 
                                                 <div class="widget__item">
                                                     <span class="media media--circle">
-                                                        <img src="media/users/100_8.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_8.jpg" alt="image">
                                                     </span>
 
                                                     <div class="widget__info">
@@ -385,7 +385,7 @@
 
                                                 <div class="widget__item">
                                                     <span class="media media--circle">
-                                                        <img src="media/users/300_10.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_10.jpg" alt="image">
                                                     </span>
 
                                                     <div class="widget__info">
@@ -405,7 +405,7 @@
 
                                                 <div class="widget__item">
                                                     <span class="media media--circle">
-                                                        <img src="media/users/300_13.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_13.jpg" alt="image">
                                                     </span>
 
                                                     <div class="widget__info">
@@ -425,7 +425,7 @@
 
                                                 <div class="widget__item">
                                                     <span class="media media--circle">
-                                                        <img src="media/users/300_21.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
                                                     </span>
 
                                                     <div class="widget__info">
@@ -537,32 +537,32 @@
                                                         <a href="#" class="media media--sm media--circle"
                                                             data-toggle="tooltip" data-skin="brand" data-placement="top"
                                                             title="" data-original-title="John Myer">
-                                                            <img src="media/users/100_1.jpg" alt="image">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
                                                         </a>
                                                         <a href="#" class="media media--sm media--circle"
                                                             data-toggle="tooltip" data-skin="brand" data-placement="top"
                                                             title="" data-original-title="John Myer">
-                                                            <img src="media/users/100_2.jpg" alt="image">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_2.jpg" alt="image">
                                                         </a>
                                                         <a href="#" class="media media--sm media--circle"
                                                             data-toggle="tooltip" data-skin="brand" data-placement="top"
                                                             title="" data-original-title="John Myer">
-                                                            <img src="media/users/100_3.jpg" alt="image">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
                                                         </a>
                                                         <a href="#" class="media media--sm media--circle"
                                                             data-toggle="tooltip" data-skin="brand" data-placement="top"
                                                             title="" data-original-title="John Myer">
-                                                            <img src="media/users/100_4.jpg" alt="image">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="image">
                                                         </a>
                                                         <a href="#" class="media media--sm media--circle"
                                                             data-toggle="tooltip" data-skin="brand" data-placement="top"
                                                             title="" data-original-title="John Myer">
-                                                            <img src="media/users/100_5.jpg" alt="image">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_5.jpg" alt="image">
                                                         </a>
                                                         <a href="#" class="media media--sm media--circle"
                                                             data-toggle="tooltip" data-skin="brand" data-placement="top"
                                                             title="" data-original-title="John Myer">
-                                                            <img src="media/users/100_6.jpg" alt="image">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg" alt="image">
                                                         </a>
                                                         <a href="#" class="media media--sm media--circle"
                                                             data-toggle="tooltip" data-skin="brand" data-placement="top"
@@ -576,21 +576,21 @@
                                                     <span class="media media--sm media--circle" data-toggle="tooltip"
                                                         data-placement="right" title=""
                                                         data-original-title="Jason Muller">
-                                                        <img src="media/users/300_12.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_12.jpg" alt="image">
                                                     </span>
                                                     <span class="media media--sm media--circle" data-toggle="tooltip"
                                                         data-placement="right" title="" data-original-title="Nick Bold">
-                                                        <img src="media/users/300_11.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_11.jpg" alt="image">
                                                     </span>
                                                     <span class="media media--sm media--circle" data-toggle="tooltip"
                                                         data-placement="right" title=""
                                                         data-original-title="Milano Esco">
-                                                        <img src="media/users/100_14.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_14.jpg" alt="image">
                                                     </span>
                                                     <span class="media media--sm media--circle" data-toggle="tooltip"
                                                         data-placement="right" title=""
                                                         data-original-title="Teresa Fox">
-                                                        <img src="media/users/100_4.jpg" alt="image">
+                                                        <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="image">
                                                     </span>
                                                 </div>
                                             </div>
@@ -676,7 +676,7 @@
                                                 <div class="d-flex flex-column mb-5 align-items-start">
                                                     <div class="d-flex align-items-center">
                                                         <span class="media media--circle">
-                                                            <img src="media/users/100_12.jpg" alt="image">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg" alt="image">
                                                         </span>
                                                         <div class="mr-lr">
                                                             <a href="#"
@@ -701,7 +701,7 @@
                                                             <a href="#"
                                                                 class="text-dark-75 text-hover-primary font-weight-bold font-size-h6">You</a>
                                                         </div><span class="media media--circle">
-                                                            <img src="media/users/100_7.jpg" alt="image">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg" alt="image">
                                                         </span>
                                                     </div>
                                                     <div
@@ -716,7 +716,7 @@
                                                 <div class="d-flex flex-column mb-5 align-items-start">
                                                     <div class="d-flex align-items-center">
                                                         <span class="media media--circle">
-                                                            <img src="media/users/100_12.jpg" alt="image">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg" alt="image">
                                                         </span>
                                                         <div class="mr-lr">
                                                             <a href="#"
@@ -740,7 +740,7 @@
                                                             <a href="#"
                                                                 class="text-dark-75 text-hover-primary font-weight-bold font-size-h6">You</a>
                                                         </div><span class="media media--circle">
-                                                            <img src="media/users/100_7.jpg" alt="image">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg" alt="image">
                                                         </span>
                                                     </div>
                                                     <div
@@ -754,7 +754,7 @@
                                                 <div class="d-flex flex-column mb-5 align-items-start">
                                                     <div class="d-flex align-items-center">
                                                         <span class="media media--circle">
-                                                            <img src="media/users/100_12.jpg" alt="image">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg" alt="image">
                                                         </span>
                                                         <div class="mr-lr">
                                                             <a href="#"
@@ -779,7 +779,7 @@
                                                             <a href="#"
                                                                 class="text-dark-75 text-hover-primary font-weight-bold font-size-h6">You</a>
                                                         </div><span class="media media--circle">
-                                                            <img src="media/users/100_7.jpg" alt="image">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg" alt="image">
                                                         </span>
                                                     </div>
                                                     <div
@@ -794,7 +794,7 @@
                                                 <div class="d-flex flex-column mb-5 align-items-start">
                                                     <div class="d-flex align-items-center">
                                                         <span class="media media--circle">
-                                                            <img src="media/users/100_12.jpg" alt="image">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg" alt="image">
                                                         </span>
                                                         <div class="mr-lr">
                                                             <a href="#"
@@ -819,7 +819,7 @@
                                                                 class="text-dark-75 text-hover-primary font-weight-bold font-size-h6">You</a>
                                                         </div>
                                                         <span class="media media--circle">
-                                                            <img src="media/users/100_7.jpg" alt="image">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg" alt="image">
                                                         </span>
                                                     </div>
                                                     <div
