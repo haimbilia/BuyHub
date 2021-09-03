@@ -432,21 +432,24 @@ class ProductCategoriesController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $prodCateObj = new ProductCategory($prodcat_id);
-        if (!$prodCateObj->canRecordMarkDelete($prodcat_id)) {
+        $prodCatObj = new ProductCategory($prodcat_id);
+        if (!$prodCatObj->canRecordMarkDelete($prodcat_id)) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieJsonError(Message::getHtml());
         }
 
         /* Sub-Categories have products[ */
-        if (true === $prodCateObj->haveProducts()) {
+        if (true === $prodCatObj->haveProducts()) {
             FatUtility::dieJsonError(Labels::getLabel('LBL_Products_are_associated_with_its_category/sub-categories_so_we_are_not_able_to_delete_this_category', $this->adminLangId));
         }
-        /* ] */
 
-        $prodCateObj->assignValues(array(ProductCategory::tblFld('deleted') => 1));
-        if (!$prodCateObj->save()) {
-            FatUtility::dieJsonError($prodCateObj->getError());
+        if (0 < $prodCatObj->getSubCategoriesCount($prodcat_id)) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_UNABLE_TO_DELETE_CATEGORY_AS_IT_IS_ASSOCOATED_WITH_CHILD_CATEGORIES', $this->adminLangId));
+        }
+
+        $prodCatObj->assignValues(array(ProductCategory::tblFld('deleted') => 1));
+        if (!$prodCatObj->save()) {
+            FatUtility::dieJsonError($prodCatObj->getError());
         }
 
         Product::updateMinPrices();
