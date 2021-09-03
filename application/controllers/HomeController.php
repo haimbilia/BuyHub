@@ -256,6 +256,7 @@ class HomeController extends MyAppController
         $productSrchObj->setLocationBasedInnerJoin(false);
         $productSrchObj->setGeoAddress();
         $productSrchObj->joinProductToCategory();
+        $productSrchObj->joinProductToTax();
         /* $productSrchObj->doNotCalculateRecords();
         $productSrchObj->setPageSize( 10 ); */
         $productSrchObj->setDefinedCriteria();

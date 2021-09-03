@@ -840,6 +840,12 @@ class Importexport extends ImportexportCommon
                         $categoryId = $this->db->getInsertId();
                     }
                 }
+                $prodCat = new ProductCategory($categoryId);
+                if (applicationConstants::INACTIVE == $prodCatDataArr['prodcat_active']) {
+                    $prodCat->disableChildCategories();
+                } else {
+                    $prodCat->enableParentCategories();
+                }
 
                 if (0 < $categoryId) {
                     /* Lang Data [*/

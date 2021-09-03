@@ -775,9 +775,38 @@ class ProductSearch extends SearchBase
         $this->joinTable(Product::DB_TBL_PRODUCT_FAVORITE, 'LEFT OUTER JOIN', 'ufp.ufp_selprod_id = selprod_id and ufp.ufp_user_id = ' . $user_id, 'ufp');
     }
 
-    public function joinProductToTax()
+    public function joinProductToTax($langId = 0, $isActive = true, $isDeleted = true, $useInnerJoin = true)
     {
-        $this->joinTable(Tax::DB_TBL_PRODUCT_TO_TAX, 'LEFT OUTER JOIN', 'ptt.ptt_product_id = product_id', 'ptt');
+        $join = ($useInnerJoin) ? 'INNER JOIN' : 'LEFT OUTER JOIN';
+        $this->joinTable(Tax::DB_TBL_PRODUCT_TO_TAX, $join, 'ptt.ptt_product_id = product_id', 'ptt');
+
+        $extraQuery = '';
+        if ($useInnerJoin) {
+            if ($isActive) {
+                $extraQuery = ' and pt.taxcat_active = ' . applicationConstants::ACTIVE;
+            }
+            if ($isDeleted) {
+                $extraQuery .= ' and pt.taxcat_deleted = ' . applicationConstants::NO;
+            }
+        } else {
+            if ($isActive) {
+                $this->addCondition('pt.taxcat_active', '=', applicationConstants::ACTIVE);
+            }
+            if ($isDeleted) {
+                $this->addCondition('pt.taxcat_deleted', '=', applicationConstants::NO);
+            }
+        }
+
+        $this->joinTable(Tax::DB_TBL, $join, 'pt.taxcat_id = ptt.ptt_taxcat_id' . $extraQuery, 'pt');
+
+        if (1 < $langId) {
+            $this->joinProductToTaxLang();
+        }
+    }
+
+    public function joinProductToTaxLang($langId)
+    {
+        $this->joinTable(Tax::DB_TBL_LANG, 'LEFT OUTER JOIN', 'pt_l.taxcatlang_taxcat_id = pt.taxcat_id AND prodcatlang_lang_id = ' . $langId, 'pt_l');
     }
 
     public function joinUserWishListProducts($user_id)
