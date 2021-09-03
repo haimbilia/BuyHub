@@ -101,7 +101,7 @@
                 <main class="main">
                     <div class="container">
                         <div class="card">
-                            <div class="card-body d-block">  
+                            <div class="card-body">  
                                 <div class="setting-search">
                                     <form class="form">
                                         <div class="row justify-content-center">
