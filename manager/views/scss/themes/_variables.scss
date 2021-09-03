@@ -10,8 +10,8 @@
 // $border-color: #e2e5ec !default;
 // $border-dark-color: #e2e5ec !default;
 // $border-light-color: #e2e5ec !default;
-// $txt-body: #212529 !default;
-// $txt-gray:#888!default;
+// $txt-body: #181c32 !default;
+// $txt-gray:#000 !default;
 // //
 // $bg-white: var(--bg-white);
 // $bg-white-inverse: var(--bg-white-inverse);
@@ -22,5 +22,9 @@
 // $bg-gray:var(--bg-gray);
 // //$bg-gray-inverse:;
 // //
-// //$txt-body: var(--txt-body);
-// $txt-gray:var(--txt-gray);
+//  $txt-body: var(--txt-body);
+//  $txt-gray:var(--txt-gray); 
+
+ //fixed theme colors
+$txt-body: #000;
+$txt-gray:#8798ad;
