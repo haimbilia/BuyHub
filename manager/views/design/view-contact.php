@@ -89,7 +89,7 @@
         <div class="widget widget--user-profile-3">
             <div class="widget__top">
                 <div class="widget__media">
-                    <img src="media/users/100_12.jpg" alt="image">
+                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg" alt="image">
                 </div>
                 <div class="widget__pic widget__pic--danger font-danger font-bolder font-light hidden">
                     JM
@@ -296,19 +296,19 @@
                         <div class="section__content section__content--solid">
                             <div class="badge badge__pics">
                                 <a href="#" class="badge__pic" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
-                                    <img src="media/users/100_7.jpg" alt="image">
+                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg" alt="image">
                                 </a>
                                 <a href="#" class="badge__pic" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
-                                    <img src="media/users/100_3.jpg" alt="image">
+                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
                                 </a>
                                 <a href="#" class="badge__pic" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
-                                    <img src="media/users/100_2.jpg" alt="image">
+                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_2.jpg" alt="image">
                                 </a>
                                 <a href="#" class="badge__pic" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Luke Walls">
-                                    <img src="media/users/100_13.jpg" alt="image">
+                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_13.jpg" alt="image">
                                 </a>
                                 <a href="#" class="badge__pic" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
-                                    <img src="media/users/100_4.jpg" alt="image">
+                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="image">
                                 </a>
                                 <a href="#" class="badge__pic badge__pic--last font-brand">
                                     +7
@@ -655,7 +655,7 @@
                             <div class="notes__items">
                                 <div class="notes__item"> 
                                     <div class="notes__media">
-                                        <img class="hidden-" src="media/users/100_3.jpg" alt="image">
+                                        <img class="hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
                                         <span class="notes__icon font-boldest hidden">
                                             <i class="flaticon2-cup"></i>                                    
                                         </span> 
@@ -1020,7 +1020,7 @@
                                 </div> 
                                 <div class="notes__item notes__item--clean"> 
                                     <div class="notes__media">
-                                        <img class="hidden" src="media/users/100_1.jpg" alt="image">
+                                        <img class="hidden" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
                                         <span class="notes__icon font-boldest hidden">
                                             <i class="flaticon2-cup"></i>                                    
                                         </span> 
@@ -1049,7 +1049,7 @@
                                 </div> 
                                 <div class="notes__item notes__item--clean"> 
                                     <div class="notes__media">
-                                        <img class="hidden" src="media/users/100_1.jpg" alt="image">
+                                        <img class="hidden" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
                                         <span class="notes__icon font-boldest hidden">
                                             <i class="flaticon2-cup"></i>                                    
                                         </span> 

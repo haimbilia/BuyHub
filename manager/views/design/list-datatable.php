@@ -212,7 +212,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>5/6/2017</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo1.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo1.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Simonis, Rowe and Davis</a> <span class="user-card-v2__email">Angular, React</span> </div>
                                                     </div>
                                                 </span></td>
@@ -246,7 +246,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>3/31/2017</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo2.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo2.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Haley, Schamberger and Durgan</a> <span class="user-card-v2__email">Vue, Kendo</span> </div>
                                                     </div>
                                                 </span></td>
@@ -269,7 +269,7 @@
 
                                             <th data-field="AgentName" class="datatable_cell  datatable_cell_left"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_6.jpg"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Jerrome Colvie</a> <span class="user-card-v2__desc">Sales</span> </div>
                                                     </div>
                                                 </span></th>
@@ -278,7 +278,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>3/4/2016</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo3.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo3.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Kreiger, Glover and Connelly</a> <span class="user-card-v2__email">.NET, Oracle, MySQL</span> </div>
                                                     </div>
                                                 </span></td>
@@ -301,7 +301,7 @@
 
                                             <th data-field="AgentName" class="datatable_cell  datatable_cell_left"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_7.jpg"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Bryn Peascod</a> <span class="user-card-v2__desc">Sales</span> </div>
                                                     </div>
                                                 </span></th>
@@ -310,7 +310,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>5/22/2016</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo4.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo4.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Larkin and Sons</a> <span class="user-card-v2__email">Node, SASS, Webpack</span> </div>
                                                     </div>
                                                 </span></td>
@@ -333,7 +333,7 @@
 
                                             <th data-field="AgentName" class="datatable_cell  datatable_cell_left"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_8.jpg"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_8.jpg"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Freda Arnall</a> <span class="user-card-v2__desc">CEO</span> </div>
                                                     </div>
                                                 </span></th>
@@ -342,7 +342,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>7/22/2016</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo5.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo5.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Dicki, Morar and Stiedemann</a> <span class="user-card-v2__email">MangoDB, Java</span> </div>
                                                     </div>
                                                 </span></td>
@@ -365,7 +365,7 @@
 
                                             <th data-field="AgentName" class="datatable_cell  datatable_cell_left"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_9.jpg"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_9.jpg"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Chrissie Jeromson</a> <span class="user-card-v2__desc">CEO</span> </div>
                                                     </div>
                                                 </span></th>
@@ -374,7 +374,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>11/26/2017</span></td>
                                             <td class="datatable_cell-sorted datatable_cell " data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo3.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo3.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Brakus-McCullough</a> <span class="user-card-v2__email">.NET, Oracle, MySQL</span> </div>
                                                     </div>
                                                 </span></td>
@@ -397,7 +397,7 @@
 
                                             <th data-field="AgentName" class="datatable_cell  datatable_cell_left"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_10.jpg"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_10.jpg"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Nixie Sailor</a> <span class="user-card-v2__desc">CEO</span> </div>
                                                     </div>
                                                 </span></th>
@@ -406,7 +406,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>2/12/2018</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo4.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo4.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Gleichner, Ziemann and Gutkowski</a> <span class="user-card-v2__email">Node, SASS, Webpack</span> </div>
                                                     </div>
                                                 </span></td>
@@ -429,7 +429,7 @@
 
                                             <th data-field="AgentName" class="datatable_cell  datatable_cell_left"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_11.jpg"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Yardley Wetherell</a> <span class="user-card-v2__desc">CEO</span> </div>
                                                     </div>
                                                 </span></th>
@@ -438,7 +438,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>4/3/2017</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo5.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo5.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Gerlach-Schultz</a> <span class="user-card-v2__email">MangoDB, Java</span> </div>
                                                     </div>
                                                 </span></td>
@@ -461,7 +461,7 @@
 
                                             <th data-field="AgentName" class="datatable_cell  datatable_cell_left"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_12.jpg"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Sioux Kneath</a> <span class="user-card-v2__desc">Architect</span> </div>
                                                     </div>
                                                 </span></th>
@@ -470,7 +470,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>10/11/2017</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo3.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo3.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Rice, Cole and Spinka</a> <span class="user-card-v2__email">.NET, Oracle, MySQL</span> </div>
                                                     </div>
                                                 </span></td>
@@ -493,7 +493,7 @@
 
                                             <th data-field="AgentName" class="datatable_cell  datatable_cell_left"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_10.jpg"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_10.jpg"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Michaelina Plenderleith</a> <span class="user-card-v2__desc">Architect</span> </div>
                                                     </div>
                                                 </span></th>
@@ -502,7 +502,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>2/21/2018</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo4.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo4.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Legros-Gleichner</a> <span class="user-card-v2__email">Node, SASS, Webpack</span> </div>
                                                     </div>
                                                 </span></td>

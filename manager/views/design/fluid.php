@@ -548,10 +548,10 @@
 														AEOL Meeting With
 													</div>
 													<div class="list-pics list-pics--sm padding-l-20">
-														<a href="#"><img src="media/users/100_4.jpg" title=""></a>
-														<a href="#"><img src="media/users/100_13.jpg" title=""></a>
-														<a href="#"><img src="media/users/100_11.jpg" title=""></a>
-														<a href="#"><img src="media/users/100_14.jpg" title=""></a>
+														<a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" title=""></a>
+														<a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_13.jpg" title=""></a>
+														<a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg" title=""></a>
+														<a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_14.jpg" title=""></a>
 													</div>
 												</div>
 												<div class="timeline-v2__item">
@@ -977,7 +977,7 @@
 											<div class="widget4__items widget4__items--bottom card__space-x mb-4">
 												<div class="widget4__item">
 													<div class="widget4__img widget4__img--logo">
-														<img src="media/client-logos/logo3.png" alt="">
+														<img src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo3.png" alt="">
 													</div>
 													<div class="widget4__info">
 														<a href="#" class="widget4__title">
@@ -993,7 +993,7 @@
 												</div>
 												<div class="widget4__item">
 													<div class="widget4__img widget4__img--logo">
-														<img src="media/client-logos/logo1.png" alt="">
+														<img src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo1.png" alt="">
 													</div>
 													<div class="widget4__info">
 														<a href="#" class="widget4__title">
@@ -1009,7 +1009,7 @@
 												</div>
 												<div class="widget4__item">
 													<div class="widget4__img widget4__img--logo">
-														<img src="media/client-logos/logo2.png" alt="">
+														<img src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo2.png" alt="">
 													</div>
 													<div class="widget4__info">
 														<a href="#" class="widget4__title">
@@ -1112,7 +1112,7 @@
 														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="1">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo1.png"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo1.png"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Gleichner, Ziemann and Gutkowski</a> <span class="user-card-v2__email">Angular, React</span> </div>
 																</div>
 															</span></td>
@@ -1143,7 +1143,7 @@
 														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="2">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo2.png"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo2.png"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Rosenbaum-Reichel</a> <span class="user-card-v2__email">Vue, Kendo</span> </div>
 																</div>
 															</span></td>
@@ -1174,7 +1174,7 @@
 														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="3">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo3.png"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo3.png"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Kulas, Cassin and Batz</a> <span class="user-card-v2__email">.NET, Oracle, MySQL</span> </div>
 																</div>
 															</span></td>
@@ -1182,7 +1182,7 @@
 														<td data-field="Status" class="datatable__cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-brand">Pending</span></span></td>
 														<td data-field="Type" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_6.jpg"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Ula Luckin</a> <span class="user-card-v2__desc">Sales</span> </div>
 																</div>
 															</span></td>
@@ -1203,7 +1203,7 @@
 														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="4">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo4.png"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo4.png"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Pfannerstill-Treutel</a> <span class="user-card-v2__email">Node, SASS, Webpack</span> </div>
 																</div>
 															</span></td>
@@ -1211,7 +1211,7 @@
 														<td data-field="Status" class="datatable__cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-brand">Pending</span></span></td>
 														<td data-field="Type" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_7.jpg"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Evangeline Cure</a> <span class="user-card-v2__desc">Architect</span> </div>
 																</div>
 															</span></td>
@@ -1232,7 +1232,7 @@
 														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="5">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo5.png"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo5.png"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Dicki-Kling</a> <span class="user-card-v2__email">MangoDB, Java</span> </div>
 																</div>
 															</span></td>
@@ -1240,7 +1240,7 @@
 														<td data-field="Status" class="datatable__cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">Processing</span></span></td>
 														<td data-field="Type" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_8.jpg"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_8.jpg"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Tierney St. Louis</a> <span class="user-card-v2__desc">Sales</span> </div>
 																</div>
 															</span></td>
@@ -1261,7 +1261,7 @@
 														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="6">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo3.png"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo3.png"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Gleason, Kub and Marquardt</a> <span class="user-card-v2__email">.NET, Oracle, MySQL</span> </div>
 																</div>
 															</span></td>
@@ -1269,7 +1269,7 @@
 														<td data-field="Status" class="datatable__cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-warning">Canceled</span></span></td>
 														<td data-field="Type" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_9.jpg"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_9.jpg"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Gerhard Reinhard</a> <span class="user-card-v2__desc">Manager</span> </div>
 																</div>
 															</span></td>
@@ -1290,7 +1290,7 @@
 														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="7">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo4.png"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo4.png"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Jenkins Inc</a> <span class="user-card-v2__email">Node, SASS, Webpack</span> </div>
 																</div>
 															</span></td>
@@ -1298,7 +1298,7 @@
 														<td data-field="Status" class="datatable__cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">Processing</span></span></td>
 														<td data-field="Type" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_10.jpg"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_10.jpg"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Englebert Shelley</a> <span class="user-card-v2__desc">CEO</span> </div>
 																</div>
 															</span></td>
@@ -1319,7 +1319,7 @@
 														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="8">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo5.png"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo5.png"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Streich LLC</a> <span class="user-card-v2__email">MangoDB, Java</span> </div>
 																</div>
 															</span></td>
@@ -1327,7 +1327,7 @@
 														<td data-field="Status" class="datatable__cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">Done</span></span></td>
 														<td data-field="Type" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_11.jpg"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Hazlett Kite</a> <span class="user-card-v2__desc">Developer</span> </div>
 																</div>
 															</span></td>
@@ -1348,7 +1348,7 @@
 														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="9">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo3.png"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo3.png"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Haley, Schamberger and Durgan</a> <span class="user-card-v2__email">.NET, Oracle, MySQL</span> </div>
 																</div>
 															</span></td>
@@ -1356,7 +1356,7 @@
 														<td data-field="Status" class="datatable__cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">Processing</span></span></td>
 														<td data-field="Type" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_12.jpg"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Freida Morby</a> <span class="user-card-v2__desc">Developer</span> </div>
 																</div>
 															</span></td>
@@ -1377,7 +1377,7 @@
 														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="10">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/client-logos/logo4.png"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo4.png"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Labadie, Predovic and Hammes</a> <span class="user-card-v2__email">Node, SASS, Webpack</span> </div>
 																</div>
 															</span></td>
@@ -1385,7 +1385,7 @@
 														<td data-field="Status" class="datatable__cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-brand">Pending</span></span></td>
 														<td data-field="Type" class="datatable__cell"><span>
 																<div class="user-card-v2">
-																	<div class="user-card-v2__pic"> <img alt="photo" src="media/users/100_10.jpg"> </div>
+																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_10.jpg"> </div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Obed Helian</a> <span class="user-card-v2__desc">Sales</span> </div>
 																</div>
 															</span></td>

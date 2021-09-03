@@ -43,7 +43,7 @@
 
 <body>
     <div class="not-found">
-	    <img src="media/retina/error-403.svg"/>
+	    <img src="<?php echo CONF_WEBROOT_URL;?>images/retina/error-403.svg"/>
         <h3>403. Access Denied</h3>
         <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae amet nesciunt eos velit omnis cumque quos, repellendus...
         </p>

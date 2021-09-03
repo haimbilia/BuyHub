@@ -89,7 +89,7 @@
 											<h1 class="invoice__title">INVOICE</h1>
 
 											<div href="#" class="invoice__logo">
-												<a href="#"><img src="media/company-logos/logo_client_white.png"></a>
+												<a href="#"><img src="<?php echo CONF_WEBROOT_URL;?>images/company-logos/logo_client_white.png"></a>
 
 												<span class="invoice__desc">
 													<span>Cecilia Chapman, 711-2880 Nulla St, Mankato</span>

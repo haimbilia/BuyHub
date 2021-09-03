@@ -100,25 +100,25 @@
 										<div class="section__info">Default user pics:</div>
 										<div class="section__content d-flex flex-wrap section__content--solid--">
 											<span class="media margin-r-5 margin-t-5">
-												<img src="media/users/300_19.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_19.jpg" alt="image">
 											</span>
 											<span class="media margin-r-5 margin-t-5">
-												<img src="media/users/100_13.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_13.jpg" alt="image">
 											</span>
 											<span class="media margin-r-5 margin-t-5">
-												<img src="media/users/100_11.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg" alt="image">
 											</span>
 											<span class="media margin-r-5 margin-t-5">
-												<img src="media/users/100_6.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg" alt="image">
 											</span>
 											<span class="media margin-r-5 margin-t-5">
-												<img src="media/users/100_7.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg" alt="image">
 											</span>
 											<span class="media margin-r-5 margin-t-5">
-												<img src="media/users/100_3.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
 											</span>
 											<span class="media margin-t-5">
-												<img src="media/users/100_10.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_10.jpg" alt="image">
 											</span>
 										</div>
 										<!--end::Section-->
@@ -158,25 +158,25 @@
 										<div class="section__info">Circle user pics:</div>
 										<div class="section__content d-flex flex-wrap section__content--solid--">
 											<span class="media media--circle margin-r-5 margin-t-5">
-												<img src="media/users/100_12.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg" alt="image">
 											</span>
 											<span class="media media--circle media--danger margin-r-5 margin-t-5">
 												<span>TR</span>
 											</span>
 											<span class="media media--circle margin-r-5 margin-t-5">
-												<img src="media/users/100_8.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_8.jpg" alt="image">
 											</span>
 											<span class="media media--circle media--warning margin-r-5 margin-t-5">
 												<span>LP</span>
 											</span>
 											<span class="media media--circle margin-r-5 margin-t-5">
-												<img src="media/users/100_3.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
 											</span>
 											<span class="media media--circle media--success margin-r-5 margin-t-5">
 												<span>BY</span>
 											</span>
 											<span class="media media--circle margin-t-5">
-												<img src="media/users/100_13.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_13.jpg" alt="image">
 											</span>
 										</div>
 										<!--end::Section-->
@@ -186,25 +186,25 @@
 										<div class="section__info">linkable user pics:</div>
 										<div class="section__content d-flex flex-wrap section__content--solid--">
 											<a href="#" class="media margin-r-5 margin-t-5" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
-												<img src="media/users/100_2.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_2.jpg" alt="image">
 											</a>
 											<a href="#" class="media media--circle margin-r-5 margin-t-5" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
-												<img src="media/users/100_5.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_5.jpg" alt="image">
 											</a>
 											<a href="#" class="media margin-r-5 margin-t-5" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
-												<img src="media/users/100_11.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg" alt="image">
 											</a>
 											<a href="#" class="media media--circle margin-r-5 margin-t-5" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
-												<img src="media/users/300_8.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_8.jpg" alt="image">
 											</a>
 											<a href="#" class="media margin-r-5 margin-t-5" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
-												<img src="media/users/100_7.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg" alt="image">
 											</a>
 											<a href="#" class="media media--circle margin-r-5 margin-t-5" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
-												<img src="media/users/300_24.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_24.jpg" alt="image">
 											</a>
 											<a href="#" class="media margin-t-5" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
-												<img src="media/users/300_20.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_20.jpg" alt="image">
 											</a>
 										</div>
 
@@ -229,31 +229,31 @@
 										<div class="section__info">Sizing options(sm, lg, xl):</div>
 										<div class="section__content d-flex flex-wrap section__content--solid--">
 											<span class="media media--sm margin-r-5 margin-t-5">
-												<img src="media/users/300_16.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_16.jpg" alt="image">
 											</span>
 											<span class="media media--sm media--success media--circle margin-r-5 margin-t-5">
 												<span>MS</span>
 											</span>
 											<span class="media media--sm margin-r-5 margin-t-5">
-												<img src="media/users/100_9.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_9.jpg" alt="image">
 											</span>
 											<span class="media media--sm media--circle media--danger margin-r-5 margin-t-5">
 												<span>AC</span>
 											</span>
 											<span class="media media--sm margin-r-5 margin-t-5">
-												<img src="media/users/300_17.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_17.jpg" alt="image">
 											</span>
 											<span class="media media--sm media--circle media--warning margin-r-5 margin-t-5">
 												<span>KL</span>
 											</span>
 											<span class="media media--sm margin-r-5 margin-t-5">
-												<img src="media/users/100_5.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_5.jpg" alt="image">
 											</span>
 											<span class="media media--sm media--circle media--brand margin-r-5 margin-t-5">
 												<span>FR</span>
 											</span>
 											<span class="media media--sm  margin-t-5">
-												<img src="media/users/300_19.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_19.jpg" alt="image">
 											</span>
 										</div>
 										<!--end::Section-->
@@ -264,25 +264,25 @@
 												<span>BT</span>
 											</span>
 											<span class="media media--lg media--circle margin-r-5 margin-t-5">
-												<img src="media/users/100_12.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg" alt="image">
 											</span>
 											<span class="media media--lg  media--danger margin-r-5 margin-t-5">
 												<span>PY</span>
 											</span>
 											<span class="media media--lg media--circle  margin-r-5 margin-t-5">
-												<img src="media/users/100_8.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_8.jpg" alt="image">
 											</span>
 											<span class="media media--lg media--warning margin-r-5 margin-t-5">
 												<span>JU</span>
 											</span>
 											<span class="media media--lg media--circle margin-r-5 margin-t-5">
-												<img src="media/users/100_3.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
 											</span>
 											<span class="media media--lg  media--success margin-r-5 margin-t-5">
 												<span>GF</span>
 											</span>
 											<span class="media media--lg media--circle margin-t-5">
-												<img src="media/users/100_13.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_13.jpg" alt="image">
 											</span>
 										</div>
 										<!--end::Section-->
@@ -290,25 +290,25 @@
 										<!--begin::Section-->
 										<div class="section__content d-flex flex-wrap margin-t-30 section__content--solid--">
 											<span class="media media--lg media--circle margin-r-5 margin-t-5">
-												<img src="media/project-logos/1.png" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/project-logos/1.png" alt="image">
 											</span>
 											<span class="media media--lg margin-r-5 margin-t-5">
-												<img src="media/project-logos/2.png" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/project-logos/2.png" alt="image">
 											</span>
 											<span class="media media--lg media--circle margin-r-5 margin-t-5">
-												<img src="media/project-logos/3.png" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/project-logos/3.png" alt="image">
 											</span>
 											<span class="media media--lg margin-r-5 margin-t-5">
-												<img src="media/project-logos/4.png" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/project-logos/4.png" alt="image">
 											</span>
 											<span class="media media--lg media--circle margin-r-5 margin-t-5">
-												<img src="media/project-logos/5.png" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/project-logos/5.png" alt="image">
 											</span>
 											<span class="media media--lg margin-r-5 margin-t-5">
-												<img src="media/project-logos/6.png" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/project-logos/6.png" alt="image">
 											</span>
 											<span class="media media--lg media--circle margin-r-5 margin-t-5">
-												<img src="media/project-logos/7.png" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/project-logos/7.png" alt="image">
 											</span>
 										</div>
 										<!--end::Section-->
@@ -319,19 +319,19 @@
 												<span>BT</span>
 											</span>
 											<span class="media media--xl  margin-r-5 margin-t-5">
-												<img src="media/users/300_19.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_19.jpg" alt="image">
 											</span>
 											<span class="media media--xl media--circle media--warning margin-r-5 margin-t-5">
 												<span>PY</span>
 											</span>
 											<span class="media media--xl margin-r-5 margin-t-5">
-												<img src="media/users/300_9.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_9.jpg" alt="image">
 											</span>
 											<span class="media media--xl media--circle media--brand margin-r-5 margin-t-5">
 												<span>JU</span>
 											</span>
 											<span class="media media--xl margin-r-5 margin-t-5">
-												<img src="media/users/300_10.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_10.jpg" alt="image">
 											</span>
 											<span class="media media--xl media--circle media--success margin-r-5 margin-t-5">
 												<span>GF</span>

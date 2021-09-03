@@ -224,8 +224,8 @@
                                 </form>
                                 <div class="card">
                                     <div class="card-head">
-                                        <h3 class="card-title">
-                                            <span class="card-label">New Products</span>
+                                        <h3 class="card-head-label">
+                                            <span class="card-head-title">New Products</span>
                                             <span class="text-muted">Over 500 new products</span>
                                         </h3>
                                         <div class="card-toolbar">
@@ -778,8 +778,8 @@
                                                 alt="">
 
                                             <div class="data">
-                                                <h5>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
-                                                    consectetur, adipisci velit...</h5>
+                                                <h6>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
+                                                    consectetur, adipisci velit...</h6>
 
                                             </div>
                                         </div>
@@ -793,7 +793,9 @@
                                     <div class="card">
                                         <div class="card-head">
                                             <div class="card-title">
-                                                <span class="card-label">Card title goes here</span>
+                                                <h3 class="card-head-label"> <span class="card-head-title">Card title
+                                                        goes here</span></h3>
+
                                             </div>
                                         </div>
                                         <div class="card-body">

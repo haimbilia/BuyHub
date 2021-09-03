@@ -99,22 +99,22 @@
 										<div class="section__desc">Image examples</div>
 										<div class="section__content">
 											<a href="#" class="media">
-												<img src="media/users/100_1.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
 											</a>
 											<a href="#" class="media">
-												<img src="media/users/100_2.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_2.jpg" alt="image">
 											</a>
 											<a href="#" class="media">
-												<img src="media/users/100_3.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
 											</a>
 											<a href="#" class="media">
-												<img src="media/users/100_4.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="image">
 											</a>
 											<a href="#" class="media">
-												<img src="media/users/100_5.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_5.jpg" alt="image">
 											</a>
 											<a href="#" class="media">
-												<img src="media/users/100_6.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg" alt="image">
 											</a>
 										</div>
 									</div>
@@ -162,19 +162,19 @@
 										<div class="section__desc">Image examples</div>
 										<div class="section__content">
 											<a href="#" class="media media--xs media--circle">
-												<img src="media/users/100_1.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
 											</a>
 											<a href="#" class="media media--sm media--circle">
-												<img src="media/users/100_1.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
 											</a>
 											<a href="#" class="media media--circle">
-												<img src="media/users/100_2.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_2.jpg" alt="image">
 											</a>
 											<a href="#" class="media media--lg media--circle">
-												<img src="media/users/100_3.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
 											</a>
 											<a href="#" class="media media--xl media--circle">
-												<img src="media/users/100_4.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="image">
 											</a>
 										</div>
 									</div>
@@ -221,22 +221,22 @@
 										<div class="section__desc">Image examples</div>
 										<div class="section__content">
 											<a href="#" class="media media--circle">
-												<img src="media/users/100_1.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
 											</a>
 											<a href="#" class="media media--circle">
-												<img src="media/users/100_2.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_2.jpg" alt="image">
 											</a>
 											<a href="#" class="media media--circle">
-												<img src="media/users/100_3.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
 											</a>
 											<a href="#" class="media media--circle">
-												<img src="media/users/100_4.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="image">
 											</a>
 											<a href="#" class="media media--circle">
-												<img src="media/users/100_5.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_5.jpg" alt="image">
 											</a>
 											<a href="#" class="media media--circle">
-												<img src="media/users/100_6.jpg" alt="image">
+												<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg" alt="image">
 											</a>
 										</div>
 									</div>
@@ -286,22 +286,22 @@
 											<div class="d-flex align-items-center">
 												<div class="media-group">
 													<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
-														<img src="media/users/100_1.jpg" alt="image">
+														<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
 													</a>
 													<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
-														<img src="media/users/100_2.jpg" alt="image">
+														<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_2.jpg" alt="image">
 													</a>
 													<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
-														<img src="media/users/100_3.jpg" alt="image">
+														<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
 													</a>
 													<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
-														<img src="media/users/100_4.jpg" alt="image">
+														<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="image">
 													</a>
 													<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
-														<img src="media/users/100_5.jpg" alt="image">
+														<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_5.jpg" alt="image">
 													</a>
 													<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
-														<img src="media/users/100_6.jpg" alt="image">
+														<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg" alt="image">
 													</a>
 													<a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
 														<span>6+</span>
@@ -309,22 +309,22 @@
 												</div>
 												<div class="media-group margin-l-30">
 													<a href="#" class="media media--circle">
-														<img src="media/users/100_1.jpg" alt="image">
+														<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="image">
 													</a>
 													<a href="#" class="media  media--circle">
-														<img src="media/users/100_2.jpg" alt="image">
+														<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_2.jpg" alt="image">
 													</a>
 													<a href="#" class="media media--circle">
-														<img src="media/users/100_3.jpg" alt="image">
+														<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg" alt="image">
 													</a>
 													<a href="#" class="media  media--circle">
-														<img src="media/users/100_4.jpg" alt="image">
+														<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="image">
 													</a>
 													<a href="#" class="media media--circle">
-														<img src="media/users/100_5.jpg" alt="image">
+														<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_5.jpg" alt="image">
 													</a>
 													<a href="#" class="media  media--circle">
-														<img src="media/users/100_6.jpg" alt="image">
+														<img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg" alt="image">
 													</a>
 													<a href="#" class="media media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
 														<span>16+</span>
