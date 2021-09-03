@@ -2097,38 +2097,15 @@ strong {
 .pages__list-wrapper {
     column-count: 4;
     margin-left: 1rem;
+    font-size: 0.8rem;
     a {
         display: block;
         margin-bottom: 0.5rem;
         color: $txt-gray;
     }
-    >li {
-        margin-bottom: 3rem;
-        >a {
-            font-size: 1.5rem;
-            color: var(--txt-body);
-        }
-        >ul {
-            margin-left: 1.25rem;
-            list-style: disc;
-            >li {
-                margin-bottom: 1rem;
-                >a {
-                    font-weight: 500;
-                    font-size: 1.125rem;
-                    color: $brand-color;
-                }
-                ul {
-                    margin-left: 1.25rem;
-                    list-style: disc;
-                    li {
-                        a {
-                            color: $txt-gray;
-                            font-size: 1rem;
-                        }
-                    }
-                }
-            }
+    li {
+        ul {
+            margin-#{$start-direction}: 1rem;
         }
     }
 }

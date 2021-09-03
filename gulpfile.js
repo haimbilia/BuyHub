@@ -1,9 +1,29 @@
-const { src, dest, watch, series, parallel } = require("gulp");
+const { src, dest, watch, series, parallel, task } = require("gulp");
 const sass = require("gulp-sass");
 sass.compiler = require("node-sass");
 const sourcemaps = require("gulp-sourcemaps");
 const autoprefixer = require("gulp-autoprefixer");
 const minify = require("gulp-minify");
+const svgSprite = require('gulp-svg-sprite');
+
+// SVG Sprite Config
+const config = {
+  shape: {
+      dimension: {
+          maxWidth: 32,
+          maxHeight: 32,
+          precision: 2,
+          attributes: false,
+      }
+  },
+  mode: {
+      symbol: {
+          dest: './',
+          sprite: 'sprite.yokart.svg'
+      }
+  },
+  dest: './'
+};
 
 function css() {
   return src("./application/views/scss/*.scss")
@@ -32,6 +52,13 @@ function dashboard() {
     .pipe(dest("./dashboard/views/css"));
 }
 
+function svg() {
+  return src('./manager/views/images/retina/sprites/*.svg')
+      .pipe(svgSprite(config))
+      .pipe(dest('./manager/views/images/retina'));
+}
+
+
 // Watch files
 function watchFiles() {
   watch(["./application/views/scss"], css);
@@ -39,5 +66,5 @@ function watchFiles() {
   watch(["./manager/views/scss"], manager);
 }
 
-exports.default = series(css, dashboard, manager);
+exports.default = series(css, dashboard, manager, svg);
 exports.watch = watchFiles;
