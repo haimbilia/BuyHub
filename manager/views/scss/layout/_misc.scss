@@ -95,3 +95,34 @@
         }
     }
 }
+
+.search-results {
+    margin-top: 2rem;
+    max-height: 330px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    &_item {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+    }
+    &_data {
+        display: flex;
+        align-items: center;
+    }
+    &_icn {
+        margin-#{$end-direction}: 10px;
+    }
+    &_links {}
+}
+
+.search-native {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    p {
+        margin: 0;
+    }
+}
