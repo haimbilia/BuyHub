@@ -35,7 +35,7 @@
                             <div class="main-header-toolbar">
                                 <ul class="accounts-nav">
                                     <li>
-                                        <a href="">
+                                        <a data-toggle="modal" data-target="#search-main" href="">
                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                 xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
                                                 viewBox="0 0 24 24" version="1.1" class="svg-icon">
@@ -51,6 +51,698 @@
                                             </svg>
 
                                         </a>
+                                        <div class="modal fade" id="search-main">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-body">
+                                                        <form method="get" class="form">
+                                                            <input type="search" class="form-control"
+                                                                placeholder="Go to...">
+
+                                                            <ul class="search-results">
+                                                                <li class="search-results_item">
+                                                                    <h6 class="title">Products</h6>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+
+                                                                        <div class="">
+                                                                            <a href="javascript:;"
+                                                                                class="text-hover-primary">
+                                                                                <div>Br<strong
+                                                                                        class="highlight">a</strong>nds
+                                                                                </div>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="search-results_item">
+                                                                    <h6 class="title">Products</h6>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+
+                                                                        <div class="">
+                                                                            <a href="javascript:;"
+                                                                                class="text-hover-primary">
+                                                                                <div>Br<strong
+                                                                                        class="highlight">a</strong>nds
+                                                                                </div>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="search-results_item">
+                                                                    <h6 class="title">Products</h6>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+
+                                                                        <div class="">
+                                                                            <a href="javascript:;"
+                                                                                class="text-hover-primary">
+                                                                                <div>Br<strong
+                                                                                        class="highlight">a</strong>nds
+                                                                                </div>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="search-results_item">
+                                                                    <h6 class="title">Products</h6>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+                                                                        <div class="search-results_links">
+                                                                            <a href="javascript:;">
+                                                                                Br<strong
+                                                                                    class="highlight">a</strong>nds
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="search-results_data">
+                                                                        <i class="search-results_icn">
+                                                                            <svg class="svg" height="16"
+                                                                                viewBox="0 0 16 16" width="16"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="SVGInline-svg SVGInline--cleaned-svg SVG-svg Icon-svg Icon--external-svg SVG--color-svg SVG--color--gray200-svg"
+                                                                                style="width: 12px; height: 12px;">
+                                                                                <path
+                                                                                    d="M2 4v10h10v-3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2zm5.707 5.707a1 1 0 1 1-1.414-1.414l6.3-6.298H9.017a.998.998 0 1 1 0-1.995h5.986A.995.995 0 0 1 16 .998v5.986a.998.998 0 1 1-1.995 0V3.406z"
+                                                                                    fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </i>
+
+                                                                        <div class="">
+                                                                            <a href="javascript:;"
+                                                                                class="text-hover-primary">
+                                                                                <div>Br<strong
+                                                                                        class="highlight">a</strong>nds
+                                                                                </div>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+
+
+
+                                                            </ul>
+
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <div class="search-native">
+
+                                                            <p>
+                                                                <label class="" for="">
+                                                                    Press <kbd>Ctrl-F</kbd> again to use native browser
+                                                                    search. <input type="checkbox">
+
+                                                                </label>
+                                                            </p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </li>
                                     <li><a href="">
                                             <svg xmlns="http://www.w3.org/2000/svg"
