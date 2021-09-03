@@ -99,7 +99,7 @@ class ShopSearch extends SearchBase
             trigger_error(Labels::getLabel('ERR_Seller_Subscription_Order_must_joined.', CommonHelper::getLangId()), E_USER_ERROR);
         }
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE')) {
-            $this->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id ', 'oss');
+            $this->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_no = oss.ossubs_order_no ', 'oss');
             if ($langId > 0) {
                 $this->joinTable(OrderSubscription::DB_TBL_LANG, 'LEFT OUTER JOIN', 'oss.ossubs_id = ossl.' . OrderSubscription::DB_TBL_LANG_PREFIX . 'ossubs_id AND ossl.' . OrderSubscription::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId, 'ossl');
             }

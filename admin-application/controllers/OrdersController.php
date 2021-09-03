@@ -68,7 +68,7 @@ class OrdersController extends AdminBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
 
-        $srch->addMultipleFields(array('order_id', 'order_date_added', 'order_payment_status', 'order_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount', 'order_wallet_amount_charge', 'order_pmethod_id', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'plugin_code', 'order_is_wallet_selected', 'order_deleted', 'order_cart_data'));
+        $srch->addMultipleFields(array('order_no', 'order_id', 'order_date_added', 'order_payment_status', 'order_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount', 'order_wallet_amount_charge', 'order_pmethod_id', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'plugin_code', 'order_is_wallet_selected', 'order_deleted', 'order_cart_data'));
 
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
@@ -141,7 +141,7 @@ class OrdersController extends AdminBaseController
         $srch->joinOrderBuyerUser();
         $srch->addMultipleFields(
             array(
-                'order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission',
+                'order_no', 'order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission',
                 'order_reward_point_value', 'order_volume_discount_total', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'order_net_amount', 'order_shippingapi_name', 'order_pmethod_id', 'ifnull(plugin_name,plugin_identifier)as plugin_name', 'order_discount_total', 'plugin_code', 'order_is_wallet_selected', 'order_reward_point_used', 'order_deleted', 'order_rounding_off'
             )
         );
@@ -168,7 +168,7 @@ class OrdersController extends AdminBaseController
 
         $opSrch->addMultipleFields(
             array(
-                'op_id', 'op_selprod_user_id', 'op_invoice_number', 'op_selprod_title', 'op_product_name',
+                'op_id', 'op_order_no', 'op_selprod_user_id', 'op_invoice_number', 'op_selprod_title', 'op_product_name',
                 'op_qty', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model',
                 'op_shop_name', 'op_shop_owner_name', 'op_shop_owner_email', 'op_shop_owner_phone', 'op_unit_price',
                 'totCombinedOrders as totOrders', 'op_shipping_duration_name', 'op_shipping_durations',  'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_other_charges', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'ts.state_code', 'tc.country_code', 'op_rounding_off',
@@ -178,7 +178,7 @@ class OrdersController extends AdminBaseController
 
         $opRs = $opSrch->getResultSet();
         $order['products'] = FatApp::getDb()->fetchAll($opRs, 'op_id');
-        $orderObj = new Orders($order['order_id']);
+        $orderObj = new Orders($order['order_no']);
 
         $charges = $orderObj->getOrderProductChargesByOrderId($order['order_id']);
         $shippingObj = new Shipping($this->adminLangId);
@@ -281,7 +281,7 @@ class OrdersController extends AdminBaseController
 
         $allowedCancellationArr =  Orders::getBuyerAllowedOrderCancellationStatuses();
         $srch = new OrderProductSearch(0, true);
-        $srch->addMultipleFields(array('op.op_status_id', 'o.order_id'));
+        $srch->addMultipleFields(array('op.op_status_id', 'o.order_no', 'o.order_id'));
         $srch->addCondition('order_id', '=', $order_id);
         $srch->addCondition('op_status_id', 'NOT IN', $allowedCancellationArr);
         $opDetails = FatApp::getDb()->fetchAll($srch->getResultSet());

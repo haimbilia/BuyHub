@@ -97,7 +97,7 @@ class Cronjob extends FatModel
 
         $srch = new OrderProductSearch(0, true);
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
-        $srch->joinTable('tbl_seller_product_reviews', 'left outer join', 'o.order_id = spr.spreview_order_id and ((op.op_selprod_id = spr.spreview_selprod_id and op.op_is_batch = 0) || (op.op_batch_selprod_id = spr.spreview_selprod_id and op.op_is_batch = 1))', 'spr');
+        $srch->joinTable('tbl_seller_product_reviews', 'left outer join', 'o.order_no = spr.spreview_order_no and ((op.op_selprod_id = spr.spreview_selprod_id and op.op_is_batch = 0) || (op.op_batch_selprod_id = spr.spreview_selprod_id and op.op_is_batch = 1))', 'spr');
         $srch->addCondition('spr.spreview_id', 'is', 'mysql_func_null', 'and', true);
         $srch->addDirectCondition("(op.op_sent_review_reminder =  " . applicationConstants::NO . " or ( op.op_sent_review_reminder = " . applicationConstants::YES . " AND op.op_review_reminder_count = 1 AND Date_add(op_sent_last_reminder, INTERVAL " . $resendReminderInterval . " day) = '" . date('Y-m-d') . "'))");
         $srch->addMultipleFields(array('op_id', 'order_language_id'));
@@ -590,8 +590,7 @@ class Cronjob extends FatModel
         $srch->addCondition('ossubs_till_date', '!=', '0000-00-00');
         $srch->addCondition('ossubs_type', '=', SellerPackages::PAID_TYPE);
         $srch->addCondition('user_autorenew_subscription', '=', 1);
-        //$srch->addMultipleFields(array('order_user_id', 'order_language_id', 'order_language_code', 'order_currency_id', 'order_id', 'ossubs_id', 'ossubs_type', 'ossubs_price', 'ossubs_images_allowed', 'ossubs_products_allowed', 'ossubs_plan_id', 'ossubs_interval', 'ossubs_frequency', 'ossubs_commission'));*/
-        $srch->addMultipleFields(array('order_user_id', 'order_language_id', 'order_language_code', 'order_currency_id', 'order_id', 'ossubs_id', 'spackage_type', 'spplan_price', 'spackage_images_per_product', 'spackage_products_allowed','spackage_inventory_allowed', 'ossubs_plan_id', 'spplan_interval', 'spplan_frequency', 'spackage_commission_rate'));
+        $srch->addMultipleFields(array('order_user_id', 'order_language_id', 'order_language_code', 'order_currency_id', 'order_id', 'order_no', 'ossubs_id', 'spackage_type', 'spplan_price', 'spackage_images_per_product', 'spackage_products_allowed','spackage_inventory_allowed', 'ossubs_plan_id', 'spplan_interval', 'spplan_frequency', 'spackage_commission_rate'));
         
         /* $srch->addGroupBy('order_user_id');  */
         $srch->addOrder('ossubs_id', 'desc');
@@ -619,6 +618,7 @@ class Cronjob extends FatModel
 
 
             $orderData['order_id'] = $order_id;
+            $orderData['order_no'] = 0;
             $orderData['order_user_id'] = $userId;
             /* $orderData['order_user_name'] = $userDataArr['user_name'];
             $orderData['order_user_email'] = $userDataArr['credential_email'];
@@ -632,6 +632,7 @@ class Cronjob extends FatModel
             /* order extras[ */
             $orderData['extra'] = array(
             'oextra_order_id' => $order_id,
+            'oextra_order_no' => 0,
             'order_ip_address' => $_SERVER['REMOTE_ADDR']
             );
 

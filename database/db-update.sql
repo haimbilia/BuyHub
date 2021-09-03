@@ -890,7 +890,7 @@ UPDATE `tbl_language_labels` SET `label_caption` = 'Submit new requests to admin
 
 
 -- --------- Added InActive Subscription Value ------ --
-INSERT IGNORE INTO tbl_configurations (conf_name, conf_val, conf_common) VALUES ('CONF_SUBSCRIPTION_INACTIVE_ORDER_STATUS', 10, 0) ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val)
+INSERT IGNORE INTO tbl_configurations (conf_name, conf_val, conf_common) VALUES ('CONF_SUBSCRIPTION_INACTIVE_ORDER_STATUS', 10, 0) ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
 -- ---------Added InActive Subscription Value------ -- 
 
 CREATE TABLE `tbl_shop_stats`(
@@ -920,3 +920,86 @@ INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`)
 ('CONF_DEFAULT_APPROVED_ORDER_STATUS', '15', 0)
 ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
 -- ---------Task 88911 Order Detail page ------ -- 
+
+-- ---------Task 899377 Auto Increment Order Id ------ -- 
+ALTER TABLE `tbl_orders` DROP PRIMARY KEY;
+ALTER TABLE `tbl_orders` ADD UNIQUE(`order_id`);
+ALTER TABLE `tbl_orders` ADD `order_no` BIGINT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`order_no`);
+
+ALTER TABLE `tbl_orders_lang` ADD `orderlang_order_no` BIGINT NOT NULL FIRST;
+UPDATE tbl_orders_lang op_l
+INNER JOIN tbl_orders o ON o.order_id = op_l.orderlang_order_id
+SET op_l.orderlang_order_no = o.order_no;
+
+ALTER TABLE `tbl_order_products` ADD `op_order_no` BIGINT NOT NULL AFTER `op_id`;
+UPDATE tbl_order_products op
+INNER JOIN tbl_orders o ON o.order_id = op.op_order_id
+SET op.op_order_no = o.order_no;
+
+ALTER TABLE `tbl_order_products_lang` DROP `oplang_order_id`;
+
+ALTER TABLE `tbl_coupons_history` ADD `couponhistory_order_no` BIGINT NOT NULL AFTER `couponhistory_coupon_id`;
+UPDATE tbl_coupons_history ch
+INNER JOIN tbl_orders o ON o.order_id = ch.couponhistory_order_id
+SET ch.couponhistory_order_no = o.order_no;
+
+ALTER TABLE `tbl_coupons_hold_pending_order` ADD `ochold_order_no` BIGINT NOT NULL FIRST;
+UPDATE tbl_coupons_hold_pending_order chpo
+INNER JOIN tbl_orders o ON o.order_id = chpo.ochold_order_id
+SET chpo.ochold_order_no = o.order_no;
+
+ALTER TABLE `tbl_orders_status_history` ADD `oshistory_order_no` BIGINT NOT NULL AFTER `oshistory_id`;
+UPDATE tbl_orders_status_history osh
+INNER JOIN tbl_orders o ON o.order_id = osh.oshistory_order_id
+SET osh.oshistory_order_no = o.order_no;
+
+ALTER TABLE `tbl_orders_to_plugin_order` ADD `opo_order_no` BIGINT NOT NULL FIRST;
+UPDATE tbl_orders_to_plugin_order opo
+INNER JOIN tbl_orders o ON o.order_id = opo.opo_order_id
+SET opo.opo_order_no = o.order_no;
+
+ALTER TABLE `tbl_order_extras` ADD `oextra_order_no` BIGINT NOT NULL FIRST;
+UPDATE tbl_order_extras oe
+INNER JOIN tbl_orders o ON o.order_id = oe.oextra_order_id
+SET oe.oextra_order_no = o.order_no;
+
+ALTER TABLE `tbl_order_payments` ADD `opayment_order_no` BIGINT NOT NULL AFTER `opayment_order_id`;
+UPDATE tbl_order_payments op
+INNER JOIN tbl_orders o ON o.order_id = op.opayment_order_id
+SET op.opayment_order_no = o.order_no;
+
+ALTER TABLE `tbl_order_seller_subscriptions` ADD `ossubs_order_no` BIGINT NOT NULL AFTER `ossubs_order_id`;
+UPDATE tbl_order_seller_subscriptions oss
+INNER JOIN tbl_orders o ON o.order_id = oss.ossubs_order_id
+SET oss.ossubs_order_no = o.order_no;
+
+ALTER TABLE `tbl_order_seller_subscriptions_lang` ADD `ossubslang_order_no` BIGINT NOT NULL AFTER `ossubslang_order_id`;
+UPDATE tbl_order_seller_subscriptions_lang oss_l
+INNER JOIN tbl_orders o ON o.order_id = oss_l.ossubslang_order_id
+SET oss_l.ossubslang_order_no = o.order_no;
+
+ALTER TABLE `tbl_order_user_address` ADD `oua_order_no` BIGINT NOT NULL AFTER `oua_order_id`;
+UPDATE tbl_order_user_address oua
+INNER JOIN tbl_orders o ON o.order_id = oua.oua_order_id
+SET oua.oua_order_no = o.order_no;
+
+ALTER TABLE `tbl_seller_product_reviews` ADD `spreview_order_no` BIGINT NOT NULL AFTER `spreview_order_id`;
+UPDATE tbl_seller_product_reviews spr
+INNER JOIN tbl_orders o ON o.order_id = spr.spreview_order_id
+SET spr.spreview_order_no = o.order_no;
+
+ALTER TABLE `tbl_user_reward_points` ADD `urp_used_order_no` BIGINT NOT NULL AFTER `urp_used_order_id`;
+UPDATE tbl_user_reward_points urp
+INNER JOIN tbl_orders o ON o.order_id = urp.urp_used_order_id
+SET urp.urp_used_order_no = o.order_no;
+
+ALTER TABLE `tbl_user_reward_point_breakup` ADD `urpbreakup_used_order_no` BIGINT NOT NULL AFTER `urpbreakup_used_order_id`;
+UPDATE tbl_user_reward_point_breakup urpb
+INNER JOIN tbl_orders o ON o.order_id = urpb.urpbreakup_used_order_id
+SET urpb.urpbreakup_used_order_no = o.order_no;
+
+ALTER TABLE `tbl_user_transactions` ADD `utxn_order_no` BIGINT NOT NULL AFTER `utxn_order_id`;
+UPDATE tbl_user_transactions ut
+INNER JOIN tbl_orders o ON o.order_id = ut.utxn_order_id
+SET ut.utxn_order_no = o.order_no;
+-- ---------Task 899377 Auto Increment Order Id ------ -- 

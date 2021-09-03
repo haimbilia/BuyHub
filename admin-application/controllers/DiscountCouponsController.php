@@ -990,7 +990,7 @@ class DiscountCouponsController extends AdminBaseController
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'user_id = couponhistory_user_id');
         $srch->joinTable(Credential::DB_TBL, 'LEFT OUTER JOIN', 'credential_user_id = user_id');
         $srch->addCondition('couponhistory_coupon_id', '=', $coupon_id);
-        $srch->addMultipleFields(array('couponhistory_id', 'couponhistory_coupon_id', 'couponhistory_order_id', 'couponhistory_user_id', 'couponhistory_amount', 'couponhistory_added_on', 'credential_username'));
+        $srch->addMultipleFields(array('couponhistory_id', 'couponhistory_coupon_id', 'couponhistory_order_no', 'couponhistory_order_id', 'couponhistory_user_id', 'couponhistory_amount', 'couponhistory_added_on', 'credential_username'));
         $srch->addOrder('couponhistory_added_on', 'DESC');
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
