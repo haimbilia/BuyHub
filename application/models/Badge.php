@@ -354,7 +354,7 @@ class Badge extends MyAppModel
             $srch->joinBadge($langId);
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
-            $srch->addMultipleFields(['blinkcond_badge_id', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name']);
+            $srch->addMultipleFields(['blinkcond_badge_id', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name', $ss['sstats_shop_id'] . ' as shop_id']);
             if (false === $addGroupBy) {
                 $srch->addFld('blinkcond_id');
             }
