@@ -35,7 +35,7 @@
 					<div class="card">
 						<div class="card-head">
 							<figure class="logo text-center p-4 mx-auto">
-								<a href="index.php"><img title="Yo!Kart" src="media/logos/logo-coloured.png" alt="Yo!Kart"></a></figure>
+								<a href="index.php"><img title="Yo!Kart" src="/manager/images/logos/logo-coloured.png" alt="Yo!Kart"></a></figure>
 						</div>
 						<div class="card-body p-5">
 							<form class="form">

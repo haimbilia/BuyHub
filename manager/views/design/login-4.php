@@ -32,7 +32,7 @@
 		<div class="login__wrapper">
 			<div class="login-aside" style="background-image: url(./media/bg/bg-page-section.png)">
 				<div class="login-aside__head">
-					<a href="#" class="login-v3-aside__logo"><img src="media/logos/logo-icon-sm.png" /></a>
+					<a href="#" class="login-v3-aside__logo"><img src="/manager/images/logos/logo-icon-sm.png" /></a>
 				</div>
 				<div class="login-aside___body">
 					<div class="login-aside__content">
@@ -79,7 +79,7 @@
             </div>
 			<div class="login-aside" style="background-image: url(./media/bg/bg-page-section.png)">
 				<div class="login-v3-aside__head">
-					<a href="#" class="login-v3-aside__logo"><img src="media/logos/logo-icon-sm.png" /></a>
+					<a href="#" class="login-v3-aside__logo"><img src="/manager/images/logos/logo-icon-sm.png" /></a>
 				</div>
 				<div class="login-aside___body">
 					<div class="login-v3-aside__content">
@@ -87,15 +87,11 @@
 						<p>The ultimate Bootstrap & Angular 6 admin theme framework for next generation web apps.</p>
 					</div>
 				</div>
-
 				<div class="login-v3-aside__footer">
 					<p class="version text-white mt-2"><strong>Admin version 2019</strong></p>
 				</div>
-	</div>
+			</div>
 		</div>
 	</div>
-
 </body>
-
-
 </html>

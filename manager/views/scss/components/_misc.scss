@@ -14,7 +14,14 @@
  *::after {
      box-sizing: border-box;
  }
- 
+ body,
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    -ms-text-size-adjust: 100%;
+    -moz-osx-font-smoothing: grayscale;
+}
  body {
      display: flex;
      flex-direction: column;
@@ -53,36 +60,30 @@
  }
  
  .animate-fade-in-up {
-     -webkit-animation: animate-fade-in-up .5s;
      animation: animate-fade-in-up .5s;
  }
  
  .animate-fade-out {
-     -webkit-animation: animate-fade-out .5s;
      animation: animate-fade-out .5s;
  }
  
  .animate-fade-in {
-     -webkit-animation: animate-fade-in .5s;
      animation: animate-fade-in .5s;
  }
  
  .animate-blink {
-     -webkit-animation: animate-blink 1s step-start 0s infinite;
      animation: animate-blink 1s step-start 0s infinite;
      -webkit-animation-fill-mode: initial;
      animation-fill-mode: initial;
  }
  
  .animate-shake {
-     -webkit-animation: animate-shake 0.1s ease-in 0.1s infinite alternate;
      animation: animate-shake 0.1s ease-in 0.1s infinite alternate;
      -webkit-animation-fill-mode: initial;
      animation-fill-mode: initial;
  }
  
  .animate-pause {
-     -webkit-animation-play-state: paused;
      animation-play-state: paused;
  }
  

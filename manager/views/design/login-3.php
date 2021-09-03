@@ -32,7 +32,7 @@
 		<div class="login__wrapper">
 			<div class="login-aside" style="background-image: url(./media/bg/bg-page-section.png)">
 				<div class="login-aside__head">
-					<a href="#" class="login-aside__logo"><img src="media/logos/logo-icon-sm.png" /></a>
+					<a href="#" class="login-aside__logo"><img src="/manager/images/logos/logo-icon-sm.png" /></a>
 				</div>
 				<div class="login-aside___body">
 					<div class="login-aside__content">
