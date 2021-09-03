@@ -1410,11 +1410,11 @@ class AdvertiserController extends AdvertiserBaseController
         $fld->requirements()->setRequired();
         $fld->requirements()->setFloatPositive(true);
 
-        $locIdFld = $frm->addSelectBox(Labels::getLabel('LBL_Location', $this->siteLangId), 'banner_blocation_id', $locationArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired(true);
-        $locIdFldUnReqObj = new FormFieldRequirement('banner_blocation_id', Labels::getLabel('LBL_Location', $this->siteLangId));
+        $locIdFld = $frm->addSelectBox(Labels::getLabel('LBL_LAYOUT_TYPE', $this->siteLangId), 'banner_blocation_id', $locationArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired(true);
+        $locIdFldUnReqObj = new FormFieldRequirement('banner_blocation_id', Labels::getLabel('LBL_LAYOUT_TYPE', $this->siteLangId));
         $locIdFldUnReqObj->setRequired(false);
 
-        $locIdFldReqObj = new FormFieldRequirement('banner_blocation_id', Labels::getLabel('LBL_Location', $this->siteLangId));
+        $locIdFldReqObj = new FormFieldRequirement('banner_blocation_id', Labels::getLabel('LBL_LAYOUT_TYPE', $this->siteLangId));
         $locIdFldReqObj->setRequired(true);
 
         $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_BANNER, 'eq', 'banner_blocation_id', $locIdFldReqObj);

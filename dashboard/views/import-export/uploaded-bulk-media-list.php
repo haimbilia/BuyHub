@@ -3,7 +3,7 @@
 <?php
 $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
-    'afile_physical_path' => Labels::getLabel('LBL_Location', $siteLangId),
+    'afile_physical_path' => Labels::getLabel('LBL_FILE_LOCATION', $siteLangId),
     'afile_name'    => Labels::getLabel('LBL_File_Name', $siteLangId),
     'files'    => Labels::getLabel('LBL_Files_Inside', $siteLangId),
     'action'    => '',

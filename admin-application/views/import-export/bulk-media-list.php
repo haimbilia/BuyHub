@@ -2,7 +2,7 @@
 $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
     'user' => Labels::getLabel('LBL_User', $adminLangId),
-    'afile_physical_path' => Labels::getLabel('LBL_Location', $adminLangId),
+    'afile_physical_path' => Labels::getLabel('LBL_FILE_LOCATION', $adminLangId),
     'files'    => Labels::getLabel('LBL_Files', $adminLangId),
     'action'    => '',
 );

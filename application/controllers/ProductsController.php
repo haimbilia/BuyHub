@@ -52,6 +52,7 @@ class ProductsController extends MyAppController
             $prodSrchObj->joinBrands();
             $prodSrchObj->joinBrandsLang($this->siteLangId, $keyword);
             $prodSrchObj->joinProductToCategory();
+            $prodSrchObj->joinProductToTax();
             $prodSrchObj->joinSellerSubscription(0, false, true);
             $prodSrchObj->addSubscriptionValidCondition();
             $prodSrchObj->doNotCalculateRecords();
@@ -447,6 +448,7 @@ class ProductsController extends MyAppController
         $prodSrch->joinSellerSubscription();
         $prodSrch->addSubscriptionValidCondition();
         $prodSrch->validateAndJoinDeliveryLocation(false);
+        $prodSrch->joinProductToTax();
         $prodSrch->doNotCalculateRecords();
         $prodSrch->addCondition('selprod_id', '=', $selprod_id);
         $prodSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);

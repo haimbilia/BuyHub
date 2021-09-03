@@ -1054,7 +1054,7 @@ class PromotionsController extends AdminBaseController
                 $locationArr[$key] = $val['blocation_name'] . ' ( ' . CommonHelper::displayMoneyFormat($val['blocation_promotion_cost']) . ' )';
             }
         }
-        $frm->addSelectBox(Labels::getLabel('LBL_Location', $this->adminLangId), 'banner_blocation_id', $locationArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LAYOUT_TYPE', $this->adminLangId), 'banner_blocation_id', $locationArr, '', array(), '');
 
 
         $fld = $frm->addTextBox(Labels::getLabel('Lbl_Budget', $this->adminLangId), 'promotion_budget');

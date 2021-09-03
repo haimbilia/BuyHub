@@ -2671,7 +2671,7 @@ class SellerController extends SellerBaseController
 
     /* public function CategoryBanners(){
       $this->_template->render(true,false);
-      } */
+      } 
 
     public function addCategoryBanner($prodCatId)
     {
@@ -2710,8 +2710,7 @@ class SellerController extends SellerBaseController
         $attachments = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_CATEGORY_BANNER_SELLER, $shop_id, $prodCatId, -1);
         $mediaFrm = $this->getCategoryMediaForm($prodCatId);
 
-        $this->set('mediaFrm', $mediaFrm);
-        /* $this->set('mode', $mode);         */
+        $this->set('mediaFrm', $mediaFrm);     
         $this->set('userId', $userId);
         $this->set('shop_id', $shop_id);
         $this->set('prodCatId', $prodCatId);
@@ -2762,7 +2761,7 @@ class SellerController extends SellerBaseController
       $this->set( 'languages', Language::getAllNames() );
       $this->set( 'formLangId', $langId );
       $this->_template->render( false, false );
-      } */
+    }
 
     public function setUpCategoryBanner()
     {
@@ -2825,8 +2824,6 @@ class SellerController extends SellerBaseController
 
         Message::addMessage(Labels::getLabel('MSG_File_uploaded_successfully', $this->siteLangId));
         FatUtility::dieJsonSuccess(Message::getHtml());
-        /* $this->set('msg', Labels::getLabel('MSG_File_uploaded_successfully',$this->siteLangId));
-          $this->_template->render(false, false, 'json-success.php'); */
     }
 
     public function removeCategoryBanner($prodCatId, $langId)
@@ -2898,7 +2895,7 @@ class SellerController extends SellerBaseController
         $this->set('siteLangId', $this->siteLangId);
         $this->set('language', Language::getAllNames());
         $this->_template->render(false, false);
-    }
+    }*/    
 
     public function orderCancellationRequests()
     {
@@ -4730,7 +4727,7 @@ class SellerController extends SellerBaseController
         /* fetch requested product[ */
         $prodSrch = clone $prodSrchObj;
         $prodSrch->joinProductToCategory(0, false, false, false);
-        $prodSrch->joinProductToTax();
+        //$prodSrch->joinProductToTax();
         $prodSrch->joinBrands(0, false, false, false);
         $prodSrch->addCondition('product_id', '=', $product_id);
         $prodSrch->doNotLimitRecords();
@@ -4738,7 +4735,7 @@ class SellerController extends SellerBaseController
 
         $prodSrch->addMultipleFields(
             array(
-                'product_id', 'product_identifier', 'IFNULL(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'product_short_description', 'prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name', 'product_min_selling_price', 'ptt_taxcat_id '
+                'product_id', 'product_identifier', 'IFNULL(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'product_short_description', 'prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name', 'product_min_selling_price'
             )
         );
         $productRs = $prodSrch->getResultSet();
@@ -5528,8 +5525,8 @@ class SellerController extends SellerBaseController
         if (true == $forCatalogReq) {
             $userId = 0;
         }
-        $shippingObj = new Shipping($this->siteLangId);
-        if (!FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && !$shippingObj->getShippingApiObj($userId)) {
+        $shippingObj = new Shipping($this->siteLangId);       
+        if (!FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && (!$shippingObj->getShippingApiObj($userId) || Shop::getAttributesByUserId($userId, 'shop_use_manual_shipping_rates') )) {            
             $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, $userId, true, true);
             $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->siteLangId), 'shipping_profile', $shipProfileArr)->requirements()->setRequired();
         }
