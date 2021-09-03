@@ -227,7 +227,7 @@ class SellerOrdersController extends AdminBaseController
             ];
 
             $shipmentTracking = new ShipmentTracking();
-            if (in_array($opRow['op_status_id'], $aftershipRequiredConfigStatus) && null !== $shippingApiObj && false !== $shipmentTracking->init($this->adminLangId)) {
+            if (in_array($opRow['op_status_id'], $aftershipRequiredConfigStatus) && null !== $shippingApiObj && false !== $shippingApiObj && false !== $shipmentTracking->init($this->adminLangId)) {
                 $srch = TrackingCourierCodeRelation::getSearchObject();
                 $srch->addCondition("tccr_shipapi_courier_code", "=", $opRow['opshipping_carrier_code']);
                 $srch->doNotCalculateRecords();

@@ -265,6 +265,7 @@ Updates/Fixes :
     => 057884 - On page pages generic location label used
     => 057956 - importing category enable/disable issue
     => 057971 - Review/Feedback image is not visible when we click on any image on frontend
+    => 057972 - Aftership tracking service can be enabled even when no shipping service is enabled
 
 New Features:  
     => Admin shipped products listing page
