@@ -226,8 +226,11 @@ class SellerOrdersController extends AdminBaseController
                 FatApp::getConfig("CONF_DEFAULT_APPROVED_ORDER_STATUS"),
             ];
 
+            $obj = new Plugin();
+            $isAdminShippingPluginOn = $obj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'plugin_active');
+
             $shipmentTracking = new ShipmentTracking();
-            if (in_array($opRow['op_status_id'], $aftershipRequiredConfigStatus) && null !== $shippingApiObj && false !== $shippingApiObj && false !== $shipmentTracking->init($this->adminLangId)) {
+            if (in_array($opRow['op_status_id'], $aftershipRequiredConfigStatus) && false !== $isAdminShippingPluginOn && false !== $shipmentTracking->init($this->adminLangId)) {
                 $srch = TrackingCourierCodeRelation::getSearchObject();
                 $srch->addCondition("tccr_shipapi_courier_code", "=", $opRow['opshipping_carrier_code']);
                 $srch->doNotCalculateRecords();

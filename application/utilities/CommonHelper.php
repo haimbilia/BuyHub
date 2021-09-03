@@ -215,19 +215,12 @@ class CommonHelper extends FatUtility
     {
         $opSellerId = FatUtility::int($opSellerId);
         $shippedByUserId = FatUtility::int($shippedByUserId);
-        if ($opSellerId > 0 && $opSellerId == $shippedByUserId) {
-            return true;
-        }
-
-        return false;
+        return ($opSellerId > 0 && $opSellerId == $shippedByUserId);
     }
 
     public static function underMyDevelopment($sessionId = false)
     {
-        if ($sessionId && $sessionId != session_id()) {
-            return false;
-        }
-        return true;
+        return !($sessionId && $sessionId != session_id());
     }
 
     public static function printArray($attr, $exit = false, $sessionId = false)
