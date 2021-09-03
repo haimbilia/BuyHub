@@ -5,123 +5,59 @@ class AdminGuestController extends FatController
     public function __construct($action)
     {
         parent::__construct($action);
-        CommonHelper::initCommonVariables(true);
-        //$this->adminLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
-        $this->adminLangId = CommonHelper::getLangId();
-        if (AdminAuthentication::isAdminLogged()) {
-            if (FatUtility::isAjaxCall()) {
-                Message::addErrorMessage(Labels::getLabel('MSG_You_are_already_logged_in', $this->adminLangId));
-                $json['loggedIn'] = true;
-                FatUtility::dieJsonError($json);
-            } else {
-                FatApp::redirectUser(UrlHelper::generateUrl('home'));
-            }
-        }
-        $controllerName = get_class($this);
-        $arr = explode('-', FatUtility::camel2dashed($controllerName));
-        array_pop($arr);
-        $urlController = implode('-', $arr);
-        $controllerName = ucfirst(FatUtility::dashed2Camel($urlController));
-
-        $jsVariables = array(
-        'processing' => Labels::getLabel('LBL_Processing...', $this->adminLangId),
-        'isMandatory' => Labels::getLabel('LBL_is_mandatory', $this->adminLangId),
-        'pleaseEnterValidEmailId' => Labels::getLabel('VLBL_Please_enter_valid_email_ID_for', $this->adminLangId)
-        );
-        if (CommonHelper::demoUrl() == true) {
-            $this->_template->addCss('css/demo.css');
-        }
-        $this->set('isAdminLogged', AdminAuthentication::isAdminLogged());
-        $this->set('controllerName', $controllerName);
-        $this->set('jsVariables', $jsVariables);
-        $this->set('adminLangId', $this->adminLangId);
-        $this->set('bodyClass', 'fb-body');
-    }
-
-    public function loginForm()
-    {
-        $frm = $this->getLoginForm();
-        //$forgotfrm = $this->getForgotForm();
-
-        /* custom theming of login form[ */
-        $frm->setValidatorJsObjectName('loginValidator');
-        $frm->setFormTagAttribute('onsubmit', 'login(this, loginValidator); return(false);');
-        //$frm->setFormTagAttribute ( 'class', '' );
-
-        $frm->setFormTagAttribute('id', 'adminLoginForm');
-        $frm->setFormTagAttribute('class', 'web_form');
-        $frm->setRequiredStarPosition('none');
-        $frm->setRequiredStarWith('none');
-        $frm->setJsErrorDisplay(FORM::FORM_ERROR_TYPE_AFTER_FIELD);
-
-        $vwfld = $frm->getField('username');
-        $vwfld->addFieldTagAttribute('title', 'Username');
-        $vwfld->addFieldTagAttribute('autocomplete', 'off');
-        $vwfld->setRequiredStarWith('none');
-
-        $vwfld = $frm->getField('password');
-        $vwfld->addFieldTagAttribute('title', 'Password');
-        $vwfld->addFieldTagAttribute('autocomplete', 'off');
-
-        /* $vwfld = $frm->getField('rememberme');
-        $vwfld->addFieldTagAttribute('id', 'rememberme');
-        $vwfld->addFieldTagAttribute('title', 'Remember Me');
-        $vwfld->addFieldTagAttribute('autocomplete', 'off'); */
-        /* ] */
-
-        /* custom theming of forgot form[ */
-        /* 	$forgotfrm->setFormTagAttribute('id', 'frmForgot');
-        $forgotfrm->setFormTagAttribute('class', 'web_form');
-        $forgotfrm->setRequiredStarPosition('none');
-        $forgotfrm->setValidatorJsObjectName('forgotValidator');
-        $forgotfrm->setFormTagAttribute ( 'onsubmit', 'forgotPassword(this, forgotValidator); return false;');
-
-        $email_fld = $forgotfrm->getField('admin_email');
-        $email_fld->addFieldTagAttribute('title', 'Email Address');
-        $email_fld->addFieldTagAttribute('autocomplete', 'off');
-        $email_fld->setRequiredStarWith('none');*/
-        /* ] */
 
         if ($this->doCookieAdminLogin()) {
             FatApp::redirectUser(UrlHelper::generateUrl('home'));
         }
 
-        $this->set('frm', $frm);
-        /* $this->set('frmForgot', $forgotfrm ); */
+        CommonHelper::initCommonVariables(true);
+        $this->adminLangId = CommonHelper::getLangId();
 
+        if (AdminAuthentication::isAdminLogged()) {
+            $msg = Labels::getLabel('MSG_You_are_already_logged_in', $this->adminLangId);
+            $redirect =  FatApp::redirectUser(UrlHelper::generateUrl('home'));
+            LibHelper::exitWithError($msg, true, $redirect);
+        }
+
+        $controllerName = get_class($this);
+        $arr = explode('-', FatUtility::camel2dashed($controllerName));
+        array_pop($arr);
+        $controllerName = ucfirst(FatUtility::dashed2Camel(implode('-', $arr)));
+
+        $jsVariables = array(
+            'processing' => Labels::getLabel('LBL_Processing...', $this->adminLangId),
+            'isMandatory' => Labels::getLabel('LBL_is_mandatory', $this->adminLangId),
+            'pleaseEnterValidEmailId' => Labels::getLabel('VLBL_Please_enter_valid_email_ID_for', $this->adminLangId)
+        );
+
+        if (CommonHelper::demoUrl() == true) {
+            $this->_template->addCss('css/demo.css');
+        }
+
+        $this->set('isAdminLogged', AdminAuthentication::isAdminLogged());
+        $this->set('controllerName', $controllerName);
+        $this->set('jsVariables', $jsVariables);
+        $this->set('adminLangId', $this->adminLangId);
+        $this->set('bodyClass', 'is-login  login-1');
+        $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css');
+    }
+
+    public function loginForm()
+    {
+        $this->set('frm', $this->getLoginForm());
         $this->_template->render();
     }
 
     public function forgotPasswordForm()
     {
         $frm = $this->getLoginForm();
-        $forgotfrm = $this->getForgotForm();
-
-
-        /* custom theming of forgot form[ */
-        $forgotfrm->setFormTagAttribute('id', 'frmForgot');
-        $forgotfrm->setFormTagAttribute('class', 'web_form');
-        $forgotfrm->setRequiredStarPosition('none');
-        $forgotfrm->setValidatorJsObjectName('forgotValidator');
-        $forgotfrm->setFormTagAttribute('onsubmit', 'forgotPassword(this, forgotValidator); return false;');
-
-        $email_fld = $forgotfrm->getField('admin_email');
-        $email_fld->addFieldTagAttribute('title', 'Email Address');
-        $email_fld->addFieldTagAttribute('autocomplete', 'off');
-        $email_fld->setRequiredStarWith('none');
-        /* ] */
-
-        if ($this->doCookieAdminLogin()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('home'));
-        }
+        $frmForgot = $this->getForgotForm();
 
         $this->set('frm', $frm);
-        $this->set('frmForgot', $forgotfrm);
+        $this->set('frmForgot', $frmForgot);
 
         $this->_template->render();
     }
-
-
 
     public function login()
     {
@@ -130,11 +66,9 @@ class AdminGuestController extends FatController
 
         $adminAuthObj = AdminAuthentication::getInstance();
         if (!$adminAuthObj->login($username, $password, $_SERVER['REMOTE_ADDR'])) {
-            Message::addErrorMessage($adminAuthObj->getError());
-            $json['errorMsg'] = Message::getHtml();
-            FatUtility::dieJsonError($json);
+            LibHelper::exitWithError($adminAuthObj->getError(), true);
         }
-        $success_message = Labels::getLabel('LBL_Login_Successful', $this->adminLangId);
+
         $rememberme = FatApp::getPostedData('rememberme', FatUtility::VAR_INT, 0);
         if ($rememberme == 1) {
             $this->setAdminLoginCookie();
@@ -153,14 +87,16 @@ class AdminGuestController extends FatController
         $this->set('redirectUrl', $redirectUrl);
         /* ] */
 
-        Message::addMessage($success_message);
-        $this->set('msg', $success_message);
+        $msg = Labels::getLabel('LBL_Login_Successful', $this->adminLangId);
+        Message::addMessage($msg);
+        $this->set('msg', $msg);
         $this->_template->render(false, false, 'json-success.php');
     }
+
     public function sendResetPasswordLink($usernameOrEmail)
     {
         if (empty($usernameOrEmail)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
         }
 
         $adminAuthObj = AdminAuthentication::getInstance();
@@ -364,8 +300,8 @@ class AdminGuestController extends FatController
         }
 
         $arr_replacements = array(
-        '{user_full_name}' => trim($admin_row['admin_name']),
-        '{login_link}' => UrlHelper::generateFullUrl('adminGuest', 'loginForm', array())
+            '{user_full_name}' => trim($admin_row['admin_name']),
+            '{login_link}' => UrlHelper::generateFullUrl('adminGuest', 'loginForm', array())
         );
         EmailHandler::sendMailTpl($admin_row['admin_email'], 'user_admin_password_changed_successfully', $this->adminLangId, $arr_replacements);
         if (!empty(FatApp::getConfig('CONF_SITE_PHONE'))) {
@@ -386,12 +322,12 @@ class AdminGuestController extends FatController
         $token = $this->generateLoginToken();
         $expiry = strtotime('+7 day');
         $values = array(
-        'admauth_admin_id' => $admin_id,
-        'admauth_token' => $token,
-        'admauth_expiry' => date('Y-m-d H:i:s', $expiry),
-        'admauth_browser' => $_SERVER['HTTP_USER_AGENT'],
-        'admauth_last_access' => date('Y-m-d H:i:s'),
-        'admauth_last_ip' => $_SERVER['REMOTE_ADDR'],
+            'admauth_admin_id' => $admin_id,
+            'admauth_token' => $token,
+            'admauth_expiry' => date('Y-m-d H:i:s', $expiry),
+            'admauth_browser' => $_SERVER['HTTP_USER_AGENT'],
+            'admauth_last_access' => date('Y-m-d H:i:s'),
+            'admauth_last_ip' => $_SERVER['REMOTE_ADDR'],
         );
         $adminAuthObj = AdminAuthentication::getInstance();
         if ($adminAuthObj->saveRememberLoginToken($values)) {

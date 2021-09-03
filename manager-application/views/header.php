@@ -1,7 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <?php
-
 if (isset($includeEditor) && $includeEditor == true) {
 	$extendEditorJs	= 'true';
 } else {
@@ -18,7 +17,7 @@ $commonHeadData = array(
 );
 $this->includeTemplate('_partial/header/common-head.php', $commonHeadData, false);
 echo $this->writeMetaTags();
-echo $this->getJsCssIncludeHtml(!CONF_DEVELOPMENT_MODE, true, true, false);
+echo $this->getJsCssIncludeHtml(!CONF_DEVELOPMENT_MODE, true, false);
 $commonHeadHtmlData = array(
 	'bodyClass'         =>   $bodyClass,
 	'includeEditor'	    =>   $includeEditor
