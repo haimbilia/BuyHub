@@ -1367,8 +1367,8 @@ class CheckoutController extends MyAppController
                     //'op_tax_total'    =>    $cartProduct['tax'],
                     'op_commission_charged' => $cartProduct['commission'],
                     'op_commission_percentage' => $cartProduct['commission_percentage'],
-                    'op_affiliate_commission_percentage' => $cartProduct['affiliate_commission_percentage'],
-                    'op_affiliate_commission_charged' => $cartProduct['affiliate_commission'],
+                    'op_affiliate_commission_percentage' => isset($cartProduct['affiliate_commission_percentage']) ? $cartProduct['affiliate_commission_percentage'] : 0,
+                    'op_affiliate_commission_charged' => isset($cartProduct['affiliate_commission']) ? $cartProduct['affiliate_commission'] : 0,
                     'op_status_id' => FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS"),
                     // 'op_volume_discount_percentage'    =>    $cartProduct['volume_discount_percentage'],
                     'productsLangData' => $productsLangData,
@@ -1394,7 +1394,7 @@ class CheckoutController extends MyAppController
                 );
 
                 $order_affiliate_user_id = isset($cartProduct['affiliate_user_id']) ? $cartProduct['affiliate_user_id'] : '';
-                $order_affiliate_total_commission += isset($cartProduct['affiliate_commission']) ? $cartProduct['affiliate_commission'] : '';
+                $order_affiliate_total_commission += isset($cartProduct['affiliate_commission']) ? $cartProduct['affiliate_commission'] : 0;
 
                 $discount = 0;
                 if (!empty($cartSummary["cartDiscounts"]["discountedSelProdIds"])) {

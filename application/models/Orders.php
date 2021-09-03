@@ -372,8 +372,8 @@ class Orders extends MyAppModel
             $this->error = $recordObj->getError();
             return false;
         }
-        $orderNo = $recordObj->getId();
 
+        $orderNo = $recordObj->getId();
         $_SESSION['shopping_cart']["order_no"] = $orderNo;
         $_SESSION['shopping_cart']["order_id"] = $this->getOrderId();
 
