@@ -41,32 +41,23 @@
                                             alt="Yo!Kart"></a>
                                 </figure>
                             </div>
-                            <div class="card-body p-5">
-                                <h2>Sign In to Yokart</h2>
+                            <div class="card-body ">
+                                <h2> Forgot Password ?</h2>
+                                <p>Enter your email to reset your password.</p>
                                 <form class="form">
-                                    <div class="form-group"><input class="form-control" title="Username"
-                                            placeholder="Username" type="text" value="">
-                                        <input class="form-control" title="Password" placeholder="Password"
-                                            type="password" value="">
+
+
+                                    <div class="form-group">
+
+                                        <input class="form-control" title="Email" placeholder="Email" type="text"
+                                            value="">
                                     </div>
-                                    <div class="row pt-3 pb-3">
-                                        <div class="col-6">
-                                            <div class="field-set ">
-                                                <label class="switch switch--sm remember-me">
-                                                    <input type="checkbox" name="">
-                                                    <span></span>Remember Me </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="field-set text-right">
-                                                <a href="" class="link">Forgot Password?</a>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                     <div class="row">
                                         <div class="col-md-12">
                                             <button disabled class="btn btn-brand btn-lg btn-block not-allowed"
-                                                type="button">Login</button>
+                                                type="button">Submit</button>
+
                                         </div>
                                     </div>
                                 </form>

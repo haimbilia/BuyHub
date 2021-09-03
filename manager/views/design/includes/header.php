@@ -5,7 +5,8 @@
         <!-- begin:: Brand -->
         <div class="header__brand" id="header_brand">
             <a class="header__brand-logo" href="index.php">
-                <img alt="Logo" src="<?php echo BASE_URL; ?>media/logos/logo.png" class="header__brand-logo-default" />
+                <img alt="Logo" src="<?php echo CONF_WEBROOT_URL;?>images/logos/full-logo.png"
+                    class="header__brand-logo-default" />
             </a>
         </div>
         <!-- end:: Brand -->
@@ -663,29 +664,30 @@
             <div class="header__topbar-item header__topbar-item--langs">
                 <div class="header__topbar-wrapper" data-toggle="dropdown">
                     <span class="header__topbar-icon">
-                        <img class="" src="<?php echo BASE_URL; ?>media/flags/020-flag.svg" alt="" />
+                        <img class="" src="<?php echo CONF_WEBROOT_URL;?>images/flags/020-flag.svg" alt="" />
                     </span>
                 </div>
                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
                     <ul class="nav nav--block margin-t-10 margin-b-10">
                         <li class="nav__item nav__item--active">
                             <a href="#" class="nav__link">
-                                <span class="nav__link-icon"><img src="<?php echo BASE_URL; ?>media/flags/020-flag.svg"
-                                        alt="" /></span>
+                                <span class="nav__link-icon"><img
+                                        src="<?php echo CONF_WEBROOT_URL;?>images/flags/020-flag.svg" alt="" /></span>
                                 <span class="nav__link-text">English</span>
                             </a>
                         </li>
                         <li class="nav__item">
                             <a href="#" class="nav__link">
-                                <span class="nav__link-icon"><img src="<?php echo BASE_URL; ?>media/flags/016-spain.svg"
-                                        alt="" /></span>
+                                <span class="nav__link-icon"><img
+                                        src="<?php echo CONF_WEBROOT_URL;?>images/flags/016-spain.svg" alt="" /></span>
                                 <span class="nav__link-text">Spanish</span>
                             </a>
                         </li>
                         <li class="nav__item">
                             <a href="#" class="nav__link">
                                 <span class="nav__link-icon"><img
-                                        src="<?php echo BASE_URL; ?>media/flags/017-germany.svg" alt="" /></span>
+                                        src="<?php echo CONF_WEBROOT_URL;?>images/flags/017-germany.svg"
+                                        alt="" /></span>
                                 <span class="nav__link-text">German</span>
                             </a>
                         </li>
@@ -701,7 +703,7 @@
                     <span class="header__topbar-welcome">Hi,</span>
                     <span class="header__topbar-username">Sean</span>
                     <span class="header__topbar-icon"><b>S</b></span>
-                    <img alt="Pic" src="<?php echo BASE_URL; ?>media/300_21.jpg" class="hidden" />
+                    <img alt="Pic" src="<?php echo CONF_WEBROOT_URL;?>images/300_21.jpg" class="hidden" />
                 </div>
                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-xl">
 
@@ -709,7 +711,7 @@
                     <div class="user-card user-card--skin-dark notification-item-padding-x"
                         style="background-image: url(./media/bg/bg-page-section.png)">
                         <div class="user-card__avatar">
-                            <img class="hidden" alt="Pic" src="<?php echo BASE_URL; ?>media/300_25.jpg" />
+                            <img class="hidden" alt="Pic" src="<?php echo CONF_WEBROOT_URL;?>images/300_25.jpg" />
 
                             <!--use below badge element instead the user avatar to display username's first letter(remove hidden class to display it) -->
                             <span class="badge badge--lg badge--rounded badge--bold font-success">S</span>

@@ -7,10 +7,17 @@
     &-item {
         display: flex;
         align-items: center;
-        padding-left: 0;
-        padding-right: 0.5rem;
+        padding: 0;
+        padding-#{$end-direction}: 1rem;
         font-size: .85rem;
         font-weight: 600;
+        position: relative;
+        &:before {
+            content: "/";
+            position: absolute;
+            #{$end-direction}: 0;
+            color: currentColor;
+        }
         a {
             color: #a1a5b7;
         }
