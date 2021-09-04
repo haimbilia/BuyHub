@@ -76,7 +76,7 @@ foreach ($vendorOrdersList as $sn => $row) {
             case 'action':
                 $td->appendElement('a', array('href' => UrlHelper::generateUrl('SellerOrders', 'view', array($row['op_id'])), 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_View_Order_Detail', $adminLangId)), "<i class='far fa-eye icon'></i>", true);
 
-                $orderObj = new Orders($row['order_id']);
+                $orderObj = new Orders($row['order_no']);
                 $notAllowedStatues = $orderObj->getNotAllowedOrderCancellationStatuses();
                 if (!in_array($row["op_status_id"], $notAllowedStatues) && $canEdit) {
                     $td->appendElement('a', array('href' => UrlHelper::generateUrl('SellerOrders', 'CancelOrder', array($row['op_id'])), 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Cancel_Order', $adminLangId)), "<i class='fas fa-times'></i>", true);

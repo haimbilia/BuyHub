@@ -310,7 +310,7 @@ class Address extends MyAppModel
      * @param  int $addrArr
      * @return array
      */
-    public static function formatUserAddress(int $type, string $orderId, array $addrArr): array
+    public static function formatUserAddress(int $type, string $orderId, int $orderNo, array $addrArr): array
     {
         $default = [
             'addr_name' => '',
@@ -328,6 +328,7 @@ class Address extends MyAppModel
         $addrArr = array_merge($default, $addrArr);
         return [
             'oua_order_id' => $orderId,
+            'oua_order_no' => $orderNo,
             'oua_type' => $type,
             'oua_name' => $addrArr['addr_name'],
             'oua_address1' => $addrArr['addr_address1'],

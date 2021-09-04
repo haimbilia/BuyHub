@@ -72,7 +72,7 @@ class OrderReturnRequestMessageSearch extends SearchBase
         }
         $this->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'op_order_id = order_id', 'o');
         if ($langId) {
-            $this->joinTable(Orders::DB_TBL_LANG, 'LEFT OUTER JOIN', 'order_id = orderlang_order_id AND orderlang_lang_id = ' . $langId, 'o_l');
+            $this->joinTable(Orders::DB_TBL_LANG, 'LEFT OUTER JOIN', 'order_no = orderlang_order_no AND orderlang_lang_id = ' . $langId, 'o_l');
         }
         $this->isOrdersJoined = true;
     }

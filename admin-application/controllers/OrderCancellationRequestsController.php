@@ -176,7 +176,7 @@
         $srch->addCondition('ocrequest_status', '=', OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $srch->addMultipleFields(array('op_id', 'ocrequest_id', 'ocrequest_status', 'ocrequest_op_id', 'o.order_language_id', 'op_status_id', 'order_pmethod_id','op_selprod_id','op_order_id'));
+        $srch->addMultipleFields(array('op_id', 'ocrequest_id', 'ocrequest_status', 'ocrequest_op_id', 'o.order_language_id', 'op_status_id', 'order_pmethod_id','op_selprod_id','op_order_no','op_order_id'));
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!$row) {
