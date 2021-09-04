@@ -135,7 +135,7 @@ class SubscriptionOrdersController extends AdminBaseController
         
         $order['products'] = FatApp::getDb()->fetchAll($opRs, 'ossubs_id');
     
-        $orderObj = new Orders($order['order_no']);
+        $orderObj = new Orders($order['order_id']);
         $order['comments'] = $orderObj->getOrderComments($this->adminLangId, array("order_id" => $order['order_id']));
         $order['payments'] = $orderObj->getOrderPayments(array("order_id" => $order['order_id']));
 

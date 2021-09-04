@@ -99,7 +99,7 @@ class Paygate extends PaymentMethodBase
      * @param  string $payMethod
      * @return bool
      */
-    public function initiateRequest(string $orderId): bool
+    public function initiateRequest($orderId): bool
     {
         /*
         * Set the array of fields to be posted to PayGate
@@ -127,7 +127,7 @@ class Paygate extends PaymentMethodBase
      * @param  string $orderId
      * @return array
      */
-    private function buildRequestBody(string $orderId): array
+    private function buildRequestBody($orderId): array
     {
         $orderPaymentObj = new OrderPayment($orderId, $this->langId);
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
@@ -166,7 +166,7 @@ class Paygate extends PaymentMethodBase
      * @param  array $response
      * @return bool
      */
-    public function validateResponse(string $orderId, array $response): bool
+    public function validateResponse($orderId, array $response): bool
     {
         $payRequestId = isset($response['PAY_REQUEST_ID']) ? $response['PAY_REQUEST_ID'] : '';
         $transactionStatus = isset($response['TRANSACTION_STATUS']) ? $response['TRANSACTION_STATUS'] : '';

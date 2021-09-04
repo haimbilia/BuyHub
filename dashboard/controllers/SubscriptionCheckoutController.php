@@ -193,11 +193,9 @@ class SubscriptionCheckoutController extends LoggedUserController
         $orderData = array();
         /* add Order Data[ */
         $order_id = isset($_SESSION['subscription_shopping_cart']["order_id"]) ? $_SESSION['subscription_shopping_cart']["order_id"] : false;
-        $orderNo = isset($_SESSION['subscription_shopping_cart']["order_no"]) ? $_SESSION['subscription_shopping_cart']["order_no"] : false;
 
         $userId = $this->userParentId;
         $orderData['order_id'] = $order_id;
-        $orderData['order_no'] = $orderNo;
         $orderData['order_user_id'] = $userId;
         /* $orderData['order_user_name'] = $userDataArr['user_name'];
         $orderData['order_user_email'] = $userDataArr['credential_email'];
@@ -210,7 +208,6 @@ class SubscriptionCheckoutController extends LoggedUserController
         /* order extras[ */
         $orderData['extra'] = array(
             'oextra_order_id' => $order_id,
-            'oextra_order_no' => $orderNo,
             'order_ip_address' => $_SERVER['REMOTE_ADDR']
         );
 
@@ -909,9 +906,9 @@ class SubscriptionCheckoutController extends LoggedUserController
 
         $orderData = array();
         /* add Order Data[ */
-        $order_id = false;
+        $order_id = 0;
         $orderData['order_id'] = $order_id;
-        $orderData['order_no'] = 0;
+        $orderData['order_no'] = false;
         $orderData['order_user_id'] = $userId;
         /* $orderData['order_user_name'] = $userDataArr['user_name'];
         $orderData['order_user_email'] = $userDataArr['credential_email'];
@@ -925,7 +922,6 @@ class SubscriptionCheckoutController extends LoggedUserController
         /* order extras[ */
         $orderData['extra'] = array(
             'oextra_order_id' => $order_id,
-            'oextra_order_no' => 0,
             'order_ip_address' => $_SERVER['REMOTE_ADDR']
         );
 

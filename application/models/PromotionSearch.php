@@ -273,7 +273,7 @@ class PromotionSearch extends SearchBase
     public function addActiveSubscriptionCondition()
     {
         $this->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_user_id=s.shop_user_id and o.order_type=' . ORDERS::ORDER_SUBSCRIPTION, 'o');
-        $this->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_no = oss.ossubs_order_no', 'oss');
+        $this->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id', 'oss');
         $this->addCondition('oss.ossubs_till_date', '>=', date("Y-m-d"));
         $this->addCondition('ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
     }

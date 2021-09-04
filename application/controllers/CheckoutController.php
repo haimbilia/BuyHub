@@ -963,7 +963,6 @@ class CheckoutController extends MyAppController
         }
 
         $orderData['order_id'] = $order_id;
-        $orderData['order_no'] = $orderNo;
         $orderData['order_user_id'] = $userId;
         /* $orderData['order_user_name'] = $userDataArr['user_name'];
         $orderData['order_user_email'] = $userDataArr['credential_email'];
@@ -974,7 +973,6 @@ class CheckoutController extends MyAppController
         /* addresses[ */
         $userAddresses[0] = array(
             'oua_order_id' => $order_id,
-            'oua_order_no' => $orderNo,
             'oua_type' => Orders::BILLING_ADDRESS_TYPE,
             'oua_name' => $billingAddressArr['addr_name'],
             'oua_address1' => $billingAddressArr['addr_address1'],
@@ -993,7 +991,6 @@ class CheckoutController extends MyAppController
         if (!empty($shippingAddressArr) && $fulfillmentType == Shipping::FULFILMENT_SHIP) {
             $userAddresses[1] = array(
                 'oua_order_id' => $order_id,
-                'oua_order_no' => $orderNo,
                 'oua_type' => Orders::SHIPPING_ADDRESS_TYPE,
                 'oua_name' => $shippingAddressArr['addr_name'],
                 'oua_address1' => $shippingAddressArr['addr_address1'],
@@ -1016,7 +1013,6 @@ class CheckoutController extends MyAppController
         /* order extras[ */
         $orderData['extra'] = array(
             'oextra_order_id' => $order_id,
-            'oextra_order_no' => $orderNo,
             'order_ip_address' => $_SERVER['REMOTE_ADDR']
         );
 
@@ -1207,7 +1203,6 @@ class CheckoutController extends MyAppController
                     $pickUpAddressArr = $addr->getData($pickUpDataRow['time_slot_type'], $addressRecordId);
                     $productPickupAddress = array(
                         'oua_order_id' => $order_id,
-                        'oua_order_no' => $orderNo,
                         'oua_op_id' => '',
                         'oua_type' => Orders::PICKUP_ADDRESS_TYPE,
                         'oua_name' => $pickUpAddressArr['addr_name'],
@@ -1446,8 +1441,7 @@ class CheckoutController extends MyAppController
         /* ] */
         $orderObj = new Orders();
         if ($orderObj->addUpdateOrder($orderData, $this->siteLangId)) {
-            $order_id = $orderObj->getOrderId();
-            $_SESSION['order_id'] = $order_id;
+            $_SESSION['order_id'] = $orderObj->getMainTableRecordId();
         } else {
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError($orderObj->getError());
@@ -1955,7 +1949,7 @@ class CheckoutController extends MyAppController
 
         /* Deduct reward point in case of cashondelivery [ */
         if (in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore']) && $orderInfo['order_reward_point_used'] > 0) {
-            $rewardDebited = UserRewards::debit($orderInfo['order_user_id'], $orderInfo['order_reward_point_used'], $order_id, $orderInfo['order_no'], $orderInfo['order_language_id']);
+            $rewardDebited = UserRewards::debit($orderInfo['order_user_id'], $orderInfo['order_reward_point_used'], $order_id, $orderInfo['order_language_id']);
             if (!$rewardDebited) {
                 $msg = Labels::getLabel("MSG_UNABLE_TO_DEBIT_REWARD_POINTS", $this->siteLangId);
                 LibHelper::dieJsonError($msg);

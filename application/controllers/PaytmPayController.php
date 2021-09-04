@@ -88,7 +88,7 @@ class PaytmPayController extends PaymentController
         FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
     }
 
-    private function getPaymentForm(string $orderId, bool $processRequest = false)
+    private function getPaymentForm($orderId, bool $processRequest = false)
     {
 
         $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', [$orderId]) : $this->plugin->getApiUrl() . "showPaymentPage?mid=" . $this->plugin->getMerchantId() . "&orderId=" . $orderId;
@@ -104,7 +104,7 @@ class PaytmPayController extends PaymentController
         return $frm;
     }
 
-    private function logFailure(string $orderId, string $msg = '', array $response = [])
+    private function logFailure($orderId, string $msg = '', array $response = [])
     {
         $response = !empty($response) ? $response : $_REQUEST;
         $orderPaymentObj = new OrderPayment($orderId);

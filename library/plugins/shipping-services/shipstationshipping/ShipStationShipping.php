@@ -151,7 +151,7 @@ class ShipStationShipping extends ShippingServicesBase
         
         $orderInvoiceNumber = $orderDetail['op_invoice_number'];
 
-        $orderObj = new Orders($orderDetail['order_no']);
+        $orderObj = new Orders($orderDetail['order_id']);
         $addresses = $orderObj->getOrderAddresses($orderDetail['order_id']);
         $billingAddress = $addresses[Orders::BILLING_ADDRESS_TYPE];
         $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : array();
@@ -384,7 +384,7 @@ class ShipStationShipping extends ShippingServicesBase
      * @param  string $orderId
      * @return bool
      */
-    public function loadOrder(string $orderId): bool
+    public function loadOrder($orderId): bool
     {
         return $this->doRequest(self::REQUEST_GET_ORDER, [$orderId]);
     }

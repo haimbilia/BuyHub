@@ -343,7 +343,6 @@ class DigitalDownload extends MyAppModel
 
         $opSrchObj->addMultipleFields([
             'op_id',
-            'op_order_no',
             'op_order_id',
             'order_date_added',
             'op_selprod_download_validity_in_days'
