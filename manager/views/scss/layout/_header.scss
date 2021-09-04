@@ -876,14 +876,14 @@ $mykart:'mykart';
     }
 }
 
-.header-action{
-    $self:'.header-action';
+.header-action {
+    $self: '.header-action';
     display: flex;
     align-items: center;
     justify-content: center;
-    #{$self}__item{
-        margin-#{$start-direction}:.75rem;
-        #{$self}__trigger{
+    #{$self}__item {
+        margin-#{$start-direction}: .75rem;
+        #{$self}__trigger {
             width: 40px;
             height: 40px;
             display: flex;
@@ -891,20 +891,21 @@ $mykart:'mykart';
             justify-content: center;
             border-radius: .25rem;
             background-color: #fff;
-            &:hover{
+            &:hover {
                 background-color: #f8f5ff;
             }
         }
-        &.header-account{
+        &.header-account {
             margin-#{$start-direction}: 1.5rem;
         }
     }
 }
-.header-account{   
-    .header-action__target{
+
+.header-account {
+    .header-action__target {
         min-width: 280px;
     }
-    &__img{
+    &__img {
         width: 42px;
         height: 42px;
         border-radius: 4px;
@@ -912,17 +913,17 @@ $mykart:'mykart';
         display: flex;
         align-items: center;
         justify-content: center;
-        img{
+        img {
             max-height: 100%;
         }
     }
-    &__avtar{
+    &__avtar {
         padding: 1rem;
     }
-    .profile{
+    .profile {
         display: flex;
         align-items: center;
-        &__img{
+        &__img {
             margin-#{$end-direction}: .875rem;
             width: 50px;
             height: 50px;
@@ -933,16 +934,16 @@ $mykart:'mykart';
             display: flex;
             align-items: center;
             justify-content: center;
-            img{
+            img {
                 max-height: 100%;
             }
         }
-        &__detail{
-            h6{
+        &__detail {
+            h6 {
                 margin-bottom: .25rem;
                 font-size: .875rem;
             }
-            a{
+            a {
                 color: $txt-gray;
                 font-size: 12px;
             }
@@ -950,29 +951,30 @@ $mykart:'mykart';
     }
 }
 
- .nav.nav--header-account{
-     display: block;
-     padding:.5rem 1rem;
-     a{
-         display: flex;
-         align-items: center;
-         flex-wrap:wrap;
-         font-size: .875rem;
-         padding: .5rem .875rem;
-         text-decoration: none;
-         color: rgba($txt-body, .85);
-         border-radius:.25rem;  
-         font-weight: 500;
-         &:hover{
-             text-decoration: none;
-             background-color: rgba(245,248,250,.8);
-         }
-     }
- }
- .language-selector{
-     position: relative;
-     background-color: #fff !important;
-     .languages{
+.nav.nav--header-account {
+    display: block;
+    padding: .5rem 1rem;
+    a {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        font-size: .875rem;
+        padding: .5rem .875rem;
+        text-decoration: none;
+        color: rgba($txt-body, .85);
+        border-radius: .25rem;
+        font-weight: 500;
+        &:hover {
+            text-decoration: none;
+            background-color: rgba(245, 248, 250, .8);
+        }
+    }
+}
+
+.language-selector {
+    position: relative;
+    background-color: #fff !important;
+    .languages {
         display: none;
         position: relative;
         background-color: #f5f8fa;
@@ -981,31 +983,32 @@ $mykart:'mykart';
         border-radius: 4px;
         padding: 10px 15px;
         margin-top: 8px;
-         span{
-             display: block;
-             padding: .25rem 0;
-         }
-         &.is-open{
-             display: block;
-         }
-     }
- }
- .selected-language{
-     margin-#{$start-direction}: auto;
-     display: flex;
-     align-items: center;
-     padding: .25rem .5rem;
-     border-radius: .25rem;
-     background-color: rgb(245,248,250);
-     font-size: .75rem;
-     span{
+        span {
+            display: block;
+            padding: .25rem 0;
+        }
+        &.is-open {
+            display: block;
+        }
+    }
+}
+
+.selected-language {
+    margin-#{$start-direction}: auto;
+    display: flex;
+    align-items: center;
+    padding: .25rem .5rem;
+    border-radius: .25rem;
+    background-color: rgb(245, 248, 250);
+    font-size: .75rem;
+    span {
         max-width: 16px;
         width: 16px;
         flex: 0 0 16px;
         margin-#{$start-direction}: .5rem;
-     }
-     img{
-         display:block;
-         border-radius: 4px;
-     }
- }
+    }
+    img {
+        display: block;
+        border-radius: 4px;
+    }
+}
