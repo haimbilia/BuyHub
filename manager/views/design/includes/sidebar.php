@@ -285,16 +285,7 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu"></div>
             </li>
-            <li class="menu-item dropdown">
-                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"  aria-haspopup="true" aria-expanded="false">
-                    <span class="menu-icon"> 
-                        <svg width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-system-setting"></use>
-                        </svg>
-                    </span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu"></div>
-            </li>
+            
             <li class="menu-item dropdown">
                 <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"  aria-haspopup="true" aria-expanded="false">
                     <span class="menu-icon"> 
@@ -317,13 +308,13 @@
             </li>
         </ul>
     </div>
-    <div class="sidebar-foot">       
-        <!-- <a href="">
+    <div class="sidebar-foot">   
+        <a href="">
             <span class="menu-icon"> 
                 <svg width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-store"></use>
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-system-setting"></use>
                 </svg>
             </span>
-        </a> -->
+        </a>
     </div>
 </sidebar>
