@@ -1293,7 +1293,18 @@ class AttachedFile extends MyAppModel
             case self::FILETYPE_CATEGORY_IMAGE:
             case self::FILETYPE_PRODCAT_IMAGE:    
                 $recordObj = new ProductCategory($recordId);
-                break;        
+                break;
+            case self::FILETYPE_BADGE:    
+                $recordObj = new Badge($recordId);
+                break;
+            case self::FILETYPE_SHOP_COLLECTION_IMAGE:    
+                $recordObj = new ShopCollection($recordId);
+                break; 
+            case self::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE:
+            case self::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE: 
+            case self::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE: 
+                $recordObj = new Extrapage($recordId);
+                break;            
         }
 
         if(false != $recordObj){

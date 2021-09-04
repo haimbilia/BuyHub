@@ -920,3 +920,7 @@ INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`)
 ('CONF_DEFAULT_APPROVED_ORDER_STATUS', '15', 0)
 ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
 -- ---------Task 88911 Order Detail page ------ -- 
+
+ALTER TABLE `tbl_badges` ADD `badge_updated_on` DATETIME NOT NULL AFTER `badge_active`;
+ALTER TABLE `tbl_shop_collections` ADD `scollection_updated_on` DATETIME NOT NULL AFTER `scollection_active`;
+ALTER TABLE `tbl_extra_pages` ADD `epage_updated_on` DATETIME NOT NULL AFTER `epage_default_content`;
