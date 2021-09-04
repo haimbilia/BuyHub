@@ -4,25 +4,25 @@ sass.compiler = require("node-sass");
 const sourcemaps = require("gulp-sourcemaps");
 const autoprefixer = require("gulp-autoprefixer");
 const minify = require("gulp-minify");
-const svgSprite = require('gulp-svg-sprite');
+const svgSprite = require("gulp-svg-sprite");
 
 // SVG Sprite Config
 const config = {
   shape: {
-      dimension: {
-          maxWidth: 32,
-          maxHeight: 32,
-          precision: 2,
-          attributes: false,
-      }
+    dimension: {
+      maxWidth: 32,
+      maxHeight: 32,
+      precision: 2,
+      attributes: false,
+    },
   },
   mode: {
-      symbol: {
-          dest: './',
-          sprite: 'sprite.yokart.svg'
-      }
+    symbol: {
+      dest: "./",
+      sprite: "sprite.yokart.svg",
+    },
   },
-  dest: './'
+  dest: "./",
 };
 
 function css() {
@@ -53,11 +53,10 @@ function dashboard() {
 }
 
 function svg() {
-  return src('./manager/views/images/retina/sprites/*.svg')
-      .pipe(svgSprite(config))
-      .pipe(dest('./manager/views/images/retina'));
+  return src("./manager/views/images/retina/sprites/*.svg")
+    .pipe(svgSprite(config))
+    .pipe(dest("./manager/views/images/retina"));
 }
-
 
 // Watch files
 function watchFiles() {
