@@ -1448,6 +1448,7 @@ class Product extends MyAppModel
         $srch->joinShopState();
         $srch->joinBrands($langId);
         $srch->joinProductToCategory($langId);
+        $srch->joinProductToTax();        
         $srch->joinSellerSubscription(0, false, true);
         $srch->addSubscriptionValidCondition();
         

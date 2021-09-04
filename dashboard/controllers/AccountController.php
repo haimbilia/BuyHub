@@ -446,10 +446,12 @@ class AccountController extends LoggedUserController
         }
         $orderData = array();
         $order_id = isset($_SESSION['wallet_recharge_cart']["order_id"]) ? $_SESSION['wallet_recharge_cart']["order_id"] : false;
+        $orderNo = isset($_SESSION['wallet_recharge_cart']["order_no"]) ? $_SESSION['wallet_recharge_cart']["order_no"] : false;
         $orderData['order_type'] = Orders::ORDER_WALLET_RECHARGE;
 
         $orderData['userAddresses'] = array(); //No Need of it
         $orderData['order_id'] = $order_id;
+        $orderData['order_no'] = $orderNo;
         $orderData['order_user_id'] = $this->userId;
         $orderData['order_payment_status'] = Orders::ORDER_PAYMENT_PENDING;
         $orderData['order_date_added'] = date('Y-m-d H:i:s');
@@ -457,6 +459,7 @@ class AccountController extends LoggedUserController
         /* order extras[ */
         $orderData['extra'] = array(
             'oextra_order_id' => $order_id,
+            'oextra_order_no' => $orderNo,
             'order_ip_address' => $_SERVER['REMOTE_ADDR']
         );
 

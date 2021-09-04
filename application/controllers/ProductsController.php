@@ -52,6 +52,7 @@ class ProductsController extends MyAppController
             $prodSrchObj->joinBrands();
             $prodSrchObj->joinBrandsLang($this->siteLangId, $keyword);
             $prodSrchObj->joinProductToCategory();
+            $prodSrchObj->joinProductToTax();
             $prodSrchObj->joinSellerSubscription(0, false, true);
             $prodSrchObj->addSubscriptionValidCondition();
             $prodSrchObj->doNotCalculateRecords();
@@ -447,6 +448,7 @@ class ProductsController extends MyAppController
         $prodSrch->joinSellerSubscription();
         $prodSrch->addSubscriptionValidCondition();
         $prodSrch->validateAndJoinDeliveryLocation(false);
+        $prodSrch->joinProductToTax();
         $prodSrch->doNotCalculateRecords();
         $prodSrch->addCondition('selprod_id', '=', $selprod_id);
         $prodSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);
@@ -466,8 +468,7 @@ class ProductsController extends MyAppController
         }
 
         $selProdReviewObj = $this->getSelProdReviewObj();
-        $selProdRviewSubQuery = $selProdReviewObj->getQuery();
-        $prodSrch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
+        $prodSrch->joinTable('(' . $selProdReviewObj->getQuery() . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
         $prodSrch->addMultipleFields(
             array(
                 'product_id', 'selprod_sku', 'product_identifier', 'COALESCE(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn', 'product_short_description', 'product_description',
@@ -707,7 +708,7 @@ class ProductsController extends MyAppController
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
             $validDateCondition = " and oss.ossubs_till_date >= '" . date('Y-m-d') . "'";
             $optionSrchObj->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_user_id=seller_user.user_id AND o.order_type=' . ORDERS::ORDER_SUBSCRIPTION . ' AND o.order_payment_status =1', 'o');
-            $optionSrchObj->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id=' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
+            $optionSrchObj->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_no = oss.ossubs_order_no and oss.ossubs_status_id=' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
         }
         $optionSrchObj->addCondition('product_id', '=', $product['product_id']);
 
@@ -1883,7 +1884,7 @@ class ProductsController extends MyAppController
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
             $validDateCondition = " and oss.ossubs_till_date >= '" . date('Y-m-d') . "'";
             $optionSrchObj->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_user_id=seller_user.user_id AND o.order_type=' . ORDERS::ORDER_SUBSCRIPTION . ' AND o.order_payment_status =1', 'o');
-            $optionSrchObj->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id=' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
+            $optionSrchObj->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_no = oss.ossubs_order_no and oss.ossubs_status_id=' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
         }
         $optionSrchObj->addCondition('product_id', '=', $product['product_id']);
 

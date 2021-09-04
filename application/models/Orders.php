@@ -59,7 +59,7 @@ class Orders extends MyAppModel
     private $order_id;
     public function __construct($id = 0)
     {
-        parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
+        parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'no', $id);
     }
 
     public static function getOrderPaymentStatusArr($langId)
@@ -253,9 +253,7 @@ class Orders extends MyAppModel
             $srch->joinTable(
                 static::DB_TBL_LANG,
                 'LEFT OUTER JOIN',
-                'o_l.orderlang_order_id = o.order_id
-			AND orderlang_lang_id = ' . $langId,
-                'o_l'
+                'o_l.orderlang_order_no = o.order_no AND orderlang_lang_id = ' . $langId, 'o_l'
             );
         }
         return $srch;
@@ -341,6 +339,7 @@ class Orders extends MyAppModel
         }
         $this->order_id = $data['order_id'];
 
+        $discountCouponHoldTblUpdate = false;
         if (array_key_exists('coupon_id', $discountInfo)) {
             $couponInfo = DiscountCoupons::getValidCoupons($data['order_user_id'], $data['order_language_id'], $data['order_discount_coupon_code'], $this->order_id);
             if ($couponInfo == false) {
@@ -358,6 +357,7 @@ class Orders extends MyAppModel
                 $this->error = FatApp::getDb()->getError();
                 return false;
             }
+            $discountCouponHoldTblUpdate = true;
         }
 
 
@@ -373,13 +373,24 @@ class Orders extends MyAppModel
             return false;
         }
 
+        $orderNo = $recordObj->getId();
+        $_SESSION['shopping_cart']["order_no"] = $orderNo;
         $_SESSION['shopping_cart']["order_id"] = $this->getOrderId();
+
+        $this->setMainTableRecordId($orderNo);
+
+        if (array_key_exists('coupon_id', $discountInfo) && true === $discountCouponHoldTblUpdate) {
+            $dataToUp = ['ochold_order_no' => $orderNo];
+            $where = array('smt' => 'ochold_order_id = ? AND ochold_coupon_id = ?', 'vals' => [$this->getOrderId(), $discountInfo['coupon_id']]);
+            FatApp::getDb()->updateFromArray(DiscountCoupons::DB_TBL_COUPON_HOLD_PENDING_ORDER, $dataToUp, $where);
+        }
 
         if (!empty($ordersLangData)) {
             $db->deleteRecords(static::DB_TBL_LANG, array('smt' => 'orderlang_order_id = ?', 'vals' => array($this->getOrderId())));
             $recordObj = new TableRecord(static::DB_TBL_LANG);
             foreach ($ordersLangData as $orderLangData) {
                 $orderLangData['orderlang_order_id'] = $this->getOrderId();
+                $orderLangData['orderlang_order_no'] = $orderNo;
                 $recordObj->assignValues($orderLangData);
                 if (!$recordObj->addNew()) {
                     $db->rollbackTransaction();
@@ -402,8 +413,17 @@ class Orders extends MyAppModel
                 $db->deleteRecords(static::DB_TBL_ORDER_USER_ADDRESS, array('smt' => 'oua_op_id = ?', 'vals' => array($opId)));
             }
         }
-        $db->deleteRecords(static::DB_TBL_ORDER_PRODUCTS, array('smt' => 'op_order_id = ?', 'vals' => array($this->getOrderId())));
-        $db->deleteRecords(static::DB_TBL_ORDER_PRODUCTS_LANG, array('smt' => 'oplang_order_id = ?', 'vals' => array($this->getOrderId())));
+
+        $qry = 'DELETE op, op_l
+        FROM ' . static::DB_TBL_ORDER_PRODUCTS . ' as op
+        INNER JOIN ' . static::DB_TBL_ORDER_PRODUCTS_LANG . ' as op_l ON op_l.oplang_op_id = op.op_id
+        WHERE op.op_order_id = "' . $this->getOrderId() . '"';
+       
+        if (!$db->query($qry)) {
+            $db->rollbackTransaction();
+            $this->error = $recordObj->getError();
+            return false;
+        };
 
         if (!empty($products)) {                       
 
@@ -411,6 +431,7 @@ class Orders extends MyAppModel
             foreach ($products as $selprodId => $product) {
                 $op_invoice_number = $this->getOrderId() . '-S' . str_pad($counter, 4, '0', STR_PAD_LEFT);
                 $product['op_order_id'] = $this->getOrderId();
+                $product['op_order_no'] = $orderNo;
                 $product['op_invoice_number'] = $op_invoice_number;
                 $opRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS);
                 $opRecordObj->assignValues($product);
@@ -435,7 +456,6 @@ class Orders extends MyAppModel
                 if (!empty($productsLangData)) {
                     foreach ($productsLangData as $productLangData) {
                         $productLangData['oplang_op_id'] = $op_id;
-                        $productLangData['oplang_order_id'] = $this->getOrderId();
                         $opLangRecordObj = new TableRecord(static::DB_TBL_ORDER_PRODUCTS_LANG);
                         $opLangRecordObj->assignValues($productLangData);
                         if (!$opLangRecordObj->addNew()) {
@@ -616,6 +636,7 @@ class Orders extends MyAppModel
                 $productPickupAddress = $product['productPickupAddress'];
                 if (!empty($productPickupAddress)) {
                     $productPickupAddress['oua_order_id'] = $this->getOrderId();
+                    $productPickupAddress['oua_order_no'] = $orderNo;
                     $productPickupAddress['oua_op_id'] = $op_id;
 
                     $ouaRecordObj = new TableRecord(static::DB_TBL_ORDER_USER_ADDRESS);
@@ -724,6 +745,7 @@ class Orders extends MyAppModel
             $ouaRecordObj = new TableRecord(static::DB_TBL_ORDER_USER_ADDRESS);
             foreach ($addresses as $address) {
                 $address['oua_order_id'] = $this->getOrderId();
+                $address['oua_order_no'] = $orderNo;
                 $ouaRecordObj->assignValues($address);
                 if (!$ouaRecordObj->addNew()) {
                     $db->rollbackTransaction();
@@ -736,8 +758,9 @@ class Orders extends MyAppModel
         if (!empty($extras)) {
             $oextraRecordObj = new TableRecord(static::DB_TBL_ORDER_EXTRAS);
             $extras['oextra_order_id'] = $this->getOrderId();
+            $extras['oextra_order_no'] = $orderNo;
             $flds_update_on_duplicate = $extras;
-            unset($flds_update_on_duplicate['oextra_order_id']);
+            unset($flds_update_on_duplicate['oextra_order_id'], $flds_update_on_duplicate['oextra_order_no']);
             $oextraRecordObj->assignValues($extras);
             if (!$oextraRecordObj->addNew(array(), $flds_update_on_duplicate)) {
                 $db->rollbackTransaction();
@@ -785,14 +808,18 @@ class Orders extends MyAppModel
             $this->error = $recordObj->getError();
             return false;
         }
-
+        $orderNo = $recordObj->getId();
         $_SESSION['subscription_shopping_cart']["order_id"] = $this->getOrderId();
+        $_SESSION['subscription_shopping_cart']["order_no"] = $orderNo;
+
+        $this->setMainTableRecordId($orderNo);
 
         $db->deleteRecords(static::DB_TBL_LANG, array('smt' => 'orderlang_order_id = ?', 'vals' => array($this->getOrderId())));
         if (!empty($ordersLangData)) {
             $recordObj = new TableRecord(static::DB_TBL_LANG);
             foreach ($ordersLangData as $orderLangData) {
                 $orderLangData['orderlang_order_id'] = $this->getOrderId();
+                $orderLangData['orderlang_order_no'] = $orderNo;
                 $recordObj->assignValues($orderLangData);
                 if (!$recordObj->addNew()) {
                     $db->rollbackTransaction();
@@ -836,6 +863,7 @@ class Orders extends MyAppModel
             foreach ($subscriptions as $spPlanId => $subscription) {
                 $op_invoice_number = $this->getOrderId() . '-S' . str_pad($counter, 4, '0', STR_PAD_LEFT);
                 $subscription[OrderSubscription::DB_TBL_PREFIX . 'order_id'] = $this->getOrderId();
+                $subscription[OrderSubscription::DB_TBL_PREFIX . 'order_no'] = $orderNo;
                 $subscription[OrderSubscription::DB_TBL_PREFIX . 'invoice_number'] = $op_invoice_number;
                 $opRecordObj->assignValues($subscription);
                 if (!$opRecordObj->addNew()) {
@@ -852,6 +880,7 @@ class Orders extends MyAppModel
                     foreach ($subscriptionsLangData as $subscriptionLangData) {
                         $subscriptionLangData[OrderSubscription::DB_TBL_LANG_PREFIX . 'ossubs_id'] = $oss_id;
                         $subscriptionLangData[OrderSubscription::DB_TBL_LANG_PREFIX . 'order_id'] = $this->getOrderId();
+                        $subscriptionLangData[OrderSubscription::DB_TBL_LANG_PREFIX . 'order_no'] = $orderNo;
 
                         $opLangRecordObj->assignValues($subscriptionLangData);
                         if (!$opLangRecordObj->addNew()) {
@@ -900,8 +929,9 @@ class Orders extends MyAppModel
         if (!empty($extras)) {
             $oextraRecordObj = new TableRecord(static::DB_TBL_ORDER_EXTRAS);
             $extras['oextra_order_id'] = $this->getOrderId();
+            $extras['oextra_order_no'] = $orderNo;
             $flds_update_on_duplicate = $extras;
-            unset($flds_update_on_duplicate['oextra_order_id']);
+            unset($flds_update_on_duplicate['oextra_order_id'], $flds_update_on_duplicate['oextra_order_no']);
             $oextraRecordObj->assignValues($extras);
             if (!$oextraRecordObj->addNew(array(), $flds_update_on_duplicate)) {
                 $db->rollbackTransaction();
@@ -951,14 +981,18 @@ class Orders extends MyAppModel
             $this->error = $recordObj->getError();
             return false;
         }
-
+        $orderNo = $recordObj->getId();
         $_SESSION['wallet_recharge_cart']["order_id"] = $this->getOrderId();
+        $_SESSION['wallet_recharge_cart']["order_no"] = $orderNo;
+
+        $this->setMainTableRecordId($orderNo);
 
         $db->deleteRecords(static::DB_TBL_LANG, array('smt' => 'orderlang_order_id = ?', 'vals' => array($this->getOrderId())));
         if (!empty($ordersLangData)) {
             $recordObj = new TableRecord(static::DB_TBL_LANG);
             foreach ($ordersLangData as $orderLangData) {
                 $orderLangData['orderlang_order_id'] = $this->getOrderId();
+                $orderLangData['orderlang_order_no'] = $orderNo;
                 $recordObj->assignValues($orderLangData);
                 if (!$recordObj->addNew()) {
                     $db->rollbackTransaction();
@@ -971,8 +1005,9 @@ class Orders extends MyAppModel
         if (!empty($extras)) {
             $oextraRecordObj = new TableRecord(static::DB_TBL_ORDER_EXTRAS);
             $extras['oextra_order_id'] = $this->getOrderId();
+            $extras['oextra_order_no'] = $orderNo;
             $flds_update_on_duplicate = $extras;
-            unset($flds_update_on_duplicate['oextra_order_id']);
+            unset($flds_update_on_duplicate['oextra_order_id'], $flds_update_on_duplicate['oextra_order_no']);
             $oextraRecordObj->assignValues($extras);
             if (!$oextraRecordObj->addNew(array(), $flds_update_on_duplicate)) {
                 $db->rollbackTransaction();
@@ -997,9 +1032,7 @@ class Orders extends MyAppModel
         $srch->addCondition('order_id', '=', $order_id);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        return $row;
+        return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
     public function getOrderAddresses($order_id, $opId = 0)
@@ -1012,9 +1045,7 @@ class Orders extends MyAppModel
         }
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetchAll($rs, 'oua_type');
-        return $row;
+        return FatApp::getDb()->fetchAll($srch->getResultSet(), 'oua_type');
     }
 
     public function addOrderHistory($order_id, $order_status_id, $comment = '', $notify = false, $langId)
@@ -1046,6 +1077,7 @@ class Orders extends MyAppModel
 
         $data_to_save_arr = array(
             'oshistory_order_id' => $orderInfo["order_id"],
+            'oshistory_order_no' => $orderInfo["order_no"],
             'oshistory_op_id' => 0,
             'oshistory_orderstatus_id' => $order_status_id,
             'oshistory_order_payment_status' => 0,
@@ -1160,9 +1192,9 @@ class Orders extends MyAppModel
             $srch->addMultipleFields(array('op_product_name', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_other_charges', 'op_shipping_duration_name', 'op_product_tax_options'));
         }
 
-        $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'torp.op_order_id = tor.order_id', 'tor');
+        $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'torp.op_order_no = tor.order_no', 'tor');
         if ($langId > 0) {
-            $srch->joinTable(Orders::DB_TBL_LANG, 'LEFT OUTER JOIN', 'tor_l.orderlang_order_id = tor.order_id and tor_l.orderlang_lang_id = ' . $langId, 'tor_l');
+            $srch->joinTable(Orders::DB_TBL_LANG, 'LEFT OUTER JOIN', 'tor_l.orderlang_order_no = tor.order_no and tor_l.orderlang_lang_id = ' . $langId, 'tor_l');
             $srch->addMultipleFields(array('order_shippingapi_name'));
         }
 
@@ -1242,7 +1274,7 @@ class Orders extends MyAppModel
             }
         }
 
-        if (!FatApp::getDb()->insertFromArray(Orders::DB_TBL_ORDER_STATUS_HISTORY, array('oshistory_order_id' => $orderId, 'oshistory_order_payment_status' => $orderPaymentStatus, 'oshistory_date_added' => date('Y-m-d H:i:s'), 'oshistory_customer_notified' => FatUtility::int($notify), 'oshistory_comments' => $comment))) {
+        if (!FatApp::getDb()->insertFromArray(Orders::DB_TBL_ORDER_STATUS_HISTORY, array('oshistory_order_id' => $orderId,'oshistory_order_no' => $orderInfo['order_no'], 'oshistory_order_payment_status' => $orderPaymentStatus, 'oshistory_date_added' => date('Y-m-d H:i:s'), 'oshistory_customer_notified' => FatUtility::int($notify), 'oshistory_comments' => $comment))) {
             $this->error = FatApp::getDb()->getError();
             return false;
         }
@@ -1313,14 +1345,14 @@ class Orders extends MyAppModel
 
                 /* Use Reward Point [ */
                 if ($orderInfo['order_reward_point_used'] > 0) {
-                    UserRewards::debit($orderInfo['order_user_id'], $orderInfo['order_reward_point_used'], $orderId, $orderInfo['order_language_id']);
+                    UserRewards::debit($orderInfo['order_user_id'], $orderInfo['order_reward_point_used'], $orderId, $orderInfo['order_no'], $orderInfo['order_language_id']);
                 }
                 /*]*/
             }
         }
     }
 
-    public function addChildSubscriptionOrderHistory($orderId, $ossubs_id, $langId, $opStatusId, $comment = '', $notify = false, $trackingNumber = '', $releasePayments = 0, $moveRefundToWallet = true)
+    public function addChildSubscriptionOrderHistory($orderId, $ossubs_id, $langId, $opStatusId, $comment = '', $notify = false)
     {
         $ossubs_id = FatUtility::int($ossubs_id);
         $langId = FatUtility::int($langId);
@@ -1361,7 +1393,7 @@ class Orders extends MyAppModel
             return false;
         }
 
-        if (!$db->insertFromArray(Orders::DB_TBL_ORDER_STATUS_HISTORY, array('oshistory_op_id' => $ossubs_id, 'oshistory_order_id' => $orderId, 'oshistory_orderstatus_id' => $opStatusId, 'oshistory_date_added' => date('Y-m-d H:i:s'), 'oshistory_customer_notified' => (int) $notify, 'oshistory_comments' => $comment), true)) {
+        if (!$db->insertFromArray(Orders::DB_TBL_ORDER_STATUS_HISTORY, array('oshistory_op_id' => $ossubs_id, 'oshistory_order_id' => $orderId, 'oshistory_order_no' => $childOrderInfo['order_no'], 'oshistory_orderstatus_id' => $opStatusId, 'oshistory_date_added' => date('Y-m-d H:i:s'), 'oshistory_customer_notified' => (int) $notify, 'oshistory_comments' => $comment), true)) {
             $this->error = $db->getError();
             return false;
         }
@@ -1391,7 +1423,7 @@ class Orders extends MyAppModel
             $emailNotificationObj->sendCancelSubscriptionNotification($userId, $orderInfo['order_language_id']);
         }
         $OldOrderInfo = OrderSubscription::getAttributesById($ossubs_id);
-        if (!$db->insertFromArray(Orders::DB_TBL_ORDER_STATUS_HISTORY, array('oshistory_op_id' => $ossubs_id, 'oshistory_order_id' => $orderId, 'oshistory_orderstatus_id' => $opStatusId, 'oshistory_order_id' => $OldOrderInfo['ossubs_order_id'], 'oshistory_date_added' => date('Y-m-d H:i:s'), 'oshistory_customer_notified' => (int) $notify, 'oshistory_comments' => Labels::getLabel("LBL_Plan_Canceled", CommonHelper::getLangId())), true)) {
+        if (!$db->insertFromArray(Orders::DB_TBL_ORDER_STATUS_HISTORY, array('oshistory_op_id' => $ossubs_id, 'oshistory_order_id' => $orderId, 'oshistory_order_no' => $orderInfo['order_no'], 'oshistory_orderstatus_id' => $opStatusId, 'oshistory_date_added' => date('Y-m-d H:i:s'), 'oshistory_customer_notified' => (int) $notify, 'oshistory_comments' => Labels::getLabel("LBL_Plan_Canceled", CommonHelper::getLangId())), true)) {
             $this->error = $db->getError();
             return false;
         }
@@ -1451,7 +1483,7 @@ class Orders extends MyAppModel
 
             /* Use Reward Point [ */
             if ($orderInfo['order_reward_point_used'] > 0 && (0 < $walletSelected || (is_array($paymentMethodRow) && !empty($paymentMethodRow) && !in_array(strtolower($paymentMethodRow['plugin_code']), ['cashondelivery', 'payatstore'])))) {
-                UserRewards::debit($orderInfo['order_user_id'], $orderInfo['order_reward_point_used'], $orderId, $orderInfo['order_language_id']);
+                UserRewards::debit($orderInfo['order_user_id'], $orderInfo['order_reward_point_used'], $orderId, $orderInfo['order_no'], $orderInfo['order_language_id']);
             }
             /*]*/
 
@@ -2196,11 +2228,10 @@ class Orders extends MyAppModel
         $srch = new OrderProductSearch($langId, true);
         $srch->joinPaymentMethod();
         $srch->joinShippingUsers();
-        //$srch->joinTable(Orders::DB_TBL,'LEFT OUTER JOIN','o.order_id = op.op_order_id','o');
         $srch->joinTable(OrderProduct::DB_TBL_CHARGES, 'LEFT OUTER JOIN', 'opc.' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'op_id = op.op_id', 'opc');
         $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
       
-        $srch->addMultipleFields(array('op.*', 'opst.*', 'op_l.*', 'o.order_id', 'o.order_payment_status', 'o.order_date_added', 'o.order_language_id', 'o.order_user_id', 'sum(' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount) as op_other_charges', 'o.order_affiliate_user_id', 'plugin_code', 'optsu_user_id', 'ops.opshipping_by_seller_user_id', 'o.order_pmethod_id','opshipping_is_seller_plugin','opshipping_plugin_id','opshipping_plugin_charges'));
+        $srch->addMultipleFields(array('op.*', 'opst.*', 'op_l.*', 'o.order_no', 'o.order_id', 'o.order_payment_status', 'o.order_date_added', 'o.order_language_id', 'o.order_user_id', 'sum(' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount) as op_other_charges', 'o.order_affiliate_user_id', 'plugin_code', 'optsu_user_id', 'ops.opshipping_by_seller_user_id', 'o.order_pmethod_id','opshipping_is_seller_plugin','opshipping_plugin_id','opshipping_plugin_charges'));
         $srch->addCondition('op_id', '=', $op_id);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -2477,6 +2508,7 @@ class Orders extends MyAppModel
             $txnArray["utxn_credit"] = $txnAmount;
             $txnArray["utxn_status"] = Transactions::STATUS_COMPLETED;
             $txnArray["utxn_order_id"] = $order['order_id'];
+            $txnArray["utxn_order_no"] = $order['order_no'];
             $txnArray["utxn_comments"] = $comments;
             $txnArray["utxn_type"] = Transactions::TYPE_ORDER_REFUND;
             $transObj = new Transactions();
@@ -2707,7 +2739,7 @@ class Orders extends MyAppModel
         $srch->joinOrderBuyerUser();
         $srch->addMultipleFields(
             array(
-                'order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission',
+                'order_no', 'order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission',
                 'order_reward_point_value', 'order_volume_discount_total', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'order_net_amount', 'order_shippingapi_name', 'order_pmethod_id', 'ifnull(plugin_name,plugin_identifier)as plugin_name', 'order_discount_total', 'plugin_code', 'order_is_wallet_selected', 'order_reward_point_used', 'order_deleted'
             )
         );
@@ -2750,7 +2782,7 @@ class Orders extends MyAppModel
         $opRs = $opSrch->getResultSet();
         $order['products'] = FatApp::getDb()->fetchAll($opRs, 'op_id');
 
-        $orderObj = new Orders($order['order_id']);
+        $orderObj = new Orders($order['order_no']);
 
         $charges = $orderObj->getOrderProductChargesByOrderId($order['order_id']);
 

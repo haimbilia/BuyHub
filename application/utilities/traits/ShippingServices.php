@@ -190,7 +190,7 @@ trait ShippingServices
         $opSrch->doNotLimitRecords();
         $opSrch->addCondition('op.op_id', '=', $opId);
         $attr = !empty($attr) ? $attr : [
-            'op_status_id', 'op.op_order_id', 'op.op_invoice_number', 'opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code',
+            'op_status_id', 'op.op_order_no', 'op.op_order_id', 'op.op_invoice_number', 'opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code',
             'opsp_api_req_id', 'opsp_scheduled', 'opshipping_by_seller_user_id', 'op_selprod_user_id', 'op_selprod_id', 'op_qty', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit',
             'op_product_weight', 'op_product_weight_unit', 'opshipping_rate_id', 'opshipping_plugin_id'
         ];
@@ -242,6 +242,7 @@ trait ShippingServices
 
         $requestParam = [
             "op_order_id" => $data['op_order_id'],
+            "op_order_no" => $data['op_order_no'],
             "op_invoice_number" => $data['op_invoice_number'],
             "orderId" => $data['opship_orderid'],
             "op_id" => $opId,
@@ -612,7 +613,7 @@ trait ShippingServices
             return false;
         }
 
-        $orderObj = new Orders($orderData['op_order_id']);
+        $orderObj = new Orders($orderData['op_order_no']);
         $addresses = $orderObj->getOrderAddresses($orderData['op_order_id'], $orderData['op_order_id']);
 
         $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : array();
