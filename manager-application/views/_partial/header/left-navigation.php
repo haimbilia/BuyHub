@@ -1,891 +1,1100 @@
-  <!--left panel start here-->
-  <span class="leftoverlay"></span>
-  <aside class="leftside">
-      <div class="sidebar_inner">
-          <div class="profilewrap">
-              <div class="profilecover">
-                  <figure class="profilepic"><img id="leftmenuimgtag" src="<?php echo UrlHelper::generateFileUrl('image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), "THUMB", true)); ?>" alt=""></figure>
-                  <span class="profileinfo"><?php echo Labels::getLabel('LBL_Welcome', $adminLangId); ?>
-                      <?php echo $adminName; ?></span>
-              </div>
+<sidebar class="sidebar">
+    <div class="sidebar-logo">
+        <a href="#">
+            <img src="<?php echo CONF_WEBROOT_URL;?>images/logos/logo.png" alt="">
+        </a>
+    </div>
+    <div class="sidebar-menu">
+        <ul class="menu">
+            <li class="menu-item dropdown">
+                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="menu-icon"> <span class="svg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect x="2" y="2" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2"></rect>
+                            </svg>
+                        </span>
+                    </i>
 
-              <div class="profilelinkswrap">
-                  <ul class="leftlinks">
-                      <li class=""><a href="<?php echo UrlHelper::generateUrl('profile'); ?>"><?php echo Labels::getLabel('LBL_View_Profile', $adminLangId); ?></a>
-                      </li>
-                      <li class=""><a href="<?php echo UrlHelper::generateUrl('profile', 'changePassword'); ?>"><?php echo Labels::getLabel('LBL_Change_Password', $adminLangId); ?></a>
-                      </li>
-                      <li class=""><a href="<?php echo UrlHelper::generateUrl('profile', 'logout'); ?>"><?php echo Labels::getLabel('LBL_Logout', $adminLangId); ?></a>
-                      </li>
-                  </ul>
-              </div>
-          </div>
-          <ul class="leftmenu">
-              <!--Dashboard-->
-              <?php if (
-                    $objPrivilege->canViewAdminDashboard(AdminAuthentication::getLoggedAdminId(), true)
-                ) { ?>
-                  <li><a href="<?php echo UrlHelper::generateUrl(); ?>"><?php echo Labels::getLabel('LBL_Dashboard', $adminLangId); ?></a>
-                  </li>
-              <?php } ?>
-
-              <?php if ($objPrivilege->canViewShops(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                  <li>
-                      <a href="<?php echo UrlHelper::generateUrl('Shops'); ?>"><?php echo Labels::getLabel('LBL_Shops', $adminLangId); ?></a>
-                  </li>
-              <?php } ?>
-
-              <!--Products -->
-              <?php if (
-                    $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewAttributes(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewOptions(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewTags(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSellerCatalogRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true)
-                ) { ?>
-                  <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Catalog', $adminLangId); ?></a>
-                      <ul>
-                          <?php
-                            if ($objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('ProductCategories'); ?>"><?php echo Labels::getLabel('LBL_Categories', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php
-                            if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('products'); ?>"><?php echo Labels::getLabel('LBL_Products', $adminLangId); ?></a>
-                              </li>
-                              <li><a href="<?php echo UrlHelper::generateUrl('sellerProducts', 'index'); ?>"><?php echo Labels::getLabel('LBL_Seller_Inventory', $adminLangId); ?></a>
-                              </li>
-                              <?php if ($objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                  <li><a href="<?php echo UrlHelper::generateUrl('SellerProducts', 'thresholdProducts'); ?>"><?php echo Labels::getLabel('LBL_Threshold_Products', $adminLangId); ?>
-                                          <?php if ($threshSelProdCount) { ?><span class='badge'>(<?php echo $threshSelProdCount; ?>)</span><?php } ?></a></li>
-                              <?php } ?>
-                          <?php } /* if($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)){ ?>
-                      <li><a
-                              href="<?php echo UrlHelper::generateUrl('sellerProducts','catalog');?>"><?php echo Labels::getLabel('LBL_Add_New_Product',$adminLangId);?></a>
-                      </li>
-                      <?php } */ ?>
-                          <?php
-                            if ($objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Brands'); ?>"><?php echo Labels::getLabel('LBL_Brands', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-
-                          <?php
-                            if ($objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('RatingTypes'); ?>"><?php echo Labels::getLabel('LBL_RATING_TYPES', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-
-                          <?php
-                            /* if($objPrivilege->canViewFilterGroups(AdminAuthentication::getLoggedAdminId(), true)){ ?>
-                      <li><a href="<?php echo UrlHelper::generateUrl('filterGroups');?>">Filters</a></li>
-                      <?php }  */ ?>
-                          <?php
-                            /* if($objPrivilege->canViewAttributes(AdminAuthentication::getLoggedAdminId(), true)){ ?>
-                      <li><a
-                              href="<?php echo UrlHelper::generateUrl('Attributes');?>"><?php echo Labels::getLabel('LBL_Attributes',$adminLangId);?></a>
-                      </li>
-                      <?php } */ ?>
-                          <?php
-                            /* if($objPrivilege->canViewExtraAttributes(AdminAuthentication::getLoggedAdminId(), true)){ ?>
-                      <li><a href="<?php echo UrlHelper::generateUrl('extraAttributeGroups');?>">Extra Attributes</a>
-                      </li>
-                      <?php } */ ?>
-                          <?php
-                            if ($objPrivilege->canViewOptions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Options'); ?>"><?php echo Labels::getLabel('LBL_Options', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-
-                          <?php
-                            if ($objPrivilege->canViewTags(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Tags'); ?>"><?php echo Labels::getLabel('LBL_Tags', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php /* if($objPrivilege->canViewSellerCatalogRequests(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig('CONF_SELLER_CAN_REQUEST_PRODUCT', FatUtility::VAR_INT, 0)){?>
-                    <li><a href="<?php echo UrlHelper::generateUrl('Users','sellerCatalogRequests');?>"><?php echo Labels::getLabel('LBL_Product_Catalog_Requests',$adminLangId);?> <?php if($catReqCount){ ?><span class='badge'>(<?php echo $catReqCount; ?>)</span><?php } ?></a></li>
-                    <?php } */ ?>
-                      </ul>
-                  </li>
-              <?php } ?>
-
-              <?php if (
-                  $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true) ||
-                  $objPrivilege->canViewCustomCatalogProductRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-                  $objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-                  $objPrivilege->canViewBadgeRequests(AdminAuthentication::getLoggedAdminId(), true) || 
-                  $objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-                  $objPrivilege->canViewUserRequests(AdminAuthentication::getLoggedAdminId(), true)
-              ) { ?>
-                <li class="haschild">
-                      <a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_REQUESTS', $adminLangId); ?></a>
-                      <ul>
-                        <?php if ($objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) { ?>
-                        <li>
-                            <a href="<?php echo UrlHelper::generateUrl('Brands', 'BrandRequests'); ?>">
-                                <?php echo Labels::getLabel('LBL_Brand_Requests', $adminLangId); ?>
-                                <?php if ($brandReqCount) { ?><span class='badge'>(<?php echo $brandReqCount; ?>)</span><?php } ?>
+                </button>
+                <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
+                    <h6 class="">Authentication </h6>
+                    <ul class="nav" id="accordion">
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse1"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
                             </a>
+
+                            <div id="collapse1" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
                         </li>
-                        <?php } ?>
-                        <?php if ($objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li>
-                            <a href="<?php echo UrlHelper::generateUrl('ProductCategories', 'requests'); ?>">
-                                <?php echo Labels::getLabel('LBL_Categories_Requests', $adminLangId); ?>
-                                <?php if ($categoryReqCount) { ?><span class='badge'>(<?php echo $categoryReqCount; ?>)</span><?php } ?>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse2"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
                             </a>
+
+                            <div id="collapse2" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
                         </li>
-                        <?php } ?>
-                        <?php if ($objPrivilege->canViewCustomCatalogProductRequests(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) { ?>
-                        <li>
-                            <a href="<?php echo UrlHelper::generateUrl('CustomProducts'); ?>">
-                                <?php echo Labels::getLabel('LBL_Custom_Product_Catalog_Requests', $adminLangId); ?>
-                                <?php if ($custProdReqCount) { ?><span class='badge'>(<?php echo $custProdReqCount; ?>)</span><?php } ?>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse3"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
                             </a>
+
+                            <div id="collapse3" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
                         </li>
-                        <?php } ?>
-                        <?php if ($objPrivilege->canViewBadgeRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li>
-                            <a href="<?php echo UrlHelper::generateUrl('BadgeRequests'); ?>">
-                                <?php echo Labels::getLabel('LBL_BADGE_REQUESTS', $adminLangId); ?>
-                                <?php if ($badgeRequestCount) { ?><span class='badge'>(<?php echo $badgeRequestCount; ?>)</span><?php } ?>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse4"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
                             </a>
+
+                            <div id="collapse4" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
                         </li>
-                        <?php } ?>
+                    </ul>
+                </div>
 
-                        <?php if ($objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Users', 'sellerApprovalRequests'); ?>"><?php echo Labels::getLabel('LBL_Seller_Approval_Requests', $adminLangId); ?>
-                                      <?php if ($supReqCount) { ?><span class='badge'>(<?php echo $supReqCount; ?>)</span><?php } ?></a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewUserRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('userGdprRequests'); ?>"><?php echo Labels::getLabel('LBL_Users_GDPR_Requests', $adminLangId); ?>
-                                      <?php if ($gdprReqCount) { ?><span class='badge'>(<?php echo $gdprReqCount; ?>)</span><?php } ?></a></li>
-                          <?php } ?>
-                      </ul>
-                </li>
-              <?php } ?>
-
-              <?php if (
-                    $objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewDiscountCoupons(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewRewardsOnPurchase(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewRecomendedWeightages(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewPromotions(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewBadges(AdminAuthentication::getLoggedAdminId(), true)
-                ) {
-                ?>
-                  <li class="haschild">
-                      <a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Promotions', $adminLangId); ?></a>
-                      <ul>
-                          <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li>
-                                  <a href="<?php echo UrlHelper::generateUrl('sellerProducts', 'specialPrice'); ?>"><?php echo Labels::getLabel('LBL_Special_Price', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li>
-                                  <a href="<?php echo UrlHelper::generateUrl('sellerProducts', 'volumeDiscount'); ?>"><?php echo Labels::getLabel('LBL_Volume_Discount', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li>
-                                  <a href="<?php echo UrlHelper::generateUrl('sellerProducts', 'upsellProducts'); ?>"><?php echo Labels::getLabel('LBL_Buy_Together_Products', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li>
-                                  <a href="<?php echo UrlHelper::generateUrl('sellerProducts', 'relatedProducts'); ?>"><?php echo Labels::getLabel('LBL_Related_Products', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewDiscountCoupons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('DiscountCoupons'); ?>"><?php echo Labels::getLabel('LBL_Discount_Coupons', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewPromotions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('promotions'); ?>"><?php echo Labels::getLabel('LBL_PPC_Promotions_Management', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewRewardsOnPurchase(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('RewardsOnPurchase'); ?>"><?php echo Labels::getLabel('LBL_Rewards_on_every_purchase', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewRecomendedWeightages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('SmartRecomendedWeightages'); ?>"><?php echo Labels::getLabel('LBL_Manage_Weightages', $adminLangId); ?></a>
-                              </li>
-                              <li><a href="<?php echo UrlHelper::generateUrl('RecomendedTagProducts'); ?>"><?php echo Labels::getLabel('LBL_Recommended_Tag_Products_Weightages', $adminLangId); ?></a>
-                              </li>
-                              <?php /*?><li><a href="<?php echo UrlHelper::generateUrl('SmartRecomendedProducts'); ?>">Tag
-                              Product Weightages</a></li>
-                      <li><a href="<?php echo UrlHelper::generateUrl('ProductBrowsingHistory'); ?>">Products Browsing
-                              History</a></li> <?php */ ?>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewBadges(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Badges', 'list', [Badge::TYPE_BADGE]); ?>"><?php echo Labels::getLabel('LBL_BADGES', $adminLangId); ?></a></li>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Badges', 'list', [Badge::TYPE_RIBBON]); ?>"><?php echo Labels::getLabel('LBL_RIBBONS', $adminLangId); ?></a></li>
-                          <?php } ?>
-                      </ul>
-                  </li>
-              <?php } ?>
-
-              <?php if (
-                    $objPrivilege->canViewOrders(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSellerOrders(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewAbandonedCart(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSubscriptionOrders(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewWithdrawRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewOrderCancellationRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewOrderReturnRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewProductReviews(AdminAuthentication::getLoggedAdminId(), true)
-                ) { ?>
-                  <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Orders', $adminLangId); ?></a>
-                      <ul>
-
-                          <?php if ($objPrivilege->canViewOrders(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('orders'); ?>"><?php echo Labels::getLabel('LBL_Orders', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewAbandonedCart(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('AbandonedCart'); ?>"><?php echo Labels::getLabel('LBL_Abandoned_Cart', $adminLangId); ?>
-                                  </a></li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewSellerOrders(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('SellerOrders'); ?>"><?php echo Labels::getLabel('LBL_Seller_Orders', $adminLangId); ?>
-                                      <?php if (!empty($sellerOrderCount)) { ?><span class='badge'>(<?php echo $sellerOrderCount; ?>)</span><?php } ?></a></li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewSubscriptionOrders(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('SubscriptionOrders'); ?>"><?php echo Labels::getLabel('LBL_Subscription_Orders', $adminLangId); ?>
-                                  </a></li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewWithdrawRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('WithdrawalRequests'); ?>"><?php echo Labels::getLabel('LBL_Withdrawl_Requests', $adminLangId); ?>
-                                      <?php if ($drReqCount) { ?><span class='badge'>(<?php echo $drReqCount; ?>)</span><?php } ?></a></li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewOrderCancellationRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('OrderCancellationRequests'); ?>"><?php echo Labels::getLabel('LBL_Cancellation_Requests', $adminLangId); ?>
-                                      <?php if ($orderCancelReqCount) { ?><span class='badge'>(<?php echo $orderCancelReqCount; ?>)</span><?php } ?></a></li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewOrderReturnRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('OrderReturnRequests'); ?>"><?php echo Labels::getLabel('LBL_Return/Refund_Requests', $adminLangId); ?>
-                                      <?php if ($orderRetReqCount) { ?><span class='badge'>(<?php echo $orderRetReqCount; ?>)</span><?php } ?></a></li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewProductReviews(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('productReviews'); ?>"><?php echo Labels::getLabel('LBL_Product_Reviews', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                      </ul>
-                  </li>
-              <?php } ?>
-
-              <?php if (
-                    $objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewCustomCatalogProductRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true)
-                ) { ?>
-                  <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Users', $adminLangId); ?></a>
-                      <ul>
-                          <?php if ($objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Users'); ?>"><?php echo Labels::getLabel('LBL_Users', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true) || $objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('AdminUsers') ?>"><?php echo Labels::getLabel('LBL_Admin_Sub_Users', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Messages'); ?>"><?php echo Labels::getLabel('LBL_Messages', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Users', 'sellerForm'); ?>"><?php echo Labels::getLabel('LBL_Seller_Approval_Form', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                      </ul>
-                  </li>
-              <?php } ?>
-              <!--FAQ-->
-              <!--<li><a href="<?php echo UrlHelper::generateUrl('faqs'); ?>">Manage FAQ's</a></li>-->
-
-              <!--Mobile Application-->
-              <?php if (
-                    $objPrivilege->canViewPushNotification(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewAppThemeSettings(AdminAuthentication::getLoggedAdminId(), true)
-                ) { ?>
-                  <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_MOBILE_APPS', $adminLangId); ?></a>
-                      <ul>
-
-                          <?php
-                            $active = (new Plugin())->getDefaultPluginData(Plugin::TYPE_PUSH_NOTIFICATION, 'plugin_active');
-                            if ($objPrivilege->canViewPushNotification(AdminAuthentication::getLoggedAdminId(), true) && false != $active && !empty($active)) { ?>
-                              <li>
-                                  <a href="<?php echo UrlHelper::generateUrl('PushNotifications'); ?>">
-                                      <?php echo Labels::getLabel('LBL_PUSH_NOTIFICATION', $adminLangId); ?>
-                                  </a>
-                              </li>
-                          <?php }
-                            if ($objPrivilege->canViewAppThemeSettings(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li>
-                                  <a href="<?php echo UrlHelper::generateUrl('MobileAppSettings', 'appTheme'); ?>">
-                                      <?php echo Labels::getLabel('LBL_APP_THEME_SETTINGS', $adminLangId); ?>
-                                  </a>
-                              </li>
-                          <?php } ?>
-                      </ul>
-                  </li>
-              <?php } ?>
-
-              <?php if (
-                    $objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewUsersReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    /* $objPrivilege->canViewTaxReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewCommissionReport(AdminAuthentication::getLoggedAdminId(), true) || */
-                    $objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)
-                ) { ?>
-                  <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Reports', $adminLangId); ?></a>
-                      <ul>
-                          <?php if (
-                                $objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                                $objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                                $objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                                $objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                                $objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)
-                            ) { ?>
-                              <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Sales_Report', $adminLangId); ?></a>
-                                  <ul>
-                                      <?php if ($objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                          <li><a href="<?php echo UrlHelper::generateUrl('SalesReport'); ?>"><?php echo Labels::getLabel('LBL_Sales_Over_Time', $adminLangId); ?></a></li>
-                                      <?php } ?>
-                                      <?php if ($objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                          <li><a href="<?php echo UrlHelper::generateUrl('CatalogReport'); ?>"><?php echo Labels::getLabel('LBL_Products', $adminLangId); ?></a></li>
-                                      <?php } ?>
-                                      <?php if ($objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                          <li><a href="<?php echo UrlHelper::generateUrl('ProductsReport'); ?>"><?php echo Labels::getLabel('LBL_Product_Varients', $adminLangId); ?></a></li>
-                                      <?php } ?>
-                                      <?php if ($objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                          <li><a href="<?php echo UrlHelper::generateUrl('ShopsReport'); ?>"><?php echo Labels::getLabel('LBL_Shops', $adminLangId); ?></a></li>
-                                      <?php } ?>
-                                      <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                          <li><a href="<?php echo UrlHelper::generateUrl('BuyersReport'); ?>"><?php echo Labels::getLabel('LBL_Customers', $adminLangId); ?></a></li>
-                                      <?php } ?>
-                                  </ul>
-                              </li>
-                          <?php } ?>
-                          <?php if (
-                                $objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                                $objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                                $objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                                $objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)
-                            ) { ?>
-                              <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Users_Report', $adminLangId); ?></a>
-                                  <ul>
-                                      <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                          <li><a href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_BUYER]); ?>"><?php echo Labels::getLabel('LBL_Buyers', $adminLangId); ?></a></li>
-                                      <?php } ?>
-                                      <?php if ($objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                          <li><a href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_SELLER]); ?>"><?php echo Labels::getLabel('LBL_Sellers', $adminLangId); ?></a></li>
-                                      <?php } ?>
-                                      <?php if ($objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                          <li><a href="<?php echo UrlHelper::generateUrl('AffiliatesReport'); ?>"><?php echo Labels::getLabel('LBL_Affiliates', $adminLangId); ?></a></li>
-                                      <?php } ?>
-                                      <?php if ($objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                          <li><a href="<?php echo UrlHelper::generateUrl('AdvertisersReport'); ?>"><?php echo Labels::getLabel('LBL_Advertisers', $adminLangId); ?></a></li>
-                                      <?php } ?>
-                                  </ul>
-                              </li>
-                          <?php } ?>
-                          <?php /* if ($objPrivilege->canViewOrdersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Orders_Report', $adminLangId); ?></a>
-                                  <ul>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('OrdersReport'); ?>"><?php echo Labels::getLabel('LBL_By_Order', $adminLangId); ?></a></li>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('OrderSubscriptionReport'); ?>"><?php echo Labels::getLabel('LBL_By_Subscription', $adminLangId); ?></a></li>
-                                  </ul>
-                              </li>
-                          <?php }   */ ?>
-                          <?php if ($objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Financial_Report', $adminLangId); ?></a>
-                                  <ul>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('EarningsReport'); ?>"><?php echo Labels::getLabel('LBL_Earnings', $adminLangId); ?></a></li>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('ProductProfitReport'); ?>"><?php echo Labels::getLabel('LBL_Profit_by_Products', $adminLangId); ?></a></li>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('PreferredPaymentMethod'); ?>"><?php echo Labels::getLabel('LBL_Preferred_Payment_Method', $adminLangId); ?></a></li>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('payoutReport'); ?>"><?php echo Labels::getLabel('LBL_Payout', $adminLangId); ?></a></li>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('TransactionReport'); ?>"><?php echo Labels::getLabel('LBL_Transaction_Report', $adminLangId); ?></a></li>
-                                  </ul>
-                              </li>
-                          <?php }  ?>
-
-                          <?php if ($objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Subscription_Report', $adminLangId); ?></a>
-                                  <ul>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('SubscriptionPlanReport'); ?>"><?php echo Labels::getLabel('LBL_By_PLAN', $adminLangId); ?></a></li>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('SubscriptionSellerReport'); ?>"><?php echo Labels::getLabel('LBL_By_Seller', $adminLangId); ?></a></li>
-
-                                  </ul>
-                              </li>
-                          <?php }  ?>
-
-                          <?php /* if ($objPrivilege->canViewTaxReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('TaxReport'); ?>"><?php echo Labels::getLabel('LBL_Tax', $adminLangId); ?></a></li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewCommissionReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('CommissionReport'); ?>"><?php echo Labels::getLabel('LBL_Commission', $adminLangId); ?></a></li>
-                          <?php }  */ ?>
-                          <li class="child"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Performance_Report', $adminLangId); ?></a>
-                              <ul>
-                                  <?php if ($objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('TopProductsReport'); ?>"><?php echo Labels::getLabel('LBL_Top_Products', $adminLangId); ?></a></li>
-                                  <?php }    ?>
-                                  <?php if ($objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('BadProductsReport'); ?>"><?php echo Labels::getLabel('LBL_Most_Refunded_Products', $adminLangId); ?></a></li>
-                                  <?php }    ?>
-                                  <?php if ($objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('TopCategoriesReport'); ?>"><?php echo Labels::getLabel('LBL_Top_Categories', $adminLangId); ?></a></li>
-                                  <?php }    ?>
-                                  <?php if ($objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                      <li><a href="<?php echo UrlHelper::generateUrl('BadCategoriesReport'); ?>"><?php echo Labels::getLabel('LBL_Bad_Categories', $adminLangId); ?></a></li>
-                                  <?php }    ?>
-                              </ul>
-                          </li>
-
-                          <?php if ($objPrivilege->canViewDiscountCoupons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('DiscountCouponsReport'); ?>"><?php echo Labels::getLabel('LBL_Discount_Coupons', $adminLangId); ?></a></li>
-                          <?php }    ?>
-                      </ul>
-                  </li>
-              <?php } ?>
-
-              <!--CMS-->
-              <?php if (
-                    $objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewNavigationManagement(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewZones(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewCountries(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewStates(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewCollections(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewPolicyPoints(AdminAuthentication::getLoggedAdminId(), true)  ||
-                    $objPrivilege->canViewEmptyCartItems(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSocialPlatforms(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewShopReportReasons(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewDiscountCoupons(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSellerDiscountCoupons(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewImportInstructions(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewEmailTemplates(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSmsTemplate(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewAbusiveWords(AdminAuthentication::getLoggedAdminId(), true)
-                ) { ?>
-                  <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Cms', $adminLangId); ?></a>
-                      <ul>
-                          <?php if ($objPrivilege->canViewNavigationManagement(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Navigations'); ?>"><?php echo Labels::getLabel('LBL_Navigation_Management', $adminLangId); ?></a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewSlides(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('slides'); ?>"><?php echo Labels::getLabel('LBL_Home_Page_Slides_Management', $adminLangId); ?></a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewCollections(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Collections'); ?>"><?php echo Labels::getLabel('LBL_Collection_Management', $adminLangId); ?> </a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewBanners(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Banners'); ?>"><?php echo Labels::getLabel('LBL_Banners', $adminLangId); ?></a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewLanguageLabels(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Labels'); ?>"><?php echo Labels::getLabel('LBL_Language_Labels', $adminLangId); ?></a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewEmailTemplates(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('EmailTemplates'); ?>"><?php echo Labels::getLabel('LBL_Email_Templates_Management', $adminLangId); ?></a></li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewSmsTemplate(AdminAuthentication::getLoggedAdminId(), true) && SmsArchive::canSendSms()) { ?>
-                              <li>
-                                  <a href="<?php echo UrlHelper::generateUrl('SmsTemplates'); ?>">
-                                      <?php echo Labels::getLabel('LBL_SMS_TEMPLATE_MANAGEMENT', $adminLangId); ?>
-                                  </a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('ContentPages'); ?>"><?php echo Labels::getLabel('LBL_Content_Pages', $adminLangId); ?></a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('ContentBlock'); ?>"><?php echo Labels::getLabel('LBL_Content_Blocks', $adminLangId); ?></a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewImportInstructions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('ContentBlock', 'importInstructions'); ?>"><?php echo Labels::getLabel('LBL_Import_Instructions', $adminLangId); ?></a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('FaqCategories'); ?>"><?php echo Labels::getLabel('LBL_FAQs', $adminLangId); ?></a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewZones(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Zones'); ?>"><?php echo Labels::getLabel('LBL_Zone(Regions)_Management', $adminLangId); ?></a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewCountries(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Countries'); ?>"><?php echo Labels::getLabel('LBL_Countries_Management', $adminLangId); ?></a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewStates(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('States'); ?>"><?php echo Labels::getLabel('LBL_States_Management', $adminLangId); ?></a></li>
-                          <?php } ?>
-
-                          <?php /* if ($objPrivilege->canViewPolicyPoints(AdminAuthentication::getLoggedAdminId(), true)) {?>
-                        <li><a href="<?php echo UrlHelper::generateUrl('PolicyPoints'); ?>"><?php echo Labels::getLabel('LBL_Policy_Points_Management', $adminLangId);?></a></li>
-                    <?php } */ ?>
-
-                          <?php if ($objPrivilege->canViewEmptyCartItems(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('emptyCartItems'); ?>"><?php echo Labels::getLabel('LBL_Empty_Cart_Items_Management', $adminLangId); ?></a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewSocialPlatforms(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('SocialPlatform'); ?>"><?php echo Labels::getLabel('LBL_Social_Platforms_Management', $adminLangId); ?></a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewShopReportReasons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('ShopReportReasons'); ?>"><?php echo Labels::getLabel('LBL_Shop_Report_Reasons_Management', $adminLangId); ?></a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('OrderStatus'); ?>"><?php echo Labels::getLabel('LBL_Order_Status_Management', $adminLangId); ?></a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('OrderCancelReasons'); ?>"><?php echo Labels::getLabel('LBL_Order_Cancel_Reasons_Management', $adminLangId); ?> </a></li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('OrderReturnReasons'); ?>"><?php echo Labels::getLabel('LBL_Order_Return_Reasons_Management', $adminLangId); ?> </a></li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewAbusiveWords(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('AbusiveWords'); ?>"><?php echo Labels::getLabel('LBL_Abusive_Keyword', $adminLangId); ?></a></li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Testimonials'); ?>"><?php echo Labels::getLabel('LBL_Testimonials_Management', $adminLangId); ?> </a></li>
-                          <?php } ?>
-
-                          <!-- <?php if ($objPrivilege->canViewDiscountCoupons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li><a href="<?php echo UrlHelper::generateUrl('SellerDiscountCoupons'); ?>"><?php echo Labels::getLabel('LBL_Seller_Discount_Coupons', $adminLangId); ?></a></li>
-                    <?php } ?> -->
-                      </ul>
-                  </li>
-              <?php } ?>
-
-              <?php if (
-                    $objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewBlogPosts(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewBlogContributions(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewBlogComments(AdminAuthentication::getLoggedAdminId(), true)
-                ) { ?>
-                  <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Blog', $adminLangId); ?></a>
-                      <ul>
-                          <?php if ($objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('BlogPostCategories'); ?>"><?php echo Labels::getLabel('LBL_Blog_Post_Categories', $adminLangId); ?></a>
-                              </li>
-                          <?php }
-                            if ($objPrivilege->canViewBlogPosts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('BlogPosts'); ?>"><?php echo Labels::getLabel('LBL_Blog_Posts', $adminLangId); ?></a>
-                              </li>
-                          <?php }
-                            if ($objPrivilege->canViewBlogContributions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('BlogContributions'); ?>"><?php echo Labels::getLabel('LBL_Blog_Contributions', $adminLangId); ?>
-                                      <?php if ($blogContrCount) { ?><span class='badge'>(<?php echo $blogContrCount; ?>)</span><?php } ?></a></li>
-                          <?php }
-                            if ($objPrivilege->canViewBlogComments(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('BlogComments'); ?>"><?php echo Labels::getLabel('LBL_Blog_Comments', $adminLangId); ?>
-                                      <?php if ($blogCommentsCount) { ?><span class='badge'>(<?php echo $blogCommentsCount; ?>)</span><?php } ?></a></li>
-                          <?php } ?>
-                      </ul>
-                  </li>
-              <?php } ?>
-
-              <?php if (
-                    $objPrivilege->canViewMetaTags(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true)
-                ) { ?>
-                  <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_SEO', $adminLangId); ?></a>
-                      <ul>
-                          <?php if ($objPrivilege->canViewMetaTags(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('MetaTags'); ?>"><?php echo Labels::getLabel('LBL_Meta_Tags_Management', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('UrlRewriting'); ?>"><?php echo Labels::getLabel('LBL_Url_Rewriting', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewImageAttributes(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('ImageAttributes'); ?>"><?php echo Labels::getLabel('LBL_Image_Attributes', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                      </ul>
-                  </li>
-              <?php } ?>
-              <?php if (
-                    /* $objPrivilege->canViewShippingMethods(AdminAuthentication::getLoggedAdminId(), true) || */
-                    $objPrivilege->canViewShippingCompanyUsers(AdminAuthentication::getLoggedAdminId(), true) ||
-                    /* $objPrivilege->canViewShippingDurationLabels(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewManualShippingApi(AdminAuthentication::getLoggedAdminId(), true) || */
-                    $objPrivilege->canViewShippingPackages(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewShippingManagement(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewTrackingRelationCode()
-                ) { ?>
-                  <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Shipping/Pickup', $adminLangId); ?></a>
-                      <ul>
-                          <?php /* if ($objPrivilege->canViewShippingMethods(AdminAuthentication::getLoggedAdminId(), true)) {?>
-                      <li><a
-                              href="<?php echo UrlHelper::generateUrl('ShippingMethods'); ?>"><?php echo Labels::getLabel('LBL_Shipping_Methods', $adminLangId);?></a>
-                      </li>
-                      <?php } */ ?>
-
-                          <?php /* if ($objPrivilege->canViewShippingDurationLabels(AdminAuthentication::getLoggedAdminId(), true)) {?>
-                      <li><a
-                              href="<?php echo UrlHelper::generateUrl('ShippingDurations'); ?>"><?php echo Labels::getLabel('LBL_Duration_Labels', $adminLangId);?></a>
-                      </li>
-                      <?php } */ ?>
-
-                          <?php /* if ($objPrivilege->canViewShippingCompanies(AdminAuthentication::getLoggedAdminId(), true)) {?>
-                      <li><a
-                              href="<?php echo UrlHelper::generateUrl('ShippingCompanies'); ?>"><?php echo Labels::getLabel('LBL_Shipping_Companies', $adminLangId);?></a>
-                      </li>
-                      <?php } */ ?>
-
-                          <?php if ($objPrivilege->canViewShippingCompanyUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('ShippingCompanyUsers'); ?>"><?php echo Labels::getLabel('LBL_Shipping_Company_Users', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewShippingPackages(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('shippingPackages'); ?>"><?php echo Labels::getLabel('LBL_Shipping_Packages', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewShippingManagement(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('shippingProfile'); ?>"><?php echo Labels::getLabel('LBL_Shipping_Profile', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-
-                          <?php /* if($objPrivilege->canViewManualShippingApi(AdminAuthentication::getLoggedAdminId(), true)){?>
-                      <li><a
-                              href="<?php echo UrlHelper::generateUrl('ManualShippingApi'); ?>"><?php echo Labels::getLabel('LBL_Manual_Shipping_Api',$adminLangId);?></a>
-                      </li>
-                      <?php } */ ?>
-
-                          <?php
-                            if ($objPrivilege->canViewTrackingRelationCode()) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('TrackingCodeRelation'); ?>"><?php echo Labels::getLabel('LBL_Tracking_Code_Relation', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('PickupAddresses'); ?>"><?php echo Labels::getLabel('LBL_Pickup_Addresses', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-
-                          <?php if ($objPrivilege->canViewShippedProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('ShippedProducts'); ?>"><?php echo Labels::getLabel('LBL_Shipped_Products', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                      </ul>
-                  </li>
-              <?php } ?>
-
-              <?php if ($objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                  <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Sales_tax', $adminLangId); ?></a>
-                      <ul>
-                          <li><a href="<?php echo UrlHelper::generateUrl('TaxStructure'); ?>"><?php echo Labels::getLabel('LBL_Tax_Structure', $adminLangId); ?></a>
-                          </li>
-                          <li><a href="<?php echo UrlHelper::generateUrl('Tax'); ?>"><?php echo Labels::getLabel('LBL_Tax_Management', $adminLangId); ?></a>
-                          </li>
-                      </ul>
-                  </li>
-              <?php } ?>
-              <!--System Settings-->
-              <?php if (
-                    $objPrivilege->canViewGeneralSettings(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewPlugins(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewPaymentMethods(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewCurrencyManagement(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewCommissionSettings(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewAffiliateCommissionSettings(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSellerPackages(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewThemeColor(AdminAuthentication::getLoggedAdminId(), true)
-                ) { ?>
-                  <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_System_Settings', $adminLangId); ?></a>
-                      <ul>
-
-                          <?php if ($objPrivilege->canViewGeneralSettings(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('configurations'); ?>"><?php echo Labels::getLabel('LBL_General_Settings', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewPlugins(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Plugins'); ?>"><?php echo Labels::getLabel('LBL_PLUGINS', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewThemeColor(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('ThemeColor'); ?>"><?php echo Labels::getLabel('LBL_Theme_Settings', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewCurrencyManagement(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('CurrencyManagement'); ?>"><?php echo Labels::getLabel('LBL_Currency_Management', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewCommissionSettings(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('Commission'); ?>"><?php echo Labels::getLabel('LBL_Commission_Settings', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewAffiliateCommissionSettings(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('AffiliateCommission'); ?>"><?php echo Labels::getLabel('LBL_Affiliate_Commission_Settings', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                          <?php if ($objPrivilege->canViewSellerPackages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li><a href="<?php echo UrlHelper::generateUrl('SellerPackages'); ?>"><?php echo Labels::getLabel('LBL_Seller_Packages_Management', $adminLangId); ?></a>
-                              </li>
-                          <?php } ?>
-                      </ul>
-                  </li>
-              <?php } ?>
-
-              <?php if ($objPrivilege->canViewImportExport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                  <li><a href="<?php echo UrlHelper::generateUrl('ImportExport'); ?>"><?php echo Labels::getLabel('LBL_Import_Export', $adminLangId); ?></a>
-                  </li>
-              <?php } ?>
-
-              <?php /* if (
-                $objPrivilege->canViewSuccessStories(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewLanguageLabels(AdminAuthentication::getLoggedAdminId(), true) ||
-                //$objPrivilege->canViewHomePageElements(AdminAuthentication::getLoggedAdminId(), true) ||  
-                $objPrivilege->canViewSlides(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewBanners(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewThemeColor(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewProductTempImages(AdminAuthentication::getLoggedAdminId(), true)
-                ) { ?>
-              <li class="haschild"><a
-                      href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Misc', $adminLangId);?></a>
-                  <ul>
-                      <?php if($objPrivilege->canViewSuccessStories(AdminAuthentication::getLoggedAdminId(), true)){ ?>
-                      <li><a
-                              href="<?php echo UrlHelper::generateUrl('SuccessStories'); ?>"><?php echo Labels::getLabel('LBL_Success_Stories',$adminLangId);?></a>
-                      </li>
-                      <?php }  ?>
-
-                      <?php  if($objPrivilege->canViewHomePageElements(AdminAuthentication::getLoggedAdminId(), true)){?>
-                      <li><a href="<?php echo UrlHelper::generateUrl('HomePageElements'); ?>">Home Page Elements</a>
-                      </li>
-                      <?php } ?>
-                      <?php  if ($objPrivilege->canViewProductTempImages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                      <li><a
-                              href="<?php echo UrlHelper::generateUrl('ProductTempImages'); ?>"><?php echo Labels::getLabel('LBL_Product_Temp_Images', $adminLangId);?></a>
-                      </li>
-                      <?php }  ?>
-                      <?php  if ($objPrivilege->canUploadBulkImages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                      <li><a
-                              href="<?php echo UrlHelper::generateUrl('UploadBulkImages'); ?>"><?php echo Labels::getLabel('LBL_Upload_Bulk_Images', $adminLangId);?></a>
-                      </li>
-                      <?php }  ?>
-                  </ul>
-              </li>
-              <?php } */ ?>
-
-              <!-- <?php if ($objPrivilege->canViewQuestionBanks(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-            <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Questionnaires', $adminLangId); ?></a>
-                <ul>
-                    <li><a href="<?php echo UrlHelper::generateUrl('QuestionBanks'); ?>"><?php echo Labels::getLabel('LBL_Question_Banks', $adminLangId); ?></a></li>
-                    <li><a href="<?php echo UrlHelper::generateUrl('Questionnaires'); ?>"><?php echo Labels::getLabel('LBL_Questionnaires', $adminLangId); ?></a></li>
-                </ul>
             </li>
-            <?php } ?>
-            <?php if ($objPrivilege->canViewPolling(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-            <li><a href="<?php echo UrlHelper::generateUrl('Polling'); ?>"><?php echo Labels::getLabel('LBL_Polling', $adminLangId); ?></a></li>
-            <?php } ?> -->
+            <li class="menu-item dropdown">
+                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="menu-icon"> <span class="svg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect x="2" y="2" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2"></rect>
+                            </svg>
+                        </span>
+                    </i>
 
-              <?php /* if ($objPrivilege->canViewTools(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-              <li class="haschild"><a
-                      href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Tools', $adminLangId);?></a>
-                  <ul>
-                      <li><a
-                              href="<?php echo UrlHelper::generateUrl('sentEmails'); ?>"><?php echo Labels::getLabel('LBL_Sent_Emails',$adminLangId);?></a>
-                      </li>
-                      <li><a
-                              href="<?php echo UrlHelper::generateUrl('','',array(),CONF_WEBROOT_FRONT_URL).'restore.php?passkey=yokart-restore'; ?>"><?php echo Labels::getLabel('LBL_Restore_Default',$adminLangId);?>
-                          </a></li>
-                  </ul>
-              </li>
-              <?php } */ ?>
+                </button>
+                <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
+                    <h6 class="">Authentication </h6>
+                    <ul class="nav" id="accordion">
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse1"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
 
-              <?php if ($objPrivilege->canViewSitemap(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                  <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Sitemap', $adminLangId); ?></a>
-                      <ul>
-                          <li><a href="<?php echo UrlHelper::generateUrl('sitemap', 'generate'); ?>"><?php echo Labels::getLabel('LBL_Update_Sitemap', $adminLangId); ?></a>
-                          </li>
-                          <li><a href="<?php echo UrlHelper::generateFullUrl('custom', 'sitemap', array(), CONF_WEBROOT_FRONT_URL); ?>" target="_blank"><?php echo Labels::getLabel('LBL_View_HTML', $adminLangId); ?></a></li>
-                          <li><a href="<?php echo UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . 'sitemap.xml'; ?>" target="_blank"><?php echo Labels::getLabel('LBL_View_XML', $adminLangId); ?></a></li>
-                      </ul>
-                  </li>
-              <?php } ?>
-              
-              
-              <?php if ($objPrivilege->canViewSystemLog(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                  <li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Log', $adminLangId); ?></a>
-                      <ul>
-                          <li><a href="<?php echo UrlHelper::generateUrl('SystemLog'); ?>"><?php echo Labels::getLabel('LBL_SystemLog', $adminLangId); ?></a>
-                          </li>
-                      </ul>
-                  </li>
-              <?php } ?>
+                            <div id="collapse1" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
 
-              <?php if (CommonHelper::demoUrl()) { ?>
-                  <li>
-                      <div class="m-4 text-center">
-                          <a class="themebtn btn-brand outline block" href="https://www.yo-kart.com/suggest-feature.html" target="_blank">
-                              <?php echo Labels::getLabel('LBL_SUGGEST_A_FEATURE', $adminLangId); ?>
-                          </a>
-                      </div>
-                  </li>
-              <?php } ?>
-              <?php /*<li class="haschild"><a href="javascript:void(0);"><?php echo Labels::getLabel('LBL_Support_Link', $adminLangId);?></a>
-              <ul>
-                  <li><a target="_blank"
-                          href="http://www.yo-kart.com/recent-updates.html"><?php echo Labels::getLabel('LBL_Version_Update', $adminLangId);?></a>
-                  </li>
-                  <li><a target="_blank"
-                          href="http://faq.yo-kart.com/"><?php echo Labels::getLabel('LBL_FAQs', $adminLangId);?></a>
-                  </li>
-                  <li><a target="_blank"
-                          href="http://www.yo-kart.com/addons-integrations.html"><?php echo Labels::getLabel('LBL_Add_Ons', $adminLangId);?></a>
-                  </li>
-                  <li><a
-                          href="<?php echo UrlHelper::generateUrl('Support'); ?>"><?php echo Labels::getLabel('LBL_Report_An_Issue', $adminLangId);?></a>
-                  </li>
-              </ul>
-              </li>*/ ?>
-          </ul>
-      </div>
-  </aside>
-  <!--left panel end here-->
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse2"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse2" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse3"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse3" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse4"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse4" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </li>
+            <li class="menu-item dropdown">
+                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="menu-icon"> <span class="svg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect x="2" y="2" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2"></rect>
+                            </svg>
+                        </span>
+                    </i>
+
+                </button>
+                <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
+                    <h6 class="">Authentication </h6>
+                    <ul class="nav" id="accordion">
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse1"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse1" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse2"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse2" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse3"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse3" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse4"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse4" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </li>
+            <li class="menu-item dropdown">
+                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="menu-icon"> <span class="svg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect x="2" y="2" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2"></rect>
+                            </svg>
+                        </span>
+                    </i>
+
+                </button>
+                <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
+                    <h6 class="">Authentication </h6>
+                    <ul class="nav" id="accordion">
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse1"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse1" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse2"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse2" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse3"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse3" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse4"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse4" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </li>
+            <li class="menu-item dropdown">
+                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="menu-icon"> <span class="svg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect x="2" y="2" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2"></rect>
+                            </svg>
+                        </span>
+                    </i>
+
+                </button>
+                <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
+                    <h6 class="">Authentication </h6>
+                    <ul class="nav" id="accordion">
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse1"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse1" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse2"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse2" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse3"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse3" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse4"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse4" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </li>
+            <li class="menu-item dropdown">
+                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="menu-icon"> <span class="svg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect x="2" y="2" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2"></rect>
+                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2"></rect>
+                            </svg>
+                        </span>
+                    </i>
+
+                </button>
+                <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
+                    <h6 class="">Authentication </h6>
+                    <ul class="nav" id="accordion">
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse1"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse1" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse2"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse2" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse3"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse3" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav_item">
+                            <a class="nav_link" data-toggle="collapse" data-parent="#accordion" href="#collapse4"
+                                aria-expanded="true">
+                                <span class="nav_text">Localization</span>
+                                <i class="nav_arrow"></i>
+                            </a>
+
+                            <div id="collapse4" class="panel-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav_item">
+                                        <a href="javascript:void(0);" class="nav_link ">
+                                            <span class="nav_text">General</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="sidebar-foot">
+        <ul>
+            <li>
+                <a href="">
+                    <svg class="svg" id="setting" viewBox="0 0 512 512">
+                        <g>
+                            <g>
+                                <path
+                                    d="M256,151c-57.897,0-105,47.103-105,105c0,57.897,47.103,105,105,105c57.897,0,105-47.103,105-105                     C361,198.103,313.897,151,256,151z M256,331c-41.355,0-75-33.645-75-75c0-41.355,33.645-75,75-75s75,33.645,75,75                     S297.355,331,256,331z">
+                                </path>
+                            </g>
+                        </g>
+                        <g>
+                            <g>
+                                <path
+                                    d="M500.582,211.434l-58.674-14.428c-3.532-11.13-8.068-21.925-13.551-32.249c8.78-14.634,27.343-45.573,27.343-45.573                     c3.541-5.902,2.611-13.457-2.256-18.324l-42.426-42.426c-4.867-4.867-12.422-5.797-18.324-2.256                     c-0.38,0.228-30.777,18.466-45.626,27.355c-10.269-5.431-20.995-9.927-32.052-13.434c-4.428-17.976-14.451-58.686-14.452-58.686                     C298.914,4.711,292.902,0,286,0h-60c-6.903,0-12.915,4.711-14.565,11.414c-4.126,16.76-11.024,44.779-14.45,58.68                     c-11.762,3.73-23.143,8.578-34.001,14.482c-6.428-3.856-16.007-9.604-24.869-14.921l-22.462-13.477                     c-5.905-3.541-13.457-2.61-18.324,2.256L54.901,100.86c-4.867,4.867-5.797,12.422-2.256,18.324                     c0.2,0.335,17.785,29.644,29.271,48.869c-4.712,9.31-8.665,18.986-11.817,28.919c-20.002,4.976-58.223,14.35-58.671,14.46                     C4.718,213.077,0,219.092,0,226v60c0,6.909,4.719,12.923,11.429,14.568c0.443,0.109,38.381,9.411,58.687,14.436                     c3.565,11.302,8.184,22.273,13.796,32.78l-26.194,43.66c-3.541,5.902-2.611,13.458,2.256,18.324l42.427,42.427                     c4.867,4.868,12.421,5.797,18.324,2.256c0.369-0.222,29.463-17.678,43.746-26.227c10.419,5.547,21.313,10.131,32.547,13.692                     l14.416,58.66C213.079,507.284,219.093,512,226,512h60c6.904,0,12.917-4.713,14.566-11.418l14.427-58.669                     c11.539-3.661,22.671-8.39,33.257-14.128c14.427,8.656,44.444,26.667,44.444,26.667c5.901,3.541,13.457,2.612,18.324-2.256                     l42.426-42.427c4.867-4.867,5.797-12.422,2.256-18.324c0,0-18.271-30.452-26.958-44.931c5.308-10.088,9.712-20.634,13.161-31.511                     c17.824-4.399,58.19-14.317,58.676-14.436C507.285,298.919,512,292.906,512,286v-60C512,219.095,507.287,213.083,500.582,211.434z                         M482,274.24c-17.32,4.257-48.723,11.979-54.72,13.479l-1.131,0.283c-5.231,1.36-9.326,5.43-10.719,10.653                     c-3.795,14.229-9.495,27.872-16.942,40.548c-2.779,4.732-2.753,10.605,0.069,15.312c0.78,1.301,16.489,27.483,25.393,42.322                     L398.087,422.7c-15.046-9.027-41.716-25.029-41.942-25.165c-4.775-2.866-10.743-2.853-15.501,0.035                     c-13,7.885-27.109,13.892-41.938,17.854c-5.177,1.383-9.224,5.422-10.614,10.597c-0.828,3.081-1.644,6.34-1.658,6.397L274.241,482                     h-36.479l-10.813-44.042l-2.916-11.664c-1.322-5.292-5.415-9.45-10.686-10.855c-14.533-3.876-28.479-9.747-41.449-17.447                     c-4.709-2.797-10.57-2.802-15.285-0.018c-3.23,1.908-27.254,16.313-41.282,24.728l-25.865-25.865l24.661-41.104                     c2.841-4.736,2.85-10.65,0.022-15.395c-7.784-13.063-13.685-27.073-17.535-41.643c-1.397-5.286-5.56-9.393-10.863-10.719                     c-10.737-2.684-39.564-9.767-55.752-13.741v-36.473c16.342-4.015,45.537-11.199,55.762-13.786                     c5.271-1.334,9.408-5.417,10.812-10.671c3.564-13.347,8.822-26.228,15.63-38.286c2.646-4.686,2.578-10.43-0.177-15.053                     c-7.25-12.166-20.08-33.577-27.632-46.172l25.865-25.866l12.42,7.452c14.968,8.981,31.98,19.188,32.44,19.463                     c4.768,2.85,10.722,2.832,15.472-0.049c13.341-8.088,27.726-14.222,42.756-18.232c5.264-1.404,9.352-5.552,10.68-10.836                     c0.282-1.121,9.071-36.815,13.728-55.726h36.49c4.915,19.958,13.621,55.312,13.724,55.722c1.326,5.288,5.417,9.44,10.685,10.845                     c14.382,3.836,28.193,9.626,41.05,17.208c4.714,2.781,10.57,2.773,15.276-0.021c4.208-2.498,28.881-17.293,43.106-25.827                     l25.864,25.864c-9.037,15.062-25.121,41.869-25.795,42.991c-2.836,4.725-2.853,10.625-0.043,15.367                     c7.628,12.872,13.451,26.714,17.308,41.141c1.382,5.167,5.408,9.207,10.57,10.604c3.097,0.839,6.373,1.657,6.428,1.671                     L482,237.758V274.24z">
+                                </path>
+                            </g>
+                        </g>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </div>
+</sidebar>

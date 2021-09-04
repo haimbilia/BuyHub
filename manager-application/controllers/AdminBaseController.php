@@ -56,6 +56,7 @@ class AdminBaseController extends FatController
         }
         $this->set("bodyClass", '');
         $this->setCommonValues();
+        $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css');
     }
 
     /*
@@ -468,19 +469,19 @@ class AdminBaseController extends FatController
 
         if (Product::PRODUCT_TYPE_PHYSICAL == $productType) {
             $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, 0, true, true);
-            if ($type == 'REQUESTED_CATALOG_PRODUCT') { 
+            if ($type == 'REQUESTED_CATALOG_PRODUCT') {
                 $fulFillmentArr = Shipping::getFulFillmentArr($this->adminLangId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
                 $fulFillmentTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->adminLangId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, ['class' => 'fieldsVisibility-js'], Labels::getLabel('LBL_Select', $this->adminLangId));
-                $fulFillmentTypeFld->requirements()->setRequired();                        
+                $fulFillmentTypeFld->requirements()->setRequired();
             }
             $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
-            if($fulFillmentTypeFld){
+            if ($fulFillmentTypeFld) {
                 $profileUnReqObj = new FormFieldRequirement('shipping_profile', Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId));
                 $profileUnReqObj->setRequired(false);
                 $profileReqObj = new FormFieldRequirement('shipping_profile', Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId));
                 $profileReqObj->setRequired(true);
 
-                $fulFillmentTypeFld->requirements()->addOnChangerequirementUpdate(Shipping::FULFILMENT_PICKUP ,'eq', 'shipping_profile', $profileUnReqObj);
+                $fulFillmentTypeFld->requirements()->addOnChangerequirementUpdate(Shipping::FULFILMENT_PICKUP, 'eq', 'shipping_profile', $profileUnReqObj);
                 $fulFillmentTypeFld->requirements()->addOnChangerequirementUpdate(Shipping::FULFILMENT_PICKUP, 'ne', 'shipping_profile', $profileReqObj);
             }
         }

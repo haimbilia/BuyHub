@@ -9,7 +9,7 @@ class AdminGuestController extends FatController
         if ($this->doCookieAdminLogin()) {
             FatApp::redirectUser(UrlHelper::generateUrl('home'));
         }
-
+        
         CommonHelper::initCommonVariables(true);
         $this->adminLangId = CommonHelper::getLangId();
 
@@ -33,7 +33,7 @@ class AdminGuestController extends FatController
         if (CommonHelper::demoUrl() == true) {
             $this->_template->addCss('css/demo.css');
         }
-
+        
         $this->set('isAdminLogged', AdminAuthentication::isAdminLogged());
         $this->set('controllerName', $controllerName);
         $this->set('jsVariables', $jsVariables);
