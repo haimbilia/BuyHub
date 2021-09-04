@@ -2010,7 +2010,7 @@ function previewImage(obj) {
     if ("" == imgUrl || "undefined" == typeof imgUrl) {
         imgUrl = $("img", obj).attr("src");
     }
-    var img = $($.parseHTML("<img>")).attr("src", imgUrl);
+    var img = $($.parseHTML("<img>")).attr("src", imgUrl).get(0).outerHTML;
     fcom.updateFaceboxContent(img, "text-center");
 }
 

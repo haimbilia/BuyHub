@@ -200,16 +200,17 @@ if (null != $conditionType) {
 					<?php } ?>
 				</div>
 				<div class="row">
-					
-				<div class="col-md-12">
+				    <div class="col-md-12">
 						<?php if (!empty($otherLangData)) {
-							foreach ($otherLangData as $langId => $data) { ?>
-								<div class="" defaultLang="<?php echo $siteDefaultLangId; ?>" language="<?php echo $langId; ?>" id="accordion-language_<?php echo $langId; ?>" onClick="translateData(this)">
+							foreach ($otherLangData as $langId => $data) { 
+                                $layOutDir = Language::getLayoutDirection($langId);
+                                ?>
+								<div defaultLang="<?php echo $siteDefaultLangId; ?>" language="<?php echo $langId; ?>" id="accordion-language_<?php echo $langId; ?>" onClick="translateData(this)">
 									<h3 class="mt-4 mb-2" id="collapse_<?php echo $langId; ?>">
 										<?php echo $data . " ";
 										echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
 									</h3>
-									<div class="row">
+									<div class="row layout--<?php echo $layOutDir; ?>">
 										<div class="col-md-12">
 											<div class="field-set">
 												<div class="caption-wraper">
