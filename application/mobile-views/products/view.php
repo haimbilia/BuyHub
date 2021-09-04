@@ -259,7 +259,6 @@ if (!empty($product['moreSellersArr']) && 0 < count($product['moreSellersArr']))
     /* Shop and SelProd Badge */
     $shopIdsArr = array_column($product['moreSellersArr'], 'shop_id');
     $shopBadges = Badge::getShopBadges($siteLangId, $shopIdsArr);
-
     $shopBadgesArr = [];
     foreach ($shopBadges as $bdgRow) {
         $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $bdgRow[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, $siteLangId);
@@ -318,8 +317,8 @@ if (!empty($banners) && $banners['blocation_active'] && count($banners['banners'
 
 if (!empty($reviews)) {
     if (!empty($ratingAspects)) {
-        foreach ($ratingAspects as &$rating) {
-            $rating['prod_rating'] = CommonHelper::numberFormat($rating['prod_rating'], false, true, 1);
+        foreach ($ratingAspects as &$ratingAsp) {
+            $ratingAsp['prod_rating'] = CommonHelper::numberFormat($ratingAsp['prod_rating'], false, true, 1);
         }
     }
 
