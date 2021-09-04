@@ -136,7 +136,7 @@ class QnbPayController extends PaymentController
      * @param  bool $processRequest
      * @return object
      */
-    private function getPaymentForm(string $orderId, bool $processRequest = false): object
+    private function getPaymentForm($orderId, bool $processRequest = false): object
     {
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         $paymentGatewayCharge = $orderPaymentObj->getOrderPaymentGatewayAmount();
@@ -180,7 +180,7 @@ class QnbPayController extends PaymentController
      * @param  string $orderId
      * @return void
      */
-    private function logFailure(string $orderId, string $msg = '', array $response = [])
+    private function logFailure($orderId, string $msg = '', array $response = [])
     {
         $response = !empty($response) ? $response : $_REQUEST;    
         SystemLog::transaction(json_encode($response),self::KEY_NAME . "-" . $orderId);

@@ -331,7 +331,7 @@ class ShipEngine extends ShippingServicesBase
             return false;
         }
 
-        $orderObj = new Orders($this->orderDetail['order_no']);
+        $orderObj = new Orders($this->orderDetail['order_id']);
         $addresses = $orderObj->getOrderAddresses($this->orderDetail['order_id']);
         $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : [];               
 

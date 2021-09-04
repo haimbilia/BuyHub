@@ -1002,4 +1002,72 @@ ALTER TABLE `tbl_user_transactions` ADD `utxn_order_no` BIGINT NOT NULL AFTER `u
 UPDATE tbl_user_transactions ut
 INNER JOIN tbl_orders o ON o.order_id = ut.utxn_order_id
 SET ut.utxn_order_no = o.order_no;
+
+ALTER TABLE `tbl_order_seller_subscriptions_lang` DROP `ossubslang_order_id`;
+ALTER TABLE `tbl_order_seller_subscriptions_lang` DROP `ossubslang_order_no`;
+
+ALTER TABLE `tbl_coupons_history` DROP `couponhistory_order_id`;
+ALTER TABLE `tbl_coupons_history` CHANGE `couponhistory_order_no` `couponhistory_order_id` BIGINT NOT NULL;
+
+ALTER TABLE `tbl_coupons_hold_pending_order` DROP PRIMARY KEY;
+ALTER TABLE `tbl_coupons_hold_pending_order` DROP `ochold_order_id`;
+ALTER TABLE `tbl_coupons_hold_pending_order` CHANGE `ochold_order_no` `ochold_order_id` BIGINT NOT NULL;
+ALTER TABLE `tbl_coupons_hold_pending_order` ADD PRIMARY KEY( `ochold_order_id`, `ochold_coupon_id`);
+
+
+ALTER TABLE `tbl_orders_lang` DROP PRIMARY KEY;
+ALTER TABLE `tbl_orders_lang` DROP `orderlang_order_id`;
+ALTER TABLE `tbl_orders_lang` CHANGE `orderlang_order_no` `orderlang_order_id` BIGINT NOT NULL;
+ALTER TABLE `tbl_orders_lang` ADD PRIMARY KEY( `orderlang_order_id`, `orderlang_lang_id`);
+
+
+ALTER TABLE `tbl_orders_status_history` DROP `oshistory_order_id`;
+ALTER TABLE `tbl_orders_status_history` CHANGE `oshistory_order_no` `oshistory_order_id` BIGINT NOT NULL;
+
+ALTER TABLE `tbl_orders_to_plugin_order` DROP INDEX `opo_order_id`;
+ALTER TABLE `tbl_orders_to_plugin_order` DROP `opo_order_id`;
+ALTER TABLE `tbl_orders_to_plugin_order` CHANGE `opo_order_no` `opo_order_id` BIGINT NOT NULL;
+ALTER TABLE `tbl_orders_to_plugin_order` ADD UNIQUE( `opo_order_id`, `opo_plugin_id`, `opo_plugin_order_id`);
+
+ALTER TABLE `tbl_order_extras` DROP PRIMARY KEY;
+ALTER TABLE `tbl_order_extras` DROP `oextra_order_id`;
+ALTER TABLE `tbl_order_extras` CHANGE `oextra_order_no` `oextra_order_id` BIGINT NOT NULL;
+ALTER TABLE `tbl_order_extras` ADD PRIMARY KEY(`oextra_order_id`);
+
+ALTER TABLE `tbl_order_payments` DROP INDEX `op_order_id`;
+ALTER TABLE `tbl_order_payments` DROP `opayment_order_id`;
+ALTER TABLE `tbl_order_payments` CHANGE `opayment_order_no` `opayment_order_id` BIGINT NOT NULL;
+ALTER TABLE `tbl_order_payments` ADD UNIQUE(`opayment_order_id`);
+
+ALTER TABLE `tbl_order_products` DROP `op_order_id`;
+ALTER TABLE `tbl_order_products` CHANGE `op_order_no` `op_order_id` BIGINT NOT NULL;
+
+ALTER TABLE `tbl_order_seller_subscriptions` DROP INDEX `ossubs_order_id`;
+ALTER TABLE `tbl_order_seller_subscriptions` DROP `ossubs_order_id`;
+ALTER TABLE `tbl_order_seller_subscriptions` CHANGE `ossubs_order_no` `ossubs_order_id` BIGINT NOT NULL;
+ALTER TABLE `tbl_order_seller_subscriptions` ADD INDEX(`ossubs_order_id`);
+
+
+ALTER TABLE `tbl_order_user_address` DROP PRIMARY KEY;
+ALTER TABLE `tbl_order_user_address` DROP `oua_order_id`;
+ALTER TABLE `tbl_order_user_address` CHANGE `oua_order_no` `oua_order_id` BIGINT NOT NULL;
+ALTER TABLE `tbl_order_user_address` ADD PRIMARY KEY( `oua_order_id`, `oua_op_id`, `oua_type`);
+
+
+ALTER TABLE `tbl_seller_product_reviews` DROP INDEX `spreview_order_id`;
+ALTER TABLE `tbl_seller_product_reviews` DROP `spreview_order_id`;
+ALTER TABLE `tbl_seller_product_reviews` CHANGE `spreview_order_no` `spreview_order_id` BIGINT NOT NULL;
+ALTER TABLE `tbl_seller_product_reviews` ADD UNIQUE( `spreview_order_id`, `spreview_selprod_id`);
+
+ALTER TABLE `tbl_user_reward_points` DROP `urp_used_order_id`;
+ALTER TABLE `tbl_user_reward_points` CHANGE `urp_used_order_no` `urp_used_order_id` BIGINT NOT NULL;
+
+ALTER TABLE `tbl_user_reward_point_breakup` DROP `urpbreakup_used_order_id`;
+ALTER TABLE `tbl_user_reward_point_breakup` CHANGE `urpbreakup_used_order_no` `urpbreakup_used_order_id` BIGINT NOT NULL;
+
+ALTER TABLE `tbl_user_transactions` DROP `utxn_order_id`;
+ALTER TABLE `tbl_user_transactions` CHANGE `utxn_order_no` `utxn_order_id` BIGINT NOT NULL;
+
+ALTER TABLE `tbl_orders` CHANGE `order_no` `order_id` BIGINT NOT NULL AUTO_INCREMENT, CHANGE `order_id` `order_no` VARCHAR(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
 -- ---------Task 899377 Auto Increment Order Id ------ -- 

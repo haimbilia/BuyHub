@@ -328,7 +328,6 @@ class Address extends MyAppModel
         $addrArr = array_merge($default, $addrArr);
         return [
             'oua_order_id' => $orderId,
-            'oua_order_no' => $orderNo,
             'oua_type' => $type,
             'oua_name' => $addrArr['addr_name'],
             'oua_address1' => $addrArr['addr_address1'],

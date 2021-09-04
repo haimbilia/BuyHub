@@ -136,7 +136,7 @@ class SelProdReviewSearch extends SearchBase
     public function joinOrderProduct()
     {
         $this->joinOrderProd = true;
-        $this->joinTable(OrderProduct::DB_TBL, 'INNER JOIN', 'op.op_order_no = spr.spreview_order_no AND op.op_selprod_id = spr.spreview_selprod_id', 'op');
+        $this->joinTable(OrderProduct::DB_TBL, 'INNER JOIN', 'op.op_order_id = spr.spreview_order_id AND op.op_selprod_id = spr.spreview_selprod_id', 'op');
     }
     
     public function joinOrderProductShipping()

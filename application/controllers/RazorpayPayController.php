@@ -122,7 +122,7 @@ class RazorpayPayController extends PaymentController
         }
     }
 
-    private function getPaymentForm(string $orderId)
+    private function getPaymentForm($orderId)
     {
         $frm = new Form('razorpay-form', array('id' => 'razorpay-form', 'action' => UrlHelper::generateFullUrl('RazorpayPay', 'callback'), 'class' => "form form--normal"));
 

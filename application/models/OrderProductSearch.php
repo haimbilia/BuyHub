@@ -59,7 +59,7 @@ class OrderProductSearch extends SearchBase
             trigger_error(Labels::getLabel('MSG_Orders_Table_is_already_joined', $this->commonLangId), E_USER_ERROR);
         }
         $this->isOrdersTableJoined = true;
-        $this->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_no = op.op_order_no', 'o');
+        $this->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_id = op.op_order_id', 'o');
     }
 
     public function joinOrderProductStatus($langId = 0)

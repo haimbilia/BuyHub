@@ -115,7 +115,7 @@ class Paynow extends PaymentMethodBase
      * @param  string $orderId
      * @return bool
      */
-    public function initiatePaymentRequest(string $orderId): bool
+    public function initiatePaymentRequest($orderId): bool
     {
         $this->orderId = $orderId;
         /*

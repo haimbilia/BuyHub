@@ -176,11 +176,11 @@ class KhipuPayController extends PaymentController
     /**
      * getPaymentForm
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @param  bool $processRequest
      * @return object
      */
-    private function getPaymentForm(string $orderId, bool $processRequest = false): object
+    private function getPaymentForm($orderId, bool $processRequest = false): object
     {
         $actionUrl = false === $processRequest ? UrlHelper::generateUrl('KhipuPay', 'charge', array($orderId)) : $this->initiatePayment->getPaymentUrl();
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));

@@ -97,7 +97,7 @@ class Cronjob extends FatModel
 
         $srch = new OrderProductSearch(0, true);
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
-        $srch->joinTable('tbl_seller_product_reviews', 'left outer join', 'o.order_no = spr.spreview_order_no and ((op.op_selprod_id = spr.spreview_selprod_id and op.op_is_batch = 0) || (op.op_batch_selprod_id = spr.spreview_selprod_id and op.op_is_batch = 1))', 'spr');
+        $srch->joinTable('tbl_seller_product_reviews', 'left outer join', 'o.order_id = spr.spreview_order_id and ((op.op_selprod_id = spr.spreview_selprod_id and op.op_is_batch = 0) || (op.op_batch_selprod_id = spr.spreview_selprod_id and op.op_is_batch = 1))', 'spr');
         $srch->addCondition('spr.spreview_id', 'is', 'mysql_func_null', 'and', true);
         $srch->addDirectCondition("(op.op_sent_review_reminder =  " . applicationConstants::NO . " or ( op.op_sent_review_reminder = " . applicationConstants::YES . " AND op.op_review_reminder_count = 1 AND Date_add(op_sent_last_reminder, INTERVAL " . $resendReminderInterval . " day) = '" . date('Y-m-d') . "'))");
         $srch->addMultipleFields(array('op_id', 'order_language_id'));
@@ -614,11 +614,11 @@ class Cronjob extends FatModel
 
             $orderData = array();
             /* add Order Data[ */
-            $order_id = false;
+            $order_id = 0;
 
 
             $orderData['order_id'] = $order_id;
-            $orderData['order_no'] = 0;
+            $orderData['order_no'] = false;
             $orderData['order_user_id'] = $userId;
             /* $orderData['order_user_name'] = $userDataArr['user_name'];
             $orderData['order_user_email'] = $userDataArr['credential_email'];
@@ -632,7 +632,6 @@ class Cronjob extends FatModel
             /* order extras[ */
             $orderData['extra'] = array(
             'oextra_order_id' => $order_id,
-            'oextra_order_no' => 0,
             'order_ip_address' => $_SERVER['REMOTE_ADDR']
             );
 

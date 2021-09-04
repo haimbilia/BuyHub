@@ -14,7 +14,7 @@ class OrderSearch extends SearchBase
             $this->joinTable(
                 Orders::DB_TBL_LANG,
                 'LEFT OUTER JOIN',
-                'orderlang_order_no = o.order_no AND orderlang_lang_id = ' . $this->langId, 'o_l'
+                'orderlang_order_id = o.order_no AND orderlang_lang_id = ' . $this->langId, 'o_l'
             );
         }
     }
@@ -89,7 +89,7 @@ class OrderSearch extends SearchBase
 
     public function joinTableOrderSellerSubscription($langId = 0)
     {
-        $this->joinTable(OrderSubscription::DB_TBL, 'LEFT OUTER JOIN', 'oss.ossubs_order_no = o.order_no', 'oss');
+        $this->joinTable(OrderSubscription::DB_TBL, 'LEFT OUTER JOIN', 'oss.ossubs_order_id = o.order_no', 'oss');
         if ($langId > 0) {
             $this->joinTable(OrderSubscription::DB_TBL_LANG, 'LEFT OUTER JOIN', 'oss.ossubs_id = ossl.' . OrderSubscription::DB_TBL_LANG_PREFIX . 'ossubs_id', 'ossl');
         }
@@ -117,7 +117,7 @@ class OrderSearch extends SearchBase
     {
         $langId = 0 < $langId ? $langId : $this->langId;
 
-        $this->joinTable(Orders::DB_TBL_ORDER_PRODUCTS, 'LEFT OUTER JOIN', 'op.op_order_no = o.order_no', 'op');
+        $this->joinTable(Orders::DB_TBL_ORDER_PRODUCTS, 'LEFT OUTER JOIN', 'op.op_order_id = o.order_no', 'op');
         if ($langId > 0) {
             $this->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_LANG, 'LEFT OUTER JOIN', 'torp_l.oplang_op_id = op.op_id and torp_l.oplang_lang_id = ' . $langId, 'torp_l');
         }

@@ -173,7 +173,7 @@ foreach ($childArr as $index => $childOrder) {
     }
     $childArr[$index]['plugin_name'] = $paymentMethodName;
 
-    $orderObj = new Orders($childOrder['order_no']);
+    $orderObj = new Orders($childOrder['order_id']);
     if ($childOrder['plugin_code'] == 'CashOnDelivery') {
         $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(true);
     } else {

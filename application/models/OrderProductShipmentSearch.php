@@ -46,7 +46,7 @@ class OrderProductShipmentSearch extends SearchBase
     public function joinOrder()
     {
         if (true === $this->joinOrderProduct) {
-            $this->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_no = op.op_order_no', 'o');
+            $this->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_id = op.op_order_id', 'o');
         }
     }
 }

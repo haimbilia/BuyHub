@@ -1161,7 +1161,7 @@ class ProductSearch extends SearchBase
         }
 
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE')) {
-            $this->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_no = oss.ossubs_order_no and oss.ossubs_status_id=' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
+            $this->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id=' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
             if ($langId > 0) {
                 $this->joinTable(OrderSubscription::DB_TBL_LANG, 'LEFT OUTER JOIN', 'oss.ossubs_id = ossl.' . OrderSubscription::DB_TBL_LANG_PREFIX . 'ossubs_id AND ossubslang_lang_id = ' . $langId, 'ossl');
             }
@@ -1190,7 +1190,7 @@ class ProductSearch extends SearchBase
 
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
             /* $srch = new searchBase(Orders::DB_TBL, 'o');
-            $srch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_no = oss.ossubs_order_no and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
+            $srch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
             if ($langId > 0) {
                 $srch->joinTable(OrderSubscription::DB_TBL_LANG, 'LEFT OUTER JOIN', 'oss.ossubs_id = ossl.' . OrderSubscription::DB_TBL_LANG_PREFIX . 'ossubs_id AND ossubslang_lang_id = ' . $langId, 'ossl');
             }
@@ -1211,7 +1211,7 @@ class ProductSearch extends SearchBase
 
             $srch = new searchBase(Orders::DB_TBL, 'o');
             $srch->joinTable('(' . $sSrch->getQuery() . ')', 'INNER JOIN', 'otemp.currentOrderId=o.order_id', 'otemp');
-            $srch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_no = oss.ossubs_order_no and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
+            $srch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
             if ($langId > 0) {
                 $srch->joinTable(OrderSubscription::DB_TBL_LANG, 'LEFT OUTER JOIN', 'oss.ossubs_id = ossl.' . OrderSubscription::DB_TBL_LANG_PREFIX . 'ossubs_id AND ossubslang_lang_id = ' . $langId, 'ossl');
             }
