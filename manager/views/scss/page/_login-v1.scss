@@ -1,9 +1,36 @@
 .login-1 {
-	.form-control {
-		height: calc(2em + 2.3rem + 2px);
-		margin: -2px 0;
-		 position: relative;
-		
-		&:focus{ z-index: 1;}
-	}
+    text-align: center;
+    .logo {
+        margin: 1rem auto;
+        img {
+            max-width: 120px;
+        }
+    }
+    .card {
+        &-body {
+            .title {
+                margin: 1.5rem 0;
+                h2 {
+                    font-size: 1.5rem;
+                    color: $txt-body;
+                }
+            }
+        }
+    }
+    .other-links {
+        color: $brand-color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        li {
+            display: inline-block;
+        }
+        a {
+            color: currentColor;
+        }
+    }
+    .version {
+        font-size: 0.8rem;
+        margin-top: 2rem;
+    }
 }
