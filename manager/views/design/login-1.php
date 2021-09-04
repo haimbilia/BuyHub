@@ -20,7 +20,7 @@
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-head">
-                                <div class="logo">
+                                <div class="logo text-center p-4 mx-auto">
                                     <a href="index.php">
                                         <img title="Yo!Kart"
                                             src="<?php echo CONF_WEBROOT_URL;?>images/logos/logo-coloured.png"
