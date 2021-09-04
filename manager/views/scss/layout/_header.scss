@@ -833,7 +833,9 @@ $mykart:'mykart';
     &__img{
         width: 42px;
         height: 42px;
-        border-radius: 4px;
+        max-width: 42px;
+        flex: 0 0 42px;
+        border-radius: .25rem;
         overflow: hidden;
         display: flex;
         align-items: center;

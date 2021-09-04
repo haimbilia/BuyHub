@@ -31,7 +31,7 @@
                                     <div class="header-action__item">
                                         <a class="header-action__trigger" href="javascript:void(0);" data-toggle="modal" data-target="#search-main">
                                             <span class="icon">
-                                                <svg width="24" height="24">
+                                                <svg width="20" height="20">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-search"></use>
                                                 </svg> 
                                             </span>  
@@ -318,18 +318,18 @@
                                         </div>
                                     </div>
                                     <div class="header-action__item">
-                                        <a class="header-action__trigger" href="">
+                                        <a class="header-action__trigger" href="" title="View Store">
                                             <span class="icon">
-                                                <svg width="24" height="24">
+                                                <svg width="20" height="20">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-store"></use>
                                                 </svg>                                                 
                                             </span>  
                                         </a>
                                     </div>
                                     <div class="header-action__item">
-                                        <a class="header-action__trigger" href="">
+                                        <a class="header-action__trigger" href="" title="Clear Cache">
                                             <span class="icon">
-                                                <svg width="24" height="24">
+                                                <svg width="20" height="20">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-cache"></use>
                                                 </svg>                                                 
                                             </span>  
@@ -338,8 +338,8 @@
                                     <div class="header-action__item">
                                         <a class="header-action__trigger" href="">
                                             <span class="icon">
-                                                <svg width="24" height="24">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-grid"></use>
+                                                <svg width="20" height="20">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification"></use>
                                                 </svg>                                                 
                                             </span>  
                                         </a>
