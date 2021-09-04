@@ -151,7 +151,7 @@ class ShipStationShipping extends ShippingServicesBase
         
         $orderInvoiceNumber = $orderDetail['op_invoice_number'];
 
-        $orderObj = new Orders($orderDetail['order_id']);
+        $orderObj = new Orders($orderDetail['order_no']);
         $addresses = $orderObj->getOrderAddresses($orderDetail['order_id']);
         $billingAddress = $addresses[Orders::BILLING_ADDRESS_TYPE];
         $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : array();

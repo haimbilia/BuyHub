@@ -53,7 +53,7 @@ class OrderSubscriptionSearch extends SearchBase
             trigger_error(Labels::getLabel('MSG_Orders_Table_is_already_joined', $this->commonLangId), E_USER_ERROR);
         }
         $this->isOrdersTableJoined = true;
-        $this->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_id = oss.' . OrderSubscription::DB_TBL_PREFIX . 'order_id', 'o');
+        $this->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_no = oss.' . OrderSubscription::DB_TBL_PREFIX . 'order_no', 'o');
     }
     public function addOrderProductCharges()
     {

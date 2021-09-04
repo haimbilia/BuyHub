@@ -48,7 +48,7 @@ class TransactionReportController extends AdminBaseController
         $srch = Transactions::getSearchObject();
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.credential_user_id = u.user_id', 'uc');
-        $srch->addMultipleFields(['utxn.utxn_id', 'utxn.utxn_order_id', 'utxn.utxn_status', 'utxn.utxn_credit', 'utxn.utxn_debit', 'utxn.utxn_date', 'utxn.utxn_comments', 'if(utxn.utxn_credit > 0, utxn.utxn_credit, if(utxn.utxn_debit>0,CONCAT("-", utxn.utxn_debit),0)) as transactionAmount', 'u.user_name', 'uc.credential_email']);
+        $srch->addMultipleFields(['utxn.utxn_id', 'utxn.utxn_order_id', 'utxn.utxn_order_no', 'utxn.utxn_order_no', 'utxn.utxn_status', 'utxn.utxn_credit', 'utxn.utxn_debit', 'utxn.utxn_date', 'utxn.utxn_comments', 'if(utxn.utxn_credit > 0, utxn.utxn_credit, if(utxn.utxn_debit>0,CONCAT("-", utxn.utxn_debit),0)) as transactionAmount', 'u.user_name', 'uc.credential_email']);
         if (!empty($keyword)) {
             $cond = $srch->addCondition('utxn.utxn_order_id', 'like', '%' . $keyword . '%');
             $cond->attachCondition('utxn.utxn_op_id', 'like', '%' . $keyword . '%', 'OR');
@@ -194,6 +194,6 @@ class TransactionReportController extends AdminBaseController
 
     private function getDefaultColumns(): array
     {
-        return ['utxn_date', 'utxn_id', 'user_name', 'utxn_status', 'utxn_order_id', 'transactionAmount'];
+        return ['utxn_date', 'utxn_id', 'user_name', 'utxn_status', 'utxn_order_id', 'utxn_order_no', 'utxn_order_no', 'transactionAmount'];
     }
 }

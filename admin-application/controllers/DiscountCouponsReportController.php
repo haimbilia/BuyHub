@@ -35,7 +35,7 @@ class DiscountCouponsReportController extends AdminBaseController
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'user_id = couponhistory_user_id');
         $srch->joinTable(DiscountCoupons::DB_TBL, 'LEFT OUTER JOIN', 'coupon_id = couponhistory_coupon_id');
         $srch->joinTable(Credential::DB_TBL, 'LEFT OUTER JOIN', 'credential_user_id = user_id');
-        $srch->addMultipleFields(array('coupon_code', 'couponhistory_id', 'couponhistory_coupon_id', 'couponhistory_order_id', 'couponhistory_user_id', 'couponhistory_amount', 'couponhistory_added_on', 'credential_username'));
+        $srch->addMultipleFields(array('coupon_code', 'couponhistory_id', 'couponhistory_coupon_id', 'couponhistory_order_no', 'couponhistory_order_id', 'couponhistory_user_id', 'couponhistory_amount', 'couponhistory_added_on', 'credential_username'));
         $date_from = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
         if (!empty($date_from)) {
             $srch->addCondition('couponhistory_added_on', '>=', $date_from . ' 00:00:00');
