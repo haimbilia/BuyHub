@@ -1145,3 +1145,9 @@ ALTER TABLE `tbl_order_product_plugin_specifics` CHANGE `opps_op_id` `opps_op_id
 
 ALTER TABLE `tbl_addresses` CHANGE `addr_id` `addr_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `tbl_order_product_shipping` CHANGE `opshipping_pickup_addr_id` `opshipping_pickup_addr_id` BIGINT UNSIGNED NOT NULL;
+
+
+-- ---- Admin Password Db Query ---- --
+UPDATE `tbl_admin` SET `admin_password` = '$2y$12$coWTcJUEggZzj7.PjE/Bt.MnIx6Yvt2tNd6GBGcHhJ3K/gZXnxMY.' WHERE `tbl_admin`.`admin_id` = 1;
+UPDATE `tbl_admin` SET `admin_password_old` = '' WHERE `tbl_admin`.`admin_id` = 1;
+-- ---- Admin Password Db Query ---- --
