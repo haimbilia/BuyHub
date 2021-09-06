@@ -1341,7 +1341,7 @@ class BuyerController extends BuyerBaseController
 
         $rs = $srch->getResultSet();
         $requests = FatApp::getDb()->fetchAll($rs);
-
+        
         $this->set('sellerPage', false);
         $this->set('buyerPage', true);
 

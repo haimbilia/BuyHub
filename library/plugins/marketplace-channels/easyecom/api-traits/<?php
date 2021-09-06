@@ -1,0 +1,195 @@
+<?php
+'jsAdminVariablesCache1'
+'jsAdminVariablesCache2'
+'jsAdminVariablesCache3'
+'avdertiserUserReportsCacheVar1'
+'avdertiserUserReportsCacheVar2'
+'avdertiserUserReportsCacheVar3'
+'affiliatesUserReportsCacheVar1'
+'affiliatesUserReportsCacheVar2'
+'affiliatesUserReportsCacheVar3'
+'buyerReportsCacheVar1'
+'buyerReportsCacheVar2'
+'buyerReportsCacheVar3'
+'catalogReportCacheVar1'
+'catalogReportCacheVar2'
+'catalogReportCacheVar3'
+'earningsReportsCacheVar1'
+'earningsReportsCacheVar2'
+'earningsReportsCacheVar3'
+'dashboardInfoCache1'
+'dashboardInfoCache2'
+'dashboardInfoCache3'
+'payoutReportsCacheVar1'
+'payoutReportsCacheVar2'
+'payoutReportsCacheVar3'
+'prefPayMethodReportsCacheVar1'
+'prefPayMethodReportsCacheVar2'
+'prefPayMethodReportsCacheVar3'
+'productProfitReportsCacheVar1'
+'productProfitReportsCacheVar2'
+'productProfitReportsCacheVar3'
+'productReportCacheVar1'
+'productReportCacheVar2'
+'productReportCacheVar3'
+'salesReportCacheVar1'
+'salesReportCacheVar2'
+'salesReportCacheVar3'
+'zonesWithStateCountry1'
+'zonesWithStateCountry2'
+'zonesWithStateCountry3'
+'shopsReportCacheVar1'
+'shopsReportCacheVar2'
+'shopsReportCacheVar3'
+'spackageReportsCacheVar1'
+'spackageReportsCacheVar2'
+'spackageReportsCacheVar3'
+'spackageSReportsCacheVar1'
+'spackageSReportsCacheVar2'
+'spackageSReportsCacheVar3'
+'transcationReportsCacheVar1'
+'transcationReportsCacheVar2'
+'transcationReportsCacheVar3'
+'getBadgeTypeArr1'
+'getBadgeTypeArr2'
+'getBadgeTypeArr3'
+'getBadgeConditionTypeArr1'
+'getBadgeConditionTypeArr2'
+'getBadgeConditionTypeArr3'
+'getBadgeShapeTypesArr1'
+'getBadgeShapeTypesArr2'
+'getBadgeShapeTypesArr3'
+'getRibbonPostionArr1'
+'getRibbonPostionArr2'
+'getRibbonPostionArr3'
+'getBadgeApprovalStatusArr1'
+'getBadgeApprovalStatusArr2'
+'getBadgeApprovalStatusArr3'
+'getBadgeLinkRecordTypeArr1'
+'getBadgeLinkRecordTypeArr2'
+'getBadgeLinkRecordTypeArr3'
+'getBadgeLinkConditionTypesArr1'
+'getBadgeLinkConditionTypesArr2'
+'getBadgeLinkConditionTypesArr3'
+'getBadgeLinkRecordConditionArr1'
+'getBadgeLinkRecordConditionArr2'
+'getBadgeLinkRecordConditionArr3'
+'getBadgeRequestStatusArr1'
+'getBadgeRequestStatusArr2'
+'getBadgeRequestStatusArr3'
+'currencyGetCurrencyAssoc1'
+'currencyGetCurrencyAssoc2'
+'currencyGetCurrencyAssoc3'
+'getLayoutDirection1'
+'getLayoutDirection2'
+'getLayoutDirection3'
+'selProdInventoryStockStatusCacheVar1'
+'selProdInventoryStockStatusCacheVar2'
+'selProdInventoryStockStatusCacheVar3'
+'selProdInventoryReportCacheVar1'
+'selProdInventoryReportCacheVar2'
+'selProdInventoryReportCacheVar3'
+
+'headerTopNavigation_1'
+'headerNavigation_1'
+'headerTopNavigations_1'
+'headerCategories_1'
+'navigationCatCache1'
+'headerNavCache1' . '-' . $type
+'footerNavigationCache1'
+
+
+
+'datepickerlangfilePath' . $langCode . "-" . $langCountryCode
+"dashboardInfo_" . $type . '_' . $interval . '_1'
+"dashboardInfo_" . $type . '_' . $interval . '_2'
+"dashboardInfo_" . $type . '_' . $interval . '_3'
+
+'bannersCache' . $type . '_1'
+'bannersCache' . $type . '_2'
+'bannersCache' . $type . '_3'
+
+'options ' . $categoryId . '-1'
+'options ' . $categoryId . '-2'
+'options ' . $categoryId . '-3'
+
+'buyerUserReportsCacheVar' . $userType . '-1'
+'buyerUserReportsCacheVar' . $userType . '-2'
+'buyerUserReportsCacheVar' . $userType . '-3'
+
+
+
+'homePageProdLayout1' . $collection['collection_id'] . $cacheKey
+'homePageProdLayout2' . $collection['collection_id'] . $cacheKey
+'homePageProdLayout3' . $collection['collection_id'] . $cacheKey
+'homePageCatLayout1' . $collection['collection_id'] . $cacheKey
+'homePageCatLayout2' . $collection['collection_id'] . $cacheKey
+'homePageShopLayout1' . $collection['collection_id'] . $cacheKey
+'homePageBrandLayout1' . $collection['collection_id'] . $cacheKey
+'homePageBlogLayout1' . $collection['collection_id'] . $cacheKey
+'homePageFaqLayout1' . $collection['collection_id'] . $cacheKey
+'homePageTestimonialLayout1' . $collection['collection_id'] . $cacheKey
+'homePageContentBlockLayout1' . $collection['collection_id'] . $cacheKey
+'collectionsArr' . $cacheKey
+'collectionCache_' . $cacheKey
+'cacheTimeStamp' . $this->siteLangId
+'jsVariablesCache' . $this->siteLangId
+'datepickerlangfilePath' . $langCode . "-" . $langCountryCode
+'brandFilter' . $cacheKey
+'conditions' . $cacheKey
+'availabilities' . $cacheKey
+'autoSuggetionsCache' . $cacheKey
+$_SERVER['REQUEST_URI']
+$imagePath
+$_SERVER['REQUEST_URI']
+$_SERVER['REQUEST_URI']
+$_SERVER['REQUEST_URI']
+$_SERVER['REQUEST_URI']
+
+
+
+
+
+
+
+
+
+
+
+
+'languageGetAllNames' . $cacheKey
+'languageGetAllCodesAssoc' . $cacheKey
+
+'categoryArrCache' . $cacheKey
+'taxCharges' . $cacheKey
+'taxCharges' . $cacheKey
+'currencyGetCurrencyAssoc' . self::$_currency_id . '-' . self::$_lang_id
+'catFilter' . $cacheKey
+
+
+
+
+
+
+
+
+$cacheKey
+$cacheKey
+$cacheKey
+$cacheKey
+'cacheTimeStamp' . $this->siteLangId
+'jsVariablesCache' . $this->siteLangId
+'datepickerlangfilePath' . $langCode . "-" . $langCountryCode
+'sellerPayoutReportsCacheVar' . $this->siteLangId
+'productProfitReportsCacheVar' . $this->siteLangId
+
+
+'shopsReportCacheVar' . $this->siteLangId
+'zonesWithStateCountry' . $this->siteLangId
+'zonesWithStateCountry' . $this->siteLangId
+'sellerTranscationReportsCacheVar' . $this->siteLangId
+'ShopifyCollectionsCache'
+'merchantCategoryCode' . $this->langId
+'stripePayoutInterval' . $this->langId
+'stripePayoutDays' . $this->langId
+self::KEY_NAME . '-carriers' . $this->langId
