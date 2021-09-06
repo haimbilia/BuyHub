@@ -913,7 +913,6 @@ class CheckoutController extends MyAppController
             Message::addErrorMessage($this->cartObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
-
         $cartSummary = $this->cartObj->getCartFinancialSummary($this->siteLangId);
 
         $userId = UserAuthentication::getLoggedUserId();
@@ -941,11 +940,9 @@ class CheckoutController extends MyAppController
         $orderData = array();
         /* add Order Data[ */
         if (true === MOBILE_APP_API_CALL) {
-            $order_id = FatApp::getPostedData('orderId', Fatutility::VAR_STRING, false);
-            $orderNo = FatApp::getPostedData('orderNo', Fatutility::VAR_INT, 0);
+            $order_id = FatApp::getPostedData('orderId', Fatutility::VAR_INT, 0);
         } else {
-            $order_id = isset($_SESSION['shopping_cart']["order_id"]) ? $_SESSION['shopping_cart']["order_id"] : false;
-            $orderNo = isset($_SESSION['shopping_cart']["order_no"]) ? $_SESSION['shopping_cart']["order_no"] : 0;
+            $order_id = isset($_SESSION['shopping_cart']["order_id"]) ? $_SESSION['shopping_cart']["order_id"] : 0;
         }
 
         $shippingAddressArr = array();
@@ -1457,10 +1454,18 @@ class CheckoutController extends MyAppController
         $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
-        /* $orderInfo = $orderObj->getOrderById( $order_id, $this->siteLangId, array('payment_status' => 0) ); */
         if (!$orderInfo) {
             $this->cartObj->clear();
-            FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'viewOrder', array($order_id)));
+            $msg = Labels::getLabel('MSG_INVALID_ORDER', $this->siteLangId);
+            if (true === MOBILE_APP_API_CALL) {
+                LibHelper::dieJsonError($msg);
+            } else {
+                Message::addErrorMessage($msg);
+                if (FatUtility::isAjaxCall()) {
+                    Message::addErrorMessage($orderObj->getError());
+                }
+                FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'viewOrder', array($order_id), CONF_WEBROOT_DASHBOARD));
+            }
         }
 
         $userWalletBalance = User::getUserBalance($userId, true);
@@ -1505,7 +1510,6 @@ class CheckoutController extends MyAppController
         }
 
         $cartHasDigitalProduct = $this->cartObj->hasDigitalProduct();
-
         $this->set('paymentMethods', $paymentMethods);
         $this->set('userWalletBalance', $userWalletBalance);
         $this->set('cartSummary', $cartSummary);
@@ -1528,7 +1532,7 @@ class CheckoutController extends MyAppController
         $this->set('orderId', $order_id);
         $this->set('orderPickUpData', $orderPickUpData);
         $this->set('orderShippingData', $shippingData);
-
+        // die(';l;l;l;');
         if (true === MOBILE_APP_API_CALL) {
             $this->set('products', $cartProducts);
             $this->set('orderType', $orderInfo['order_type']);

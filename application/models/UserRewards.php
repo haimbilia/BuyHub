@@ -1,5 +1,7 @@
 <?php
 
+use Stripe\Order;
+
 class UserRewards extends MyAppModel
 {
     public const DB_TBL = 'tbl_user_reward_points';
@@ -29,12 +31,13 @@ class UserRewards extends MyAppModel
 
     public static function debit($userId, $rewardPointUsed, $orderId, $langId = 0)
     {
+        $orderNo = Orders::getAttributesById($orderId, 'order_no');
         $rewardsRecord = new UserRewards();
         $rewarPointArr = array(
             'urp_user_id' => $userId,
             'urp_points' => '-' . $rewardPointUsed,
             'urp_used_order_id' => $orderId,
-            'urp_comments' => 'Reward Points used in checkout with order ID ' . $orderId,
+            'urp_comments' => 'Reward Points used in checkout with order ID ' . $orderNo,
         );
         $rewardsRecord->assignValues($rewarPointArr);
         if (!$rewardsRecord->save()) {
