@@ -116,6 +116,9 @@
     &--arrow{
         position: relative;
         padding-#{$end-direction}: 20px;
+        &:hover{
+            text-decoration: none;
+        }
         &::before{
             position: absolute;
             #{$end-direction}: 5px;
