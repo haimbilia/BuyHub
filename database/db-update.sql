@@ -1063,7 +1063,9 @@ ALTER TABLE `tbl_user_reward_point_breakup` CHANGE `urpbreakup_used_order_no` `u
 ALTER TABLE `tbl_user_transactions` DROP `utxn_order_id`;
 ALTER TABLE `tbl_user_transactions` CHANGE `utxn_order_no` `utxn_order_id` BIGINT NOT NULL;
 
-ALTER TABLE `tbl_orders` CHANGE `order_no` `order_id` BIGINT NOT NULL AUTO_INCREMENT, CHANGE `order_id` `order_no` VARCHAR(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `tbl_orders` CHANGE `order_id` `order_number` VARCHAR(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+ALTER TABLE `tbl_orders` CHANGE `order_no` `order_id` BIGINT(20) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tbl_orders` CHANGE `order_number` `order_no` VARCHAR(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 
 -- ---------Task 899377 Auto Increment Order Id ------ -- 
 ALTER TABLE `tbl_badges` ADD `badge_updated_on` DATETIME NOT NULL AFTER `badge_active`;
