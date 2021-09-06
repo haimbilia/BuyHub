@@ -13,6 +13,7 @@
             </div>
             <div class="main-header-toolbar">
                 <div class="header-action">
+                    
                     <div class="header-action__item">
                         <a class="header-action__trigger" href="javascript:void(0);" data-toggle="modal"
                             data-target="#search-main">
@@ -495,6 +496,7 @@
 
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
