@@ -56,7 +56,7 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                         <table class="table table--details">
                             <tr>
                                 <td><strong><?php echo Labels::getLabel('LBL_Order/Invoice_ID', $adminLangId); ?>:</strong>
-                                    <?php echo $order["order_no"]; ?>
+                                    <?php echo $order["order_number"]; ?>
                                 </td>
                                 <td><strong><?php echo Labels::getLabel('LBL_Order_Date', $adminLangId); ?>:
                                     </strong> <?php echo FatDate::format($order['order_date_added'], true, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())); ?>

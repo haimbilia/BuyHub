@@ -45,7 +45,7 @@
                     if ($order['totOrders'] > 1) {
                         $txt .= $order['op_invoice_number'];
                     } else {
-                        $txt .= $order['order_no'];
+                        $txt .= $order['order_number'];
                     }
                     $txt .= '</a><br/>' . FatDate::format($order['order_date_added']);
                     $td->appendElement('plaintext', array(), $txt, true);

@@ -260,7 +260,7 @@ class Orders extends MyAppModel
             $srch->joinTable(
                 static::DB_TBL_LANG,
                 'LEFT OUTER JOIN',
-                'o_l.orderlang_order_id = o.order_no AND orderlang_lang_id = ' . $langId,
+                'o_l.orderlang_order_id = o.order_id AND orderlang_lang_id = ' . $langId,
                 'o_l'
             );
         }
@@ -336,19 +336,19 @@ class Orders extends MyAppModel
         }
 
         if (!empty($data['order_id'])) {
-            $oldOrderData = Orders::getAttributesById($data['order_id'], ['order_payment_status', 'order_user_id', 'order_no']);
+            $oldOrderData = Orders::getAttributesById($data['order_id'], ['order_payment_status', 'order_user_id', 'order_number']);
             if (false == $oldOrderData || Orders::ORDER_PAYMENT_PENDING != $oldOrderData['order_payment_status'] ||  $data['order_user_id'] != $oldOrderData['order_user_id']) {
                 $data['order_id'] = 0;
             }
 
             if (!empty($oldOrderData)) {
-                $this->orderNo = $oldOrderData['order_no'];
+                $this->orderNo = $oldOrderData['order_number'];
             }
         }
 
         if (empty($data['order_id'])) {
             $this->orderNo = $this->generateOrderNo();
-            $data['order_no'] = $this->getOrderNo();
+            $data['order_number'] = $this->getOrderNo();
         }
 
         $recordObj = new TableRecord(static::DB_TBL);
@@ -790,18 +790,18 @@ class Orders extends MyAppModel
         unset($data['subscrCharges']);
 
         if (!empty($data['order_id'])) {
-            $oldOrderData = Orders::getAttributesById($data['order_id'], ['order_payment_status', 'order_user_id', 'order_no']);
+            $oldOrderData = Orders::getAttributesById($data['order_id'], ['order_payment_status', 'order_user_id', 'order_number']);
             if (false === $oldOrderData || Orders::ORDER_PAYMENT_PENDING != $oldOrderData['order_payment_status'] ||  $data['order_user_id'] != $oldOrderData['order_user_id']) {
                 $data['order_id'] = 0;
             }
 
             if (!empty($oldOrderData)) {
-                $this->orderNo = $oldOrderData['order_no'];
+                $this->orderNo = $oldOrderData['order_number'];
             }
         }
         if (empty($data['order_id'])) {
             $this->orderNo = $this->generateOrderNo();
-            $data['order_no'] = $this->getOrderNo();
+            $data['order_number'] = $this->getOrderNo();
         }
 
         $this->orderNo = $data['order_id'];
@@ -953,19 +953,19 @@ class Orders extends MyAppModel
         unset($data['extra']);
 
         if (!empty($data['order_id'])) {
-            $oldOrderData = Orders::getAttributesById($data['order_id'], ['order_payment_status', 'order_user_id', 'order_no']);
+            $oldOrderData = Orders::getAttributesById($data['order_id'], ['order_payment_status', 'order_user_id', 'order_number']);
             if (false === $oldOrderData || Orders::ORDER_PAYMENT_PENDING != $oldOrderData['order_payment_status'] ||  $data['order_user_id'] != $oldOrderData['order_user_id']) {
                 $data['order_id'] = 0;
             }
 
             if (!empty($oldOrderData)) {
-                $this->orderNo = $oldOrderData['order_no'];
+                $this->orderNo = $oldOrderData['order_number'];
             }
         }
 
         if (empty($data['order_id'])) {
             $this->orderNo = $this->generateOrderNo();
-            $data['order_no'] = $this->getOrderNo();
+            $data['order_number'] = $this->getOrderNo();
         }
         $this->orderNo = $data['order_id'];
 
@@ -1188,9 +1188,9 @@ class Orders extends MyAppModel
             $srch->addMultipleFields(array('op_product_name', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_other_charges', 'op_shipping_duration_name', 'op_product_tax_options'));
         }
 
-        $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'torp.op_order_id = tor.order_no', 'tor');
+        $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'torp.op_order_id = tor.order_number', 'tor');
         if ($langId > 0) {
-            $srch->joinTable(Orders::DB_TBL_LANG, 'LEFT OUTER JOIN', 'tor_l.orderlang_order_id = tor.order_no and tor_l.orderlang_lang_id = ' . $langId, 'tor_l');
+            $srch->joinTable(Orders::DB_TBL_LANG, 'LEFT OUTER JOIN', 'tor_l.orderlang_order_id = tor.order_number and tor_l.orderlang_lang_id = ' . $langId, 'tor_l');
             $srch->addMultipleFields(array('order_shippingapi_name'));
         }
 
@@ -2227,7 +2227,7 @@ class Orders extends MyAppModel
         $srch->joinTable(OrderProduct::DB_TBL_CHARGES, 'LEFT OUTER JOIN', 'opc.' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'op_id = op.op_id', 'opc');
         $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
 
-        $srch->addMultipleFields(array('op.*', 'opst.*', 'op_l.*', 'o.order_no', 'o.order_id', 'o.order_payment_status', 'o.order_date_added', 'o.order_language_id', 'o.order_user_id', 'sum(' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount) as op_other_charges', 'o.order_affiliate_user_id', 'plugin_code', 'optsu_user_id', 'ops.opshipping_by_seller_user_id', 'o.order_pmethod_id', 'opshipping_is_seller_plugin', 'opshipping_plugin_id', 'opshipping_plugin_charges'));
+        $srch->addMultipleFields(array('op.*', 'opst.*', 'op_l.*', 'o.order_number', 'o.order_id', 'o.order_payment_status', 'o.order_date_added', 'o.order_language_id', 'o.order_user_id', 'sum(' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount) as op_other_charges', 'o.order_affiliate_user_id', 'plugin_code', 'optsu_user_id', 'ops.opshipping_by_seller_user_id', 'o.order_pmethod_id', 'opshipping_is_seller_plugin', 'opshipping_plugin_id', 'opshipping_plugin_charges'));
         $srch->addCondition('op_id', '=', $op_id);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -2617,7 +2617,7 @@ class Orders extends MyAppModel
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
 
-        $formattedOrderValue = " #" . $orderInfo['order_no'];
+        $formattedOrderValue = " #" . $orderInfo['order_number'];
         /* CommonHelper::printArray($orderInfo); die; */
         if ($orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
             if ($orderInfo['order_renew']) {
@@ -2732,7 +2732,7 @@ class Orders extends MyAppModel
         $srch->joinOrderBuyerUser();
         $srch->addMultipleFields(
             array(
-                'order_no', 'order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission',
+                'order_number', 'order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission',
                 'order_reward_point_value', 'order_volume_discount_total', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'order_net_amount', 'order_shippingapi_name', 'order_pmethod_id', 'ifnull(plugin_name,plugin_identifier)as plugin_name', 'order_discount_total', 'plugin_code', 'order_is_wallet_selected', 'order_reward_point_used', 'order_deleted'
             )
         );

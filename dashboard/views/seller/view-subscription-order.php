@@ -30,7 +30,7 @@
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="info--order">
-                                <p><strong><?php echo Labels::getLabel('LBL_Invoice', $siteLangId);?> #: </strong><?php echo $orderDetail['order_no'];?></p>
+                                <p><strong><?php echo Labels::getLabel('LBL_Invoice', $siteLangId);?> #: </strong><?php echo $orderDetail['order_number'];?></p>
                                 <p><strong><?php echo Labels::getLabel('LBL_Date', $siteLangId);?>: </strong><?php echo FatDate::format($orderDetail['order_date_added']);?></p>
                                 <span class="gap"></span>
                             </div>

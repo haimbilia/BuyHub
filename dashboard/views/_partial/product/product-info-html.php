@@ -25,7 +25,7 @@ if (isset($order)) {
 
     $shopName = $order['op_shop_name'] ?? '';
     if (isset($order['totOrders']) && $order['totOrders'] > 1) {
-        $otherInfo = Labels::getLabel('LBL_Part_combined_order', $siteLangId) . ' <a title="' . Labels::getLabel('LBL_View_Order_Detail', $siteLangId) . '" href="' . UrlHelper::generateUrl('Buyer', 'viewOrder', array($order['order_id'])) . '">' . $order['order_no'] . "</a>";
+        $otherInfo = Labels::getLabel('LBL_Part_combined_order', $siteLangId) . ' <a title="' . Labels::getLabel('LBL_View_Order_Detail', $siteLangId) . '" href="' . UrlHelper::generateUrl('Buyer', 'viewOrder', array($order['order_id'])) . '">' . $order['order_number'] . "</a>";
     }
 
     $date = isset($showDate) && $order['order_date_added']   ? FatDate::format($order['order_date_added']) : '';

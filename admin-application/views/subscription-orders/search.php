@@ -2,7 +2,7 @@
 <?php
 $arr_flds = array(
     'listserial'    =>    Labels::getLabel('LBL_#', $adminLangId),
-    'order_no' => Labels::getLabel('LBL_Order_ID', $adminLangId),
+    'order_number' => Labels::getLabel('LBL_Order_ID', $adminLangId),
     'buyer_user_name' => Labels::getLabel('LBL_Customer_Name', $adminLangId),
     'order_date_added' => Labels::getLabel('LBL_Order_Date', $adminLangId),
     'order_net_amount' => Labels::getLabel('LBL_Total', $adminLangId),
@@ -24,7 +24,7 @@ foreach ($ordersList as $sn => $row) {
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
-            case 'order_no':
+            case 'order_number':
                 $td->appendElement('a', array('target' => '_blank', 'href' => UrlHelper::generateUrl('SubscriptionOrders', 'view', array($row['order_id']))), $row[$key], true);
                 break;
             case 'buyer_user_name':

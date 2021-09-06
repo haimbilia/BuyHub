@@ -31,7 +31,7 @@ class UserRewards extends MyAppModel
 
     public static function debit($userId, $rewardPointUsed, $orderId, $langId = 0)
     {
-        $orderNo = Orders::getAttributesById($orderId, 'order_no');
+        $orderNo = Orders::getAttributesById($orderId, 'order_number');
         $rewardsRecord = new UserRewards();
         $rewarPointArr = array(
             'urp_user_id' => $userId,
