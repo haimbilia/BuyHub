@@ -69,15 +69,36 @@
                     <!-- end:: Subheader -->
                     <!-- begin:: Content -->
                     <div class="container  grid__item grid__item--fluid">
+
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-head">
+                                        <div class="card-head-label">
+                                            <h3 class="card-head-title">Yokart Admin</h3>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="pages__list-wrapper">
+                                            <li><a href="listing.php">Listing</a></li>
+                                            <li><a href="login-1.php">Login</a></li>
+                                            <li><a href="password-reset.php">Password Reset</a></li>
+                                            <li><a href="profile-management.php">Profile Management</a></li>
+                                            <li><a href="get-started.php">Getting Started</a></li>
+                                            <li><a href="setting.php">Settings</a></li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-xl-12">
                                 <!--begin::card-->
                                 <div class="card">
-
                                     <div class="card-head">
                                         <div class="card-head-label">
-                                            <h3 class="card-head-title">
-                                                Page list </h3>
+                                            <h3 class="card-head-title"> Page list </h3>
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -91,16 +112,19 @@
                                                                 <li><a href="index.php">Dashboard</a></li>
                                                                 <li><a href="index.php">Default Dashboard</a></li>
                                                                 <li><a href="fluid.php">Fluid Dashboard </a></li>
-                                                                <li><a href="dashboard.php">Yo!kart Dashboard</a></li>
+                                                                <li><a href="dashboard.php">Yo!kart Dashboard</a>
+                                                                </li>
                                                             </ul>
                                                         </li>
                                                         <li><a href="">Projects</a>
                                                             <ul>
                                                                 <li><a href="#">List</a>
                                                                     <ul>
-                                                                        <li><a href="list-columns-1.php">Columns 1</a>
+                                                                        <li><a href="list-columns-1.php">Columns
+                                                                                1</a>
                                                                         </li>
-                                                                        <li><a href="list-columns-2.php">Columns 2</a>
+                                                                        <li><a href="list-columns-2.php">Columns
+                                                                                2</a>
                                                                         </li>
                                                                         <li><a href="list-datatable.php">Datatable</a>
                                                                         </li>
@@ -117,9 +141,11 @@
                                                             <li><a href="#">Base</a>
                                                                 <ul>
                                                                     <li><a href="colors.php">State Colors</a></li>
-                                                                    <li><a href="button-group.php">Button Group</a></li>
+                                                                    <li><a href="button-group.php">Button Group</a>
+                                                                    </li>
                                                                     <li><a href="dropdown.php">Dropdown</a></li>
-                                                                    <li><a href="bootstrap.php">Bootstrap Tabs</a></li>
+                                                                    <li><a href="bootstrap.php">Bootstrap Tabs</a>
+                                                                    </li>
                                                                     <li><a href="line.php">Line Tabs</a></li>
                                                                     <li><a href="accordions.php">Accordions</a></li>
                                                                     <li><a href="tables.php">Tables</a></li>
@@ -140,13 +166,15 @@
                                                                     <li>
                                                                         <a href="#">Icon</a>
                                                                         <ul>
-                                                                            <li><a href="flaticon.php">Flaticon</a></li>
+                                                                            <li><a href="flaticon.php">Flaticon</a>
+                                                                            </li>
                                                                             <li><a href="fontawesome5.php">Fontawesome
                                                                                     5</a></li>
                                                                             <li><a
                                                                                     href="lineawesome.php">Lineawesome</a>
                                                                             </li>
-                                                                            <li><a href="socicon.php">Socicons</a></li>
+                                                                            <li><a href="socicon.php">Socicons</a>
+                                                                            </li>
                                                                             <li><a href="svg.php">SVG Icons</a></li>
                                                                         </ul>
                                                                     </li>
@@ -179,18 +207,23 @@
                                                                     <li><a href="bootstrap-notify.php">Bootstrap
                                                                             Notify</a></li>
                                                                     <li><a href="toastr.php">Toastr</a></li>
-                                                                    <li><a href="sweetalert2.php">SweetAlert2</a></li>
-                                                                    <li><a href="dual-listbox.php">Dual Listbox</a></li>
+                                                                    <li><a href="sweetalert2.php">SweetAlert2</a>
+                                                                    </li>
+                                                                    <li><a href="dual-listbox.php">Dual Listbox</a>
+                                                                    </li>
                                                                 </ul>
                                                             </li>
                                                             <li><a href="#">cards </a>
                                                                 <ul>
                                                                     <li><a href="base.php">Base cards</a></li>
-                                                                    <li><a href="advanced.php">Advanced cards</a></li>
+                                                                    <li><a href="advanced.php">Advanced cards</a>
+                                                                    </li>
                                                                     <li><a href="tabbed.php">Tabbed cards</a></li>
-                                                                    <li><a href="draggable.php">Draggable cards</a></li>
+                                                                    <li><a href="draggable.php">Draggable cards</a>
+                                                                    </li>
                                                                     <li><a href="tools.php">card Tools</a></li>
-                                                                    <li><a href="sticky-head.php">Sticky Head</a></li>
+                                                                    <li><a href="sticky-head.php">Sticky Head</a>
+                                                                    </li>
                                                                 </ul>
                                                             </li>
                                                             <li><a href="#">Widgets </a>
@@ -204,7 +237,8 @@
                                                                 <ul>
                                                                     <li><a href="base.php">Basic Calendar</a></li>
                                                                     <li><a href="list-view.php">List Views</a></li>
-                                                                    <li><a href="google.php">Google Calendar</a></li>
+                                                                    <li><a href="google.php">Google Calendar</a>
+                                                                    </li>
                                                                     <li><a href="external-events.php">External
                                                                             Events</a></li>
                                                                     <li><a href="background-events.php">Background
@@ -213,7 +247,8 @@
                                                             </li>
                                                             <li><a href="#">Maps </a>
                                                                 <ul>
-                                                                    <li><a href="google-maps.php">Google Maps</a></li>
+                                                                    <li><a href="google-maps.php">Google Maps</a>
+                                                                    </li>
                                                                     <li><a href="jqvmaps.php"> JQVMap</a></li>
                                                                 </ul>
                                                             </li>
@@ -221,7 +256,8 @@
                                                                 <ul>
                                                                     <li><a href="#">amCharts</a>
                                                                         <ul>
-                                                                            <li><a href="charts.php">amCharts Charts</a>
+                                                                            <li><a href="charts.php">amCharts
+                                                                                    Charts</a>
                                                                             </li>
                                                                             <li><a href="stock-charts.php">amCharts
                                                                                     Stock Charts</a></li>
@@ -229,11 +265,15 @@
                                                                             </li>
                                                                         </ul>
                                                                     </li>
-                                                                    <li><a href="apex-charts.php">Apex Charts</a></li>
-                                                                    <li><a href="flotcharts.php">Flot Charts</a></li>
-                                                                    <li><a href="google-charts.php">Google Charts</a>
+                                                                    <li><a href="apex-charts.php">Apex Charts</a>
                                                                     </li>
-                                                                    <li><a href="morris-charts.php">Morris Charts</a>
+                                                                    <li><a href="flotcharts.php">Flot Charts</a>
+                                                                    </li>
+                                                                    <li><a href="google-charts.php">Google
+                                                                            Charts</a>
+                                                                    </li>
+                                                                    <li><a href="morris-charts.php">Morris
+                                                                            Charts</a>
                                                                     </li>
                                                                 </ul>
                                                             </li>
@@ -253,9 +293,12 @@
                                                             <li><a href="#">List</a>
                                                                 <ul>
                                                                     <li><a href="list-default.php">Default</a></li>
-                                                                    <li><a href="list-datatable.php">Datatable</a></li>
-                                                                    <li><a href="list-colums-1.php">Columns 1 </a></li>
-                                                                    <li><a href="list-colums-2.php">Columns 2</a></li>
+                                                                    <li><a href="list-datatable.php">Datatable</a>
+                                                                    </li>
+                                                                    <li><a href="list-colums-1.php">Columns 1 </a>
+                                                                    </li>
+                                                                    <li><a href="list-colums-2.php">Columns 2</a>
+                                                                    </li>
                                                                 </ul>
                                                             </li>
                                                         </ul>
@@ -266,14 +309,17 @@
                                                                 <ul>
                                                                     <li><a href="#">Form Control</a>
                                                                         <ul>
-                                                                            <li><a href="base-input.php">Base Inputs</a>
+                                                                            <li><a href="base-input.php">Base
+                                                                                    Inputs</a>
                                                                             </li>
                                                                             <li><a href="input-group.php">Input
                                                                                     Groups</a></li>
-                                                                            <li><a href="checkbox.php">Checkbox</a></li>
+                                                                            <li><a href="checkbox.php">Checkbox</a>
+                                                                            </li>
                                                                             <li><a href="radio.php">Radio</a></li>
                                                                             <li><a href="switch.php">Switch</a></li>
-                                                                            <li><a href="option.php">Mega Options</a>
+                                                                            <li><a href="option.php">Mega
+                                                                                    Options</a>
                                                                             </li>
                                                                         </ul>
                                                                     </li>
@@ -306,7 +352,8 @@
                                                                                     Select Splitter</a></li>
                                                                             <li><a href="bootstrap-select.php">Bootstrap
                                                                                     Select</a></li>
-                                                                            <li><a href="select2.php">Select2</a></li>
+                                                                            <li><a href="select2.php">Select2</a>
+                                                                            </li>
                                                                             <li><a href="typeahead.php">Typeahead</a>
                                                                             </li>
                                                                         </ul>
@@ -317,9 +364,11 @@
                                                                             </li>
                                                                             <li><a href="form-repeater.php">Form
                                                                                     Repeater</a></li>
-                                                                            <li><a href="ion-range-slider.php">Ion Range
+                                                                            <li><a href="ion-range-slider.php">Ion
+                                                                                    Range
                                                                                     Slider</a></li>
-                                                                            <li><a href="input-mask.php">Input Masks</a>
+                                                                            <li><a href="input-mask.php">Input
+                                                                                    Masks</a>
                                                                             </li>
                                                                             <li><a href="quill.php">Quill Text
                                                                                     Editor</a></li>
@@ -327,7 +376,8 @@
                                                                                     WYSIWYG</a></li>
                                                                             <li><a href="bootstrap-markdown.php">Markdown
                                                                                     Editor</a></li>
-                                                                            <li><a href="autosize.php">Autosize</a></li>
+                                                                            <li><a href="autosize.php">Autosize</a>
+                                                                            </li>
                                                                             <li><a href="recaptcha.php">Clipboard</a>
                                                                             </li>
                                                                             <li><a href="recaptcha.php">Google
@@ -350,7 +400,8 @@
                                                                                     Forms</a></li>
                                                                             <li><a href="multi-column-forms.php">Multi
                                                                                     Column Forms</a></li>
-                                                                            <li><a href="action-bars.php">Basic Action
+                                                                            <li><a href="action-bars.php">Basic
+                                                                                    Action
                                                                                     Bars</a></li>
                                                                             <li><a href="sticky-action-bar.php">Sticky
                                                                                     Action Bar</a></li>
@@ -362,15 +413,20 @@
                                                                 <ul>
                                                                     <li><a href="#">Base</a>
                                                                         <ul>
-                                                                            <li><a href="data-local.php">Local Data</a>
+                                                                            <li><a href="data-local.php">Local
+                                                                                    Data</a>
                                                                             </li>
-                                                                            <li><a href="data-json.php">JSON Data</a>
+                                                                            <li><a href="data-json.php">JSON
+                                                                                    Data</a>
                                                                             </li>
-                                                                            <li><a href="data-ajax.php">Ajax Data</a>
+                                                                            <li><a href="data-ajax.php">Ajax
+                                                                                    Data</a>
                                                                             </li>
-                                                                            <li><a href="html-table.php">HTML Table</a>
+                                                                            <li><a href="html-table.php">HTML
+                                                                                    Table</a>
                                                                             </li>
-                                                                            <li><a href="local-sort.php">Local Sort</a>
+                                                                            <li><a href="local-sort.php">Local
+                                                                                    Sort</a>
                                                                             </li>
                                                                             <li><a
                                                                                     href="translation.php">Translation</a>
@@ -383,15 +439,20 @@
                                                                 <ul>
                                                                     <li><a href="#">Base</a>
                                                                         <ul>
-                                                                            <li><a href="data-local.php">Local Data</a>
+                                                                            <li><a href="data-local.php">Local
+                                                                                    Data</a>
                                                                             </li>
-                                                                            <li><a href="data-json.php">JSON Data</a>
+                                                                            <li><a href="data-json.php">JSON
+                                                                                    Data</a>
                                                                             </li>
-                                                                            <li><a href="data-ajax.php">Ajax Data</a>
+                                                                            <li><a href="data-ajax.php">Ajax
+                                                                                    Data</a>
                                                                             </li>
-                                                                            <li><a href="html-table.php">HTML Table</a>
+                                                                            <li><a href="html-table.php">HTML
+                                                                                    Table</a>
                                                                             </li>
-                                                                            <li><a href="local-sort.php">Local Sort</a>
+                                                                            <li><a href="local-sort.php">Local
+                                                                                    Sort</a>
                                                                             </li>
                                                                             <li><a
                                                                                     href="translation.php">Translation</a>
@@ -404,7 +465,8 @@
                                                                                     Selection</a></li>
                                                                             <li><a href="row-details.php">Row
                                                                                     Details</a></li>
-                                                                            <li><a href="modal.php">Modal Examples</a>
+                                                                            <li><a href="modal.php">Modal
+                                                                                    Examples</a>
                                                                             </li>
                                                                             <li><a href="column-rendering.php">Column
                                                                                     Rendering</a></li>
@@ -416,15 +478,18 @@
                                                                     </li>
                                                                     <li><a href="#">Child Datatables</a>
                                                                         <ul>
-                                                                            <li><a href="data-local.php">Local Data</a>
+                                                                            <li><a href="data-local.php">Local
+                                                                                    Data</a>
                                                                             </li>
-                                                                            <li><a href="data-ajax.php">Remote Data</a>
+                                                                            <li><a href="data-ajax.php">Remote
+                                                                                    Data</a>
                                                                             </li>
                                                                         </ul>
                                                                     </li>
                                                                     <li><a href="#">API</a>
                                                                         <ul>
-                                                                            <li><a href="methods.php">API Methods</a>
+                                                                            <li><a href="methods.php">API
+                                                                                    Methods</a>
                                                                             </li>
                                                                             <li><a href="events.php">Events</a></li>
                                                                         </ul>
@@ -483,16 +548,20 @@
                                                                     </li>
                                                                     <li><a href="#">Extensions</a>
                                                                         <ul>
-                                                                            <li><a href="buttons.php">Buttons</a></li>
+                                                                            <li><a href="buttons.php">Buttons</a>
+                                                                            </li>
                                                                             <li><a href="colreorder.php">ColReorder</a>
                                                                             </li>
-                                                                            <li><a href="keytable.php">KeyTable</a></li>
+                                                                            <li><a href="keytable.php">KeyTable</a>
+                                                                            </li>
                                                                             <li><a href="responsive.php">Responsive</a>
                                                                             </li>
-                                                                            <li><a href="rowgroup.php">RowGroup</a></li>
+                                                                            <li><a href="rowgroup.php">RowGroup</a>
+                                                                            </li>
                                                                             <li><a href="rowreorder.php">RowReorder</a>
                                                                             </li>
-                                                                            <li><a href="scroller.php">Scroller</a></li>
+                                                                            <li><a href="scroller.php">Scroller</a>
+                                                                            </li>
                                                                             <li><a href="select.php">Select</a></li>
                                                                         </ul>
                                                                     </li>
@@ -510,7 +579,8 @@
                                                         <ul>
                                                             <li><a href="#">Profile 1</a>
                                                                 <ul>
-                                                                    <li><a href="profile-overview.php">Overview</a></li>
+                                                                    <li><a href="profile-overview.php">Overview</a>
+                                                                    </li>
                                                                     <li><a href="profile-personal-information.php">Personal
                                                                             Information</a></li>
                                                                     <li><a href="profile-account-information.php">Account
@@ -526,13 +596,17 @@
                                                             </li>
                                                             <li><a href="#">Contacts</a>
                                                                 <ul>
-                                                                    <li><a href="list-columns.php">List - Columns</a>
+                                                                    <li><a href="list-columns.php">List -
+                                                                            Columns</a>
                                                                     </li>
                                                                     <li><a href="list-datatable.php">List -
                                                                             Datatable</a></li>
-                                                                    <li><a href="view-contact.php">View Contact</a></li>
-                                                                    <li><a href="add-contact.php">Add Contact</a></li>
-                                                                    <li><a href="edit-contact.php">Edit Contact</a></li>
+                                                                    <li><a href="view-contact.php">View Contact</a>
+                                                                    </li>
+                                                                    <li><a href="add-contact.php">Add Contact</a>
+                                                                    </li>
+                                                                    <li><a href="edit-contact.php">Edit Contact</a>
+                                                                    </li>
                                                                 </ul>
                                                             <li><a href="#">Chat</a>
                                                                 <ul>
@@ -545,11 +619,16 @@
                                                     </li>
                                                     <li><a href="#">Projects</a>
                                                         <ul>
-                                                            <li><a href="list-columns-1.php">List - Columns 1</a></li>
-                                                            <li><a href="list-columns-2.php">List - Columns 2</a></li>
-                                                            <li><a href="list-columns-3.php">List - Columns 3</a></li>
-                                                            <li><a href="list-columns-4.php">List - Columns 4</a></li>
-                                                            <li><a href="list-datatable.php">List - Datatable</a></li>
+                                                            <li><a href="list-columns-1.php">List - Columns 1</a>
+                                                            </li>
+                                                            <li><a href="list-columns-2.php">List - Columns 2</a>
+                                                            </li>
+                                                            <li><a href="list-columns-3.php">List - Columns 3</a>
+                                                            </li>
+                                                            <li><a href="list-columns-4.php">List - Columns 4</a>
+                                                            </li>
+                                                            <li><a href="list-datatable.php">List - Datatable</a>
+                                                            </li>
                                                             <li><a href="view-project.php">View Project</a></li>
                                                             <li><a href="add-project.php">Add Project</a></li>
                                                             <li><a href="edit-project.php">Edit Project</a></li>
@@ -617,24 +696,36 @@
                                                             <li><a href="#">Error Pages</a>
                                                                 <ul>
                                                                     <li><a href="400.php">Bad Request (400)</a></li>
-                                                                    <li><a href="401.php">Unauthorised (401)</a></li>
-                                                                    <li><a href="403.php"> Access Denied (403)</a></li>
+                                                                    <li><a href="401.php">Unauthorised (401)</a>
+                                                                    </li>
+                                                                    <li><a href="403.php"> Access Denied (403)</a>
+                                                                    </li>
                                                                     <li><a href="404.php">Page not found (404)</a>
                                                                         <ul>
-                                                                            <li><a href="error-1.php">Error 1</a></li>
-                                                                            <li><a href="error-2.php">Error 2</a></li>
-                                                                            <li><a href="error-3.php">Error 3</a></li>
-                                                                            <li><a href="error-4.php">Error 4</a></li>
-                                                                            <li><a href="error-5.php">Error 5</a></li>
-                                                                            <li><a href="error-6.php">Error 6</a></li>
+                                                                            <li><a href="error-1.php">Error 1</a>
+                                                                            </li>
+                                                                            <li><a href="error-2.php">Error 2</a>
+                                                                            </li>
+                                                                            <li><a href="error-3.php">Error 3</a>
+                                                                            </li>
+                                                                            <li><a href="error-4.php">Error 4</a>
+                                                                            </li>
+                                                                            <li><a href="error-5.php">Error 5</a>
+                                                                            </li>
+                                                                            <li><a href="error-6.php">Error 6</a>
+                                                                            </li>
                                                                         </ul>
                                                                     </li>
                                                                     <li><a href="408.php">Time Out (408)</a></li>
-                                                                    <li><a href="500.php">Server error (500)</a></li>
-                                                                    <li><a href="501.php">Not Implemented (501)</a></li>
-                                                                    <li><a href="502.php">Service Temporarily Overloaded
+                                                                    <li><a href="500.php">Server error (500)</a>
+                                                                    </li>
+                                                                    <li><a href="501.php">Not Implemented (501)</a>
+                                                                    </li>
+                                                                    <li><a href="502.php">Service Temporarily
+                                                                            Overloaded
                                                                             (502)</a></li>
-                                                                    <li><a href="503.php">Service Unavailable (503)</a>
+                                                                    <li><a href="503.php">Service Unavailable
+                                                                            (503)</a>
                                                                     </li>
                                                                 </ul>
                                                             </li>
@@ -646,7 +737,8 @@
                                                             <li class=""><a href="email/account-verification.html"
                                                                     target="_blank">Account Verification</a></li>
                                                             <li class=""><a href="email/account-verification-admin.html"
-                                                                    target="_blank">Account Verification Admin</a></li>
+                                                                    target="_blank">Account Verification Admin</a>
+                                                            </li>
                                                             <li class=""><a href="email/admin-message.html"
                                                                     target="_blank">Admin Message</a></li>
                                                             <li class=""><a
@@ -654,7 +746,8 @@
                                                                     target="_blank">Admin Review Approval</a></li>
                                                             <li class=""><a
                                                                     href="email/admin-review-recived-without-approval.html"
-                                                                    target="_blank">Admin Review Without Approval</a>
+                                                                    target="_blank">Admin Review Without
+                                                                    Approval</a>
                                                             </li>
                                                             <li class=""><a href="email/buyer-give-review.html"
                                                                     target="_blank">Buyer Give Review</a></li>
@@ -681,15 +774,18 @@
                                                             <li class=""><a href="email/discount-coupon-buyer.html"
                                                                     target="_blank">Discount Coupon Buyer</a></li>
                                                             <li class=""><a href="email/email-from-admin-buyer.html"
-                                                                    target="_blank">Email from Admin To Buyer</a></li>
+                                                                    target="_blank">Email from Admin To Buyer</a>
+                                                            </li>
                                                             <li class=""><a href="email/failed-login-attempt.html"
                                                                     target="_blank">Failed Login Attempt</a></li>
                                                             <li class=""><a href="email/failed-login-attempt-admin.html"
-                                                                    target="_blank">Failed Login Attempt Admin</a></li>
+                                                                    target="_blank">Failed Login Attempt Admin</a>
+                                                            </li>
                                                             <li class=""><a href="email/favorite-email-buyer.html"
                                                                     target="_blank">Favorite Email Buyer</a></li>
                                                             <li class=""><a href="email/favorite-price-drop-buyer.html"
-                                                                    target="_blank">Favorite Price Drop Buyer</a></li>
+                                                                    target="_blank">Favorite Price Drop Buyer</a>
+                                                            </li>
                                                             <li class=""><a href="email/forgot-password.html"
                                                                     target="_blank">Forgot Password</a></li>
                                                             <li class=""><a href="email/forgot-password-admin.html"
@@ -703,9 +799,11 @@
                                                             <li class=""><a href="email/new-order-admin.html"
                                                                     target="_blank">New Order Admin</a></li>
                                                             <li class=""><a href="email/newsletter-subscribe-admin.html"
-                                                                    target="_blank">Newsletter subscribe admin</a></li>
+                                                                    target="_blank">Newsletter subscribe admin</a>
+                                                            </li>
                                                             <li class=""><a href="email/newsletter-subscribe-buyer.html"
-                                                                    target="_blank">Newsletter subscribe buyer</a></li>
+                                                                    target="_blank">Newsletter subscribe buyer</a>
+                                                            </li>
                                                             <li class=""><a
                                                                     href="email/newsletter-unsubscribe-admin.html"
                                                                     target="_blank">Newsletter unsubscribe admin</a>
@@ -727,13 +825,16 @@
                                                             <li class=""><a href="email/order-confirmation.html"
                                                                     target="_blank">Order confirmation</a></li>
                                                             <li class=""><a href="email/order-confirmation-email-2.html"
-                                                                    target="_blank">Order confirmation email-2</a></li>
+                                                                    target="_blank">Order confirmation email-2</a>
+                                                            </li>
                                                             <li class=""><a href="email/order-confirmation-email-3.html"
-                                                                    target="_blank">Order confirmation email-3</a></li>
+                                                                    target="_blank">Order confirmation email-3</a>
+                                                            </li>
                                                             <li class=""><a href="email/order-delivered-digital.html"
                                                                     target="_blank">Order delivered digital</a></li>
                                                             <li class=""><a href="email/order-delivered-physical.html"
-                                                                    target="_blank">Order delivered physical</a></li>
+                                                                    target="_blank">Order delivered physical</a>
+                                                            </li>
                                                             <li class=""><a href="email/order-ready-digital.html"
                                                                     target="_blank">Order ready digital</a></li>
                                                             <li class=""><a href="email/order-ready-physical.html"
@@ -746,7 +847,8 @@
                                                                     target="_blank">Order shipping email</a></li>
                                                             <li class=""><a
                                                                     href="email/payment-failed-payment-link.html"
-                                                                    target="_blank">Payment failed payment link</a></li>
+                                                                    target="_blank">Payment failed payment link</a>
+                                                            </li>
                                                             <li class=""><a href="email/pending-cart-buyer.html"
                                                                     target="_blank">Pending cart buyer</a></li>
                                                             <li class=""><a href="email/return-requested-admin.html"
@@ -755,23 +857,27 @@
                                                                     target="_blank">Return requested buyer</a></li>
                                                             <li class=""><a
                                                                     href="email/return-requested-buyer-approved.html"
-                                                                    target="_blank">Return requested buyer approved</a>
+                                                                    target="_blank">Return requested buyer
+                                                                    approved</a>
                                                             </li>
                                                             <li class=""><a
                                                                     href="email/return-requested-buyer-declined.html"
-                                                                    target="_blank">Return requested buyer declined</a>
+                                                                    target="_blank">Return requested buyer
+                                                                    declined</a>
                                                             </li>
                                                             <li class=""><a
                                                                     href="email/return-requested-buyer-item-recived.html"
                                                                     target="_blank">Return requested buyer item
                                                                     recived</a></li>
                                                             <li class=""><a href="email/rewards-earned-on-birthday.html"
-                                                                    target="_blank">Rewards earned on birthday</a></li>
+                                                                    target="_blank">Rewards earned on birthday</a>
+                                                            </li>
                                                             <li class=""><a href="email/rewards-earned-on-order.html"
                                                                     target="_blank">Rewards earned on order</a></li>
                                                             <li class=""><a
                                                                     href="email/rewards-earned-on-social-sharing.html"
-                                                                    target="_blank">Rewards earned on social sharing</a>
+                                                                    target="_blank">Rewards earned on social
+                                                                    sharing</a>
                                                             </li>
                                                             <li class=""><a href="email/rewards-share-earn.html"
                                                                     target="_blank">Rewards share & earn</a></li>
@@ -804,18 +910,23 @@
                                                             <li><a href="categories.php" target="_blank">Categories</a>
                                                             </li>
                                                             <li><a href="email-template-settings.php"
-                                                                    target="_blank">Email temaplate - Settings</a></li>
-                                                            <li><a href="products.php" target="_blank">Products</a></li>
+                                                                    target="_blank">Email temaplate - Settings</a>
+                                                            </li>
+                                                            <li><a href="products.php" target="_blank">Products</a>
+                                                            </li>
                                                             <li><a href="add-product.php" target="_blank">Add
                                                                     Products</a></li>
                                                             <li><a href="tax-rules-listing.php" target="_blank">Tax
                                                                     Rules Listing</a></li>
-                                                            <li><a href="tax-rules-edit.php" target="_blank">Tax Rules
+                                                            <li><a href="tax-rules-edit.php" target="_blank">Tax
+                                                                    Rules
                                                                     Edit</a></li>
-                                                            <li><a href="shipping.php" target="_blank">Shipping</a></li>
+                                                            <li><a href="shipping.php" target="_blank">Shipping</a>
+                                                            </li>
                                                             <li><a href="general-profile.php"
                                                                     target="_blank">General-Profile</a></li>
-                                                            <li><a href="admin-role.php" target="_blank">Admin Role</a>
+                                                            <li><a href="admin-role.php" target="_blank">Admin
+                                                                    Role</a>
                                                             </li>
                                                             <li><a href="orders-kanban.php" target="_blank">Orders</a>
                                                             </li>

@@ -106,28 +106,3 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
         }
     }
 }
-
-.scroll {
-    overflow: auto;
-    /* width */
-    &::-webkit-scrollbar {
-        width: 8px;
-    }
-    /* Track */
-    &::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
-    /* Handle */
-    &::-webkit-scrollbar-thumb {
-        background: rgb(180, 180, 180);
-        border-radius:10px;
-        border:2px solid #eff1f5;
-    }
-    /* Handle on hover */
-    &::-webkit-scrollbar-thumb:hover {
-        background: rgb(129, 129, 129);
-    }
-}
-
-
- 

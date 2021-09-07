@@ -1053,7 +1053,8 @@ strong {
 .todo-list {
     padding: 0;
     margin: 0;
-    height: 229px;
+    max-height: 229px;
+    overflow-y: auto;
     li {
         list-style: none;
         font-size: .9375rem;
