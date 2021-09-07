@@ -22,10 +22,9 @@
 
                     <!-- begin:: Subheader -->
                     <div id="subheader" class="subheader">
-                        <div class="container ">
+                        <div class="container">
                             <div class="subheader__main">
                                 <h3 class="subheader__title">All Pages</h3>
-
                                 <div class="subheader__breadcrumbs">
                                     <a href="#" class="subheader__breadcrumbs-home"><i
                                             class="flaticon2-shelter"></i></a>
@@ -112,8 +111,9 @@
                                                                 <li><a href="index.php">Dashboard</a></li>
                                                                 <li><a href="index.php">Default Dashboard</a></li>
                                                                 <li><a href="fluid.php">Fluid Dashboard </a></li>
-                                                                <li><a href="dashboard.php">Yo!kart Dashboard</a>
-                                                                </li>
+                                                                <li><a href="dashboard.php">Yo!kart Dashboard</a></li>
+                                                                <li><a href="setting.php">Dashboard Setting</a></li>
+                                                                <li><a href="notifications.php">Notification</a></li>
                                                             </ul>
                                                         </li>
                                                         <li><a href="">Projects</a>

@@ -18,18 +18,18 @@
         }
         .timeline-comments-box {
             flex: 1;
-            .input-group{
-                .form-control{
+            .input-group {
+                .form-control {
                     @include media-breakpoint-down(sm) {
                         flex: 1;
                         margin-bottom: .875rem;
                         max-width: 100%
-                    }                    
+                    }
                 }
-                .input-group-append{
-                    > .btn{
+                .input-group-append {
+                    >.btn {
                         @include media-breakpoint-down(sm) {
-                          border-radius: 3px;
+                            border-radius: 3px;
                         }
                     }
                 }
