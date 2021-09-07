@@ -54,8 +54,8 @@ class AdminBaseController extends FatController
             $admin_dashboard_layouts = Admin::$admin_dashboard_layouts;
             $this->set('admin_dashboard_layouts', $admin_dashboard_layouts);
         }
-        $this->set("bodyClass", '');
         $this->setCommonValues();
+        $this->set("bodyClass", '');                
         $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css');
     }
 

@@ -5,14 +5,15 @@
             <div class="container-fluid">
                 <div class="main-header-inner">
                     <div class="page-title">
-                        <h1>Dashboard</h1>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item ">
-                                <a href="" class="">Home</a>
-                            </li>
-                            <li class="breadcrumb-item">Account</li>
-                            <li class="breadcrumb-item">Settings</li>
-                        </ul>
+                        <h1>
+                            <?php
+                            if (array_key_exists('pageTitle', $this->variables['pageTitle'])) {
+                                echo $this->variables['pageTitle'];
+                            } else {
+                                echo Labels::getLabel('LBL_Dashboard', $adminLangId);
+                            } ?>
+                        </h1>
+                        <?php $this->includeTemplate('_partial/header/header-breadcrumb.php'); ?>
                     </div>
                     <div class="main-header-toolbar">
                         <ul class="accounts-nav">
