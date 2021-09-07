@@ -50,7 +50,7 @@ class PaypalPayController extends PaymentController
     /**
      * charge
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return void
      */
     public function charge($orderId)
@@ -81,10 +81,10 @@ class PaypalPayController extends PaymentController
     /**
      * createOrder
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return string json
      */
-    public function createOrder(string $orderId)
+    public function createOrder($orderId)
     {
         if (false === $this->plugin->createOrder($orderId)) {
             $error = $this->plugin->getError();
@@ -118,10 +118,10 @@ class PaypalPayController extends PaymentController
     /**
      * callback
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return void
      */
-    public function callback(string $orderId)
+    public function callback($orderId)
     {
         $post = FatApp::getPostedData();
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);

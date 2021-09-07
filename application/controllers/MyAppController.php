@@ -889,7 +889,7 @@ class MyAppController extends FatController
      * @param  mixed $orderId
      * @return object
      */
-    public function getTransferBankForm(int $langId, string $orderId = ''): object
+    public function getTransferBankForm(int $langId, $orderId = ''): object
     {
         $frm = new Form('frmPayment');
         $frm->addHiddenField('', 'opayment_order_id', $orderId);

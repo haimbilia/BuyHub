@@ -567,8 +567,6 @@ class Statistics extends MyAppModel
         $cancelAndRefundedStatusArr = (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS");
         $srch = new OrderProductSearch(0, true);
         $srch->joinPaymentMethod();
-        /* $srch = new SearchBase('tbl_order_products', 'torp');
-        $srch->joinTable('tbl_orders', 'LEFT JOIN', 'tord.order_id = torp.op_order_id', 'tord'); */
         switch (strtoupper($type)) {
             case 'CANCEL_AND_REFUNDED':
                 $srch->addStatusCondition($cancelAndRefundedStatusArr);

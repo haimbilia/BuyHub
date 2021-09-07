@@ -319,8 +319,7 @@ class Badge extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(['blnk.blinkcond_id', 'blnk.blinkcond_badge_id', 'bdg.badge_display_inside', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name', 'blc.badgelink_id', 'blc.badgelink_record_id', 'breq.breq_id', 'shpprod.shop_id']);
 
-        $rs = $srch->getResultSet();
-        return FatApp::getDb()->fetchAll($rs);
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
     /**
@@ -394,8 +393,8 @@ class Badge extends MyAppModel
                 $srch->addGroupBy('blinkcond_badge_id');
             }
 
-            $shopAutoBadges[$ss['sstats_shop_id']] = FatApp::getDb()->fetchAll($srch->getResultSet());
+            $shopAutoBadges = array_merge($shopAutoBadges, FatApp::getDb()->fetchAll($srch->getResultSet()));
         }
-        return (1 == count($shopIdArr) ? current($shopAutoBadges) : $shopAutoBadges);
+        return $shopAutoBadges;
     }
 }

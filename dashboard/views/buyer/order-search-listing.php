@@ -45,32 +45,12 @@
                     if ($order['totOrders'] > 1) {
                         $txt .= $order['op_invoice_number'];
                     } else {
-                        $txt .= $order['order_id'];
+                        $txt .= $order['order_number'];
                     }
                     $txt .= '</a><br/>' . FatDate::format($order['order_date_added']);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
-                case 'product':
-                    $txt = '<div class="item__description">';
-                    if ($order['op_selprod_title'] != '') {
-                        $txt .= '<div class="item__title">' . $order['op_selprod_title'] . '</div>';
-                    }
-                    $txt .= '<div class="item__sub_title">' . $order['op_product_name'] . ' (' . Labels::getLabel('LBL_Qty', $siteLangId) . ': ' . $order['op_qty'] . ')</div>';
-                    $txt .= '<div class="item__brand">';
-                    if (!empty($order['op_brand_name'])) {
-                        $txt .=  Labels::getLabel('LBL_Brand', $siteLangId) . ': ' . $order['op_brand_name'];
-                    }
-                    if (!empty($order['op_brand_name']) && !empty($order['op_selprod_options'])) {
-                        $txt .= ' | ';
-                    }
-                    if ($order['op_selprod_options'] != '') {
-                        $txt .= $order['op_selprod_options'];
-                    }
-                    $txt .= '</div>';
-                    if ($order['totOrders'] > 1) {
-                        $txt .= '<div class="item__specification">' . Labels::getLabel('LBL_Part_combined_order', $siteLangId) . ' <a title="' . Labels::getLabel('LBL_View_Order_Detail', $siteLangId) . '" href="' . UrlHelper::generateUrl('Buyer', 'viewOrder', array($order['order_id'])) . '">' . $order['order_id'] . '</div>';
-                    }
-                    $txt .= '</div>';
+                case 'product':                   
                     $txt = $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $order ,'siteLangId'=> $siteLangId], false, true);
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;

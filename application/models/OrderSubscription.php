@@ -49,7 +49,7 @@ class OrderSubscription extends MyAppModel
         $srch->addCondition(Orders::DB_TBL_PREFIX . 'user_id', '=', $userId);
         $srch->setPageSize(1);
 
-        $srch->addOrder(Orders::DB_TBL_PREFIX . 'id');
+        $srch->addOrder(Orders::DB_TBL_PREFIX . 'no');
         $rs = $srch->getResultSet();
 
         $rowCount = $srch->recordCount();
@@ -121,7 +121,7 @@ class OrderSubscription extends MyAppModel
         $srch = new OrderSubscriptionSearch($langId);
         $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'o.' . Orders::DB_TBL_PREFIX . 'id = oss.' . OrderSubscription::DB_TBL_PREFIX . 'order_id', 'o');
         $srch->joinTable(Orders::DB_TBL_CHARGES, 'LEFT OUTER JOIN', 'oc.' . Orders::DB_TBL_CHARGES_PREFIX . 'op_id = oss.' . OrderSubscription::DB_TBL_PREFIX . 'id', 'oc');
-        $srch->addMultipleFields(array('oss.*', 'oss_l.*', 'o.' . Orders::DB_TBL_PREFIX . 'payment_status', 'o.' . Orders::DB_TBL_PREFIX . 'language_id', 'o.' . Orders::DB_TBL_PREFIX . 'user_id', 'sum(' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount) as op_other_charges'));
+        $srch->addMultipleFields(array('oss.*', 'oss_l.*', 'o.' . Orders::DB_TBL_PREFIX . 'payment_status', 'o.' . Orders::DB_TBL_PREFIX . 'language_id', 'o.' . Orders::DB_TBL_PREFIX . 'user_id', 'o.' . Orders::DB_TBL_PREFIX . 'no', 'sum(' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount) as op_other_charges'));
         $srch->addCondition(OrderSubscription::DB_TBL_PREFIX . 'id', '=', $ossubs_id);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();

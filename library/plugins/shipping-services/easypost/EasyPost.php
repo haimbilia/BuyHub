@@ -383,7 +383,7 @@ class EasyPost extends ShippingServicesBase
      * @param  bool $formatResp
      * @return bool
      */
-    public function retrieveOrder(string $orderId, bool $formatResp = true): bool
+    public function retrieveOrder($orderId, bool $formatResp = true): bool
     {
         if (!is_null($this->shipment) && !empty($this->shipment) && $this->shipmentOrderId == trim($orderId)) {
             $this->shipment['orderStatus'] = current($this->shipment['shipments'])['status'];

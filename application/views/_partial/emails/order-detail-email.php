@@ -7,7 +7,7 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                             <td style="background-color: #' . FatApp::getConfig('CONF_EMAIL_TEMPLATE_COLOR_CODE' . $siteLangId, FatUtility::VAR_STRING, 'ff3a59') . ';padding: 10px 25px;">
                                 <table width="100%" border="0" cellpadding="0" cellspacing="0">                                                             
                                     <tr>
-                                        <td style="font-size: 14px;font-weight: 700;color: #fff;">' . Labels::getLabel('Lbl_Order_No.', $siteLangId) . ' ' . $orderInfo['order_id'] . '</td>
+                                        <td style="font-size: 14px;font-weight: 700;color: #fff;">' . Labels::getLabel('Lbl_Order_No.', $siteLangId) . ' ' . $orderInfo['order_number'] . '</td>
                                         <td style="font-size: 14px;font-weight: 700;color: #fff; text-align: right;">' . Labels::getLabel('Lbl_Order_Date.', $siteLangId) . ' ' . FatDate::format($orderInfo['order_date_added']) . '</td>
                                     </tr>
                                 </table>                                                          

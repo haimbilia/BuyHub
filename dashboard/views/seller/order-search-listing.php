@@ -30,7 +30,7 @@ foreach ($orders as $sn => $order) {
         switch ($key) {
             case 'order_id':
                 $txt = '<a title="'.Labels::getLabel('LBL_View_Order_Detail', $siteLangId).'" href="'.$orderDetailUrl.'">';
-                $txt .= $order['order_id'];
+                $txt .= $order['order_number'];
                 $txt .= '</a><br/>'. FatDate::format($order['order_date_added']);
                 $td->appendElement('plaintext', array(), $txt, true);
                 break;

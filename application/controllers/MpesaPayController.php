@@ -52,7 +52,7 @@ class MpesaPayController extends PaymentController
     /**
      * charge
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return void
      */
     public function charge($orderId)
@@ -129,10 +129,10 @@ class MpesaPayController extends PaymentController
     /**
      * callback
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return void
      */
-    public function callback(string $orderId)
+    public function callback($orderId)
     {
         $json = file_get_contents('php://input');
         $post = json_decode($json, true);

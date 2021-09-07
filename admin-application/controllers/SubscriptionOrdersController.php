@@ -40,7 +40,7 @@ class SubscriptionOrdersController extends AdminBaseController
         $srch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addMultipleFields(array('order_id', 'order_date_added', 'order_payment_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount'));
+        $srch->addMultipleFields(array('order_number', 'order_id', 'order_date_added', 'order_payment_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount'));
         
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
@@ -104,7 +104,7 @@ class SubscriptionOrdersController extends AdminBaseController
         $srch->doNotLimitRecords();
         $srch->joinOrderUser();
         $srch->addMultipleFields(
-            array('order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission',
+            array('order_number', 'order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission',
             'ou.user_name as buyer_user_name', 'ouc.credential_email as buyer_email', 'ou.user_phone_dcode as buyer_phone_dcode', 'ou.user_phone as buyer_phone', 'order_net_amount',   'order_pmethod_id', 'plugin_name', 'order_discount_total')
         );
         $srch->addCondition('order_id', '=', $order_id);
@@ -127,9 +127,7 @@ class SubscriptionOrdersController extends AdminBaseController
         $opSrch->addCondition('oss.ossubs_order_id', '=', $order['order_id']);
         
         $opSrch->addMultipleFields(
-            array('ossubs_id', 'ossubs_invoice_number',
-         
-            'ossubs_price', 'ossubs_type', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+            array('ossubs_id', 'ossubs_invoice_number', 'ossubs_price', 'ossubs_type', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
             'ossubs_frequency', 'ossubs_subscription_name,ossubs_interval', 'ossubs_status_id', 'ossubs_till_date', 'ossubs_from_date'/* ,'op_other_charges' */ )
         );
         
@@ -221,11 +219,11 @@ class SubscriptionOrdersController extends AdminBaseController
     {
         $frm = new Form('frmPayment');
         $frm->addHiddenField('', 'opayment_order_id', $orderId);
-        $frm->addTextArea(Labels::getLabel('LBL_Comments', $this->adminLangId), 'opayment_comments', '')->requirements()->setRequired();
-        $frm->addRequiredField(Labels::getLabel('LBL_Payment_Method', $this->adminLangId), 'opayment_method');
-        $frm->addRequiredField(Labels::getLabel('LBL_Txn_ID', $this->adminLangId), 'opayment_gateway_txn_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_Amount', $this->adminLangId), 'opayment_amount')->requirements()->setFloatPositive(true);
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addTextArea(Labels::getLabel('LBL_Comments', $langId), 'opayment_comments', '')->requirements()->setRequired();
+        $frm->addRequiredField(Labels::getLabel('LBL_Payment_Method', $langId), 'opayment_method');
+        $frm->addRequiredField(Labels::getLabel('LBL_Txn_ID', $langId), 'opayment_gateway_txn_id');
+        $frm->addRequiredField(Labels::getLabel('LBL_Amount', $langId), 'opayment_amount')->requirements()->setFloatPositive(true);
+        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
         return $frm;
     }
     

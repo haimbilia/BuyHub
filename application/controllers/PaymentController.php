@@ -54,7 +54,13 @@ abstract class PaymentController extends MyAppController
         LibHelper::exitWithError($msg, $json, $redirect);
         CommonHelper::redirectUserReferer();
     }
-    
+        
+    /**
+     * paymentInitiated : Order Id is not being used for now. 
+     *
+     * @param  int $orderId
+     * @return void
+     */
     protected function paymentInitiated($orderId)
     {
         unset($_SESSION['shopping_cart']["order_id"]);

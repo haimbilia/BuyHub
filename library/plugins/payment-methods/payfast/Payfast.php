@@ -162,7 +162,7 @@ class Payfast extends PaymentMethodBase
      * @param  string $orderId
      * @return bool
      */
-    public function buildRequestBody(string $orderId): bool
+    public function buildRequestBody($orderId): bool
     {
         $orderPaymentObj = new OrderPayment($orderId, $this->langId);
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();

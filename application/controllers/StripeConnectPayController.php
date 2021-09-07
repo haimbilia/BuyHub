@@ -92,7 +92,7 @@ class StripeConnectPayController extends PaymentController
      * @param  string $orderId
      * @return array
      */
-    private function getOrderInfo(string $orderId): array
+    private function getOrderInfo($orderId): array
     {
         if (empty($this->orderInfo)) {
             $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);

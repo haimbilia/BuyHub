@@ -129,7 +129,7 @@ class Mpesa extends PaymentMethodBase
      * @param  string $orderId
      * @return string
      */
-    public function callbackUrl(string $orderId): string
+    public function callbackUrl($orderId): string
     {
         return UrlHelper::generateFullUrl(self::KEY_NAME . 'Pay', "callback", [$orderId]);
     }
@@ -182,7 +182,7 @@ class Mpesa extends PaymentMethodBase
      * @return bool
      */
 
-    public function STKPushSimulation(string $orderId, float $amount, string $customerPhone, string $transactionDesc): bool
+    public function STKPushSimulation($orderId, float $amount, string $customerPhone, string $transactionDesc): bool
     {
         if (false === $this->generateToken()) {
             return false;

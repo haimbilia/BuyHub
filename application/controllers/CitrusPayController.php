@@ -95,7 +95,7 @@ class CitrusPayController extends PaymentController
     }
 
 
-    private function getPaymentForm(string $orderId, bool $processRequest = false)
+    private function getPaymentForm($orderId, bool $processRequest = false)
     {
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         $paymentGatewayCharge = $orderPaymentObj->getOrderPaymentGatewayAmount();

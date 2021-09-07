@@ -43,7 +43,7 @@ class TaxReportController extends AdminBaseController
         $srch->addStatusCondition(unserialize(FatApp::getConfig('CONF_COMPLETED_ORDER_STATUS')));
         $srch->addCondition('opcharge.opcharge_type', '=', OrderProduct::CHARGE_TYPE_TAX);
         $srch->addGroupBy('op.op_shop_id');
-        $srch->addMultipleFields(array('op_shop_name', 'op.op_selprod_user_id', 'o.order_id', 'op.op_id', 'opcharge.opcharge_id', 'opcharge.opcharge_type', 'SUM(opcharge.opcharge_amount) as totTax', 'count(op.op_id) as totChildOrders', 'seller.user_name as owner_name', 'seller_cred.credential_email as owner_email',));
+        $srch->addMultipleFields(array('op_shop_name', 'op.op_selprod_user_id', 'o.order_number', 'o.order_id', 'op.op_id', 'opcharge.opcharge_id', 'opcharge.opcharge_type', 'SUM(opcharge.opcharge_amount) as totTax', 'count(op.op_id) as totChildOrders', 'seller.user_name as owner_name', 'seller_cred.credential_email as owner_email',));
 
 
         $op_shop_id = FatApp::getPostedData('op_shop_id', null, '');

@@ -613,7 +613,7 @@ trait ShippingServices
         }
 
         $orderObj = new Orders($orderData['op_order_id']);
-        $addresses = $orderObj->getOrderAddresses($orderData['op_order_id'], $orderData['op_order_id']);
+        $addresses = $orderObj->getOrderAddresses($orderData['op_order_id'], $orderData['op_id']);
 
         $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : array();
 

@@ -14,9 +14,7 @@ class OrderSearch extends SearchBase
             $this->joinTable(
                 Orders::DB_TBL_LANG,
                 'LEFT OUTER JOIN',
-                'orderlang_order_id = o.order_id
-			AND orderlang_lang_id = ' . $this->langId,
-                'o_l'
+                'orderlang_order_id = o.order_id AND orderlang_lang_id = ' . $this->langId, 'o_l'
             );
         }
     }

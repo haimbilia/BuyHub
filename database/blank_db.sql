@@ -2068,12 +2068,6 @@ CREATE TABLE `tbl_coupons_hold_pending_order` (
   `ochold_added_on` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `tbl_coupons_hold_pending_order`
---
-
-INSERT INTO `tbl_coupons_hold_pending_order` (`ochold_order_id`, `ochold_coupon_id`, `ochold_added_on`) VALUES
-('O1563433888', 7, '2019-07-18 12:41:42');
 
 -- --------------------------------------------------------
 
@@ -13426,16 +13420,6 @@ CREATE TABLE `tbl_order_product_digital_download_links` (
   `opddl_downloaded_times` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `tbl_order_product_digital_download_links`
---
-
-INSERT INTO `tbl_order_product_digital_download_links` (`opddl_link_id`, `opddl_op_id`, `opddl_downloadable_link`, `opddl_downloaded_times`) VALUES
-(1, 179, 'www.v9.demo.yo-kart.com\r', 0),
-(2, 179, 'www.yo-kart.com', 0),
-(3, 180, 'www.v9.demo.yo-kart.com\r', 0),
-(4, 180, 'www.yo-kart.com', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -13513,62 +13497,6 @@ CREATE TABLE `tbl_order_product_specifics` (
   `op_selprod_cancellation_age` int NOT NULL COMMENT 'In Days',
   `op_product_warranty` int NOT NULL COMMENT 'In Days'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tbl_order_product_specifics`
---
-
-INSERT INTO `tbl_order_product_specifics` (`ops_op_id`, `op_selprod_return_age`, `op_selprod_cancellation_age`, `op_product_warranty`) VALUES
-(195, 0, 0, 0),
-(198, 0, 0, 0),
-(200, 0, 0, 0),
-(205, 7, 7, 0),
-(206, 7, 7, 0),
-(207, 7, 7, 50),
-(208, 0, 0, 0),
-(209, 7, 7, 365),
-(211, 7, 7, 365),
-(215, 7, 7, 0),
-(216, 7, 7, 50),
-(217, 0, 0, 0),
-(218, 7, 7, 0),
-(219, 7, 7, 50),
-(220, 0, 0, 0),
-(221, 0, 0, 0),
-(222, 0, 0, 0),
-(223, 7, 7, 365),
-(224, 7, 7, 0),
-(225, 0, 0, 0),
-(226, 0, 0, 0),
-(227, 0, 0, 0),
-(228, 0, 0, 0),
-(229, 0, 0, 0),
-(230, 0, 0, 0),
-(231, 0, 0, 0),
-(232, 0, 0, 0),
-(233, 0, 0, 0),
-(234, 0, 0, 0),
-(235, 0, 0, 0),
-(236, 0, 0, 0),
-(237, 0, 0, 0),
-(238, 0, 0, 0),
-(239, 0, 0, 0),
-(240, 0, 0, 0),
-(241, 0, 0, 0),
-(242, 0, 0, 0),
-(244, 0, 0, 0),
-(246, 0, 0, 0),
-(247, 7, 7, 0),
-(249, 7, 7, 0),
-(250, 0, 0, 0),
-(251, 0, 0, 0),
-(253, 0, 0, 0),
-(256, 7, 7, 0),
-(257, 0, 0, 0),
-(260, 7, 7, 0),
-(261, 7, 7, 0);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tbl_order_product_to_shipping_users`
@@ -14236,8 +14164,6 @@ CREATE TABLE `tbl_product_requests` (
   `preq_status_updated_on` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
 --
 -- Table structure for table `tbl_product_requests_lang`
 --
@@ -14247,8 +14173,6 @@ CREATE TABLE `tbl_product_requests_lang` (
   `preqlang_lang_id` bigint NOT NULL,
   `preq_lang_data` mediumtext COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tbl_product_saved_search`
@@ -14265,7 +14189,6 @@ CREATE TABLE `tbl_product_saved_search` (
   `pssearch_updated_on` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---------------------------------------------------------
 
 --
 -- Table structure for table `tbl_product_shipping_rates`
@@ -14593,13 +14516,6 @@ CREATE TABLE `tbl_push_notifications` (
   `pnotification_status` tinyint(1) NOT NULL,
   `pnotification_added_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tbl_push_notifications`
---
-
-INSERT INTO `tbl_push_notifications` (`pnotification_id`, `pnotification_type`, `pnotification_lang_id`, `pnotification_title`, `pnotification_description`, `pnotification_url`, `pnotification_notified_on`, `pnotification_for_buyer`, `pnotification_for_seller`, `pnotification_user_auth_type`, `pnotification_device_os`, `pnotification_uauth_last_access`, `pnotification_status`, `pnotification_added_on`) VALUES
-(1, 1, 1, 'Welcome!', 'Welcome to Yo!Kart!!', '', '2020-12-09 11:00:00', 1, 0, 2, 0, '0000-00-00 00:00:00', 0, '2020-12-09 11:30:46');
 
 -- --------------------------------------------------------
 
@@ -15458,19 +15374,6 @@ CREATE TABLE `tbl_shop_specifics` (
   `shop_invoice_codes` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `shop_pickup_interval` tinyint(1) NOT NULL COMMENT 'In Hours'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tbl_shop_specifics`
---
-
-INSERT INTO `tbl_shop_specifics` (`ss_shop_id`, `shop_return_age`, `shop_cancellation_age`, `shop_invoice_codes`, `shop_pickup_interval`) VALUES
-(0, 50, 20, '', 0),
-(1, 7, 7, '', 0),
-(2, 0, 0, '', 0),
-(3, 0, 0, '', 0),
-(4, 0, 0, '', 0),
-(5, 0, 0, '', 0),
-(6, 0, 0, '', 0);
 
 -- --------------------------------------------------------
 
@@ -25900,16 +25803,6 @@ CREATE TABLE `tbl_unique_check_failed_attempt` (
   `ucfattempt_time` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `tbl_unique_check_failed_attempt`
---
-
-INSERT INTO `tbl_unique_check_failed_attempt` (`ucfattempt_ip`, `ucfattempt_time`) VALUES
-('112.196.26.205', '2020-12-21 13:22:28'),
-('112.196.26.205', '2020-12-21 13:23:25'),
-('112.196.26.205', '2020-12-21 13:23:30'),
-('112.196.26.205', '2020-12-22 16:29:58'),
-('112.196.26.205', '2020-12-22 16:30:30');
 
 -- --------------------------------------------------------
 
@@ -25939,161 +25832,6 @@ CREATE TABLE `tbl_updated_record_log` (
   `urlog_added_on` datetime NOT NULL,
   `urlog_executed` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tbl_updated_record_log`
---
-
-INSERT INTO `tbl_updated_record_log` (`urlog_id`, `urlog_record_id`, `urlog_subrecord_id`, `urlog_record_type`, `urlog_added_on`, `urlog_executed`) VALUES
-(1, 1, 0, 1, '2020-12-22 16:19:16', 0),
-(2, 2, 0, 1, '2020-11-27 13:06:35', 0),
-(3, 3, 0, 1, '2020-12-04 13:28:07', 0),
-(4, 4, 0, 1, '2020-12-22 16:24:42', 0),
-(5, 5, 0, 1, '2020-12-22 16:26:25', 0),
-(9, 4, 0, 2, '2020-12-21 16:21:21', 0),
-(10, 5, 0, 2, '2020-12-02 09:21:35', 0),
-(11, 6, 0, 2, '2020-12-02 09:21:04', 0),
-(12, 11, 0, 2, '2020-12-02 09:20:22', 0),
-(13, 12, 0, 2, '2020-12-02 09:19:38', 0),
-(14, 16, 0, 2, '2020-12-02 09:18:54', 0),
-(15, 74, 0, 7, '2020-12-05 13:13:35', 0),
-(18, 21, 0, 2, '2020-12-02 09:15:03', 0),
-(19, 20, 0, 2, '2020-12-02 09:16:09', 0),
-(20, 19, 0, 2, '2020-12-02 09:18:24', 0),
-(30, 22, 0, 2, '2020-12-02 09:59:48', 0),
-(36, 82, 0, 8, '2020-12-03 11:54:04', 0),
-(41, 112, 0, 3, '2020-12-04 18:28:19', 0),
-(42, 159, 0, 3, '2020-12-04 18:28:19', 0),
-(43, 160, 0, 3, '2020-12-04 18:28:19', 0),
-(44, 161, 0, 3, '2020-12-04 18:28:19', 0),
-(45, 162, 0, 3, '2020-12-04 18:28:19', 0),
-(46, 163, 0, 3, '2020-12-04 18:28:19', 0),
-(47, 164, 0, 3, '2020-12-04 18:28:19', 0),
-(48, 165, 0, 3, '2020-12-04 18:28:19', 0),
-(49, 166, 0, 3, '2020-12-04 18:28:19', 0),
-(50, 167, 0, 3, '2020-12-04 18:28:19', 0),
-(51, 168, 0, 3, '2020-12-04 18:28:19', 0),
-(52, 169, 0, 3, '2020-12-04 18:28:19', 0),
-(53, 158, 0, 3, '2020-12-04 18:28:19', 0),
-(54, 136, 0, 3, '2020-12-04 18:28:19', 0),
-(55, 135, 0, 3, '2020-12-04 18:28:19', 0),
-(56, 114, 0, 3, '2020-12-04 18:28:19', 0),
-(57, 119, 0, 3, '2020-12-04 18:28:19', 0),
-(58, 123, 0, 3, '2020-12-04 18:28:19', 0),
-(59, 124, 0, 3, '2020-12-04 18:28:19', 0),
-(60, 126, 0, 3, '2020-12-04 18:28:19', 0),
-(61, 128, 0, 3, '2020-12-04 18:28:19', 0),
-(62, 129, 0, 3, '2020-12-04 18:28:19', 0),
-(63, 130, 0, 3, '2020-12-04 18:28:19', 0),
-(64, 131, 0, 3, '2020-12-04 18:28:19', 0),
-(65, 132, 0, 3, '2020-12-04 18:28:19', 0),
-(66, 134, 0, 3, '2020-12-04 18:28:19', 0),
-(67, 180, 0, 3, '2020-12-04 18:28:19', 0),
-(79, 170, 0, 3, '2020-12-04 18:28:19', 0),
-(80, 178, 0, 3, '2020-12-04 18:28:19', 0),
-(81, 177, 0, 3, '2020-12-04 18:28:19', 0),
-(82, 176, 0, 3, '2020-12-04 18:28:19', 0),
-(83, 175, 0, 3, '2020-12-04 18:28:19', 0),
-(84, 174, 0, 3, '2020-12-04 18:28:19', 0),
-(85, 173, 0, 3, '2020-12-04 18:28:19', 0),
-(86, 172, 0, 3, '2020-12-04 18:28:19', 0),
-(87, 171, 0, 3, '2020-12-04 18:28:19', 0),
-(90, 157, 0, 3, '2020-12-04 18:28:19', 0),
-(91, 122, 0, 3, '2020-12-04 18:28:19', 0),
-(92, 121, 0, 3, '2020-12-04 18:28:19', 0),
-(94, 117, 0, 3, '2020-12-04 18:28:19', 0),
-(97, 111, 0, 3, '2020-12-04 18:28:19', 0),
-(98, 110, 0, 3, '2020-12-04 18:28:19', 0),
-(110, 109, 0, 3, '2020-12-04 18:28:19', 0),
-(121, 156, 0, 3, '2020-12-04 18:28:19', 0),
-(122, 155, 0, 3, '2020-12-04 18:28:19', 0),
-(126, 179, 0, 3, '2020-12-04 18:28:19', 0),
-(137, 154, 0, 3, '2020-12-04 18:28:19', 0),
-(138, 153, 0, 3, '2020-12-04 18:28:19', 0),
-(141, 120, 0, 3, '2020-12-28 10:05:34', 0),
-(144, 116, 0, 3, '2020-12-28 10:05:34', 0),
-(146, 113, 0, 3, '2020-12-28 10:05:34', 0),
-(153, 152, 0, 3, '2020-12-04 18:28:19', 0),
-(154, 151, 0, 3, '2020-12-04 18:28:19', 0),
-(155, 150, 0, 3, '2020-12-04 18:28:19', 0),
-(255, 49, 0, 7, '2020-12-05 16:02:31', 0),
-(257, 181, 0, 3, '2020-12-28 10:05:34', 0),
-(264, 23, 0, 2, '2020-12-14 11:02:12', 0),
-(266, 24, 0, 2, '2020-12-23 11:29:50', 0),
-(267, 25, 0, 2, '2020-12-23 11:30:04', 0),
-(277, 6, 0, 1, '2020-12-23 11:29:23', 0),
-(286, 132, 0, 4, '2020-12-16 15:52:04', 0),
-(291, 75, 0, 7, '2020-12-16 16:04:09', 0),
-(296, 169, 0, 8, '2020-12-16 16:06:57', 0),
-(298, 170, 0, 8, '2020-12-16 16:06:57', 0),
-(300, 171, 0, 8, '2020-12-16 16:06:58', 0),
-(302, 51, 0, 7, '2020-12-18 12:13:06', 0),
-(304, 244, 0, 5, '2020-12-21 12:53:37', 0),
-(305, 246, 0, 5, '2020-12-21 12:59:01', 0),
-(306, 126, 0, 5, '2020-12-21 13:04:00', 0),
-(310, 247, 0, 5, '2020-12-21 13:04:30', 0),
-(317, 60, 0, 7, '2020-12-22 17:55:24', 0),
-(328, 76, 0, 7, '2020-12-23 14:11:01', 0),
-(362, 172, 0, 8, '2020-12-23 13:08:16', 0),
-(364, 173, 0, 8, '2020-12-23 13:08:16', 0),
-(366, 174, 0, 8, '2020-12-23 13:08:16', 0),
-(368, 175, 0, 8, '2020-12-23 13:08:16', 0),
-(370, 176, 0, 8, '2020-12-23 13:08:16', 0),
-(372, 177, 0, 8, '2020-12-23 13:08:16', 0),
-(374, 178, 0, 8, '2020-12-23 13:08:16', 0),
-(376, 179, 0, 8, '2020-12-23 13:08:16', 0),
-(378, 180, 0, 8, '2020-12-23 13:08:17', 0),
-(380, 181, 0, 8, '2020-12-23 13:08:17', 0),
-(382, 182, 0, 8, '2020-12-23 13:08:17', 0),
-(384, 183, 0, 8, '2020-12-23 13:08:17', 0),
-(386, 184, 0, 8, '2020-12-23 13:08:18', 0),
-(388, 185, 0, 8, '2020-12-23 13:08:18', 0),
-(390, 186, 0, 8, '2020-12-23 13:08:18', 0),
-(392, 187, 0, 8, '2020-12-23 13:08:18', 0),
-(394, 188, 0, 8, '2020-12-23 13:08:18', 0),
-(396, 189, 0, 8, '2020-12-23 13:08:18', 0),
-(398, 190, 0, 8, '2020-12-23 13:28:04', 0),
-(400, 191, 0, 8, '2020-12-23 13:28:04', 0),
-(402, 192, 0, 8, '2020-12-23 13:28:04', 0),
-(404, 193, 0, 8, '2020-12-23 13:28:05', 0),
-(406, 194, 0, 8, '2020-12-23 13:28:05', 0),
-(408, 195, 0, 8, '2020-12-23 13:28:05', 0),
-(410, 196, 0, 8, '2020-12-23 13:28:05', 0),
-(412, 197, 0, 8, '2020-12-23 13:28:05', 0),
-(414, 198, 0, 8, '2020-12-23 13:28:05', 0),
-(416, 199, 0, 8, '2020-12-23 13:28:06', 0),
-(418, 200, 0, 8, '2020-12-23 13:28:06', 0),
-(420, 201, 0, 8, '2020-12-23 13:28:06', 0),
-(422, 202, 0, 8, '2020-12-23 13:28:07', 0),
-(424, 203, 0, 8, '2020-12-23 13:28:07', 0),
-(426, 204, 0, 8, '2020-12-23 13:28:07', 0),
-(428, 205, 0, 8, '2020-12-23 13:28:07', 0),
-(430, 206, 0, 8, '2020-12-23 13:28:07', 0),
-(432, 207, 0, 8, '2020-12-23 13:28:08', 0),
-(434, 208, 0, 8, '2020-12-23 13:31:53', 0),
-(436, 209, 0, 8, '2020-12-23 13:31:53', 0),
-(438, 210, 0, 8, '2020-12-23 13:31:53', 0),
-(440, 211, 0, 8, '2020-12-23 13:31:53', 0),
-(442, 212, 0, 8, '2020-12-23 13:31:53', 0),
-(444, 213, 0, 8, '2020-12-23 13:31:53', 0),
-(446, 214, 0, 8, '2020-12-23 13:31:53', 0),
-(448, 215, 0, 8, '2020-12-23 13:31:53', 0),
-(450, 216, 0, 8, '2020-12-23 13:31:53', 0),
-(452, 217, 0, 8, '2020-12-23 13:31:53', 0),
-(454, 218, 0, 8, '2020-12-23 13:31:54', 0),
-(456, 219, 0, 8, '2020-12-23 13:31:54', 0),
-(458, 220, 0, 8, '2020-12-23 13:31:54', 0),
-(460, 221, 0, 8, '2020-12-23 13:31:55', 0),
-(462, 222, 0, 8, '2020-12-23 13:33:18', 0),
-(464, 223, 0, 8, '2020-12-23 13:33:18', 0),
-(466, 224, 0, 8, '2020-12-23 13:33:18', 0),
-(468, 225, 0, 8, '2020-12-23 13:33:18', 0),
-(470, 226, 0, 8, '2020-12-23 13:33:18', 0),
-(472, 227, 0, 8, '2020-12-23 13:33:18', 0),
-(475, 228, 0, 8, '2020-12-23 13:46:24', 0),
-(477, 229, 0, 8, '2020-12-23 13:47:07', 0);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tbl_upsell_products`
@@ -26300,24 +26038,6 @@ CREATE TABLE `tbl_user_meta` (
   `usermeta_value` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `tbl_user_meta`
---
-
-INSERT INTO `tbl_user_meta` (`usermeta_user_id`, `usermeta_key`, `usermeta_value`) VALUES
-(4, 'GoogleShoppingFeed_merchantId', '147295507'),
-(4, 'service_account', '{\r\n  \"type\": \"service_account\",\r\n  \"project_id\": \"yokart-marketplace\",\r\n  \"private_key_id\": \"4b6e49419617ce4e90329d70a7b6de31ae74d8d4\",\r\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDWFeMgzguORdP5\\nsIlVgmtsTuWLHl/6Dne2bErQhjl/zEeJFr+Hk6marOagK9yI+3d0YmOkbl7dVV+M\\nMuBXusTmcsp0SQoh5jtuJz8aneHHjp54BE0nVtd7iacYe4AQy1PONgIihx+cNZnm\\n1MFsUwS9dpviEl8RAXZPwXU/K+L+0uyiAyvD+t1BX1qqLXSD4a1i2Crnt5MYV9hS\\nMHbi+uOpvQxXQC9HfD4U/SyNby6XvB21IQHjKCzl68s3DhWmlda2iy/rMih1bsVv\\nMyrg2v/A+dHMhH0qdNZcjGnyiiGUoTvZklo8S+hcZcQysk2kqxZAC9dLHgAl33X0\\nm7ed9/Q3AgMBAAECggEAJWa+fvkwUKNHZLxgSdWWod3owVTFrMCBTpf9vA9vFTIh\\nn0QfovZ7r3+cbQgsp6vTEzyrLstvfFiRcENlKT6CbsZIM2edQw3ffR+TKTnC+6Oh\\ncNNDjWdhDv6d+Ct/VK/JDOInnlOgBKDiqc6qmhuo3NbPZgASprxsKIPiUW5/4key\\nRGVEYMpZLowxeXPQi9dd9wSQOr29IBJgbX0x8pu7q1n7eUeA0Ym4UT5k+z7cPphj\\n6RHuLvvjFC1qMIu8cbWdAxXHUl+vVgDR/+YbU3iR5dn1cHX9apElg0Jtqf8gbZs+\\nJsvSTy33xjrpAdXpnGP5vpAbl+SFxEtFwcKbdhd77QKBgQD5VGsITywbXjGsYEu7\\nOTj9HwZ+0OU9CcA4A4icmdb7fzcT7+wCxMBFTT+YAxyvYjsUYQ4HSZzhxoBBIABG\\nGrER977HX5BmK4Z50qI2G+KhP6qmzCz3D1YosGZpyVX/eSHMXtjJFSqR6i/0xZ5z\\nD6pO9//sDiJyR3vwDbEOeSjYtQKBgQDb0BeXFbh/4sSA2gvkm9uX367xbc9r2aKD\\n270SpWaev43gzxkCdquymJHDO+x748Ge1UeM8RQHYnEFNgi5aYbG/OqmrYcuNi7n\\nupHYcFI19W8oQ58y1A+1DZRPjGd+YMYEaYUqjBBhHj9xE5kxeUagB3zznJZdXWYD\\n09YTAmwIuwKBgDN9KXVX1EX6l8t/P2R0lr4/D/pUbWLDhryKjkW4x1q8lMU7QMP5\\nmbM2FrHvwpa9dHHq8Ri0LP+7HHVWhHf1vyd0wCMwKwPObUDvLKx76btfCIDVnVuQ\\nATz54Mxr1aSigUZRN/eetWHYuPqVbPlZ/NO+B03aRWbQOFoEmdHhV3wZAoGBAI/S\\n82x+4M6EkPCCOx/kvuT7jdsYb4xwxT4ji+3kXWXnjiyXNRUAks1zuIQW9GAHoQuN\\nH5jfsKw4RB0VwtWWb4JJwDs49WdOOpiS4ZTNwWze31FoFYVLbc+YR/9Yrerp5QbE\\nCEbTiHATO42ANk9Bu+0/mQlI3rXOQ86jT8H2Zru7AoGAYIv8H39LJ9Q6Q31DMWlU\\nZ8jr/UtNVnCtQmKguGsXwYYAzIXh3VOCpVLFJjRsdDOpSzMMbJuRZZYqzlCHAsc8\\nzUpf2WAkPdA8K7cPYvu7BrVXO+dhTe50hpDdOBevEDccdz/LLXviBQQ7NisjoyLS\\n5//MmbAG1QaVtkd2vIzr/mk=\\n-----END PRIVATE KEY-----\\n\",\r\n  \"client_email\": \"google-shopping-content@yokart-marketplace.iam.gserviceaccount.com\",\r\n  \"client_id\": \"117025910873504269744\",\r\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\r\n  \"token_uri\": \"https://oauth2.googleapis.com/token\",\r\n  \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\",\r\n  \"client_x509_cert_url\": \"https://www.googleapis.com/robot/v1/metadata/x509/google-shopping-content%40yokart-marketplace.iam.gserviceaccount.com\"\r\n}'),
-(19, 'stripe_customer_id', 'cus_IfJzmztFLtl27E'),
-(20, 'stripe_customer_id', 'cus_IfJo1oNYBWaqAA'),
-(22, 'facebooklogin_account_id', '2397180460397738'),
-(23, 'facebooklogin_account_id', '283960418747461'),
-(24, 'facebooklogin_account_id', '1543421119107014'),
-(24, 'stripe_account_id', 'acct_1HyZB62QKFz9SuIF'),
-(24, 'stripe_account_type', 'custom'),
-(24, 'stripe_customer_id', 'cus_IZhFGf7SGtfAPz'),
-(25, 'user_country_iso', ''),
-(26, 'instagramlogin_account_id', '5622163812'),
-(28, 'user_country_iso', '');
 
 -- --------------------------------------------------------
 
@@ -26334,345 +26054,6 @@ CREATE TABLE `tbl_user_notifications` (
   `unotification_type` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `unotification_data` mediumtext COLLATE utf8mb4_general_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tbl_user_notifications`
---
-
-INSERT INTO `tbl_user_notifications` (`unotification_id`, `unotification_user_id`, `unotification_body`, `unotification_date`, `unotification_is_read`, `unotification_type`, `unotification_data`) VALUES
-(1, 4, 'App Notification Your Order Payment Status Changed', '2019-03-27 13:55:10', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(2, 5, 'App Notification An Order Has Been Placed', '2019-03-27 13:55:11', 0, 'SELLER_ORDER', NULL),
-(3, 12, 'App Notification An Order Has Been Placed', '2019-03-27 13:55:11', 0, 'SELLER_ORDER', NULL),
-(4, 4, 'App Notification Thanks For Placing An Order', '2019-03-27 13:55:12', 0, 'BUYER_ORDER', NULL),
-(5, 4, 'App Notification Your Order Item Status Changed', '2019-03-27 13:55:13', 0, 'BUYER_ORDER_STATUS', NULL),
-(6, 4, 'App Notification Your Order Item Status Changed', '2019-03-27 13:55:14', 0, 'BUYER_ORDER_STATUS', NULL),
-(7, 4, 'App Notification Your Order Payment Status Changed', '2019-03-27 16:05:02', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(8, 5, 'App Notification An Order Has Been Placed', '2019-03-27 16:05:03', 0, 'SELLER_ORDER', NULL),
-(9, 4, 'App Notification Thanks For Placing An Order', '2019-03-27 16:05:04', 0, 'BUYER_ORDER', NULL),
-(10, 4, 'App Notification Your Order Item Status Changed', '2019-03-27 16:05:05', 0, 'BUYER_ORDER_STATUS', NULL),
-(11, 16, 'App Notification Your Account Has Been Txn Type With Amount', '2019-03-27 17:01:02', 0, 'TXN', NULL),
-(12, 16, 'App Notification Your Account Has Been Txn Type With Amount', '2019-03-27 17:13:15', 0, 'TXN', NULL),
-(13, 17, 'App Notification Your Order Payment Status Changed', '2019-03-27 17:35:17', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(14, 5, 'App Notification An Order Has Been Placed', '2019-03-27 17:35:18', 0, 'SELLER_ORDER', NULL),
-(15, 17, 'App Notification Thanks For Placing An Order', '2019-03-27 17:35:19', 0, 'BUYER_ORDER', NULL),
-(16, 17, 'App Notification Your Order Item Status Changed', '2019-03-27 17:35:20', 0, 'BUYER_ORDER_STATUS', NULL),
-(17, 5, 'App Notification Your Account Has Been Txn Type With Amount', '2019-03-27 17:48:05', 0, 'TXN', NULL),
-(18, 5, 'App Notification Your Account Has Been Txn Type With Amount', '2019-03-27 17:48:05', 0, 'TXN', NULL),
-(19, 17, 'App Notification Your Order Payment Status Changed', '2019-03-27 18:27:34', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(20, 4, 'App Notification An Order Has Been Placed', '2019-03-27 18:27:35', 0, 'SELLER_ORDER', NULL),
-(21, 5, 'App Notification An Order Has Been Placed', '2019-03-27 18:27:36', 0, 'SELLER_ORDER', NULL),
-(22, 5, 'App Notification An Order Has Been Placed', '2019-03-27 18:27:36', 0, 'SELLER_ORDER', NULL),
-(23, 17, 'App Notification Thanks For Placing An Order', '2019-03-27 18:27:37', 0, 'BUYER_ORDER', NULL),
-(24, 17, 'App Notification Your Order Item Status Changed', '2019-03-27 18:27:38', 0, 'BUYER_ORDER_STATUS', NULL),
-(25, 17, 'App Notification Your Order Item Status Changed', '2019-03-27 18:27:39', 0, 'BUYER_ORDER_STATUS', NULL),
-(26, 17, 'App Notification Your Order Item Status Changed', '2019-03-27 18:27:40', 0, 'BUYER_ORDER_STATUS', NULL),
-(27, 5, 'App Notification Buyer Has Submitted Order Cancellation Request', '2019-03-27 18:28:19', 0, 'ORDER_CANCELLATION_REQUEST', NULL),
-(28, 17, 'App Notification Your Order Item Status Changed', '2019-03-27 18:32:46', 0, 'BUYER_ORDER_STATUS', NULL),
-(29, 17, 'App Notification Your Order Item Status Changed', '2019-03-27 18:33:32', 0, 'BUYER_ORDER_STATUS', NULL),
-(30, 17, 'App Notification Your Product Return Request Submitted', '2019-03-27 18:33:33', 0, 'BUYER_RETURN_REQUEST', NULL),
-(31, 4, 'App Notification Your Order Payment Status Changed', '2019-03-27 18:38:43', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(32, 5, 'App Notification An Order Has Been Placed', '2019-03-27 18:38:44', 0, 'SELLER_ORDER', NULL),
-(33, 5, 'App Notification An Order Has Been Placed', '2019-03-27 18:38:44', 0, 'SELLER_ORDER', NULL),
-(34, 5, 'App Notification An Order Has Been Placed', '2019-03-27 18:38:45', 0, 'SELLER_ORDER', NULL),
-(35, 5, 'App Notification An Order Has Been Placed', '2019-03-27 18:38:45', 0, 'SELLER_ORDER', NULL),
-(36, 4, 'App Notification Thanks For Placing An Order', '2019-03-27 18:38:47', 0, 'BUYER_ORDER', NULL),
-(37, 4, 'App Notification Your Order Item Status Changed', '2019-03-27 18:38:48', 0, 'BUYER_ORDER_STATUS', NULL),
-(38, 4, 'App Notification Your Order Item Status Changed', '2019-03-27 18:38:49', 0, 'BUYER_ORDER_STATUS', NULL),
-(39, 4, 'App Notification Your Order Item Status Changed', '2019-03-27 18:38:50', 0, 'BUYER_ORDER_STATUS', NULL),
-(40, 4, 'App Notification Your Order Item Status Changed', '2019-03-27 18:38:50', 0, 'BUYER_ORDER_STATUS', NULL),
-(41, 5, 'App Notification Buyer Has Submitted Order Cancellation Request', '2019-03-27 18:39:12', 0, 'ORDER_CANCELLATION_REQUEST', NULL),
-(42, 4, 'App Notification Your Order Item Status Changed', '2019-03-27 18:39:45', 0, 'BUYER_ORDER_STATUS', NULL),
-(43, 4, 'App Notification Your Product Return Request Submitted', '2019-03-27 18:39:46', 0, 'BUYER_RETURN_REQUEST', NULL),
-(44, 4, 'App Notification Your Fund Withdrawal Request Changed', '2019-03-27 18:41:00', 0, 'FUNDS_WITHDRAWAL_REQUEST_CHANGED', NULL),
-(45, 5, 'App Notification Your Fund Withdrawal Request Changed', '2019-03-27 18:42:09', 0, 'FUNDS_WITHDRAWAL_REQUEST_CHANGED', NULL),
-(46, 5, 'App Notification Buyer Has Submitted Order Cancellation Request', '2019-03-27 18:44:14', 0, 'ORDER_CANCELLATION_REQUEST', NULL),
-(47, 4, 'App Notification Your Order Payment Status Changed', '2019-03-28 15:15:29', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(48, 4, 'App Notification An Order Has Been Placed', '2019-03-28 15:15:30', 0, 'SELLER_ORDER', NULL),
-(49, 4, 'App Notification Thanks For Placing An Order', '2019-03-28 15:15:31', 0, 'BUYER_ORDER', NULL),
-(50, 4, 'App Notification Your Order Item Status Changed', '2019-03-28 15:15:32', 0, 'BUYER_ORDER_STATUS', NULL),
-(51, 4, 'App Notification Your Order Item Status Changed', '2019-03-28 15:16:41', 0, 'BUYER_ORDER_STATUS', NULL),
-(52, 4, 'App Notification Your Account Has Been Txn Type With Amount', '2019-03-28 15:16:53', 0, 'TXN', NULL),
-(53, 4, 'App Notification Your Account Has Been Txn Type With Amount', '2019-03-28 15:16:54', 0, 'TXN', NULL),
-(54, 4, 'App Notification Your Order Payment Status Changed', '2019-03-28 15:19:10', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(55, 5, 'App Notification An Order Has Been Placed', '2019-03-28 15:19:11', 0, 'SELLER_ORDER', NULL),
-(56, 4, 'App Notification Thanks For Placing An Order', '2019-03-28 15:19:12', 0, 'BUYER_ORDER', NULL),
-(57, 4, 'App Notification Your Order Item Status Changed', '2019-03-28 15:19:12', 0, 'BUYER_ORDER_STATUS', NULL),
-(58, 4, 'App Notification Your Order Item Status Changed', '2019-03-28 15:19:53', 0, 'BUYER_ORDER_STATUS', NULL),
-(59, 4, 'App Notification Your Order Item Status Changed', '2019-03-28 15:20:01', 0, 'BUYER_ORDER_STATUS', NULL),
-(60, 5, 'App Notification Your Account Has Been Txn Type With Amount', '2019-03-28 15:20:08', 0, 'TXN', NULL),
-(61, 5, 'App Notification Your Account Has Been Txn Type With Amount', '2019-03-28 15:20:08', 0, 'TXN', NULL),
-(62, 4, 'App Notification Message Received From anant', '2019-03-28 15:50:23', 0, 'MESSAGE', NULL),
-(63, 17, 'App Notification Message Received From michael', '2019-03-28 15:56:35', 0, 'MESSAGE', NULL),
-(64, 4, 'App Notification Your Order Payment Status Changed', '2019-07-18 12:23:49', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(65, 4, 'App Notification An Order Has Been Placed', '2019-07-18 12:23:50', 0, 'SELLER_ORDER', NULL),
-(66, 4, 'App Notification An Order Has Been Placed', '2019-07-18 12:23:50', 0, 'SELLER_ORDER', NULL),
-(67, 4, 'App Notification Thanks For Placing An Order', '2019-07-18 12:23:50', 0, 'BUYER_ORDER', NULL),
-(68, 4, 'App Notification Your Order Item Status Changed', '2019-07-18 12:23:50', 0, 'BUYER_ORDER_STATUS', NULL),
-(69, 4, 'App Notification Your Order Item Status Changed', '2019-07-18 12:23:50', 0, 'BUYER_ORDER_STATUS', NULL),
-(70, 4, 'App Notification Your Order Payment Status Changed', '2019-07-18 12:25:22', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(71, 12, 'App Notification An Order Has Been Placed', '2019-07-18 12:25:22', 0, 'SELLER_ORDER', NULL),
-(72, 4, 'App Notification Thanks For Placing An Order', '2019-07-18 12:25:22', 0, 'BUYER_ORDER', NULL),
-(73, 4, 'App Notification Your Order Item Status Changed', '2019-07-18 12:25:22', 0, 'BUYER_ORDER_STATUS', NULL),
-(74, 4, 'App Notification Your Order Payment Status Changed', '2019-07-18 12:28:30', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(75, 6, 'App Notification An Order Has Been Placed', '2019-07-18 12:28:31', 0, 'SELLER_ORDER', NULL),
-(76, 4, 'App Notification Thanks For Placing An Order', '2019-07-18 12:28:31', 0, 'BUYER_ORDER', NULL),
-(77, 4, 'App Notification Your Order Item Status Changed', '2019-07-18 12:28:31', 0, 'BUYER_ORDER_STATUS', NULL),
-(78, 4, 'App Notification Your Order Item Status Changed', '2019-07-18 12:29:13', 0, 'BUYER_ORDER_STATUS', NULL),
-(79, 12, 'App Notification Your Account Has Been Txn Type With Amount', '2019-07-18 12:30:15', 0, 'TXN', NULL),
-(80, 12, 'App Notification Your Account Has Been Txn Type With Amount', '2019-07-18 12:30:15', 0, 'TXN', NULL),
-(81, 4, 'App Notification Your Order Item Status Changed', '2019-07-18 12:30:41', 0, 'BUYER_ORDER_STATUS', NULL),
-(82, 4, 'App Notification Your Order Item Status Changed', '2019-07-18 12:30:54', 0, 'BUYER_ORDER_STATUS', NULL),
-(83, 4, 'App Notification Your Order Item Status Changed', '2019-07-18 12:31:39', 0, 'BUYER_ORDER_STATUS', NULL),
-(84, 4, 'App Notification Your Order Item Status Changed', '2019-07-18 12:31:53', 0, 'BUYER_ORDER_STATUS', NULL),
-(85, 4, 'App Notification Your Order Item Status Changed', '2019-07-18 12:32:01', 0, 'BUYER_ORDER_STATUS', NULL),
-(86, 4, 'App Notification Your Account Has Been Txn Type With Amount', '2019-07-18 12:32:08', 0, 'TXN', NULL),
-(87, 4, 'App Notification Your Account Has Been Txn Type With Amount', '2019-07-18 12:32:08', 0, 'TXN', NULL),
-(88, 4, 'App Notification Your Order Item Status Changed', '2019-07-18 12:32:08', 0, 'BUYER_ORDER_STATUS', NULL),
-(89, 4, 'App Notification Your Order Payment Status Changed', '2019-07-18 12:33:13', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(90, 6, 'App Notification An Order Has Been Placed', '2019-07-18 12:33:13', 0, 'SELLER_ORDER', NULL),
-(91, 4, 'App Notification Thanks For Placing An Order', '2019-07-18 12:33:13', 0, 'BUYER_ORDER', NULL),
-(92, 4, 'App Notification Your Order Item Status Changed', '2019-07-18 12:33:13', 0, 'BUYER_ORDER_STATUS', NULL),
-(93, 6, 'App Notification Your Order Payment Status Changed', '2019-07-18 12:40:58', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(94, 12, 'App Notification An Order Has Been Placed', '2019-07-18 12:40:58', 0, 'SELLER_ORDER', NULL),
-(95, 6, 'App Notification Thanks For Placing An Order', '2019-07-18 12:40:58', 0, 'BUYER_ORDER', NULL),
-(96, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:40:58', 0, 'BUYER_ORDER_STATUS', NULL),
-(97, 6, 'App Notification Your Order Payment Status Changed', '2019-07-18 12:45:15', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(98, 4, 'App Notification An Order Has Been Placed', '2019-07-18 12:45:15', 0, 'SELLER_ORDER', NULL),
-(99, 6, 'App Notification An Order Has Been Placed', '2019-07-18 12:45:15', 0, 'SELLER_ORDER', NULL),
-(100, 6, 'App Notification Thanks For Placing An Order', '2019-07-18 12:45:15', 0, 'BUYER_ORDER', NULL),
-(101, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:45:15', 0, 'BUYER_ORDER_STATUS', NULL),
-(102, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:45:15', 0, 'BUYER_ORDER_STATUS', NULL),
-(103, 6, 'App Notification Your Account Credited Debited Reward Points', '2019-07-18 12:46:25', 0, 'REWARD_POINTS', NULL),
-(104, 6, 'App Notification Your Order Payment Status Changed', '2019-07-18 12:47:32', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(105, 5, 'App Notification An Order Has Been Placed', '2019-07-18 12:47:32', 0, 'SELLER_ORDER', NULL),
-(106, 5, 'App Notification An Order Has Been Placed', '2019-07-18 12:47:32', 0, 'SELLER_ORDER', NULL),
-(107, 6, 'App Notification Thanks For Placing An Order', '2019-07-18 12:47:32', 0, 'BUYER_ORDER', NULL),
-(108, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:47:32', 0, 'BUYER_ORDER_STATUS', NULL),
-(109, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:47:32', 0, 'BUYER_ORDER_STATUS', NULL),
-(110, 6, 'App Notification Your Account Credited Debited Reward Points', '2019-07-18 12:47:32', 0, 'REWARD_POINTS', NULL),
-(111, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:48:05', 0, 'BUYER_ORDER_STATUS', NULL),
-(112, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:48:22', 0, 'BUYER_ORDER_STATUS', NULL),
-(113, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:48:40', 0, 'BUYER_ORDER_STATUS', NULL),
-(114, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:48:53', 0, 'BUYER_ORDER_STATUS', NULL),
-(115, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:49:00', 0, 'BUYER_ORDER_STATUS', NULL),
-(116, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:49:18', 0, 'BUYER_ORDER_STATUS', NULL),
-(117, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:49:42', 0, 'BUYER_ORDER_STATUS', NULL),
-(118, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:49:56', 0, 'BUYER_ORDER_STATUS', NULL),
-(119, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:50:04', 0, 'BUYER_ORDER_STATUS', NULL),
-(120, 6, 'App Notification Your Account Has Been Txn Type With Amount', '2019-07-18 12:50:11', 0, 'TXN', NULL),
-(121, 6, 'App Notification Your Account Has Been Txn Type With Amount', '2019-07-18 12:50:11', 0, 'TXN', NULL),
-(122, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:50:11', 0, 'BUYER_ORDER_STATUS', NULL),
-(123, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:50:52', 0, 'BUYER_ORDER_STATUS', NULL),
-(124, 6, 'App Notification Your Product Return Request Submitted', '2019-07-18 12:50:52', 0, 'BUYER_RETURN_REQUEST', NULL),
-(125, 6, 'App Notification Your Order Payment Status Changed', '2019-07-18 12:51:41', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(126, 4, 'App Notification An Order Has Been Placed', '2019-07-18 12:51:41', 0, 'SELLER_ORDER', NULL),
-(127, 6, 'App Notification Thanks For Placing An Order', '2019-07-18 12:51:41', 0, 'BUYER_ORDER', NULL),
-(128, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 12:51:41', 0, 'BUYER_ORDER_STATUS', NULL),
-(129, 4, 'App Notification Buyer Has Submitted Order Cancellation Request', '2019-07-18 12:52:07', 0, 'ORDER_CANCELLATION_REQUEST', NULL),
-(130, 4, 'App Notification Your Order Payment Status Changed', '2019-07-18 13:08:50', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(131, 6, 'App Notification An Order Has Been Placed', '2019-07-18 13:08:50', 0, 'SELLER_ORDER', NULL),
-(132, 4, 'App Notification Thanks For Placing An Order', '2019-07-18 13:08:50', 0, 'BUYER_ORDER', NULL),
-(133, 4, 'App Notification Your Order Item Status Changed', '2019-07-18 13:08:50', 0, 'BUYER_ORDER_STATUS', NULL),
-(134, 6, 'App Notification Your Account Has Been Txn Type With Amount', '2019-07-18 13:10:11', 0, 'TXN', NULL),
-(135, 6, 'App Notification Your Account Has Been Txn Type With Amount', '2019-07-18 13:10:11', 0, 'TXN', NULL),
-(136, 4, 'App Notification Your Order Item Status Changed', '2019-07-18 13:10:11', 0, 'BUYER_ORDER_STATUS', NULL),
-(137, 4, 'App Notification Your Account Credited Debited Reward Points', '2019-07-18 13:13:07', 0, 'REWARD_POINTS', NULL),
-(138, 4, 'App Notification Your Account Credited Debited Reward Points', '2019-07-18 13:13:41', 0, 'REWARD_POINTS', NULL),
-(139, 4, 'App Notification Message Received From michael', '2019-07-18 13:16:05', 0, 'MESSAGE', NULL),
-(140, 6, 'App Notification Your Account Has Been Txn Type With Amount', '2019-07-18 13:18:57', 0, 'TXN', NULL),
-(141, 4, 'App Notification Your Account Has Been Txn Type With Amount', '2019-07-18 13:18:57', 0, 'TXN', NULL),
-(142, 4, 'App Notification Your Account Has Been Txn Type With Amount', '2019-07-18 13:18:57', 0, 'TXN', NULL),
-(143, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 13:18:57', 0, 'BUYER_ORDER_STATUS', NULL),
-(144, 6, 'App Notification Your Order Payment Status Changed', '2019-07-18 13:21:03', 0, 'ORDER_PAYMENT_STATUS', NULL),
-(145, 4, 'App Notification An Order Has Been Placed', '2019-07-18 13:21:03', 0, 'SELLER_ORDER', NULL),
-(146, 6, 'App Notification Thanks For Placing An Order', '2019-07-18 13:21:03', 0, 'BUYER_ORDER', NULL),
-(147, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 13:21:03', 0, 'BUYER_ORDER_STATUS', NULL),
-(148, 4, 'App Notification Buyer Has Submitted Order Cancellation Request', '2019-07-18 13:21:23', 0, 'ORDER_CANCELLATION_REQUEST', NULL),
-(149, 6, 'App Notification Your Account Has Been Txn Type With Amount', '2019-07-18 13:21:39', 0, 'TXN', NULL),
-(150, 6, 'App Notification Your Order Item Status Changed', '2019-07-18 13:21:39', 0, 'BUYER_ORDER_STATUS', NULL),
-(151, 6, 'App Notification Your Order Cancellation Request Status Changed', '2019-07-18 13:21:40', 0, 'CANCELLATION_REQUEST_STATUS', NULL),
-(152, 4, '?? ????? ???? ????? ???? {???? ?????} ??? {?????}', '2019-10-15 16:36:58', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1571137558\",\"status\":\"\\u062d\\u0627\\u0644\\u0629 \\u0627\\u0644\\u0637\\u0644\\u0628 \\u0627\\u0644\\u062f\\u0641\\u0639 \\u0627\\u0644\\u0645\\u062f\\u0641\\u0648\\u0639\\u0629\"}'),
-(153, 5, '??? ????? ???? ????? {} ???? ????? ?Saree.', '2019-10-15 16:36:58', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571137558\",\"productName\":\"Saree\"}'),
-(154, 4, '??? ????? ???? ????? {} ???? ????? ?Jeans.', '2019-10-15 16:36:58', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571137558\",\"productName\":\"Jeans\"}'),
-(155, 4, 'Your Order O1571137558 Have Been Place', '2019-10-15 16:36:58', 0, 'BUYER_ORDER', '{\"orderId\":\"O1571137558\"}'),
-(156, 4, 'Status for Saree with invoice O1571137558-S0002 has been updated to Payment Confirmed', '2019-10-15 16:36:59', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571137558-S0002\",\"productName\":\"Saree\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571137558\",\"orderProductId\":148}'),
-(157, 4, 'Status for Jeans with invoice O1571137558-S0001 has been updated to Payment Confirmed', '2019-10-15 16:36:59', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571137558-S0001\",\"productName\":\"Jeans\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571137558\",\"orderProductId\":147}'),
-(158, 4, 'Payment status for order O1571137742 has been updated to Order Payment Status Paid', '2019-10-15 16:39:32', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1571137742\",\"status\":\"Order Payment Status Paid\"}'),
-(159, 5, 'You have received a new order O1571137742 for Saree.', '2019-10-15 16:39:32', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571137742\",\"productName\":\"Saree\"}'),
-(160, 4, 'Your Order O1571137742 Have Been Place', '2019-10-15 16:39:33', 0, 'BUYER_ORDER', '{\"orderId\":\"O1571137742\"}'),
-(161, 4, 'Status for Saree with invoice O1571137742-S0001 has been updated to Payment Confirmed', '2019-10-15 16:39:33', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571137742-S0001\",\"productName\":\"Saree\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571137742\",\"orderProductId\":149}'),
-(162, 20, 'Payment status for order O1571385122 has been updated to Order Payment Status Paid', '2019-10-18 13:23:30', 1, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1571385122\",\"status\":\"Order Payment Status Paid\"}'),
-(163, 11, 'You have received a new order O1571385122 for Printed Men Round or Crew Blue T-Shirt.', '2019-10-18 13:23:30', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571385122\",\"productName\":\"Printed Men Round or Crew Blue T-Shirt\"}'),
-(164, 20, 'Your Order O1571385122 Have Been Place', '2019-10-18 13:23:30', 1, 'BUYER_ORDER', '{\"orderId\":\"O1571385122\"}'),
-(165, 20, 'Status for Printed Men Round or Crew Blue T-Shirt with invoice O1571385122-S0001 has been updated to Payment Confirmed', '2019-10-18 13:23:30', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571385122-S0001\",\"productName\":\"Printed Men Round or Crew Blue T-Shirt\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571385122\",\"orderProductId\":155}'),
-(166, 20, 'Status for Printed Men Round or Crew Blue T-Shirt with invoice O1571385122-S0001 has been updated to In Process', '2019-10-18 13:24:25', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571385122-S0001\",\"productName\":\"Printed Men Round or Crew Blue T-Shirt\",\"status\":\"In Process\",\"orderId\":\"O1571385122\",\"orderProductId\":155}'),
-(167, 20, 'Status for Printed Men Round or Crew Blue T-Shirt with invoice O1571385122-S0001 has been updated to Shipped', '2019-10-18 13:24:52', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571385122-S0001\",\"productName\":\"Printed Men Round or Crew Blue T-Shirt\",\"status\":\"Shipped\",\"orderId\":\"O1571385122\",\"orderProductId\":155}'),
-(168, 20, 'Status for Printed Men Round or Crew Blue T-Shirt with invoice O1571385122-S0001 has been updated to Delivered', '2019-10-18 13:25:16', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571385122-S0001\",\"productName\":\"Printed Men Round or Crew Blue T-Shirt\",\"status\":\"Delivered\",\"orderId\":\"O1571385122\",\"orderProductId\":155}'),
-(169, 11, 'Amount $44.00 with transaction id TN-0000096 has been Credited to your account', '2019-10-18 13:25:29', 0, 'TXN', '{\"txnAmount\":\"$44.00\",\"txnId\":\"TN-0000096\",\"txnType\":\"Credited\"}'),
-(170, 11, 'Amount $2.20 with transaction id TN-0000097 has been Debited to your account', '2019-10-18 13:25:29', 0, 'TXN', '{\"txnAmount\":\"$2.20\",\"txnId\":\"TN-0000097\",\"txnType\":\"Debited\"}'),
-(171, 20, 'Status for Printed Men Round or Crew Blue T-Shirt with invoice O1571385122-S0001 has been updated to Completed', '2019-10-18 13:25:29', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571385122-S0001\",\"productName\":\"Printed Men Round or Crew Blue T-Shirt\",\"status\":\"Completed\",\"orderId\":\"O1571385122\",\"orderProductId\":155}'),
-(172, 21, 'Amount $15,000.00 with transaction id TN-0000098 has been Credited to your account', '2019-10-18 13:29:03', 0, 'TXN', '{\"txnAmount\":\"$15,000.00\",\"txnId\":\"TN-0000098\",\"txnType\":\"Credited\"}'),
-(173, 21, 'Reward points 500 has been Credited to your account', '2019-10-18 13:29:35', 0, 'REWARD_POINTS', '{\"rewardPoints\":500,\"debitCreditType\":\"Credited\"}'),
-(174, 20, 'Payment status for order O1571385406 has been updated to Order Payment Status Paid', '2019-10-18 13:34:27', 1, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1571385406\",\"status\":\"Order Payment Status Paid\"}'),
-(175, 11, 'You have received a new order O1571385406 for OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery).', '2019-10-18 13:34:27', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571385406\",\"productName\":\"OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery)\"}'),
-(176, 20, 'Your Order O1571385406 Have Been Place', '2019-10-18 13:34:28', 1, 'BUYER_ORDER', '{\"orderId\":\"O1571385406\"}'),
-(177, 20, 'Status for OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery) with invoice O1571385406-S0001 has been updated to Payment Confirmed', '2019-10-18 13:34:28', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571385406-S0001\",\"productName\":\"OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery)\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571385406\",\"orderProductId\":158}'),
-(178, 20, 'Status for OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery) with invoice O1571385406-S0001 has been updated to Shipped', '2019-10-18 13:35:04', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571385406-S0001\",\"productName\":\"OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery)\",\"status\":\"Shipped\",\"orderId\":\"O1571385406\",\"orderProductId\":158}'),
-(179, 20, 'Status for OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery) with invoice O1571385406-S0001 has been updated to Delivered', '2019-10-18 13:35:19', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571385406-S0001\",\"productName\":\"OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery)\",\"status\":\"Delivered\",\"orderId\":\"O1571385406\",\"orderProductId\":158}'),
-(180, 21, 'Payment status for order O1571385910 has been updated to Order Payment Status Paid', '2019-10-18 13:35:24', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1571385910\",\"status\":\"Order Payment Status Paid\"}'),
-(181, 11, 'You have received a new order O1571385910 for OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery).', '2019-10-18 13:35:24', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571385910\",\"productName\":\"OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery)\"}'),
-(182, 21, 'Your Order O1571385910 Have Been Place', '2019-10-18 13:35:24', 0, 'BUYER_ORDER', '{\"orderId\":\"O1571385910\"}'),
-(183, 21, 'Status for OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery) with invoice O1571385910-S0001 has been updated to Payment Confirmed', '2019-10-18 13:35:24', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571385910-S0001\",\"productName\":\"OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery)\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571385910\",\"orderProductId\":161}'),
-(184, 21, 'Reward points 50 has been Debited to your account', '2019-10-18 13:35:24', 0, 'REWARD_POINTS', '{\"rewardPoints\":50,\"debitCreditType\":\"Debited\"}'),
-(185, 11, 'Amount $733.95 with transaction id TN-0000100 has been Credited to your account', '2019-10-18 13:35:28', 0, 'TXN', '{\"txnAmount\":\"$733.95\",\"txnId\":\"TN-0000100\",\"txnType\":\"Credited\"}'),
-(186, 11, 'Amount $36.70 with transaction id TN-0000101 has been Debited to your account', '2019-10-18 13:35:29', 0, 'TXN', '{\"txnAmount\":\"$36.70\",\"txnId\":\"TN-0000101\",\"txnType\":\"Debited\"}'),
-(187, 20, 'Status for OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery) with invoice O1571385406-S0001 has been updated to Completed', '2019-10-18 13:35:29', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571385406-S0001\",\"productName\":\"OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery)\",\"status\":\"Completed\",\"orderId\":\"O1571385406\",\"orderProductId\":158}'),
-(188, 21, 'Status for OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery) with invoice O1571385910-S0001 has been updated to In Process', '2019-10-18 13:36:29', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571385910-S0001\",\"productName\":\"OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery)\",\"status\":\"In Process\",\"orderId\":\"O1571385910\",\"orderProductId\":161}'),
-(189, 20, 'Payment status for order O1571386007 has been updated to Order Payment Status Paid', '2019-10-18 13:37:07', 1, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1571386007\",\"status\":\"Order Payment Status Paid\"}'),
-(190, 5, 'You have received a new order O1571386007 for Tops.', '2019-10-18 13:37:07', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571386007\",\"productName\":\"Tops\"}'),
-(191, 20, 'Your Order O1571386007 Have Been Place', '2019-10-18 13:37:07', 1, 'BUYER_ORDER', '{\"orderId\":\"O1571386007\"}'),
-(192, 20, 'Status for Tops with invoice O1571386007-S0001 has been updated to Payment Confirmed', '2019-10-18 13:37:07', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386007-S0001\",\"productName\":\"Tops\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571386007\",\"orderProductId\":162}'),
-(193, 21, 'Status for OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery) with invoice O1571385910-S0001 has been updated to Shipped', '2019-10-18 13:37:09', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571385910-S0001\",\"productName\":\"OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery)\",\"status\":\"Shipped\",\"orderId\":\"O1571385910\",\"orderProductId\":161}'),
-(194, 21, 'Status for OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery) with invoice O1571385910-S0001 has been updated to Delivered', '2019-10-18 13:37:27', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571385910-S0001\",\"productName\":\"OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery)\",\"status\":\"Delivered\",\"orderId\":\"O1571385910\",\"orderProductId\":161}'),
-(195, 11, 'Amount $733.95 with transaction id TN-0000102 has been Credited to your account', '2019-10-18 13:37:38', 0, 'TXN', '{\"txnAmount\":\"$733.95\",\"txnId\":\"TN-0000102\",\"txnType\":\"Credited\"}'),
-(196, 11, 'Amount $36.70 with transaction id TN-0000103 has been Debited to your account', '2019-10-18 13:37:38', 0, 'TXN', '{\"txnAmount\":\"$36.70\",\"txnId\":\"TN-0000103\",\"txnType\":\"Debited\"}'),
-(197, 21, 'Status for OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery) with invoice O1571385910-S0001 has been updated to Completed', '2019-10-18 13:37:38', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571385910-S0001\",\"productName\":\"OnePlus 7 (Mirror Grey, 6GB RAM, Optic AMOLED Display, 128GB Storage, 3700mAH Battery)\",\"status\":\"Completed\",\"orderId\":\"O1571385910\",\"orderProductId\":161}'),
-(198, 5, 'Cancellation request received for invoice O1571386007-S0001', '2019-10-18 13:37:53', 0, 'ORDER_CANCELLATION_REQUEST', '{\"invoiceNumber\":\"O1571386007-S0001\"}'),
-(199, 20, 'Amount $158.90 with transaction id TN-0000104 has been Credited to your account', '2019-10-18 13:39:17', 1, 'TXN', '{\"txnAmount\":\"$158.90\",\"txnId\":\"TN-0000104\",\"txnType\":\"Credited\"}'),
-(200, 20, 'Status for Tops with invoice O1571386007-S0001 has been updated to Cancelled', '2019-10-18 13:39:17', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386007-S0001\",\"productName\":\"Tops\",\"status\":\"Cancelled\",\"orderId\":\"O1571386007\",\"orderProductId\":162}'),
-(201, 20, 'Status for order cancellation invoice O1571386007-S0001 has been updated to Approved', '2019-10-18 13:39:17', 1, 'CANCELLATION_REQUEST_STATUS', '{\"invoiceNumber\":\"O1571386007-S0001\",\"requestStatus\":\"Approved\"}'),
-(202, 20, 'Payment status for order O1571386223 has been updated to Order Payment Status Paid', '2019-10-18 13:40:38', 1, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1571386223\",\"status\":\"Order Payment Status Paid\"}'),
-(203, 5, 'You have received a new order O1571386223 for Tops.', '2019-10-18 13:40:38', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571386223\",\"productName\":\"Tops\"}'),
-(204, 20, 'Your Order O1571386223 Have Been Place', '2019-10-18 13:40:38', 1, 'BUYER_ORDER', '{\"orderId\":\"O1571386223\"}'),
-(205, 20, 'Status for Tops with invoice O1571386223-S0001 has been updated to Payment Confirmed', '2019-10-18 13:40:38', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386223-S0001\",\"productName\":\"Tops\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571386223\",\"orderProductId\":165}'),
-(206, 21, 'Payment status for order O1571386197 has been updated to Order Payment Status Paid', '2019-10-18 13:40:41', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1571386197\",\"status\":\"Order Payment Status Paid\"}'),
-(207, 11, 'You have received a new order O1571386197 for Regular Men Blue Jeans.', '2019-10-18 13:40:41', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571386197\",\"productName\":\"Regular Men Blue Jeans\"}'),
-(208, 6, 'You have received a new order O1571386197 for Sketch Pens.', '2019-10-18 13:40:41', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571386197\",\"productName\":\"Sketch Pens\"}'),
-(209, 21, 'Your Order O1571386197 Have Been Place', '2019-10-18 13:40:41', 0, 'BUYER_ORDER', '{\"orderId\":\"O1571386197\"}'),
-(210, 21, 'Status for Regular Men Blue Jeans with invoice O1571386197-S0002 has been updated to Payment Confirmed', '2019-10-18 13:40:41', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386197-S0002\",\"productName\":\"Regular Men Blue Jeans\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571386197\",\"orderProductId\":164}'),
-(211, 21, 'Status for Sketch Pens with invoice O1571386197-S0001 has been updated to Payment Confirmed', '2019-10-18 13:40:41', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386197-S0001\",\"productName\":\"Sketch Pens\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571386197\",\"orderProductId\":163}'),
-(212, 20, 'Status for Tops with invoice O1571386223-S0001 has been updated to Delivered', '2019-10-18 13:41:37', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386223-S0001\",\"productName\":\"Tops\",\"status\":\"Delivered\",\"orderId\":\"O1571386223\",\"orderProductId\":165}'),
-(213, 20, 'Status for Tops with invoice O1571386223-S0001 has been updated to Return Requested', '2019-10-18 13:41:59', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386223-S0001\",\"productName\":\"Tops\",\"status\":\"Return Requested\",\"orderId\":\"O1571386223\",\"orderProductId\":165}'),
-(214, 20, 'Return request for Daily Wear Fun top (Tops)Brand: Allen Solly with reference number 20-1571386319 is successfully submitted.', '2019-10-18 13:41:59', 1, 'BUYER_RETURN_REQUEST', '{\"username\":\"dougals\",\"returnRequestId\":\"20-1571386319\"}'),
-(215, 20, 'Amount $61.30 with transaction id TN-0000105 has been Credited to your account', '2019-10-18 13:42:31', 1, 'TXN', '{\"txnAmount\":\"$61.30\",\"txnId\":\"TN-0000105\",\"txnType\":\"Credited\"}'),
-(216, 5, 'Amount $36.30 with transaction id TN-0000106 has been Credited to your account', '2019-10-18 13:42:31', 0, 'TXN', '{\"txnAmount\":\"$36.30\",\"txnId\":\"TN-0000106\",\"txnType\":\"Credited\"}'),
-(217, 5, 'Amount $0.45 with transaction id TN-0000107 has been Debited to your account', '2019-10-18 13:42:31', 0, 'TXN', '{\"txnAmount\":\"$0.45\",\"txnId\":\"TN-0000107\",\"txnType\":\"Debited\"}'),
-(218, 20, 'Status for Tops with invoice O1571386223-S0001 has been updated to Refunded/Completed', '2019-10-18 13:42:31', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386223-S0001\",\"productName\":\"Tops\",\"status\":\"Refunded\\/Completed\",\"orderId\":\"O1571386223\",\"orderProductId\":165}'),
-(219, 6, 'Cancellation request received for invoice O1571386197-S0001', '2019-10-18 13:43:55', 0, 'ORDER_CANCELLATION_REQUEST', '{\"invoiceNumber\":\"O1571386197-S0001\"}'),
-(220, 21, 'Status for Regular Men Blue Jeans with invoice O1571386197-S0002 has been updated to In Process', '2019-10-18 13:45:09', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386197-S0002\",\"productName\":\"Regular Men Blue Jeans\",\"status\":\"In Process\",\"orderId\":\"O1571386197\",\"orderProductId\":164}'),
-(221, 21, 'Status for Regular Men Blue Jeans with invoice O1571386197-S0002 has been updated to Shipped', '2019-10-18 13:45:27', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386197-S0002\",\"productName\":\"Regular Men Blue Jeans\",\"status\":\"Shipped\",\"orderId\":\"O1571386197\",\"orderProductId\":164}'),
-(222, 21, 'Status for Regular Men Blue Jeans with invoice O1571386197-S0002 has been updated to Delivered', '2019-10-18 13:45:36', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386197-S0002\",\"productName\":\"Regular Men Blue Jeans\",\"status\":\"Delivered\",\"orderId\":\"O1571386197\",\"orderProductId\":164}'),
-(223, 21, 'Status for Regular Men Blue Jeans with invoice O1571386197-S0002 has been updated to Return Requested', '2019-10-18 13:46:06', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386197-S0002\",\"productName\":\"Regular Men Blue Jeans\",\"status\":\"Return Requested\",\"orderId\":\"O1571386197\",\"orderProductId\":164}'),
-(224, 21, 'Return request for Regular Men Blue Jeans (Regular Men Blue Jeans)Brand: Pepe Jeans with reference number 21-1571386566 is successfully submitted.', '2019-10-18 13:46:06', 0, 'BUYER_RETURN_REQUEST', '{\"username\":\"Tomhanks\",\"returnRequestId\":\"21-1571386566\"}'),
-(225, 21, 'Payment status for order O1571386619 has been updated to Order Payment Status Paid', '2019-10-18 13:47:24', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1571386619\",\"status\":\"Order Payment Status Paid\"}'),
-(226, 12, 'You have received a new order O1571386619 for Beats by Dr. Dre - Beats Solo³ Wireless Headphones - Gold.', '2019-10-18 13:47:24', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571386619\",\"productName\":\"Beats by Dr. Dre - Beats Solo\\u00b3 Wireless Headphones - Gold\"}'),
-(227, 21, 'Your Order O1571386619 Have Been Place', '2019-10-18 13:47:24', 0, 'BUYER_ORDER', '{\"orderId\":\"O1571386619\"}'),
-(228, 21, 'Status for Beats by Dr. Dre - Beats Solo³ Wireless Headphones - Gold with invoice O1571386619-S0001 has been updated to Payment Confirmed', '2019-10-18 13:47:24', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386619-S0001\",\"productName\":\"Beats by Dr. Dre - Beats Solo\\u00b3 Wireless Headphones - Gold\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571386619\",\"orderProductId\":166}'),
-(229, 21, 'Payment status for order O1571386744 has been updated to Order Payment Status Paid', '2019-10-18 13:50:46', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1571386744\",\"status\":\"Order Payment Status Paid\"}'),
-(230, 6, 'You have received a new order O1571386744 for Women Fit and Flare Pink Dress.', '2019-10-18 13:50:47', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571386744\",\"productName\":\"Women Fit and Flare Pink Dress\"}'),
-(231, 21, 'Your Order O1571386744 Have Been Place', '2019-10-18 13:50:47', 0, 'BUYER_ORDER', '{\"orderId\":\"O1571386744\"}'),
-(232, 21, 'Status for Women Fit and Flare Pink Dress with invoice O1571386744-S0001 has been updated to Payment Confirmed', '2019-10-18 13:50:47', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386744-S0001\",\"productName\":\"Women Fit and Flare Pink Dress\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571386744\",\"orderProductId\":171}'),
-(233, 21, 'Reward points 57 has been Debited to your account', '2019-10-18 13:50:47', 0, 'REWARD_POINTS', '{\"rewardPoints\":57,\"debitCreditType\":\"Debited\"}'),
-(234, 6, 'Cancellation request received for invoice O1571386744-S0001', '2019-10-18 13:51:05', 0, 'ORDER_CANCELLATION_REQUEST', '{\"invoiceNumber\":\"O1571386744-S0001\"}'),
-(235, 21, 'Amount $3.49 with transaction id TN-0000109 has been Credited to your account', '2019-10-18 13:51:29', 0, 'TXN', '{\"txnAmount\":\"$3.49\",\"txnId\":\"TN-0000109\",\"txnType\":\"Credited\"}'),
-(236, 21, 'Status for Women Fit and Flare Pink Dress with invoice O1571386744-S0001 has been updated to Cancelled', '2019-10-18 13:51:29', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386744-S0001\",\"productName\":\"Women Fit and Flare Pink Dress\",\"status\":\"Cancelled\",\"orderId\":\"O1571386744\",\"orderProductId\":171}'),
-(237, 21, 'Status for order cancellation invoice O1571386744-S0001 has been updated to Approved', '2019-10-18 13:51:29', 0, 'CANCELLATION_REQUEST_STATUS', '{\"invoiceNumber\":\"O1571386744-S0001\",\"requestStatus\":\"Approved\"}'),
-(238, 20, 'Payment status for order O1571386911 has been updated to Order Payment Status Paid', '2019-10-18 13:51:56', 1, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1571386911\",\"status\":\"Order Payment Status Paid\"}'),
-(239, 4, 'You have received a new order O1571386911 for Jeans.', '2019-10-18 13:51:56', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571386911\",\"productName\":\"Jeans\"}'),
-(240, 20, 'Your Order O1571386911 Have Been Place', '2019-10-18 13:51:56', 1, 'BUYER_ORDER', '{\"orderId\":\"O1571386911\"}'),
-(241, 20, 'Status for Jeans with invoice O1571386911-S0001 has been updated to Payment Confirmed', '2019-10-18 13:51:56', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386911-S0001\",\"productName\":\"Jeans\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571386911\",\"orderProductId\":173}'),
-(242, 20, 'Payment status for order O1571386984 has been updated to Order Payment Status Paid', '2019-10-18 13:53:19', 1, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1571386984\",\"status\":\"Order Payment Status Paid\"}'),
-(243, 4, 'You have received a new order O1571386984 for Nike Solid Men\'s Track Suit.', '2019-10-18 13:53:19', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571386984\",\"productName\":\"Nike Solid Men\'s Track Suit\"}'),
-(244, 20, 'Your Order O1571386984 Have Been Place', '2019-10-18 13:53:19', 1, 'BUYER_ORDER', '{\"orderId\":\"O1571386984\"}'),
-(245, 20, 'Status for Nike Solid Men\'s Track Suit with invoice O1571386984-S0001 has been updated to Payment Confirmed', '2019-10-18 13:53:19', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386984-S0001\",\"productName\":\"Nike Solid Men\'s Track Suit\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571386984\",\"orderProductId\":175}'),
-(246, 20, 'Status for Nike Solid Men\'s Track Suit with invoice O1571386984-S0001 has been updated to In Process', '2019-10-18 13:53:50', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386984-S0001\",\"productName\":\"Nike Solid Men\'s Track Suit\",\"status\":\"In Process\",\"orderId\":\"O1571386984\",\"orderProductId\":175}'),
-(247, 20, 'Status for Nike Solid Men\'s Track Suit with invoice O1571386984-S0001 has been updated to Shipped', '2019-10-18 13:54:07', 1, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571386984-S0001\",\"productName\":\"Nike Solid Men\'s Track Suit\",\"status\":\"Shipped\",\"orderId\":\"O1571386984\",\"orderProductId\":175}'),
-(248, 11, 'New message posted by Yo!Kart on return request 21-1571386566', '2019-10-18 13:54:39', 0, 'MESSAGE_RETURN_REQUEST', '{\"username\":\"Tomhanks\",\"requestNumber\":\"21-1571386566\"}'),
-(249, 11, 'New message posted by Yo!Kart on return request 21-1571386566', '2019-10-18 13:55:28', 0, 'MESSAGE_RETURN_REQUEST', '{\"username\":\"Tomhanks\",\"requestNumber\":\"21-1571386566\"}'),
-(250, 11, 'New message posted by Yo!Kart on return request 21-1571386566', '2019-10-18 13:55:38', 0, 'MESSAGE_RETURN_REQUEST', '{\"username\":\"Tomhanks\",\"requestNumber\":\"21-1571386566\"}'),
-(251, 21, 'Payment status for order O1571389667 has been updated to Order Payment Status Paid', '2019-10-18 14:37:51', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1571389667\",\"status\":\"Order Payment Status Paid\"}'),
-(252, 6, 'You have received a new order O1571389667 for Norton Antivirus Software 2016.', '2019-10-18 14:37:51', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571389667\",\"productName\":\"Norton Antivirus Software 2016\"}'),
-(253, 21, 'Your Order O1571389667 Have Been Place', '2019-10-18 14:37:51', 0, 'BUYER_ORDER', '{\"orderId\":\"O1571389667\"}'),
-(254, 21, 'Status for Norton Antivirus Software 2016 with invoice O1571389667-S0001 has been updated to Payment Confirmed', '2019-10-18 14:37:51', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571389667-S0001\",\"productName\":\"Norton Antivirus Software 2016\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571389667\",\"orderProductId\":178}'),
-(255, 6, 'Amount $103.95 with transaction id TN-0000112 has been Credited to your account', '2019-10-18 14:39:43', 0, 'TXN', '{\"txnAmount\":\"$103.95\",\"txnId\":\"TN-0000112\",\"txnType\":\"Credited\"}'),
-(256, 6, 'Amount $4.16 with transaction id TN-0000113 has been Debited to your account', '2019-10-18 14:39:43', 0, 'TXN', '{\"txnAmount\":\"$4.16\",\"txnId\":\"TN-0000113\",\"txnType\":\"Debited\"}'),
-(257, 21, 'Status for Norton Antivirus Software 2016 with invoice O1571389667-S0001 has been updated to Completed', '2019-10-18 14:39:43', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571389667-S0001\",\"productName\":\"Norton Antivirus Software 2016\",\"status\":\"Completed\",\"orderId\":\"O1571389667\",\"orderProductId\":178}'),
-(258, 21, 'Payment status for order O1571390902 has been updated to Order Payment Status Paid', '2019-10-18 14:58:26', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1571390902\",\"status\":\"Order Payment Status Paid\"}'),
-(259, 12, 'You have received a new order O1571390902 for After the Fall (How Humpty Dumpty Got Back Up Again).', '2019-10-18 14:58:26', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571390902\",\"productName\":\"After the Fall (How Humpty Dumpty Got Back Up Again)\"}'),
-(260, 21, 'Your Order O1571390902 Have Been Place', '2019-10-18 14:58:26', 0, 'BUYER_ORDER', '{\"orderId\":\"O1571390902\"}'),
-(261, 21, 'Status for After the Fall (How Humpty Dumpty Got Back Up Again) with invoice O1571390902-S0001 has been updated to Payment Confirmed', '2019-10-18 14:58:26', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571390902-S0001\",\"productName\":\"After the Fall (How Humpty Dumpty Got Back Up Again)\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571390902\",\"orderProductId\":180}'),
-(262, 12, 'Amount $157.50 with transaction id TN-0000115 has been Credited to your account', '2019-10-18 14:58:46', 0, 'TXN', '{\"txnAmount\":\"$157.50\",\"txnId\":\"TN-0000115\",\"txnType\":\"Credited\"}'),
-(263, 12, 'Amount $7.88 with transaction id TN-0000116 has been Debited to your account', '2019-10-18 14:58:46', 0, 'TXN', '{\"txnAmount\":\"$7.88\",\"txnId\":\"TN-0000116\",\"txnType\":\"Debited\"}'),
-(264, 21, 'Status for After the Fall (How Humpty Dumpty Got Back Up Again) with invoice O1571390902-S0001 has been updated to Completed', '2019-10-18 14:58:46', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571390902-S0001\",\"productName\":\"After the Fall (How Humpty Dumpty Got Back Up Again)\",\"status\":\"Completed\",\"orderId\":\"O1571390902\",\"orderProductId\":180}'),
-(265, 21, 'Payment status for order O1571720774 has been updated to Order Payment Status Paid', '2019-10-22 10:36:50', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1571720774\",\"status\":\"Order Payment Status Paid\"}'),
-(266, 4, 'You have received a new order O1571720774 for Sony Playstation 4.', '2019-10-22 10:36:51', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571720774\",\"productName\":\"Sony Playstation 4\"}'),
-(267, 21, 'Your Order O1571720774 Have Been Place', '2019-10-22 10:36:51', 0, 'BUYER_ORDER', '{\"orderId\":\"O1571720774\"}'),
-(268, 21, 'Status for Sony Playstation 4 with invoice O1571720774-S0001 has been updated to Payment Confirmed', '2019-10-22 10:36:52', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571720774-S0001\",\"productName\":\"Sony Playstation 4\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571720774\",\"orderProductId\":185}'),
-(269, 21, 'Payment status for order O1571721470 has been updated to Order Payment Status Paid', '2019-10-22 10:48:25', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1571721470\",\"status\":\"Order Payment Status Paid\"}'),
-(270, 4, 'You have received a new order O1571721470 for Sony Playstation 4.', '2019-10-22 10:48:26', 0, 'SELLER_ORDER', '{\"orderId\":\"O1571721470\",\"productName\":\"Sony Playstation 4\"}'),
-(271, 21, 'Your Order O1571721470 Have Been Place', '2019-10-22 10:48:26', 0, 'BUYER_ORDER', '{\"orderId\":\"O1571721470\"}'),
-(272, 21, 'Status for Sony Playstation 4 with invoice O1571721470-S0001 has been updated to Payment Confirmed', '2019-10-22 10:48:26', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1571721470-S0001\",\"productName\":\"Sony Playstation 4\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1571721470\",\"orderProductId\":190}'),
-(273, 4, 'Payment status for order O1606194252 has been updated to Order Payment Status Paid', '2020-11-24 10:36:31', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1606194252\",\"status\":\"Order Payment Status Paid\"}'),
-(274, 6, 'You have received a new order O1606194252 for Women Fit and Flare Pink Dress.', '2020-11-24 10:36:34', 0, 'SELLER_ORDER', '{\"orderId\":\"O1606194252\",\"productName\":\"Women Fit and Flare Pink Dress\"}'),
-(275, 4, 'Your Order O1606194252 Have Been Place', '2020-11-24 10:36:38', 0, 'BUYER_ORDER', '{\"orderId\":\"O1606194252\"}'),
-(276, 4, 'Status for Women Fit and Flare Pink Dress with invoice O1606194252-S0001 has been updated to Payment Confirmed', '2020-11-24 10:36:39', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1606194252-S0001\",\"productName\":\"Women Fit and Flare Pink Dress\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1606194252\",\"orderProductId\":195}'),
-(277, 20, 'Payment status for order O1608711589 has been updated to Order Payment Status Paid', '2020-12-23 13:50:08', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1608711589\",\"status\":\"Order Payment Status Paid\"}'),
-(278, 4, 'You have received a new order O1608711589 for Apple iPhone 12.', '2020-12-23 13:50:08', 0, 'SELLER_ORDER', '{\"orderId\":\"O1608711589\",\"productName\":\"Apple iPhone 12\"}'),
-(279, 20, 'Your Order O1608711589 Have Been Place', '2020-12-23 13:50:08', 0, 'BUYER_ORDER', '{\"orderId\":\"O1608711589\"}'),
-(280, 20, 'Status for Apple iPhone 12 with invoice O1608711589-S0001 has been updated to Payment Confirmed', '2020-12-23 13:50:08', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1608711589-S0001\",\"productName\":\"Apple iPhone 12\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1608711589\",\"orderProductId\":209}'),
-(281, 20, 'Status for Apple iPhone 12 with invoice O1608711589-S0001 has been updated to Delivered', '2020-12-23 13:50:29', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1608711589-S0001\",\"productName\":\"Apple iPhone 12\",\"status\":\"Delivered\",\"orderId\":\"O1608711589\",\"orderProductId\":209}'),
-(282, 20, 'Status for Apple iPhone 12 with invoice O1608711589-S0001 has been updated to Completed', '2020-12-23 13:50:36', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1608711589-S0001\",\"productName\":\"Apple iPhone 12\",\"status\":\"Completed\",\"orderId\":\"O1608711589\",\"orderProductId\":209}'),
-(283, 4, 'Amount $422.50 with transaction id TN-0000120 has been Credited to your account', '2020-12-23 13:50:36', 0, 'TXN', '{\"txnAmount\":\"$422.50\",\"txnId\":\"TN-0000120\",\"txnType\":\"Credited\"}'),
-(284, 4, 'Amount $16.90 with transaction id TN-0000121 has been Debited to your account', '2020-12-23 13:50:36', 0, 'TXN', '{\"txnAmount\":\"$16.90\",\"txnId\":\"TN-0000121\",\"txnType\":\"Debited\"}');
-INSERT INTO `tbl_user_notifications` (`unotification_id`, `unotification_user_id`, `unotification_body`, `unotification_date`, `unotification_is_read`, `unotification_type`, `unotification_data`) VALUES
-(285, 21, 'Payment status for order O1608711781 has been updated to Order Payment Status Paid', '2020-12-23 13:53:06', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1608711781\",\"status\":\"Order Payment Status Paid\"}'),
-(286, 4, 'You have received a new order O1608711781 for Apple iPhone 12.', '2020-12-23 13:53:06', 0, 'SELLER_ORDER', '{\"orderId\":\"O1608711781\",\"productName\":\"Apple iPhone 12\"}'),
-(287, 21, 'Your Order O1608711781 Have Been Place', '2020-12-23 13:53:06', 0, 'BUYER_ORDER', '{\"orderId\":\"O1608711781\"}'),
-(288, 21, 'Status for Apple iPhone 12 with invoice O1608711781-S0001 has been updated to Payment Confirmed', '2020-12-23 13:53:06', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1608711781-S0001\",\"productName\":\"Apple iPhone 12\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1608711781\",\"orderProductId\":211}'),
-(289, 21, 'Status for Apple iPhone 12 with invoice O1608711781-S0001 has been updated to Completed', '2020-12-23 13:53:17', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1608711781-S0001\",\"productName\":\"Apple iPhone 12\",\"status\":\"Completed\",\"orderId\":\"O1608711781\",\"orderProductId\":211}'),
-(290, 4, 'Amount $432.50 with transaction id TN-0000123 has been Credited to your account', '2020-12-23 13:53:17', 0, 'TXN', '{\"txnAmount\":\"$432.50\",\"txnId\":\"TN-0000123\",\"txnType\":\"Credited\"}'),
-(291, 4, 'Amount $17.30 with transaction id TN-0000124 has been Debited to your account', '2020-12-23 13:53:17', 0, 'TXN', '{\"txnAmount\":\"$17.30\",\"txnId\":\"TN-0000124\",\"txnType\":\"Debited\"}'),
-(292, 4, 'You have received a new order O1609221651 for Apple iPhone 12.', '2020-12-29 11:31:06', 0, 'SELLER_ORDER', '{\"orderId\":\"O1609221651\",\"productName\":\"Apple iPhone 12\"}'),
-(293, 20, 'Amount $2,000.00 with transaction id TN-0000125 has been Credited to your account', '2020-12-29 13:22:11', 0, 'TXN', '{\"txnAmount\":\"$2,000.00\",\"txnId\":\"TN-0000125\",\"txnType\":\"Credited\"}'),
-(294, 20, 'Withdrawal Amount $200.00 with request id #000003 has been Withdrawal Request Pending', '2020-12-29 13:25:22', 0, 'FUNDS_WITHDRAWAL_REQUEST_CHANGED', '{\"requestAmount\":\"$200.00\",\"requestId\":\"#000003\",\"requestStatus\":\"Withdrawal Request Pending\"}'),
-(295, 20, 'Withdrawal Amount $200.00 with request id #000004 has been Withdrawal Request Pending', '2020-12-29 13:28:45', 0, 'FUNDS_WITHDRAWAL_REQUEST_CHANGED', '{\"requestAmount\":\"$200.00\",\"requestId\":\"#000004\",\"requestStatus\":\"Withdrawal Request Pending\"}'),
-(296, 20, 'Withdrawal Amount $50.00 with request id #000005 has been Withdrawal Request Pending', '2020-12-29 13:31:42', 0, 'FUNDS_WITHDRAWAL_REQUEST_CHANGED', '{\"requestAmount\":\"$50.00\",\"requestId\":\"#000005\",\"requestStatus\":\"Withdrawal Request Pending\"}'),
-(297, 20, 'Payment status for order O1609242993 has been updated to Order Payment Status Paid', '2020-12-29 17:26:50', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1609242993\",\"status\":\"Order Payment Status Paid\"}'),
-(298, 5, 'You have received a new order O1609242993 for Tops.', '2020-12-29 17:26:51', 0, 'SELLER_ORDER', '{\"orderId\":\"O1609242993\",\"productName\":\"Tops\"}'),
-(299, 20, 'Your Order O1609242993 Have Been Place', '2020-12-29 17:26:51', 0, 'BUYER_ORDER', '{\"orderId\":\"O1609242993\"}'),
-(300, 20, 'Status for Tops with invoice O1609242993-S0001 has been updated to Payment Confirmed', '2020-12-29 17:26:52', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1609242993-S0001\",\"productName\":\"Tops\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1609242993\",\"orderProductId\":244}'),
-(301, 20, 'Reward points 0 has been Debited to your account', '2020-12-29 17:26:52', 0, 'REWARD_POINTS', '{\"rewardPoints\":0,\"debitCreditType\":\"Debited\"}'),
-(302, 4, 'Payment status for order O1609243042 has been updated to Order Payment Status Paid', '2020-12-29 17:27:33', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1609243042\",\"status\":\"Order Payment Status Paid\"}'),
-(303, 11, 'You have received a new order O1609243042 for Printed Men Round or Crew Blue T-Shirt.', '2020-12-29 17:27:33', 0, 'SELLER_ORDER', '{\"orderId\":\"O1609243042\",\"productName\":\"Printed Men Round or Crew Blue T-Shirt\"}'),
-(304, 4, 'Your Order O1609243042 Have Been Place', '2020-12-29 17:27:33', 0, 'BUYER_ORDER', '{\"orderId\":\"O1609243042\"}'),
-(305, 4, 'Status for Printed Men Round or Crew Blue T-Shirt with invoice O1609243042-S0001 has been updated to Payment Confirmed', '2020-12-29 17:27:33', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1609243042-S0001\",\"productName\":\"Printed Men Round or Crew Blue T-Shirt\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1609243042\",\"orderProductId\":246}'),
-(306, 4, 'Reward points 0 has been Debited to your account', '2020-12-29 17:27:33', 0, 'REWARD_POINTS', '{\"rewardPoints\":0,\"debitCreditType\":\"Debited\"}'),
-(307, 4, 'Payment status for order O1609244208 has been updated to Order Payment Status Paid', '2020-12-29 17:46:59', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1609244208\",\"status\":\"Order Payment Status Paid\"}'),
-(308, 11, 'You have received a new order O1609244208 for Printed Men Round or Crew Blue T-Shirt.', '2020-12-29 17:47:00', 0, 'SELLER_ORDER', '{\"orderId\":\"O1609244208\",\"productName\":\"Printed Men Round or Crew Blue T-Shirt\"}'),
-(309, 4, 'Your Order O1609244208 Have Been Place', '2020-12-29 17:47:00', 0, 'BUYER_ORDER', '{\"orderId\":\"O1609244208\"}'),
-(310, 4, 'Status for Printed Men Round or Crew Blue T-Shirt with invoice O1609244208-S0001 has been updated to Payment Confirmed', '2020-12-29 17:47:00', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1609244208-S0001\",\"productName\":\"Printed Men Round or Crew Blue T-Shirt\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1609244208\",\"orderProductId\":251}'),
-(311, 4, 'Payment status for order O1609244315 has been updated to Order Payment Status Paid', '2020-12-29 17:48:42', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1609244315\",\"status\":\"Order Payment Status Paid\"}'),
-(312, 12, 'You have received a new order O1609244315 for Beats by Dr. Dre - Beats Solo³ Wireless Headphones - Gold.', '2020-12-29 17:48:42', 0, 'SELLER_ORDER', '{\"orderId\":\"O1609244315\",\"productName\":\"Beats by Dr. Dre - Beats Solo\\u00b3 Wireless Headphones - Gold\"}'),
-(313, 4, 'Your Order O1609244315 Have Been Place', '2020-12-29 17:48:42', 0, 'BUYER_ORDER', '{\"orderId\":\"O1609244315\"}'),
-(314, 4, 'Status for Beats by Dr. Dre - Beats Solo³ Wireless Headphones - Gold with invoice O1609244315-S0001 has been updated to Payment Confirmed', '2020-12-29 17:48:42', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1609244315-S0001\",\"productName\":\"Beats by Dr. Dre - Beats Solo\\u00b3 Wireless Headphones - Gold\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1609244315\",\"orderProductId\":253}'),
-(315, 5, 'You have received a new order O1609244209 for Tops.', '2020-12-29 17:49:55', 0, 'SELLER_ORDER', '{\"orderId\":\"O1609244209\",\"productName\":\"Tops\"}'),
-(316, 4, 'You have received a new order O1609244209 for Women Levis Tshirt.', '2020-12-29 17:49:55', 0, 'SELLER_ORDER', '{\"orderId\":\"O1609244209\",\"productName\":\"Women Levis Tshirt\"}'),
-(317, 20, 'Payment status for order O1609244474 has been updated to Order Payment Status Paid', '2020-12-29 17:51:24', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1609244474\",\"status\":\"Order Payment Status Paid\"}'),
-(318, 5, 'You have received a new order O1609244474 for Tops.', '2020-12-29 17:51:25', 0, 'SELLER_ORDER', '{\"orderId\":\"O1609244474\",\"productName\":\"Tops\"}'),
-(319, 4, 'You have received a new order O1609244474 for Women Levis Tshirt.', '2020-12-29 17:51:25', 0, 'SELLER_ORDER', '{\"orderId\":\"O1609244474\",\"productName\":\"Women Levis Tshirt\"}'),
-(320, 20, 'Your Order O1609244474 Have Been Place', '2020-12-29 17:51:25', 0, 'BUYER_ORDER', '{\"orderId\":\"O1609244474\"}'),
-(321, 20, 'Status for Tops with invoice O1609244474-S0002 has been updated to Payment Confirmed', '2020-12-29 17:51:26', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1609244474-S0002\",\"productName\":\"Tops\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1609244474\",\"orderProductId\":257}'),
-(322, 20, 'Status for Women Levis Tshirt with invoice O1609244474-S0001 has been updated to Payment Confirmed', '2020-12-29 17:51:27', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1609244474-S0001\",\"productName\":\"Women Levis Tshirt\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1609244474\",\"orderProductId\":256}'),
-(323, 20, 'Reward points 0 has been Debited to your account', '2020-12-29 17:51:27', 0, 'REWARD_POINTS', '{\"rewardPoints\":0,\"debitCreditType\":\"Debited\"}'),
-(324, 4, 'Payment status for order O1609244503 has been updated to Order Payment Status Paid', '2020-12-29 17:52:06', 0, 'ORDER_PAYMENT_STATUS', '{\"orderId\":\"O1609244503\",\"status\":\"Order Payment Status Paid\"}'),
-(325, 4, 'You have received a new order O1609244503 for Jeans.', '2020-12-29 17:52:06', 0, 'SELLER_ORDER', '{\"orderId\":\"O1609244503\",\"productName\":\"Jeans\"}'),
-(326, 4, 'Your Order O1609244503 Have Been Place', '2020-12-29 17:52:06', 0, 'BUYER_ORDER', '{\"orderId\":\"O1609244503\"}'),
-(327, 4, 'Status for Jeans with invoice O1609244503-S0001 has been updated to Payment Confirmed', '2020-12-29 17:52:06', 0, 'BUYER_ORDER_STATUS', '{\"invoiceNumber\":\"O1609244503-S0001\",\"productName\":\"Jeans\",\"status\":\"Payment Confirmed\",\"orderId\":\"O1609244503\",\"orderProductId\":260}'),
-(328, 4, 'Reward points 40 has been Debited to your account', '2020-12-29 17:52:06', 0, 'REWARD_POINTS', '{\"rewardPoints\":40,\"debitCreditType\":\"Debited\"}'),
-(329, 20, 'Your Order O1609244474 Have Been Place', '2020-12-29 18:16:16', 0, 'BUYER_ORDER', '{\"orderId\":\"O1609244474\"}');
-
--- --------------------------------------------------------
-
 --
 -- Table structure for table `tbl_user_password_reset_requests`
 --
@@ -26907,12 +26288,6 @@ CREATE TABLE `tbl_user_temp_token_requests` (
   `uttr_expiry` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `tbl_user_temp_token_requests`
---
-
-INSERT INTO `tbl_user_temp_token_requests` (`uttr_user_id`, `uttr_token`, `uttr_expiry`) VALUES
-(20, '231a412697fac0a8c6179334f4781847', '2020-12-30 13:14:10');
 
 -- --------------------------------------------------------
 
@@ -26999,20 +26374,6 @@ CREATE TABLE `tbl_user_withdrawal_requests_specifics` (
   `uwrs_value` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `tbl_user_withdrawal_requests_specifics`
---
-
-INSERT INTO `tbl_user_withdrawal_requests_specifics` (`uwrs_withdrawal_id`, `uwrs_key`, `uwrs_value`) VALUES
-(3, 'amount', '200'),
-(3, 'email', 'nitesh@dummyid.com'),
-(3, 'paypal_id', 'qwer'),
-(4, 'amount', '200'),
-(4, 'email', 'nitesh@dummyid.com'),
-(4, 'paypal_id', 'qwerty'),
-(5, 'amount', '50'),
-(5, 'email', 'nitesh@dummyid.com'),
-(5, 'paypal_id', 'Gaia');
 
 -- --------------------------------------------------------
 
@@ -29340,7 +28701,7 @@ ALTER TABLE `tbl_order_product_charges`
 -- AUTO_INCREMENT for table `tbl_order_product_digital_download_links`
 --
 ALTER TABLE `tbl_order_product_digital_download_links`
-  MODIFY `opddl_link_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `opddl_link_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_order_prod_charges_logs`
@@ -29424,13 +28785,13 @@ ALTER TABLE `tbl_product_groups`
 -- AUTO_INCREMENT for table `tbl_product_requests`
 --
 ALTER TABLE `tbl_product_requests`
-  MODIFY `preq_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `preq_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_product_saved_search`
 --
 ALTER TABLE `tbl_product_saved_search`
-  MODIFY `pssearch_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `pssearch_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_product_shipping_rates`
@@ -29490,7 +28851,7 @@ ALTER TABLE `tbl_promotion_item_charges`
 -- AUTO_INCREMENT for table `tbl_push_notifications`
 --
 ALTER TABLE `tbl_push_notifications`
-  MODIFY `pnotification_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `pnotification_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_questionnaires`
@@ -29778,7 +29139,7 @@ ALTER TABLE `tbl_upc_codes`
 -- AUTO_INCREMENT for table `tbl_updated_record_log`
 --
 ALTER TABLE `tbl_updated_record_log`
-  MODIFY `urlog_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=490;
+  MODIFY `urlog_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_url_rewrite`
@@ -29856,7 +29217,7 @@ ALTER TABLE `tbl_user_supplier_request_values`
 -- AUTO_INCREMENT for table `tbl_user_temp_token_requests`
 --
 ALTER TABLE `tbl_user_temp_token_requests`
-  MODIFY `uttr_user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `uttr_user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_user_transactions`

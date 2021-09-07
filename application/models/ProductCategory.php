@@ -1429,6 +1429,50 @@ class ProductCategory extends MyAppModel
 
         return true;
     }
+    
+    public function unDeleteParentCategories(): bool
+    {
+        $catId = $this->getMainTableRecordId();
+        if (1 > $catId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
+            return false;
+        }
+
+        $qry = 'UPDATE ' . static::DB_TBL . '
+        INNER JOIN ' . static::DB_TBL_PROD_CAT_RELATIONS . ' ON pcr_parent_id = prodcat_id
+        SET prodcat_deleted = ' . applicationConstants::NO . '
+        WHERE pcr_prodcat_id = ' . $catId;
+
+        $db = FatApp::getDb();
+        if (!$db->query($qry)) {
+            $this->error = $db->getError();
+            return false;
+        }
+
+        return true;
+    }
+
+    public function deleteChildCategories(): bool
+    {
+        $catId = $this->getMainTableRecordId();
+        if (1 > $catId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
+            return false;
+        }
+
+        $qry = 'UPDATE ' . static::DB_TBL . '
+        INNER JOIN ' . static::DB_TBL_PROD_CAT_RELATIONS . ' ON pcr_prodcat_id = prodcat_id
+        SET prodcat_deleted = ' . applicationConstants::YES . '
+        WHERE pcr_parent_id = ' . $catId . ' or pcr_prodcat_id = ' . $catId;
+
+        $db = FatApp::getDb();
+        if (!$db->query($qry)) {
+            $this->error = $db->getError();
+            return false;
+        }
+
+        return true;
+    }
 
     /**
      * getParents
