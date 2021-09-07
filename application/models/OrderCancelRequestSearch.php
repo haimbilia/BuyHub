@@ -45,7 +45,7 @@ class OrderCancelRequestSearch extends SearchBase
             trigger_error(Labels::getLabel('MSG_joinOrders_cannot_be_applied_until_joinOrderProducts_is_not_applied.', $this->commonLangId), E_USER_ERROR);
         }
         $langId = FatUtility::int($langId);
-        $this->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'op.op_order_id = o.order_no', 'o');
+        $this->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'op.op_order_id = o.order_id', 'o');
         $this->isOrdersJoined = true;
     }
 

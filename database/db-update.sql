@@ -973,11 +973,6 @@ UPDATE tbl_order_seller_subscriptions oss
 INNER JOIN tbl_orders o ON o.order_id = oss.ossubs_order_id
 SET oss.ossubs_order_no = o.order_no;
 
-ALTER TABLE `tbl_order_seller_subscriptions_lang` ADD `ossubslang_order_no` BIGINT NOT NULL AFTER `ossubslang_order_id`;
-UPDATE tbl_order_seller_subscriptions_lang oss_l
-INNER JOIN tbl_orders o ON o.order_id = oss_l.ossubslang_order_id
-SET oss_l.ossubslang_order_no = o.order_no;
-
 ALTER TABLE `tbl_order_user_address` ADD `oua_order_no` BIGINT NOT NULL AFTER `oua_order_id`;
 UPDATE tbl_order_user_address oua
 INNER JOIN tbl_orders o ON o.order_id = oua.oua_order_id
@@ -1003,8 +998,8 @@ UPDATE tbl_user_transactions ut
 INNER JOIN tbl_orders o ON o.order_id = ut.utxn_order_id
 SET ut.utxn_order_no = o.order_no;
 
+ALTER TABLE `tbl_order_seller_subscriptions_lang` DROP INDEX `ossubslang_ossubs_id`;
 ALTER TABLE `tbl_order_seller_subscriptions_lang` DROP `ossubslang_order_id`;
-ALTER TABLE `tbl_order_seller_subscriptions_lang` DROP `ossubslang_order_no`;
 
 ALTER TABLE `tbl_coupons_history` DROP `couponhistory_order_id`;
 ALTER TABLE `tbl_coupons_history` CHANGE `couponhistory_order_no` `couponhistory_order_id` BIGINT NOT NULL;
@@ -1068,7 +1063,8 @@ ALTER TABLE `tbl_user_reward_point_breakup` CHANGE `urpbreakup_used_order_no` `u
 ALTER TABLE `tbl_user_transactions` DROP `utxn_order_id`;
 ALTER TABLE `tbl_user_transactions` CHANGE `utxn_order_no` `utxn_order_id` BIGINT NOT NULL;
 
-ALTER TABLE `tbl_orders` CHANGE `order_no` `order_id` BIGINT NOT NULL AUTO_INCREMENT, CHANGE `order_id` `order_no` VARCHAR(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `tbl_orders` CHANGE `order_id` `order_number` VARCHAR(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+ALTER TABLE `tbl_orders` CHANGE `order_no` `order_id` BIGINT(20) NOT NULL AUTO_INCREMENT;
 
 -- ---------Task 899377 Auto Increment Order Id ------ -- 
 ALTER TABLE `tbl_badges` ADD `badge_updated_on` DATETIME NOT NULL AFTER `badge_active`;
@@ -1082,7 +1078,7 @@ ALTER TABLE `tbl_commission_settings` CHANGE `commsetting_product_id` `commsetti
 ALTER TABLE `tbl_commission_setting_history` CHANGE `csh_commsetting_product_id` `csh_commsetting_product_id` INT UNSIGNED NOT NULL;
 ALTER TABLE `tbl_coupon_to_products` CHANGE `ctp_product_id` `ctp_product_id` INT UNSIGNED NOT NULL;
 ALTER TABLE `tbl_polling_to_products` CHANGE `ptp_product_id` `ptp_product_id` INT UNSIGNED NOT NULL;
-ALTER TABLE `tbl_polling_to_products` CHANGE `pbhistory_product_id` `pbhistory_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_products_browsing_history` CHANGE `pbhistory_product_id` `pbhistory_product_id` INT UNSIGNED NOT NULL;
 ALTER TABLE `tbl_products_min_price` CHANGE `pmp_product_id` `pmp_product_id` INT UNSIGNED NOT NULL;
 ALTER TABLE `tbl_products_shipped_by_seller` CHANGE `psbs_product_id` `psbs_product_id` INT UNSIGNED NOT NULL;
 ALTER TABLE `tbl_products_shipping` CHANGE `ps_product_id` `ps_product_id` INT UNSIGNED NOT NULL;
@@ -1142,9 +1138,15 @@ ALTER TABLE `tbl_order_return_requests` CHANGE `orrequest_op_id` `orrequest_op_i
 ALTER TABLE `tbl_order_user_address` CHANGE `oua_op_id` `oua_op_id` BIGINT UNSIGNED NOT NULL;
 ALTER TABLE `tbl_user_transactions` CHANGE `utxn_op_id` `utxn_op_id` BIGINT UNSIGNED NOT NULL;
 ALTER TABLE `tbl_order_product_responses` CHANGE `opr_op_id` `opr_op_id` BIGINT UNSIGNED NOT NULL;
-ALTER TABLE `tbl_order_product_shipment_pickup` CHANGE `opr_op_id` `opr_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_product_shipment_pickup` CHANGE `opsp_op_id` `opsp_op_id` BIGINT UNSIGNED NOT NULL;
 ALTER TABLE `tbl_order_product_plugin_specifics` CHANGE `opps_op_id` `opps_op_id` BIGINT UNSIGNED NOT NULL;
 
 
 ALTER TABLE `tbl_addresses` CHANGE `addr_id` `addr_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `tbl_order_product_shipping` CHANGE `opshipping_pickup_addr_id` `opshipping_pickup_addr_id` BIGINT UNSIGNED NOT NULL;
+
+
+-- ---- Admin Password Db Query ---- --
+UPDATE `tbl_admin` SET `admin_password` = '$2y$12$coWTcJUEggZzj7.PjE/Bt.MnIx6Yvt2tNd6GBGcHhJ3K/gZXnxMY.' WHERE `tbl_admin`.`admin_id` = 1;
+UPDATE `tbl_admin` SET `admin_password_old` = '' WHERE `tbl_admin`.`admin_id` = 1;
+-- ---- Admin Password Db Query ---- --

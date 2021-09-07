@@ -452,7 +452,7 @@ class OrderPayment extends Orders
         }
 
         $transObj = new Transactions();
-        $formattedOrderValue = "#" . $orderInfo["order_id"];
+        $formattedOrderValue = "#" . $orderInfo["order_number"];
         /*
         $txnArray["utxn_user_id"]= $orderInfo["order_user_id"];
         $txnArray["utxn_debit"]= $amountToBeCharge;

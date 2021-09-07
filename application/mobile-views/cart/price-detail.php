@@ -10,6 +10,7 @@ $minValue = min($totalRewardPoints, $cartValue);
 $canBeUse = min($minValue, FatApp::getConfig('CONF_MAX_REWARD_POINT', FatUtility::VAR_INT, 0));
 $canBeUseRPAmt = CommonHelper::displayMoneyFormat(CommonHelper::convertRewardPointToCurrency($canBeUse));
 
+$productsCount = isset($productsCount) ? $productsCount : count($products);
 
 $walletCharged = 0;
 if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $cartSummary["cartWalletSelected"]) {
@@ -42,7 +43,7 @@ $appliedRewardPointsDiscount = isset($cartSummary['cartRewardPoints']) ? $cartSu
 $priceDetail['priceDetail'] = array(
     array(
         'key' => Labels::getLabel('LBL_Items', $siteLangId),
-        'value' => count($products)
+        'value' => $productsCount
     ),
     array(
         'key' => Labels::getLabel('LBL_SUB_TOTAL', $siteLangId),

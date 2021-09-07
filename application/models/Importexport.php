@@ -5891,7 +5891,7 @@ class Importexport extends ImportexportCommon
             $srch->addCondition('op_selprod_user_id', '=', $userId);
         }
 
-        $srch->addMultipleFields(array('op_id', 'order_id', 'order_no', 'op_shop_id', 'order_payment_status', 'op_completion_date', 'op_order_id', 'op_invoice_number', 'order_net_amount', 'order_date_added', 'ou.user_id', 'ou.user_name as buyer_name', 'op.op_qty', 'op.op_unit_price', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_status_id', 'op_selprod_user_id', 'opship.opcharge_amount as shipping_amount', 'opdc.discount_amount', 'optax.opcharge_amount as tax_amount', 'opshipping_by_seller_user_id', 'op_refund_shipping', 'op_refund_qty'));
+        $srch->addMultipleFields(array('op_id', 'order_id', 'order_number', 'op_shop_id', 'order_payment_status', 'op_completion_date', 'op_order_id', 'op_invoice_number', 'order_net_amount', 'order_date_added', 'ou.user_id', 'ou.user_name as buyer_name', 'op.op_qty', 'op.op_unit_price', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_status_id', 'op_selprod_user_id', 'opship.opcharge_amount as shipping_amount', 'opdc.discount_amount', 'optax.opcharge_amount as tax_amount', 'opshipping_by_seller_user_id', 'op_refund_shipping', 'op_refund_qty'));
 
         $rs = $srch->getResultSet();
 
