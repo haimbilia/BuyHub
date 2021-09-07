@@ -185,7 +185,7 @@ class PayoutReportController extends SellerBaseController
 
     private function getFormColumns()
     {
-        $sellerPayoutReportsCacheVar = FatCache::get('sellerPayoutReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $sellerPayoutReportsCacheVar = CacheHelper::get('sellerPayoutReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$sellerPayoutReportsCacheVar) {
             $arr = [
                 'date' => Labels::getLabel('LBL_Date', $this->siteLangId),
@@ -196,7 +196,7 @@ class PayoutReportController extends SellerBaseController
                 'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $this->siteLangId),
                 'totalAmount' => Labels::getLabel('LBL_Total_Amount', $this->siteLangId),
             ];
-            FatCache::set('sellerPayoutReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
+            CacheHelper::create('sellerPayoutReportsCacheVar' . $this->siteLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($sellerPayoutReportsCacheVar);
         }

@@ -144,6 +144,7 @@ class CountriesController extends AdminBaseController
             $countryId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
+        CacheHelper::clear(CacheHelper::TYPE_ZONE);
         Product::updateMinPrices(0, 0, 0, $countryId);
         $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
         $this->set('countryId', $countryId);
@@ -225,6 +226,7 @@ class CountriesController extends AdminBaseController
             Message::addErrorMessage($countryObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
+        CacheHelper::clear(CacheHelper::TYPE_ZONE);
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
@@ -375,5 +377,6 @@ class CountriesController extends AdminBaseController
             Message::addErrorMessage($countryObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
+        CacheHelper::clear(CacheHelper::TYPE_ZONE);
     }
 }

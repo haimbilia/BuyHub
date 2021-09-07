@@ -183,7 +183,7 @@ class CatalogReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $catalogReportCacheVar = FatCache::get('catalogReportCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $catalogReportCacheVar = CacheHelper::get('catalogReportCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$catalogReportCacheVar) {
             $arr = [
                 'product_name'    =>    Labels::getLabel('LBL_Product', $this->adminLangId),
@@ -219,7 +219,7 @@ class CatalogReportController extends AdminBaseController
                 'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $this->adminLangId),
                 'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $this->adminLangId)
             ];
-            FatCache::set('catalogReportCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            CacheHelper::create('catalogReportCacheVar' . $this->adminLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($catalogReportCacheVar);
         }

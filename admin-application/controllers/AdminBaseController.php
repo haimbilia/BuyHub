@@ -85,7 +85,7 @@ class AdminBaseController extends FatController
         $defultCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
         $defaultCountryCode = Countries::getAttributesById($defultCountryId, 'country_code');
 
-        $jsAdminVariablesCache = FatCache::get('jsAdminVariablesCache' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $jsAdminVariablesCache = CacheHelper::get('jsAdminVariablesCache' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$jsAdminVariablesCache) {
 
             $jsVariables = array(
@@ -185,7 +185,7 @@ class AdminBaseController extends FatController
                 $jsVariables['language' . $val['language_id']] = $val['language_layout_direction'];
             }
             $jsVariables['languages'] = $languages;
-            FatCache::set('jsAdminVariablesCache' . $this->adminLangId, serialize($jsVariables), '.txt');
+            CacheHelper::create('jsAdminVariablesCache' . $this->adminLangId, serialize($jsVariables), CacheHelper::TYPE_LABELS);
         } else {
             $jsVariables =  unserialize($jsAdminVariablesCache);
         }
@@ -259,7 +259,7 @@ class AdminBaseController extends FatController
     {
         $langCode = strtolower($this->siteLangCode);
         $langCountryCode = strtoupper($this->siteLangCountryCode);
-        $jsPath = FatCache::get('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, CONF_DEF_CACHE_TIME, '.txt');
+        $jsPath = CacheHelper::get('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, CONF_DEF_CACHE_TIME, '.txt');
         if ($jsPath) {
             if ($jsPath == 'notfound') {
                 return;
@@ -289,7 +289,7 @@ class AdminBaseController extends FatController
         } else {
             $jsPath = 'notfound';
         }
-        FatCache::set('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, $jsPath, '.txt');
+        CacheHelper::create('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, $jsPath);
     }
 
     public function getStates($countryId, $stateId = 0, $langId = 0, $idCol = 'state_id')

@@ -44,10 +44,10 @@ class MyAppController extends FatController
         $this->set('siteCurrencyId', $this->siteCurrencyId);
         $this->set('siteLangCountryCode', $this->siteLangCountryCode);
 
-        $cacheTimeStamp = FatCache::get('cacheTimeStamp' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $cacheTimeStamp = CacheHelper::get('cacheTimeStamp' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$cacheTimeStamp) {
             $cacheTimeStamp = date('Y-m-d H:i:s');
-            FatCache::set('cacheTimeStamp' . $this->siteLangId, $cacheTimeStamp, '.txt');
+            CacheHelper::create('cacheTimeStamp' . $this->siteLangId, $cacheTimeStamp);
         }
         $cacheTimeStamp = AttachedFile::setTimeParam($cacheTimeStamp);
         $this->set('cacheTimeStamp', $cacheTimeStamp);
@@ -86,7 +86,7 @@ class MyAppController extends FatController
         $defultCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
         $defaultCountryCode = Countries::getAttributesById($defultCountryId, 'country_code');
 
-        $jsVariablesCache = FatCache::get('jsVariablesCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $jsVariablesCache = CacheHelper::get('jsVariablesCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$jsVariablesCache) {
             $jsVariables = array(
                 'confirmRemove' => Labels::getLabel('LBL_Do_you_want_to_remove', $this->siteLangId),
@@ -192,7 +192,7 @@ class MyAppController extends FatController
             foreach ($languages as $val) {
                 $jsVariables['language' . $val['language_id']] = $val['language_layout_direction'];
             }
-            FatCache::set('jsVariablesCache' . $this->siteLangId, serialize($jsVariables), '.txt');
+            CacheHelper::create('jsVariablesCache' . $this->siteLangId, serialize($jsVariables), CacheHelper::TYPE_LABELS);
         } else {
             $jsVariables =  unserialize($jsVariablesCache);
         }
@@ -695,7 +695,7 @@ class MyAppController extends FatController
     {
         $langCode = strtolower($this->siteLangCode);
         $langCountryCode = strtoupper($this->siteLangCountryCode);
-        $jsPath = FatCache::get('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, CONF_DEF_CACHE_TIME, '.txt');
+        $jsPath = CacheHelper::get('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, CONF_DEF_CACHE_TIME, '.txt');
         if ($jsPath) {
             if ($jsPath == 'notfound') {
                 return;
@@ -725,7 +725,7 @@ class MyAppController extends FatController
         } else {
             $jsPath = 'notfound';
         }
-        FatCache::set('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, $jsPath, '.txt');
+        CacheHelper::create('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, $jsPath);
     }
 
     public function getAppTempUserId()

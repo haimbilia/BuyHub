@@ -24,7 +24,7 @@ class Language extends MyAppModel
     public static function getAllNames($assoc = true, $recordId = 0, $active = true, $deleted = false)
     {
         $cacheKey = $assoc . '-' . $recordId . '-' . $active . '-' . $deleted;
-        $languageGetAllNames = FatCache::get('languageGetAllNames' .  $cacheKey, CONF_DEF_CACHE_TIME, '.txt');
+        $languageGetAllNames = CacheHelper::get('languageGetAllNames' .  $cacheKey, CONF_DEF_CACHE_TIME, '.txt');
         if ($languageGetAllNames) {
             return json_decode($languageGetAllNames, true);
         }
@@ -53,14 +53,14 @@ class Language extends MyAppModel
         unset($langData[$siteDefaultLang]);
         $langData = [$siteDefaultLang => $defaultLangData] + $langData;
 
-        FatCache::set('languageGetAllNames' . $cacheKey, FatUtility::convertToJson($langData), '.txt');
+        CacheHelper::create('languageGetAllNames' . $cacheKey, FatUtility::convertToJson($langData), CacheHelper::TYPE_LANGUAGE);
         return $langData;
     }
 
     public static function getAllCodesAssoc($withDefaultValue = false, $recordId = 0, $active = true, $deleted = false)
     {
         $cacheKey = $withDefaultValue . '-' . $recordId . '-' . $active . '-' . $deleted;
-        $languageGetAllCodesAssoc = FatCache::get('languageGetAllCodesAssoc' .  $cacheKey, CONF_DEF_CACHE_TIME, '.txt');
+        $languageGetAllCodesAssoc = CacheHelper::get('languageGetAllCodesAssoc' .  $cacheKey, CONF_DEF_CACHE_TIME, CacheHelper::TYPE_LANGUAGE);
         if ($languageGetAllCodesAssoc) {
             return json_decode($languageGetAllCodesAssoc, true);
         }
@@ -83,7 +83,7 @@ class Language extends MyAppModel
             $row = array(0 => 'Universal') + $row;
         }
 
-        FatCache::set('languageGetAllCodesAssoc' . $cacheKey, FatUtility::convertToJson($row), '.txt');
+        CacheHelper::create('languageGetAllCodesAssoc' . $cacheKey, FatUtility::convertToJson($row), CacheHelper::TYPE_LANGUAGE);
         return $row;
     }
 
@@ -94,14 +94,14 @@ class Language extends MyAppModel
             trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $langId), E_USER_ERROR);
         }
 
-        $getLayoutDirection = FatCache::get('getLayoutDirection' .  $langId, CONF_DEF_CACHE_TIME, '.txt');
+        $getLayoutDirection = CacheHelper::get('getLayoutDirection' .  $langId, CONF_DEF_CACHE_TIME, '.txt');
         if ($getLayoutDirection) {
             return json_decode($getLayoutDirection, true);
         }
 
         $langData = self::getAttributesById($langId, array('language_layout_direction'));
         if (false != $langData) {
-            FatCache::set('getLayoutDirection' . $langId, FatUtility::convertToJson($langData['language_layout_direction']), '.txt');
+            CacheHelper::create('getLayoutDirection' . $langId, FatUtility::convertToJson($langData['language_layout_direction']), CacheHelper::TYPE_LANGUAGE);
             return $langData['language_layout_direction'];
         }
     }

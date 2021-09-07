@@ -157,7 +157,7 @@ class PreferredPaymentMethodController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $prefPayMethodReportsCacheVar = FatCache::get('prefPayMethodReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $prefPayMethodReportsCacheVar = CacheHelper::get('prefPayMethodReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$prefPayMethodReportsCacheVar) {
             $arr = [
                 'orderDate' => Labels::getLabel('LBL_Date', $this->adminLangId),
@@ -168,7 +168,7 @@ class PreferredPaymentMethodController extends AdminBaseController
                 'oua_city' => Labels::getLabel('LBL_City', $this->adminLangId), */
                 'transactionAmount' => Labels::getLabel('LBL_Transaction', $this->adminLangId)
             ];
-            FatCache::set('prefPayMethodReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            CacheHelper::create('prefPayMethodReportsCacheVar' . $this->adminLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($prefPayMethodReportsCacheVar);
         }

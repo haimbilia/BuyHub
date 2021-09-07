@@ -1102,7 +1102,7 @@ class ImportExportController extends AdminBaseController
                 }
             }
         }
-
+        CacheHelper::clear(CacheHelper::TYPE_LABELS);
         $labelsUpdatedAt = array('conf_name' => 'CONF_LANG_LABELS_UPDATED_AT', 'conf_val' => time());
         $db->insertFromArray('tbl_configurations', $labelsUpdatedAt, false, array(), $labelsUpdatedAt);
         Message::addMessage(Labels::getLabel('LBL_Labels_data_imported/updated_Successfully', $this->adminLangId));

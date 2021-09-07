@@ -190,7 +190,7 @@ class UsersReportController extends AdminBaseController
 
     private function getFormColumns($userType = User::USER_TYPE_BUYER)
     {
-        $buyerUserReportsCacheVar = FatCache::get('buyerUserReportsCacheVar' . $userType . '-' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $buyerUserReportsCacheVar = CacheHelper::get('buyerUserReportsCacheVar' . $userType . '-' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$buyerUserReportsCacheVar) {
             $arr = [
                 'name' => Labels::getLabel('LBL_Name', $this->adminLangId),
@@ -226,7 +226,7 @@ class UsersReportController extends AdminBaseController
                     ];
                     break;
             }
-            FatCache::set('buyerUserReportsCacheVar' . $userType . '-' . $this->adminLangId, serialize($arr), '.txt');
+            CacheHelper::create('buyerUserReportsCacheVar' . $userType . '-' . $this->adminLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($buyerUserReportsCacheVar);
         }
