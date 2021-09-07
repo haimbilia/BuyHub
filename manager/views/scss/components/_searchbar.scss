@@ -1,4 +1,15 @@
 .quick-search{
+    .search-primary-scroll {
+        max-height: 300px;
+        overflow: auto;
+        .font-search-primary {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .section-scroll {
+            margin-top: 20px; 
+        }
+    }
     & &__form {
         padding: 0 8px; 
         background-color: $bg-white;
@@ -19,44 +30,6 @@
         border-radius: 0 0 8px 8px;
     }
 }
-
-
-
-
-.quick-search {   
-    .quick-search-wrapper {
-        .search-primary-scroll {
-            max-height: 300px;
-            overflow: auto;
-            .font-search-primary {
-                font-size: 14px;
-                font-weight: 500;
-                color: var(--blue);
-            }
-            .section-scroll {
-                margin-top: 20px;
-                .symbol-document {
-                    img {
-                        width: 100%;
-                        max-width: 35px;
-                        height: 35px;
-                    }
-                }
-                .search-list-text {
-                    display: flex;
-                    padding-left: 5px;
-                    flex-direction: column;
-                    .sm--search {
-                        font-size: 12px;
-                        font-weight: 500;
-                    }
-                }
-            }
-        }
-    }
-}
-
-
 
 
 
