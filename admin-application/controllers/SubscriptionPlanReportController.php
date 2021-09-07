@@ -148,7 +148,7 @@ class SubscriptionPlanReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $spackageReportsCacheVar = FatCache::get('spackageReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $spackageReportsCacheVar = CacheHelper::get('spackageReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$spackageReportsCacheVar) {
             $arr = [
                 'spackage_name' => Labels::getLabel('LBL_Package_Name', $this->adminLangId),
@@ -159,7 +159,7 @@ class SubscriptionPlanReportController extends AdminBaseController
                 'spackageCancelled' => Labels::getLabel('LBL_Cancellation', $this->adminLangId),
                 'spplan_price' => Labels::getLabel('LBL_Package_Cost', $this->adminLangId)
             ];
-            FatCache::set('spackageReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            CacheHelper::create('spackageReportsCacheVar' . $this->adminLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($spackageReportsCacheVar);
         }

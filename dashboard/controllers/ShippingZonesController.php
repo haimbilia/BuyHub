@@ -81,20 +81,13 @@ class ShippingZonesController extends SellerBaseController
             }
             $zoneLocations = $this->getLocations($zoneId);
         }        
-        $zones = FatCache::get('zonesWithStateCountry' . $this->siteLangId, 108000, '.txt');
+        $zones = CacheHelper::get('zonesWithStateCountry' . $this->siteLangId, 108000, '.txt');
         if (!$zones) {
             $zones = Zone::getZoneWithCountriesStates($this->siteLangId);
-            FatCache::set('zonesWithStateCountry' . $this->siteLangId, serialize($zones), '.txt');
+            CacheHelper::create('zonesWithStateCountry' . $this->siteLangId, serialize($zones), CacheHelper::TYPE_ZONE);
         }else{
             $zones =  unserialize($zones); 
-        }
-        $zones = FatCache::get('zonesWithStateCountry' . $this->siteLangId, 108000, '.txt');
-        if (!$zones) {
-            $zones = Zone::getZoneWithCountriesStates($this->siteLangId);
-            FatCache::set('zonesWithStateCountry' . $this->siteLangId, serialize($zones), '.txt');
-        }else{
-            $zones =  unserialize($zones); 
-        }
+        }      
         $excludeLocations = Zone::getExcludeLocations($profileId, $zoneId);
 
         $this->set('profile_id', $profileId);

@@ -152,6 +152,7 @@ class StatesController extends AdminBaseController
             $stateId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
+        CacheHelper::clear(CacheHelper::TYPE_ZONE);
         Product::updateMinPrices(0, 0, 0, 0, $stateId);
         $this->set('msg', $this->str_setup_successful);
         $this->set('stateId', $stateId);
@@ -232,6 +233,7 @@ class StatesController extends AdminBaseController
             Message::addErrorMessage($stateObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
+        CacheHelper::clear(CacheHelper::TYPE_ZONE);
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
@@ -364,5 +366,6 @@ class StatesController extends AdminBaseController
             Message::addErrorMessage($stateObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
+        CacheHelper::clear(CacheHelper::TYPE_ZONE);
     }
 }

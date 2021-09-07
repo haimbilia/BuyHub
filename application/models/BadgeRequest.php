@@ -38,14 +38,14 @@ class BadgeRequest extends MyAppModel
      */
     public static function getStatusArr(int $langId): array
     {
-        $arr = FatCache::get('getBadgeRequestStatusArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        $arr = CacheHelper::get('getBadgeRequestStatusArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$arr) {
             $arr = [
                 self::REQUEST_PENDING => Labels::getLabel('LBL_PENDING', $langId),
                 self::REQUEST_APPROVED => Labels::getLabel('LBL_APPROVED', $langId),
                 self::REQUEST_REJECTED => Labels::getLabel('LBL_REJECTED', $langId)
             ];
-            FatCache::set('getBadgeRequestStatusArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            CacheHelper::create('getBadgeRequestStatusArr' . $langId, FatUtility::convertToJson($arr), CacheHelper::TYPE_LABELS);
             return $arr;
         }
     

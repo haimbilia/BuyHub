@@ -221,7 +221,7 @@ class ShopsReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $shopsReportCacheVar = FatCache::get('shopsReportCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $shopsReportCacheVar = CacheHelper::get('shopsReportCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$shopsReportCacheVar) {
             $arr = [
                 'shop_name'        =>    Labels::getLabel('LBL_Name', $this->adminLangId),
@@ -260,7 +260,7 @@ class ShopsReportController extends AdminBaseController
                 'totReviews'    =>    Labels::getLabel('LBL_Reviews', $this->adminLangId),
                 'totRating'        =>    Labels::getLabel('LBL_Rating', $this->adminLangId),
             ];
-            FatCache::set('shopsReportCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            CacheHelper::create('shopsReportCacheVar' . $this->adminLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($shopsReportCacheVar);
         }

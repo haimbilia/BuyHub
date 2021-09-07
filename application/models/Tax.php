@@ -417,24 +417,25 @@ class Tax extends MyAppModel
         $taxCatName = !empty($taxCategoryRow['taxcat_name']) ? $taxCategoryRow['taxcat_name'] : $taxCategoryRow['taxcat_identifier'];
         $taxCatCode = !empty($taxCategoryRow['taxcat_code']) ? $taxCategoryRow['taxcat_code'] : $taxCatName;
         $taxCategoryRow['taxcat_code'] = $taxCatCode;
-
-        $arr  = [
-            'productId' => $productId,
-            'prodPrice' => $prodPrice,
-            'sellerId' => $sellerId,
-            'langId' =>   $langId,
-            'qty' => $qty,
-            'shipFromStateId' => $shipFromStateId,
-            'shipToStateId' => $shipToStateId,
-            'extraInfo' => $extraInfo,
-            'taxCategoryRow' => $taxCategoryRow
-        ];
-        $cacheKey = self::TAX_RATE_CACHE_KEY_NAME . md5(json_encode($arr));
-        global $taxRatesArr; 
       
-        if (0 < $activatedTaxServiceId && !empty($extraInfo) && !empty($extraInfo['shippingAddress'])) {        
+        if (0 < $activatedTaxServiceId && !empty($extraInfo) && !empty($extraInfo['shippingAddress'])) {
+            global $taxRatesArr; 
+            
+            $arr  = [
+                'productId' => $productId,
+                'prodPrice' => $prodPrice,
+                'sellerId' => $sellerId,
+                'langId' =>   $langId,
+                'qty' => $qty,
+                'shipFromStateId' => $shipFromStateId,
+                'shipToStateId' => $shipToStateId,
+                'extraInfo' => $extraInfo,
+                'taxCategoryRow' => $taxCategoryRow,
+                'plugin_id' => $activatedTaxServiceId, 
+            ];
+            $cacheKey = self::TAX_RATE_CACHE_KEY_NAME . md5(json_encode($arr));
             if (true == $useCache) {
-                $rates = FatCache::get('taxCharges' . $cacheKey, CONF_API_REQ_CACHE_TIME, '.txt'); 
+                $rates = CacheHelper::get('taxCharges' . $cacheKey, CONF_API_REQ_CACHE_TIME, '.txt'); 
                 if ($rates) {   
                     return unserialize($rates);
                 }
@@ -524,7 +525,7 @@ class Tax extends MyAppModel
                     'options' => []
                 ];
                 $taxRatesArr[$cacheKey]['values'] = $data;
-                FatCache::set('taxCharges' . $cacheKey, serialize($data), '.txt');
+                CacheHelper::create('taxCharges' . $cacheKey, serialize($data), CacheHelper::TYPE_TAX_API);
                 return  $data;
             }
 
@@ -553,8 +554,8 @@ class Tax extends MyAppModel
                 }
             }
             $taxRatesArr[$cacheKey]['values'] = $data;
-            FatCache::set('taxCharges' . $cacheKey, serialize($data), '.txt');
-
+            
+            CacheHelper::create('taxCharges' . $cacheKey, serialize($data), CacheHelper::TYPE_TAX_API);
             return $data;
         }
 

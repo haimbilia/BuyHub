@@ -55,6 +55,10 @@ class PluginSettingController extends LoggedUserController
         $pluginSetting = new PluginSetting($post["plugin_id"], NULL, UserAuthentication::getLoggedUserId());
         if (!$pluginSetting->save($post)) {
             FatUtility::dieWithError($pluginSetting->getError());
+        }       
+        
+        if (Plugin::getAttributesById($post["plugin_id"], 'plugin_type') == Plugin::TYPE_SHIPPING_SERVICES) {          
+            CacheHelper::clear(CacheHelper::TYPE_SHIPING_API);
         }
 
         $this->set('msg', Labels::getLabel('MSG_SET_UP_SUCCESSFULLY', $this->siteLangId));

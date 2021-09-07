@@ -28,7 +28,7 @@ class HomeController extends AdminBaseController
 
 
         // simple Caching with:        
-        $dashboardInfoCache = FatCache::get('dashboardInfoCache' . $this->adminLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        $dashboardInfoCache = CacheHelper::get('dashboardInfoCache' . $this->adminLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
         //$dashboardInfo = array();
         if (!$dashboardInfoCache) {
             include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';
@@ -154,7 +154,7 @@ class HomeController extends AdminBaseController
             $dashboardInfo['socialVisits'] = isset($socialVisits) ? $socialVisits : '';
             $dashboardInfo['conversionChatData'] = $conversionChatData;
             $dashboardInfo['conversionStats'] = $conversionStats;
-            FatCache::set('dashboardInfoCache' . $this->adminLangId, serialize($dashboardInfo), '.txt');
+            CacheHelper::create('dashboardInfoCache' . $this->adminLangId, serialize($dashboardInfo), CacheHelper::TYPE_GOOGLE_ANALYTICS);
             //$cache->set("dashboardInfo" . $this->adminLangId, $dashboardInfo, 24 * 60 * 60);
         } else {
             $dashboardInfo =  unserialize($dashboardInfoCache);
@@ -312,7 +312,7 @@ class HomeController extends AdminBaseController
             'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID")
         );
 
-        $dashboardInfoCache = FatCache::get("dashboardInfo_" . $type . '_' . $interval . '_' . $this->adminLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        $dashboardInfoCache = CacheHelper::get("dashboardInfo_" . $type . '_' . $interval . '_' . $this->adminLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
         //$result = $cache->get("dashboardInfo_" . $type . '_' . $interval . '_' . $this->adminLangId);
         if (!$dashboardInfoCache) {
             $result = [];
@@ -356,7 +356,7 @@ class HomeController extends AdminBaseController
                 }
             }
             if (!empty($result)) {
-                FatCache::set("dashboardInfo_" . $type . '_' . $interval . '_' . $this->adminLangId, serialize($result), '.txt');
+                CacheHelper::create("dashboardInfo_" . $type . '_' . $interval . '_' . $this->adminLangId, serialize($result));
             }
             // $cache->set("dashboardInfo_" . $type . '_' . $interval . '_' . $this->adminLangId, $result, 6 * 60 * 60);
         } else {

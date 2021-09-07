@@ -255,7 +255,7 @@ class FilterHelper extends FatUtility
     public static function getCategories($langId, $categoryId, $prodSrchObj, $cacheKey)
     {
         $cacheKey .= (true ===  MOBILE_APP_API_CALL) ? $cacheKey . '-m' : $cacheKey;
-        $catFilter =  FatCache::get('catFilter' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
+        $catFilter =  CacheHelper::get('catFilter' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
         if (!$catFilter) {
             if (0 < $categoryId) {
                 $categoriesArr = ProductCategory::getArray($langId, $categoryId, true, true, false, true);
@@ -272,7 +272,7 @@ class FilterHelper extends FatUtility
                 $categoriesArr = ProductCategory::getTreeArr($langId, $categoryId, false, $catSrch, $excludeCatHavingNoProducts);
             }
             $categoriesArr = (true ===  MOBILE_APP_API_CALL) ? array_values($categoriesArr) : $categoriesArr;
-            FatCache::set('catFilter' . $cacheKey, serialize($categoriesArr), '.txt');
+            CacheHelper::create('catFilter' . $cacheKey, serialize($categoriesArr));
             return $categoriesArr;
         }
         return unserialize($catFilter);
@@ -280,7 +280,7 @@ class FilterHelper extends FatUtility
 
     public static function getOptions($langId, $categoryId, $prodSrchObj)
     {
-        $options =  FatCache::get('options' . $categoryId . '-' . $langId, CONF_FILTER_CACHE_TIME, '.txt');
+        $options =  CacheHelper::get('options' . $categoryId . '-' . $langId, CONF_FILTER_CACHE_TIME, '.txt');
         if (!$options) {
             $options = array();
             if ($categoryId && ProductCategory::isLastChildCategory($categoryId)) {
@@ -309,7 +309,7 @@ class FilterHelper extends FatUtility
                     return ($a['optionvalue_id'] < $b['optionvalue_id']) ? -1 : 1;
                 }
             );
-            FatCache::set('options ' . $categoryId . '-' . $langId, serialize($options), '.txt');
+            CacheHelper::create('options ' . $categoryId . '-' . $langId, serialize($options));
             return $options;
         }
         return unserialize($options);

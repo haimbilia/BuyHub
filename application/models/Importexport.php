@@ -893,6 +893,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
             FatUtility::dieJsonError($success);
         }
+        CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES); 
         $success['msg'] = Labels::getLabel('LBL_data_imported/updated_Successfully.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
@@ -5393,6 +5394,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
             FatUtility::dieJsonError($success);
         }
+        CacheHelper::clear(CacheHelper::TYPE_ZONE);
         $success['msg'] = Labels::getLabel('LBL_data_imported/updated_Successfully.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
@@ -5560,6 +5562,8 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('LBL_Error!_Please_check_error_log_sheet.', $langId);
             FatUtility::dieJsonError($success);
         }
+        
+        CacheHelper::clear(CacheHelper::TYPE_ZONE);        
         $success['msg'] = Labels::getLabel('LBL_data_imported/updated_Successfully.', $langId);
         FatUtility::dieJsonSuccess($success);
     }

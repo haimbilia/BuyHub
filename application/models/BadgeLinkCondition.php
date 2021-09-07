@@ -73,14 +73,14 @@ class BadgeLinkCondition extends MyAppModel
      */
     public static function getRecordTypeArr(int $langId): array
     {
-        $arr = FatCache::get('getBadgeLinkRecordTypeArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        $arr = CacheHelper::get('getBadgeLinkRecordTypeArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$arr) {
             $arr = [
                 self::RECORD_TYPE_SELLER_PRODUCT => Labels::getLabel('LBL_SELLER_PRODUCT', $langId),
                 self::RECORD_TYPE_PRODUCT => Labels::getLabel('LBL_PRODUCT', $langId),
                 self::RECORD_TYPE_SHOP => Labels::getLabel('LBL_SHOP', $langId)
             ];
-            FatCache::set('getBadgeLinkRecordTypeArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            CacheHelper::create('getBadgeLinkRecordTypeArr' . $langId, FatUtility::convertToJson($arr), CacheHelper::TYPE_LABELS);
             return $arr;
         }
 
@@ -95,7 +95,7 @@ class BadgeLinkCondition extends MyAppModel
      */
     public static function getConditionTypesArr(int $langId): array
     {
-        $arr = FatCache::get('getBadgeLinkConditionTypesArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        $arr = CacheHelper::get('getBadgeLinkConditionTypesArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$arr) {
             $arr = [
                 // self::COND_TYPE_AVG_RATING_SELPROD => Labels::getLabel('LBL_AVERAGE_RATING_SELLER_PRODUCT_(%)', $langId),
@@ -105,7 +105,7 @@ class BadgeLinkCondition extends MyAppModel
                 self::COND_TYPE_RETURN_ACCEPTANCE => Labels::getLabel('LBL_RETURN/_REFUND_ACCEPTANCE_RATE_(%)', $langId),
                 self::COND_TYPE_ORDER_CANCELLED => Labels::getLabel('LBL_ORDER_CANCELLED_BY_SELLER_(%)', $langId),
             ];
-            FatCache::set('getBadgeLinkConditionTypesArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            CacheHelper::create('getBadgeLinkConditionTypesArr' . $langId, FatUtility::convertToJson($arr), CacheHelper::TYPE_LABELS);
             return $arr;
         }
 
@@ -120,13 +120,13 @@ class BadgeLinkCondition extends MyAppModel
      */
     public static function getRecordConditionArr(int $langId): array
     {
-        $arr = FatCache::get('getBadgeLinkRecordConditionArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        $arr = CacheHelper::get('getBadgeLinkRecordConditionArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$arr) {
             $arr = [
                 self::REC_COND_MANUAL => Labels::getLabel('LBL_MANUAL', $langId),
                 self::REC_COND_AUTO => Labels::getLabel('LBL_AUTOMATIC', $langId),
             ];
-            FatCache::set('getBadgeLinkRecordConditionArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            CacheHelper::create('getBadgeLinkRecordConditionArr' . $langId, FatUtility::convertToJson($arr), CacheHelper::TYPE_LABELS);
             return $arr;
         }
 

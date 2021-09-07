@@ -174,7 +174,7 @@ class BuyersReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $buyerReportsCacheVar = FatCache::get('buyerReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $buyerReportsCacheVar = CacheHelper::get('buyerReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$buyerReportsCacheVar) {
             $arr = [
                 'buyerName' => Labels::getLabel('LBL_Name', $this->adminLangId),
@@ -201,7 +201,7 @@ class BuyersReportController extends AdminBaseController
 
                 'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->adminLangId),
             ];
-            FatCache::set('buyerReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            CacheHelper::create('buyerReportsCacheVar' . $this->adminLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($buyerReportsCacheVar);
         }
