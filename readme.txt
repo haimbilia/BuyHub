@@ -269,6 +269,7 @@ Updates/Fixes :
     => 057973 - While adding badge or ribbon name RTL mode chracters are displayed in LTR Mode
     => 057956 - importing category enable/disable issue 
     => 058034 - in blank db dummy data exist
+    => 058112 - Stripe connect registration tab content not loading
 
 New Features:  
     => Admin shipped products listing page
