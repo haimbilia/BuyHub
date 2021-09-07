@@ -96,11 +96,17 @@ class CategoryController extends MyAppController
                 $moreSellersArr = Product::getMoreSeller($selprodCodes, $this->siteLangId);
             }
         }
-        
+
+        $selProdIdsArr = array_column($products, 'selprod_id');
+        $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+        $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
+
         $data = array(
             'frmProductSearch' => $frm,
             'category' => $category,
             'products' => $products,
+            'tLeftRibbons' => $tLeftRibbons,
+            'tRightRibbons' => $tRightRibbons,
             'moreSellersProductsArr' => $moreSellersArr,
             'page' => $page,
             'pageSize' => $pageSize,
@@ -128,6 +134,8 @@ class CategoryController extends MyAppController
             $this->set('siteLangId', $this->siteLangId);
             $this->set('pageSize', $data['pageSize']);
             $this->set('pageSizeArr', $data['pageSizeArr']);
+            $this->set('tRightRibbons', $tRightRibbons);
+            $this->set('tLeftRibbons', $tLeftRibbons);
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }
