@@ -1,40 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$productsArr = [
-    'notAvailable' => [],
-    'available' => [],
-    'saveForLater' => [],
-];
-
-$productsCount = count($products);
-if (0 < $productsCount) {
-    uasort($products, function ($a, $b) {
-        return  $b['fulfillment_type'] - $a['fulfillment_type'];
-    });
-
-    foreach ($products as $key => &$product) {
-        $product['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id']));
-        $product['shopUrl'] = UrlHelper::generateFullUrl('Shops', 'View', array($product['shop_id']));
-        $product['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
-
-        $type = '';
-        if ($product['fulfillment_type'] == Shipping::FULFILMENT_PICKUP) {
-            $type = 'notAvailable';
-        } else {
-            $type = 'available';
-        }
-        $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
-        $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], false, false, false);
-        $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
-        $productsArr[$type][] = $product;
-    }
-}
-
-foreach ($saveForLaterProducts as &$slProduct) {
-    $slProduct['discount'] = ($slProduct['special_price_found'] && $slProduct['selprod_price'] > $slProduct['theprice']) ? CommonHelper::showProductDiscountedText($slProduct, $siteLangId) : '';
-    $slProduct['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($slProduct['selprod_id']));
-    $slProduct['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($slProduct['product_id'], "THUMB", $slProduct['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
-    $productsArr['saveForLater'][] = $slProduct;
-}
+$productsArr = $availableProductsArr;
+$productsCount = $pickUpProductsCount;
 
 $cartSummary['orderNetAmount'] = CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'], false, false, false);
 
@@ -51,8 +17,6 @@ $data = array(
     'shipProductsCount' => $shipProductsCount,
     'pickUpProductsCount' => $pickUpProductsCount,
 );
-
-$products = $productsArr['available'];
 
 require_once(CONF_THEME_PATH . 'cart/price-detail.php');
 

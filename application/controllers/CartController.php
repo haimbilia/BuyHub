@@ -132,12 +132,13 @@ class CartController extends MyAppController
                     $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], false, false, false);
                     $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
 
-
                     $type = '';
-                    if ($product['fulfillment_type'] == Shipping::FULFILMENT_SHIP) {
-                        $type = 'notAvailable';
+
+                    /* Cart Page tab selection. */
+                    if ($fulfilmentType == Shipping::FULFILMENT_SHIP) {
+                        $type = $product['fulfillment_type'] != Shipping::FULFILMENT_PICKUP ? 'available' : 'notAvailable';
                     } else {
-                        $type = 'available';
+                        $type = $product['fulfillment_type'] != Shipping::FULFILMENT_SHIP ? 'available' : 'notAvailable';
                     }
 
                     $availableProductsArr[$type][] = $product;
