@@ -141,4 +141,24 @@ class Zone extends MyAppModel
         $cnd->attachCondition('shipprozone_shipzone_id', '!=', $zoneId, 'AND', false);
         return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
+    
+    public static function requiredFields()
+    {
+        return array(
+            ImportexportCommon::VALIDATE_POSITIVE_INT => array(
+                'zone_id',
+            ),
+            ImportexportCommon::VALIDATE_NOT_NULL => array(
+                'zone_identifier',
+                'zone_name',
+            ),
+        );
+    }
+
+    public static function validateFields($columnIndex, $columnTitle, $columnValue, $langId)
+    {
+        $requiredFields = static::requiredFields();
+        return ImportexportCommon::validateFields($requiredFields, $columnIndex, $columnTitle, $columnValue, $langId);
+    }
+
 }

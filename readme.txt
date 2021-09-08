@@ -270,6 +270,7 @@ Updates/Fixes :
     => 057956 - importing category enable/disable issue 
     => 058034 - in blank db dummy data exist
     => 058112 - Stripe connect registration tab content not loading
+    => 058142 - we should have zone export/import
 
 New Features:  
     => Admin shipped products listing page

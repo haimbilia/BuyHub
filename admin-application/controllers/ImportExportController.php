@@ -51,6 +51,9 @@ class ImportExportController extends AdminBaseController
             case Importexport::TYPE_TAG:
                 $this->objPrivilege->canViewTags();
                 break;
+            case Importexport::TYPE_ZONES:
+                $this->objPrivilege->canViewZones();
+                break;
             case Importexport::TYPE_COUNTRY:
                 $this->objPrivilege->canViewCountries();
                 break;
@@ -146,6 +149,9 @@ class ImportExportController extends AdminBaseController
                 break;
             case Importexport::TYPE_TAG:
                 $this->objPrivilege->canEditTags();
+                break;
+            case Importexport::TYPE_ZONES:
+                $this->objPrivilege->canEditZones();
                 break;
             case Importexport::TYPE_COUNTRY:
                 $this->objPrivilege->canEditCountries();
@@ -369,6 +375,11 @@ class ImportExportController extends AdminBaseController
                 $displayMediaTab = false;
                 $title = Labels::getLabel('LBL_Import_Tags', $langId);
                 break;
+            case Importexport::TYPE_ZONES:
+                $this->objPrivilege->canViewZones();
+                $displayMediaTab = false;
+                $title = Labels::getLabel('LBL_Import_Zones', $langId);
+                break;
             case Importexport::TYPE_COUNTRY:
                 $this->objPrivilege->canViewCountries();
                 $displayMediaTab = false;
@@ -436,6 +447,10 @@ class ImportExportController extends AdminBaseController
                 $this->objPrivilege->canViewTags();
                 $pageData = $obj->getContentByPageType(Extrapage::ADMIN_TAGS_INSTRUCTIONS, $langId);
                 break;
+            case Importexport::TYPE_ZONES:
+                $this->objPrivilege->canViewZones();
+                $pageData = $obj->getContentByPageType(Extrapage::ADMIN_ZONE_MANAGEMENT_INSTRUCTIONS, $langId);
+                break;
             case Importexport::TYPE_COUNTRY:
                 $this->objPrivilege->canViewCountries();
                 $pageData = $obj->getContentByPageType(Extrapage::ADMIN_COUNTRIES_MANAGEMENT_INSTRUCTIONS, $langId);
@@ -494,6 +509,9 @@ class ImportExportController extends AdminBaseController
                 break;
             case Importexport::TYPE_TAG:
                 $this->objPrivilege->canViewTags();
+                break;
+            case Importexport::TYPE_ZONES:
+                $this->objPrivilege->canViewZones();
                 break;
             case Importexport::TYPE_COUNTRY:
                 $this->objPrivilege->canViewCountries();
@@ -802,6 +820,9 @@ class ImportExportController extends AdminBaseController
 
         $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_persent_or_flat_condition_id_instead_of_identifier", $this->adminLangId), 'CONF_USE_PERSENT_OR_FLAT_CONDITION_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_persent_or_flat_condition_id_instead_of_identifier_in_worksheets", $this->adminLangId) . '</small>';
+        
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_zone_id_instead_of_zone_identifier", $this->adminLangId), 'CONF_USE_ZONE_ID', 1, array(), false, 0);
+        $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_zone_id_instead_of_zone_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
         $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_country_id_instead_of_country_code", $this->adminLangId), 'CONF_USE_COUNTRY_ID', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_country_id_instead_of_country_code_in_worksheets", $this->adminLangId) . '</small>';
@@ -844,7 +865,7 @@ class ImportExportController extends AdminBaseController
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
         }
-
+        
         $record = new Configurations();
         if (!$record->update($post)) {
             Message::addErrorMessage($record->getError());
