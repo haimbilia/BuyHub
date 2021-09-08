@@ -853,9 +853,10 @@ class CartController extends MyAppController
             $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id'], Cart::PAGE_TYPE_CART);
             $cartObj->setFulfilmentType($fulfilmentType);
             $cartObj->setCartCheckoutType($fulfilmentType);
-            $productsArr = $cartObj->getProducts($this->siteLangId);
+            $cartObj->getProducts($this->siteLangId);
+            $shipmentAvailableItemsCount = $cartObj->getShipmentItemsCount();
             $cartSummary = $cartObj->getCartFinancialSummary($this->siteLangId);
-            $this->set('products', $productsArr);
+            $this->set('productsCount', $shipmentAvailableItemsCount);
             $this->set('cartSummary', $cartSummary);
             $this->_template->render();
         }
