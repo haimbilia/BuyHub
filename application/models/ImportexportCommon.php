@@ -823,6 +823,29 @@ class ImportexportCommon extends FatModel
         $arr['tag_name'] = Labels::getLabel('LBL_Tag_Name', $langId);
         return $arr;
     }
+    
+    public function getZoneColoumArr($langId, $userId = 0)
+    {
+        $arr = array();
+        if ($this->settings['CONF_USE_ZONE_ID']) {
+            $arr['zone_id'] = Labels::getLabel('LBL_ZONE_ID', $langId);
+            if ($this->isDefaultSheetData($langId)) {
+                $arr['zone_identifier'] = Labels::getLabel('LBL_Zone_Identifier', $langId);
+            }
+        } else {
+            $arr['zone_identifier'] = Labels::getLabel('LBL_Zone_Identifier', $langId);
+        }
+
+        $arr['zone_name'] = Labels::getLabel('LBL_Zone_Name', $langId);
+
+        if (!$userId) {
+            if ($this->isDefaultSheetData($langId)) {
+                $arr['zone_active'] = Labels::getLabel('LBL_Active', $langId);
+            }
+        }
+
+        return $arr;
+    }
 
     public function getCountryColoumArr($langId, $userId = 0)
     {
@@ -986,7 +1009,8 @@ class ImportexportCommon extends FatModel
         'CONF_USE_SHIPPING_PROFILE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_SHIPPING_PROFILE_ID', FatUtility::VAR_INT, 0) : false,
         'CONF_USE_SHIPPING_PACKAGE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_SHIPPING_PACKAGE_ID', FatUtility::VAR_INT, 0) : false,
         'CONF_USE_O_OR_1' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_O_OR_1', FatUtility::VAR_INT, 0) : false,
-        'CONF_PRODUCT_BRAND_MANDATORY' => ($siteConfiguration) ? FatApp::getConfig('CONF_PRODUCT_BRAND_MANDATORY', FatUtility::VAR_INT, false) : false,    
+        'CONF_PRODUCT_BRAND_MANDATORY' => ($siteConfiguration) ? FatApp::getConfig('CONF_PRODUCT_BRAND_MANDATORY', FatUtility::VAR_INT, false) : false,
+        'CONF_USE_ZONE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_ZONE_ID', FatUtility::VAR_INT, 0) : false,
         );
     }
 
