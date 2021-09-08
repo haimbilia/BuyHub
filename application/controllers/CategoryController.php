@@ -86,9 +86,7 @@ class CategoryController extends MyAppController
             $srch->setPageSize($pageSize);
         }
 
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $products = $db->fetchAll($rs);
+        $products = FatApp::getDb()->fetchAll($srch->getResultSet());
         $moreSellersArr = [];
         if($get['vtype'] == 'map'){            
             if(0 < count($products)){           
