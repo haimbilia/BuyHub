@@ -392,7 +392,7 @@ class BlogPostsController extends AdminBaseController
         }
 
         if (!$row = BlogPost::getAttributesById($post_id)) {
-            FatUtility::dieWithError($this->str_no_record);
+            FatUtility::dieWithError(Labels::getLabel('LBL_No_Record_Found', $this->adminLangId));
         }
         $imagesFrm = $this->getImagesFrm($post_id);
         $this->set('languages', Language::getAllNames());
@@ -416,7 +416,7 @@ class BlogPostsController extends AdminBaseController
         }
 
         if (!$row = BlogPost::getAttributesById($post_id)) {
-            FatUtility::dieWithError($this->str_no_record);
+            FatUtility::dieWithError(Labels::getLabel('LBL_No_Record_Found', $this->adminLangId));
         }
         $post_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $post_id, 0, $lang_id, (count($languages) > 1) ? false : true);
         $this->set('languages', Language::getAllNames());

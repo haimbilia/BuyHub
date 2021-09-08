@@ -246,7 +246,7 @@ class AttributesController extends AdminBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('Attributes'));
         }
         
-        Message::addMessage($this->str_add_record);
+        Message::addMessage(Labels::getLabel('LBL_Record_Added_Successfully', $this->adminLangId));
         FatApp::redirectUser(UrlHelper::generateUrl('Attributes'));
     }
     

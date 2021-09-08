@@ -273,7 +273,7 @@ class BlogPostCategoriesController extends AdminBaseController
         }
 
         if ($this->canEdit === false) {
-            FatUtility::dieJsonError($this->unAuthorizeAccess);
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Unauthorized_Access', $this->adminLangId));
         }
 
         $bpcategory_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);

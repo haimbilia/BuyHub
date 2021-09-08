@@ -758,7 +758,7 @@ class ProductsController extends AdminBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
         if (!$row = Product::getAttributesById($productId)) {
-            Message::addErrorMessage($this->str_no_record);
+            Message::addErrorMessage(Labels::getLabel('LBL_No_Record_Found', $this->adminLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $imagesFrm = $this->getImagesFrm($productId, $this->adminLangId);
@@ -803,7 +803,7 @@ class ProductsController extends AdminBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
         if (!$row = Product::getAttributesById($productId)) {
-            Message::addErrorMessage($this->str_no_record);
+            Message::addErrorMessage(Labels::getLabel('LBL_No_Record_Found', $this->adminLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $productImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $productId, $option_id, $lang_id, (count($languages) <= 1) ? true : false , 0, 0, true);

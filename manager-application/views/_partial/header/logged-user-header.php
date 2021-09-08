@@ -7,7 +7,7 @@
                     <div class="page-title">
                         <h1>
                             <?php
-                            if (array_key_exists('pageTitle', $this->variables['pageTitle'])) {
+                            if (array_key_exists('pageTitle', $this->variables)) {
                                 echo $this->variables['pageTitle'];
                             } else {
                                 echo Labels::getLabel('LBL_Dashboard', $adminLangId);
