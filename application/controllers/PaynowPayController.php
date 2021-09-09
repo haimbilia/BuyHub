@@ -49,7 +49,7 @@ class PaynowPayController extends PaymentController
     /**
      * charge
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return void
      */
     public function charge($orderId)
@@ -109,10 +109,10 @@ class PaynowPayController extends PaymentController
     /**
      * paymentSuccess
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return void
      */
-    public function paymentSuccess(string $orderId)
+    public function paymentSuccess($orderId)
     {
         $orderPaymentObj = new OrderPayment($orderId);
         $paymentId = $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME][self::KEY_NAME . '_paymentId'];
@@ -152,7 +152,7 @@ class PaynowPayController extends PaymentController
     /**
      * logFailure
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return void
      */
     private function logFailure($orderId, $msg = '')
@@ -174,11 +174,11 @@ class PaynowPayController extends PaymentController
     /**
      * getPaymentForm
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @param  bool $processRequest
      * @return object
      */
-    private function getPaymentForm(string $orderId, bool $processRequest = false): object
+    private function getPaymentForm($orderId, bool $processRequest = false): object
     {
         $actionUrl = false === $processRequest ? UrlHelper::generateUrl('PaynowPay', 'charge', array($orderId)) : $this->authorize->getRedirectUrl();
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));

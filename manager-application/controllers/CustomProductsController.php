@@ -1233,7 +1233,7 @@ class CustomProductsController extends AdminBaseController
         }
 
         if (!$row = ProductRequest::getAttributesById($preq_id)) {
-            FatUtility::dieWithError($this->str_no_record);
+            FatUtility::dieWithError(Labels::getLabel('LBL_No_Record_Found', $this->adminLangId));
         }
         $imagesFrm = $this->getImagesFrm($preq_id, $this->adminLangId);
         $this->set('preq_id', $preq_id);
@@ -1250,7 +1250,7 @@ class CustomProductsController extends AdminBaseController
         }
 
         if (!$row = ProductRequest::getAttributesById($preq_id)) {
-            Message::addErrorMessage($this->str_no_record);
+            Message::addErrorMessage(Labels::getLabel('LBL_No_Record_Found', $this->adminLangId));
         }
 		
 		$languages = Language::getAllNames();

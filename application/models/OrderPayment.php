@@ -15,12 +15,7 @@ class OrderPayment extends Orders
 
     protected function loadData()
     {
-        $this->attributes = $this->getOrderInfo();
-    }
-
-    private function getOrderInfo()
-    {
-        return $orderInfo = $this->getOrderById($this->paymentOrderId);
+        $this->attributes = $this->getOrderById($this->paymentOrderId);
     }
 
     public function getOrderPaymentGatewayAmount()
@@ -218,7 +213,14 @@ class OrderPayment extends Orders
                     $rs = $srch->getResultSet();
                     $row = FatApp::getDb()->fetch($rs);
                     if (!empty($row)) {
-                        if (!FatApp::getDb()->insertFromArray(CouponHistory::DB_TBL, array('couponhistory_coupon_id' => $row['coupon_id'], 'couponhistory_order_id' => $orderDetails['order_id'], 'couponhistory_user_id' => $orderDetails['order_user_id'], 'couponhistory_amount' => $orderDetails['order_discount_total'], 'couponhistory_added_on' => date('Y-m-d H:i:s')))) {
+                        $data = array(
+                            'couponhistory_coupon_id' => $row['coupon_id'],
+                            'couponhistory_order_id' => $orderDetails['order_id'],
+                            'couponhistory_user_id' => $orderDetails['order_user_id'],
+                            'couponhistory_amount' => $orderDetails['order_discount_total'],
+                            'couponhistory_added_on' => date('Y-m-d H:i:s')
+                        );
+                        if (!FatApp::getDb()->insertFromArray(CouponHistory::DB_TBL, $data)) {
                             $this->error = FatApp::getDb()->getError();
                             return false;
                         }
@@ -378,7 +380,7 @@ class OrderPayment extends Orders
     {
         $paymentOrderId = $this->paymentOrderId;
         $orderInfo = $this->attributes;
-        if (!empty($orderInfo)) { 
+        if (!empty($orderInfo)) {
             $this->addOrderPaymentHistory($paymentOrderId, Orders::ORDER_PAYMENT_PENDING, $comments, $notify);
         } else {
             $this->error = Labels::getLabel('MSG_Invalid_Order', $this->commonLangId);
@@ -450,7 +452,7 @@ class OrderPayment extends Orders
         }
 
         $transObj = new Transactions();
-        $formattedOrderValue = "#" . $orderInfo["order_id"];
+        $formattedOrderValue = "#" . $orderInfo["order_number"];
         /*
         $txnArray["utxn_user_id"]= $orderInfo["order_user_id"];
         $txnArray["utxn_debit"]= $amountToBeCharge;

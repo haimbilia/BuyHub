@@ -315,6 +315,17 @@ if (!empty($banners) && $banners['blocation_active'] && count($banners['banners'
     $productDetailPageBanner = $banners['banners'];
 }
 
+if (!empty($reviews)) {
+    if (!empty($ratingAspects)) {
+        foreach ($ratingAspects as &$ratingAsp) {
+            $ratingAsp['prod_rating'] = CommonHelper::numberFormat($ratingAsp['prod_rating'], false, true, 1);
+        }
+    }
+
+    $reviews['prod_rating'] = FatUtility::convertToType($reviews['prod_rating'], FatUtility::VAR_FLOAT);
+    $reviews['ratingAspects'] = (array) $ratingAspects;
+}
+
 $data = array(
     'reviews' => empty($reviews) ? (object) array() : $reviews,
     'codEnabled' => (true === $codEnabled ? 1 : 0),

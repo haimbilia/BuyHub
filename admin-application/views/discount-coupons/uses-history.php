@@ -13,7 +13,7 @@
 					<div class="border-box border-box--space">
 						<?php 
 						$arr_flds = array(
-							'couponhistory_order_id'=> Labels::getLabel('LBL_Order_Id',$adminLangId),
+							'couponhistory_order_no'=> Labels::getLabel('LBL_Order_Id',$adminLangId),
 							'credential_username'=> Labels::getLabel('LBL_Customer',$adminLangId),
 							'couponhistory_amount' => Labels::getLabel('LBL_Amount',$adminLangId),
 							'couponhistory_added_on' => Labels::getLabel('LBL_Date',$adminLangId),	

@@ -211,7 +211,7 @@ class ProductCategory extends MyAppModel
     {
         if (true == $useCache) {
             $cacheKey = $langId . '-' . $parentId . '-' . $sortByName . '-' . $excludeCatHavingNoProducts . '-' . $keywords . '-' . $parseTree;
-            $categoryArrCache = FatCache::get('categoryArrCache' . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+            $categoryArrCache = CacheHelper::get('categoryArrCache' . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
             if ($categoryArrCache) {
                 return unserialize($categoryArrCache);
             }
@@ -279,7 +279,7 @@ class ProductCategory extends MyAppModel
             $categoriesArr = static::parseTree($categoriesArr, $parentId);
         }
         if (true == $useCache) {
-            FatCache::set('categoryArrCache' . $cacheKey, serialize($categoriesArr), '.txt');
+            CacheHelper::create('categoryArrCache' . $cacheKey, serialize($categoriesArr), CacheHelper::TYPE_PRODUCT_CATEGORIES);
         }
         return $categoriesArr;
     }
@@ -1191,7 +1191,8 @@ class ProductCategory extends MyAppModel
         if ($prodCatId == 0 && isset($post['cat_icon_image_id']) && isset($post['cat_banner_image_id'])) {
             $this->updateMedia($post['cat_icon_image_id']);
             $this->updateMedia($post['cat_banner_image_id']);
-        }
+        }        
+        CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);
         return true;
     }
 
@@ -1212,6 +1213,7 @@ class ProductCategory extends MyAppModel
             $this->error = $this->getError();
             return false;
         }
+        CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);        
         return true;
     }
 
@@ -1373,6 +1375,7 @@ class ProductCategory extends MyAppModel
             echo $db->getError();die;
             return false;
         }
+        CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);
         return true;
     }
 
@@ -1399,7 +1402,7 @@ class ProductCategory extends MyAppModel
             $this->error = $db->getError();
             return false;
         }
-
+        CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);
         return true;
     }
 
@@ -1419,6 +1422,50 @@ class ProductCategory extends MyAppModel
         $qry = 'UPDATE ' . static::DB_TBL . '
         INNER JOIN ' . static::DB_TBL_PROD_CAT_RELATIONS . ' ON pcr_prodcat_id = prodcat_id
         SET prodcat_active = ' . applicationConstants::INACTIVE . '
+        WHERE pcr_parent_id = ' . $catId . ' or pcr_prodcat_id = ' . $catId;
+
+        $db = FatApp::getDb();
+        if (!$db->query($qry)) {
+            $this->error = $db->getError();
+            return false;
+        }
+        CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);
+        return true;
+    }
+    
+    public function unDeleteParentCategories(): bool
+    {
+        $catId = $this->getMainTableRecordId();
+        if (1 > $catId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
+            return false;
+        }
+
+        $qry = 'UPDATE ' . static::DB_TBL . '
+        INNER JOIN ' . static::DB_TBL_PROD_CAT_RELATIONS . ' ON pcr_parent_id = prodcat_id
+        SET prodcat_deleted = ' . applicationConstants::NO . '
+        WHERE pcr_prodcat_id = ' . $catId;
+
+        $db = FatApp::getDb();
+        if (!$db->query($qry)) {
+            $this->error = $db->getError();
+            return false;
+        }
+
+        return true;
+    }
+
+    public function deleteChildCategories(): bool
+    {
+        $catId = $this->getMainTableRecordId();
+        if (1 > $catId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
+            return false;
+        }
+
+        $qry = 'UPDATE ' . static::DB_TBL . '
+        INNER JOIN ' . static::DB_TBL_PROD_CAT_RELATIONS . ' ON pcr_prodcat_id = prodcat_id
+        SET prodcat_deleted = ' . applicationConstants::YES . '
         WHERE pcr_parent_id = ' . $catId . ' or pcr_prodcat_id = ' . $catId;
 
         $db = FatApp::getDb();

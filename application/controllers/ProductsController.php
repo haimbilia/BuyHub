@@ -52,6 +52,7 @@ class ProductsController extends MyAppController
             $prodSrchObj->joinBrands();
             $prodSrchObj->joinBrandsLang($this->siteLangId, $keyword);
             $prodSrchObj->joinProductToCategory();
+            $prodSrchObj->joinProductToTax();
             $prodSrchObj->joinSellerSubscription(0, false, true);
             $prodSrchObj->addSubscriptionValidCondition();
             $prodSrchObj->doNotCalculateRecords();
@@ -198,10 +199,10 @@ class ProductsController extends MyAppController
         //$prodSrchObj->addFld('count(selprod_id) as totalProducts');
         $cacheKey = FilterHelper::getCacheKey($this->siteLangId, $post);
 
-        $brandFilter = FatCache::get('brandFilter' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
+        $brandFilter = CacheHelper::get('brandFilter' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
         if (!$brandFilter) {
             $brandsArr = FilterHelper::brands($prodSrchObj, $this->siteLangId, $post, true);
-            FatCache::set('brandFilter' . $cacheKey, serialize($brandsArr), '.txt');
+            CacheHelper::create('brandFilter' . $cacheKey, serialize($brandsArr));
         } else {
             $brandsArr = unserialize($brandFilter);
         }
@@ -270,7 +271,7 @@ class ProductsController extends MyAppController
 
         /* Condition filters data[ */
         $conditionsArr = array();
-        $conditions = FatCache::get('conditions' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
+        $conditions = CacheHelper::get('conditions' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
         if (!$conditions) {
             $conditionArr = Product::getConditionArr($this->siteLangId);
             $conditions = array();
@@ -290,7 +291,7 @@ class ProductsController extends MyAppController
                     $conditionsArr[] = $row;
                 }
             }
-            FatCache::set('conditions' . $cacheKey, serialize($conditionsArr), '.txt');
+            CacheHelper::create('conditions' . $cacheKey, serialize($conditionsArr));
         } else {
             $conditionsArr = unserialize($conditions);
         }
@@ -331,7 +332,7 @@ class ProductsController extends MyAppController
         /* ] */
 
         /* Availability Filters[ */
-        $availabilities = FatCache::get('availabilities' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
+        $availabilities = CacheHelper::get('availabilities' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
         if (!$availabilities) {
             $availabilitySrch = clone $prodSrchObj;
             $availabilitySrch->setPageSize(1);
@@ -340,7 +341,7 @@ class ProductsController extends MyAppController
             $availabilitySrch->addMultipleFields(array('if(selprod_stock > 0,1,0) as in_stock'));
             $availabilityRs = $availabilitySrch->getResultSet();
             $availabilityArr = $db->fetchAll($availabilityRs, 'in_stock');
-            FatCache::set('availabilities' . $cacheKey, serialize($availabilityArr), '.txt');
+            CacheHelper::create('availabilities' . $cacheKey, serialize($availabilityArr));
         } else {
             $availabilityArr = unserialize($availabilities);
         }
@@ -447,6 +448,7 @@ class ProductsController extends MyAppController
         $prodSrch->joinSellerSubscription();
         $prodSrch->addSubscriptionValidCondition();
         $prodSrch->validateAndJoinDeliveryLocation(false);
+        $prodSrch->joinProductToTax();
         $prodSrch->doNotCalculateRecords();
         $prodSrch->addCondition('selprod_id', '=', $selprod_id);
         $prodSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);
@@ -466,8 +468,7 @@ class ProductsController extends MyAppController
         }
 
         $selProdReviewObj = $this->getSelProdReviewObj();
-        $selProdRviewSubQuery = $selProdReviewObj->getQuery();
-        $prodSrch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
+        $prodSrch->joinTable('(' . $selProdReviewObj->getQuery() . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
         $prodSrch->addMultipleFields(
             array(
                 'product_id', 'selprod_sku', 'product_identifier', 'COALESCE(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn', 'product_short_description', 'product_description',
@@ -1313,7 +1314,7 @@ class ProductsController extends MyAppController
         $cacheKey = $this->siteLangId . '-' .  urlencode($keyword);
 
 
-        $autoSuggetionsCache = FatCache::get('autoSuggetionsCache' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
+        $autoSuggetionsCache = CacheHelper::get('autoSuggetionsCache' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
         if (!$autoSuggetionsCache) {
             $criteria = [
                 'keyword' => $keyword,
@@ -1424,7 +1425,7 @@ class ProductsController extends MyAppController
             $recentSearchArr = array_unique($recentSearchArr);
             $recentSearchArr = array_slice($recentSearchArr, 0, 5);
             setcookie('recentSearchKeywords_' . $this->siteLangId, serialize($recentSearchArr), time() + 60 * 60 * 72, CONF_WEBROOT_URL);
-            FatCache::set('autoSuggetionsCache' . $cacheKey, serialize($suggestions), '.txt');
+            CacheHelper::create('autoSuggetionsCache' . $cacheKey, serialize($suggestions));
         } else {
             $suggestions = unserialize($autoSuggetionsCache);
         }

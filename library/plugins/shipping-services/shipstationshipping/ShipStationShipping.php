@@ -384,7 +384,7 @@ class ShipStationShipping extends ShippingServicesBase
      * @param  string $orderId
      * @return bool
      */
-    public function loadOrder(string $orderId): bool
+    public function loadOrder($orderId): bool
     {
         return $this->doRequest(self::REQUEST_GET_ORDER, [$orderId]);
     }

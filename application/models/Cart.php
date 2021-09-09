@@ -13,6 +13,7 @@ class Cart extends FatModel
     private $discounts = 0;
     private $selectedShippingService = [];
     private static $cartData = [];
+    private $shipmentItemsCount = 0;
 
     private $hasPhysicalProduct = -1;
     private $hasDigitalProduct = -1;
@@ -371,6 +372,16 @@ class Cart extends FatModel
         });
         return $this->products;
     }
+        
+    /**
+     * getShipmentItemsCount: This function works after Calling getProducts
+     *
+     * @return int
+     */
+    public function getShipmentItemsCount(): int
+    {
+        return (int) $this->shipmentItemsCount;
+    }
 
     public function getProducts($siteLangId = 0)
     {
@@ -642,6 +653,8 @@ class Cart extends FatModel
                 }
                 $this->products[$key]['fulfillment_type'] = $sellerProductRow['fulfillment_type'];
                 $this->products[$key]['rounding_off'] = $sellerProductRow['rounding_off'];
+
+                $this->shipmentItemsCount += ($sellerProductRow['fulfillment_type'] != Shipping::FULFILMENT_PICKUP) ? 1 : 0;
             }
 
             /* $sellerPrice = $this->getSellersProductItemsPrice($this->products);

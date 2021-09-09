@@ -240,7 +240,7 @@ class TwocheckoutPayController extends PaymentController
         echo json_encode($json);
     }
 
-    private function getPaymentForm(string $orderId, bool $processRequest = false)
+    private function getPaymentForm($orderId, bool $processRequest = false)
     {
         // $this->paymentType = $this->settings['payment_type']; // Form Submission from own server code not working.
         $this->paymentType = 'HOSTED';
@@ -251,7 +251,7 @@ class TwocheckoutPayController extends PaymentController
         }
     }
 
-    private function getHostedCheckoutForm(string $orderId, bool $processRequest = false)
+    private function getHostedCheckoutForm($orderId, bool $processRequest = false)
     {
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         $payment_gateway_charge = $orderPaymentObj->getOrderPaymentGatewayAmount();

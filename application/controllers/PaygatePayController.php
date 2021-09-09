@@ -47,7 +47,7 @@ class PaygatePayController extends PaymentController
     /**
      * charge
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return void
      */
     public function charge($orderId)
@@ -106,10 +106,10 @@ class PaygatePayController extends PaymentController
     /**
      * callback
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return void
      */
-    public function callback(string $orderId)
+    public function callback($orderId)
     {
         $response = FatApp::getPostedData();
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
@@ -164,11 +164,11 @@ class PaygatePayController extends PaymentController
     /**
      * getPaymentForm
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @param  bool $processRequest
      * @return object
      */
-    private function getPaymentForm(string $orderId, bool $processRequest = false): object
+    private function getPaymentForm($orderId, bool $processRequest = false): object
     {
         $actionUrl = false === $processRequest ? UrlHelper::generateUrl('PaygatePay', 'charge', array($orderId)) : $this->payWeb3::$process_url;
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));

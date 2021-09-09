@@ -229,7 +229,7 @@ class BannerController extends MyAppController
             return;
         }
 
-        $bannerDataCache = FatCache::get('bannersCache' . $type . '_' . $langId, CONF_IMG_CACHE_TIME, '.txt');
+        $bannerDataCache = CacheHelper::get('bannersCache' . $type . '_' . $langId, CONF_IMG_CACHE_TIME, '.txt');
         if ($bannerDataCache) {
             return unserialize($bannerDataCache);
         }
@@ -257,7 +257,7 @@ class BannerController extends MyAppController
         $rs = $srch->getResultSet();
 
         return $bannerListing = $db->fetchAll($rs, 'banner_id');
-        FatCache::set('bannersCache' . $type . '_' . $langId, serialize($bannerListing), '.txt');
+        CacheHelper::create('bannersCache' . $type . '_' . $langId, serialize($bannerListing));
     }
 
     public function locationFrames($frameId, $sizeType = '')

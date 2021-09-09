@@ -38,7 +38,7 @@ class AdminGuestController extends FatController
         $this->set('controllerName', $controllerName);
         $this->set('jsVariables', $jsVariables);
         $this->set('adminLangId', $this->adminLangId);
-        $this->set('bodyClass', 'is-login  login-1');
+        $this->set('bodyClass', '');
         $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css');
     }
 

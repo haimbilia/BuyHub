@@ -172,7 +172,7 @@ class TransactionReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $transcationReportsCacheVar = FatCache::get('transcationReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $transcationReportsCacheVar = CacheHelper::get('transcationReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$transcationReportsCacheVar) {
             $arr = [
                 'utxn_date' => Labels::getLabel('LBL_Date', $this->adminLangId),
@@ -185,7 +185,7 @@ class TransactionReportController extends AdminBaseController
                 'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->adminLangId),
                 'utxn_comments' => Labels::getLabel('LBL_Comments', $this->adminLangId),
             ];
-            FatCache::set('transcationReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            CacheHelper::create('transcationReportsCacheVar' . $this->adminLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($transcationReportsCacheVar);
         }

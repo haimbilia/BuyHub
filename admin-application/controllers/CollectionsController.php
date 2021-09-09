@@ -234,6 +234,8 @@ class CollectionsController extends AdminBaseController
                 $collection->saveLangData($langId, $catName);
             }
         }
+        
+        CacheHelper::clear(CacheHelper::TYPE_COLLECTIONS);
 
         /* if ($data['collection_type'] == Collections::COLLECTION_TYPE_CONTENT_BLOCK) {
             $post['epage_identifier'] = $post['collection_name'][$siteDefaultLangId];
@@ -405,6 +407,8 @@ class CollectionsController extends AdminBaseController
         $status = ($data['collection_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
 
         $this->updateCollectionStatus($collectionId, $status);
+        
+        CacheHelper::clear(CacheHelper::TYPE_COLLECTIONS);
 
         FatUtility::dieJsonSuccess($this->str_update_record);
     }
@@ -428,6 +432,7 @@ class CollectionsController extends AdminBaseController
 
             $this->updateCollectionStatus($collectionId, $status);
         }
+        CacheHelper::clear(CacheHelper::TYPE_COLLECTIONS);
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -447,6 +452,7 @@ class CollectionsController extends AdminBaseController
             Message::addErrorMessage($collectionObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
+        CacheHelper::clear(CacheHelper::TYPE_COLLECTIONS);
     }
 
     public function updateCollectionRecords()
@@ -476,6 +482,7 @@ class CollectionsController extends AdminBaseController
             Message::addErrorMessage(Labels::getLabel($collectionObj->getError(), $this->adminLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
+        CacheHelper::clear(CacheHelper::TYPE_COLLECTIONS);
         $this->set('collection_id', $collection_id);
         $this->set('collection_type', $collectionDetails['collection_type']);
         $this->set('msg', Labels::getLabel('MSG_Record_Updated_Successfully', $this->adminLangId));
@@ -508,6 +515,7 @@ class CollectionsController extends AdminBaseController
             Message::addErrorMessage(Labels::getLabel($collectionObj->getError(), $this->adminLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
+        CacheHelper::clear(CacheHelper::TYPE_COLLECTIONS);
         $this->set('msg', Labels::getLabel('MSG_Record_Removed_Successfully', $this->adminLangId));
         $this->set('collection_type', $collectionDetails['collection_type']);
         $this->_template->render(false, false, 'json-success.php');
@@ -731,6 +739,7 @@ class CollectionsController extends AdminBaseController
             Message::addErrorMessage($fileHandlerObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
+        CacheHelper::clear(CacheHelper::TYPE_COLLECTIONS);
         $this->set('msg', Labels::getLabel('MSG_Image_deleted_successfully', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -819,6 +828,7 @@ class CollectionsController extends AdminBaseController
             $banner = new Banner($banner_id);
             $banner->updateMedia($post['banner_image_id']);
         }
+        CacheHelper::clear(CacheHelper::TYPE_COLLECTIONS);
 
         $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->adminLangId));
         $this->set('collection_id', $collection_id);
@@ -1251,6 +1261,7 @@ class CollectionsController extends AdminBaseController
                 Message::addErrorMessage($collectionObj->getError());
                 FatUtility::dieJsonError(Message::getHtml());
             }
+            CacheHelper::clear(CacheHelper::TYPE_COLLECTIONS);
             FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Order_Updated_Successfully', $this->adminLangId));
         }
     }
@@ -1264,6 +1275,7 @@ class CollectionsController extends AdminBaseController
                 Message::addErrorMessage($collectionObj->getError());
                 FatUtility::dieJsonError(Message::getHtml());
             }
+            CacheHelper::clear(CacheHelper::TYPE_COLLECTIONS);
             FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Order_Updated_Successfully', $this->adminLangId));
         }
     }

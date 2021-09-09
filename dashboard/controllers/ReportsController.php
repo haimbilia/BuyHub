@@ -604,7 +604,7 @@ class ReportsController extends SellerBaseController
 
     private function getProductsPerformanceFormColumns($langId)
     {
-        $sellerProdPerformanceCacheVar = FatCache::get('sellerProdPerformanceCacheVar' . '-' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        $sellerProdPerformanceCacheVar = CacheHelper::get('sellerProdPerformanceCacheVar' . '-' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$sellerProdPerformanceCacheVar) {
             $arr = [
                 'product_name'    =>    Labels::getLabel('LBL_Product', $langId),
@@ -614,6 +614,7 @@ class ReportsController extends SellerBaseController
                 'totSoldQty' => Labels::getLabel('LBL_Sold_Quantity', $langId),
                 'totRefundQty' => Labels::getLabel('LBL_Refund_Quantity', $langId)
             ];
+            CacheHelper::create('sellerProdPerformanceCacheVar' . $this->siteLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($sellerProdPerformanceCacheVar);
         }
@@ -797,7 +798,7 @@ class ReportsController extends SellerBaseController
 
     private function productsInventoryStockStatusColumns($langId)
     {
-        $selProdInventoryStockStatusCacheVar = FatCache::get('selProdInventoryStockStatusCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        $selProdInventoryStockStatusCacheVar = CacheHelper::get('selProdInventoryStockStatusCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$selProdInventoryStockStatusCacheVar) {
             $arr = [
                 'product_name'        =>    Labels::getLabel('LBL_Product_name', $langId),
@@ -810,7 +811,7 @@ class ReportsController extends SellerBaseController
                 'selprod_price'    =>    Labels::getLabel('LBL_Unit_Price', $langId),
                 'total_value'    =>    Labels::getLabel('LBL_Total_Value_', $langId)
             ];
-            FatCache::set('selProdInventoryStockStatusCacheVar' . $langId, serialize($arr), '.txt');
+            CacheHelper::create('selProdInventoryStockStatusCacheVar' . $langId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($selProdInventoryStockStatusCacheVar);
         }
@@ -842,7 +843,7 @@ class ReportsController extends SellerBaseController
 
     private function productsInventoryColumns($langId)
     {
-        $selProdInventoryReportCacheVar = FatCache::get('selProdInventoryReportCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        $selProdInventoryReportCacheVar = CacheHelper::get('selProdInventoryReportCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$selProdInventoryReportCacheVar) {
             $arr = [
                 'product_name'    =>    Labels::getLabel('LBL_Product_name', $langId),
@@ -867,7 +868,7 @@ class ReportsController extends SellerBaseController
                 'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $langId),
                 'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $langId)
             ];
-            FatCache::set('selProdInventoryReportCacheVar' . $langId, serialize($arr), '.txt');
+            CacheHelper::create('selProdInventoryReportCacheVar' . $langId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($selProdInventoryReportCacheVar);
         }
@@ -906,7 +907,7 @@ class ReportsController extends SellerBaseController
 
     private function getFormColumns($orderDate = '')
     {
-        $shopsReportCacheVar = FatCache::get('shopsReportCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $shopsReportCacheVar = CacheHelper::get('shopsReportCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$shopsReportCacheVar) {
             $arr = [
                 'orderDate' => Labels::getLabel('LBL_Date', $this->siteLangId),
@@ -928,7 +929,7 @@ class ReportsController extends SellerBaseController
                 'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $this->siteLangId),
                 'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $this->siteLangId),
             ];
-            FatCache::set('shopsReportCacheVar' . $this->siteLangId, serialize($arr), '.txt');
+            CacheHelper::create('shopsReportCacheVar' . $this->siteLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($shopsReportCacheVar);
         }

@@ -50,7 +50,7 @@ class PaystackPayController extends PaymentController
     /**
      * charge
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return void
      */
     public function charge($orderId)
@@ -109,10 +109,10 @@ class PaystackPayController extends PaymentController
     /**
      * callback
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return void
      */
-    public function callback(string $orderId)
+    public function callback($orderId)
     {
         $orderPaymentObj = new OrderPayment($orderId);
         $referenceId = $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME][self::KEY_NAME . '_reference'];
@@ -153,10 +153,10 @@ class PaystackPayController extends PaymentController
     /**
      * logFailure
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return void
      */
-    private function logFailure(string $orderId, string $msg = '', array $response = [])
+    private function logFailure($orderId, string $msg = '', array $response = [])
     {
         $response = !empty($response) ? $response : $_REQUEST;
         $orderPaymentObj = new OrderPayment($orderId);   
@@ -176,11 +176,11 @@ class PaystackPayController extends PaymentController
     /**
      * getPaymentForm
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @param  bool $processRequest
      * @return object
      */
-    private function getPaymentForm(string $orderId, bool $processRequest = false): object
+    private function getPaymentForm($orderId, bool $processRequest = false): object
     {
         $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', [$orderId]) : $this->authorize['data']['authorization_url'];
 

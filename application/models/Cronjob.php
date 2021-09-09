@@ -590,8 +590,7 @@ class Cronjob extends FatModel
         $srch->addCondition('ossubs_till_date', '!=', '0000-00-00');
         $srch->addCondition('ossubs_type', '=', SellerPackages::PAID_TYPE);
         $srch->addCondition('user_autorenew_subscription', '=', 1);
-        //$srch->addMultipleFields(array('order_user_id', 'order_language_id', 'order_language_code', 'order_currency_id', 'order_id', 'ossubs_id', 'ossubs_type', 'ossubs_price', 'ossubs_images_allowed', 'ossubs_products_allowed', 'ossubs_plan_id', 'ossubs_interval', 'ossubs_frequency', 'ossubs_commission'));*/
-        $srch->addMultipleFields(array('order_user_id', 'order_language_id', 'order_language_code', 'order_currency_id', 'order_id', 'ossubs_id', 'spackage_type', 'spplan_price', 'spackage_images_per_product', 'spackage_products_allowed','spackage_inventory_allowed', 'ossubs_plan_id', 'spplan_interval', 'spplan_frequency', 'spackage_commission_rate'));
+        $srch->addMultipleFields(array('order_user_id', 'order_language_id', 'order_language_code', 'order_currency_id', 'order_id', 'order_number', 'ossubs_id', 'spackage_type', 'spplan_price', 'spackage_images_per_product', 'spackage_products_allowed','spackage_inventory_allowed', 'ossubs_plan_id', 'spplan_interval', 'spplan_frequency', 'spackage_commission_rate'));
         
         /* $srch->addGroupBy('order_user_id');  */
         $srch->addOrder('ossubs_id', 'desc');
@@ -615,10 +614,11 @@ class Cronjob extends FatModel
 
             $orderData = array();
             /* add Order Data[ */
-            $order_id = false;
+            $order_id = 0;
 
 
             $orderData['order_id'] = $order_id;
+            $orderData['order_number'] = false;
             $orderData['order_user_id'] = $userId;
             /* $orderData['order_user_name'] = $userDataArr['user_name'];
             $orderData['order_user_email'] = $userDataArr['credential_email'];

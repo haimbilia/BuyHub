@@ -310,7 +310,7 @@ class Address extends MyAppModel
      * @param  int $addrArr
      * @return array
      */
-    public static function formatUserAddress(int $type, string $orderId, array $addrArr): array
+    public static function formatUserAddress(int $type, string $orderId, int $orderNo, array $addrArr): array
     {
         $default = [
             'addr_name' => '',

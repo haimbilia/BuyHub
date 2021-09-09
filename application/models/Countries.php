@@ -167,7 +167,7 @@ class Countries extends MyAppModel
     
     public static function getCountryAttributeByName(string $countryName, int $langId, string $attr): string
     {
-        $countryArr = $this->getCountryArrByName($countryName, $langId, [$attr]);
+        $countryArr = self::getCountryArrByName($countryName, $langId, [$attr]);
         return (string) (array_key_exists($attr, $countryArr) ? $countryArr[$attr] : '');
     }
 

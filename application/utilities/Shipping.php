@@ -302,14 +302,14 @@ class Shipping
             }
 
             $cacheKey = self::CARRIER_CACHE_KEY_NAME . $this->langId . get_class($shippingApiObj) . ($isProductShippedBySeller ? $product['selprod_user_id'] : 0);
-            $carriers = FatCache::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
+            $carriers = CacheHelper::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
             if ($carriers) {
                 $carriers = unserialize($carriers);
             } else {
                 $limit = ('ShipStationShipping' == get_class($shippingApiObj)::KEY_NAME ? 0 : 1);
                 $carriers = $shippingApiObj->getCarriers($limit);
                 if (!empty($carriers)) {
-                    FatCache::set($cacheKey, serialize($carriers), '.txt');
+                    CacheHelper::create($cacheKey, serialize($carriers), CacheHelper::TYPE_SHIPING_API);
                 }
             }
 
@@ -382,13 +382,13 @@ class Shipping
                 $carrierCode = !empty($carrier) && array_key_exists('code', $carrier) ? $carrier['code'] : '';
                 $cacheKeyArr = array_merge($cacheKeyArr, [$carrierCode, $shopAddress['postalCode'], $this->langId]);
                 $cacheKey = self::RATE_CACHE_KEY_NAME . md5(json_encode($cacheKeyArr));
-                $shippingRates = FatCache::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
+                $shippingRates = CacheHelper::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
                 if ($shippingRates) {
                     $shippingRates = unserialize($shippingRates);
                 } else {
                     $shippingRates = $shippingApiObj->getRates($carrierCode, $shopAddress['postalCode']);
                     if (!empty($shippingRates)) {
-                        FatCache::set($cacheKey, serialize($shippingRates), '.txt');
+                        CacheHelper::create($cacheKey, serialize($shippingRates), CacheHelper::TYPE_SHIPING_API);
                     }
                 }
 

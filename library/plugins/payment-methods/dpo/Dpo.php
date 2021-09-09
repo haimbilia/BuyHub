@@ -108,7 +108,7 @@ class Dpo extends PaymentMethodBase
      * @param  mixed $orderId
      * @return string
      */
-    public function getReturnUrl(string $orderId): string
+    public function getReturnUrl($orderId): string
     {
         return UrlHelper::generateFullUrl(self::KEY_NAME . 'Pay', "callback", [$orderId]);
     }
@@ -129,7 +129,7 @@ class Dpo extends PaymentMethodBase
      * @param  string $orderId
      * @return string
      */
-    private function getTxnRequestBody(string $orderId): string
+    private function getTxnRequestBody($orderId): string
     {
         $orderPaymentObj = new OrderPayment($orderId, $this->langId);
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
@@ -159,7 +159,7 @@ class Dpo extends PaymentMethodBase
      * @param  string $orderId
      * @return string
      */
-    private function getServiceRequestBody(string $orderId): string
+    private function getServiceRequestBody($orderId): string
     {
         $websiteName = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->langId, FatUtility::VAR_STRING, '');
         $description = !empty($websiteName) ? $websiteName . ' : #' . $orderId : '#' . $orderId;
@@ -180,7 +180,7 @@ class Dpo extends PaymentMethodBase
      * @param  string $orderId
      * @return string
      */
-    private function buildRequestBody(string $orderId): string
+    private function buildRequestBody($orderId): string
     {
         return '<?xml version="1.0" encoding="UTF-8"?>
                     <API3G>
@@ -198,7 +198,7 @@ class Dpo extends PaymentMethodBase
      * @param  string $payMethod
      * @return bool
      */
-    public function initiateRequest(string $orderId): bool
+    public function initiateRequest($orderId): bool
     {
         /*
         * Create Request Body

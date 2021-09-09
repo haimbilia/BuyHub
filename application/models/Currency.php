@@ -59,7 +59,7 @@ class Currency extends MyAppModel
 
     public static function getCurrencyAssoc($langId)
     {
-        $currencyGetCurrencyAssoc = FatCache::get('currencyGetCurrencyAssoc' .  $langId, CONF_DEF_CACHE_TIME, '.txt');
+        $currencyGetCurrencyAssoc = CacheHelper::get('currencyGetCurrencyAssoc' .  $langId, CONF_DEF_CACHE_TIME, '.txt');
         if ($currencyGetCurrencyAssoc) {
             return json_decode($currencyGetCurrencyAssoc, true);
         }
@@ -74,7 +74,7 @@ class Currency extends MyAppModel
         if (!is_array($row)) {
             return false;
         }
-        FatCache::set('currencyGetCurrencyAssoc' . $langId, FatUtility::convertToJson($row), '.txt');
+        CacheHelper::create('currencyGetCurrencyAssoc' . $langId, FatUtility::convertToJson($row), CacheHelper::TYPE_CURRENCY);
         return $row;
     }
 

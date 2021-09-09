@@ -920,3 +920,237 @@ INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`)
 ('CONF_DEFAULT_APPROVED_ORDER_STATUS', '15', 0)
 ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
 -- ---------Task 88911 Order Detail page ------ -- 
+
+-- ---------Task 899377 Auto Increment Order Id ------ -- 
+ALTER TABLE `tbl_orders` DROP PRIMARY KEY;
+ALTER TABLE `tbl_orders` ADD UNIQUE(`order_id`);
+ALTER TABLE `tbl_orders` ADD `order_no` BIGINT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`order_no`);
+
+ALTER TABLE `tbl_orders_lang` ADD `orderlang_order_no` BIGINT NOT NULL FIRST;
+UPDATE tbl_orders_lang op_l
+INNER JOIN tbl_orders o ON o.order_id = op_l.orderlang_order_id
+SET op_l.orderlang_order_no = o.order_no;
+
+ALTER TABLE `tbl_order_products` ADD `op_order_no` BIGINT NOT NULL AFTER `op_id`;
+UPDATE tbl_order_products op
+INNER JOIN tbl_orders o ON o.order_id = op.op_order_id
+SET op.op_order_no = o.order_no;
+
+ALTER TABLE `tbl_order_products_lang` DROP `oplang_order_id`;
+
+ALTER TABLE `tbl_coupons_history` ADD `couponhistory_order_no` BIGINT NOT NULL AFTER `couponhistory_coupon_id`;
+UPDATE tbl_coupons_history ch
+INNER JOIN tbl_orders o ON o.order_id = ch.couponhistory_order_id
+SET ch.couponhistory_order_no = o.order_no;
+
+ALTER TABLE `tbl_coupons_hold_pending_order` ADD `ochold_order_no` BIGINT NOT NULL FIRST;
+UPDATE tbl_coupons_hold_pending_order chpo
+INNER JOIN tbl_orders o ON o.order_id = chpo.ochold_order_id
+SET chpo.ochold_order_no = o.order_no;
+
+ALTER TABLE `tbl_orders_status_history` ADD `oshistory_order_no` BIGINT NOT NULL AFTER `oshistory_id`;
+UPDATE tbl_orders_status_history osh
+INNER JOIN tbl_orders o ON o.order_id = osh.oshistory_order_id
+SET osh.oshistory_order_no = o.order_no;
+
+ALTER TABLE `tbl_orders_to_plugin_order` ADD `opo_order_no` BIGINT NOT NULL FIRST;
+UPDATE tbl_orders_to_plugin_order opo
+INNER JOIN tbl_orders o ON o.order_id = opo.opo_order_id
+SET opo.opo_order_no = o.order_no;
+
+ALTER TABLE `tbl_order_extras` ADD `oextra_order_no` BIGINT NOT NULL FIRST;
+UPDATE tbl_order_extras oe
+INNER JOIN tbl_orders o ON o.order_id = oe.oextra_order_id
+SET oe.oextra_order_no = o.order_no;
+
+ALTER TABLE `tbl_order_payments` ADD `opayment_order_no` BIGINT NOT NULL AFTER `opayment_order_id`;
+UPDATE tbl_order_payments op
+INNER JOIN tbl_orders o ON o.order_id = op.opayment_order_id
+SET op.opayment_order_no = o.order_no;
+
+ALTER TABLE `tbl_order_seller_subscriptions` ADD `ossubs_order_no` BIGINT NOT NULL AFTER `ossubs_order_id`;
+UPDATE tbl_order_seller_subscriptions oss
+INNER JOIN tbl_orders o ON o.order_id = oss.ossubs_order_id
+SET oss.ossubs_order_no = o.order_no;
+
+ALTER TABLE `tbl_order_user_address` ADD `oua_order_no` BIGINT NOT NULL AFTER `oua_order_id`;
+UPDATE tbl_order_user_address oua
+INNER JOIN tbl_orders o ON o.order_id = oua.oua_order_id
+SET oua.oua_order_no = o.order_no;
+
+ALTER TABLE `tbl_seller_product_reviews` ADD `spreview_order_no` BIGINT NOT NULL AFTER `spreview_order_id`;
+UPDATE tbl_seller_product_reviews spr
+INNER JOIN tbl_orders o ON o.order_id = spr.spreview_order_id
+SET spr.spreview_order_no = o.order_no;
+
+ALTER TABLE `tbl_user_reward_points` ADD `urp_used_order_no` BIGINT NOT NULL AFTER `urp_used_order_id`;
+UPDATE tbl_user_reward_points urp
+INNER JOIN tbl_orders o ON o.order_id = urp.urp_used_order_id
+SET urp.urp_used_order_no = o.order_no;
+
+ALTER TABLE `tbl_user_reward_point_breakup` ADD `urpbreakup_used_order_no` BIGINT NOT NULL AFTER `urpbreakup_used_order_id`;
+UPDATE tbl_user_reward_point_breakup urpb
+INNER JOIN tbl_orders o ON o.order_id = urpb.urpbreakup_used_order_id
+SET urpb.urpbreakup_used_order_no = o.order_no;
+
+ALTER TABLE `tbl_user_transactions` ADD `utxn_order_no` BIGINT NOT NULL AFTER `utxn_order_id`;
+UPDATE tbl_user_transactions ut
+INNER JOIN tbl_orders o ON o.order_id = ut.utxn_order_id
+SET ut.utxn_order_no = o.order_no;
+
+ALTER TABLE `tbl_order_seller_subscriptions_lang` DROP INDEX `ossubslang_ossubs_id`;
+ALTER TABLE `tbl_order_seller_subscriptions_lang` DROP `ossubslang_order_id`;
+
+ALTER TABLE `tbl_coupons_history` DROP `couponhistory_order_id`;
+ALTER TABLE `tbl_coupons_history` CHANGE `couponhistory_order_no` `couponhistory_order_id` BIGINT NOT NULL;
+
+ALTER TABLE `tbl_coupons_hold_pending_order` DROP PRIMARY KEY;
+ALTER TABLE `tbl_coupons_hold_pending_order` DROP `ochold_order_id`;
+ALTER TABLE `tbl_coupons_hold_pending_order` CHANGE `ochold_order_no` `ochold_order_id` BIGINT NOT NULL;
+ALTER TABLE `tbl_coupons_hold_pending_order` ADD PRIMARY KEY( `ochold_order_id`, `ochold_coupon_id`);
+
+
+ALTER TABLE `tbl_orders_lang` DROP PRIMARY KEY;
+ALTER TABLE `tbl_orders_lang` DROP `orderlang_order_id`;
+ALTER TABLE `tbl_orders_lang` CHANGE `orderlang_order_no` `orderlang_order_id` BIGINT NOT NULL;
+ALTER TABLE `tbl_orders_lang` ADD PRIMARY KEY( `orderlang_order_id`, `orderlang_lang_id`);
+
+
+ALTER TABLE `tbl_orders_status_history` DROP `oshistory_order_id`;
+ALTER TABLE `tbl_orders_status_history` CHANGE `oshistory_order_no` `oshistory_order_id` BIGINT NOT NULL;
+
+ALTER TABLE `tbl_orders_to_plugin_order` DROP INDEX `opo_order_id`;
+ALTER TABLE `tbl_orders_to_plugin_order` DROP `opo_order_id`;
+ALTER TABLE `tbl_orders_to_plugin_order` CHANGE `opo_order_no` `opo_order_id` BIGINT NOT NULL;
+ALTER TABLE `tbl_orders_to_plugin_order` ADD UNIQUE( `opo_order_id`, `opo_plugin_id`, `opo_plugin_order_id`);
+
+ALTER TABLE `tbl_order_extras` DROP PRIMARY KEY;
+ALTER TABLE `tbl_order_extras` DROP `oextra_order_id`;
+ALTER TABLE `tbl_order_extras` CHANGE `oextra_order_no` `oextra_order_id` BIGINT NOT NULL;
+ALTER TABLE `tbl_order_extras` ADD PRIMARY KEY(`oextra_order_id`);
+
+ALTER TABLE `tbl_order_payments` DROP INDEX `op_order_id`;
+ALTER TABLE `tbl_order_payments` DROP `opayment_order_id`;
+ALTER TABLE `tbl_order_payments` CHANGE `opayment_order_no` `opayment_order_id` BIGINT NOT NULL;
+ALTER TABLE `tbl_order_payments` ADD UNIQUE(`opayment_order_id`);
+
+ALTER TABLE `tbl_order_products` DROP `op_order_id`;
+ALTER TABLE `tbl_order_products` CHANGE `op_order_no` `op_order_id` BIGINT NOT NULL;
+
+ALTER TABLE `tbl_order_seller_subscriptions` DROP INDEX `ossubs_order_id`;
+ALTER TABLE `tbl_order_seller_subscriptions` DROP `ossubs_order_id`;
+ALTER TABLE `tbl_order_seller_subscriptions` CHANGE `ossubs_order_no` `ossubs_order_id` BIGINT NOT NULL;
+ALTER TABLE `tbl_order_seller_subscriptions` ADD INDEX(`ossubs_order_id`);
+
+
+ALTER TABLE `tbl_order_user_address` DROP PRIMARY KEY;
+ALTER TABLE `tbl_order_user_address` DROP `oua_order_id`;
+ALTER TABLE `tbl_order_user_address` CHANGE `oua_order_no` `oua_order_id` BIGINT NOT NULL;
+ALTER TABLE `tbl_order_user_address` ADD PRIMARY KEY( `oua_order_id`, `oua_op_id`, `oua_type`);
+
+
+ALTER TABLE `tbl_seller_product_reviews` DROP INDEX `spreview_order_id`;
+ALTER TABLE `tbl_seller_product_reviews` DROP `spreview_order_id`;
+ALTER TABLE `tbl_seller_product_reviews` CHANGE `spreview_order_no` `spreview_order_id` BIGINT NOT NULL;
+ALTER TABLE `tbl_seller_product_reviews` ADD UNIQUE( `spreview_order_id`, `spreview_selprod_id`);
+
+ALTER TABLE `tbl_user_reward_points` DROP `urp_used_order_id`;
+ALTER TABLE `tbl_user_reward_points` CHANGE `urp_used_order_no` `urp_used_order_id` BIGINT NOT NULL;
+
+ALTER TABLE `tbl_user_reward_point_breakup` DROP `urpbreakup_used_order_id`;
+ALTER TABLE `tbl_user_reward_point_breakup` CHANGE `urpbreakup_used_order_no` `urpbreakup_used_order_id` BIGINT NOT NULL;
+
+ALTER TABLE `tbl_user_transactions` DROP `utxn_order_id`;
+ALTER TABLE `tbl_user_transactions` CHANGE `utxn_order_no` `utxn_order_id` BIGINT NOT NULL;
+
+ALTER TABLE `tbl_orders` CHANGE `order_id` `order_number` VARCHAR(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+ALTER TABLE `tbl_orders` CHANGE `order_no` `order_id` BIGINT(20) NOT NULL AUTO_INCREMENT;
+
+-- ---------Task 899377 Auto Increment Order Id ------ -- 
+ALTER TABLE `tbl_badges` ADD `badge_updated_on` DATETIME NOT NULL AFTER `badge_active`;
+ALTER TABLE `tbl_shop_collections` ADD `scollection_updated_on` DATETIME NOT NULL AFTER `scollection_active`;
+ALTER TABLE `tbl_extra_pages` ADD `epage_updated_on` DATETIME NOT NULL AFTER `epage_default_content`;
+
+ALTER TABLE `tbl_products` CHANGE `product_id` `product_id` INT UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tbl_products_lang` CHANGE `productlang_product_id` `productlang_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_products_to_plugin_product` CHANGE `ptpp_product_id` `ptpp_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_commission_settings` CHANGE `commsetting_product_id` `commsetting_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_commission_setting_history` CHANGE `csh_commsetting_product_id` `csh_commsetting_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_coupon_to_products` CHANGE `ctp_product_id` `ctp_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_polling_to_products` CHANGE `ptp_product_id` `ptp_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_products_browsing_history` CHANGE `pbhistory_product_id` `pbhistory_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_products_min_price` CHANGE `pmp_product_id` `pmp_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_products_shipped_by_seller` CHANGE `psbs_product_id` `psbs_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_products_shipping` CHANGE `ps_product_id` `ps_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_products_temp_ids` CHANGE `pti_product_id` `pti_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_product_numeric_attributes` CHANGE `prodnumattr_product_id` `prodnumattr_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_product_product_recommendation` CHANGE `ppr_viewing_product_id` `ppr_viewing_product_id` INT UNSIGNED NOT NULL, CHANGE `ppr_recommended_product_id` `ppr_recommended_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_product_specifications` CHANGE `prodspec_product_id` `prodspec_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_product_specifics` CHANGE `ps_product_id` `ps_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_product_text_attributes` CHANGE `prodtxtattr_product_id` `prodtxtattr_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_product_to_category` CHANGE `ptc_product_id` `ptc_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_product_to_options` CHANGE `prodoption_product_id` `prodoption_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_product_to_tags` CHANGE `ptt_product_id` `ptt_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_product_to_tax` CHANGE `ptt_product_id` `ptt_product_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_related_products` CHANGE `related_sellerproduct_id` `related_sellerproduct_id` INT UNSIGNED NOT NULL, CHANGE `related_recommend_sellerproduct_id` `related_recommend_sellerproduct_id` INT UNSIGNED NOT NULL;
+
+ALTER TABLE `tbl_seller_products` CHANGE `selprod_id` `selprod_id` INT UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tbl_seller_products_lang` CHANGE `selprodlang_selprod_id` `selprodlang_selprod_id` INT UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tbl_abandoned_cart` CHANGE `abandonedcart_selprod_id` `abandonedcart_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_ads_batch_products` CHANGE `abprod_selprod_id` `abprod_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_products` CHANGE `op_selprod_id` `op_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_products` CHANGE `op_batch_selprod_id` `op_batch_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_products_min_price` CHANGE `pmp_selprod_id` `pmp_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_product_special_prices` CHANGE `splprice_selprod_id` `splprice_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_product_stock_hold` CHANGE `pshold_selprod_id` `pshold_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_product_to_groups` CHANGE `ptg_selprod_id` `ptg_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_product_volume_discount` CHANGE `voldiscount_selprod_id` `voldiscount_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_seller_products_temp_ids` CHANGE `spti_selprod_id` `spti_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_seller_product_options` CHANGE `selprodoption_selprod_id` `selprodoption_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_seller_product_policies` CHANGE `sppolicy_selprod_id` `sppolicy_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_seller_product_reviews` CHANGE `spreview_selprod_id` `spreview_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_seller_product_specifics` CHANGE `sps_selprod_id` `sps_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_shop_collection_products` CHANGE `scp_selprod_id` `scp_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_user_favourite_products` CHANGE `ufp_selprod_id` `ufp_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_user_wish_list_products` CHANGE `uwlp_selprod_id` `uwlp_selprod_id` INT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_seller_products_to_plugin_selprod` CHANGE `spps_selprod_id` `spps_selprod_id` INT UNSIGNED NOT NULL;
+
+ALTER TABLE `tbl_attached_files` CHANGE `afile_id` `afile_id` INT UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tbl_attached_files_temp` CHANGE `afile_id` `afile_id` INT UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tbl_orders_status_history` CHANGE `oshistory_id` `oshistory_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tbl_cron_log` CHANGE `cronlog_id` `cronlog_id` INT UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `tbl_order_products` CHANGE `op_id` `op_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tbl_orders_status_history` CHANGE `oshistory_op_id` `oshistory_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_cancel_requests` CHANGE `ocrequest_op_id` `ocrequest_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_products_lang` CHANGE `oplang_op_id` `oplang_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_product_charges` CHANGE `opcharge_op_id` `opcharge_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_product_digital_download_links` CHANGE `opddl_op_id` `opddl_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_product_settings` CHANGE `opsetting_op_id` `opsetting_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_product_shipment` CHANGE `opship_op_id` `opship_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_product_shipping` CHANGE `opshipping_op_id` `opshipping_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_product_shipping_lang` CHANGE `opshippinglang_op_id` `opshippinglang_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_product_specifics` CHANGE `ops_op_id` `ops_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_product_to_shipping_users` CHANGE `optsu_op_id` `optsu_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_prod_charges_logs` CHANGE `opchargelog_op_id` `opchargelog_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_prod_charges_logs_lang` CHANGE `opchargeloglang_op_id` `opchargeloglang_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_return_requests` CHANGE `orrequest_op_id` `orrequest_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_user_address` CHANGE `oua_op_id` `oua_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_user_transactions` CHANGE `utxn_op_id` `utxn_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_product_responses` CHANGE `opr_op_id` `opr_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_product_shipment_pickup` CHANGE `opsp_op_id` `opsp_op_id` BIGINT UNSIGNED NOT NULL;
+ALTER TABLE `tbl_order_product_plugin_specifics` CHANGE `opps_op_id` `opps_op_id` BIGINT UNSIGNED NOT NULL;
+
+
+ALTER TABLE `tbl_addresses` CHANGE `addr_id` `addr_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tbl_order_product_shipping` CHANGE `opshipping_pickup_addr_id` `opshipping_pickup_addr_id` BIGINT UNSIGNED NOT NULL;
+
+
+-- ---- Admin Password Db Query ---- --
+UPDATE `tbl_admin` SET `admin_password` = '$2y$12$coWTcJUEggZzj7.PjE/Bt.MnIx6Yvt2tNd6GBGcHhJ3K/gZXnxMY.' WHERE `tbl_admin`.`admin_id` = 1;
+UPDATE `tbl_admin` SET `admin_password_old` = '' WHERE `tbl_admin`.`admin_id` = 1;
+-- ---- Admin Password Db Query ---- --
+
+INSERT INTO `tbl_extra_pages` (`epage_id`, `epage_identifier`, `epage_type`, `epage_content_for`, `epage_active`, `epage_default`, `epage_default_content`) VALUES (NULL, 'Admin Zones', '45', '1', '1', '0', '<br />\r\n\r\n<h2>Zones Content File</h2> <br />\r\n\r\n<h3>Zone Identifier</h3>User defined unique identifier for the Zone. This works as a unique key for the system to identify a particular Zone. <br />\r\n<br />\r\n\r\n<h3>Zone name</h3>User defined name for the Zone.<br />\r\n<br />\r\n\r\n<h3>Active</h3>User defined field to mark a particular zone as active in the system or not. Possible inputs for this field are \'Yes\' &amp; \'No\'. Default value should be set as \'Yes\'.');
+INSERT INTO `tbl_extra_pages_lang` (`epagelang_epage_id`, `epagelang_lang_id`, `epage_label`, `epage_content`) VALUES ((select epage_id from tbl_extra_pages where epage_type='45'), '1', 'Admin Zones', '<br />\r\n\r\n<h2>Zones Content File</h2> <br />\r\n\r\n<h3>Zone Identifier</h3>User defined unique identifier for the Zone. This works as a unique key for the system to identify a particular Zone. <br />\r\n<br />\r\n\r\n<h3>Zone name</h3>User defined name for the Zone.<br />\r\n<br />\r\n\r\n<h3>Active</h3>User defined field to mark a particular zone as active in the system or not. Possible inputs for this field are \'Yes\' &amp; \'No\'. Default value should be set as \'Yes\'.');
+

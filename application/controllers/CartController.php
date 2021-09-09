@@ -88,15 +88,29 @@ class CartController extends MyAppController
         $srch->addOrder('uwlp_added_on', 'DESC');
         $rs = $srch->getResultSet();
         $saveForLaterProducts = FatApp::getDb()->fetchAll($rs);
+
+        $availableProductsArr = [
+            'notAvailable' => [],
+            'available' => [],
+            'saveForLater' => [],
+        ];
+
         if (count($saveForLaterProducts)) {
             foreach ($saveForLaterProducts as &$arr) {
                 $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
+
+                if (true === MOBILE_APP_API_CALL) {
+                    $slProduct['discount'] = ($arr['special_price_found'] && $arr['selprod_price'] > $arr['theprice']) ? CommonHelper::showProductDiscountedText($arr, $this->siteLangId) : '';
+                    $arr['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($arr['selprod_id']));
+                    $arr['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($arr['product_id'], "THUMB", $arr['selprod_id'], 0, $this->siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+                    $availableProductsArr['saveForLater'][] = $arr;
+                }
             }
         }
         /* ] */
 
-        if (0 < count($productsArr) || true === MOBILE_APP_API_CALL || 0 < count($saveForLaterProducts)) {
-            foreach ($productsArr as $product) {
+        if (0 < count($productsArr) || true === MOBILE_APP_API_CALL || 0 < count($saveForLaterProducts)) {            
+            foreach ($productsArr as &$product) {
                 switch ($product['fulfillment_type']) {
                     case Shipping::FULFILMENT_SHIP:
                         $fulfillmentProdArr[Shipping::FULFILMENT_SHIP][] = $product['selprod_id'];
@@ -108,6 +122,26 @@ class CartController extends MyAppController
                         $fulfillmentProdArr[Shipping::FULFILMENT_SHIP][] = $product['selprod_id'];
                         $fulfillmentProdArr[Shipping::FULFILMENT_PICKUP][] = $product['selprod_id'];
                         break;
+                }
+
+                if (true === MOBILE_APP_API_CALL) {
+                    $product['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id']));
+                    $product['shopUrl'] = UrlHelper::generateFullUrl('Shops', 'View', array($product['shop_id']));
+                    $product['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $this->siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+                    $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $this->siteLangId) : '';
+                    $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], false, false, false);
+                    $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
+
+                    $type = '';
+
+                    /* Cart Page tab selection. */
+                    if ($fulfilmentType == Shipping::FULFILMENT_SHIP) {
+                        $type = $product['fulfillment_type'] != Shipping::FULFILMENT_PICKUP ? 'available' : 'notAvailable';
+                    } else {
+                        $type = $product['fulfillment_type'] != Shipping::FULFILMENT_SHIP ? 'available' : 'notAvailable';
+                    }
+
+                    $availableProductsArr[$type][] = $product;
                 }
             }
 
@@ -147,6 +181,7 @@ class CartController extends MyAppController
                 $this->set('cartProductsCount', count($productsArr));
                 $this->set('shipProductsCount', count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]));
                 $this->set('pickUpProductsCount', count($fulfillmentProdArr[Shipping::FULFILMENT_PICKUP]));
+                $this->set('availableProductsArr', $availableProductsArr);
             }
 
             $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId);
@@ -791,9 +826,10 @@ class CartController extends MyAppController
             $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id'], Cart::PAGE_TYPE_CART);
             $cartObj->setFulfilmentType($fulfilmentType);
             $cartObj->setCartCheckoutType($fulfilmentType);
-            $productsArr = $cartObj->getProducts($this->siteLangId);
+            $cartObj->getProducts($this->siteLangId);
+            $shipmentAvailableItemsCount = $cartObj->getShipmentItemsCount();
             $cartSummary = $cartObj->getCartFinancialSummary($this->siteLangId);
-            $this->set('products', $productsArr);
+            $this->set('productsCount', $shipmentAvailableItemsCount);
             $this->set('cartSummary', $cartSummary);
             $this->_template->render();
         }
@@ -818,9 +854,10 @@ class CartController extends MyAppController
             $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id'], Cart::PAGE_TYPE_CART);
             $cartObj->setFulfilmentType($fulfilmentType);
             $cartObj->setCartCheckoutType($fulfilmentType);
-            $productsArr = $cartObj->getProducts($this->siteLangId);
+            $cartObj->getProducts($this->siteLangId);
+            $shipmentAvailableItemsCount = $cartObj->getShipmentItemsCount();
             $cartSummary = $cartObj->getCartFinancialSummary($this->siteLangId);
-            $this->set('products', $productsArr);
+            $this->set('productsCount', $shipmentAvailableItemsCount);
             $this->set('cartSummary', $cartSummary);
             $this->_template->render();
         }

@@ -597,14 +597,14 @@ trait ShippingServices
         $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
 
         $cacheKey = Shipping::CARRIER_CACHE_KEY_NAME . $this->langId . $this->shippingService->keyName;
-        $carriers = FatCache::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
+        $carriers = CacheHelper::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
         if ($carriers) {
             $carriers = unserialize($carriers);
         } else {
             $limit = ('ShipStationShipping' == (get_class($this->shippingService))::KEY_NAME ? 0 : 1);
             $carriers = $this->shippingService->getCarriers($limit);
             if (!empty($carriers)) {
-                FatCache::set($cacheKey, serialize($carriers), '.txt');
+                CacheHelper::create($cacheKey, serialize($carriers), CacheHelper::TYPE_SHIPING_API);
             }
         }
         if (empty($carriers)) {
@@ -613,7 +613,7 @@ trait ShippingServices
         }
 
         $orderObj = new Orders($orderData['op_order_id']);
-        $addresses = $orderObj->getOrderAddresses($orderData['op_order_id'], $orderData['op_order_id']);
+        $addresses = $orderObj->getOrderAddresses($orderData['op_order_id'], $orderData['op_id']);
 
         $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : array();
 
@@ -669,13 +669,13 @@ trait ShippingServices
             $carrierCode = !empty($carrier) && array_key_exists('code', $carrier) ? $carrier['code'] : '';
             $cacheKeyArr = array_merge($cacheKeyArr, [$carrierCode, $this->langId]);
             $cacheKey = Shipping::RATE_CACHE_KEY_NAME . md5(json_encode($cacheKeyArr));
-            $shippingRates = FatCache::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
+            $shippingRates = CacheHelper::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
             if ($shippingRates) {
                 $shippingRates = unserialize($shippingRates);
             } else {
                 $shippingRates = $this->shippingService->getRates($carrierCode, $shopAddress['postalCode']);
                 if (!empty($shippingRates)) {
-                    FatCache::set($cacheKey, serialize($shippingRates), '.txt');
+                    CacheHelper::create($cacheKey, serialize($shippingRates),CacheHelper::TYPE_SHIPING_API);
                 } else {
                     SystemLog::system($this->shippingService->getError(),'SelProd ID-'.$orderData['op_id']);
                     continue;

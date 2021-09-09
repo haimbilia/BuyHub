@@ -101,7 +101,7 @@ class Paypal extends PaymentMethodBase
      * @param  mixed $orderId
      * @return bool
      */
-    public function createOrder(string $orderId): bool
+    public function createOrder($orderId): bool
     {
         //=== Create New Order Request
         $request = new OrdersCreateRequest();
@@ -142,7 +142,7 @@ class Paypal extends PaymentMethodBase
      * @param  string $orderId
      * @return array
      */
-    private function buildRequestBody(string $orderId): array
+    private function buildRequestBody($orderId): array
     {
         $orderPaymentObj = new OrderPayment($orderId, $this->langId);
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();

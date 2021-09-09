@@ -184,7 +184,7 @@ class PatchUpdateController extends AdminBaseController
             $taxObj->updateLangData($this->adminLangId, $data);
         }
 
-        $this->set('msg', $this->str_add_record);
+        $this->set('msg', Labels::getLabel('LBL_Record_Added_Successfully', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

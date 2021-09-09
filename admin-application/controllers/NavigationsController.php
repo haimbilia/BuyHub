@@ -321,7 +321,10 @@ class NavigationsController extends AdminBaseController
         if (!$navLinkObj->save()) {
             Message::addErrorMessage($navLinkObj->getError());
             FatUtility::dieWithError(Message::getHtml());
-        }
+        } 
+        
+        CacheHelper::clear(CacheHelper::TYPE_NAVIGATION);
+        
         $newTabLangId = 0;
         if ($nlink_id > 0) {
             $languages = Language::getAllNames();
@@ -449,7 +452,9 @@ class NavigationsController extends AdminBaseController
                 FatUtility::dieWithError(Message::getHtml());
             }
         }
-
+        
+        CacheHelper::clear(CacheHelper::TYPE_NAVIGATION);
+        
         $newTabLangId = 0;
         if ($nlink_id > 0) {
             $languages = Language::getAllNames();

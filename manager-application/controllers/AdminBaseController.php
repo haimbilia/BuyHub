@@ -5,10 +5,7 @@ class AdminBaseController extends FatController
     protected $objPrivilege;
     protected $unAuthorizeAccess;
     protected $admin_id;
-    protected $str_add_record;
     protected $str_update_record;
-    protected $str_export_successfull;
-    protected $str_no_record;
     protected $str_invalid_request;
     protected $str_invalid_request_id;
     protected $str_delete_record;
@@ -21,41 +18,22 @@ class AdminBaseController extends FatController
     {
         parent::__construct($action);
 
-        $controllerName = get_class($this);
-        $arr = explode('-', FatUtility::camel2dashed($controllerName));
-        array_pop($arr);
-        $urlController = implode('-', $arr);
-        $controllerName = ucfirst(FatUtility::dashed2Camel($urlController));
-        if ($controllerName != 'AdminGuest') {
+        if (get_class($this) != 'AdminGuestController') {
             $_SESSION['admin_referer_page_url'] = UrlHelper::getCurrUrl();
         }
 
         if (!AdminAuthentication::isAdminLogged()) {
             CommonHelper::initCommonVariables(true);
-            if (FatUtility::isAjaxCall()) {
-                // FatUtility::dieWithError("Your session seems to be expired, Please try after reloading the page.");
-                Message::addErrorMessage(Labels::getLabel('LBL_Your_session_seems_to_be_expired', CommonHelper::getLangId()));
-                FatUtility::dieWithError(Message::getHtml());
-            }
-            FatApp::redirectUser(UrlHelper::generateUrl('AdminGuest', 'loginForm'));
+            $msg = Labels::getLabel('LBL_Your_session_seems_to_be_expired', CommonHelper::getLangId());
+            $redirect =  FatApp::redirectUser(UrlHelper::generateUrl('AdminGuest', 'loginForm'));
+            LibHelper::exitWithError($msg, true, $redirect);
         }
 
         $this->objPrivilege = AdminPrivilege::getInstance();
-        /* $this->checkPermissions(); */
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
 
-        if (!FatUtility::isAjaxCall()) {
-            $session_element_name = AdminAuthentication::SESSION_ELEMENT_NAME;
-            $cookie_name = $session_element_name . 'layout';
-            //@todo-ask::: Confirm about the usage of $_COOKIE.
-            $selected_admin_dashboard_layout = isset($_COOKIE[$cookie_name]) ? (int) $_COOKIE[$cookie_name] : 0;
-            $this->set('selected_admin_dashboard_layout', $selected_admin_dashboard_layout);
-
-            $admin_dashboard_layouts = Admin::$admin_dashboard_layouts;
-            $this->set('admin_dashboard_layouts', $admin_dashboard_layouts);
-        }
-        $this->set("bodyClass", '');
         $this->setCommonValues();
+        $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css');
     }
 
     /*
@@ -70,17 +48,27 @@ class AdminBaseController extends FatController
         $this->siteLangCode = CommonHelper::getLangCode();
         $this->siteLangCountryCode = CommonHelper::getLangCountryCode();
 
-        $this->unAuthorizeAccess = Labels::getLabel('LBL_Unauthorized_Access', $this->adminLangId);
-        $this->str_add_record = Labels::getLabel('LBL_Record_Added_Successfully', $this->adminLangId);
-        $this->str_update_record = Labels::getLabel('LBL_Record_Updated_Successfully', $this->adminLangId);
-        $this->str_no_record = Labels::getLabel('LBL_No_Record_Found', $this->adminLangId);
-        $this->str_invalid_request_id = Labels::getLabel('LBL_Invalid_Request_Id', $this->adminLangId);
-        $this->str_invalid_request = Labels::getLabel('LBL_Invalid_Request', $this->adminLangId);
-        $this->str_delete_record = Labels::getLabel('LBL_Record_Deleted_Successfully', $this->adminLangId);
-        $this->str_invalid_Action = Labels::getLabel('LBL_Invalid_Action', $this->adminLangId);
-        $this->str_setup_successful = Labels::getLabel('LBL_Setup_Successful', $this->adminLangId);
-        $this->str_export_successfull = Labels::getLabel('LBL_Export_Successful', $this->adminLangId);
-        $this->str_add_update_record = $this->str_update_record;
+        $adminLangLabelCache = FatCache::get('adminLangLabelCache' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$adminLangLabelCache) {
+            $arr = [
+                'str_update_record' => Labels::getLabel('LBL_Record_Updated_Successfully', $this->adminLangId),
+                'str_invalid_request_id' => Labels::getLabel('LBL_Invalid_Request_Id', $this->adminLangId),
+                'str_invalid_request' => Labels::getLabel('LBL_Invalid_Request', $this->adminLangId),
+                'str_delete_record' => Labels::getLabel('LBL_Record_Deleted_Successfully', $this->adminLangId),
+                'str_invalid_Action' => Labels::getLabel('LBL_Invalid_Action', $this->adminLangId),
+                'str_setup_successful' => Labels::getLabel('LBL_Setup_Successful', $this->adminLangId)
+            ];
+            FatCache::set('adminLangLabelCache' . $this->adminLangId, serialize($arr), '.txt');
+        } else {
+            $arr =  unserialize($adminLangLabelCache);
+        }
+
+        $this->str_update_record = $arr['str_update_record'];
+        $this->str_invalid_request_id = $arr['str_invalid_request_id'];
+        $this->str_invalid_request = $arr['str_invalid_request'];
+        $this->str_delete_record = $arr['str_delete_record'];
+        $this->str_invalid_Action = $arr['str_invalid_Action'];
+        $this->str_setup_successful = $arr['str_setup_successful'];
 
         $defultCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
         $defaultCountryCode = Countries::getAttributesById($defultCountryId, 'country_code');
@@ -468,19 +456,19 @@ class AdminBaseController extends FatController
 
         if (Product::PRODUCT_TYPE_PHYSICAL == $productType) {
             $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, 0, true, true);
-            if ($type == 'REQUESTED_CATALOG_PRODUCT') { 
+            if ($type == 'REQUESTED_CATALOG_PRODUCT') {
                 $fulFillmentArr = Shipping::getFulFillmentArr($this->adminLangId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
                 $fulFillmentTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->adminLangId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, ['class' => 'fieldsVisibility-js'], Labels::getLabel('LBL_Select', $this->adminLangId));
-                $fulFillmentTypeFld->requirements()->setRequired();                        
+                $fulFillmentTypeFld->requirements()->setRequired();
             }
             $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
-            if($fulFillmentTypeFld){
+            if ($fulFillmentTypeFld) {
                 $profileUnReqObj = new FormFieldRequirement('shipping_profile', Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId));
                 $profileUnReqObj->setRequired(false);
                 $profileReqObj = new FormFieldRequirement('shipping_profile', Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId));
                 $profileReqObj->setRequired(true);
 
-                $fulFillmentTypeFld->requirements()->addOnChangerequirementUpdate(Shipping::FULFILMENT_PICKUP ,'eq', 'shipping_profile', $profileUnReqObj);
+                $fulFillmentTypeFld->requirements()->addOnChangerequirementUpdate(Shipping::FULFILMENT_PICKUP, 'eq', 'shipping_profile', $profileUnReqObj);
                 $fulFillmentTypeFld->requirements()->addOnChangerequirementUpdate(Shipping::FULFILMENT_PICKUP, 'ne', 'shipping_profile', $profileReqObj);
             }
         }

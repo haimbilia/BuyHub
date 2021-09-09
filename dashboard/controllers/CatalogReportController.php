@@ -179,7 +179,7 @@ class CatalogReportController extends SellerBaseController
 
     private function getFormColumns(int $langId)
     {
-        $sellerCatalogReportCacheVar = FatCache::get('sellerCatalogReportCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        $sellerCatalogReportCacheVar = CacheHelper::get('sellerCatalogReportCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$sellerCatalogReportCacheVar) {
             $arr = [
                 'product_name'    =>    Labels::getLabel('LBL_Product', $langId),
@@ -201,6 +201,7 @@ class CatalogReportController extends SellerBaseController
                 'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $langId),
                 'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $langId)
             ];
+            CacheHelper::create('sellerCatalogReportCacheVar' . $this->siteLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($sellerCatalogReportCacheVar);
         }

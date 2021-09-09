@@ -111,6 +111,8 @@ class ZonesController extends AdminBaseController
             $zoneId = $record->getMainTableRecordId();
             $newTabLangId=FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
+        
+        CacheHelper::clear(CacheHelper::TYPE_ZONE);
         $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
         $this->set('zoneId', $zoneId);
         $this->set('langId', $newTabLangId);
@@ -194,7 +196,7 @@ class ZonesController extends AdminBaseController
                 break;
             }
         }
-
+        CacheHelper::clear(CacheHelper::TYPE_ZONE);
         $this->set('msg', $this->str_setup_successful);
         $this->set('zoneId', $zoneId);
         $this->set('langId', $newTabLangId);
@@ -296,5 +298,6 @@ class ZonesController extends AdminBaseController
             Message::addErrorMessage($zoneObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
+        CacheHelper::clear(CacheHelper::TYPE_ZONE);
     }
 }

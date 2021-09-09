@@ -74,13 +74,13 @@ class Badge extends MyAppModel
      */
     public static function getTypeArr(int $langId): array
     {
-        $arr = FatCache::get('getBadgeTypeArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        $arr = CacheHelper::get('getBadgeTypeArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$arr) {
             $arr = [
                 self::TYPE_BADGE => Labels::getLabel('LBL_BADGE', $langId),
                 self::TYPE_RIBBON => Labels::getLabel('LBL_RIBBON', $langId)
             ];
-            FatCache::set('getBadgeTypeArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            CacheHelper::create('getBadgeTypeArr' . $langId, FatUtility::convertToJson($arr), CacheHelper::TYPE_LABELS);
             return $arr;
         }
 
@@ -95,13 +95,13 @@ class Badge extends MyAppModel
      */
     public static function getConditionTypeArr(int $langId): array
     {
-        $arr = FatCache::get('getBadgeConditionTypeArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        $arr = CacheHelper::get('getBadgeConditionTypeArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$arr) {
             $arr = [
                 self::COND_MANUAL => Labels::getLabel('LBL_MANUAL', $langId),
                 self::COND_AUTO => Labels::getLabel('LBL_AUTOMATIC', $langId)
             ];
-            FatCache::set('getBadgeConditionTypeArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            CacheHelper::create('getBadgeConditionTypeArr' . $langId, FatUtility::convertToJson($arr), CacheHelper::TYPE_LABELS);
             return $arr;
         }
 
@@ -116,7 +116,7 @@ class Badge extends MyAppModel
      */
     public static function getShapeTypesArr(int $langId): array
     {
-        $arr = FatCache::get('getBadgeShapeTypesArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        $arr = CacheHelper::get('getBadgeShapeTypesArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$arr) {
             $arr = [
                 self::SHAPE_RECTANGLE => Labels::getLabel('LBL_RECTANGLE', $langId),
@@ -125,7 +125,7 @@ class Badge extends MyAppModel
                 self::SHAPE_TRIANGLE => Labels::getLabel('LBL_TRIANGLE', $langId),
                 self::SHAPE_CIRCLE => Labels::getLabel('LBL_CIRCLE', $langId),
             ];
-            FatCache::set('getBadgeShapeTypesArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            CacheHelper::create('getBadgeShapeTypesArr' . $langId, FatUtility::convertToJson($arr), CacheHelper::TYPE_LABELS);
             return $arr;
         }
 
@@ -140,13 +140,13 @@ class Badge extends MyAppModel
      */
     public static function getRibbonPostionArr(int $langId): array
     {
-        $arr = FatCache::get('getRibbonPostionArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        $arr = CacheHelper::get('getRibbonPostionArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$arr) {
             $arr = [
                 self::RIBB_POS_TRIGHT => Labels::getLabel("LBL_TOP_RIGHT", $langId),
                 self::RIBB_POS_TLEFT => Labels::getLabel("LBL_TOP_LEFT", $langId),
             ];
-            FatCache::set('getRibbonPostionArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            CacheHelper::create('getRibbonPostionArr' . $langId, FatUtility::convertToJson($arr), CacheHelper::TYPE_LABELS);
             return $arr;
         }
 
@@ -161,13 +161,13 @@ class Badge extends MyAppModel
      */
     public static function getApprovalStatusArr(int $langId): array
     {
-        $arr = FatCache::get('getBadgeApprovalStatusArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        $arr = CacheHelper::get('getBadgeApprovalStatusArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$arr) {
             $arr = [
                 self::APPROVAL_OPEN => Labels::getLabel('LBL_OPEN', $langId),
                 self::APPROVAL_REQUIRED => Labels::getLabel('LBL_REQUIRED', $langId),
             ];
-            FatCache::set('getBadgeApprovalStatusArr' . $langId, FatUtility::convertToJson($arr), '.txt');
+            CacheHelper::create('getBadgeApprovalStatusArr' . $langId, FatUtility::convertToJson($arr), CacheHelper::TYPE_LABELS);
             return $arr;
         }
 
@@ -319,8 +319,7 @@ class Badge extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(['blnk.blinkcond_id', 'blnk.blinkcond_badge_id', 'bdg.badge_display_inside', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name', 'blc.badgelink_id', 'blc.badgelink_record_id', 'breq.breq_id', 'shpprod.shop_id']);
 
-        $rs = $srch->getResultSet();
-        return FatApp::getDb()->fetchAll($rs);
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
     /**
@@ -354,7 +353,7 @@ class Badge extends MyAppModel
             $srch->joinBadge($langId);
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
-            $srch->addMultipleFields(['blinkcond_badge_id', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name']);
+            $srch->addMultipleFields(['blinkcond_badge_id', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name', $ss['sstats_shop_id'] . ' as shop_id']);
             if (false === $addGroupBy) {
                 $srch->addFld('blinkcond_id');
             }
@@ -394,8 +393,8 @@ class Badge extends MyAppModel
                 $srch->addGroupBy('blinkcond_badge_id');
             }
 
-            $shopAutoBadges[$ss['sstats_shop_id']] = FatApp::getDb()->fetchAll($srch->getResultSet());
+            $shopAutoBadges = array_merge($shopAutoBadges, FatApp::getDb()->fetchAll($srch->getResultSet()));
         }
-        return (1 == count($shopIdArr) ? current($shopAutoBadges) : $shopAutoBadges);
+        return $shopAutoBadges;
     }
 }

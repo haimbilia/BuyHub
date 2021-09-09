@@ -19,7 +19,7 @@ $this->includeTemplate('_partial/header/common-head.php', $commonHeadData, false
 echo $this->writeMetaTags();
 echo $this->getJsCssIncludeHtml(!CONF_DEVELOPMENT_MODE, true, false);
 $commonHeadHtmlData = array(
-	'bodyClass'         =>   $bodyClass,
+	'bodyClass'         =>   isset($bodyClass) ? $bodyClass : '',
 	'includeEditor'	    =>   $includeEditor
 );
 $this->includeTemplate('_partial/header/common-header-html.php', $commonHeadHtmlData, false);

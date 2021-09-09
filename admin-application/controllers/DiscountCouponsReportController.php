@@ -32,10 +32,11 @@ class DiscountCouponsReportController extends AdminBaseController
         $page = (empty($page) || $page <= 0) ? 1 : FatUtility::int($page);
 
         $srch = CouponHistory::getSearchObject();
+        $srch->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_id = couponhistory_order_id', 'o');
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'user_id = couponhistory_user_id');
         $srch->joinTable(DiscountCoupons::DB_TBL, 'LEFT OUTER JOIN', 'coupon_id = couponhistory_coupon_id');
         $srch->joinTable(Credential::DB_TBL, 'LEFT OUTER JOIN', 'credential_user_id = user_id');
-        $srch->addMultipleFields(array('coupon_code', 'couponhistory_id', 'couponhistory_coupon_id', 'couponhistory_order_id', 'couponhistory_user_id', 'couponhistory_amount', 'couponhistory_added_on', 'credential_username'));
+        $srch->addMultipleFields(array('coupon_code', 'couponhistory_id', 'couponhistory_coupon_id', 'couponhistory_order_id', 'order_number as couponhistory_order_no', 'couponhistory_user_id', 'couponhistory_amount', 'couponhistory_added_on', 'credential_username'));
         $date_from = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
         if (!empty($date_from)) {
             $srch->addCondition('couponhistory_added_on', '>=', $date_from . ' 00:00:00');
@@ -59,7 +60,7 @@ class DiscountCouponsReportController extends AdminBaseController
             $arr = array(Labels::getLabel('LBL_Coupon_Code', $this->adminLangId), Labels::getLabel('LBL_Order_Id', $this->adminLangId), Labels::getLabel('LBL_Customer', $this->adminLangId), Labels::getLabel('LBL_Amount', $this->adminLangId), Labels::getLabel('LBL_Date', $this->adminLangId));
             array_push($sheetData, $arr);
             while ($row = FatApp::getDb()->fetch($rs)) {
-                $arr = array($row['coupon_code'], $row['couponhistory_order_id'], $row['credential_username'], FatApp::getConfig('conf_currency_symbol') . $row['couponhistory_amount'],  FatDate::format($row['couponhistory_added_on']));
+                $arr = array($row['coupon_code'], $row['couponhistory_order_no'], $row['credential_username'], FatApp::getConfig('conf_currency_symbol') . $row['couponhistory_amount'],  FatDate::format($row['couponhistory_added_on']));
                 array_push($sheetData, $arr);
             }
 

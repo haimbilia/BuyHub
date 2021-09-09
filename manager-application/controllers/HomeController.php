@@ -5,11 +5,7 @@ class HomeController extends AdminBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewAdminDashboard($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditAdminDashboard($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewAdminDashboard($this->admin_id);
     }
 
     public function index()
@@ -161,8 +157,8 @@ class HomeController extends AdminBaseController
         }
 
         //$saleStats = Stats::getTotalSalesStats();
-        $this->_template->addJs(array('js/chartist.min.js', 'js/jquery.counterup.js', 'js/slick.min.js', 'js/enscroll-0.6.2.min.js'));
-        $this->_template->addCss(array('css/chartist.css'));
+        /* $this->_template->addJs(array('js/chartist.min.js', 'js/jquery.counterup.js', 'js/slick.min.js', 'js/enscroll-0.6.2.min.js'));
+        $this->_template->addCss(array('css/chartist.css')); */
 
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'Trident/7.0; rv:11.0') !== false) {
             $this->_template->addCss('css/ie.css');
