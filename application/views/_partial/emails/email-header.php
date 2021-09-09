@@ -7,7 +7,7 @@
                         <tr>
                             <td style="padding:15px;width:100%">
                                 <div style="margin: 0 auto; max-width:<?php echo (FatApp::getConfig('CONF_EMAIL_TEMPLATE_LOGO_RATIO', FatUtility::VAR_INT, 1) == EmailTemplates::LOGO_RATIO_SQUARE) ? '60px' : '150px' ?>;">
-                                    <a style="display: table;text-align:center;width: 100%; margin:0 auto;" href="https://v9.demo.yo-kart.com/">
+                                    <a style="display: table;text-align:center;width: 100%; margin:0 auto;" href="{website_url}">
                                         {Company_Logo}
                                     </a>
                                 </div>

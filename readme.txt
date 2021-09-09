@@ -271,6 +271,7 @@ Updates/Fixes :
     => 058034 - in blank db dummy data exist
     => 058112 - Stripe connect registration tab content not loading
     => 058142 - we should have zone export/import
+    => 058197 - on email header logo static link is there
 
 New Features:  
     => Admin shipped products listing page
