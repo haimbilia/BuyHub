@@ -300,6 +300,10 @@ class Labels extends MyAppModel
                 return false;
             }
         }
+        
+        if($type == Labels::TYPE_WEB){
+            CacheHelper::clear(CacheHelper::TYPE_LABELS);
+        }       
 
         return true;
     }

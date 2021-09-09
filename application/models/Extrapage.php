@@ -42,6 +42,7 @@ class Extrapage extends MyAppModel
     public const SELLER_INVENTORY_INSTRUCTIONS = 42;
     public const PRODUCT_REQUEST_INSTRUCTIONS = 43;
     public const ADMIN_TYPE_POLICY_POINTS = 44;
+    public const ADMIN_ZONE_MANAGEMENT_INSTRUCTIONS = 45;    
 
     public const CONTENT_PAGES = 0;
     public const CONTENT_IMPORT_INSTRUCTION = 1;

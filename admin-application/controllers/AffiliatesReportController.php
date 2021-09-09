@@ -161,7 +161,7 @@ class AffiliatesReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $affiliatesUserReportsCacheVar = FatCache::get('affiliatesUserReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $affiliatesUserReportsCacheVar = CacheHelper::get('affiliatesUserReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$affiliatesUserReportsCacheVar) {
             $arr = [
                 'name' => Labels::getLabel('LBL_Name', $this->adminLangId),
@@ -173,7 +173,7 @@ class AffiliatesReportController extends AdminBaseController
                 'totAffilateOrdersRevenue' => Labels::getLabel('LBL_Orders_Revenue', $this->adminLangId),
                 'affiliateLink' => Labels::getLabel('LBL_Affiliate_link', $this->adminLangId),
             ];
-            FatCache::set('affiliatesUserReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            CacheHelper::create('affiliatesUserReportsCacheVar' . $this->adminLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($affiliatesUserReportsCacheVar);
         }

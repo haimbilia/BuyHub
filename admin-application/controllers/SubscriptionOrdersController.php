@@ -40,7 +40,7 @@ class SubscriptionOrdersController extends AdminBaseController
         $srch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addMultipleFields(array('order_no', 'order_id', 'order_date_added', 'order_payment_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount'));
+        $srch->addMultipleFields(array('order_number', 'order_id', 'order_date_added', 'order_payment_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount'));
         
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
@@ -104,7 +104,7 @@ class SubscriptionOrdersController extends AdminBaseController
         $srch->doNotLimitRecords();
         $srch->joinOrderUser();
         $srch->addMultipleFields(
-            array('order_no', 'order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission',
+            array('order_number', 'order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission',
             'ou.user_name as buyer_user_name', 'ouc.credential_email as buyer_email', 'ou.user_phone_dcode as buyer_phone_dcode', 'ou.user_phone as buyer_phone', 'order_net_amount',   'order_pmethod_id', 'plugin_name', 'order_discount_total')
         );
         $srch->addCondition('order_id', '=', $order_id);
@@ -135,7 +135,7 @@ class SubscriptionOrdersController extends AdminBaseController
         
         $order['products'] = FatApp::getDb()->fetchAll($opRs, 'ossubs_id');
     
-        $orderObj = new Orders($order['order_no']);
+        $orderObj = new Orders($order['order_id']);
         $order['comments'] = $orderObj->getOrderComments($this->adminLangId, array("order_id" => $order['order_id']));
         $order['payments'] = $orderObj->getOrderPayments(array("order_id" => $order['order_id']));
 

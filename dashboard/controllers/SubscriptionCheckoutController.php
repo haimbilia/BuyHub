@@ -193,11 +193,9 @@ class SubscriptionCheckoutController extends LoggedUserController
         $orderData = array();
         /* add Order Data[ */
         $order_id = isset($_SESSION['subscription_shopping_cart']["order_id"]) ? $_SESSION['subscription_shopping_cart']["order_id"] : false;
-        $orderNo = isset($_SESSION['subscription_shopping_cart']["order_no"]) ? $_SESSION['subscription_shopping_cart']["order_no"] : false;
 
         $userId = $this->userParentId;
         $orderData['order_id'] = $order_id;
-        $orderData['order_no'] = $orderNo;
         $orderData['order_user_id'] = $userId;
         /* $orderData['order_user_name'] = $userDataArr['user_name'];
         $orderData['order_user_email'] = $userDataArr['credential_email'];
@@ -210,7 +208,6 @@ class SubscriptionCheckoutController extends LoggedUserController
         /* order extras[ */
         $orderData['extra'] = array(
             'oextra_order_id' => $order_id,
-            'oextra_order_no' => $orderNo,
             'order_ip_address' => $_SERVER['REMOTE_ADDR']
         );
 
@@ -883,7 +880,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $srch->addCondition('ossubs_till_date', '<=', $endDate);
         $srch->addCondition('ossubs_till_date', '!=', '0000-00-00');
         $srch->addCondition('user_autorenew_subscription', '!=', 1);
-        $srch->addMultipleFields(array('order_user_id', 'order_id', 'order_no', 'ossubs_id', 'ossubs_type', 'ossubs_price', 'ossubs_images_allowed', 'ossubs_products_allowed', 'ossubs_inventory_allowed', 'ossubs_plan_id', 'ossubs_interval', 'ossubs_frequency', 'ossubs_commission'));
+        $srch->addMultipleFields(array('order_user_id', 'order_id', 'order_number', 'ossubs_id', 'ossubs_type', 'ossubs_price', 'ossubs_images_allowed', 'ossubs_products_allowed', 'ossubs_inventory_allowed', 'ossubs_plan_id', 'ossubs_interval', 'ossubs_frequency', 'ossubs_commission'));
         /* $srch->addGroupBy('order_user_id');  */
         $srch->addOrder('ossubs_id', 'desc');
         $srch->doNotCalculateRecords();
@@ -909,9 +906,9 @@ class SubscriptionCheckoutController extends LoggedUserController
 
         $orderData = array();
         /* add Order Data[ */
-        $order_id = false;
+        $order_id = 0;
         $orderData['order_id'] = $order_id;
-        $orderData['order_no'] = 0;
+        $orderData['order_number'] = false;
         $orderData['order_user_id'] = $userId;
         /* $orderData['order_user_name'] = $userDataArr['user_name'];
         $orderData['order_user_email'] = $userDataArr['credential_email'];
@@ -925,7 +922,6 @@ class SubscriptionCheckoutController extends LoggedUserController
         /* order extras[ */
         $orderData['extra'] = array(
             'oextra_order_id' => $order_id,
-            'oextra_order_no' => 0,
             'order_ip_address' => $_SERVER['REMOTE_ADDR']
         );
 

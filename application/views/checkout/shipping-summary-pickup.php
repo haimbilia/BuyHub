@@ -6,8 +6,7 @@
             <div class="review-block__label">
                 <?php echo Labels::getLabel('LBL_Billing_to:', $siteLangId); ?>
                 <div class="review-block__link">
-                    <a class="link" href="javascript:void(0);"
-                        onClick="showAddressList()"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></a>
+                    <a class="link" href="javascript:void(0);" onClick="showAddressList()"><span><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?></span></a>
                 </div>
 
             </div>
@@ -22,7 +21,7 @@
                 <?php if (strlen($addresses['addr_phone']) > 0) {
                     $addrPhone = ValidateElement::formatDialCode($addresses['addr_phone_dcode']) . $addresses['addr_phone'];
                 ?>
-                <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
+                    <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
                 <?php } ?>
             </div>
 
@@ -44,168 +43,86 @@
         </div>
         <div class="step_body">
             <?php
-        ksort($shippingRates);
-        $levelNo = 0;
-        foreach ($shippingRates as $pickUpBy => $levelItems) { ?>
-            <ul class="list-cart list-cart-page list-shippings">
-                <?php
-                $seletedSlotId = '';
-                $seletedSlotDate = '';
-                $seletedAddrId = '';
-                if (isset($levelItems['products']) && count($levelItems['products']) > 0 && $pickUpBy == 0) {
-                    $productData = current($levelItems['products']);
-                    if (!empty($levelItems['pickup_address'])) {
-                        $address = $levelItems['pickup_address'];
-                        $seletedSlotId = $address['time_slot_id'];
-                        $seletedSlotDate = $address['time_slot_date'];
-                        $seletedAddrId = $address['addr_id'];
-                    }
-                ?>
-                <li class="shipping-select">
-                    <div class="shop-name">
-                        <h6> <i class="icn">
-                                <svg class="svg" width="20px" height="20px">
-                                    <use
-                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#manage-shop">
-                                    </use>
-                                </svg></i>
-                            <?php echo ($pickUpBy == Shipping::LEVEL_SHOP) ? $productData['shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, ''); ?>
-                        </h6>
-                    </div>
-                    <div class="shop-address js-slot-addr_<?php echo $pickUpBy; ?>">
-                        <?php if (!empty($levelItems['pickup_address'])) {
-                                $fromTime = date('H:i', strtotime($address["time_slot_from"]));
-                                $toTime = date('H:i', strtotime($address["time_slot_to"]));
-                            ?>
-                        <p><?php echo $address['addr_name'] . ', ' . $address['addr_address1']; ?>
-                            <?php if (strlen($address['addr_address2']) > 0) {
-                                        echo ", " . $address['addr_address2']; ?>
-                            <?php } ?>
-                        </p>
-                        <p><?php echo $address['addr_city'] . ", " . $address['state_name']; ?></p>
-                        <p><?php echo $address['country_name'] . ", " . $address['addr_zip']; ?></p>
-                        <?php if (strlen($address['addr_phone']) > 0) {
-                                    $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
+            ksort($shippingRates);
+            foreach ($shippingRates as $pickUpBy => $levelItems) {
+                /*  Physical Products */
+                if (isset($levelItems['products']) && 0 < count($levelItems['products'])) { ?>
+                    <ul class="list-cart list-cart-page list-shippings">
+                        <?php $seletedSlotId = $seletedSlotDate = $seletedAddrId = '';
+                        $productData = current($levelItems['products']);
+                        $shopId = 0 < $pickUpBy ? $pickUpBy : 0;
+
+                        if (!empty($levelItems['pickup_address'])) {
+                            $address = $levelItems['pickup_address'];
+                            $seletedSlotId = $address['time_slot_id'];
+                            $seletedSlotDate = $address['time_slot_date'];
+                            $seletedAddrId = $address['addr_id'];
+                        } ?>
+                        <!-- Header Shop Name-->
+                        <li class="shipping-select">
+                            <div class="shop-name">
+                                <h6> <i class="icn">
+                                        <svg class="svg" width="20px" height="20px">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#manage-shop">
+                                            </use>
+                                        </svg></i>
+                                    <?php echo 0 < $pickUpBy ? $productData['shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, ''); ?>
+                                </h6>
+                            </div>
+                            <div class="shop-address js-slot-addr_<?php echo $pickUpBy; ?>">
+                                <?php if (!empty($levelItems['pickup_address'])) {
+                                    $fromTime = date('H:i', strtotime($address["time_slot_from"]));
+                                    $toTime = date('H:i', strtotime($address["time_slot_to"]));
                                 ?>
-                        <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
-                        <?php } ?>
-                        <p class="time-txt"><i
-                                class="fas fa-calendar-day"></i><?php echo FatDate::format($address["time_slot_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?>
-                        </p>
-                        <?php } ?>
-                    </div>
-                    <div class="shipping-method js-slot-addr-<?php echo $pickUpBy; ?>"
-                        data-addr-id="<?php echo $seletedAddrId; ?>">
-                        <input type="hidden" name="slot_id[<?php echo $pickUpBy; ?>]" class="js-slot-id"
-                            data-level="<?php echo $pickUpBy; ?>" value="<?php echo $seletedSlotId; ?>">
-                        <input type="hidden" name="slot_date[<?php echo $pickUpBy; ?>]" class="js-slot-date"
-                            data-level="<?php echo $pickUpBy; ?>"
-                            value="<?php echo isset($seletedSlotDate) ? $seletedSlotDate : ''; ?>">
-                        <?php if (count($levelItems['pickup_options']) > 0) { ?>
-                        <a class="link pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0)"
-                            onclick="displayPickupAddress(<?php echo $pickUpBy; ?>, 0)">
-                            <?php
+                                    <p><?php echo $address['addr_name'] . ', ' . $address['addr_address1']; ?>
+                                        <?php if (strlen($address['addr_address2']) > 0) {
+                                            echo ", " . $address['addr_address2']; ?>
+                                        <?php } ?>
+                                    </p>
+                                    <p><?php echo $address['addr_city'] . ", " . $address['state_name']; ?></p>
+                                    <p><?php echo $address['country_name'] . ", " . $address['addr_zip']; ?></p>
+                                    <?php if (strlen($address['addr_phone']) > 0) {
+                                        $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
+                                    ?>
+                                        <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
+                                    <?php } ?>
+                                    <p class="time-txt"><i class="fas fa-calendar-day"></i><?php echo FatDate::format($address["time_slot_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?>
+                                    </p>
+                                <?php } ?>
+                            </div>
+                            <div class="shipping-method js-slot-addr-<?php echo $pickUpBy; ?>" data-addr-id="<?php echo $seletedAddrId; ?>">
+                                <input type="hidden" name="slot_id[<?php echo $pickUpBy; ?>]" class="js-slot-id" data-level="<?php echo $pickUpBy; ?>" value="<?php echo $seletedSlotId; ?>">
+                                <input type="hidden" name="slot_date[<?php echo $pickUpBy; ?>]" class="js-slot-date" data-level="<?php echo $pickUpBy; ?>" value="<?php echo isset($seletedSlotDate) ? $seletedSlotDate : ''; ?>">
+                                <?php if (count($levelItems['pickup_options']) > 0) { ?>
+                                    <a class="text-link pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0)" onclick="displayPickupAddress(<?php echo $pickUpBy; ?>, <?php echo $shopId; ?>)">
+                                        <?php
                                         if (!empty($levelItems['pickup_address'])) {
                                             echo Labels::getLabel('LBL_CHANGE_PICKUP', $siteLangId);
                                         } else {
                                             echo Labels::getLabel('LBL_SELECT_PICKUP', $siteLangId);
                                         }
                                         ?>
-                        </a>
-                        <?php } else {
+                                    </a>
+                                <?php } else {
                                     echo Labels::getLabel('MSG_NO_PICKUP_ADDRESS_CONFIGURED', $siteLangId);
                                 } ?>
-                    </div>
+                            </div>
+                        </li>
+                        <!-- Header -->
 
-
-                </li>
-                <?php } ?>
-                <?php if (isset($levelItems['products'])) {
-                    foreach ($levelItems['products'] as $product) {
-                        $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-                        $productUrl = !$isAppUser ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : 'javascript:void(0)';
-                        $shopUrl = !$isAppUser ? UrlHelper::generateUrl('Shops', 'View', array($product['shop_id'])) : 'javascript:void(0)';
-                        $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBPTHUMB", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'); ?>
-                <?php if ($levelNo != $pickUpBy) {
-                            if (count($levelItems['products']) > 0  && $pickUpBy != 0) { ?>
-                <li class="shipping-select">
-                    <div class="shop-name">
-                        <h6><i class="icn">
-                                <svg class="svg" width="20px" height="20px">
-                                    <use
-                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#manage-shop">
-                                    </use>
-                                </svg></i>
-                            <?php echo $product['shop_name']; ?>
-                        </h6>
-
-
-                    </div>
-                    <div class="shop-address js-slot-addr_<?php echo $pickUpBy; ?>">
-                        <?php $seletedSlotId = '';
-                                        $seletedSlotDate = '';
-                                        $seletedAddrId = '';
-                                        if (!empty($levelItems['pickup_address'])) {
-                                            $address = $levelItems['pickup_address'];
-                                            $seletedSlotId = $address['time_slot_id'];
-                                            $seletedSlotDate = $address['time_slot_date'];
-                                            $seletedAddrId = $address['addr_id'];
-                                            $fromTime = date('H:i', strtotime($address["time_slot_from"]));
-                                            $toTime = date('H:i', strtotime($address["time_slot_to"]));
-                                        ?>
-                        <p><?php echo $address['addr_name'] . ', ' . $address['addr_address1']; ?>
-                            <?php if (strlen($address['addr_address2']) > 0) {
-                                                    echo ", " . $address['addr_address2']; ?>
-                            <?php } ?> <?php echo $address['addr_city'] . ", " . $address['state_name']; ?>
-                            <?php echo $address['country_name'] . ", " . $address['addr_zip']; ?>
-                        </p>
-
-                        <?php if (strlen($address['addr_phone']) > 0) {
-                                                $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
-                                            ?>
-                        <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
-                        <?php } ?>
-                        <p class="time-txt"><i
-                                class="fas fa-calendar-day"></i><?php echo FatDate::format($address["time_slot_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?>
-                        </p>
-                        <?php } ?>
-
-                    </div>
-                    <div class="shipping-method js-slot-addr-<?php echo $pickUpBy; ?>"
-                        data-addr-id="<?php echo $seletedAddrId; ?>">
-                        <input type="hidden" name="slot_id[<?php echo $pickUpBy; ?>]" class="js-slot-id"
-                            data-level="<?php echo $pickUpBy; ?>" value="<?php echo $seletedSlotId; ?>">
-                        <input type="hidden" name="slot_date[<?php echo $pickUpBy; ?>]" class="js-slot-date"
-                            data-level="<?php echo $pickUpBy; ?>"
-                            value="<?php echo isset($seletedSlotDate) ? $seletedSlotDate : ''; ?>">
-                        <?php if (count($levelItems['pickup_options']) > 0) { ?>
-                        <a class="text-link pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0)"
-                            onclick="displayPickupAddress(<?php echo $pickUpBy; ?>, <?php echo $product['shop_id']; ?>)">
-                            <?php
-                                                    if (!empty($levelItems['pickup_address'])) {
-                                                        echo Labels::getLabel('LBL_CHANGE_PICKUP', $siteLangId);
-                                                    } else {
-                                                        echo Labels::getLabel('LBL_SELECT_PICKUP', $siteLangId);
-                                                    }
-                                                    ?>
-                        </a>
-                        <?php } else {
-                                                echo Labels::getLabel('MSG_NO_PICKUP_ADDRESS_CONFIGURED', $siteLangId);
-                                            } ?>
-                    </div>
-
-                </li>
-                <?php } ?>
-                <?php
-                        }
-                        $levelNo = $pickUpBy; ?>
-                <li>
-                    <div class="cell cell_product">
-                        <div class="product-profile">
-                            <div class="product-profile__thumbnail">
-                                <a href="<?php echo $productUrl; ?>">
-                                    <?php
+                        <!-- Items Body-->
+                        <?php foreach ($levelItems['products'] as $product) {
+                            $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
+                            $productUrl = !$isAppUser ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : 'javascript:void(0)';
+                            $shopUrl = !$isAppUser ? UrlHelper::generateUrl('Shops', 'View', array($product['shop_id'])) : 'javascript:void(0)';
+                            $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                            $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBPTHUMB", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'); ?>
+                            <li>
+                                <div class="cell cell_product">
+                                    <div class="product-profile">
+                                        <div class="product-profile__thumbnail">
+                                            <a href="<?php echo $productUrl; ?>">
+                                                <?php
                                                 $pictureAttr = [
                                                     'webpImageUrl' => $imageWebpUrl,
                                                     'jpgImageUrl' => $imageUrl,
@@ -214,197 +131,180 @@
                                                     'siteLangId' => $siteLangId,
                                                 ];
 
-                                                $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
-                                            ?>
-                                </a>
-                            </div>
-                            <div class="product-profile__data">
-                                <div class="title"><a class=""
-                                        href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+                                                $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+                                                ?>
+                                            </a>
+                                        </div>
+                                        <div class="product-profile__data">
+                                            <div class="title">
+                                                <a class="" href="<?php echo $productUrl; ?>">
+                                                    <?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?>
+                                                </a>
+                                            </div>
+                                            <div class="options">
+                                                <p class="">
+                                                    <?php if (isset($product['options']) && count($product['options'])) {
+                                                        $optionStr = '';
+                                                        foreach ($product['options'] as $option) {
+                                                            $optionStr .= $option['optionvalue_name'] . '|';
+                                                        }
+                                                        echo rtrim($optionStr, '|');
+                                                    } ?>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="options">
-                                    <p class=""> <?php if (isset($product['options']) && count($product['options'])) {
-                                                                $optionStr = '';
-                                                                foreach ($product['options'] as $option) {
-                                                                    $optionStr .= $option['optionvalue_name'] . '|';
-                                                                }
-                                                                echo rtrim($optionStr, '|');
-                                                            } ?></p>
+                                <div class="cell cell_qty">
+                                    <div class="quantity quantity-2">
+                                        <span class="decrease decrease-js"><i class="icn">
+                                                <svg class="svg" width="16px" height="16px">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                                    </use>
+                                                </svg>
+                                            </i></span>
+                                        <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
+                                        <span class="increase increase-js"> <i class="icn">
+                                                <svg class="svg" width="16px" height="16px">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                    </use>
+                                                </svg>
+                                            </i></span>
+                                    </div>
                                 </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cell cell_qty">
-                        <div class="quantity quantity-2">
-                            <span class="decrease decrease-js"><i class="icn">
-                                    <svg class="svg" width="16px" height="16px">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                        </use>
-                                    </svg>
-                                </i></span>
-                            <input class="qty-input no-focus cartQtyTextBox productQty-js"
-                                title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout"
-                                type="text" name="qty_<?php echo md5($product['key']); ?>"
-                                data-key="<?php echo md5($product['key']); ?>"
-                                value="<?php echo $product['quantity']; ?>">
-                            <span class="increase increase-js"> <i class="icn">
-                                    <svg class="svg" width="16px" height="16px">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                        </use>
-                                    </svg>
-                                </i></span>
-                        </div>
-
-
-                    </div>
-                    <div class="cell cell_price">
-                        <div class="product-price">
-                            <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
-                            <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
-                            <del><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></del>
-                            <?php } ?>
-                        </div>
-                    </div>
-                    <div class="cell cell_action">
-                        <ul class="actions">
-                            <li>
-                                <a href="javascript:void(0);"
-                                    onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
-                                    <svg class="svg" width="20px" height="20px">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
-                                        </use>
-                                    </svg>
-                                </a>
+                                <div class="cell cell_price">
+                                    <div class="product-price">
+                                        <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
+                                        <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
+                                            <del><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></del>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                                <div class="cell cell_action">
+                                    <ul class="actions">
+                                        <li>
+                                            <a href="javascript:void(0);" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
+                                                <svg class="svg" width="20px" height="20px">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
+                                                    </use>
+                                                </svg>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
-                        </ul>
-                    </div>
-                </li>
-                <?php if (isset($levelItems['products']) && count($levelItems['products']) == 1) { ?>
-            </ul> <?php } ?>
-            <?php }
-                } ?>
+                        <?php } ?>
+                        <!-- Items Body-->
+                    </ul>
+                <?php }
+                /*  Physical Products */
 
-            <?php if (isset($levelItems['products']) && count($levelItems['products']) > 1) { ?>
-            </ul>
-            <?php }
-
-            if (isset($levelItems['digital_products']) && count($levelItems['digital_products']) > 0) { ?>
-            <ul class="list-cart list-cart-page list-shippings">
-                <?php $count = 0;
-                foreach ($levelItems['digital_products'] as $product) {
-                    $productUrl = !$isAppUser ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : 'javascript:void(0)';
-                    $shopUrl = !$isAppUser ? UrlHelper::generateUrl('Shops', 'View', array($product['shop_id'])) : 'javascript:void(0)';
-                    $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
-                    if ($count == 0) {
-        ?>
-                <li class="shipping-select">
-                    <div class="shop-name">
-                        <h6> <i class="icn">
-                                <svg class="svg" width="20px" height="20px">
-                                    <use
-                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#manage-shop">
-                                    </use>
-                                </svg></i>
-                            <?php echo $product['shop_name']; ?></h6>
-                    </div>
-                </li>
-                <?php } ?>
-                <li>
-                    <div class="cell cell_product">
-                        <div class="product-profile">
-                            <div class="product-profile__thumbnail">
-                                <a href="<?php echo $productUrl; ?>">
-                                    <img class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>"
-                                        alt="<?php echo $product['product_name']; ?>"
-                                        title="<?php echo $product['product_name']; ?>">
-                                </a>
+                /*  Digital Products */
+                if (isset($levelItems['digital_products']) && count($levelItems['digital_products']) > 0) {
+                    $digiProductData = current($levelItems['digital_products']); ?>
+                    <ul class="list-cart list-cart-page list-shippings">
+                        <!-- Header Shop Name-->
+                        <li class="shipping-select">
+                            <div class="shop-name">
+                                <h6> <i class="icn">
+                                        <svg class="svg" width="20px" height="20px">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#manage-shop">
+                                            </use>
+                                        </svg></i>
+                                    <?php echo (0 < $pickUpBy) ? $digiProductData['shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, ''); ?>
+                                </h6>
                             </div>
-                            <div class="product-profile__data">
-                                <div class="title"><a class=""
-                                        href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+                        </li>
+                        <!-- Header -->
+
+                        <!-- Items Body-->
+                        <?php foreach ($levelItems['digital_products'] as $pickUpBy => $product) {
+                            $productUrl = !$isAppUser ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : 'javascript:void(0)';
+                            $shopUrl = !$isAppUser ? UrlHelper::generateUrl('Shops', 'View', array($product['shop_id'])) : 'javascript:void(0)';
+                            $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+                        ?>
+                            <li>
+                                <div class="cell cell_product">
+                                    <div class="product-profile">
+                                        <div class="product-profile__thumbnail">
+                                            <a href="<?php echo $productUrl; ?>">
+                                                <img class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
+                                            </a>
+                                        </div>
+                                        <div class="product-profile__data">
+                                            <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+                                            </div>
+                                            <div class="options">
+                                                <p class=""> <?php if (isset($product['options']) && count($product['options'])) {
+                                                                    $optionStr = '';
+                                                                    foreach ($product['options'] as $option) {
+                                                                        $optionStr .= $option['optionvalue_name'] . '|';
+                                                                    }
+                                                                    echo rtrim($optionStr, '|');
+                                                                } ?></p>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="options">
-                                    <p class=""> <?php if (isset($product['options']) && count($product['options'])) {
-                                                    $optionStr = '';
-                                                    foreach ($product['options'] as $option) {
-                                                        $optionStr .= $option['optionvalue_name'] . '|';
-                                                    }
-                                                    echo rtrim($optionStr, '|');
-                                                } ?></p>
+                                <div class="cell cell_qty">
+                                    <div class="wrap-qty-price">
+                                        <div class="quantity quantity-2">
+                                            <span class="decrease decrease-js">
+                                                <i class="icn">
+                                                    <svg class="svg" width="16px" height="16px">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                                        </use>
+                                                    </svg>
+                                                </i></span>
+                                            <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
+                                            <span class="increase increase-js">
+                                                <i class="icn">
+                                                    <svg class="svg" width="16px" height="16px">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                        </use>
+                                                    </svg>
+                                                </i></span>
+                                        </div>
+                                    </div>
                                 </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cell cell_qty">
-                        <div class="wrap-qty-price">
-                            <div class="quantity quantity-2">
-                                <span class="decrease decrease-js">
-                                    <i class="icn">
-                                        <svg class="svg" width="16px" height="16px">
-                                            <use
-                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                            </use>
-                                        </svg>
-                                    </i></span>
-                                <input class="qty-input no-focus cartQtyTextBox productQty-js"
-                                    title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>"
-                                    data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>"
-                                    data-key="<?php echo md5($product['key']); ?>"
-                                    value="<?php echo $product['quantity']; ?>">
-                                <span class="increase increase-js">
-                                    <i class="icn">
-                                        <svg class="svg" width="16px" height="16px">
-                                            <use
-                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                            </use>
-                                        </svg>
-                                    </i></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cell cell_price">
-                        <div class="product-price">
-                            <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
-                            <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
-                            <del><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></del>
-                            <?php } ?>
-                        </div>
-                    </div>
-                    <div class="cell cell_action">
-                        <div class="product-action">
-                            <ul class="actions">
-                                <li>
-                                    <a href="javascript:void(0);"
-                                        onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
-                                        <svg class="svg" width="24px" height="24px">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin"
-                                                href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
-                                            </use>
-                                        </svg>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </li>
-                <?php $count++;
-                } ?>
-            </ul>
-            <?php   }
-        }
-?>
+                                <div class="cell cell_price">
+                                    <div class="product-price">
+                                        <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
+                                        <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
+                                            <del><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></del>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                                <div class="cell cell_action">
+                                    <div class="product-action">
+                                        <ul class="actions">
+                                            <li>
+                                                <a href="javascript:void(0);" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
+                                                    <svg class="svg" width="24px" height="24px">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
+                                                        </use>
+                                                    </svg>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        <?php } ?>
+                        <!-- Items Body-->
+                    </ul>
+            <?php }
+                /*  Digital Products */
+            } ?>
         </div>
         <div class="step_foot">
-            <a class="btn btn-outline-brand btn-wide" href="javascript:void(0)"
-                onclick="showAddressList();"><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></a>
+            <a class="btn btn-outline-brand btn-wide" href="javascript:void(0)" onclick="showAddressList();"><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></a>
             <?php if ($hasPhysicalProd) { ?>
-            <a class="btn btn-brand btn-wide " onClick="setUpPickup();"
-                href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?></a>
+                <a class="btn btn-brand btn-wide " onClick="setUpPickup();" href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?></a>
             <?php } else { ?>
-            <a class="btn btn-brand btn-wide " onClick="loadPaymentSummary();"
-                href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?></a>
+                <a class="btn btn-brand btn-wide " onClick="loadPaymentSummary();" href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?></a>
             <?php } ?>
         </div>
     </div>
+</div>

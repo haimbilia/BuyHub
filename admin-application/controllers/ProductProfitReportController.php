@@ -160,7 +160,7 @@ class ProductProfitReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $productProfitReportsCacheVar = FatCache::get('productProfitReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $productProfitReportsCacheVar = CacheHelper::get('productProfitReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$productProfitReportsCacheVar) {
             $arr = [
                 'product_name'    =>    Labels::getLabel('LBL_Product_name', $this->adminLangId),
@@ -170,7 +170,7 @@ class ProductProfitReportController extends AdminBaseController
                 'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->adminLangId),
                 'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $this->adminLangId)
             ];
-            FatCache::set('productProfitReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            CacheHelper::create('productProfitReportsCacheVar' . $this->adminLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($productProfitReportsCacheVar);
         }

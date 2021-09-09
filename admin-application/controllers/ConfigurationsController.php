@@ -400,6 +400,7 @@ class ConfigurationsController extends AdminBaseController
                 if (!$record->update($arr)) {
                     Message::addErrorMessage($record->getError());
                 } else {
+                    CacheHelper::clear(CacheHelper::TYPE_GOOGLE_ANALYTICS);
                     Message::addMessage(Labels::getLabel('MSG_Setting_Updated_Successfully', $this->adminLangId));
                 }
             } else {

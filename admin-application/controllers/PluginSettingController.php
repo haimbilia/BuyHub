@@ -58,6 +58,13 @@ class PluginSettingController extends AdminBaseController
         $pluginSetting = new PluginSetting($post["plugin_id"]);
         if (!$pluginSetting->save($post)) {
             FatUtility::dieWithError($pluginSetting->getError());
+        }  
+        
+        $pluginType = Plugin::getAttributesById($post["plugin_id"], 'plugin_type');
+        if ($pluginType == Plugin::TYPE_SHIPPING_SERVICES) {
+            CacheHelper::clear(CacheHelper::TYPE_SHIPING_API);
+        } elseif ($pluginType == Plugin::TYPE_TAX_SERVICES) {
+            CacheHelper::clear(CacheHelper::TYPE_TAX_API);
         }
 
         $this->set('msg', $this->str_setup_successful);

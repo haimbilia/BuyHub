@@ -88,7 +88,7 @@ class OrderProduct extends MyAppModel
         $opSrch = OrderProduct::getSearchObject();
         $opSrch->doNotCalculateRecords();
         $opSrch->doNotLimitRecords();
-        $opSrch->addMultipleFields(array('op_id', 'op_order_no', 'op_selprod_id', 'op_selprod_user_id', 'op_unit_price', 'op_qty', 'op_actual_shipping_charges', 'op_refund_qty'));
+        $opSrch->addMultipleFields(array('op_id', 'op_selprod_id', 'op_selprod_user_id', 'op_unit_price', 'op_qty', 'op_actual_shipping_charges', 'op_refund_qty'));
         $opSrch->addCondition('op_order_id', '=', $orderId);
 
         if ($checkNotCancelled) {
@@ -124,10 +124,10 @@ class OrderProduct extends MyAppModel
         $srch = new OrderProductSearch($langId, true);
         $srch->joinSellerProducts($langId);
         $srch->addStatusCondition(SelProdReview::getBuyerAllowedOrderReviewStatuses());
-        $srch->joinTable('tbl_seller_product_reviews', 'left outer join', 'o.order_no = spr.spreview_order_no and ((op.op_selprod_id = spr.spreview_selprod_id and op.op_is_batch = 0) || (op.op_batch_selprod_id = spr.spreview_selprod_id and op.op_is_batch = 1))', 'spr');
+        $srch->joinTable('tbl_seller_product_reviews', 'left outer join', 'o.order_id = spr.spreview_order_id and ((op.op_selprod_id = spr.spreview_selprod_id and op.op_is_batch = 0) || (op.op_batch_selprod_id = spr.spreview_selprod_id and op.op_is_batch = 1))', 'spr');
         $srch->addCondition('o.order_user_id', '=', $userId);
         $srch->addCondition('spr.spreview_id', 'is', 'mysql_func_null', 'and', true);
-        $srch->addMultipleFields(array('op_id', 'op_selprod_id', 'op_order_no', 'op_order_id', 'selprod_title', 'selprod_product_id', 'order_id', 'order_no', 'order_user_id', 'op_qty', 'op_unit_price', 'op_selprod_options'));
+        $srch->addMultipleFields(array('op_id', 'op_selprod_id', 'op_order_id', 'selprod_title', 'selprod_product_id', 'order_id', 'order_number', 'order_user_id', 'op_qty', 'op_unit_price', 'op_selprod_options'));
         $rows = FatApp::getDb()->fetchAll($srch->getResultSet());
         return $rows;
     }

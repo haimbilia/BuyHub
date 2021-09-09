@@ -42,7 +42,7 @@ class BuyerController extends BuyerBaseController
         $srch->setPageSize(applicationConstants::DASHBOARD_PAGE_SIZE);
 
         $srch->addMultipleFields(
-            array('order_no', 'order_id', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_product_type', 'op_status_id', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_other_charges', 'op_unit_price', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class', 'order_pmethod_id', 'opshipping_fulfillment_type', 'op_rounding_off')
+            array('order_number', 'order_id', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_product_type', 'op_status_id', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_other_charges', 'op_unit_price', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class', 'order_pmethod_id', 'opshipping_fulfillment_type', 'op_rounding_off')
         );
         $rs = $srch->getResultSet();
         $orders = FatApp::getDb()->fetchAll($rs);
@@ -189,7 +189,7 @@ class BuyerController extends BuyerBaseController
 
         if (0 < $opId) {
             if (true === MOBILE_APP_API_CALL) {
-                $srch->joinTable(SelProdReview::DB_TBL, 'LEFT OUTER JOIN', 'o.order_no = spr.spreview_order_no and op.op_selprod_id = spr.spreview_selprod_id', 'spr');
+                $srch->joinTable(SelProdReview::DB_TBL, 'LEFT OUTER JOIN', 'o.order_id = spr.spreview_order_id and op.op_selprod_id = spr.spreview_selprod_id', 'spr');
                 $srch->joinTable(SelProdRating::DB_TBL, 'LEFT OUTER JOIN', 'sprating.sprating_spreview_id = spr.spreview_id', 'sprating');
                 $srch->addFld(array('*', 'IFNULL(ROUND(AVG(sprating_rating),2),0) as prod_rating'));
             }
@@ -280,7 +280,7 @@ class BuyerController extends BuyerBaseController
 
         $orderProductStatusArr = [];
         if (true === $primaryOrderDisplay) {
-            $orderObj = new Orders($childOrderDetail['order_no']);
+            $orderObj = new Orders($childOrderDetail['order_id']);
             if ($childOrderDetail['plugin_code'] == 'CashOnDelivery') {
                 $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(true);
             } else if ($childOrderDetail['plugin_code'] == 'PayAtStore') {
@@ -632,7 +632,7 @@ class BuyerController extends BuyerBaseController
         $srch->setPageSize($pagesize);
         $srch->addMultipleFields(
             array(
-                'order_no', 'order_id', 'order_user_id', 'order_date_added', 'order_net_amount', 'op_invoice_number',
+                'order_number', 'order_id', 'order_user_id', 'order_date_added', 'order_net_amount', 'op_invoice_number',
                 'totCombinedOrders as totOrders', 'op_selprod_id', 'op_selprod_title', 'op_product_name', 'op_id', 'op_other_charges', 'op_unit_price',
                 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_status_id', 'op_product_type',
                 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class',
@@ -1270,7 +1270,7 @@ class BuyerController extends BuyerBaseController
         $srch->joinOrderCancelReasons();
         $srch->joinOrders();
         $srch->addCondition('ocrequest_user_id', '=', UserAuthentication::getLoggedUserId());
-        $srch->addMultipleFields(array('ocrequest_id', 'ocrequest_date', 'ocrequest_status', 'order_id', 'order_no', 'op_invoice_number', 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'ocrequest_message', 'op_id', 'op_is_batch', 'op_selprod_id', 'op_selprod_title'));
+        $srch->addMultipleFields(array('ocrequest_id', 'ocrequest_date', 'ocrequest_status', 'order_id', 'order_number', 'op_invoice_number', 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'ocrequest_message', 'op_id', 'op_is_batch', 'op_selprod_id', 'op_selprod_title'));
         $srch->addOrder('ocrequest_date', 'DESC');
         return $srch;
     }
@@ -1341,7 +1341,7 @@ class BuyerController extends BuyerBaseController
 
         $rs = $srch->getResultSet();
         $requests = FatApp::getDb()->fetchAll($rs);
-
+        
         $this->set('sellerPage', false);
         $this->set('buyerPage', true);
 
@@ -1368,7 +1368,7 @@ class BuyerController extends BuyerBaseController
         $srch->addMultipleFields(
             array(
                 'orrequest_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type', 'orrequest_reference', 'orrequest_date', 'orrequest_status',
-                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_id', 'op_is_batch', 'op_selprod_id', 'order_id', 'order_no'
+                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_id', 'op_is_batch', 'op_selprod_id', 'order_id', 'order_number'
             )
         );
         $srch->addOrder('orrequest_date', 'DESC');
@@ -1872,7 +1872,7 @@ class BuyerController extends BuyerBaseController
         $srch->addCondition('order_user_id', '=', $userId);
         $srch->addCondition('op_id', '=', $opId);
         $srch->addOrder("op_id", "DESC");
-        $srch->addMultipleFields(array('op_status_id', 'op_selprod_user_id', 'op_selprod_code', 'op_order_no', 'op_order_id', 'op_selprod_id', 'op_is_batch', 'op_batch_selprod_id', 'op_product_type', 'opshipping_fulfillment_type'));
+        $srch->addMultipleFields(array('op_status_id', 'op_selprod_user_id', 'op_selprod_code', 'op_order_id', 'op_selprod_id', 'op_is_batch', 'op_batch_selprod_id', 'op_product_type', 'opshipping_fulfillment_type'));
         $rs = $srch->getResultSet();
         $opDetail = FatApp::getDb()->fetch($rs);
 
@@ -1972,7 +1972,6 @@ class BuyerController extends BuyerBaseController
 
         $post['spreview_seller_user_id'] = $sellerId;
         $post['spreview_order_id'] = $opDetail['op_order_id'];
-        $post['spreview_order_no'] = $opDetail['op_order_no'];
         $post['spreview_product_id'] = $productId;
         $post['spreview_selprod_id'] = $selProdId;
         $post['spreview_selprod_code'] = $selProdCode;
@@ -3093,7 +3092,7 @@ class BuyerController extends BuyerBaseController
         FatUtility::dieJsonSuccess($msg);
     }
 
-    private function getOrderProducts(string $orderId): array
+    private function getOrderProducts($orderId): array
     {
         $opSrch = new OrderProductSearch($this->siteLangId, false, true, true);
         $opSrch->joinShippingCharges();
@@ -3109,7 +3108,7 @@ class BuyerController extends BuyerBaseController
 
         $opSrch->addMultipleFields(
             [
-                'op_id', 'op_order_no', 'op_selprod_user_id', 'op_invoice_number', 'op_selprod_title', 'op_product_name',
+                'op_id', 'op_selprod_user_id', 'op_invoice_number', 'op_selprod_title', 'op_product_name',
                 'op_qty', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model',
                 'op_shop_name', 'op_shop_owner_name', 'op_shop_owner_email', 'op_shop_owner_phone', 'op_unit_price',
                 'totCombinedOrders as totOrders', 'op_shipping_duration_name', 'op_shipping_durations',  'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_other_charges', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'ts.state_code', 'tc.country_code', 'op_rounding_off',
@@ -3120,7 +3119,7 @@ class BuyerController extends BuyerBaseController
         return (array) FatApp::getDb()->fetchAll($opSrch->getResultSet());
     }
 
-    public function orderProductsCharges(string $orderId, int $chargeType = 0)
+    public function orderProductsCharges($orderId, int $chargeType = 0)
     {
         $opsShippingDetail = $this->getOrderProducts($orderId);
         $oObj = new Orders();

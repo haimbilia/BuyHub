@@ -41,7 +41,7 @@ class MolliePayController extends PaymentController
     /**
      * charge
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return void
      */
     public function charge($orderId)
@@ -90,10 +90,10 @@ class MolliePayController extends PaymentController
     /**
      * callback - Used for webhook
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return void
      */
-    public function callback(string $orderId)
+    public function callback($orderId)
     {
 		$post = FatApp::getPostedData();
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
@@ -128,11 +128,11 @@ class MolliePayController extends PaymentController
     /**
      * getPaymentForm
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @param  bool $processRequest
      * @return object
      */
-    private function getPaymentForm(string $orderId, bool $processRequest = false): object
+    private function getPaymentForm($orderId, bool $processRequest = false): object
     {
         if(false === $processRequest){
             $actionUrl = UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', [$orderId]);
@@ -152,10 +152,10 @@ class MolliePayController extends PaymentController
     /**
      * logFailure
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return void
      */
-    private function logFailure(string $orderId, string $msg = '', array $response = [])
+    private function logFailure($orderId, string $msg = '', array $response = [])
     {
         $response = !empty($response) ? $response : $_REQUEST;   
         SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);

@@ -34,15 +34,15 @@
     }
     &-2 {
         top: 3px;
-        #{$end-direction}: 3px;
+        right: 3px;
         width: 70px;
         height: 70px;
         .text {
             font-weight: 600;
             transform: rotate( 45deg);
             position: absolute;
-            #{$start-direction}: 20px;
-            #{$end-direction}: 0;
+            left: 20px;
+            right: 0;
             top: 10px;
             line-height: 30px;
             text-transform: uppercase;
@@ -51,11 +51,11 @@
         &.badges-left {
             transform: rotate(-90deg);
         }
-        &.badges-right {
-            svg {
-                transform: scaleX($transform-direction);
-            }
-        }
+        // &.badges-right {
+        //     svg {
+        //         transform: scaleX($transform-direction);
+        //     }
+        // }
     }
     &-3 {
         display: flex;
@@ -69,12 +69,12 @@
         height: 60px;
         .text {
             transform: rotate( 45deg);
-            #{$start-direction}: 10px;
-            #{$end-direction}: 0;
+            left: 10px;
+            right: 0;
             line-height: 30px;
             width: 55px;
             top: 8px;
-            margin-#{$start-direction}: 0;
+            margin-left: 0;
         }
         &.badges-left {
             transform: rotate(-90deg);
@@ -82,7 +82,7 @@
     }
     &-5 {
         top: 1rem;
-        #{$end-direction}: 1rem;
+        right: 1rem;
         width: 60px;
         height: 60px;
         display: flex;
@@ -99,15 +99,15 @@
         }
     }
     &-left {
-        #{$start-direction}: 10px;
+        left: 10px;
         top: 10px;
     }
     &-right {
-        #{$end-direction}: 10px;
+        right: 10px;
         top: 10px;
-        svg {
-            transform: scaleX($transform-direction);
-        }
+        // svg {
+        //     transform: scaleX($transform-direction);
+        // }
     }
 }
 
@@ -115,9 +115,9 @@
     .badges {
         &-4 {
             .text {
-                #{$start-direction}: -10px;
+                left: -10px;
                 top: 6px;
-                transform: rotate(-45deg);
+                // transform: rotate(-45deg);
             }
             &.badges-left {
                 transform: none;
@@ -125,9 +125,9 @@
         }
         &-2 {
             .text {
-                #{$start-direction}: 0px;
+                left: 0px;
                 top: 10px;
-                transform: rotate( -45deg);
+                // transform: rotate( -45deg);
             }
         }
     }

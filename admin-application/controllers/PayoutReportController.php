@@ -141,7 +141,7 @@ class PayoutReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $payoutReportsCacheVar = FatCache::get('payoutReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $payoutReportsCacheVar = CacheHelper::get('payoutReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$payoutReportsCacheVar) {
             $arr = [
                 'orderDate' => Labels::getLabel('LBL_Date', $this->adminLangId),
@@ -150,7 +150,7 @@ class PayoutReportController extends AdminBaseController
                 'discountTotal' => Labels::getLabel('LBL_Coupon_Discount', $this->adminLangId),
                 'totalAmount' => Labels::getLabel('LBL_Total_Amount', $this->adminLangId),
             ];
-            FatCache::set('payoutReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            CacheHelper::create('payoutReportsCacheVar' . $this->adminLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($payoutReportsCacheVar);
         }

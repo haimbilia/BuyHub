@@ -1137,12 +1137,8 @@ class Product extends MyAppModel
         $srch->addCondition('psbs_user_id', '=', $selProdSellerId);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        if (!empty($row) && $row['psbs_user_id'] == $selProdSellerId) {
-            return true;
-        }
-        return false;
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return (!empty($row) && $row['psbs_user_id'] == $selProdSellerId);
     }
 
     public function getTotalProductsAddedByUser($user_id)

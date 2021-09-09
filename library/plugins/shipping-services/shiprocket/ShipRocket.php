@@ -464,7 +464,7 @@ class ShipRocket extends ShippingServicesBase
         $volumeDiscount = CommonHelper::orderProductAmount($this->orderDetail, 'VOLUME_DISCOUNT');
         $totalDiscount = abs($discount) + abs($volumeDiscount);
 
-        $orderObj = new Orders($this->orderDetail['order_no']);
+        $orderObj = new Orders($this->orderDetail['order_id']);
         $addresses = $orderObj->getOrderAddresses($this->orderDetail['order_id']);
         $billingAddress = $addresses[Orders::BILLING_ADDRESS_TYPE];
         $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : [];
@@ -603,7 +603,7 @@ class ShipRocket extends ShippingServicesBase
         $orderTimestamp = strtotime($this->orderDetail['order_date_added']);
         $channel = $this->getChannel();
 
-        $orderObj = new Orders($this->orderDetail['order_no']);
+        $orderObj = new Orders($this->orderDetail['order_id']);
         $addresses = $orderObj->getOrderAddresses($this->orderDetail['order_id']);
         $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : [];
         

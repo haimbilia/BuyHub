@@ -190,7 +190,7 @@ trait ShippingServices
         $opSrch->doNotLimitRecords();
         $opSrch->addCondition('op.op_id', '=', $opId);
         $attr = !empty($attr) ? $attr : [
-            'op_status_id', 'op.op_order_no', 'op.op_order_id', 'op.op_invoice_number', 'opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code',
+            'op_status_id', 'op.op_order_id', 'op.op_invoice_number', 'opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code',
             'opsp_api_req_id', 'opsp_scheduled', 'opshipping_by_seller_user_id', 'op_selprod_user_id', 'op_selprod_id', 'op_qty', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit',
             'op_product_weight', 'op_product_weight_unit', 'opshipping_rate_id', 'opshipping_plugin_id'
         ];
@@ -242,7 +242,6 @@ trait ShippingServices
 
         $requestParam = [
             "op_order_id" => $data['op_order_id'],
-            "op_order_no" => $data['op_order_no'],
             "op_invoice_number" => $data['op_invoice_number'],
             "orderId" => $data['opship_orderid'],
             "op_id" => $opId,
@@ -598,14 +597,14 @@ trait ShippingServices
         $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
 
         $cacheKey = Shipping::CARRIER_CACHE_KEY_NAME . $this->langId . $this->shippingService->keyName;
-        $carriers = FatCache::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
+        $carriers = CacheHelper::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
         if ($carriers) {
             $carriers = unserialize($carriers);
         } else {
             $limit = ('ShipStationShipping' == (get_class($this->shippingService))::KEY_NAME ? 0 : 1);
             $carriers = $this->shippingService->getCarriers($limit);
             if (!empty($carriers)) {
-                FatCache::set($cacheKey, serialize($carriers), '.txt');
+                CacheHelper::create($cacheKey, serialize($carriers), CacheHelper::TYPE_SHIPING_API);
             }
         }
         if (empty($carriers)) {
@@ -613,8 +612,8 @@ trait ShippingServices
             return false;
         }
 
-        $orderObj = new Orders($orderData['op_order_no']);
-        $addresses = $orderObj->getOrderAddresses($orderData['op_order_id'], $orderData['op_order_id']);
+        $orderObj = new Orders($orderData['op_order_id']);
+        $addresses = $orderObj->getOrderAddresses($orderData['op_order_id'], $orderData['op_id']);
 
         $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : array();
 
@@ -670,13 +669,13 @@ trait ShippingServices
             $carrierCode = !empty($carrier) && array_key_exists('code', $carrier) ? $carrier['code'] : '';
             $cacheKeyArr = array_merge($cacheKeyArr, [$carrierCode, $this->langId]);
             $cacheKey = Shipping::RATE_CACHE_KEY_NAME . md5(json_encode($cacheKeyArr));
-            $shippingRates = FatCache::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
+            $shippingRates = CacheHelper::get($cacheKey, CONF_API_REQ_CACHE_TIME, '.txt');
             if ($shippingRates) {
                 $shippingRates = unserialize($shippingRates);
             } else {
                 $shippingRates = $this->shippingService->getRates($carrierCode, $shopAddress['postalCode']);
                 if (!empty($shippingRates)) {
-                    FatCache::set($cacheKey, serialize($shippingRates), '.txt');
+                    CacheHelper::create($cacheKey, serialize($shippingRates),CacheHelper::TYPE_SHIPING_API);
                 } else {
                     SystemLog::system($this->shippingService->getError(),'SelProd ID-'.$orderData['op_id']);
                     continue;

@@ -272,7 +272,7 @@ class ProductsReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $productReportCacheVar = FatCache::get('productReportCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $productReportCacheVar = CacheHelper::get('productReportCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$productReportCacheVar) {
             $arr = [
                 'product_name'    =>    Labels::getLabel('LBL_Product_name', $this->adminLangId),
@@ -311,7 +311,7 @@ class ProductsReportController extends AdminBaseController
                 'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $this->adminLangId),
                 'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $this->adminLangId)
             ];
-            FatCache::set('productReportCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            CacheHelper::create('productReportCacheVar' . $this->adminLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($productReportCacheVar);
         }

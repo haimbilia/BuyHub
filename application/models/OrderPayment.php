@@ -151,7 +151,6 @@ class OrderPayment extends Orders
                 static::DB_TBL_ORDER_PAYMENTS,
                 array(
                     'opayment_order_id' => $paymentOrderId,
-                    'opayment_order_no' => $orderInfo["order_no"],
                     'opayment_method' => $paymentMethodName,
                     'opayment_gateway_txn_id' => $txnId,
                     'opayment_amount' => $amount,
@@ -217,7 +216,6 @@ class OrderPayment extends Orders
                         $data = array(
                             'couponhistory_coupon_id' => $row['coupon_id'],
                             'couponhistory_order_id' => $orderDetails['order_id'],
-                            'couponhistory_order_no' => $orderDetails['order_no'],
                             'couponhistory_user_id' => $orderDetails['order_user_id'],
                             'couponhistory_amount' => $orderDetails['order_discount_total'],
                             'couponhistory_added_on' => date('Y-m-d H:i:s')
@@ -288,7 +286,6 @@ class OrderPayment extends Orders
                     'utxn_gateway_txn_id' => $txnId,
                     'utxn_status' => Transactions::STATUS_COMPLETED,
                     'utxn_order_id' => $orderDetails["order_id"],
-                    'utxn_order_no' => $orderDetails["order_no"],
                     'utxn_comments' => sprintf(Labels::getLabel('LBL_Loaded_Money_to_Wallet', $defaultSiteLangId), $formattedOrderValue),
                     'utxn_type' => Transactions::TYPE_LOADED_MONEY_TO_WALLET
                 );
@@ -333,7 +330,7 @@ class OrderPayment extends Orders
             $rs = $srch->getResultSet();
             $row = FatApp::getDb()->fetch($rs);
             if (!empty($row)) {
-                if (!FatApp::getDb()->insertFromArray(CouponHistory::DB_TBL, array('couponhistory_coupon_id' => $row['coupon_id'], 'couponhistory_order_id' => $orderDetails['order_id'], 'couponhistory_order_no' => $orderDetails['order_no'], 'couponhistory_user_id' => $orderDetails['order_user_id'], 'couponhistory_amount' => $orderDetails['order_discount_total'], 'couponhistory_added_on' => date('Y-m-d H:i:s')))) {
+                if (!FatApp::getDb()->insertFromArray(CouponHistory::DB_TBL, array('couponhistory_coupon_id' => $row['coupon_id'], 'couponhistory_order_id' => $orderDetails['order_id'], 'couponhistory_user_id' => $orderDetails['order_user_id'], 'couponhistory_amount' => $orderDetails['order_discount_total'], 'couponhistory_added_on' => date('Y-m-d H:i:s')))) {
                     $this->error = FatApp::getDb()->getError();
                     return false;
                 }
@@ -368,7 +365,7 @@ class OrderPayment extends Orders
             $rs = $srch->getResultSet();
             $row = FatApp::getDb()->fetch($rs);
             if (!empty($row)) {
-                if (!FatApp::getDb()->insertFromArray(CouponHistory::DB_TBL, array('couponhistory_coupon_id' => $row['coupon_id'], 'couponhistory_order_id' => $orderDetails['order_id'], 'couponhistory_order_no' => $orderDetails['order_no'], 'couponhistory_user_id' => $orderDetails['order_user_id'], 'couponhistory_amount' => $orderDetails['order_discount_total'], 'couponhistory_added_on' => date('Y-m-d H:i:s')))) {
+                if (!FatApp::getDb()->insertFromArray(CouponHistory::DB_TBL, array('couponhistory_coupon_id' => $row['coupon_id'], 'couponhistory_order_id' => $orderDetails['order_id'], 'couponhistory_user_id' => $orderDetails['order_user_id'], 'couponhistory_amount' => $orderDetails['order_discount_total'], 'couponhistory_added_on' => date('Y-m-d H:i:s')))) {
                     $this->error = FatApp::getDb()->getError();
                     return false;
                 }
@@ -420,7 +417,6 @@ class OrderPayment extends Orders
             'utxn_debit' => $amountToBeCharge,
             'utxn_status' => Transactions::STATUS_COMPLETED,
             'utxn_order_id' => $orderInfo["order_id"],
-            'utxn_order_no' => $orderInfo["order_no"],
             'utxn_comments' => $transaction_comment,
             /* 'utxn_comments'=>sprintf( Labels::getLabel( 'LBL_ORDER_PLACED_NUMBER', $defaultSiteLangId ), $formattedOrderValue ), */
             'utxn_type' => Transactions::TYPE_ORDER_PAYMENT
@@ -456,7 +452,7 @@ class OrderPayment extends Orders
         }
 
         $transObj = new Transactions();
-        $formattedOrderValue = "#" . $orderInfo["order_id"];
+        $formattedOrderValue = "#" . $orderInfo["order_number"];
         /*
         $txnArray["utxn_user_id"]= $orderInfo["order_user_id"];
         $txnArray["utxn_debit"]= $amountToBeCharge;
@@ -476,7 +472,6 @@ class OrderPayment extends Orders
             'utxn_debit' => $amountToBeCharge,
             'utxn_status' => Transactions::STATUS_COMPLETED,
             'utxn_order_id' => $orderInfo["order_id"],
-            'utxn_order_no' => $orderInfo["order_no"],
             'utxn_comments' => $txnComment,
             'utxn_type' => Transactions::TYPE_ORDER_PAYMENT
         );

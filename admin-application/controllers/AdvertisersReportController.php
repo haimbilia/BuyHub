@@ -168,7 +168,7 @@ class AdvertisersReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $avdertiserUserReportsCacheVar = FatCache::get('avdertiserUserReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $avdertiserUserReportsCacheVar = CacheHelper::get('avdertiserUserReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$avdertiserUserReportsCacheVar) {
             $arr = [
                 'name' => Labels::getLabel('LBL_Name', $this->adminLangId),
@@ -179,7 +179,7 @@ class AdvertisersReportController extends AdminBaseController
                 'promotionCharged' => Labels::getLabel('LBL_Promotions_Cost', $this->adminLangId),
                 'availableBalance' => Labels::getLabel('LBL_Available_Balance', $this->adminLangId),
             ];
-            FatCache::set('avdertiserUserReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            CacheHelper::create('avdertiserUserReportsCacheVar' . $this->adminLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($avdertiserUserReportsCacheVar);
         }

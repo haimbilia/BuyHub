@@ -102,6 +102,8 @@ class CurrencyManagementController extends AdminBaseController
             Message::addErrorMessage($record->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
+        
+        CacheHelper::clear(CacheHelper::TYPE_CURRENCY);
 
         $newTabLangId = 0;
         if ($currencyId > 0) {
@@ -196,6 +198,8 @@ class CurrencyManagementController extends AdminBaseController
                 FatUtility::dieWithError(Message::getHtml());
             }
         }
+        
+        CacheHelper::clear(CacheHelper::TYPE_CURRENCY);
 
         $newTabLangId = 0;
         $languages = Language::getAllNames();

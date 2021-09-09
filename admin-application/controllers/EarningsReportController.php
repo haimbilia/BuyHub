@@ -188,7 +188,7 @@ class EarningsReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $earningsReportsCacheVar = FatCache::get('earningsReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $earningsReportsCacheVar = CacheHelper::get('earningsReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$earningsReportsCacheVar) {
             $arr = [
                 'date' => Labels::getLabel('LBL_Date', $this->adminLangId),
@@ -197,7 +197,7 @@ class EarningsReportController extends AdminBaseController
                 'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $this->adminLangId),
                 'totalEarning' => Labels::getLabel('LBL_Total_Earnings', $this->adminLangId),
             ];
-            FatCache::set('earningsReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            CacheHelper::create('earningsReportsCacheVar' . $this->adminLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($earningsReportsCacheVar);
         }

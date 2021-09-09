@@ -48,7 +48,7 @@ class Report extends SearchBase
         if ($this->ordersTableJoined) {
             trigger_error('Orders Table is already joined', E_USER_ERROR);
         }
-        $this->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_no = op.op_order_no', 'o');
+        $this->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_id = op.op_order_id', 'o');
         $this->ordersTableJoined = true;
         return $this;
     }
@@ -238,7 +238,7 @@ class Report extends SearchBase
      */
     public function joinOrderUserAddress(int $addrType = Orders::BILLING_ADDRESS_TYPE): object
     {
-        $this->joinTable(Orders::DB_TBL_ORDER_USER_ADDRESS, 'LEFT JOIN', 'o.order_no = oaddr.oua_order_no and oua_type = ' . $addrType, 'oaddr');
+        $this->joinTable(Orders::DB_TBL_ORDER_USER_ADDRESS, 'LEFT JOIN', 'o.order_id = oaddr.oua_order_id and oua_type = ' . $addrType, 'oaddr');
         return $this;
     }
 
@@ -250,7 +250,7 @@ class Report extends SearchBase
      */
     public function joinOrderPayments(int $txnStatus = Orders::ORDER_PAYMENT_PAID): object
     {
-        $this->joinTable(Orders::DB_TBL_ORDER_PAYMENTS, 'LEFT JOIN', 'o.order_no = opaym.opayment_order_no and opaym.opayment_txn_status = ' . $txnStatus, 'opaym');
+        $this->joinTable(Orders::DB_TBL_ORDER_PAYMENTS, 'LEFT JOIN', 'o.order_id = opaym.opayment_order_id and opaym.opayment_txn_status = ' . $txnStatus, 'opaym');
         return $this;
     }
 

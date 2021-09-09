@@ -199,10 +199,10 @@ class ProductsController extends MyAppController
         //$prodSrchObj->addFld('count(selprod_id) as totalProducts');
         $cacheKey = FilterHelper::getCacheKey($this->siteLangId, $post);
 
-        $brandFilter = FatCache::get('brandFilter' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
+        $brandFilter = CacheHelper::get('brandFilter' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
         if (!$brandFilter) {
             $brandsArr = FilterHelper::brands($prodSrchObj, $this->siteLangId, $post, true);
-            FatCache::set('brandFilter' . $cacheKey, serialize($brandsArr), '.txt');
+            CacheHelper::create('brandFilter' . $cacheKey, serialize($brandsArr));
         } else {
             $brandsArr = unserialize($brandFilter);
         }
@@ -271,7 +271,7 @@ class ProductsController extends MyAppController
 
         /* Condition filters data[ */
         $conditionsArr = array();
-        $conditions = FatCache::get('conditions' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
+        $conditions = CacheHelper::get('conditions' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
         if (!$conditions) {
             $conditionArr = Product::getConditionArr($this->siteLangId);
             $conditions = array();
@@ -291,7 +291,7 @@ class ProductsController extends MyAppController
                     $conditionsArr[] = $row;
                 }
             }
-            FatCache::set('conditions' . $cacheKey, serialize($conditionsArr), '.txt');
+            CacheHelper::create('conditions' . $cacheKey, serialize($conditionsArr));
         } else {
             $conditionsArr = unserialize($conditions);
         }
@@ -332,7 +332,7 @@ class ProductsController extends MyAppController
         /* ] */
 
         /* Availability Filters[ */
-        $availabilities = FatCache::get('availabilities' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
+        $availabilities = CacheHelper::get('availabilities' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
         if (!$availabilities) {
             $availabilitySrch = clone $prodSrchObj;
             $availabilitySrch->setPageSize(1);
@@ -341,7 +341,7 @@ class ProductsController extends MyAppController
             $availabilitySrch->addMultipleFields(array('if(selprod_stock > 0,1,0) as in_stock'));
             $availabilityRs = $availabilitySrch->getResultSet();
             $availabilityArr = $db->fetchAll($availabilityRs, 'in_stock');
-            FatCache::set('availabilities' . $cacheKey, serialize($availabilityArr), '.txt');
+            CacheHelper::create('availabilities' . $cacheKey, serialize($availabilityArr));
         } else {
             $availabilityArr = unserialize($availabilities);
         }
@@ -708,7 +708,7 @@ class ProductsController extends MyAppController
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
             $validDateCondition = " and oss.ossubs_till_date >= '" . date('Y-m-d') . "'";
             $optionSrchObj->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_user_id=seller_user.user_id AND o.order_type=' . ORDERS::ORDER_SUBSCRIPTION . ' AND o.order_payment_status =1', 'o');
-            $optionSrchObj->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_no = oss.ossubs_order_no and oss.ossubs_status_id=' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
+            $optionSrchObj->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id=' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
         }
         $optionSrchObj->addCondition('product_id', '=', $product['product_id']);
 
@@ -1314,7 +1314,7 @@ class ProductsController extends MyAppController
         $cacheKey = $this->siteLangId . '-' .  urlencode($keyword);
 
 
-        $autoSuggetionsCache = FatCache::get('autoSuggetionsCache' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
+        $autoSuggetionsCache = CacheHelper::get('autoSuggetionsCache' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
         if (!$autoSuggetionsCache) {
             $criteria = [
                 'keyword' => $keyword,
@@ -1425,7 +1425,7 @@ class ProductsController extends MyAppController
             $recentSearchArr = array_unique($recentSearchArr);
             $recentSearchArr = array_slice($recentSearchArr, 0, 5);
             setcookie('recentSearchKeywords_' . $this->siteLangId, serialize($recentSearchArr), time() + 60 * 60 * 72, CONF_WEBROOT_URL);
-            FatCache::set('autoSuggetionsCache' . $cacheKey, serialize($suggestions), '.txt');
+            CacheHelper::create('autoSuggetionsCache' . $cacheKey, serialize($suggestions));
         } else {
             $suggestions = unserialize($autoSuggetionsCache);
         }
@@ -1884,7 +1884,7 @@ class ProductsController extends MyAppController
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
             $validDateCondition = " and oss.ossubs_till_date >= '" . date('Y-m-d') . "'";
             $optionSrchObj->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_user_id=seller_user.user_id AND o.order_type=' . ORDERS::ORDER_SUBSCRIPTION . ' AND o.order_payment_status =1', 'o');
-            $optionSrchObj->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_no = oss.ossubs_order_no and oss.ossubs_status_id=' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
+            $optionSrchObj->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id=' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
         }
         $optionSrchObj->addCondition('product_id', '=', $product['product_id']);
 

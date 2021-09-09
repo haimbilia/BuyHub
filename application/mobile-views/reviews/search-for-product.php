@@ -1,12 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-// CommonHelper::printArray($recordRatings);
-
 if (!empty($reviewsList) && is_array($reviewsList)) {
     foreach ($reviewsList as &$review) {
+        $uploadedTime = AttachedFile::setTimeParam($review['user_updated_on']);
+        $review['user_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', [$review['spreview_postedby_user_id'], 'ORIGINAL']) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
         $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $review['spreview_id']);
-        $review['images'] = [];     
-        foreach ($images as $image) { 
+        $review['images'] = [];
+        foreach ($images as $image) {
             $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
             $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, 'MINITHUMB', $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, 'LARGE', $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
