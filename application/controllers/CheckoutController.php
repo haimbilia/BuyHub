@@ -1438,34 +1438,14 @@ class CheckoutController extends MyAppController
         /* ] */
         $orderObj = new Orders();
         if ($orderObj->addUpdateOrder($orderData, $this->siteLangId)) {
-            $_SESSION['order_id'] = $orderObj->getMainTableRecordId();
+            $order_id = $orderObj->getMainTableRecordId();
+            $_SESSION['order_id'] = $order_id;
         } else {
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError($orderObj->getError());
             }
             Message::addErrorMessage($orderObj->getError());
             FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $srch = Orders::getSearchObject();
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-        $srch->addCondition('order_id', '=', $order_id);
-        $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
-        $rs = $srch->getResultSet();
-        $orderInfo = FatApp::getDb()->fetch($rs);
-        if (!$orderInfo) {
-            $this->cartObj->clear();
-            $msg = Labels::getLabel('MSG_INVALID_ORDER', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($msg);
-            } else {
-                Message::addErrorMessage($msg);
-                if (FatUtility::isAjaxCall()) {
-                    Message::addErrorMessage($orderObj->getError());
-                }
-                FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'viewOrder', array($order_id), CONF_WEBROOT_DASHBOARD));
-            }
         }
 
         $userWalletBalance = User::getUserBalance($userId, true);
@@ -1518,8 +1498,7 @@ class CheckoutController extends MyAppController
         $excludePaymentGatewaysArr = applicationConstants::getExcludePaymentGatewayArr();
         $this->set('cartHasPhysicalProduct', $cartHasPhysicalProduct);
         $this->set('excludePaymentGatewaysArr', $excludePaymentGatewaysArr);
-        if (false === MOBILE_APP_API_CALL) {
-            $this->set('orderInfo', $orderInfo);
+        if (false === MOBILE_APP_API_CALL) {        
             $this->set('WalletPaymentForm', $WalletPaymentForm);
             $this->set('confirmForm', $confirmForm);
         }
@@ -1535,7 +1514,7 @@ class CheckoutController extends MyAppController
         // die(';l;l;l;');
         if (true === MOBILE_APP_API_CALL) {
             $this->set('products', $cartProducts);
-            $this->set('orderType', $orderInfo['order_type']);
+            $this->set('orderType', $orderData['order_type']);
             if (0 < $useRewardPoints) {
                 $this->set('msg', Labels::getLabel("MSG_Used_Reward_point", $this->siteLangId) . '-' . $useRewardPoints);
                 $this->_template->render(true, true, 'checkout/use-reward-points.php');
