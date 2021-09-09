@@ -1,6 +1,6 @@
 <header class="main-header">
     <div class="container-fluid">
-        <div class="main-header-inner">                        
+        <div class="main-header-inner">
             <div class="page-title">
                 <h1>Dashboard</h1>
                 <ul class="breadcrumb">
@@ -13,25 +13,26 @@
             </div>
             <div class="main-header-toolbar">
                 <div class="header-action">
-                    
+
                     <div class="header-action__item">
                         <a class="header-action__trigger" href="javascript:void(0);" data-toggle="modal"
                             data-target="#search-main">
                             <span class="icon">
                                 <svg width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-search"></use>
-                                </svg> 
-                            </span>  
+                                    <use
+                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-search">
+                                    </use>
+                                </svg>
+                            </span>
                         </a>
                         <div class="header-action__target modal fade" id="search-main">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
-                                    <div class="modal-body p-0">
+                                    <div class="modal-body p-5">
                                         <div class="quick-search">
                                             <form method="get" class="form form--quick-search">
                                                 <div class="quick-search__form">
-                                                    <input type="search" class="form-control"
-                                                        placeholder="Go to...">
+                                                    <input type="search" class="form-control" placeholder="Go to...">
                                                 </div>
                                                 <div class="quick-search__wrapper">
                                                     <ul class="list list--search-result">
@@ -400,33 +401,39 @@
                         <a class="header-action__trigger" href="" title="View Store">
                             <span class="icon">
                                 <svg width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-store"></use>
-                                </svg>                                                 
-                            </span>  
+                                    <use
+                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-store">
+                                    </use>
+                                </svg>
+                            </span>
                         </a>
                     </div>
                     <div class="header-action__item">
                         <a class="header-action__trigger" href="" title="Clear Cache">
                             <span class="icon">
                                 <svg width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-cache"></use>
-                                </svg>                                                 
-                            </span>  
+                                    <use
+                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-cache">
+                                    </use>
+                                </svg>
+                            </span>
                         </a>
                     </div>
                     <div class="header-action__item dropdown">
                         <a class="header-action__trigger dropdown-toggle no-after" data-toggle="dropdown" href="">
                             <span class="icon">
                                 <svg width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification"></use>
-                                </svg>                                                 
-                            </span>  
+                                    <use
+                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification">
+                                    </use>
+                                </svg>
+                            </span>
                         </a>
                         <div class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim">
                             <div class="header-notification">
                                 <div class="header-notification__head">
-                                     <h5>Notifications <span class="count">24 reports</span></h5>
-                                     <nav class="nav nav--tabs js-tab">
+                                    <h5>Notifications <span class="count">24 reports</span></h5>
+                                    <nav class="nav nav--tabs js-tab">
                                         <a class="is-current" href="#tab-1">Alerts</a>
                                         <a href="#tab-2">Updates</a>
                                         <a href="#tab-3">Logs</a>
@@ -440,127 +447,153 @@
                                                     <div class="notification__img">
                                                         <span class="icon">
                                                             <svg width="20" height="20">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert"></use>
-                                                            </svg> 
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                </use>
+                                                            </svg>
                                                         </span>
                                                     </div>
                                                     <div class="notification__detail">
                                                         <a href="" class="title">Project Alice</a>
                                                         <div class="summary">Phase 1 development</div>
-                                                    </div>                                                   
+                                                    </div>
                                                     <span class="notification__time">1 hr</span>
-                                                </div><!--item-->
+                                                </div>
+                                                <!--item-->
                                                 <div class="notification">
                                                     <div class="notification__img">
                                                         <span class="icon">
                                                             <svg width="20" height="20">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert"></use>
-                                                            </svg> 
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                </use>
+                                                            </svg>
                                                         </span>
                                                     </div>
                                                     <div class="notification__detail">
                                                         <a href="" class="title">Project Alice</a>
                                                         <div class="summary">Phase 1 development</div>
-                                                    </div>                                                   
+                                                    </div>
                                                     <span class="notification__time">1 hr</span>
-                                                </div><!--item-->
+                                                </div>
+                                                <!--item-->
                                                 <div class="notification">
                                                     <div class="notification__img">
                                                         <span class="icon">
                                                             <svg width="20" height="20">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert"></use>
-                                                            </svg> 
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                </use>
+                                                            </svg>
                                                         </span>
                                                     </div>
                                                     <div class="notification__detail">
                                                         <a href="" class="title">Project Alice</a>
                                                         <div class="summary">Phase 1 development</div>
-                                                    </div>                                                   
+                                                    </div>
                                                     <span class="notification__time">1 hr</span>
-                                                </div><!--item-->
+                                                </div>
+                                                <!--item-->
                                                 <div class="notification">
                                                     <div class="notification__img">
                                                         <span class="icon">
                                                             <svg width="20" height="20">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert"></use>
-                                                            </svg> 
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                </use>
+                                                            </svg>
                                                         </span>
                                                     </div>
                                                     <div class="notification__detail">
                                                         <a href="" class="title">Project Alice</a>
                                                         <div class="summary">Phase 1 development</div>
-                                                    </div>                                                   
+                                                    </div>
                                                     <span class="notification__time">1 hr</span>
-                                                </div><!--item-->
+                                                </div>
+                                                <!--item-->
                                                 <div class="notification">
                                                     <div class="notification__img">
                                                         <span class="icon">
                                                             <svg width="20" height="20">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert"></use>
-                                                            </svg> 
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                </use>
+                                                            </svg>
                                                         </span>
                                                     </div>
                                                     <div class="notification__detail">
                                                         <a href="" class="title">Project Alice</a>
                                                         <div class="summary">Phase 1 development</div>
-                                                    </div>                                                   
+                                                    </div>
                                                     <span class="notification__time">1 hr</span>
-                                                </div><!--item-->
+                                                </div>
+                                                <!--item-->
                                                 <div class="notification">
                                                     <div class="notification__img">
                                                         <span class="icon">
                                                             <svg width="20" height="20">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert"></use>
-                                                            </svg> 
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                </use>
+                                                            </svg>
                                                         </span>
                                                     </div>
                                                     <div class="notification__detail">
                                                         <a href="" class="title">Project Alice</a>
                                                         <div class="summary">Phase 1 development</div>
-                                                    </div>                                                   
+                                                    </div>
                                                     <span class="notification__time">1 hr</span>
-                                                </div><!--item-->
+                                                </div>
+                                                <!--item-->
                                                 <div class="notification">
                                                     <div class="notification__img">
                                                         <span class="icon">
                                                             <svg width="20" height="20">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert"></use>
-                                                            </svg> 
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                </use>
+                                                            </svg>
                                                         </span>
                                                     </div>
                                                     <div class="notification__detail">
                                                         <a href="" class="title">Project Alice</a>
                                                         <div class="summary">Phase 1 development</div>
-                                                    </div>                                                   
+                                                    </div>
                                                     <span class="notification__time">1 hr</span>
-                                                </div><!--item-->
+                                                </div>
+                                                <!--item-->
                                                 <div class="notification">
                                                     <div class="notification__img">
                                                         <span class="icon">
                                                             <svg width="20" height="20">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert"></use>
-                                                            </svg> 
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                </use>
+                                                            </svg>
                                                         </span>
                                                     </div>
                                                     <div class="notification__detail">
                                                         <a href="" class="title">Project Alice</a>
                                                         <div class="summary">Phase 1 development</div>
-                                                    </div>                                                   
+                                                    </div>
                                                     <span class="notification__time">1 hr</span>
-                                                </div><!--item-->
+                                                </div>
+                                                <!--item-->
                                             </div>
                                         </div>
                                     </div>
                                     <div class="tab-2 tab-container" id="tab-2">
                                         <div class="scroll-y p-4">
-                                            <div class="update text-center">                                                    
-                                                <div class="update__content">                                                    
-                                                    <h5>Get Pro Access</h5>                                                    
-                                                    <p>Outlines keep you honest. They stoping you from amazing poorly about drive</p> 
-                                                    <a href="#" class="btn btn-sm btn-primary">Upgrade</a>                                                 
+                                            <div class="update text-center">
+                                                <div class="update__content">
+                                                    <h5>Get Pro Access</h5>
+                                                    <p>Outlines keep you honest. They stoping you from amazing poorly
+                                                        about drive</p>
+                                                    <a href="#" class="btn btn-sm btn-primary">Upgrade</a>
                                                 </div>
-                                                <div class="update__img">                                                    
-                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/misc/update-img.png"/>                                              
+                                                <div class="update__img">
+                                                    <img
+                                                        src="<?php echo CONF_WEBROOT_URL;?>images/misc/update-img.png" />
                                                 </div>
                                             </div>
                                         </div>
@@ -573,85 +606,97 @@
                                                     <div class="log__detail">
                                                         <a href="#" class="log__title">New order</a>
                                                     </div>
-                                                    <span class="log__time">Just now</span>                                             
-                                                </div><!--log-->
+                                                    <span class="log__time">Just now</span>
+                                                </div>
+                                                <!--log-->
                                                 <div class="log">
                                                     <span class="badge badge-danger">500 ERR</span>
                                                     <div class="log__detail">
                                                         <a href="#" class="log__title">New customer</a>
                                                     </div>
-                                                    <span class="log__time">2 hrs</span>                                             
-                                                </div><!--log-->
+                                                    <span class="log__time">2 hrs</span>
+                                                </div>
+                                                <!--log-->
                                                 <div class="log">
                                                     <span class="badge badge-success">200 OK</span>
                                                     <div class="log__detail">
                                                         <a href="#" class="log__title">Payment process</a>
                                                     </div>
-                                                    <span class="log__time">5 hrs</span>                                             
-                                                </div><!--log-->
+                                                    <span class="log__time">5 hrs</span>
+                                                </div>
+                                                <!--log-->
                                                 <div class="log">
                                                     <span class="badge badge-warning">300 WRN</span>
                                                     <div class="log__detail">
                                                         <a href="#" class="log__title">Search query</a>
                                                     </div>
-                                                    <span class="log__time">2 days</span>                                             
-                                                </div><!--log-->
+                                                    <span class="log__time">2 days</span>
+                                                </div>
+                                                <!--log-->
                                                 <div class="log">
                                                     <span class="badge badge-success">200 OK</span>
                                                     <div class="log__detail">
                                                         <a href="#" class="log__title">New order</a>
                                                     </div>
-                                                    <span class="log__time">Just now</span>                                             
-                                                </div><!--log-->
+                                                    <span class="log__time">Just now</span>
+                                                </div>
+                                                <!--log-->
                                                 <div class="log">
                                                     <span class="badge badge-danger">500 ERR</span>
                                                     <div class="log__detail">
                                                         <a href="#" class="log__title">New customer</a>
                                                     </div>
-                                                    <span class="log__time">2 hrs</span>                                             
-                                                </div><!--log-->
+                                                    <span class="log__time">2 hrs</span>
+                                                </div>
+                                                <!--log-->
                                                 <div class="log">
                                                     <span class="badge badge-success">200 OK</span>
                                                     <div class="log__detail">
                                                         <a href="#" class="log__title">Payment process</a>
                                                     </div>
-                                                    <span class="log__time">5 hrs</span>                                             
-                                                </div><!--log-->
+                                                    <span class="log__time">5 hrs</span>
+                                                </div>
+                                                <!--log-->
                                                 <div class="log">
                                                     <span class="badge badge-warning">300 WRN</span>
                                                     <div class="log__detail">
                                                         <a href="#" class="log__title">Search query</a>
                                                     </div>
-                                                    <span class="log__time">2 days</span>                                             
-                                                </div><!--log-->
+                                                    <span class="log__time">2 days</span>
+                                                </div>
+                                                <!--log-->
                                                 <div class="log">
                                                     <span class="badge badge-success">200 OK</span>
                                                     <div class="log__detail">
                                                         <a href="#" class="log__title">New order</a>
                                                     </div>
-                                                    <span class="log__time">Just now</span>                                             
-                                                </div><!--log-->
+                                                    <span class="log__time">Just now</span>
+                                                </div>
+                                                <!--log-->
                                                 <div class="log">
                                                     <span class="badge badge-danger">500 ERR</span>
                                                     <div class="log__detail">
                                                         <a href="#" class="log__title">New customer</a>
                                                     </div>
-                                                    <span class="log__time">2 hrs</span>                                             
-                                                </div><!--log-->
+                                                    <span class="log__time">2 hrs</span>
+                                                </div>
+                                                <!--log-->
                                                 <div class="log">
                                                     <span class="badge badge-success">200 OK</span>
                                                     <div class="log__detail">
                                                         <a href="#" class="log__title">Payment process</a>
                                                     </div>
-                                                    <span class="log__time">5 hrs</span>                                             
-                                                </div><!--log-->
+                                                    <span class="log__time">5 hrs</span>
+                                                </div>
+                                                <!--log-->
                                                 <div class="log">
                                                     <span class="badge badge-warning">300 WRN</span>
                                                     <div class="log__detail">
                                                         <a href="#" class="log__title">Search query</a>
                                                     </div>
-                                                    <span class="log__time">2 days</span>                                             
-                                                </div><!--log-->
+                                                    <span class="log__time">2 days</span>
+                                                </div>
+                                                <!--log-->
                                             </div>
                                         </div>
                                     </div>
@@ -665,16 +710,15 @@
                     <div class="header-action__item dropdown header-account">
                         <a class="header-action__trigger dropdown-toggle no-after" data-toggle="dropdown" href="">
                             <span class="header-account__img">
-                                <img aria-expanded="false"
-                                    src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="">
+                                <img aria-expanded="false" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg"
+                                    alt="">
                             </span>
                         </a>
                         <div class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim">
                             <div class="header-account__avtar">
                                 <div class="profile">
                                     <div class="profile__img">
-                                        <img alt=""
-                                            src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg">
+                                        <img alt="" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg">
                                     </div>
                                     <div class="profile__detail">
                                         <h6>Hi, Michael Williams <h6>
@@ -694,8 +738,7 @@
                                     Language
                                     <span class="selected-language">
                                         English
-                                        <span><img
-                                                src="<?php echo CONF_WEBROOT_URL;?>images/flags/009-australia.svg"
+                                        <span><img src="<?php echo CONF_WEBROOT_URL;?>images/flags/009-australia.svg"
                                                 alt=""></span>
                                     </span>
                                     <div class="languages">

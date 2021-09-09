@@ -1523,22 +1523,16 @@
                                                             <!--begin::Options-->
                                                             <div class="d-flex align-items-center mt-3">
                                                                 <!--begin::Option-->
-                                                                <label
-                                                                    class="form-check form-check-inline form-check-solid me-5">
-                                                                    <input class="form-check-input"
-                                                                        name="communication[]" type="checkbox"
-                                                                        value="1">
-                                                                    <span class="fw-bold ps-2 fs-6">Email</span>
+                                                                <label class="checkbox">
+                                                                    <input type="checkbox" value="1"> Email
                                                                 </label>
                                                                 <!--end::Option-->
                                                                 <!--begin::Option-->
-                                                                <label
-                                                                    class="form-check form-check-inline form-check-solid">
-                                                                    <input class="form-check-input"
-                                                                        name="communication[]" type="checkbox"
-                                                                        value="2">
-                                                                    <span class="fw-bold ps-2 fs-6">Phone</span>
+
+                                                                <label class="checkbox">
+                                                                    <input type="checkbox" value="1"> Phone
                                                                 </label>
+
                                                                 <!--end::Option-->
                                                             </div>
                                                             <!--end::Options-->
@@ -1556,13 +1550,9 @@
                                                         <!--begin::Label-->
                                                         <!--begin::Label-->
                                                         <div class="col-lg-8 d-flex align-items-center">
-                                                            <div class="form-check form-check-solid form-switch fv-row">
-                                                                <input class="form-check-input w-45px h-30px"
-                                                                    type="checkbox" id="allowmarketing"
-                                                                    checked="checked">
-                                                                <label class="form-check-label"
-                                                                    for="allowmarketing"></label>
-                                                            </div>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" value="1">
+                                                            </label>
                                                         </div>
                                                         <!--begin::Label-->
                                                     </div>
@@ -1574,7 +1564,7 @@
                                                     <button type="reset"
                                                         class="btn btn-light btn-active-light-primary me-2">Discard</button>
 
-                                                    <button type="submit" class="btn btn-primary" id="_submit">Save
+                                                    <button type="submit" class="btn btn-brand" id="_submit">Save
                                                         Changes</button>
                                                 </div>
                                                 <!--end::Actions-->

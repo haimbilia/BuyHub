@@ -1,5 +1,5 @@
 .fb-body {
-    background-color: #f3f6f9;
+    background-color: $bg-gray;
     flex: 1;
 }
 
@@ -13,7 +13,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding-left: 100px;
+    padding-left: 80px;
 }
 
 .main {
@@ -103,34 +103,36 @@
         }
     }
 }
-.modal{
+
+.modal {
     &-content {
         border-radius: 4px;
         overflow: hidden;
     }
 }
-.text-link{
+
+.text-link {
     font-size: .875rem;
     color: #7e8299;
     position: relative;
-    &--arrow{
+    &--arrow {
         position: relative;
         padding-#{$end-direction}: 20px;
-        &:hover{
+        &:hover {
             text-decoration: none;
         }
-        &::before{
+        &::before {
             position: absolute;
             #{$end-direction}: 5px;
             top: 7px;
             content: "";
-            height:7px;
+            height: 7px;
             width: 7px;
-            border-#{$end-direction}:1px solid currentColor;  
-            border-top:1px solid currentColor;  
+            border-#{$end-direction}: 1px solid currentColor;
+            border-top: 1px solid currentColor;
             transform: rotate(45deg);
         }
-        &:after{
+        &:after {
             position: absolute;
             #{$end-direction}: 5px;
             top: 10px;

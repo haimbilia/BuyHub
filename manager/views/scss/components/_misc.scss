@@ -2176,3 +2176,59 @@ strong {
         background-position: calc(-10px) center;
     }
 }
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    &_photo {
+        margin: 0;
+        margin-#{$end-direction}: 1rem;
+        display: inline-block;
+        flex-shrink: 0;
+        position: relative;
+        border-radius: .475rem;
+        >img {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            display: inline-block;
+            border-radius: 50%;
+        }
+    }
+    &_data {
+        display: flex;
+        flex-direction: column;
+    }
+    &_title {
+        font-weight: 600;
+        color: $txt-body;
+    }
+}
+
+.help-btn {
+    box-shadow: 0 .1rem 1rem .25rem rgba(0, 0, 0, .05);
+    position: fixed;
+    #{$end-direction}: 0;
+    top: 50%;
+    transform: rotate( 90deg);
+    transform-origin: right top;
+    padding: calc(.55rem + 1px) calc(1.25rem + 1px);
+    border-top-left-radius: 0!important;
+    border-top-right-radius: 0!important;
+}
+
+.form-edit {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    &-body {
+        flex: 1 1 auto;
+    }
+    &-foot {
+        border-top: $border;
+        position: sticky;
+        bottom: 0;
+        background-color: $bg-white;
+        padding-top: 1rem;
+    }
+}
