@@ -324,7 +324,7 @@ class Cart extends FatModel
                     'is_shipping_selected' => false,
                     'volume_discount_total' => 0
                 ];
-                
+
                 /* Has Stock */
                 if (!$sellerProductRow['in_stock'] && true === $this->isAnyOutOfStock) {
                     $this->isAnyOutOfStock = false;
@@ -372,7 +372,7 @@ class Cart extends FatModel
         });
         return $this->products;
     }
-        
+
     /**
      * getShipmentItemsCount: This function works after Calling getProducts
      *

@@ -72,12 +72,8 @@ class Plugin extends PluginCommon
         $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        if (!empty($row)) {
-            return true;
-        }
-        return false;
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return !empty($row);
     }
 
     /**
