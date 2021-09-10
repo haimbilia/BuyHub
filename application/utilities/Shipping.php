@@ -598,11 +598,9 @@ class Shipping
     }
 
     /**
-     * setCombinedCharges
-     *
-     * @return bool
+     * setCombinedCharges : Can be deleted(01-09-2021)
      */
-    private function setCombinedCharges(): bool
+    /* private function setCombinedCharges(): bool
     {
         $shipppedByArr = array_keys($this->shippedByArr);
         sort($shipppedByArr);
@@ -643,7 +641,7 @@ class Shipping
             }
         }
         return true;
-    }
+    } */
 
     /**
      * filterShippingRates
