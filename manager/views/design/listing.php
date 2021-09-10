@@ -75,14 +75,15 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="row">
-                                                <div class="col-md-7">
+                                                <div class="col-md-8">
                                                     <input type="search" class="form-control" name="search" value=""
                                                         placeholder="Search">
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <button type="button" class="btn btn-brand btn-wide">Search</button>
+                                                    <button type="button"
+                                                        class="btn btn-brand btn-block">Search</button>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <a class="btn btn-link" data-toggle="collapse"
                                                         href="#collapseExample" aria-expanded="false"
                                                         aria-controls="collapseExample">Advanced
@@ -93,14 +94,7 @@
                                                 <div class="separator separator-dashed my-4"></div>
 
                                                 <div class="row">
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label class="label">Keyword</label>
-                                                            <input data-field-caption="Keyword"
-                                                                data-fatreq="{&quot;required&quot;:false}" type="text"
-                                                                name="keyword" value="">
-                                                        </div>
-                                                    </div>
+
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label class="label">From
@@ -119,8 +113,6 @@
                                                                 type="text" name="maxprice" value="">
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row">
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label class="label">Status</label>
@@ -147,6 +139,8 @@
                                                             </select>
                                                         </div>
                                                     </div>
+                                                </div>
+                                                <div class="row">
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label class="label">Date
@@ -175,8 +169,6 @@
 
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row">
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label class="label">User
@@ -193,7 +185,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -205,7 +196,6 @@
                                             <span class="text-muted">Over 500 new products</span>
                                         </h3>
                                         <div class="card-toolbar">
-
                                             <a href="#" class="btn btn-sm btn-light btn-light">
 
                                                 <span class="svg-icon svg-icon-3">
@@ -218,7 +208,7 @@
                                                             fill="black"></rect>
                                                     </svg>
                                                 </span>
-                                                New Member
+                                                New
                                             </a>
                                         </div>
                                     </div>
@@ -787,23 +777,32 @@
                                 </div>
                             </div>
 
-                            <div class="modal fixed-right fade" id="edit" tabindex="-1" role="dialog"
+                            <div class="modal fixed-right fade " id="edit" tabindex="-1" role="dialog"
                                 aria-labelledby="edit" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-vertical" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="">Card title
-                                                goes here</h5>
+                                            <h5 class="modal-title" id="">Card title goes here</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <form class="modal-body form form-edit">
+                                            <div class="form-edit-head">
+                                                <nav class="nav nav-tabs">
+                                                    <a class="nav-link active" href="#">Active</a>
+                                                    <a class="nav-link" href="#">Longer nav link</a>
+                                                    <a class="nav-link" href="#">Link</a>
+                                                    <a class="nav-link disabled" href="#">Disabled</a>
+                                                </nav>
+
+                                            </div>
                                             <div class="form-edit-body">
+
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <label class="label">Language</label>
+                                                            <label class="label required">Language </label>
                                                             <select onchange="addShopLangForm(5, this.value);"
                                                                 data-field-caption="Language"
                                                                 data-fatreq="{&quot;required&quot;:false}"
@@ -818,8 +817,13 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <label class="label">Shop
-                                                                Name<span class="required">*</span>
+                                                            <label class="label">
+                                                                <span class="required">Shop Name</span>
+                                                                <i class="fas fa-exclamation-circle ms-2 fs-7"
+                                                                    data-toggle="tooltip" title=""
+                                                                    data-original-title="Specify a target priorty"
+                                                                    aria-label="Specify a target priorty"
+                                                                    aria-describedby="tooltip849482"></i>
                                                             </label>
                                                             <input data-field-caption="Shop Name"
                                                                 data-fatreq="{&quot;required&quot;:true}" type="text"

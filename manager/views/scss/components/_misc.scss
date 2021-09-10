@@ -2221,14 +2221,20 @@ strong {
     display: flex;
     flex-direction: column;
     height: 100%;
+    padding: 0;
+    &-head {
+        padding: 0 2rem;
+        border-bottom: $border;
+    }
     &-body {
         flex: 1 1 auto;
+        padding: 1.5rem 2rem;
     }
     &-foot {
         border-top: $border;
         position: sticky;
         bottom: 0;
         background-color: $bg-white;
-        padding-top: 1rem;
+        padding: 1.5rem 2rem;
     }
 }

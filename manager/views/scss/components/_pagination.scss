@@ -54,13 +54,13 @@
                  &:before,
                  &:after {
                      content: "";
-                     width: 10px;
-                     height: 10px;
-                     border-#{$start-direction}: 2px solid currentColor;
-                     border-bottom: 2px solid currentColor;
+                     width: 8px;
+                     height: 8px;
+                     border-#{$start-direction}: 1px solid currentColor;
+                     border-bottom: 1px solid currentColor;
                      position: absolute;
                      #{$start-direction}: calc(50% - 3px);
-                     top: calc(50% - 5px);
+                     top: calc(50% - 4px);
                      transform: rotate(45deg);
                  }
              }
