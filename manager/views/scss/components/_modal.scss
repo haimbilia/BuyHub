@@ -6,7 +6,36 @@
              font-weight: 400;
          }
      }
+     &-title {
+         font-size: 1.2rem;
+         color: $txt-body;
+     }
      &-footer {
          justify-content: inherit;
      }
+     &.fixed-right {
+         padding-right: 0 !important;
+         .modal-dialog-vertical {
+             height: 100%;
+             max-width: 470px;
+             margin: 0;
+             margin-left: auto;
+             .modal-content {
+                 border-radius: 0px;
+                 height: inherit;
+                 overflow-y: auto;
+             }
+         }
+         &.fade .modal-dialog-vertical {
+             transform: translateX(100%);
+         }
+         &.show .modal-dialog-vertical {
+             transform: translateX(0);
+         }
+     }
+ }
+ 
+ button.close {
+     font-weight: 400;
+     font-size: 1.5rem;
  }

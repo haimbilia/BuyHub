@@ -4,11 +4,11 @@
      border-radius: $radius4;
      overflow: hidden;
      margin: 0;
-     &.pagination--center {
+     &-center {
          justify-content: center;
          width: 100%;
      }
-     &.pagination--right {
+     &-right {
          justify-content: flex-end;
      }
      li {
@@ -24,7 +24,7 @@
              color: $body-color;
              border: none;
              border: $border;
-             border-radius: $radius4;
+             border-radius: 1px;
              position: relative;
              overflow: hidden;
              margin: 0 3px;
@@ -48,25 +48,26 @@
                  cursor: not-allowed;
              }
          }
-         &.prev,&.next {
+         &.prev,
+         &.next {
              a {
                  &:before,
                  &:after {
                      content: "";
-                     width: 10px;
-                     height: 10px;
-                     border-#{$start-direction}: 2px solid currentColor;
-                     border-bottom: 2px solid currentColor;
+                     width: 8px;
+                     height: 8px;
+                     border-#{$start-direction}: 1px solid currentColor;
+                     border-bottom: 1px solid currentColor;
                      position: absolute;
                      #{$start-direction}: calc(50% - 3px);
-                     top: calc(50% - 5px);
+                     top: calc(50% - 4px);
                      transform: rotate(45deg);
                  }
              }
          }
          &.next {
              a {
-                transform: rotate(180deg);
+                 transform: rotate(180deg);
              }
          }
      }
