@@ -1317,9 +1317,7 @@ class HomeController extends MyAppController
         $productSrchSponObj->addFld('IFNULL(prod_rating, 0) as prod_rating');
         $productSrchSponObj->setPageNumber($page);
         $productSrchSponObj->setPageSize($pagesize);
-
-        $rs = $productSrchSponObj->getResultSet();
-        $sponsoredProds = FatApp::getDb()->fetchAll($rs);
+        $sponsoredProds = FatApp::getDb()->fetchAll($productSrchSponObj->getResultSet());
 
         $this->set('sponsoredProds', $sponsoredProds);
         $this->set('page', $page);
