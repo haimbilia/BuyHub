@@ -11,9 +11,7 @@ if (false === $key) {
     }
 }
 
-$data = array(
-    'addresses' => !empty($addresses) ? $addresses : array(),
-);
+$data = array('addresses' => $addresses);
 
 if (empty($addresses)) {
     $status = applicationConstants::OFF;
