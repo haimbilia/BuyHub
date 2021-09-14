@@ -61,6 +61,7 @@ class OrderPayment extends Orders
 
         $arrOrder = array(
             "id" => $orderInfo["order_id"],
+            "order_number" => $orderInfo["order_number"],
             "invoice" => $orderInfo["order_id"],
             "customer_id" => $orderInfo["order_user_id"],
             "customer_name" => isset($userInfo["user_name"]) ? $userInfo["user_name"] : '',
