@@ -137,12 +137,11 @@ class applicationConstants
     public static function bannerTypeArr()
     {
         $bannerTypeArr = Language::getAllNames();
-		if(count($bannerTypeArr) > 1){
-			 return array(0 => Labels::getLabel('LBL_All_Languages', CommonHelper::getLangId())) + $bannerTypeArr;
-		} else  {
-			return  $bannerTypeArr;
-		}
-       
+        if (count($bannerTypeArr) > 1) {
+            return array(0 => Labels::getLabel('LBL_All_Languages', CommonHelper::getLangId())) + $bannerTypeArr;
+        } else {
+            return  $bannerTypeArr;
+        }
     }
 
     public static function digitalDownloadTypeArr($langId)
@@ -319,12 +318,11 @@ class applicationConstants
         $extensions = array('zip', 'txt', 'png', 'jpeg', 'jpg', 'gif', 'bmp', 'ico', 'tiff', 'tif', 'svg', 'svgz', 'rar', 'msi', 'cab', 'mp3', 'pdf', 'psd', 'ai', 'eps', 'ps', 'doc', 'docx');
 
         return array_merge($extensions, static::allowedVideoFileExtensions());
-
     }
 
     public static function allowedVideoFileExtensions()
     {
-        return array(/* 'qt',  */ 'mov', 'mp4', 'webm');
+        return array(/* 'qt',  */'mov', 'mp4', 'webm');
     }
 
     public static function allowedVideoMimeTypes()
@@ -549,5 +547,10 @@ class applicationConstants
                 return '#000000';
                 break;
         }
+    }
+
+    public static function getPageSizeValues()
+    {
+        return [10, 25, 50, 100];
     }
 }

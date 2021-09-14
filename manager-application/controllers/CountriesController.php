@@ -11,58 +11,81 @@ class CountriesController extends AdminBaseController
 
     public function index()
     {
-        $frmSrch = $this->getSearchForm();
-        $this->set("frmSrch", $frmSrch);
-        $this->set('pageTitle', Labels::getLabel('LBL_Manage_Countries', $this->adminLangId));
-        $this->_template->render();
-    }
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
 
-    private function getSearchForm()
-    {
-        $frm = new Form('frmSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
+        $this->set('frmSearch', $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_COUNTRIES', $this->adminLangId));
+        $this->_template->addJs('js/report.js');
+        $this->_template->render();
     }
 
     public function search()
     {
+        $db = FatApp::getDb();
+        $post = FatApp::getPostedData();
 
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $searchForm = $this->getSearchForm();
-        $data = FatApp::getPostedData();
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
-        $post = $searchForm->getFormDataFromArray($data);
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_DESC;
+        }
+        $srchFrm = $this->getSearchForm($fields);
+
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
+
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
 
         $srch = Countries::getSearchObject(false, $this->adminLangId);
+        $srch->addMultipleFields(['c.* , COALESCE(c_l.country_name, c.country_code) as country_name', 'c.country_id as listSerial']);
 
-        $srch->addFld('c.* , c_l.country_name');
-        $srch->addOrder('country_name', 'ASC');
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('c.country_code', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('c_l.country_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
-        $page = FatUtility::int($page);
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-
-        $rs = $srch->getResultSet();
-        $records = array();
-        if ($rs) {
-            $records = FatApp::getDb()->fetchAll($rs);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
         }
 
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
-        $this->set("arrListing", $records);
+        switch ($sortBy) {
+            default:
+                $srch->addOrder($sortBy, $sortOrder);
+                break;
+        }
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $srch->removeFld(['select_all', 'action']);
+        $rs = $srch->getResultSet();
+        $arrListing = $db->fetchAll($rs);
+
+        $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
+        $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
         $this->_template->render(false, false);
     }
 
@@ -362,5 +385,53 @@ class CountriesController extends AdminBaseController
             Message::addErrorMessage($countryObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
+    }
+
+    private function getSearchForm($fields = [])
+    {
+        $frm = new Form('frmReportSearch');
+        $frm->addHiddenField('', 'page');
+
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        if (!empty($fields)) {
+            $frm->addHiddenField('', 'sortBy', 'listSerial');
+            $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_DESC);
+            $frm->addHiddenField('', 'reportColumns', '');
+            $frm->addHiddenField('', 'pageSize', FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        }
+
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        return $frm;
+    }
+
+    private function getFormColumns(): array
+    {
+        $countryManagementCacheVar = CacheHelper::get('countryManagementCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$countryManagementCacheVar) {
+            $arr = [
+                'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->adminLangId),
+                'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
+                'country_code' => Labels::getLabel('LBL_COUNTRY_CODE', $this->adminLangId),
+                'country_code_alpha3' => Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->adminLangId),
+                'country_name' => Labels::getLabel('LBL_COUNTRY_NAME', $this->adminLangId),
+                'country_active' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
+                'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            ];
+            CacheHelper::create('countryManagementCacheVar' . $this->adminLangId, serialize($arr), CacheHelper::TYPE_LABELS);
+        } else {
+            $arr =  unserialize($countryManagementCacheVar);
+        }
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return ['select_all', 'listSerial', 'country_name', 'country_code', 'country_code_alpha3',  'country_active', 'action'];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['select_all', 'action']);
     }
 }

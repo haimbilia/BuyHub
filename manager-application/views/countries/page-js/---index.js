@@ -1,26 +1,25 @@
-$(document).ready(function() {
-    searchCountry(document.frmCountrySearch);
+$(document).ready(function () {
+    searchRecord(document.frmSearch);
 });
 
-(function() {
-    var runningAjaxReq = false;
+(function () {
     var dv = '#listing';
 
-    goToSearchPage = function(page) {
+    goToSearchPage = function (page) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
-        var frm = document.frmCountrySearchPaging;
+        var frm = document.frmSearchPaging;
         $(frm.page).val(page);
         searchCountry(frm);
     }
 
-    reloadList = function() {
-        var frm = document.frmCountrySearchPaging;
+    reloadList = function () {
+        var frm = document.frmSearchPaging;
         searchCountry(frm);
     };
 
-    searchCountry = function(form) {
+    searchCountry = function (form) {
         /*[ this block should be before dv.html('... anything here.....') otherwise it will through exception in ie due to form being removed from div 'dv' while putting html*/
         var data = '';
         if (form) {
@@ -29,45 +28,45 @@ $(document).ready(function() {
         /*]*/
         $(dv).html(fcom.getLoader());
 
-        fcom.ajax(fcom.makeUrl('Countries', 'search'), data, function(res) {
+        fcom.ajax(fcom.makeUrl('Countries', 'search'), data, function (res) {
             $(dv).html(res);
         });
     };
-    addCountryForm = function(id) {
-        $.facebox(function() {
+    addCountryForm = function (id) {
+        $.facebox(function () {
             countryForm(id);
         });
 
     };
 
-    countryForm = function(id) {
+    countryForm = function (id) {
         fcom.displayProcessing();
         ///$.facebox(function() {
-        fcom.ajax(fcom.makeUrl('Countries', 'form', [id]), '', function(t) {
+        fcom.ajax(fcom.makeUrl('Countries', 'form', [id]), '', function (t) {
             $.facebox(t, 'faceboxWidth');
             fcom.updateFaceboxContent(t);
         });
         //});
     };
 
-    editCountryFormNew = function(countryId) {
-        $.facebox(function() {
+    editCountryFormNew = function (countryId) {
+        $.facebox(function () {
             editCountryForm(countryId);
         });
     };
 
-    editCountryForm = function(countryId) {
+    editCountryForm = function (countryId) {
         fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('Countries', 'form', [countryId]), '', function(t) {
+        fcom.ajax(fcom.makeUrl('Countries', 'form', [countryId]), '', function (t) {
             //$.facebox(t,'faceboxWidth');
             fcom.updateFaceboxContent(t);
         });
     };
 
-    setupCountry = function(frm) {
+    setupCountry = function (frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Countries', 'setup'), data, function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('Countries', 'setup'), data, function (t) {
             reloadList();
             if (t.langId > 0) {
                 editCountryLangForm(t.countryId, t.langId);
@@ -77,20 +76,20 @@ $(document).ready(function() {
         });
     };
 
-    editCountryLangForm = function(countryId, langId, autoFillLangData = 0) {
+    editCountryLangForm = function (countryId, langId, autoFillLangData = 0) {
         fcom.displayProcessing();
         //$.facebox(function() {
-        fcom.ajax(fcom.makeUrl('Countries', 'langForm', [countryId, langId, autoFillLangData]), '', function(t) {
+        fcom.ajax(fcom.makeUrl('Countries', 'langForm', [countryId, langId, autoFillLangData]), '', function (t) {
             //$.facebox(t,'faceboxWidth');
             fcom.updateFaceboxContent(t);
         });
         //});
     };
 
-    setupLangCountry = function(frm) {
+    setupLangCountry = function (frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Countries', 'langSetup'), data, function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('Countries', 'langSetup'), data, function (t) {
             reloadList();
             if (t.langId > 0) {
                 editCountryLangForm(t.countryId, t.langId);
@@ -100,7 +99,7 @@ $(document).ready(function() {
         });
     };
 
-    toggleStatus = function(e, obj, canEdit) {
+    toggleStatus = function (e, obj, canEdit) {
         if (canEdit == 0) {
             e.preventDefault();
             return;
@@ -115,7 +114,7 @@ $(document).ready(function() {
             return false;
         }
         data = 'countryId=' + countryId;
-        fcom.ajax(fcom.makeUrl('Countries', 'changeStatus'), data, function(res) {
+        fcom.ajax(fcom.makeUrl('Countries', 'changeStatus'), data, function (res) {
             var ans = $.parseJSON(res);
 
             if (ans.status == 1) {
@@ -125,8 +124,8 @@ $(document).ready(function() {
             }
         });
     };
-    
-    clearSearch = function() {
+
+    clearSearch = function () {
         document.frmSearch.reset();
         searchCountry(document.frmSearch);
     };

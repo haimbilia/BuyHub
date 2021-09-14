@@ -202,6 +202,7 @@ class AdminBaseController extends FatController
         $this->set('languages', Language::getAllNames(false));
         $this->set('isAdminLogged', AdminAuthentication::isAdminLogged());
         $this->set('layoutDirection', $this->layoutDirection);
+        $this->set('bodyClass', 'fb-body');
 
         $this->includeDatePickerLangJs();
 
