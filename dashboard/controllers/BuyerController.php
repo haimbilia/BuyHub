@@ -2543,19 +2543,16 @@ class BuyerController extends BuyerBaseController
 
     public function searchOffers()
     {
-        $offers = DiscountCoupons::getUserCoupons(UserAuthentication::getLoggedUserId(), $this->siteLangId);
+        $offers = (array) DiscountCoupons::getUserCoupons(UserAuthentication::getLoggedUserId(), $this->siteLangId);
 
-        if ($offers) {
-            $this->set('offers', $offers);
-        } else {
-            if (true === MOBILE_APP_API_CALL) {
-                $this->set('offers', array());
-            } else {
-                $this->set('noRecordsHtml', $this->_template->render(false, false, '_partial/no-record-found.php', true));
-            }
-        }
+        $this->set('offers', $offers);
+        
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
+        }
+
+        if (empty($offers)) {
+            $this->set('noRecordsHtml', $this->_template->render(false, false, '_partial/no-record-found.php', true));
         }
         $this->_template->render(false, false, 'buyer/search-offers.php');
     }
