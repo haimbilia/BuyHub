@@ -394,17 +394,26 @@ class HomeController extends MyAppController
         $this->_template->render(false, false, 'json-success.php');
     }
 
+        
+    /**
+     * currencies : Used for APPs
+     *
+     * @return void
+     */
     public function currencies()
     {
+        $defaultCurrencyId = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
         $cObj = Currency::getSearchObject($this->siteLangId, true);
         $cObj->addMultipleFields(
             array(
-                'currency_id', 'currency_code', 'IFNULL(curr_l.currency_name,curr.currency_code) as currency_name'
+                'currency_id',
+                'currency_code',
+                'IFNULL(curr_l.currency_name,curr.currency_code) as currency_name',
+                'IF(currency_id = ' . $defaultCurrencyId . ', 1, 0) as isDefault'
             )
         );
-        $rs = $cObj->getResultSet();
-        $currencies = $this->db->fetchAll($rs);
-        $this->set('currencies', $currencies);
+        $currencies = $this->db->fetchAll($cObj->getResultSet());
+        $this->set('data', ['currencies' => $currencies]);
         $this->_template->render();
     }
 
