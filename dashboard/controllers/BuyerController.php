@@ -748,6 +748,9 @@ class BuyerController extends BuyerBaseController
         $orderProducts = FatApp::getDb()->fetchAll($rs);
 
         foreach ($orderProducts as &$op) {
+            $uploadedTime = AttachedFile::setTimeParam($op['product_updated_on']);
+            $op['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($op['selprod_product_id'], "CLAYOUT3", $op['op_selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
             $files = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD, $op['op_id'], 0, $this->siteLangId, true);
             foreach ($files as &$file) {
                 $dateAvailable = date('Y-m-d', strtotime(date('Y-m-d') . '+ 1 year'));
@@ -771,9 +774,10 @@ class BuyerController extends BuyerBaseController
                         $file['downloadable'] = false;
                     }
                 }
+                $file['downloadUrl'] = UrlHelper::generateFullUrl() . 'public/index.php?url=buyer/download-digital-file/' . $file['afile_id'] . '/' . $file['afile_record_id'];
             }
 
-            $op['files'] = $files;
+            $op['files'] = (true === MOBILE_APP_API_CALL) ? array_values($files) : $files;
 
             $linkSrch = new SearchBase(OrderProductDigitalLinks::DB_TBL);
             $linkSrch->addCondition("opddl_op_id", "=", $op['op_id']);
