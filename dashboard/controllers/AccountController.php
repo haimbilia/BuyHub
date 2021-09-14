@@ -585,11 +585,8 @@ class AccountController extends LoggedUserController
                     break;
             }
         }
-        $records = array();
-
-        $rs = $srch->getResultSet();
-
-        $records = FatApp::getDb()->fetchAll($rs, 'utxn_id');
+        
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'utxn_id');
         $this->set('arrListing', $records);
         $this->set('page', $page);
         $this->set('pageCount', $srch->pages());

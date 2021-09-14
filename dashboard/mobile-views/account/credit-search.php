@@ -4,12 +4,12 @@
 $txnStatusArr = $statusArr;
 
 
-foreach ($arrListing as $key => $value) {
-    $arrListing[$key]['utxn_statusLabel'] = $txnStatusArr[$value['utxn_status']];
-    $arrListing[$key]['utxn_id'] = Transactions::formatTransactionNumber($value['utxn_id']);
-    $arrListing[$key]['balance'] = CommonHelper::displayMoneyFormat($value['balance'], false, false, false);
-    $arrListing[$key]['utxn_credit'] = CommonHelper::displayMoneyFormat($value['utxn_credit'], false, false, false);
-    $arrListing[$key]['utxn_debit'] = CommonHelper::displayMoneyFormat($value['utxn_debit'], false, false, false);
+foreach ($arrListing as $key => &$value) {
+    $value['utxn_statusLabel'] = $txnStatusArr[$value['utxn_status']];
+    $value['utxn_id'] = Transactions::formatTransactionNumber($value['utxn_id']);
+    $value['balance'] = CommonHelper::displayMoneyFormat($value['balance'], false, false, false);
+    $value['utxn_credit'] = CommonHelper::displayMoneyFormat($value['utxn_credit'], false, false, false);
+    $value['utxn_debit'] = CommonHelper::displayMoneyFormat($value['utxn_debit'], false, false, false);
 }
 
 $data = array(
