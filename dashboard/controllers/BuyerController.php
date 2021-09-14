@@ -351,9 +351,8 @@ class BuyerController extends BuyerBaseController
 
         $urlParts = array($orderId, $opId);
         $this->set('urlParts', $urlParts);
-        if ($print !== false) {
-            $print = true;
-        }
+        $print = ($print !== false);
+        
         $this->set('print', $print);
 
         $this->set('opId', $opId);
