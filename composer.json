@@ -18,7 +18,8 @@
         "paypal/paypal-checkout-sdk": "1.0.1",
         "easypost/easypost-php": "dev-master",
         "mollie/mollie-api-php": "2.30.2",
-        "rajathans/shiprocket-php": "1.0.0"
+        "rajathans/shiprocket-php": "1.0.0",
+        "phpmailer/phpmailer": "^6.5"
     },
     "config": {
         "platform": {

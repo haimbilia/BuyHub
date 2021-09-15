@@ -87,8 +87,10 @@ class EmailTemplatesController extends AdminBaseController
         if (empty($tpl)) {
             FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_TEMPLATE', $this->adminLangId));
         }
-
-        if (!EmailHandler::sendMailTpl($to, $tpl, $langId)) {
+        
+        $emailObj = new FatMailer($langId ,$tpl);       
+        $emailObj->setTo($to);
+        if (!$emailObj->send()) {
             FatUtility::dieJsonError(Labels::getLabel('LBL_MAIL_NOT_SENT', $this->adminLangId));
         }
 

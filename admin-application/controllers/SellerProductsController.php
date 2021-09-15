@@ -2316,16 +2316,16 @@ class SellerProductsController extends AdminBaseController
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->adminLangId, 'p_l');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'cred.credential_user_id = selprod_user_id', 'cred');
-        $srch->joinTable('tbl_email_archives', 'LEFT OUTER JOIN', 'arch.emailarchive_to_email = cred.credential_email', 'arch');
+        $srch->joinTable('tbl_email_archives', 'LEFT OUTER JOIN', 'arch.earch_to_email = cred.credential_email', 'arch');
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
             $condition->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%');
         }
-        /* $cnd = $srch->addCondition('emailarchive_tpl_name', 'LIKE', 'threshold_notification_vendor_custom');
-        $cnd->attachCondition('emailarchive_tpl_name', 'LIKE', 'threshold_notification_vendor', 'OR'); */
+        /* $cnd = $srch->addCondition('earch_tpl_name', 'LIKE', 'threshold_notification_vendor_custom');
+        $cnd->attachCondition('earch_tpl_name', 'LIKE', 'threshold_notification_vendor', 'OR'); */
         $srch->addDirectCondition('selprod_stock <= selprod_threshold_stock_level');
         $srch->addDirectCondition('selprod_track_inventory = ' . Product::INVENTORY_TRACK);
-        $srch->addMultipleFields(array('selprod_id', 'selprod_user_id', 'IF(selprod_title is NULL or selprod_title = "" ,product_name, selprod_title) as product_name', 'selprod_stock', 'selprod_threshold_stock_level', 'emailarchive_sent_on'));
+        $srch->addMultipleFields(array('selprod_id', 'selprod_user_id', 'IF(selprod_title is NULL or selprod_title = "" ,product_name, selprod_title) as product_name', 'selprod_stock', 'selprod_threshold_stock_level', 'earch_sent_on'));
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
