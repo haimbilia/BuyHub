@@ -33,7 +33,7 @@
                                     <h2>Forgot your password?</h2>
                                     <p>Enter your email to reset your password.</p>
                                 </div>
-                                <form class="form">
+                                <form class="form form-login">
                                     <div class="form-group">
                                         <input class="form-control" title="Email" placeholder="Email" type="text"
                                             value="">

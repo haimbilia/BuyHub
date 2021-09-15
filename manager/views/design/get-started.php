@@ -40,10 +40,14 @@
                                                         <div class="list-started_icon">
                                                             <a href="#/localization/bussiness-management" class="links"
                                                                 target="_blank">
-                                                                <svg>
+                                                                <svg class="svg">
                                                                     <use
-                                                                        xlink:href="https://demo.tribe.yo-kart.com/admin/images/retina/sprite.svg#setup-logo-address">
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-getting-started.svg#setup-logo-address">
                                                                     </use>
+
+
+
+
                                                                 </svg></a>
                                                         </div>
                                                         <div class="list-started_data">
@@ -54,54 +58,61 @@
                                                                 currencies &amp; languages to get started.</p>
                                                         </div>
                                                         <div class="list-started_action"><img
-                                                                src="https://demo.tribe.yo-kart.com/admin/images/retina/tick-green.svg"
+                                                                src="<?php echo CONF_WEBROOT_URL;?>images/retina/tick-green.svg"
                                                                 alt="">
 
                                                         </div>
                                                     </li>
                                                     <li class="completed">
-                                                        <div class="list-started_icon"><a href="#/system-settings/logo"
-                                                                class="links" target="_blank"><svg>
+                                                        <div class="list-started_icon">
+                                                            <a href="#/system-settings/logo" class="links"
+                                                                target="_blank">
+                                                                <svg class="svg">
                                                                     <use
-                                                                        xlink:href="https://demo.tribe.yo-kart.com/admin/images/retina/sprite.svg#setup-logo-address">
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-getting-started.svg#setup-logo-address">
                                                                     </use>
-                                                                </svg></a></div>
+                                                                </svg>
+                                                            </a>
+                                                        </div>
                                                         <div class="list-started_data">
-                                                            <h5><a href="#/system-settings/logo" class="links"
-                                                                    target="_blank">Configure General Settings</a></h5>
+                                                            <h5>
+                                                                <a href="#/system-settings/logo" class="links"
+                                                                    target="_blank">Configure General Settings
+                                                                </a>
+                                                            </h5>
                                                             <p>Let's configure the system's workflows.</p>
                                                         </div>
                                                         <div class="list-started_action"><img
-                                                                src="https://demo.tribe.yo-kart.com/admin/images/retina/tick-green.svg"
+                                                                src="<?php echo CONF_WEBROOT_URL;?>images/retina/tick-green.svg"
                                                                 alt="">
 
                                                         </div>
                                                     </li>
                                                     <li class="completed">
                                                         <div class="list-started_icon"><a target="_blank"
-                                                                href="https://demo.tribe.yo-kart.com/admin/pages/1/edit"
-                                                                class="links"><svg>
+                                                                href="<?php echo CONF_WEBROOT_URL;?>pages/1/edit"
+                                                                class="links"><svg class="svg">
                                                                     <use
-                                                                        xlink:href="https://demo.tribe.yo-kart.com/admin/images/retina/sprite.svg#setup-homepage">
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-getting-started.svg#setup-homepage">
                                                                     </use>
                                                                 </svg></a></div>
                                                         <div class="list-started_data">
                                                             <h5><a target="_blank"
-                                                                    href="https://demo.tribe.yo-kart.com/admin/pages/1/edit"
+                                                                    href="<?php echo CONF_WEBROOT_URL;?>pages/1/edit"
                                                                     class="links">Configure Homepage</a></h5>
                                                             <p>Customize your homepage with an easy to use editor</p>
                                                         </div>
                                                         <div class="list-started_action">
-                                                            <img src="https://demo.tribe.yo-kart.com/admin/images/retina/tick-green.svg"
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/retina/tick-green.svg"
                                                                 alt="">
 
                                                         </div>
                                                     </li>
                                                     <li class="completed">
                                                         <div class="list-started_icon"><a href="#/payment-methods"
-                                                                class="links" target="_blank"><svg>
+                                                                class="links" target="_blank"><svg class="svg">
                                                                     <use
-                                                                        xlink:href="https://demo.tribe.yo-kart.com/admin/images/retina/sprite.svg#setup-payment-gateway">
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-getting-started.svg#setup-payment-gateway">
                                                                     </use>
                                                                 </svg></a></div>
                                                         <div class="list-started_data">
@@ -111,16 +122,16 @@
                                                                 collect payments online.</p>
                                                         </div>
                                                         <div class="list-started_action"><img
-                                                                src="https://demo.tribe.yo-kart.com/admin/images/retina/tick-green.svg"
+                                                                src="<?php echo CONF_WEBROOT_URL;?>images/retina/tick-green.svg"
                                                                 alt="">
 
                                                         </div>
                                                     </li>
                                                     <li class="completed">
                                                         <div class="list-started_icon"><a href="#/shipping/create"
-                                                                class="links" target="_blank"><svg>
+                                                                class="links" target="_blank"><svg class="svg">
                                                                     <use
-                                                                        xlink:href="https://demo.tribe.yo-kart.com/admin/images/retina/sprite.svg#setup-shipping-charges">
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-getting-started.svg#setup-shipping-charges">
                                                                     </use>
                                                                 </svg></a></div>
                                                         <div class="list-started_data">
@@ -130,16 +141,16 @@
                                                                 location and shipping carriers.</p>
                                                         </div>
                                                         <div class="list-started_action"><img
-                                                                src="https://demo.tribe.yo-kart.com/admin/images/retina/tick-green.svg"
+                                                                src="<?php echo CONF_WEBROOT_URL;?>images/retina/tick-green.svg"
                                                                 alt="">
 
                                                         </div>
                                                     </li>
                                                     <li class="completed">
                                                         <div class="list-started_icon"><a href="#/tax/create"
-                                                                class="links" target="_blank"><svg>
+                                                                class="links" target="_blank"><svg class="svg">
                                                                     <use
-                                                                        xlink:href="https://demo.tribe.yo-kart.com/admin/images/retina/sprite.svg#setup-tax-rates">
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-getting-started.svg#setup-tax-rates">
                                                                     </use>
                                                                 </svg></a></div>
                                                         <div class="list-started_data">
@@ -148,16 +159,16 @@
                                                             <p>Configure store-wide taxes and invoice settings.</p>
                                                         </div>
                                                         <div class="list-started_action"><img
-                                                                src="https://demo.tribe.yo-kart.com/admin/images/retina/tick-green.svg"
+                                                                src="<?php echo CONF_WEBROOT_URL;?>images/retina/tick-green.svg"
                                                                 alt="">
 
                                                         </div>
                                                     </li>
                                                     <li class="completed">
                                                         <div class="list-started_icon"><a href="#/brands" class="links"
-                                                                target="_blank"><svg>
+                                                                target="_blank"><svg class="svg">
                                                                     <use
-                                                                        xlink:href="https://demo.tribe.yo-kart.com/admin/images/retina/sprite.svg#setup-brand">
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-getting-started.svg#setup-brand">
                                                                     </use>
                                                                 </svg></a></div>
                                                         <div class="list-started_data">
@@ -167,16 +178,16 @@
                                                                 products online</p>
                                                         </div>
                                                         <div class="list-started_action"><img
-                                                                src="https://demo.tribe.yo-kart.com/admin/images/retina/tick-green.svg"
+                                                                src="<?php echo CONF_WEBROOT_URL;?>images/retina/tick-green.svg"
                                                                 alt="">
 
                                                         </div>
                                                     </li>
                                                     <li class="completed">
                                                         <div class="list-started_icon"><a href="#/product/categories"
-                                                                class="links" target="_blank"><svg>
+                                                                class="links" target="_blank"><svg class="svg">
                                                                     <use
-                                                                        xlink:href="https://demo.tribe.yo-kart.com/admin/images/retina/sprite.svg#setup-categoriess">
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-getting-started.svg#setup-categoriess">
                                                                     </use>
                                                                 </svg></a></div>
                                                         <div class="list-started_data">
@@ -185,16 +196,16 @@
                                                             <p>Add categories to showcase your product range</p>
                                                         </div>
                                                         <div class="list-started_action"><img
-                                                                src="https://demo.tribe.yo-kart.com/admin/images/retina/tick-green.svg"
+                                                                src="<?php echo CONF_WEBROOT_URL;?>images/retina/tick-green.svg"
                                                                 alt="">
 
                                                         </div>
                                                     </li>
                                                     <li class="completed">
                                                         <div class="list-started_icon"><a href="#/product/create"
-                                                                class="links" target="_blank"><svg>
+                                                                class="links" target="_blank"><svg class="svg">
                                                                     <use
-                                                                        xlink:href="https://demo.tribe.yo-kart.com/admin/images/retina/sprite.svg#setup-products">
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-getting-started.svg#setup-products">
                                                                     </use>
                                                                 </svg></a></div>
                                                         <div class="list-started_data">
@@ -203,17 +214,18 @@
                                                             <p>Let's roll your products out! Showcase your products with
                                                                 images, options &amp; detailed descriptions.</p>
                                                         </div>
-                                                        <div class="list-started_action"><img
-                                                                src="https://demo.tribe.yo-kart.com/admin/images/retina/tick-green.svg"
+                                                        <div class="list-started_action">
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/retina/tick-green.svg"
                                                                 alt="">
 
                                                         </div>
                                                     </li>
                                                     <li class="">
                                                         <div class="list-started_icon">
-                                                            <a href="#/pages" class="links" target="_blank"><svg>
+                                                            <a href="#/pages" class="links" target="_blank"><svg
+                                                                    class="svg">
                                                                     <use
-                                                                        xlink:href="https://demo.tribe.yo-kart.com/admin/images/retina/sprite.svg#setup-content-pages">
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-getting-started.svg#setup-content-pages">
                                                                     </use>
                                                                 </svg>
                                                             </a>
@@ -224,7 +236,7 @@
                                                             <p>Setup your content pages. How about a brand story?</p>
                                                         </div>
                                                         <div class="list-started_action">
-                                                            <img src="https://demo.tribe.yo-kart.com/admin/images/retina/tick-unfill.svg"
+                                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/retina/tick-green.svg"
                                                                 alt="">
                                                         </div>
                                                     </li>

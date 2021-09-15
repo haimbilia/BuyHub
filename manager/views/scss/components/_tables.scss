@@ -27,7 +27,7 @@
     tfoot {}
     th,
     td {
-        padding: 0.75rem 1.2rem;
+        padding: 1rem 1.2rem;
         vertical-align: top;
         border-top: dashed 1px $border-color;
     }
@@ -551,7 +551,7 @@
     display: flex;
     align-items: center;
     &-select {
-        max-width: 100px;
+        max-width: 70px;
         margin-#{$end-direction}: 1.5rem;
     }
 }
@@ -588,7 +588,9 @@
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            &:hover {}
+            &:hover {
+                background: lighten($bg-gray, 0.20);
+            }
             .svg {
                 width: 16px;
                 height: 16px;
@@ -599,5 +601,23 @@
                 }
             }
         }
+    }
+}
+
+.sorting {
+    cursor: pointer;
+    position: relative;
+    >span {
+        display: flex;
+        align-items: center;
+        .svg {
+            margin-#{$start-direction}: 4px;
+            width: 12px;
+            height: 12px;
+        }
+    }
+    &:hover,
+    &_asc {
+        color: $brand-color !important;
     }
 }
