@@ -28701,7 +28701,7 @@ ALTER TABLE `tbl_order_product_charges`
 -- AUTO_INCREMENT for table `tbl_order_product_digital_download_links`
 --
 ALTER TABLE `tbl_order_product_digital_download_links`
-  MODIFY `opddl_link_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+  MODIFY `opddl_link_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_order_prod_charges_logs`
