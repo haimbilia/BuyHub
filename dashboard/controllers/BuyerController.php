@@ -351,9 +351,8 @@ class BuyerController extends BuyerBaseController
 
         $urlParts = array($orderId, $opId);
         $this->set('urlParts', $urlParts);
-        if ($print !== false) {
-            $print = true;
-        }
+        $print = ($print !== false);
+        
         $this->set('print', $print);
 
         $this->set('opId', $opId);
@@ -684,6 +683,8 @@ class BuyerController extends BuyerBaseController
         foreach ($orders as &$order) {
             $charges = $oObj->getOrderProductChargesArr($order['op_id'], MOBILE_APP_API_CALL);
             $order['charges'] = $charges;
+            $order['orderstatus_color_code'] = applicationConstants::getClassColor($order['orderstatus_color_class']);
+            $order['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($order['selprod_product_id'], "THUMB", $order['op_selprod_id'], 0, $this->siteLangId), CONF_WEBROOT_FRONTEND);
         }
         $this->set('orders', $orders);
         $this->set('page', $page);
@@ -748,6 +749,9 @@ class BuyerController extends BuyerBaseController
         $orderProducts = FatApp::getDb()->fetchAll($rs);
 
         foreach ($orderProducts as &$op) {
+            $uploadedTime = AttachedFile::setTimeParam($op['product_updated_on']);
+            $op['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($op['selprod_product_id'], "CLAYOUT3", $op['op_selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
             $files = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD, $op['op_id'], 0, $this->siteLangId, true);
             foreach ($files as &$file) {
                 $dateAvailable = date('Y-m-d', strtotime(date('Y-m-d') . '+ 1 year'));
@@ -771,9 +775,10 @@ class BuyerController extends BuyerBaseController
                         $file['downloadable'] = false;
                     }
                 }
+                $file['downloadUrl'] = UrlHelper::generateFullUrl() . 'public/index.php?url=buyer/download-digital-file/' . $file['afile_id'] . '/' . $file['afile_record_id'];
             }
 
-            $op['files'] = $files;
+            $op['files'] = (true === MOBILE_APP_API_CALL) ? array_values($files) : $files;
 
             $linkSrch = new SearchBase(OrderProductDigitalLinks::DB_TBL);
             $linkSrch->addCondition("opddl_op_id", "=", $op['op_id']);
@@ -2537,19 +2542,16 @@ class BuyerController extends BuyerBaseController
 
     public function searchOffers()
     {
-        $offers = DiscountCoupons::getUserCoupons(UserAuthentication::getLoggedUserId(), $this->siteLangId);
+        $offers = (array) DiscountCoupons::getUserCoupons(UserAuthentication::getLoggedUserId(), $this->siteLangId);
 
-        if ($offers) {
-            $this->set('offers', $offers);
-        } else {
-            if (true === MOBILE_APP_API_CALL) {
-                $this->set('offers', array());
-            } else {
-                $this->set('noRecordsHtml', $this->_template->render(false, false, '_partial/no-record-found.php', true));
-            }
-        }
+        $this->set('offers', $offers);
+        
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
+        }
+
+        if (empty($offers)) {
+            $this->set('noRecordsHtml', $this->_template->render(false, false, '_partial/no-record-found.php', true));
         }
         $this->_template->render(false, false, 'buyer/search-offers.php');
     }

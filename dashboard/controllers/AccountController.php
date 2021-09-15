@@ -585,11 +585,8 @@ class AccountController extends LoggedUserController
                     break;
             }
         }
-        $records = array();
 
-        $rs = $srch->getResultSet();
-
-        $records = FatApp::getDb()->fetchAll($rs, 'utxn_id');
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'utxn_id');
         $this->set('arrListing', $records);
         $this->set('page', $page);
         $this->set('pageCount', $srch->pages());
@@ -3276,21 +3273,18 @@ class AccountController extends LoggedUserController
     public function searchAddresses()
     {
         $address = new Address(0, $this->siteLangId);
-        $addresses = $address->getData(Address::TYPE_USER, $this->userId);
+        $addresses = (array) $address->getData(Address::TYPE_USER, $this->userId);
 
-        if ($addresses) {
-            $this->set('addresses', $addresses);
-        } else {
-            if (true === MOBILE_APP_API_CALL) {
-                $this->set('addresses', array());
-            }
-            $this->set('noRecordsHtml', $this->_template->render(false, false, '_partial/no-record-found.php', true));
-        }
+        $this->set('addresses', $addresses);
+
         if (true === MOBILE_APP_API_CALL) {
             $cartObj = new Cart($this->userId);
-            $shipping_address_id = $cartObj->getCartShippingAddress();
-            $this->set('shippingAddressId', $shipping_address_id);
+            $this->set('shippingAddressId', $cartObj->getCartShippingAddress());
             $this->_template->render();
+        }
+
+        if (empty($addresses)) {
+            $this->set('noRecordsHtml', $this->_template->render(false, false, '_partial/no-record-found.php', true));
         }
         $this->_template->render(false, false);
     }

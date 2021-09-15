@@ -14,16 +14,15 @@ class Countries extends MyAppModel
         $this->db = FatApp::getDb();
     }
 
-    public static function getSearchObject($isActive = true, $langId = 0)
+    public static function getSearchObject(bool $isActive = true, int $langId = 0): object
     {
-        $langId = FatUtility::int($langId);
         $srch = new SearchBase(static::DB_TBL, 'c');
 
         if ($isActive == true) {
             $srch->addCondition('c.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::ACTIVE);
         }
 
-        if ($langId > 0) {
+        if (0 < $langId) {
             $srch->joinTable(
                 static::DB_TBL_LANG,
                 'LEFT OUTER JOIN',
@@ -164,7 +163,7 @@ class Countries extends MyAppModel
 
         return $row;
     }
-    
+
     public static function getCountryAttributeByName(string $countryName, int $langId, string $attr): string
     {
         $countryArr = self::getCountryArrByName($countryName, $langId, [$attr]);
@@ -184,5 +183,4 @@ class Countries extends MyAppModel
         $rs = $srch->getResultSet();
         return (array) FatApp::getDb()->fetch($rs);
     }
-
 }

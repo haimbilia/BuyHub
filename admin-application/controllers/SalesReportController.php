@@ -10,7 +10,6 @@ class SalesReportController extends AdminBaseController
 
     public function index($orderDate = '')
     {
-
         $fields = $this->getFormColumns($orderDate);
         $frmSearch = $this->getSearchForm($fields, $orderDate);
         $this->set('frmSearch', $frmSearch);
@@ -183,7 +182,7 @@ class SalesReportController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns($orderDate = '')
+    private function getFormColumns()
     {
         $salesReportCacheVar = CacheHelper::get('salesReportCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$salesReportCacheVar) {

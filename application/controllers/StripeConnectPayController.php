@@ -160,7 +160,7 @@ class StripeConnectPayController extends PaymentController
             'payment_method_types' => $this->stripeConnect->getOtherPaymentMethods(),
             'success_url' => $successUrl,
             'cancel_url' => $cancelBtnUrl,
-            'client_reference_id' => $orderId,
+            'client_reference_id' => $this->orderInfo['order_number'],
             'customer' => $this->customerId,
         ];
 
@@ -173,7 +173,7 @@ class StripeConnectPayController extends PaymentController
                         'receipt_email' => FatApp::getConfig('CONF_SITE_OWNER_EMAIL'),
                         'shipping' => $orderFormattedData['shipping'],
                         'metadata' => [
-                            'orderId' => $orderId
+                            'orderId' => $this->orderId
                         ]
                     ]
                 ]
@@ -205,7 +205,7 @@ class StripeConnectPayController extends PaymentController
                     'quantity' => $op['op_qty']
                 ];
 
-                $data['payment_intent_data']['statement_descriptor'] = $orderId;
+                $data['payment_intent_data']['statement_descriptor'] = $this->orderInfo['order_number'];
             }
         } else if ($this->orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
             $stipePlanInfo = SellerPackagePlans::getAttributesById($orderProducts[key($orderProducts)]['ossubs_plan_id']);
