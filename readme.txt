@@ -369,3 +369,5 @@ Notes:
     2Checkout Payment Gateway:
         To Test Sandbox Payment Refer This: https://knowledgecenter.2checkout.com/Documentation/09Test_ordering_system/01Test_payment_methods
 
+
+    ShipRocket : No sandbox environment available need to test live.
