@@ -504,7 +504,7 @@
                                                                     </p>
                                                                     <div class="widget5__info">
                                                                         <span>Author:</span>
-                                                                        <span class="font-info">Keenthemes</span>
+                                                                        <span class="font-info">Yokart</span>
                                                                         <span>Released:</span>
                                                                         <span class="font-info">23.08.17</span>
                                                                     </div>
@@ -669,7 +669,7 @@
                                                                     </p>
                                                                     <div class="widget5__info">
                                                                         <span>Author:</span>
-                                                                        <span class="font-info">Keenthemes</span>
+                                                                        <span class="font-info">Yokart</span>
                                                                         <span>Released:</span>
                                                                         <span class="font-info">23.08.17</span>
                                                                     </div>
@@ -738,7 +738,7 @@
                                                                     </p>
                                                                     <div class="widget5__info">
                                                                         <span>Author:</span>
-                                                                        <span class="font-info">Keenthemes</span>
+                                                                        <span class="font-info">Yokart</span>
                                                                         <span>Released:</span>
                                                                         <span class="font-info">23.08.17</span>
                                                                     </div>

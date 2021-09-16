@@ -623,6 +623,18 @@ function showActionsBtns() {
     }
 }
 
+function getHelpCenterContent(controller, action = "") {
+    fcom.ajax(fcom.makeUrl('HelpCenter', 'getContent', [controller, action]), '', function (t) {
+        var res = $.parseJSON(t);
+        if (0 == res.status) {
+            return;
+        }
+        
+        if ('undefined' != typeof res.html) {
+            $("#helpCenterJs").html(res.html);
+        }
+    });
+}
 
 (function () {
     Slugify = function (str, str_val_id, is_slugify) {
