@@ -84,6 +84,7 @@ class CountriesController extends AdminBaseController
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
         $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
         $this->_template->render(false, false);
@@ -449,6 +450,6 @@ class CountriesController extends AdminBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['select_all', 'action']);
+        return array_diff($fields, ['select_all', 'listSerial', 'action']);
     }
 }
