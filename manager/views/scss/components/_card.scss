@@ -49,6 +49,12 @@ $card:'card';
         display: flex;
         align-items: center;
         align-content: flex-end;
+        >.actions {
+            .selected {
+                background-color: $brand-color;
+                color: $brand-color-inverse;
+            }
+        }
     }
     &-body {
         $selfBody: &;

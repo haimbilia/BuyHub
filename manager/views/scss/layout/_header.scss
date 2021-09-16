@@ -809,6 +809,7 @@ $mykart:'mykart';
     #{$self}__item {
         margin-#{$start-direction}: .75rem;
         #{$self}__trigger {
+            color: $txt-gray;
             width: 40px;
             height: 40px;
             display: flex;

@@ -34,3 +34,19 @@
         margin-top: 2rem;
     }
 }
+
+.form-login {
+    input {
+        &[type="text"],
+        &[type="password"] {
+            height: auto;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+    }
+    [type="button"] {
+        height: auto;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+}

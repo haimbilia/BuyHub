@@ -663,7 +663,7 @@
                                                         <div class="row">
                                                             <label class="col-xl-3"></label>
                                                             <div class="col-lg-9 col-xl-6">
-                                                                <h3 class="section__title section__title-sm">Updates From Keenthemes:</h3>
+                                                                <h3 class="section__title section__title-sm">Updates From Yokart:</h3>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">

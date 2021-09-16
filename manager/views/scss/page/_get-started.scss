@@ -5,7 +5,7 @@
     &-head {
         text-align: center;
         color: $txt-body;
-        padding-bottom: 1rem;
+        padding-bottom: 2rem;
     }
     &-foot {
         padding: 3rem 0;
@@ -20,6 +20,8 @@
     }
     p {
         color: $txt-gray;
+        margin: 0;
+        font-size: 0.9rem;
     }
 }
 
@@ -28,17 +30,21 @@
     flex-direction: column;
     li {
         display: flex;
-        padding: 1rem 0;
-        border-bottom: $border;
+        padding: 1.5rem 0;
+        border-bottom: dashed 1px $border-color;
+        &:first-child {
+            padding-top: 0;
+        }
         &:last-child {
+            padding-bottom: 0;
             border-bottom: none;
         }
     }
     &_icon {
-        min-width: 80px;
-        svg {
-            width: 30px;
-            height: 30px;
+        min-width: 50px;
+        .svg {
+            width: 52px;
+            height: 52px;
         }
     }
     &_data {

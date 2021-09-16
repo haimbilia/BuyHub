@@ -376,8 +376,7 @@
                                                     <!--begin::Input group-->
                                                     <div class="row form-group">
                                                         <!--begin::Label-->
-                                                        <label
-                                                            class="col-lg-4 col-form-label fw-bold fs-6">Avatar</label>
+                                                        <label class="col-lg-4 col-form-label label">Avatar</label>
                                                         <!--end::Label-->
                                                         <!--begin::Col-->
                                                         <div class="col-lg-8">
@@ -435,8 +434,7 @@
                                                     <!--begin::Input group-->
                                                     <div class="row form-group">
                                                         <!--begin::Label-->
-                                                        <label
-                                                            class="col-lg-4 col-form-label required fw-bold fs-6">Full
+                                                        <label class="col-lg-4 col-form-label required label">Full
                                                             Name</label>
                                                         <!--end::Label-->
                                                         <!--begin::Col-->
@@ -473,13 +471,13 @@
                                                     <div class="row form-group">
                                                         <!--begin::Label-->
                                                         <label
-                                                            class="col-lg-4 col-form-label required fw-bold fs-6">Company</label>
+                                                            class="col-lg-4 col-form-label required label">Company</label>
                                                         <!--end::Label-->
                                                         <!--begin::Col-->
                                                         <div class="col-lg-8 fv-row fv-plugins-icon-container">
                                                             <input type="text" name="company"
                                                                 class="form-control form-control-lg form-control-solid"
-                                                                placeholder="Company name" value="Keenthemes">
+                                                                placeholder="Company name" value="Yokart">
                                                             <div class="fv-plugins-message-container invalid-feedback">
                                                             </div>
                                                         </div>
@@ -489,7 +487,7 @@
                                                     <!--begin::Input group-->
                                                     <div class="row form-group">
                                                         <!--begin::Label-->
-                                                        <label class="col-lg-4 col-form-label fw-bold fs-6">
+                                                        <label class="col-lg-4 col-form-label label">
                                                             <span class="required">Contact Phone</span>
                                                             <i class="fas fa-exclamation-circle ms-1 fs-7"
                                                                 data-toggle="tooltip" title=""
@@ -511,14 +509,14 @@
                                                     <!--begin::Input group-->
                                                     <div class="row form-group">
                                                         <!--begin::Label-->
-                                                        <label class="col-lg-4 col-form-label fw-bold fs-6">Company
+                                                        <label class="col-lg-4 col-form-label label">Company
                                                             Site</label>
                                                         <!--end::Label-->
                                                         <!--begin::Col-->
                                                         <div class="col-lg-8 fv-row">
                                                             <input type="text" name="website"
                                                                 class="form-control form-control-lg form-control-solid"
-                                                                placeholder="Company website" value="keenthemes.com">
+                                                                placeholder="Company website" value=" ">
                                                         </div>
                                                         <!--end::Col-->
                                                     </div>
@@ -526,7 +524,7 @@
                                                     <!--begin::Input group-->
                                                     <div class="row form-group">
                                                         <!--begin::Label-->
-                                                        <label class="col-lg-4 col-form-label fw-bold fs-6">
+                                                        <label class="col-lg-4 col-form-label label">
                                                             <span class="required">Country</span>
                                                             <i class="fas fa-exclamation-circle ms-1 fs-7"
                                                                 data-toggle="tooltip" title=""
@@ -1018,7 +1016,7 @@
                                                     <div class="row form-group">
                                                         <!--begin::Label-->
                                                         <label
-                                                            class="col-lg-4 col-form-label required fw-bold fs-6">Language</label>
+                                                            class="col-lg-4 col-form-label required label">Language</label>
                                                         <!--end::Label-->
                                                         <!--begin::Col-->
                                                         <div class="col-lg-8 fv-row fv-plugins-icon-container">
@@ -1144,8 +1142,7 @@
                                                     <!--begin::Input group-->
                                                     <div class="row form-group">
                                                         <!--begin::Label-->
-                                                        <label
-                                                            class="col-lg-4 col-form-label required fw-bold fs-6">Time
+                                                        <label class="col-lg-4 col-form-label required label">Time
                                                             Zone</label>
                                                         <!--end::Label-->
                                                         <!--begin::Col-->
@@ -1475,8 +1472,7 @@
                                                     <!--begin::Input group-->
                                                     <div class="row form-group">
                                                         <!--begin::Label-->
-                                                        <label
-                                                            class="col-lg-4 col-form-label fw-bold fs-6">Currency</label>
+                                                        <label class="col-lg-4 col-form-label label">Currency</label>
                                                         <!--end::Label-->
                                                         <!--begin::Col-->
                                                         <div class="col-lg-8 fv-row">
@@ -1516,7 +1512,7 @@
                                                     <div class="row form-group">
                                                         <!--begin::Label-->
                                                         <label
-                                                            class="col-lg-4 col-form-label required fw-bold fs-6">Communication</label>
+                                                            class="col-lg-4 col-form-label required label">Communication</label>
                                                         <!--end::Label-->
                                                         <!--begin::Col-->
                                                         <div class="col-lg-8 fv-row fv-plugins-icon-container">
@@ -1545,7 +1541,7 @@
                                                     <!--begin::Input group-->
                                                     <div class="row form-group">
                                                         <!--begin::Label-->
-                                                        <label class="col-lg-4 col-form-label fw-bold fs-6">Allow
+                                                        <label class="col-lg-4 col-form-label label">Allow
                                                             Marketing</label>
                                                         <!--begin::Label-->
                                                         <!--begin::Label-->
@@ -1561,11 +1557,17 @@
                                                 <!--end::Card body-->
                                                 <!--begin::Actions-->
                                                 <div class="card-foot">
-                                                    <button type="reset"
-                                                        class="btn btn-light btn-active-light-primary me-2">Discard</button>
 
-                                                    <button type="submit" class="btn btn-brand" id="_submit">Save
-                                                        Changes</button>
+                                                    <div class="row">
+                                                        <div class="col"><button type="reset"
+                                                                class="btn btn-outline-brand">Discard</button>
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <button type="submit"
+                                                                class="btn btn-brand gb-btn gb-btn-primary ">Update</button>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                                 <!--end::Actions-->
                                                 <input type="hidden">

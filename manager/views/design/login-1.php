@@ -27,13 +27,12 @@
                                             alt="Yo!Kart">
                                     </a>
                                 </div>
-
                             </div>
                             <div class="card-body">
                                 <div class="title">
                                     <h2>Sign In to Yokart</h2>
                                 </div>
-                                <form class="form">
+                                <form class="form form-login">
                                     <div class="form-group"><input class="form-control" title="Username"
                                             placeholder="Username" type="text" value="">
                                         <input class="form-control" title="Password" placeholder="Password"
