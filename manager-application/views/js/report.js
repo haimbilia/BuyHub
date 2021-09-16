@@ -58,7 +58,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
         if (frm) {
             data = fcom.frmData(frm);
         }
-        
+
         if (typeof withloader == 'undefined' || withloader != false) {
             $(dv).html(fcom.getLoader());
         }
@@ -91,5 +91,15 @@ $(document).on("click", ".headerColumnJs", function (e) {
         });
 
         $(frm.reportColumns).val(JSON.stringify(reportColumns));
+    };
+
+    deleteRecord = function (recordId) {
+        if (!confirm(langLbl.confirmDelete)) {
+            return;
+        }
+        data = 'recordId=' + recordId;
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'deleteRecord'), data, function () {
+            reloadList();
+        });
     };
 })();

@@ -20,7 +20,7 @@ $btn_clear = $frmSearch->getField('btn_clear');
 $btn_clear->addFieldtagAttribute('class', 'btn btn-link');
 $btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
 ?>
-<main class="main">
+<main class="main mainJs">    
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -38,7 +38,6 @@ $btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
                                 <?php echo $frmSearch->getFieldHTML('btn_clear'); ?>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <?php
@@ -52,12 +51,11 @@ $btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
                     <?php echo Labels::getLabel('LBL_Processing...', $adminLangId); ?>
                 </div>
             </div>
-
-
         </div>
-
     </div>
 </main>
+
 <script>
     var controllerName = '<?php echo str_replace('Controller', '', FatApp::getController()); ?>';
+    getHelpCenterContent(controllerName);
 </script>

@@ -25,26 +25,38 @@
         );
         $th = $tbl->appendElement('thead')->appendElement('tr');
         foreach ($fields as $key => $val) {
+
+            $headColumData = Common::getHeaderElementColumn($key, $sortBy, $sortOrder);
+            $cls = '';
+            if (in_array($key, $allowedKeysForSorting)) {
+                $cls .= 'headerColumnJs ' . $headColumData['class'];
+            }
+
+            if ('action' == strtolower($key)) {
+                $cls .= 'align-right';
+            }
+
+            $td = $th->appendElement('th', ['class' => $cls, 'data-field' => $key]);
+
             switch ($key) {
                 case 'select_all':
-                    $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
+                    $td->appendElement('plaintext', [], '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
                     break;
                 case 'action':
-                    $th->appendElement('th', ['class' => 'align-right'], $val);
+                    $td->appendElement('plaintext', [], $val);
                     break;
                 default:
-                    $th->appendElement('th', ['class' => 'sorting'], $val);
+                    $td->appendElement('plaintext', [], $val);
                     break;
             }
         }
 
         $tbody = $tbl->appendElement('tbody');
-
         $serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
+
         foreach ($arrListing as $sn => $row) {
             $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
             $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
-
             foreach ($fields as $key => $val) {
                 $cls = ('action' == $key) ? ['class' => 'align-right'] : [];
                 $td = $tr->appendElement('td', $cls);
@@ -53,12 +65,13 @@
                     case 'select_all':
                         $td->appendElement('plaintext', array(), '');
                         break;
-                    case 'listserial':
+                    case 'listSerial':
                         $td->appendElement('plaintext', array(), $serialNo);
                         break;
                     case 'action':
                         $data = [
                             'adminLangId' => $adminLangId,
+                            'recordId' => $row['country_id']
                         ];
 
                         if ($canEdit) {
@@ -73,7 +86,7 @@
                         break;
                 }
             }
-            $serialNo++;
+            $serialNo--;
         }
         if (count($arrListing) == 0) {
             $tbl->appendElement('tr')->appendElement(
@@ -84,12 +97,8 @@
                 Labels::getLabel('LBL_No_Records_Found', $adminLangId)
             );
         }
-
         echo $tbl->getHtml();
-
         ?>
-
-
     </div>
 
 </div>
@@ -98,6 +107,6 @@
     echo FatUtility::createHiddenFormFromData($postedData, array(
         'name' => 'frmReportSearchPaging'
     ));
-    $pagingArr = array('pageCount' => $pageCount, 'page' => $pageSize, 'pageSize' => $pageSize, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
+    $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'pageSize' => $pageSize, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
     $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
 </div>

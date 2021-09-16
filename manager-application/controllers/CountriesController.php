@@ -84,6 +84,7 @@ class CountriesController extends AdminBaseController
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
         $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
         $this->_template->render(false, false);
@@ -387,6 +388,23 @@ class CountriesController extends AdminBaseController
         }
     }
 
+    public function deleteRecord()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+
+        if (1 >  $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $country = new Countries($recordId);
+        $country->assignValues(array(Countries::tblFld('deleted') => 1));
+        if (!$country->save()) {
+            LibHelper::exitWithError($country->getError(), true);
+        }
+
+        LibHelper::dieJsonSuccess(['msg' => $this->str_update_record]);
+    }
+
     private function getSearchForm($fields = [])
     {
         $frm = new Form('frmReportSearch');
@@ -432,6 +450,6 @@ class CountriesController extends AdminBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['select_all', 'action']);
+        return array_diff($fields, ['select_all', 'listSerial', 'action']);
     }
 }
