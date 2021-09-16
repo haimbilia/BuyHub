@@ -65,9 +65,10 @@ $pagination .=     FatUtility::getPageString(
                 </select>
             <?php } ?>
             <div class="data-length-info"></div>
-            <?php if (1 < $pageCount) {
-                $str = Labels::getLabel('LBL_SHOWING', $adminLangId);
-                $str .= ' ' . $startIdx = ($pageNumber - 1) * $pageSize + 1;
+            <?php if (1 < $pageCount) {               
+                $startIdx = (($pageNumber - 1) * $pageSize) + 1;
+                $str = Labels::getLabel('LBL_SHOWING', $adminLangId) . ' ';
+                $str .= $startIdx;
                 $str .= ' ' . Labels::getLabel('LBL_TO', $adminLangId) . ' ';
                 $str .= ($recordCount < $startIdx + $pageSize - 1) ? $recordCount : $startIdx + $pageSize - 1;
                 $str .= ' ' . Labels::getLabel('LBL_OF', $adminLangId);

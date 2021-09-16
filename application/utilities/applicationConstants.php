@@ -551,6 +551,6 @@ class applicationConstants
 
     public static function getPageSizeValues()
     {
-        return [10, 25, 50, 100];
+        return [10, 20, 25, 50, 100];
     }
 }
