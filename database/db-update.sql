@@ -1154,3 +1154,25 @@ UPDATE `tbl_admin` SET `admin_password_old` = '' WHERE `tbl_admin`.`admin_id` = 
 INSERT INTO `tbl_extra_pages` (`epage_id`, `epage_identifier`, `epage_type`, `epage_content_for`, `epage_active`, `epage_default`, `epage_default_content`) VALUES (NULL, 'Admin Zones', '45', '1', '1', '0', '<br />\r\n\r\n<h2>Zones Content File</h2> <br />\r\n\r\n<h3>Zone Identifier</h3>User defined unique identifier for the Zone. This works as a unique key for the system to identify a particular Zone. <br />\r\n<br />\r\n\r\n<h3>Zone name</h3>User defined name for the Zone.<br />\r\n<br />\r\n\r\n<h3>Active</h3>User defined field to mark a particular zone as active in the system or not. Possible inputs for this field are \'Yes\' &amp; \'No\'. Default value should be set as \'Yes\'.');
 INSERT INTO `tbl_extra_pages_lang` (`epagelang_epage_id`, `epagelang_lang_id`, `epage_label`, `epage_content`) VALUES ((select epage_id from tbl_extra_pages where epage_type='45'), '1', 'Admin Zones', '<br />\r\n\r\n<h2>Zones Content File</h2> <br />\r\n\r\n<h3>Zone Identifier</h3>User defined unique identifier for the Zone. This works as a unique key for the system to identify a particular Zone. <br />\r\n<br />\r\n\r\n<h3>Zone name</h3>User defined name for the Zone.<br />\r\n<br />\r\n\r\n<h3>Active</h3>User defined field to mark a particular zone as active in the system or not. Possible inputs for this field are \'Yes\' &amp; \'No\'. Default value should be set as \'Yes\'.');
 
+-- ----- Task : 89922 Help Center -------- --
+CREATE TABLE `tbl_help_center` (
+    `hc_id` INT NOT NULL AUTO_INCREMENT,
+    `hc_controller` VARCHAR(100) NULL,
+    `hc_action` VARCHAR(50) NULL,
+    `hc_default_title` VARCHAR(100) NOT NULL,
+    `hc_default_description` TEXT NOT NULL,
+    PRIMARY KEY (`hc_id`)
+) ENGINE = InnoDB;
+
+ALTER TABLE `tbl_help_center`  ADD `hc_user_type` TINYINT NOT NULL  AFTER `hc_id`;
+ALTER TABLE `tbl_help_center` ADD UNIQUE( `hc_user_type`, `hc_controller`, `hc_action`);
+
+CREATE TABLE `tbl_help_center_lang` (
+    `hclang_hc_id` INT NOT NULL,
+    `hclang_lang_id` TINYINT NOT NULL,
+    `hclang_title` VARCHAR(100) NOT NULL,
+    `hclang_description` TEXT NOT NULL
+) ENGINE = InnoDB;
+
+ALTER TABLE `tbl_help_center_lang` ADD UNIQUE( `hclang_hc_id`, `hclang_lang_id`);
+-- ----- Task : 89922 Help Center -------- --

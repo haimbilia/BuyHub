@@ -27,9 +27,7 @@
                     <span class="help_label">Help</span>
                 </button>
 
-                <div class="modal fixed-right fade" id="help" tabindex="-1" role="dialog" aria-labelledby="help"
-                    aria-hidden="true">
-
+                <div class="modal fixed-right fade" id="help" tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-vertical" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -61,10 +59,6 @@
 
                         </div>
                     </div>
-
-
-
-
                 </div>
 
                 <main class="main">
