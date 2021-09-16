@@ -62,12 +62,24 @@
         max-width: 400px;
     }
     .data {
-        ul {
+        h6 {
+            margin-bottom: 1.5rem;
+        }
+        >ul {
             li {
+                font-size: 0.9rem;
                 margin: 0.5rem 0;
+                &::marker {
+                    color: $brand-color;
+                }
             }
         }
     }
+}
+
+.help-window {
+    @extend .empty-stats;
+    text-align:#{$start-direction};
 }
 
 .accounts-nav {

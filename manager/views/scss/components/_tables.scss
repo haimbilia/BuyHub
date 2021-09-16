@@ -556,8 +556,6 @@
     }
 }
 
-.table-check {}
-
 .actions {
     display: inline-flex;
     align-items: center;
@@ -617,7 +615,30 @@
         }
     }
     &:hover,
-    &_asc {
+    &_asc,
+    &_desc {
         color: $brand-color !important;
+    }
+}
+
+.table-processing {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:after {
+        position: absolute;
+        content: "";
+        background-color: rgba(255, 255, 255, 0.05);
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
     }
 }

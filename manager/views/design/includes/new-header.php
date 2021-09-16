@@ -13,6 +13,17 @@
             </div>
             <div class="main-header-toolbar">
                 <div class="header-action">
+                    <div class="header-action__item">
+                        <a href="#" class="btn btn-icon btn-outline-brand btn-add">
+                            <i class="icn">
+                                <svg class="svg">
+                                    <use
+                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
+                                    </use>
+                                </svg></i>
+                            <span>New</span>
+                        </a>
+                    </div>
 
                     <div class="header-action__item">
                         <a class="header-action__trigger" href="javascript:void(0);" data-toggle="modal"

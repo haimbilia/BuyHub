@@ -39,6 +39,17 @@
             padding-bottom: 0;
             border-bottom: none;
         }
+        &.completed {
+            .target {
+                opacity: 0.5;
+                filter: grayscale(100);
+                color: $txt-gray;
+            }
+        }
+    }
+    .target {
+        display: flex;
+        flex: 1;
     }
     &_icon {
         min-width: 50px;
