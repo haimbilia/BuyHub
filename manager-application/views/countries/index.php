@@ -20,7 +20,7 @@ $btn_clear = $frmSearch->getField('btn_clear');
 $btn_clear->addFieldtagAttribute('class', 'btn btn-link');
 $btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
 ?>
-<main class="main">    
+<main class="main mainJs">    
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -55,11 +55,7 @@ $btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
     </div>
 </main>
 
-<!-- Help Center Content -->
-<div id="helpCenterJs"></div>
-<!-- Help Center Content -->
-
 <script>
     var controllerName = '<?php echo str_replace('Controller', '', FatApp::getController()); ?>';
-    getHelpCenterContent("countries");
+    getHelpCenterContent(controllerName);
 </script>

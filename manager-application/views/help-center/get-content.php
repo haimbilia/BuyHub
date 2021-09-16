@@ -20,10 +20,8 @@
                     <div class="card-body">
                         <div class="empty-stats">
                             <img src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-data-cuate.svg" alt="">
-                              <div class="data">
-                                <h6>
-                                    <?php echo $record[HelpCenter::DB_TBL_PREFIX . 'description']; ?>
-                                </h6>
+                              <div class="data data--cms">
+                                <?php echo $record[HelpCenter::DB_TBL_PREFIX . 'description']; ?>
                             </div>
                         </div>
                     </div>

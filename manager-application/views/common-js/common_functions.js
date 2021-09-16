@@ -630,6 +630,10 @@ function getHelpCenterContent(controller, action = "") {
             return;
         }
         
+        if (1 > $('#helpCenterJs').length) {
+            $(".mainJs").after('<div id="helpCenterJs"></div>');
+        }
+
         if ('undefined' != typeof res.html) {
             $("#helpCenterJs").html(res.html);
         }
