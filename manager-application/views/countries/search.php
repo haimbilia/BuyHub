@@ -25,15 +25,28 @@
         );
         $th = $tbl->appendElement('thead')->appendElement('tr');
         foreach ($fields as $key => $val) {
+
+            $headColumData = Common::getHeaderElementColumn($key, $sortBy, $sortOrder);
+            $cls = '';
+            if (in_array($key, $allowedKeysForSorting)) {
+                $cls .= 'headerColumnJs ' . $headColumData['class'];
+            }
+
+            if ('action' == strtolower($key)) {
+                $cls .= 'align-right';
+            }
+
+            $td = $th->appendElement('th', ['class' => $cls, 'data-field' => $key]);
+
             switch ($key) {
                 case 'select_all':
-                    $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
+                    $td->appendElement('plaintext', [], '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
                     break;
                 case 'action':
-                    $th->appendElement('th', ['class' => 'align-right'], $val);
+                    $td->appendElement('plaintext', [], $val);
                     break;
                 default:
-                    $th->appendElement('th', ['class' => 'sorting'], $val);
+                    $td->appendElement('plaintext', [], $val);
                     break;
             }
         }
