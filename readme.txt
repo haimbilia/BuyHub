@@ -273,6 +273,7 @@ Updates/Fixes :
     => 058142 - we should have zone export/import
     => 058197 - on email header logo static link is there
     => 058449 - import Product seo data not working 
+    => 058450 - product stock availability issue
 
 New Features:  
     => Admin shipped products listing page

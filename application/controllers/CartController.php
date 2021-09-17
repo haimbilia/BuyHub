@@ -475,6 +475,7 @@ class CartController extends MyAppController
             /* cannot add quantity more than stock of the product[ */
             $selprod_stock = $sellerProductRow['selprod_stock'] - Product::tempHoldStockCount($productId);
             if ($quantity > $selprod_stock) {
+                $productAdd = false;
                 $message = Labels::getLabel('MSG_Requested_quantity_more_than_stock_available', $this->siteLangId);
                 if (true === MOBILE_APP_API_CALL) {
                     FatUtility::dieJsonError($message);
@@ -969,7 +970,10 @@ class CartController extends MyAppController
         if (1 > $loggedUserId) {
             $loggedUserId = session_id();
         }
-        FatApp::getDb()->deleteRecords('tbl_user_cart', array('smt' => '`usercart_user_id`=? and usercart_type=?', 'vals' => array($loggedUserId, $type)));
+        $cartObj = new Cart($loggedUserId, $this->siteLangId, $this->app_user['temp_user_id']);    
+        $cartObj->clear(true);
+        $cartObj->updateUserCart();        
+        //FatApp::getDb()->deleteRecords('tbl_user_cart', array('smt' => '`usercart_user_id`=? and usercart_type=?', 'vals' => array($loggedUserId, $type)));
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->siteLangId));
     }
 }

@@ -1051,9 +1051,9 @@ class Product extends MyAppModel
 
         if ($useProductGroup == true) {
             $srch->addCondition('pshold_prodgroup_id', '=', $pshold_prodgroup_id);
-        }
-
-        if ($userId > 0) {
+        }       
+        
+        if (!empty($userId)) {
             $srch->addCondition('pshold_user_id', '=', $userId);
         }
         $srch->addMultipleFields(array('sum(pshold_selprod_stock) as stockHold'));
