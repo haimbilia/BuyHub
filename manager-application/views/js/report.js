@@ -60,11 +60,14 @@ $(document).on("click", ".headerColumnJs", function (e) {
         }
 
         if (typeof withloader == 'undefined' || withloader != false) {
-            $(dv).html(fcom.getLoader());
+            $('.listingTableJs').html(fcom.getLoader());
+        } else {
+            $('.listingTableJs').prepend(fcom.getLoader());
         }
 
         fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
             $(dv).html(res);
+            fcom.removeLoader();
         });
     };
 
@@ -81,7 +84,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
                 $(this).prop('checked', false);
             }
         });
-        searchReport(document.frmReportSearch);
+        searchReport(document.frmReportSearch, false);
     };
 
     setColumnsData = function (frm) {
@@ -103,20 +106,37 @@ $(document).on("click", ".headerColumnJs", function (e) {
         });
     };
     
-    editRecord = function (recordId) {
-        data = 'recordId=' + recordId;
+    addNew = function () {
         $.ykmodal(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl(controllerName, 'form'), '', function (t) {
+            $.ykmodal(t);
+        });
+    };
+    
+    editRecord = function (recordId) {
+        $.ykmodal(fcom.getLoader());
+        data = 'recordId=' + recordId;
         fcom.ajax(fcom.makeUrl(controllerName, 'editRecord'), data, function (t) {
             $.ykmodal(t);
         });
     };
+    
+    editLangData = function (recordId, langId, autoFillLangData = 0) {
+        $.ykmodal(fcom.getLoader());
+        data = 'recordId=' + recordId + '&langId=' + langId;
+        fcom.ajax(fcom.makeUrl(controllerName, 'langForm', [autoFillLangData]), data, function (t) {
+            $.ykmodal(t);
+        });
+    };
 
-    updateStatus = function (obj, recordId, status) {
+    updateStatus = function (e, obj, recordId, status) {
         if (!confirm(langLbl.confirmUpdateStatus)) {
-            return;
+            e.preventDefault();
+            return false;
         }
 
         if (recordId < 1) {
+            e.preventDefault();
             fcom.displayErrorMessage(langLbl.invalidRequest);
             return false;
         }
@@ -125,8 +145,36 @@ $(document).on("click", ".headerColumnJs", function (e) {
         fcom.ajax(fcom.makeUrl(controllerName, 'updateStatus'), data, function (res) {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
-                $.fcom.displaySuccessMessage(ans.msg);
+                $.mbsmessage(ans.msg, true, "alert--success alert");
                 $(obj).toggleClass("active");
+            }
+        });
+    };
+
+    saveRecord = function (frm) {
+        if (!$(frm).validate()) { return; }
+        $.ykmodal(fcom.getLoader());
+
+        var data = fcom.frmData(frm);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
+            fcom.removeLoader();
+            reloadList();
+            if (t.langId > 0) {
+                editLangData(t.recordId, t.langId);
+            }
+        });
+    };
+
+    saveLangData = function (frm) {
+        if (!$(frm).validate()) { return; }
+        $.ykmodal(fcom.getLoader());
+
+        var data = fcom.frmData(frm);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langSetup'), data, function (t) {
+            fcom.removeLoader();
+            reloadList();
+            if (t.langId > 0) {
+                editLangData(t.recordId, t.langId);
             }
         });
     };

@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frmSearch->setFormTagAttribute('onsubmit', 'searchReport(this); return(false);');
+$frmSearch->setFormTagAttribute('onsubmit', 'searchReport(this, false); return(false);');
 $frmSearch->setFormTagAttribute('id', 'frmSearch');
 $frmSearch->setFormTagAttribute('class', 'form');
 
@@ -20,7 +20,7 @@ $btn_clear = $frmSearch->getField('btn_clear');
 $btn_clear->addFieldtagAttribute('class', 'btn btn-link');
 $btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
 ?>
-<main class="main mainJs">    
+<main class="main mainJs">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -48,7 +48,9 @@ $btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
                 echo $frmSearch->getExternalJS(); ?>
                 </form>
                 <div class="card" id="listing">
-                    <?php echo Labels::getLabel('LBL_Processing...', $adminLangId); ?>
+                    <div class="card-body listingTableJs">
+                        <?php echo HtmlHelper::getLoader(); ?>
+                    </div>
                 </div>
             </div>
         </div>

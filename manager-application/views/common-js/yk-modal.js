@@ -1,9 +1,14 @@
 (function ($) {
-    $.ykmodal = function (data, klass, bodyClass) {
-        if (0 < $(".modal").length) {
-            $(".modal, .modal-backdrop").remove()
+    $.ykmodal = function (data, modalClass = "", dialogClass = "", bodyClass = "") {
+        if (0 < $("." + $.ykmodal.element).length) {
+            // $("." + $.ykmodal.element + ', .modal-backdrop').remove()
         }
-        init(klass);
+
+        modalClass = "" == modalClass ? "fixed-right" : modalClass;
+        dialogClass = "" == dialogClass ? "modal-dialog-vertical" : dialogClass;
+        bodyClass = "" == bodyClass ? "pd-0" : bodyClass;
+
+        init(modalClass, dialogClass);
         if (data.ajax) fillYKModalFromAjax(data.ajax);
         else if (data.image) fillYKModalFromImage(data.image);
         else if (data.div) fillYKModalFromHref(data.div);
@@ -14,18 +19,22 @@
     $.extend($.ykmodal, {
         element: Date.now(),
         reveal: function (data, bodyClass) {
-            var isLoader = $(data).hasClass("circularLoader");
-            
+            if ($(data).hasClass("loaderJs") && 0 < $("." + $.ykmodal.element + " .loaderContainerJs").length) {
+                $("." + $.ykmodal.element + " .loaderContainerJs").prepend(data);
+                return;
+            }
+
             if (0 == $(data).find(".modal-body").length && false === $(data).hasClass("modal-body")) {
                 data = '<div class="modal-body">' + data + "</div>"
             }
 
-            var contentBody = "body ." + $.ykmodal.element + " .contentBody--js";
+            var contentBody = "." + $.ykmodal.element + " .contentBody--js";
+            
             $(contentBody).html(data);
             var headerHtm = '<div class="modal-header">';
             var closeBtnHtm = '<button type="button" class="close ykmodalJs" data-dismiss="modal" aria-label="' + langLbl.close + '"><span aria-hidden="true">×</span></button>';
 
-            if (1 > $(contentBody).find(".modal-header").length && false === isLoader) {
+            if (1 > $(contentBody).find(".modal-header").length) {
                 $(contentBody).prepend(headerHtm + closeBtnHtm + "</div>")
             }
             else if (0 < $(contentBody).find(".modal-header").length && 1 > $("body ." + $.ykmodal.element + " .contentBody--js .modal-header").find(".close").length) {
@@ -47,16 +56,18 @@
         },
     });
 
-    function init(klass) {
-        klass = "undefined" == typeof klass ? "" : klass;
+    function init(modalClass, dialogClass) {
+        modalClass = "" == modalClass ? "" : modalClass;
+        dialogClass = "" == dialogClass ? "" : dialogClass;
+
         if (1 > $("body").find("." + $.ykmodal.element).length) {
-            var content = '<div class="modal-dialog modal-dialog-centered ' + klass + ' " role="document"><div class="modal-content contentBody--js"></div></div>';
-            var htm = '<div class="modal fade ' + $.ykmodal.element + '" tabindex="-1" role="dialog">' + content + "</div>";
+            var content = '<div class="modal-dialog ' + dialogClass + ' " role="document"><div class="modal-content contentBody--js"></div></div>';
+            var htm = '<div class="modal ' + modalClass + ' fade ' + $.ykmodal.element + '" tabindex="-1" role="dialog">' + content + "</div>";
             $("body").append(htm)
         }
 
-        if (!$("body ." + $.ykmodal.element + " .modal-dialog").hasClass(klass)) {
-            $("body ." + $.ykmodal.element + " .modal-dialog").addClass(klass)
+        if (!$("body ." + $.ykmodal.element + " .modal-dialog").hasClass(modalClass)) {
+            $("body ." + $.ykmodal.element + " .modal-dialog").addClass(modalClass)
         }
     }
 
@@ -95,5 +106,9 @@
 
     $(document).on("hidden.bs.modal", "." + $.ykmodal.element, function () {
         $.ykmodal.close()
-    })
+    });
+    
+    $(document).on("click", ".submitBtnJs", function () {
+        $('.' + $.ykmodal.element + ' form').submit();
+    });
 })(jQuery);

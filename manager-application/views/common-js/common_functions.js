@@ -585,7 +585,7 @@ function formAction(frm, callback) {
         $.systemMessage(langLbl.atleastOneRecord, 'alert--danger');
         return false;
     }
-    
+
     $.systemMessage.loading();
     data = fcom.frmData(frm);
 
@@ -624,12 +624,12 @@ function showActionsBtns() {
 }
 
 function getHelpCenterContent(controller, action = "") {
-    fcom.ajax(fcom.makeUrl('HelpCenter', 'getContent', [controller, action]), '', function (t) {
+    /* fcom.ajax(fcom.makeUrl('HelpCenter', 'getContent', [controller, action]), '', function (t) {
         var res = $.parseJSON(t);
         if (0 == res.status) {
             return;
         }
-        
+
         if (1 > $('#helpCenterJs').length) {
             $(".mainJs").after('<div id="helpCenterJs"></div>');
         }
@@ -637,7 +637,7 @@ function getHelpCenterContent(controller, action = "") {
         if ('undefined' != typeof res.html) {
             $("#helpCenterJs").html(res.html);
         }
-    });
+    }); */
 }
 
 (function () {
