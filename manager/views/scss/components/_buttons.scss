@@ -6,6 +6,7 @@ a {
     padding: 0.6rem 1.3rem;
     font-size: 0.85rem;
     line-height: 1.5;
+    border-radius: 1px;
     &.btn-brand {
         background-color: var(--brand-color);
         color: var(--brand-color-inverse);
@@ -152,9 +153,11 @@ a.link {
 .btn-add {
     display: flex;
     align-items: center;
-    padding-left: 1.5rem !important;
-    padding-right: 1.5rem !important;
     .icn {
-        margin-#{$end-direction}: 5px;
+        margin-#{$end-direction}: 8px;
+        .svg {
+            width: 12px;
+            height: 12px;
+        }
     }
 }

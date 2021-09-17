@@ -1,8 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="card-head">
     <h3 class="card-head-label">
-        <span class="card-head-title">New Products</span>
-        <span class="text-muted"> Over <?php echo $recordCount; ?> new products</span>
+        <span class="card-head-title"><?php echo Labels::getLabel('LBL_NEW_PRODUCTS', $adminLangId); ?></span>
+        <span class="text-muted"><?php echo sprintf(Labels::getLabel('LBL_OVER_%S_NEW_PRODUCTS', $adminLangId), $recordCount); ?></span>
     </h3>
     <div class="card-toolbar">
         <a href="#" class="btn btn-sm btn-light btn-light">
@@ -13,7 +13,7 @@
                     <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black"></rect>
                 </svg>
             </span>
-            New
+            <?php echo Labels::getLabel('LBL_NEW', $adminLangId); ?>
         </a>
     </div>
 </div>
@@ -67,6 +67,20 @@
                         break;
                     case 'listSerial':
                         $td->appendElement('plaintext', array(), $serialNo);
+                        break;
+                    case 'country_active':
+                        '(obj, recordId, status)';
+                        $statusAct = ($canEdit) ? 'updateStatus(this, ' . $row['country_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
+                        $statusClass = ($canEdit) ? '' : 'disabled';
+                        $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
+                        
+                        $htm = '<span class="switch switch--sm switch--icon">
+                                    <label>
+                                        <input type="checkbox" value="' . $row['country_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
+                                        <span></span>
+                                    </label>
+                                </span>';
+                        $td->appendElement('plaintext', array(), $htm, true);
                         break;
                     case 'action':
                         $data = [

@@ -39,13 +39,23 @@
                             <div class="modal-body">
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="empty-stats">
+                                        <div class="help-window">
                                             <img src="<?php echo CONF_WEBROOT_URL;?>images/retina/no-data-cuate.svg"
                                                 alt="">
 
                                             <div class="data">
                                                 <h6>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
                                                     consectetur, adipisci velit...</h6>
+                                                <ul>
+                                                    <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+                                                    <li>Sed aliquam turpis ac justo accumsan volutpat.</li>
+                                                    <li>Donec commodo augue id justo molestie luctus mattis id mi.</li>
+                                                    <li>Sed ut tellus rutrum, egestas lectus at, ultrices arcu.</li>
+                                                    <li>Phasellus posuere lectus vitae arcu volutpat, et consectetur
+                                                        lacus vestibulum.</li>
+                                                    <li>Sed ullamcorper lectus nec risus tincidunt, eu tempor ipsum
+                                                        viverra.</li>
+                                                </ul>
 
                                             </div>
                                         </div>
@@ -227,6 +237,9 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
+                                            <div class="table-processing">
+                                                <div class="spinner"></div>
+                                            </div>
                                             <table width="100%" class="table table-dashed">
                                                 <thead>
                                                     <tr>
