@@ -1,7 +1,7 @@
 (function ($) {
     $.ykmodal = function (data, modalClass = "", dialogClass = "", bodyClass = "") {
         if (0 < $("." + $.ykmodal.element).length) {
-            $("." + $.ykmodal.element + ', .modal-backdrop').remove()
+            // $("." + $.ykmodal.element + ', .modal-backdrop').remove()
         }
 
         modalClass = "" == modalClass ? "fixed-right" : modalClass;

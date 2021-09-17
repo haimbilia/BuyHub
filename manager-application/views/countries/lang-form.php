@@ -66,7 +66,7 @@ $langFld->setfieldTagAttribute('onChange', "editCountryLangForm(" . $countryId .
     <div class="form-edit-foot">
         <div class="row">
             <div class="col-auto">
-                <button type="submit" class="btn btn-brand gb-btn gb-btn-primary">
+                <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
                     <?php echo Labels::getLabel('LBL_UPDATE', $adminLangId); ?>
                 </button>
             </div>
