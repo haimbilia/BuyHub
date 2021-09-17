@@ -105,18 +105,19 @@ $(document).on("click", ".headerColumnJs", function (e) {
     
     editRecord = function (recordId) {
         data = 'recordId=' + recordId;
-        $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(controllerName, 'editRecord'), data, function (t) {
             $.ykmodal(t);
         });
     };
 
-    updateStatus = function (obj, recordId, status) {
+    updateStatus = function (e, obj, recordId, status) {
         if (!confirm(langLbl.confirmUpdateStatus)) {
-            return;
+            e.preventDefault();
+            return false;
         }
 
         if (recordId < 1) {
+            e.preventDefault();
             fcom.displayErrorMessage(langLbl.invalidRequest);
             return false;
         }
@@ -125,7 +126,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
         fcom.ajax(fcom.makeUrl(controllerName, 'updateStatus'), data, function (res) {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
-                $.fcom.displaySuccessMessage(ans.msg);
+                $.mbsmessage(ans.msg, true, "alert--success alert");
                 $(obj).toggleClass("active");
             }
         });
