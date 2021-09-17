@@ -1,9 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-if (1 > $opId) {
-    $childOrderDetail = array_values($childOrderDetail);
-}
-
 $orderDetail['charges'] = !empty($orderDetail['charges']) ? $orderDetail['charges'] : (object)array();
 $orderDetail['billingAddress'] = !empty($orderDetail['billingAddress']) ? $orderDetail['billingAddress'] : (object)array();
 $orderDetail['shippingAddress'] = !empty($orderDetail['shippingAddress']) ? $orderDetail['shippingAddress'] : (object)array();
@@ -19,12 +15,8 @@ if (!empty($orderDetail['charges'])) {
     }
     $orderDetail['charges'] = $charges;
 }
-// echo $primaryOrder; die;
-if ($primaryOrder) {
-    $childArr[] = $childOrderDetail;
-} else {
-    $childArr = $childOrderDetail;
-}
+
+$childArr = array_values($arr);
 
 $orderDetail['pickupDetail'] = (object)array();
 if (0 < $opId) {
@@ -47,13 +39,13 @@ $reviewAllowed = FatApp::getConfig('CONF_ALLOW_REVIEWS', FatUtility::VAR_INT, 0)
 
 $canCancelOrder = true;
 $canReturnRefund = true;
-foreach ($childArr as $index => $childOrder) {
+foreach ($childArr as &$childOrder) {
     $colorClass = !empty($childOrder['orderstatus_color_class']) ? $childOrder['orderstatus_color_class'] : '';
-    $childArr[$index]['orderstatus_color_code'] = applicationConstants::getClassColor($colorClass);
-    $rating = isset($childArr[$index]['prod_rating']) ? $childArr[$index]['prod_rating'] : 0;
-    $childArr[$index]['prod_rating'] =  (1 == $defaultOrderStatus || (isset($childArr[$index]['spreview_status']) && $childArr[$index]['spreview_status'] == 1)) ? $rating : 0;
-    $childArr[$index]['reviewsAllowed'] =  $reviewAllowed;
-    $childArr[$index]['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($childOrder['selprod_product_id'], "THUMB", $childOrder['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND);
+    $childOrder['orderstatus_color_code'] = applicationConstants::getClassColor($colorClass);
+    $rating = isset($childOrder['prod_rating']) ? $childOrder['prod_rating'] : 0;
+    $childOrder['prod_rating'] =  (1 == $defaultOrderStatus || (isset($childOrder['spreview_status']) && $childOrder['spreview_status'] == 1)) ? $rating : 0;
+    $childOrder['reviewsAllowed'] =  $reviewAllowed;
+    $childOrder['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($childOrder['selprod_product_id'], "THUMB", $childOrder['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND);
 
     if ($childOrder['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
         $canCancelOrder = (in_array($childOrder["op_status_id"], (array)Orders::getBuyerAllowedOrderCancellationStatuses(true))) ? 1 : 0;
@@ -63,14 +55,14 @@ foreach ($childArr as $index => $childOrder) {
         $canReturnRefund = (in_array($childOrder["op_status_id"], (array)Orders::getBuyerAllowedOrderReturnStatuses())) ? 1 : 0;
     }
 
-    $childArr[$index]['canCancelOrder'] = ($canCancelOrder && false === OrderCancelRequest::getCancelRequestById($childOrder['op_id']) ? 1 : 0);
+    $childOrder['canCancelOrder'] = ($canCancelOrder && false === OrderCancelRequest::getCancelRequestById($childOrder['op_id']) ? 1 : 0);
 
-    $childArr[$index]['canReturnOrder'] = ($canReturnRefund && $childOrder['return_request'] == 0 && $childOrder['cancel_request'] == 0 ? 1 : 0);
+    $childOrder['canReturnOrder'] = ($canReturnRefund && $childOrder['return_request'] == 0 && $childOrder['cancel_request'] == 0 ? 1 : 0);
 
     $canSubmitFeedback = Orders::canSubmitFeedback($childOrder['order_user_id'], $childOrder['order_id'], $childOrder['op_selprod_id']);
     $isValidForReview = in_array($childOrder["op_status_id"], SelProdReview::getBuyerAllowedOrderReviewStatuses());
 
-    $childArr[$index]['canSubmitFeedback'] = ($canSubmitFeedback && $isValidForReview) ? 1 : 0;
+    $childOrder['canSubmitFeedback'] = ($canSubmitFeedback && $isValidForReview) ? 1 : 0;
 
     $cartTotal = $cartTotal + CommonHelper::orderProductAmount($childOrder, 'cart_total');
     $shippingCharges = $shippingCharges + CommonHelper::orderProductAmount($childOrder, 'shipping');
@@ -83,7 +75,7 @@ foreach ($childArr as $index => $childOrder) {
     $orderDiscountTotal = CommonHelper::orderProductAmount($childOrder, 'DISCOUNT');
     $totalOrderDiscountTotal += $orderDiscountTotal;
 
-    $childArr[$index]['priceDetail'] = array(
+    $childOrder['priceDetail'] = array(
         array(
             'key' => Labels::getLabel('LBL_Ordered_Quantity', $siteLangId),
             'value' => $childOrder['op_qty'],
@@ -95,14 +87,14 @@ foreach ($childArr as $index => $childOrder) {
     );
 
     if (0 < CommonHelper::orderProductAmount($childOrder, 'shipping')) {
-        $childArr[$index]['priceDetail'][] = array(
+        $childOrder['priceDetail'][] = array(
             'key' => Labels::getLabel('LBL_Shipping_Charges', $siteLangId),
             'value' => CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'shipping')),
         );
     }
 
     if (0 < $volumeDiscount) {
-        $childArr[$index]['priceDetail'][] = array(
+        $childOrder['priceDetail'][] = array(
             'key' => Labels::getLabel('LBL_Volume/Loyalty_Discount', $siteLangId),
             'value' => CommonHelper::displayMoneyFormat($volumeDiscount),
         );
@@ -112,7 +104,7 @@ foreach ($childArr as $index => $childOrder) {
     $taxCharges = [];
     if (empty($childOrder['taxOptions'])) {
         $totalTax = CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'tax'));
-        $childArr[$index]['priceDetail'][] = array(
+        $childOrder['priceDetail'][] = array(
             'key' => Labels::getLabel('LBL_Tax_Charges', $siteLangId),
             'value' => $totalTax,
         );
@@ -134,18 +126,18 @@ foreach ($childArr as $index => $childOrder) {
             }
             $taxOptionsTotal[$key]['value'] += $val['value'];
         }
-        $childArr[$index]['priceDetail'] = array_merge($childArr[$index]['priceDetail'], $taxCharges);
+        $childOrder['priceDetail'] = array_merge($childOrder['priceDetail'], $taxCharges);
     }
 
     if (0 != $orderDiscountTotal) {
-        $childArr[$index]['priceDetail'][] = array(
+        $childOrder['priceDetail'][] = array(
             'key' => Labels::getLabel('LBL_Discount', $siteLangId),
             'value' => CommonHelper::displayMoneyFormat($orderDiscountTotal),
         );
     }
 
     if (0 != $rewardPointDiscount) {
-        $childArr[$index]['priceDetail'][] = array(
+        $childOrder['priceDetail'][] = array(
             'key' => Labels::getLabel('LBL_Reward_Point_Discount', $siteLangId),
             'value' => CommonHelper::displayMoneyFormat($rewardPointDiscount),
         );
@@ -153,13 +145,13 @@ foreach ($childArr as $index => $childOrder) {
 
     
     if (0 != $orderDetail['order_rounding_off']) {
-        $childArr[$index]['priceDetail'][] = array(
+        $childOrder['priceDetail'][] = array(
             'key' => (0 < $orderDetail['order_rounding_off']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId),
             'value' => CommonHelper::displayMoneyFormat($orderDetail['order_rounding_off'])
         );
     }
 
-    $childArr[$index]['totalAmount'] = array(
+    $childOrder['totalAmount'] = array(
         'key' => Labels::getLabel('LBL_Total', $siteLangId),
         'value' => CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder)),
     );
@@ -171,7 +163,7 @@ foreach ($childArr as $index => $childOrder) {
     if (0 < $childOrder['order_is_wallet_selected']) {
         $paymentMethodName .= Labels::getLabel("LBL_Wallet", $siteLangId);
     }
-    $childArr[$index]['plugin_name'] = $paymentMethodName;
+    $childOrder['plugin_name'] = $paymentMethodName;
 
     $orderObj = new Orders($childOrder['order_id']);
     if ($childOrder['plugin_code'] == 'CashOnDelivery') {

@@ -5,10 +5,6 @@ $statusArr = array(
     'msg' => !empty($msg) ? $msg : Labels::getLabel('MSG_Success', $siteLangId)
 );
 
-foreach ($orders as $index => $orderProduct) {
-    $orders[$index]['orderstatus_color_code'] = applicationConstants::getClassColor($orderProduct['orderstatus_color_class']);
-    $orders[$index]['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($orderProduct['selprod_product_id'], "THUMB", $orderProduct['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND);
-}
 $data = array(
     'orders' => $orders,
     'page' => $page,
