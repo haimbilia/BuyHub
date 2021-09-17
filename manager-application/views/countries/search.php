@@ -38,7 +38,26 @@
                 $cls .= 'align-right';
             }
 
-            $td = $th->appendElement('th', ['class' => $cls, 'data-field' => $key]);
+            switch ($key) {
+                case 'select_all':
+                    $thWidth = '5%';
+                    break;
+                case 'action':
+                    $thWidth = '10%';
+                case 'listSerial':
+                case 'country_code':
+                case 'country_code_alpha3':
+                case 'country_active':
+                    $thWidth = '14%';
+                    break;
+                case 'country_name':
+                    $thWidth = '29%';
+                    break;
+                default:
+                    $thWidth = '';
+                    break;
+            }
+            $td = $th->appendElement('th', ['class' => $cls, 'data-field' => $key, 'width' => $thWidth]);
             $span = $td->appendElement('span');
 
             switch ($key) {
@@ -58,22 +77,22 @@
             $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
             $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
             foreach ($fields as $key => $val) {
-                $cls = ('action' == $key) ? ['class' => 'align-right'] : [];
-                $td = $tr->appendElement('td', $cls);
+                $cls = ('action' == $key) ? 'align-right' : '';
+                $td = $tr->appendElement('td', ['class' => $cls]);
 
                 switch ($key) {
                     case 'select_all':
-                        $td->appendElement('plaintext', array(), '');
+                        $td->appendElement('plaintext', [], '');
                         break;
                     case 'listSerial':
-                        $td->appendElement('plaintext', array(), $serialNo);
+                        $td->appendElement('plaintext', [], $serialNo);
                         break;
                     case 'country_active':
                         '(obj, recordId, status)';
                         $statusAct = ($canEdit) ? 'updateStatus(this, ' . $row['country_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
                         $statusClass = ($canEdit) ? '' : 'disabled';
                         $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
-                        
+
                         $htm = '<span class="switch switch--sm switch--icon">
                                     <label>
                                         <input type="checkbox" value="' . $row['country_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
@@ -93,7 +112,7 @@
                             $data['deleteButton'] = [];
                         }
                         $actionItems = $this->includeTemplate('_partial/listing-action-buttons.php', $data, false, true);
-                        $td->appendElement('plaintext', $cls, $actionItems, true);
+                        $td->appendElement('plaintext', ['class' => $cls], $actionItems, true);
                         break;
                     default:
                         $td->appendElement('plaintext', array(), $row[$key], true);
