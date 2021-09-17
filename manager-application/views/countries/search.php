@@ -30,7 +30,7 @@
             $cls = '';
             $html = '';
             if (in_array($key, $allowedKeysForSorting)) {
-                $cls .= 'headerColumnJs ' . $headColumData['class'];
+                $cls .= 'headerColumnJs sorting ' . $headColumData['class'];
                 $html = $headColumData['html'];
             }
 

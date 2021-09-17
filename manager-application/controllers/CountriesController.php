@@ -94,7 +94,7 @@ class CountriesController extends AdminBaseController
     {
         $this->form();
     }
-    
+
     public function form()
     {
         $this->objPrivilege->canEditCountries();
@@ -339,9 +339,11 @@ class CountriesController extends AdminBaseController
         }
 
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
-        $status = ($status) ? applicationConstants::ACTIVE : applicationConstants::INACTIVE;
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
 
-        $this->updateCountryStatus($recordId, $status);
+        $this->changeStatus($recordId, $status);
         Product::updateMinPrices(0, 0, 0, $recordId);
         LibHelper::dieJsonSuccess(['msg' => $this->str_update_record]);
     }
@@ -353,9 +355,7 @@ class CountriesController extends AdminBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $countryIdsArr = FatUtility::int(FatApp::getPostedData('country_ids'));
         if (empty($countryIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($countryIdsArr as $countryId) {
@@ -363,28 +363,10 @@ class CountriesController extends AdminBaseController
                 continue;
             }
 
-            $this->updateCountryStatus($countryId, $status);
+            $this->changeStatus($countryId, $status);
         }
         Product::updateMinPrices();
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    private function updateCountryStatus($countryId, $status)
-    {
-        $status = FatUtility::int($status);
-        $countryId = FatUtility::int($countryId);
-        if (1 > $countryId || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
-        }
-
-        $countryObj = new Countries($countryId);
-        if (!$countryObj->changeStatus($status)) {
-            Message::addErrorMessage($countryObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
+        LibHelper::dieJsonSuccess(['msg' => $this->str_update_record]);
     }
 
     public function deleteRecord()
@@ -402,6 +384,18 @@ class CountriesController extends AdminBaseController
         }
 
         LibHelper::dieJsonSuccess(['msg' => $this->str_update_record]);
+    }
+
+    private function changeStatus(int $countryId, int $status)
+    {
+        if (1 > $countryId || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $countryObj = new Countries($countryId);
+        if (!$countryObj->changeStatus($status)) {
+            LibHelper::exitWithError($countryObj->getError(), true);
+        }
     }
 
     private function getSearchForm($fields = [])
@@ -449,6 +443,6 @@ class CountriesController extends AdminBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, Common::excludeKeysForSort());
+        return array_diff($fields, ['country_active'], Common::excludeKeysForSort());
     }
 }
