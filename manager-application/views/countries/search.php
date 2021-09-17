@@ -69,7 +69,7 @@
                         break;
                     case 'country_active':
                         '(obj, recordId, status)';
-                        $statusAct = ($canEdit) ? 'updateStatus(this, ' . $row['country_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
+                        $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['country_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
                         $statusClass = ($canEdit) ? '' : 'disabled';
                         $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
                         

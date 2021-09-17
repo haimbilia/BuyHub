@@ -92,6 +92,11 @@ class CountriesController extends AdminBaseController
 
     public function editRecord()
     {
+        $this->form();
+    }
+    
+    public function form()
+    {
         $this->objPrivilege->canEditCountries();
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
@@ -110,7 +115,7 @@ class CountriesController extends AdminBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('country_id', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->_template->render(false, false, 'countries/form.php');
     }
 
     public function setup()

@@ -1,9 +1,13 @@
 (function ($) {
-    $.ykmodal = function (data, klass, bodyClass) {
-        if (0 < $(".modal").length) {
-            $(".modal, .modal-backdrop").remove()
+    $.ykmodal = function (data, modalClass = "", dialogClass = "", bodyClass = "") {
+        if (0 < $("." + $.ykmodal.element).length) {
+            $("." + $.ykmodal.element).remove()
         }
-        init(klass);
+
+        modalClass = "" == modalClass ? "fixed-right" : modalClass;
+        dialogClass = "" == dialogClass ? "modal-dialog-vertical" : dialogClass;
+
+        init(modalClass, dialogClass);
         if (data.ajax) fillYKModalFromAjax(data.ajax);
         else if (data.image) fillYKModalFromImage(data.image);
         else if (data.div) fillYKModalFromHref(data.div);
@@ -47,16 +51,18 @@
         },
     });
 
-    function init(klass) {
-        klass = "undefined" == typeof klass ? "" : klass;
+    function init(modalClass, dialogClass) {
+        modalClass = "" == modalClass ? "" : modalClass;
+        dialogClass = "" == dialogClass ? "" : dialogClass;
+
         if (1 > $("body").find("." + $.ykmodal.element).length) {
-            var content = '<div class="modal-dialog modal-dialog-centered ' + klass + ' " role="document"><div class="modal-content contentBody--js"></div></div>';
-            var htm = '<div class="modal fade ' + $.ykmodal.element + '" tabindex="-1" role="dialog">' + content + "</div>";
+            var content = '<div class="modal-dialog ' + dialogClass + ' " role="document"><div class="modal-content contentBody--js"></div></div>';
+            var htm = '<div class="modal ' + modalClass + ' fade ' + $.ykmodal.element + '" tabindex="-1" role="dialog">' + content + "</div>";
             $("body").append(htm)
         }
 
-        if (!$("body ." + $.ykmodal.element + " .modal-dialog").hasClass(klass)) {
-            $("body ." + $.ykmodal.element + " .modal-dialog").addClass(klass)
+        if (!$("body ." + $.ykmodal.element + " .modal-dialog").hasClass(modalClass)) {
+            $("body ." + $.ykmodal.element + " .modal-dialog").addClass(modalClass)
         }
     }
 
