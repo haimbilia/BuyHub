@@ -109,6 +109,13 @@ $(document).on("click", ".headerColumnJs", function (e) {
             $.ykmodal(t);
         });
     };
+    
+    editLangData = function (recordId, langId) {
+        data = 'recordId=' + recordId + '&langId=' + langId;
+        fcom.ajax(fcom.makeUrl(controllerName, 'langForm'), data, function (t) {
+            $.ykmodal(t);
+        });
+    };
 
     updateStatus = function (e, obj, recordId, status) {
         if (!confirm(langLbl.confirmUpdateStatus)) {

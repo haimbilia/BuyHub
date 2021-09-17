@@ -1,11 +1,12 @@
 (function ($) {
     $.ykmodal = function (data, modalClass = "", dialogClass = "", bodyClass = "") {
         if (0 < $("." + $.ykmodal.element).length) {
-            $("." + $.ykmodal.element).remove()
+            $("." + $.ykmodal.element + ', .modal-backdrop').remove()
         }
 
         modalClass = "" == modalClass ? "fixed-right" : modalClass;
         dialogClass = "" == dialogClass ? "modal-dialog-vertical" : dialogClass;
+        bodyClass = "" == bodyClass ? "pd-0" : bodyClass;
 
         init(modalClass, dialogClass);
         if (data.ajax) fillYKModalFromAjax(data.ajax);
