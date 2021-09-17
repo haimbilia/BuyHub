@@ -3,7 +3,8 @@ $ul = new HtmlElement("ul", array("class" => "actions"));
 $actionItems = false;
 
 if (isset($editButton) && is_array($editButton)) {
-    $onClick = isset($editButton['onClick']) ? $editButton['onClick'] : 'editSelected(' . $recordId . ')';
+    $onClick = isset($editButton['onClick']) ? $editButton['onClick'] : 'editRecord(' . $recordId . ')';
+
     $cls = isset($editButton['class']) ? $editButton['class'] : '';
     $li = $ul->appendElement('li');
     $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, 'title' => Labels::getLabel('LBL_EDIT', $adminLangId), "onclick" => $onClick), '<svg class="svg"
@@ -22,6 +23,7 @@ if (isset($editButton) && is_array($editButton)) {
 
 if (isset($deleteButton) && is_array($deleteButton)) {
     $onClick = isset($deleteButton['onClick']) ? $deleteButton['onClick'] : "deleteRecord(" . $recordId . ")";
+
     $cls = isset($editButton['class']) ? $editButton['class'] : '';
     $li = $ul->appendElement('li');
     $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, 'title' => Labels::getLabel('LBL_DELETE', $adminLangId), "onclick" => $onClick), '<svg class="svg"

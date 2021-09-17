@@ -23,7 +23,7 @@
             var contentBody = "body ." + $.ykmodal.element + " .contentBody--js";
             $(contentBody).html(data);
             var headerHtm = '<div class="modal-header">';
-            var closeBtnHtm = '<button type="button" class="close" data-dismiss="modal" aria-label="' + langLbl.close + '"><span aria-hidden="true">×</span></button>';
+            var closeBtnHtm = '<button type="button" class="close ykmodalJs" data-dismiss="modal" aria-label="' + langLbl.close + '"><span aria-hidden="true">×</span></button>';
 
             if (1 > $(contentBody).find(".modal-header").length && false === isLoader) {
                 $(contentBody).prepend(headerHtm + closeBtnHtm + "</div>")
@@ -35,7 +35,7 @@
             if ("undefined" != typeof bodyClass && 0 == $(data).find(bodyClass).length) {
                 $(contentBody + " .modal-body").addClass(bodyClass)
             }
-            $.ykmodal.show()
+            $.ykmodal.show();
         },
         close: function () {
             $("." + $.ykmodal.element).modal("hide");
