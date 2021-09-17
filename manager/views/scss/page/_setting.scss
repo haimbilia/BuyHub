@@ -1,42 +1,47 @@
-.settings{
+.settings {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     grid-gap: 4rem;
     padding: 3rem;
 }
-.setting-search{
+
+.setting-search {
     max-width: 500px;
-    margin: 0 auto;
+    margin: 2rem auto;
     width: 100%;
+    .form-control {
+        height: 3.2rem !important;
+    }
 }
-.setting{
+
+.setting {
     display: flex;
     align-items: flex-start;
     text-decoration: none;
-    &:hover{
+    &:hover {
         text-decoration: none;
-        .setting__detail{
-            h6{
+        .setting__detail {
+            h6 {
                 color: $brand-color;
             }
         }
     }
-    &__icon{
+    &__icon {
         max-width: 60px;
-        flex: 0 0 60px;      
-        svg{
+        flex: 0 0 60px;
+        svg {
             fill: $brand-color;
-        }  
+        }
     }
-    &__detail{
-        h6{
+    &__detail {
+        h6 {
             color: $txt-body;
             font-size: 1rem;
             margin-bottom: .25rem;
         }
-        span{
+        span {
             display: block;
-            color: $txt-gray; 
+            color: $txt-gray;
             font-size: .875rem;
         }
     }

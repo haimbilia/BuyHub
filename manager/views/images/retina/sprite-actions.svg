@@ -14,8 +14,13 @@
 
 
 
-        <symbol id="add" viewBox="0 0 20 20">
-            <path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+        <symbol id="add"  viewBox="0 0 341.4 341.4">
+            <g>
+	<g>
+		<polygon points="192,149.4 192,0 149.4,0 149.4,149.4 0,149.4 0,192 149.4,192 149.4,341.4 192,341.4 192,192 341.4,192 
+			341.4,149.4 		"/>
+	</g>
+</g>
         </symbol>
 
          <symbol id="edit"  viewBox="0 0 24 24">
