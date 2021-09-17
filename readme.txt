@@ -274,6 +274,7 @@ Updates/Fixes :
     => 058197 - on email header logo static link is there
     => 058449 - import Product seo data not working 
     => 058450 - product stock availability issue
+    => 058462 - on product detail page specification not coming with group 
 
 New Features:  
     => Admin shipped products listing page

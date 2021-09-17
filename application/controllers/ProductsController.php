@@ -784,7 +784,7 @@ class ProductsController extends MyAppController
         $banners = BannerLocation::getPromotionalBanners(0, $this->siteLangId);
         /* End of Prmotional Banner  ]*/
 
-        /* Get Product Specifications */
+        /* Get Product Specifications */        
         $this->set('productSpecifications', $this->getProductSpecifications($product['product_id'], $this->siteLangId));
         /* End of Product Specifications */
 
@@ -967,8 +967,10 @@ class ProductsController extends MyAppController
         $specSrchObj->doNotLimitRecords();
         $specSrchObj->joinTable(Product::DB_PRODUCT_SPECIFICATION, 'LEFT OUTER JOIN', 'product_id = tcps.prodspec_product_id', 'tcps');
         $specSrchObj->joinTable(Product::DB_PRODUCT_LANG_SPECIFICATION, 'INNER JOIN', 'tcps.prodspec_id = tcpsl.prodspeclang_prodspec_id and   prodspeclang_lang_id  = ' . $langId, 'tcpsl');
-        $specSrchObj->addMultipleFields(array('prodspec_id', 'prodspec_name', 'prodspec_value'));
+        $specSrchObj->addMultipleFields(array('prodspec_id', 'prodspec_name', 'prodspec_value','prodspec_group'));
         $specSrchObj->addGroupBy('prodspec_id');
+        $specSrchObj->addOrder('prodspec_group');
+        $specSrchObj->addOrder('prodspec_name');
         $specSrchObj->addCondition('prodspec_product_id', '=', $product_id);
         $specSrchObjRs = $specSrchObj->getResultSet();
         return FatApp::getDb()->fetchAll($specSrchObjRs);
