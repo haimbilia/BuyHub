@@ -171,27 +171,28 @@ class CountriesController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($countryId = 0, $lang_id = 0, $autoFillLangData = 0)
+    public function langForm($autoFillLangData = 0)
     {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $lang_id = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
+        // $countryId = FatUtility::int($countryId);
+        // $lang_id = FatUtility::int($lang_id);
 
-        $countryId = FatUtility::int($countryId);
-        $lang_id = FatUtility::int($lang_id);
-
-        if ($countryId == 0 || $lang_id == 0) {
+        if ($recordId == 0 || $lang_id == 0) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
 
-        $langFrm = $this->getLangForm($countryId, $lang_id);
+        $langFrm = $this->getLangForm($recordId, $lang_id);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(Countries::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($countryId, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $lang_id);
             if (false === $translatedData) {
                 Message::addErrorMessage($updateLangDataobj->getError());
                 FatUtility::dieWithError(Message::getHtml());
             }
             $langData = current($translatedData);
         } else {
-            $langData = Countries::getAttributesByLangId($lang_id, $countryId);
+            $langData = Countries::getAttributesByLangId($lang_id, $recordId);
         }
 
         if ($langData) {
@@ -199,7 +200,7 @@ class CountriesController extends AdminBaseController
         }
 
         $this->set('languages', Language::getAllNames());
-        $this->set('countryId', $countryId);
+        $this->set('countryId', $recordId);
         $this->set('lang_id', $lang_id);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
@@ -299,7 +300,7 @@ class CountriesController extends AdminBaseController
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
 
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'country_active', $activeInactiveArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 
@@ -325,7 +326,7 @@ class CountriesController extends AdminBaseController
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 
