@@ -102,7 +102,15 @@ $(document).ready(function () {
         },
 
         getLoader: function () {
-            return '<div class="table-processing"><div class="spinner spinner--sm spinner--brand"></div></div>';
+            $(document.body).css({ 'cursor': 'wait' });
+            $('.loaderJs').remove();
+            var html = '<div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
+            return html;
+        },
+
+        removeLoader: function (cls) {
+            $('.loaderJs').remove();
+            $(document.body).css({ 'cursor': 'default' });
         },
 
         updateFaceboxContent: function (t, cls) {

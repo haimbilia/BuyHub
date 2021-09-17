@@ -18,7 +18,7 @@
     </div>
 </div>
 <div class="card-body">
-    <div class="table-responsive">
+    <div class="table-responsive listingTableJs">
         <?php $tbl = new HtmlElement(
             'table',
             array('width' => '100%', 'class' => 'table table-dashed')

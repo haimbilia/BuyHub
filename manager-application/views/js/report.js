@@ -60,11 +60,14 @@ $(document).on("click", ".headerColumnJs", function (e) {
         }
 
         if (typeof withloader == 'undefined' || withloader != false) {
-            $(dv).html(fcom.getLoader());
+            $('.listingTableJs').html(fcom.getLoader());
+        } else {
+            $('.listingTableJs').prepend(fcom.getLoader());
         }
 
         fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
             $(dv).html(res);
+            fcom.removeLoader();
         });
     };
 
@@ -81,7 +84,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
                 $(this).prop('checked', false);
             }
         });
-        searchReport(document.frmReportSearch);
+        searchReport(document.frmReportSearch, false);
     };
 
     setColumnsData = function (frm) {
@@ -102,14 +105,14 @@ $(document).on("click", ".headerColumnJs", function (e) {
             reloadList();
         });
     };
-    
+
     editRecord = function (recordId) {
         data = 'recordId=' + recordId;
         fcom.ajax(fcom.makeUrl(controllerName, 'editRecord'), data, function (t) {
             $.ykmodal(t);
         });
     };
-    
+
     editLangData = function (recordId, langId) {
         data = 'recordId=' + recordId + '&langId=' + langId;
         fcom.ajax(fcom.makeUrl(controllerName, 'langForm'), data, function (t) {

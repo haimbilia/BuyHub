@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frmSearch->setFormTagAttribute('onsubmit', 'searchReport(this); return(false);');
+$frmSearch->setFormTagAttribute('onsubmit', 'searchReport(this, false); return(false);');
 $frmSearch->setFormTagAttribute('id', 'frmSearch');
 $frmSearch->setFormTagAttribute('class', 'form');
 
@@ -48,7 +48,9 @@ $btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
                 echo $frmSearch->getExternalJS(); ?>
                 </form>
                 <div class="card" id="listing">
-                    <?php echo HtmlHelper::getLoader(); ?>
+                    <div class="card-body listingTableJs">
+                        <?php echo HtmlHelper::getLoader(); ?>
+                    </div>
                 </div>
             </div>
         </div>
