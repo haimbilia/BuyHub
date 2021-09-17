@@ -449,6 +449,6 @@ class CountriesController extends AdminBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['select_all', 'listSerial', 'action']);
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }
