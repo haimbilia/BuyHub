@@ -11,15 +11,15 @@ class Common
         $template->set('adminLangId', CommonHelper::getlangId());
     }
 
-    public static function getHeaderElementColumn($key, $sortBy, $sortOrder)
+    public static function getListingHeaderColumnHtml($key, $sortBy, $sortOrder)
     {
         if ($key == $sortBy) {
             if ($sortOrder == applicationConstants::SORT_ASC) {
                 return [
                     'class' => 'sorting_asc',
-                    'icon' => '<i class="icn">
+                    'html' => '<i class="icn">
                     <svg class="svg" width="18" height="18">
-                        <use xlink:href="/manager/images/retina/sprite-actions.svg#arrow-up">
+                        <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#arrow-down">
                         </use>
                     </svg>
                 </i>'
@@ -28,9 +28,9 @@ class Common
 
             return [
                 'class' => 'sorting_desc',
-                'icon' => '<i class="icn">
+                'html' => '<i class="icn">
                 <svg class="svg" width="18" height="18">
-                    <use xlink:href="/manager/images/retina/sprite-actions.svg#arrow-down">
+                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#arrow-up">
                     </use>
                 </svg>
             </i>'
@@ -39,7 +39,12 @@ class Common
 
         return [
             'class' => '',
-            'icon' => ''
+            'html' => ''
         ];
+    }
+
+    public static function excludeKeysForSort()
+    {
+        return ['select_all', 'listSerial', 'action'];
     }
 }
