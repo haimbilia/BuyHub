@@ -22,19 +22,17 @@ $langFrm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
 /* Group Label and Input field. */
 
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit layout--' . $formLayout);
-$langFrm->setFormTagAttribute('onsubmit', 'setupLangCountry(this); return(false);');
+$langFrm->setFormTagAttribute('onsubmit', 'saveLangData(this); return(false);');
 
 $langFld = $langFrm->getField('lang_id');
-$langFld->setfieldTagAttribute('onChange', "editCountryLangForm(" . $countryId . ", this.value);");
-
+$langFld->setfieldTagAttribute('onChange', "editLangData(" . $countryId . ", this.value);");
 ?>
-
 <div class="modal-header">
     <h5 class="modal-title">
         <?php echo Labels::getLabel('LBL_COUNTRY_SETUP', $adminLangId); ?>
     </h5>
 </div>
-<div class="modal-body">
+<div class="modal-body form-edit">
     <div class="form-edit-head">
         <nav class="nav nav-tabs">
             <a class="nav-link" href="javascript:void(0)" onclick="editRecord(<?php echo $countryId ?>);">
@@ -46,7 +44,7 @@ $langFld->setfieldTagAttribute('onChange', "editCountryLangForm(" . $countryId .
         </nav>
     </div>
 
-    <div class="form-edit-body">
+    <div class="form-edit-body loaderContainerJs">
         <?php
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
@@ -56,7 +54,7 @@ $langFld->setfieldTagAttribute('onChange', "editCountryLangForm(" . $countryId .
                     <input class="btn btn-brand" 
                         type="button" 
                         value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" 
-                        onClick="editCountryLangForm(<?php echo $countryId; ?>, <?php echo $lang_id; ?>, 1)">
+                        onClick="editLangData(<?php echo $countryId; ?>, <?php echo $lang_id; ?>, 1)">
                 </div>
             </div>
         <?php } ?>

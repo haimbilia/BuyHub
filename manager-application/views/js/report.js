@@ -105,17 +105,26 @@ $(document).on("click", ".headerColumnJs", function (e) {
             reloadList();
         });
     };
-
+    
+    addNew = function () {
+        $.ykmodal(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl(controllerName, 'form'), '', function (t) {
+            $.ykmodal(t);
+        });
+    };
+    
     editRecord = function (recordId) {
+        $.ykmodal(fcom.getLoader());
         data = 'recordId=' + recordId;
         fcom.ajax(fcom.makeUrl(controllerName, 'editRecord'), data, function (t) {
             $.ykmodal(t);
         });
     };
-
-    editLangData = function (recordId, langId) {
+    
+    editLangData = function (recordId, langId, autoFillLangData = 0) {
+        $.ykmodal(fcom.getLoader());
         data = 'recordId=' + recordId + '&langId=' + langId;
-        fcom.ajax(fcom.makeUrl(controllerName, 'langForm'), data, function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'langForm', [autoFillLangData]), data, function (t) {
             $.ykmodal(t);
         });
     };
@@ -138,6 +147,34 @@ $(document).on("click", ".headerColumnJs", function (e) {
             if (ans.status == 1) {
                 $.mbsmessage(ans.msg, true, "alert--success alert");
                 $(obj).toggleClass("active");
+            }
+        });
+    };
+
+    saveRecord = function (frm) {
+        if (!$(frm).validate()) { return; }
+        $.ykmodal(fcom.getLoader());
+
+        var data = fcom.frmData(frm);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
+            fcom.removeLoader();
+            reloadList();
+            if (t.langId > 0) {
+                editLangData(t.recordId, t.langId);
+            }
+        });
+    };
+
+    saveLangData = function (frm) {
+        if (!$(frm).validate()) { return; }
+        $.ykmodal(fcom.getLoader());
+
+        var data = fcom.frmData(frm);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langSetup'), data, function (t) {
+            fcom.removeLoader();
+            reloadList();
+            if (t.langId > 0) {
+                editLangData(t.recordId, t.langId);
             }
         });
     };

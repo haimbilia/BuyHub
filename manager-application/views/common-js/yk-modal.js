@@ -19,18 +19,22 @@
     $.extend($.ykmodal, {
         element: Date.now(),
         reveal: function (data, bodyClass) {
-            var isLoader = $(data).hasClass("circularLoader");
-            
+            if ($(data).hasClass("loaderJs") && 0 < $("." + $.ykmodal.element + " .loaderContainerJs").length) {
+                $("." + $.ykmodal.element + " .loaderContainerJs").prepend(data);
+                return;
+            }
+
             if (0 == $(data).find(".modal-body").length && false === $(data).hasClass("modal-body")) {
                 data = '<div class="modal-body">' + data + "</div>"
             }
 
-            var contentBody = "body ." + $.ykmodal.element + " .contentBody--js";
+            var contentBody = "." + $.ykmodal.element + " .contentBody--js";
+            
             $(contentBody).html(data);
             var headerHtm = '<div class="modal-header">';
             var closeBtnHtm = '<button type="button" class="close ykmodalJs" data-dismiss="modal" aria-label="' + langLbl.close + '"><span aria-hidden="true">×</span></button>';
 
-            if (1 > $(contentBody).find(".modal-header").length && false === isLoader) {
+            if (1 > $(contentBody).find(".modal-header").length) {
                 $(contentBody).prepend(headerHtm + closeBtnHtm + "</div>")
             }
             else if (0 < $(contentBody).find(".modal-header").length && 1 > $("body ." + $.ykmodal.element + " .contentBody--js .modal-header").find(".close").length) {
@@ -102,5 +106,9 @@
 
     $(document).on("hidden.bs.modal", "." + $.ykmodal.element, function () {
         $.ykmodal.close()
-    })
+    });
+    
+    $(document).on("click", ".submitBtnJs", function () {
+        $('.' + $.ykmodal.element + ' form').submit();
+    });
 })(jQuery);

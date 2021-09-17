@@ -113,7 +113,7 @@ class CountriesController extends AdminBaseController
         }
 
         $this->set('languages', Language::getAllNames());
-        $this->set('country_id', $recordId);
+        $this->set('countryId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false, 'countries/form.php');
     }
@@ -166,13 +166,15 @@ class CountriesController extends AdminBaseController
         }
         Product::updateMinPrices(0, 0, 0, $countryId);
         $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
-        $this->set('countryId', $countryId);
+        $this->set('recordId', $countryId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
     public function langForm($autoFillLangData = 0)
     {
+        $loadTabs = FatApp::getPostedData('loadTabs', FatUtility::VAR_INT, 0);
+
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
         // $countryId = FatUtility::int($countryId);
@@ -200,6 +202,7 @@ class CountriesController extends AdminBaseController
         }
 
         $this->set('languages', Language::getAllNames());
+        $this->set('loadTabs', $loadTabs);
         $this->set('countryId', $recordId);
         $this->set('lang_id', $lang_id);
         $this->set('langFrm', $langFrm);
@@ -265,7 +268,7 @@ class CountriesController extends AdminBaseController
         }
 
         $this->set('msg', $this->str_setup_successful);
-        $this->set('countryId', $countryId);
+        $this->set('recordId', $countryId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -277,7 +280,7 @@ class CountriesController extends AdminBaseController
         $frm = new Form('frmCountry');
         $frm->addHiddenField('', 'country_id', $countryId);
         $frm->addRequiredField(Labels::getLabel('LBL_Country_code', $this->adminLangId), 'country_code');
-        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->adminLangId), 'country_code_alpha3');
+        $frm->addTextBox(Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->adminLangId), 'country_code_alpha3');
 
         $zoneArr = Zone::getAllZones($this->adminLangId, true);
         $frm->addSelectBox(Labels::getLabel('LBL_Zone', $this->adminLangId), 'country_zone_id', $zoneArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
@@ -294,8 +297,6 @@ class CountriesController extends AdminBaseController
             $lang_id = array_key_first($languageArr);
             $frm->addHiddenField('', 'country_language_id', $lang_id);
         }
-
-
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
 
