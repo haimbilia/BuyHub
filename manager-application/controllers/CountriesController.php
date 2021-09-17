@@ -90,16 +90,16 @@ class CountriesController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    public function form($countryId)
+    public function editRecord()
     {
         $this->objPrivilege->canEditCountries();
 
-        $countryId = FatUtility::int($countryId);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
-        $frm = $this->getForm($countryId);
+        $frm = $this->getForm($recordId);
 
-        if (0 < $countryId) {
-            $data = Countries::getAttributesById($countryId);
+        if (0 < $recordId) {
+            $data = Countries::getAttributesById($recordId);
 
             if ($data === false) {
                 FatUtility::dieWithError($this->str_invalid_request);
@@ -108,7 +108,7 @@ class CountriesController extends AdminBaseController
         }
 
         $this->set('languages', Language::getAllNames());
-        $this->set('country_id', $countryId);
+        $this->set('country_id', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
     }
@@ -324,27 +324,21 @@ class CountriesController extends AdminBaseController
         return $frm;
     }
 
-    public function changeStatus()
+    public function updateStatus()
     {
         $this->objPrivilege->canEditCountries();
-        $countryId = FatApp::getPostedData('countryId', FatUtility::VAR_INT, 0);
-        if (0 >= $countryId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (0 >= $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $data = Countries::getAttributesById($countryId, array('country_active'));
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+        $status = ($status) ? applicationConstants::ACTIVE : applicationConstants::INACTIVE;
 
-        if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $status = ($data['country_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
-
-        $this->updateCountryStatus($countryId, $status);
-        Product::updateMinPrices(0, 0, 0, $countryId);
-        FatUtility::dieJsonSuccess($this->str_update_record);
+        $this->updateCountryStatus($recordId, $status);
+        Product::updateMinPrices(0, 0, 0, $recordId);
+        LibHelper::dieJsonSuccess(['msg' => $this->str_update_record]);
     }
 
     public function toggleBulkStatuses()
@@ -450,6 +444,6 @@ class CountriesController extends AdminBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['select_all', 'listSerial', 'action']);
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }
