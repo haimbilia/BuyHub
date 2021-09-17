@@ -143,7 +143,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<button type="reset" class="btn btn-primary">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>
@@ -213,7 +213,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<button type="reset" class="btn btn-primary">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>
@@ -278,7 +278,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<button type="reset" class="btn btn-primary">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>
@@ -350,7 +350,7 @@
 											<span class="form-text text-muted">Some help content goes here</span>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<button type="reset" class="btn btn-primary">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>
@@ -491,7 +491,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<button type="reset" class="btn btn-primary">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>
@@ -584,7 +584,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<button type="reset" class="btn btn-primary">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>
@@ -685,7 +685,7 @@
 											<span class="form-text text-muted">Some help content goes here</span>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<button type="reset" class="btn btn-primary">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>

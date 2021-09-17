@@ -563,7 +563,7 @@
 										Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
 									</div>
 								</div>
-								<div class="card__foot card__foot--sm align-right">
+								<div class="card-foot card-foot--sm align-right">
 									<a href="#" class="btn btn-font-light btn-outline-hover-light">Dismiss</a>
 									<a href="#" class="btn btn-font-light btn-outline-hover-light">View</a>
 								</div>
@@ -587,7 +587,7 @@
 										Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
 									</div>
 								</div>
-								<div class="card__foot card__foot--sm align-right">
+								<div class="card-foot card-foot--sm align-right">
 									<a href="#" class="btn btn-font-light btn-outline-hover-light">Save</a>
 									<a href="#" class="btn btn-font-light btn-outline-hover-light">Cancel</a>
 								</div>
@@ -611,7 +611,7 @@
 										when an unknown printer took a galley of type and scrambled.
 									</div>
 								</div>
-								<div class="card__foot card__foot--sm align-right">
+								<div class="card-foot card-foot--sm align-right">
 									<a href="#" class="btn btn-font-light btn-elevate btn-outline-hover-light">Save</a>
 									<a href="#" class="btn btn-font-light btn-elevate btn-outline-hover-light">Cancel</a>
 								</div>

@@ -146,7 +146,7 @@
 						</div>
 					</div>	                
 	            </div>
-	            <div class="card__foot">
+	            <div class="card-foot">
 					<div class="form__actions">
 						<div class="row">
 							<div class="col-lg-6">
@@ -223,7 +223,7 @@
 						</div>
 					</div>	            
 	            </div>
-	            <div class="card__foot card__foot--fit-x">
+	            <div class="card-foot card-foot-fit-x">
 					<div class="form__actions">
 						<div class="row">
 							<div class="col-lg-2"></div>
@@ -319,7 +319,7 @@
 						</div>
 					</div>	                
 	            </div>
-	            <div class="card__foot">
+	            <div class="card-foot">
 					<div class="form__actions">
 						<div class="row">
 							<div class="col-lg-4"></div>
@@ -421,7 +421,7 @@
 						</div>
 					</div>	               
 	            </div>
-	            <div class="card__foot">
+	            <div class="card-foot">
 					<div class="form__actions">
 						<div class="row">
 							<div class="col-lg-5"></div>

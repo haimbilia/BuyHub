@@ -292,7 +292,7 @@
 
 
                                     </div>
-                                    <div class="card__foot">
+                                    <div class="card-foot">
                                         <div class="form__actions text-center">
                                             <button type="reset" class="btn btn-success">Submit</button>
                                             <button type="reset" class="btn btn-secondary">Cancel</button>

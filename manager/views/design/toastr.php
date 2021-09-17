@@ -256,7 +256,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="card__foot">
+							<div class="card-foot">
 								<div class=" ">
 									<div class="row">
 										<div class="col-lg-8 offset-lg-4">

@@ -34,7 +34,7 @@ $third-color: var(--third-color);
 $third-color-inverse:var(--third-color-inverse);
 //fixed theme colors 
 $body-color: #000;
-$txt-body:#000;
+$txt-body:rgb(59, 59, 59);
 $txt-gray:#888;
 //border colors
 $border-color:#dee2e6;
@@ -55,6 +55,7 @@ $bg-placeholder:rgba(0, 0, 0, 0.03);
 $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
 $shadow-rgb: var(--shadow-rgb);
 //radius
+$radius-common:1px;
 $radius4:4px;
 $radius3:3px;
 $radius2:2px;
