@@ -237,10 +237,7 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <div class="table-responsive">
-                                            <div class="table-processing">
-                                                <div class="spinner spinner--sm spinner--brand"></div>
-                                            </div>
+                                        <div class="table-responsive">                                         
                                             <table width="100%" class="table table-dashed">
                                                 <thead>
                                                     <tr>

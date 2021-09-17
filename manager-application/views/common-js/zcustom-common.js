@@ -102,7 +102,7 @@ $(document).ready(function () {
         },
 
         getLoader: function () {
-            return '<div class="circularLoader"><svg class="circular" height="30" width="30"><circle class="path" cx="25" cy="25.2" r="19.9" fill="none" stroke-width="6" stroke-miterlimit="10"></circle> </svg> </div>';
+            return '<div class="table-processing"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
 
         updateFaceboxContent: function (t, cls) {

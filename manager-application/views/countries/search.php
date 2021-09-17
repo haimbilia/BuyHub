@@ -26,7 +26,7 @@
         $th = $tbl->appendElement('thead')->appendElement('tr');
         foreach ($fields as $key => $val) {
 
-            $headColumData = Common::getListingHeaderColumnHtml($key, $sortBy, $sortOrder);
+            $headColumData = HtmlHelper::getListingHeaderColumnHtml($key, $sortBy, $sortOrder);
             $cls = '';
             $html = '';
             if (in_array($key, $allowedKeysForSorting)) {

@@ -20,7 +20,7 @@ $btn_clear = $frmSearch->getField('btn_clear');
 $btn_clear->addFieldtagAttribute('class', 'btn btn-link');
 $btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
 ?>
-<main class="main mainJs">    
+<main class="main mainJs">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -48,7 +48,7 @@ $btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
                 echo $frmSearch->getExternalJS(); ?>
                 </form>
                 <div class="card" id="listing">
-                    <?php echo Labels::getLabel('LBL_Processing...', $adminLangId); ?>
+                    <?php echo HtmlHelper::getLoader(); ?>
                 </div>
             </div>
         </div>
