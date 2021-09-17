@@ -27,7 +27,8 @@
                     <span class="help_label">Help</span>
                 </button>
 
-                <div class="modal fixed-right fade" id="help" tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
+                <div class="modal fixed-right fade" id="help" tabindex="-1" role="dialog" aria-labelledby="help"
+                    aria-hidden="true">
                     <div class="modal-dialog modal-dialog-vertical" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -238,7 +239,7 @@
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <div class="table-processing">
-                                                <div class="spinner"></div>
+                                                <div class="spinner spinner--sm spinner--brand"></div>
                                             </div>
                                             <table width="100%" class="table table-dashed">
                                                 <thead>
@@ -316,7 +317,7 @@
                                                         <td>
                                                             <div class="user-profile">
                                                                 <figure class="user-profile_photo">
-                                                                    <img src="/yokart/manager/images/users/100_7.jpg"
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg"
                                                                         alt="image">
                                                                 </figure>
                                                                 <div class="user-profile_data">
@@ -385,7 +386,7 @@
                                                         <td>
                                                             <div class="user-profile">
                                                                 <figure class="user-profile_photo">
-                                                                    <img src="/yokart/manager/images/users/100_1.jpg"
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg"
                                                                         alt="image">
                                                                 </figure>
                                                                 <div class="user-profile_data">
@@ -451,7 +452,7 @@
                                                         <td>
                                                             <div class="user-profile">
                                                                 <figure class="user-profile_photo">
-                                                                    <img src="/yokart/manager/images/users/100_2.jpg"
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_2.jpg"
                                                                         alt="image">
                                                                 </figure>
                                                                 <div class="user-profile_data">
@@ -515,7 +516,7 @@
                                                         <td>
                                                             <div class="user-profile">
                                                                 <figure class="user-profile_photo">
-                                                                    <img src="/yokart/manager/images/users/100_3.jpg"
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg"
                                                                         alt="image">
                                                                 </figure>
                                                                 <div class="user-profile_data">
@@ -579,7 +580,7 @@
                                                         <td>
                                                             <div class="user-profile">
                                                                 <figure class="user-profile_photo">
-                                                                    <img src="/yokart/manager/images/users/100_4.jpg"
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg"
                                                                         alt="image">
                                                                 </figure>
                                                                 <div class="user-profile_data">
@@ -643,7 +644,7 @@
                                                         <td>
                                                             <div class="user-profile">
                                                                 <figure class="user-profile_photo">
-                                                                    <img src="/yokart/manager/images/users/100_5.jpg"
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_5.jpg"
                                                                         alt="image">
                                                                 </figure>
                                                                 <div class="user-profile_data">
@@ -707,7 +708,7 @@
                                                         <td>
                                                             <div class="user-profile">
                                                                 <figure class="user-profile_photo">
-                                                                    <img src="/yokart/manager/images/users/100_6.jpg"
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg"
                                                                         alt="image">
                                                                 </figure>
                                                                 <div class="user-profile_data">

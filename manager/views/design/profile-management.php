@@ -1560,36 +1560,7 @@
                                                         <!--end::Col-->
                                                     </div>
                                                     <!--end::Input group-->
-                                                    <!--begin::Input group-->
-                                                    <div class="row form-group">
-                                                        <!--begin::Label-->
-                                                        <label
-                                                            class="col-lg-4 col-form-label required label">Communication</label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Col-->
-                                                        <div class="col-lg-8 fv-row fv-plugins-icon-container">
-                                                            <!--begin::Options-->
-                                                            <div class="d-flex align-items-center mt-3">
-                                                                <!--begin::Option-->
-                                                                <label class="checkbox">
-                                                                    <input type="checkbox" value="1"> Email
-                                                                </label>
-                                                                <!--end::Option-->
-                                                                <!--begin::Option-->
 
-                                                                <label class="checkbox">
-                                                                    <input type="checkbox" value="1"> Phone
-                                                                </label>
-
-                                                                <!--end::Option-->
-                                                            </div>
-                                                            <!--end::Options-->
-                                                            <div class="fv-plugins-message-container invalid-feedback">
-                                                            </div>
-                                                        </div>
-                                                        <!--end::Col-->
-                                                    </div>
-                                                    <!--end::Input group-->
                                                     <!--begin::Input group-->
                                                     <div class="row form-group">
                                                         <!--begin::Label-->
@@ -1598,9 +1569,12 @@
                                                         <!--begin::Label-->
                                                         <!--begin::Label-->
                                                         <div class="col-lg-8 d-flex align-items-center">
-                                                            <label class="checkbox">
-                                                                <input type="checkbox" value="1">
-                                                            </label>
+                                                            <span class="switch switch--sm switch--icon">
+                                                                <label>
+                                                                    <input type="checkbox" checked="checked" name="">
+                                                                    <span></span>
+                                                                </label>
+                                                            </span>
                                                         </div>
                                                         <!--begin::Label-->
                                                     </div>

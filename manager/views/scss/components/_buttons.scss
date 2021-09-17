@@ -6,7 +6,7 @@ a {
     padding: 0.6rem 1.3rem;
     font-size: 0.85rem;
     line-height: 1.5;
-    border-radius: 1px;
+    border-radius: 1px !important;
     &.btn-brand {
         background-color: var(--brand-color);
         color: var(--brand-color-inverse);
