@@ -64,13 +64,44 @@ $youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video
                 <div class="cms bg-gray p-4 mb-4">
                     <table>
                         <tbody>
-                            <?php foreach ($productSpecifications as $key => $specification) { ?>
-                            <tr>
-                                <th><?php echo $specification['prodspec_name'] . ":"; ?></th>
-                                <td><?php echo html_entity_decode($specification['prodspec_value'], ENT_QUOTES, 'utf-8'); ?>
-                                </td>
-                            </tr>
-                            <?php } ?>
+                            <?php
+                                $groupname = '';
+                                $specOthersStr = '';
+                                foreach ($productSpecifications as $key => $specification) {
+                                    if ($groupname != $specification['prodspec_group']) {
+                                        $groupname = $specification['prodspec_group'];
+                                        ?>                                            
+                                        <tr>
+                                            <th colspan="2"><?php echo $groupname; ?></th>
+                                        </tr>
+                                    <?php
+                                    }
+                                    if (empty($groupname)) {
+                                        $specOthersStr .= '<tr>
+                                                <th>' . $specification['prodspec_name'] . ':</th>  
+                                                <td>' . html_entity_decode($specification['prodspec_value'], ENT_QUOTES, 'utf-8') . '</td>     
+                                             </tr>';
+                                        continue;
+                                    }
+                                    ?>   
+                                    <tr>
+                                        <td><?php echo $specification['prodspec_name'] . ":"; ?></td>
+                                        <td><?php echo html_entity_decode($specification['prodspec_value'], ENT_QUOTES, 'utf-8'); ?>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                }
+                                if (!empty($groupname) && !empty($specOthersStr)) {
+                                    echo '<tr>
+                                            <th colspan="2">' . Labels::getLabel('LBL_Others', $siteLangId) . '</th>  
+                                         </tr>';
+                                    $specOthersStr = str_replace(['<th>', '</th>'], ['<td>', '</td>'], $specOthersStr);
+                                }
+
+                                if (!empty($specOthersStr)) {
+                                    echo $specOthersStr;
+                                }
+                                ?>
                         </tbody>
                     </table>
                 </div>
