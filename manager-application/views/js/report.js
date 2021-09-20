@@ -27,7 +27,6 @@ $(document).on("click", ".headerColumnJs", function (e) {
 
 (function () {
     var dv = '#listing';
-    var listingTableJsObj = $('.listingTableJs');
 
     goToSearchPage = function (page) {
         if (typeof page == undefined || page == null) {
@@ -61,9 +60,9 @@ $(document).on("click", ".headerColumnJs", function (e) {
         }
 
         if (typeof withloader == 'undefined' || withloader != false) {
-            listingTableJsObj.html(fcom.getLoader());
+            $('.listingTableJs').html(fcom.getLoader());
         } else {
-            listingTableJsObj.prepend(fcom.getLoader());
+            $('.listingTableJs').prepend(fcom.getLoader());
         }
 
         fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
