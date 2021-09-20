@@ -3,11 +3,11 @@ $frmSearch->setFormTagAttribute('onsubmit', 'searchReport(this, false); return(f
 $frmSearch->setFormTagAttribute('id', 'frmSearch');
 $frmSearch->setFormTagAttribute('class', 'form');
 
-$sortBy = $frmSearch->getField('sortBy');
-$sortBy->setFieldTagAttribute('id', 'sortBy');
+$sortByFld = $frmSearch->getField('sortBy');
+$sortByFld->setFieldTagAttribute('id', 'sortBy');
 
-$sortOrder = $frmSearch->getField('sortOrder');
-$sortOrder->setFieldTagAttribute('id', 'sortOrder');
+$sortOrderFld = $frmSearch->getField('sortOrder');
+$sortOrderFld->setFieldTagAttribute('id', 'sortOrder');
 
 $keyword  = $frmSearch->getField('keyword');
 $keyword->addFieldtagAttribute('class', 'form-control');
@@ -40,7 +40,7 @@ $btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
                         </div>
                     </div>
                 </div>
-                <?php
+                <?php 
                 echo $frmSearch->getFieldHTML('sortBy');
                 echo $frmSearch->getFieldHTML('sortOrder');
                 echo $frmSearch->getFieldHTML('reportColumns');
@@ -56,6 +56,7 @@ $btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
                         'newRecordBtn' => true,
                         'statusButtons' => true
                     ];
+                   
                     $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
                     <div class="card-body">
                         <div class="table-responsive listingTableJs">
@@ -64,9 +65,8 @@ $btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
                                 array('width' => '100%', 'class' => 'table table-dashed')
                             );
                             $th = $tbl->appendElement('thead')->appendElement('tr');
-                            foreach ($fields as $key => $val) {
-
-                                $headColumData = HtmlHelper::getListingHeaderColumnHtml($key, $sortBy, $sortOrder);
+                            foreach ($fields as $key => $val) {                                
+                                $headColumData = HtmlHelper::getListingHeaderColumnHtml($key, $sortBy, $sortOrder);                                
                                 $cls = '';
                                 $html = '';
                                 if (in_array($key, $allowedKeysForSorting)) {
