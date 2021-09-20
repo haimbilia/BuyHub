@@ -266,7 +266,7 @@
 			<div class="card-body">
 				Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
 			</div>
-			<div class="card__foot hidden">
+			<div class="card-foot hidden">
 				<div class="row">
 					<div class="col-lg-6">
 						card footer: 
@@ -297,7 +297,7 @@
 			<div class="card-body">
 				Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
 			</div>
-			<div class="card__foot">
+			<div class="card-foot">
 				<div class="row align-items-center">
 					<div class="col-lg-6 m--valign-middle">
 						card footer: 
@@ -330,7 +330,7 @@
 				Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
 				 </div>
 			</div>
-			<div class="card__foot">
+			<div class="card-foot">
 				<div class="row align-items-center">
 					<div class="col-lg-12">
 						<button type="submit" class="btn btn-success">Submit</button>

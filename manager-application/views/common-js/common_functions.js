@@ -554,7 +554,7 @@ function setSiteDefaultLang(langId) {
 }
 
 function getNotifications() {
-    $("#notificationList").html(fcom.getLoader());
+    $("#notificationList").prepend(fcom.getLoader());
 
     fcom.ajax(fcom.makeUrl('Notifications', 'notificationList'), '', function (res) {
         $("#notificationList").html(res);
@@ -573,10 +573,12 @@ function selectAll(obj) {
 
     var faceboxActionBtns = (0 < $("#facebox").length && $("#facebox").is(":visible")) ? "#facebox " : '';
 
-    if ($(obj).prop("checked") == false) {
-        $(faceboxActionBtns + ".toolbar-btn-js").addClass('d-none');
-    } else {
-        $(faceboxActionBtns + ".toolbar-btn-js").removeClass('d-none');
+    if (0 < $(faceboxActionBtns + ".toolbar-btn-js").length) {
+        if ($(obj).prop("checked") == false) {
+            $(faceboxActionBtns + ".toolbar-btn-js").addClass('disabled');
+        } else {
+            $(faceboxActionBtns + ".toolbar-btn-js").removeClass('disabled');
+        }
     }
 }
 
@@ -586,11 +588,13 @@ function formAction(frm, callback) {
         return false;
     }
 
-    $.systemMessage.loading();
+    if (0 < $('.listingTableJs').length) {
+        $('.listingTableJs').prepend(fcom.getLoader());
+    }
+    
     data = fcom.frmData(frm);
 
     fcom.updateWithAjax(frm.action, data, function (resp) {
-        console.log(callback);
         callback();
         showActionsBtns();
     });

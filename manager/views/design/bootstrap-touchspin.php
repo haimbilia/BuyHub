@@ -131,7 +131,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card__foot">
+                            <div class="card-foot">
                                 <div class="form__actions">
                                     <div class="row">
                                         <div class="col-lg-9 ml-lg-auto">
@@ -173,7 +173,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card__foot">
+                            <div class="card-foot">
                                 <div class="form__actions">
                                     <div class="row">
                                         <div class="col-lg-9 ml-lg-auto">

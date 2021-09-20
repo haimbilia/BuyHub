@@ -165,7 +165,7 @@
 											<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div>
 											<button type="reset" class="btn btn-primary">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>
@@ -259,7 +259,7 @@
 											<input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="">
 											<button type="reset" class="btn btn-brand">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>

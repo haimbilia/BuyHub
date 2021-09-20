@@ -118,6 +118,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
         data = 'recordId=' + recordId;
         fcom.ajax(fcom.makeUrl(controllerName, 'editRecord'), data, function (t) {
             $.ykmodal(t);
+            fcom.removeLoader();
         });
     };
     
@@ -126,6 +127,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
         data = 'recordId=' + recordId + '&langId=' + langId;
         fcom.ajax(fcom.makeUrl(controllerName, 'langForm', [autoFillLangData]), data, function (t) {
             $.ykmodal(t);
+            fcom.removeLoader();
         });
     };
 

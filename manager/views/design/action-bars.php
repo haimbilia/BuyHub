@@ -10,7 +10,7 @@
 
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
             rel="stylesheet">
-        
+
 
         <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
 
@@ -19,8 +19,7 @@
 
 
 
-    <body
-        class="">
+    <body class="">
         <div class="wrapper">
 
             <?php
@@ -125,7 +124,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card__foot">
+                                        <div class="card-foot">
                                             <div class="form__actions">
                                                 <button type="reset" class="btn btn-primary">Submit</button>
                                                 <button type="reset" class="btn btn-secondary">Cancel</button>
@@ -177,7 +176,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card__foot">
+                                        <div class="card-foot">
                                             <div class="form__actions form__actions--right">
                                                 <button type="reset" class="btn btn-brand">Submit</button>
                                                 <button type="reset" class="btn btn-secondary">Cancel</button>
@@ -229,7 +228,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card__foot">
+                                        <div class="card-foot">
                                             <div class="form__actions form__actions--right">
                                                 <div class="row">
                                                     <div class="col align-left">
@@ -288,7 +287,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card__foot">
+                                        <div class="card-foot">
                                             <div class="form__actions form__actions--right">
                                                 <button type="reset" class="btn btn-primary">Submit</button>
                                                 <span class="margin-l-10">or <a href="#"
@@ -342,7 +341,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card__foot card__foot--fit">
+                                        <div class="card-foot card-foot-fit">
                                             <div class="form__actions form__actions--right">
                                                 <div class="row">
                                                     <div class="col align-left">
@@ -401,7 +400,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card__foot card__foot--solid">
+                                        <div class="card-foot card-foot--solid">
                                             <div class="form__actions form__actions--right">
                                                 <button type="reset" class="btn btn-brand">Submit</button>
                                                 <button type="reset" class="btn btn-secondary">Cancel</button>
@@ -423,7 +422,7 @@
                                     </div>
                                     <!--begin::Form-->
                                     <form class="form">
-                                        <div class="card__foot card__foot--top">
+                                        <div class="card-foot card-foot--top">
                                             <div class="form__actions form__actions--solid">
                                                 <div class="row align-items-center">
                                                     <div class="col align-left valign-middle">
@@ -466,7 +465,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card__foot card__foot--solid">
+                                        <div class="card-foot card-foot--solid">
                                             <div class="form__actions form__actions--center">
                                                 <button type="reset" class="btn btn-success">Submit</button>
                                                 <button type="reset" class="btn btn-secondary">Cancel</button>
@@ -529,7 +528,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card__foot card__foot--solid">
+                                        <div class="card-foot card-foot--solid">
                                             <div class="form__actions">
                                                 <div class="row">
                                                     <div class="col-3">

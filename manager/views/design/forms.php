@@ -143,7 +143,7 @@
 											<textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<button type="reset" class="btn btn-primary">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>
@@ -259,7 +259,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<div class="row">
 												<div class="col-2">
@@ -332,7 +332,7 @@
 											<textarea class="form-control" readonly="" rows="3"></textarea>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<button type="reset" class="btn btn-brand">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>
@@ -406,7 +406,7 @@
 											</select>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<button type="reset" class="btn btn-success">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>
@@ -461,7 +461,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<button type="reset" class="btn btn-primary">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>

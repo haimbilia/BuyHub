@@ -736,7 +736,7 @@
                                     </div>
                                 </div>
 
-                                <div class="card__foot">
+                                <div class="card-foot">
                                     <div class="chat__input">
                                         <div class="chat__editor">
                                             <textarea style="height: 50px" placeholder="Type here..."></textarea>
