@@ -525,9 +525,9 @@ $(document).ready(function () {
 
         var faceboxActionBtns = (0 < $("#facebox").length && $("#facebox").is(":visible")) ? "#facebox " : '';
         if ($("#" + parentForm + " .selectItem--js:checked").length == 0) {
-            $(faceboxActionBtns + " .toolbar-btn-js").addClass('d-none');
+            $(faceboxActionBtns + " .toolbar-btn-js").addClass('disabled');
         } else {
-            $(faceboxActionBtns + " .toolbar-btn-js").removeClass('d-none');
+            $(faceboxActionBtns + " .toolbar-btn-js").removeClass('disabled');
         }
     });
 
@@ -597,6 +597,7 @@ function formAction(frm, callback) {
     fcom.updateWithAjax(frm.action, data, function (resp) {
         callback();
         showActionsBtns();
+        $(".selectAll-js").prop("checked", false);
     });
 }
 
