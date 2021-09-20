@@ -109,8 +109,8 @@ $(document).ready(function () {
         },
 
         removeLoader: function (cls) {
-            $('.loaderJs').remove();
             $(document.body).css({ 'cursor': 'default' });
+            $('.loaderJs').remove();
         },
 
         updateFaceboxContent: function (t, cls) {
