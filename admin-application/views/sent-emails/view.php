@@ -22,9 +22,9 @@
 				</li>				
 				<li>
 					<span class="captions"><?php echo Labels::getLabel('LBL_Content',$adminLangId); ?></span>
-					<span class="value captions ">
-					
-					<div  class="email-temp"><?php echo CommonHelper::renderHtml($data['earch_body'],true);?></div></span>
+					<span class="value captions ">					
+                                            <div  class="email-temp"><?php echo CommonHelper::renderHtml($data['earch_body'],true);?></div>
+                                        </span>
 				</li>
 				
 			</ul>

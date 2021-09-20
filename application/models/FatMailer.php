@@ -25,7 +25,8 @@ class FatMailer extends FatModel
     private $langId = 0;
     private $template = '';
     private $priority = null;
-    private $smtpObj = null;
+    private $smtpArr = [];
+    private $forceSmtp = false; //testing with smtp only
 
     /**
      * Initialize Mailer
@@ -42,33 +43,37 @@ class FatMailer extends FatModel
     public function setFrom(string $email, string $name = '')
     {
         $this->addAnAddress('from', $email, $name);
+        return $this;
     }
 
     public function setReplyTo(string $email, string $name = '')
     {
         $this->addAnAddress('replyTo', $email, $name);
+        return $this;
     }
 
     public function addCc(string $email, string $name = '')
     {
         $this->addAnAddress('cc', $email, $name);
+        return $this;
     }
 
     public function addBcc(string $email, string $name = '')
     {
         $this->addAnAddress('bcc', $email, $name);
+        return $this;
     }
 
     public function setTo(string $email, string $name = '')
-    
     {
-        
         $this->addAnAddress('to', $email, $name);
+        return $this;
     }
 
     public function setVariables(array $variables)
     {
         $this->variables = $variables;
+        return $this;
     }
 
     /**
@@ -79,6 +84,7 @@ class FatMailer extends FatModel
     public function addAttachment($path, $name)
     {
         array_push($this->attachments, ['path' => $path, 'name' => $name]);
+        return $this;
     }
 
     /**
@@ -89,52 +95,30 @@ class FatMailer extends FatModel
     public function setPriority(int $priority)
     {
         $this->priority = $priority;
+        return $this;
     }
 
     /**
      * 
      * @param type $smtpArr
-     *  $smtp_arr = ["host" => '',"port" =>'' ,"username" => '', "password" =>'' , "secure" => '' ];
+     *  $smtpArr = ["host" => '',"port" =>'' ,"username" => '', "password" =>'' , "secure" => '' ];
      */
-    public function setSmtpDetails(SmtpModel $smtpobj)
+    public function setSmtpDetails(array $smtpArr)
     {
-        $this->smtpObj = $smtpobj;
+        $this->smtpArr = $smtpArr;
+        $this->forceSmtp();
+        return $this;
     }
 
-    private function addAnAddress(string $type, string $email, string $name)
+    public function forceSmtp()
     {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return;
-        }        
-        switch ($type) {          
-             case 'to':            
-                $this->toEmail = $email;
-                $this->toName = $name;
-                echo $this->toEmail;
-                break;
-            case 'from':
-                $this->fromEmail = $email;
-                $this->fromName = $name;
-                break;
-            case 'replyTo':
-                $this->replyToArr = ['email' => $email, 'name' => $name];
-                break;           
-            case 'cc':
-                array_push($this->ccArr, ['email' => $email, 'name' => $name]);
-                break;
-            case 'bcc':
-                array_push($this->ccArr, ['email' => $email, 'name' => $name]);
-                break;
-
-            default:
-                break;
-        }
+        $this->forceSmtp = true;
+        return $this;
     }
 
     public function send(): bool
-    {      
-        
-        if (!empty($this->toEmail)) { 
+    {
+        if (empty($this->toEmail)) {
             $this->error = Labels::getLabel('ERR_TO_EMAIL_ADDRESS_IS_REQUIRED!', $this->langId);
             return false;
         }
@@ -143,11 +127,11 @@ class FatMailer extends FatModel
             $this->error = Labels::getLabel('ERR_EMAIL_TEMPLATE_NOT_FOUND!', $this->langId);
             return false;
         }
-        
+
         if (empty($this->fromEmail)) {
             $this->fromEmail = FatApp::getConfig("CONF_FROM_EMAIL");
             $this->fromName = FatApp::getConfig('CONF_FROM_NAME_' . $this->langId, FatUtility::VAR_STRING, '');
-        } 
+        }
 
         $etpl = new FatTemplate('', '');
         $etpl->set('langId', $row['etpl_lang_id']);
@@ -156,26 +140,40 @@ class FatMailer extends FatModel
         $ftpl = new FatTemplate('', '');
         $ftpl->set('langId', $row['etpl_lang_id']);
         $footer = $ftpl->render(false, false, '_partial/emails/email-footer.php', true);
-        $subject = $row['etpl_subject'];
         $body = $header . $row['etpl_body'] . $footer;
-        $this->variables += static::commonVars($row['etpl_lang_id']);
+        $this->variables += $this->commonVars($row['etpl_lang_id']);
 
-        $body = $this->replaceVariables($row['etpl_body']);
-        $subject = $this->replaceVariables($row['etpl_subject']);     
+        $body = $this->replaceVariables($body);
+        $subject = $this->replaceVariables($row['etpl_subject']);
+
+        if ($row['etpl_status'] != applicationConstants::ACTIVE) {
+            SystemLog::system('Email template is not active - ' . $row['etpl_code'], 'Email Template');
+            return true;
+        }
+
         if (!$this->addToArchive($subject, $body, $row['etpl_priority'])) {
             return false;
-        }   
+        }
 
-        if ($row['etpl_status'] != applicationConstants::ACTIVE || !empty($body)) {
+        if (empty($body)) {
+            SystemLog::system('Email template body is empty - ' . $row['etpl_code'], 'Email Template');
             return false;
         }
 
-        if ($row['etpl_priority'] != self::PRIORITY_TYPE_IMMEDIATE) {
+        if (!ALLOW_EMAILS) {
             return true;
         }
-        if (FatApp::getConfig('CONF_SEND_EMAIL') == applicationConstants::NO || !ALLOW_EMAILS) {
-            return true;
+
+        if (!$this->forceSmtp) {
+            if ($row['etpl_priority'] != self::PRIORITY_TYPE_IMMEDIATE) {
+                return true;
+            }
+
+            if (FatApp::getConfig('CONF_SEND_EMAIL') == applicationConstants::NO) {
+                return true;
+            }
         }
+
         if (!$this->sendByPhpMailer($subject, $body)) {
             return false;
         }
@@ -183,21 +181,55 @@ class FatMailer extends FatModel
         return true;
     }
 
+    public static function sendArchivedEmail()
+    {
+        if (FatApp::getConfig('CONF_SEND_EMAIL') == applicationConstants::NO || !ALLOW_EMAILS) {
+            return 'Email is disabled';
+        }
+
+        $srch = new SearchBase(self::DB_TBL_ARCHIVE);
+        $srch->addCondition('earch_sent_on', '=', 'mysql_func_null', true);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(50);
+        $srch->addOrder('earch_priority DESC');
+        $archives = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $fatMailerObj = new self(1, '');
+        foreach ($archives as $archive) {
+            $fatMailerObj->toEmail = $archive['earch_to_email'];
+            $fatMailerObj->toName = $archive['earch_to_name'];
+            $fatMailerObj->fromEmail = $archive['earch_from_email'];
+            $fatMailerObj->fromName = $archive['earch_from_name'];
+            $fatMailerObj->ccArr = $archive['earch_cc_email'] ? json_decode($archive['earch_cc_email'], true) : null;
+            $fatMailerObj->bccArr = $archive['earch_bcc_email'] ? json_decode($archive['earch_bcc_email'], true) : null;
+            $fatMailerObj->attachments = $archive['earch_attachments'] ? json_decode($archive['earch_attachments'], true) : null;
+            if ($this->sendByPhpMailer($archive['earch_subject'], $archive['earch_body'])) {
+                $this->archiveId = $archive['earch_id'];
+                $this->markArchiveSent();
+            }
+        }
+        return true;
+    }
+
     private function sendByPhpMailer(string $subject, string $body): bool
     {
-        $mail = new PHPMailer();
+        $mail = new PHPMailer(true);
         $mail->SMTPDebug = false;
-        if (FatApp::getConfig('CONF_SEND_SMTP_EMAIL')) {
+        if (FatApp::getConfig('CONF_SEND_SMTP_EMAIL') || $this->forceSmtp) {
             $mail->IsSMTP();
-            $mail->Host = $this->smtpObj->host ?? FatApp::getConfig("CONF_SMTP_HOST");
+            $mail->Host = $this->smtpArr['host'] ?? FatApp::getConfig("CONF_SMTP_HOST");
             $mail->SMTPAuth = (strtolower($mail->Host) == 'localhost') ? false : true;
-            $mail->Port = $this->smtpObj->port ?? FatApp::getConfig("CONF_SMTP_PORT");
-            $mail->Username = $this->smtpObj->username ?? FatApp::getConfig("CONF_SMTP_USERNAME");
-            $mail->Password = $this->smtpObj->password ?? FatApp::getConfig("CONF_SMTP_PASSWORD");
-            $mail->SMTPSecure = $this->smtpObj->secure ?? ((strtolower($mail->Host) == 'localhost') ? 'none' : FatApp::getConfig("CONF_SMTP_SECURE"));
+            $mail->Port = $this->smtpArr['port'] ?? FatApp::getConfig("CONF_SMTP_PORT");
+            $mail->Username = $this->smtpArr['username'] ?? FatApp::getConfig("CONF_SMTP_USERNAME");
+            $mail->Password = $this->smtpArr['password'] ?? FatApp::getConfig("CONF_SMTP_PASSWORD");
+            $mail->SMTPSecure = $this->smtpArr['secure'] ?? ((strtolower($mail->Host) == 'localhost') ? 'none' : FatApp::getConfig("CONF_SMTP_SECURE"));
         } else {
             $mail->isMail();
         }
+
+        if ($this->forceSmtp) {
+            $mail->Timeout = 30;
+        }
+
         $mail->IsHTML();
         $mail->CharSet = 'UTF-8';
         $mail->setFrom($this->fromEmail, $this->fromName);
@@ -217,16 +249,41 @@ class FatMailer extends FatModel
         $mail->msgHTML($body);
         $mail->Subject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
         try {
-            if (!$mail->send()) {
-                $this->error = $mail->ErrorInfo;
-                return false;
-            }
-        } catch (phpmailerException $e) {
-            return false;
+            $mail->send();
         } catch (Exception $e) {
+            $this->error = $mail->ErrorInfo;
             return false;
         }
         return true;
+    }
+
+    private function addAnAddress(string $type, string $email, string $name)
+    {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return;
+        }
+        switch ($type) {
+            case 'to':
+                $this->toEmail = $email;
+                $this->toName = $name;
+                break;
+            case 'from':
+                $this->fromEmail = $email;
+                $this->fromName = $name;
+                break;
+            case 'replyTo':
+                $this->replyToArr = ['email' => $email, 'name' => $name];
+                break;
+            case 'cc':
+                array_push($this->ccArr, ['email' => $email, 'name' => $name]);
+                break;
+            case 'bcc':
+                array_push($this->ccArr, ['email' => $email, 'name' => $name]);
+                break;
+
+            default:
+                break;
+        }
     }
 
     private function getTemplate()
@@ -240,7 +297,7 @@ class FatMailer extends FatModel
 
     private function getMailTpl($langId)
     {
-        $srch = new SearchBase(self::DB_TBL); 
+        $srch = new SearchBase(self::DB_TBL);
         $srch->addCondition('etpl_code', '=', $this->template);
         $srch->addCondition('etpl_lang_id', '=', $langId);
         $srch->doNotCalculateRecords();
@@ -262,23 +319,20 @@ class FatMailer extends FatModel
             'earch_to_name' => $this->toName,
             'earch_from_email' => $this->fromEmail,
             'earch_from_name' => $this->fromName,
-            'earch_cc_email' => json_encode($this->ccArr),
-            'earch_bcc_email' => json_encode($this->bccArr),
+            'earch_cc_email' => $this->ccArr ? json_encode($this->ccArr) : null,
+            'earch_bcc_email' => $this->bccArr ? json_encode($this->bccArr) : null,
             'earch_tpl_name' => $this->template,
             'earch_subject' => $subject,
             'earch_body' => $body,
-            'earch_attachments' => json_encode($this->attachments),
+            'earch_attachments' => $this->attachments ? json_encode($this->attachments) : null,
             'earch_added' => date('Y-m-d H:i:s'),
             'earch_priority' => $this->priority ?? $priority,
-        ];   
-        
-        print_r($archiveRecord);
-        
-        die();
+        ];
+
         $record = new TableRecord(static::DB_TBL_ARCHIVE);
         $record->assignValues($archiveRecord);
         if (!$record->addNew()) {
-            echo $this->error = $record->getError();
+            $this->error = $record->getError();
             return false;
         }
         $this->archiveId = $record->getId();
@@ -327,36 +381,7 @@ class FatMailer extends FatModel
         return array_unique($emails);
     }
 
-    public static function sendArchivedEmail()
-    {
-        if (FatApp::getConfig('CONF_SEND_EMAIL') == applicationConstants::NO || !ALLOW_EMAILS) {
-            return 'Email is disabled';
-        }
-
-        $srch = new SearchBase(self::DB_TBL_ARCHIVE);
-        $srch->addCondition('earch_sent_on', '=', 'mysql_func_null', true);
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(50);
-        $srch->addOrder('earch_priority DESC');
-        $archives = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $fatMailerObj = new self(1, '');
-        foreach ($archives as $archive) {
-            $fatMailerObj->toEmail = $archive['earch_to_email'];
-            $fatMailerObj->toName = $archive['earch_to_name'];
-            $fatMailerObj->fromEmail = $archive['earch_from_email'];
-            $fatMailerObj->fromName = $archive['earch_from_name'];
-            $fatMailerObj->ccArr = json_decode($archive['earch_cc_email'], true);
-            $fatMailerObj->bccArr = json_decode($archive['earch_bcc_email'], true);
-            $fatMailerObj->attachments = json_decode($archive['earch_attachments'], true);
-            if ($this->sendByPhpMailer($archive['earch_subject'], $archive['earch_body'])) {
-                $this->archiveId = $archive['earch_id'];
-                $this->markArchiveSent();
-            }
-        }
-        return true;
-    }
-
-    private static function commonVars($langId)
+    private function commonVars($langId)
     {
         $srch = SocialPlatform::getSearchObject($langId);
         $srch->doNotCalculateRecords();
@@ -395,24 +420,5 @@ class FatMailer extends FatModel
             '{contact_us_url}' => UrlHelper::generateFullUrl('custom', 'contactUs', array(), CONF_WEBROOT_FRONT_URL),
         );
     }
-
-}
-
-class SmtpModel
-{    
-    
-    public $username;
-    public $password;
-    public $host;
-
-    /**
-     * @var port int.
-     */
-    public $port;    
-
-    /**
-     * @var secure int.
-     */
-    public $secure;
 
 }

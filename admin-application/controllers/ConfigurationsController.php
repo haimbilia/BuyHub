@@ -200,14 +200,15 @@ class ConfigurationsController extends AdminBaseController
         $record = new Configurations();
 
         if (isset($post["CONF_SEND_SMTP_EMAIL"]) && $post["CONF_SEND_EMAIL"] && $post["CONF_SEND_SMTP_EMAIL"] && (($post["CONF_SEND_SMTP_EMAIL"] != FatApp::getConfig("CONF_SEND_SMTP_EMAIL")) || ($post["CONF_SMTP_HOST"] != FatApp::getConfig("CONF_SMTP_HOST")) || ($post["CONF_SMTP_PORT"] != FatApp::getConfig("CONF_SMTP_PORT")) || ($post["CONF_SMTP_USERNAME"] != FatApp::getConfig("CONF_SMTP_USERNAME")) || ($post["CONF_SMTP_SECURE"] != FatApp::getConfig("CONF_SMTP_SECURE")) || ($post["CONF_SMTP_PASSWORD"] != FatApp::getConfig("CONF_SMTP_PASSWORD")))) {
-            $smtpObj = new SmtpModel();
-            $smtpObj->host = $post["CONF_SMTP_HOST"];
-            $smtpObj->port = $post["CONF_SMTP_PORT"];
-            $smtpObj->username = $post["CONF_SMTP_USERNAME"];
-            $smtpObj->password = $post["CONF_SMTP_PASSWORD"];
-            $smtpObj->secure = $post["CONF_SMTP_SECURE"];
-
-            if (EmailHandler::sendSmtpTestEmail($this->adminLangId, $smtpObj)) {
+            $smtp_arr = [
+                'host' => $post["CONF_SMTP_HOST"],
+                'port' => $post["CONF_SMTP_PORT"],
+                'username' => $post["CONF_SMTP_USERNAME"],
+                'password' => $post["CONF_SMTP_PASSWORD"],
+                'secure' => $post["CONF_SMTP_SECURE"],
+            ];           
+            
+            if (EmailHandler::sendSmtpTestEmail($this->adminLangId, $smtp_arr)) {
                 Message::addMessage(Labels::getLabel('LBL_We_have_sent_a_test_email_to_administrator_account' . FatApp::getConfig("CONF_SITE_OWNER_EMAIL"), $this->adminLangId));
             } else {
                 Message::addErrorMessage(Labels::getLabel("LBL_SMTP_settings_provided_is_invalid_or_unable_to_send_email_so_we_have_not_saved_SMTP_settings", $this->adminLangId));
@@ -2015,13 +2016,12 @@ class ConfigurationsController extends AdminBaseController
 
     public function testEmail()
     {
-        try {
-            if (EmailHandler::sendMailTpl(FatApp::getConfig('CONF_SITE_OWNER_EMAIL'), 'test_email', $this->adminLangId)) {
-                FatUtility::dieJsonSuccess("Mail sent to - " . FatApp::getConfig('CONF_SITE_OWNER_EMAIL'));
-            }
-        } catch (Exception $e) {
-            FatUtility::dieJsonError($e->getMessage());
+        $emailObj = new FatMailer($this->adminLangId, 'test_email');
+        $emailObj->setTo(FatApp::getConfig('CONF_SITE_OWNER_EMAIL'));
+        if (!$emailObj->send()) {
+            FatUtility::dieJsonError($emailObj->getError());
         }
+        FatUtility::dieJsonSuccess("Mail sent to - " . FatApp::getConfig('CONF_SITE_OWNER_EMAIL'));
     }
 
     public function displayDateTime()

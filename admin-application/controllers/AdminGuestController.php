@@ -188,12 +188,12 @@ class AdminGuestController extends FatController
             '{site_domain}' => UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONTEND),
             '{user_full_name}' => trim($admin['admin_name']),
         );
-        if (!EmailHandler::sendMailTpl(
-            $admin['admin_email'],
-            'admin_forgot_password',
-            $this->adminLangId,
-            $replacements
-        )) {
+        
+        $sendEmail = (new FatMailer($this->adminLangId, 'admin_forgot_password'))
+                ->setTo($admin['admin_email'])
+                ->setVariables($replacements)
+                ->send();
+        if (false === $sendEmail) {
             Message::addErrorMessage(Labels::getLabel('MSG_Unable_to_send_email', $this->adminLangId));
             $this->set('msg', Message::getHtml());
             $this->_template->render(false, false, 'json-error.php', true, false);
@@ -256,12 +256,13 @@ class AdminGuestController extends FatController
             '{site_domain}' => UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONTEND),
             '{user_full_name}' => trim($admin['admin_name']),
         );
-        if (!EmailHandler::sendMailTpl(
-            $admin['admin_email'],
-            'admin_forgot_password',
-            $this->adminLangId,
-            $replacements
-        )) {
+        
+        $sendEmail = (new FatMailer($this->adminLangId, 'admin_forgot_password'))
+                ->setTo($admin['admin_email'])
+                ->setVariables($replacements)
+                ->send();
+
+        if (false === $sendEmail) {
             Message::addErrorMessage(Labels::getLabel('MSG_Unable_to_send_email', $this->adminLangId));
             $this->set('msg', Message::getHtml());
             $this->_template->render(false, false, 'json-error.php', true, false);
@@ -367,7 +368,12 @@ class AdminGuestController extends FatController
         '{user_full_name}' => trim($admin_row['admin_name']),
         '{login_link}' => UrlHelper::generateFullUrl('adminGuest', 'loginForm', array())
         );
-        EmailHandler::sendMailTpl($admin_row['admin_email'], 'user_admin_password_changed_successfully', $this->adminLangId, $arr_replacements);
+        
+        $sendEmail = (new FatMailer($this->adminLangId, 'user_admin_password_changed_successfully'))
+                ->setTo($admin_row['admin_email'])
+                ->setVariables($arr_replacements)
+                ->send();
+
         if (!empty(FatApp::getConfig('CONF_SITE_PHONE'))) {
             $emaiHandObj = new EmailHandler();
             $emaiHandObj->sendSms('user_admin_password_changed_successfully', FatApp::getConfig('CONF_SITE_PHONE'), $arr_replacements, $this->adminLangId);

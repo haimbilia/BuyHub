@@ -2,16 +2,18 @@
 
 class EmailHandler extends FatModel
 {
+
     public const ADD_ADDITIONAL_ALERTS = 1;
     public const NO_ADDITIONAL_ALERT = 0;
     public const ONLY_SUPER_ADMIN = 1;
     public const NOT_ONLY_SUPER_ADMIN = 0;
 
     private $commonLangId;
+
     public function __construct()
     {
         $this->commonLangId = CommonHelper::getLangId();
-    }    
+    }
 
     public function sendSms($tpl, $phone, $arrReplacements, $langId)
     {
@@ -46,7 +48,10 @@ class EmailHandler extends FatModel
         }
         $onlySuperAdmin = FatUtility::int($onlySuperAdmin);
         if (0 < $onlySuperAdmin) {
-            return self::sendMailTpl(FatApp::getConfig('CONF_SITE_OWNER_EMAIL'), $tpl, $langId, $arrReplacements);
+            return $sendEmail = (new FatMailer($langId, $tpl))
+                    ->setTo(FatApp::getConfig('CONF_SITE_OWNER_EMAIL'))
+                    ->setVariables($arrReplacements)
+                    ->send();
         }
 
 
@@ -86,7 +91,10 @@ class EmailHandler extends FatModel
         foreach ($emails as $index => $email) {
             $email = trim($email);
             if ($email && preg_match('/^[^\@]+@.*.[a-z]{2,15}$/i', $email)) {
-                $resp = self::sendMailTpl($email, $tpl, $langId, $arrReplacements);
+                $resp = (new FatMailer($langId, $tpl))
+                        ->setTo($email)
+                        ->setVariables($arrReplacements)
+                        ->send();
                 if (1 > $index) {
                     $superAdminResp = $resp;
                 }
@@ -117,9 +125,15 @@ class EmailHandler extends FatModel
             }
         }
 
-        if (!self::sendMailTpl($d['user_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($d['user_email'])
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
+
         return true;
     }
 
@@ -132,9 +146,15 @@ class EmailHandler extends FatModel
             '{verification_url}' => $d['link'],
         );
 
-        if (!self::sendMailTpl($d['user_new_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($d['user_email'])
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
+
         $this->sendSms($tpl, ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'], $vars, $langId);
         return true;
     }
@@ -147,9 +167,15 @@ class EmailHandler extends FatModel
             '{new_email}' => $d['user_new_email'],
         );
 
-        if (!self::sendMailTpl($d['user_new_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($d['user_new_email'])
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
+
         $this->sendSms($tpl, ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'], $vars, $langId);
         return true;
     }
@@ -163,9 +189,15 @@ class EmailHandler extends FatModel
             '{new_email}' => $d['user_new_email'],
         );
 
-        if (!self::sendMailTpl($d['user_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($d['user_email'])
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
+
         $this->sendSms($tpl, ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'], $vars, $langId);
         return true;
     }
@@ -233,9 +265,15 @@ class EmailHandler extends FatModel
             '{contact_us_email}' => FatApp::getConfig('CONF_CONTACT_EMAIL'),
         );
 
-        if (!self::sendMailTpl($d['user_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($d['user_email'])
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
+
         $this->sendSms($tpl, ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'], $vars, $langId);
         return true;
     }
@@ -266,9 +304,15 @@ class EmailHandler extends FatModel
             }
         }
 
-        if (!self::sendMailTpl($d['user_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($d['user_email'])
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
+
         $this->sendSms($tpl, ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'], $vars, $langId);
         return true;
     }
@@ -285,7 +329,12 @@ class EmailHandler extends FatModel
             '{account_type}' => $d['account_type'],
         );
 
-        if (!self::sendMailTpl($d['user_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($d['user_email'])
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
 
@@ -300,9 +349,15 @@ class EmailHandler extends FatModel
             '{reset_url}' => $d['link'],
         );
 
-        if (!self::sendMailTpl($d['credential_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($d['credential_email'])
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
+
         $phone = !empty($d['user_phone']) ? ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'] : '';
         $this->sendSms($tpl, $phone, $vars, $langId);
         return true;
@@ -316,10 +371,16 @@ class EmailHandler extends FatModel
             '{login_link}' => $d['link'],
         );
 
-        if (!self::sendMailTpl($d['credential_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($d['credential_email'])
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
-        $phone = array_key_exists('user_phone', $d) ? ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone']  : '';
+
+        $phone = array_key_exists('user_phone', $d) ? ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'] : '';
         $this->sendSms($tpl, $phone, $vars, $langId);
         return true;
     }
@@ -364,10 +425,15 @@ class EmailHandler extends FatModel
             '{request_comments}' => $supplierRequestComments,
         );
 
-        if (!self::sendMailTpl($d['credential_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($d['credential_email'])
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
-        
+
         $phone = !empty($d['user_phone']) ? ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'] : '';
         $this->sendSms($tpl, $phone, $vars, $langId);
         return true;
@@ -390,7 +456,16 @@ class EmailHandler extends FatModel
 
         $receipentsInfo = User::getSubUsersReceipents($userInfo['user_id'], 'canViewProducts');
         $bccEmails = $receipentsInfo['email'];
-        if (!self::sendMailTpl($userInfo['credential_email'], $tpl, $langId, $vars, '', 0, array(), $bccEmails)) {
+
+        $mailerObj = (new FatMailer($langId, $tpl))
+                ->setTo($userInfo['credential_email'])
+                ->setVariables($vars);
+
+        foreach ($bccEmails as $emailId => $emailName) {
+            $mailerObj->addBcc($emailId, $emailName);
+        }
+
+        if (false === $mailerObj->send()) {
             return false;
         }
 
@@ -404,6 +479,7 @@ class EmailHandler extends FatModel
 
     public function sendBrandRequestStatusChangeNotification($langId, $data)
     {
+        $tpl = 'seller_brand_request_status_change';
         $brandRequestComments = '';
         if (isset($data['brand_comments']) != '') {
             $brandRequestComments = nl2br($data['brand_comments']);
@@ -419,9 +495,9 @@ class EmailHandler extends FatModel
             '{brand_request_comments}' => '',
         );
         if (!empty($brandRequestComments)) {
-            $tpl = new FatTemplate('', '');
-            $tpl->set('brandRequestComments', $brandRequestComments);
-            $requestCommentTableFormatHtml = $tpl->render(false, false, '_partial/emails/brand-request-comment-email.php', true);
+            $rTpl = new FatTemplate('', '');
+            $rTpl->set('brandRequestComments', $brandRequestComments);
+            $requestCommentTableFormatHtml = $rTpl->render(false, false, '_partial/emails/brand-request-comment-email.php', true);
             $vars["{brand_request_comments}"] = $requestCommentTableFormatHtml;
         }
 
@@ -430,14 +506,23 @@ class EmailHandler extends FatModel
         $bccEmails = $receipentsInfo['email'];
         $phoneNumbers = $receipentsInfo['phone'];
 
-        if (!self::sendMailTpl($userInfo['credential_email'], 'seller_brand_request_status_change', $langId, $vars, '', 0, array(), $bccEmails)) {
+        $mailerObj = (new FatMailer($langId, $tpl))
+                ->setTo($userInfo['credential_email'])
+                ->setVariables($vars);
+
+        foreach ($bccEmails as $emailId => $emailName) {
+            $mailerObj->addBcc($emailId, $emailName);
+        }
+
+        if (false === $mailerObj->send()) {
             return false;
         }
+
         $userPhone = !empty($userInfo['user_phone']) ? $userInfo['user_phone'] : '';
         $dialCode = !empty($userInfo['user_phone_dcode']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) : '';
         $phoneNumbers[] = $dialCode . $userPhone;
         foreach ($phoneNumbers as $phone) {
-            $this->sendSms('seller_brand_request_status_change', $phone, $vars, $langId);
+            $this->sendSms($tpl, $phone, $vars, $langId);
         }
 
         return true;
@@ -465,9 +550,18 @@ class EmailHandler extends FatModel
 
         $receipentsInfo = User::getSubUsersReceipents($d['preq_user_id'], 'canViewProducts');
         $bccEmails = $receipentsInfo['email'];
-        if (!self::sendMailTpl($d['credential_email'], $tpl, $langId, $vars, '', 0, array(), $bccEmails)) {
+
+        $mailerObj = (new FatMailer($langId, $tpl))
+                ->setTo($d['credential_email'])
+                ->setVariables($vars);
+
+        foreach ($bccEmails as $emailId => $emailName) {
+            $mailerObj->addBcc($emailId, $emailName);
+        }
+        if (false === $mailerObj->send()) {
             return false;
         }
+
         $phoneNumbers = $receipentsInfo['phone'];
         $userPhone = !empty($d['user_phone']) ? ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'] : '';
         $phoneNumbers[] = $userPhone;
@@ -480,7 +574,6 @@ class EmailHandler extends FatModel
     public function sendBrandRequestAdminNotification($langId, $data)
     {
         $tpl = 'seller_brand_request_admin_email';
-
 
         $userObj = new User($data['brand_seller_id']);
         $userInfo = $userObj->getUserInfo(array('user_name', 'user_phone_dcode', 'user_phone', 'credential_email'));
@@ -502,7 +595,6 @@ class EmailHandler extends FatModel
     public function sendCategoryRequestAdminNotification($langId, $data)
     {
         $tpl = 'seller_category_request_admin_email';
-
 
         $userObj = new User($data['prodcat_seller_id']);
         $userInfo = $userObj->getUserInfo(array('user_name', 'user_phone_dcode', 'user_phone', 'credential_email'));
@@ -531,9 +623,16 @@ class EmailHandler extends FatModel
         if (strlen(trim($to)) < 1) {
             return $this->sendMailToAdminAndAdditionalEmails($tpl, $vars, static::NO_ADDITIONAL_ALERT, static::ONLY_SUPER_ADMIN, $langId);
         }
-        if (!self::sendMailTpl($to, $tpl, $langId, $vars)) {
+
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($to)
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
+
         $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
         return true;
     }
@@ -547,7 +646,12 @@ class EmailHandler extends FatModel
             '{phone_number}' => ValidateElement::formatDialCode($d['phone_dcode']) . $d['phone'],
             '{message}' => nl2br($d['message'])
         );
-        if (!self::sendMailTpl($to, $tpl, $langId, $vars, ['ReplyTo' => $d['email']])) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($to)
+                ->setReplyTo($d['email'])
+                ->setVariables($vars)
+                ->send();
+        if (false === $sendEmail) {
             return false;
         }
         $d['phone'] = isset($d['phone']) ? ValidateElement::formatDialCode($d['phone_dcode']) . $d['phone'] : '';
@@ -642,7 +746,12 @@ class EmailHandler extends FatModel
                 $this->sendMailToAdminAndAdditionalEmails("admin_order_email", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
                 $this->sendSms("admin_order_email", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
             }
-            self::sendMailTpl($userInfo['credential_email'], "customer_order_email", $langId, $arrReplacements);
+
+            $sendEmail = (new FatMailer($langId, 'customer_order_email'))
+                    ->setTo($userInfo['credential_email'])
+                    ->setVariables($arrReplacements)
+                    ->send();
+
             $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
             $this->sendSms("customer_order_email", $phone, $arrReplacements, $langId);
 
@@ -659,10 +768,10 @@ class EmailHandler extends FatModel
             }
 
             /* if($orderProduct['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL){
-            self::sendMailTpl( $userInfo['credential_email'], "customer_digital_order_email", $langId, $arrReplacements );
-            }else{
-            self::sendMailTpl( $userInfo['credential_email'], "customer_order_email", $langId, $arrReplacements );
-            } */
+              self::sendMailTpl( $userInfo['credential_email'], "customer_digital_order_email", $langId, $arrReplacements );
+              }else{
+              self::sendMailTpl( $userInfo['credential_email'], "customer_order_email", $langId, $arrReplacements );
+              } */
         }
         return true;
     }
@@ -694,15 +803,19 @@ class EmailHandler extends FatModel
             $tpl->set('orderProducts', $childOrderInfo);
             $tpl->set('siteLangId', $langId);
             $orderItemsTableFormatHtml = $tpl->render(false, false, '_partial/emails/child-order-detail-email.php', true);
-            $arrReplacements = array(
+            $vars = array(
                 '{user_full_name}' => trim($userInfo['user_name']),
                 '{order_items_table_format}' => $orderItemsTableFormatHtml,
                 '{order_id}' => $orderId,
             );
 
-            self::sendMailTpl($userInfo['credential_email'], "customer_digital_order_email", $langId, $arrReplacements);
+            $sendEmail = (new FatMailer($langId, 'customer_digital_order_email'))
+                    ->setTo($userInfo['credential_email'])
+                    ->setVariables($vars)
+                    ->send();
+
             $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
-            $this->sendSms("customer_digital_order_email", $phone, $arrReplacements, $langId);
+            $this->sendSms("customer_digital_order_email", $phone, $vars, $langId);
         }
         return true;
     }
@@ -745,7 +858,10 @@ class EmailHandler extends FatModel
                 $this->error = $notificationObj->getError();
                 return false;
             }
-            self::sendMailTpl($userInfo["credential_email"], "primary_order_payment_status_change_buyer", $orderDetail['order_language_id'], $arrReplacements);
+            $sendEmail = (new FatMailer($orderDetail['order_language_id'], 'primary_order_payment_status_change_buyer'))
+                    ->setTo($userInfo['credential_email'])
+                    ->setVariables($arrReplacements)
+                    ->send();
             $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
             $this->sendSms("primary_order_payment_status_change_buyer", $phone, $arrReplacements, $orderDetail['order_language_id']);
         }
@@ -777,7 +893,11 @@ class EmailHandler extends FatModel
             $this->sendMailToAdminAndAdditionalEmails("primary_order_payment_status_admin", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
             $this->sendSms("primary_order_payment_status_admin", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
 
-            self::sendMailTpl($userInfo["credential_email"], "primary_order_payment_status_buyer", $orderDetail['order_language_id'], $arrReplacements);
+            $sendEmail = (new FatMailer($orderDetail['order_language_id'], 'primary_order_payment_status_buyer'))
+                    ->setTo($userInfo['credential_email'])
+                    ->setVariables($arrReplacements)
+                    ->send();
+
             $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
             $this->sendSms("primary_order_payment_status_buyer", $phone, $arrReplacements, $orderDetail['order_language_id']);
         }
@@ -810,7 +930,11 @@ class EmailHandler extends FatModel
             $this->sendMailToAdminAndAdditionalEmails("primary_order_bank_transfer_payment_status_admin", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
             $this->sendSms("primary_order_bank_transfer_payment_status_admin", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
 
-            self::sendMailTpl($userInfo["credential_email"], "primary_order_bank_transfer_payment_status_buyer", $orderDetail['order_language_id'], $arrReplacements);
+            $sendEmail = (new FatMailer($orderDetail['order_language_id'], 'primary_order_bank_transfer_payment_status_buyer'))
+                    ->setTo($userInfo['credential_email'])
+                    ->setVariables($arrReplacements)
+                    ->send();
+
             $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
             $this->sendSms("primary_order_bank_transfer_payment_status_buyer", $phone, $arrReplacements, $orderDetail['order_language_id']);
         }
@@ -858,7 +982,16 @@ class EmailHandler extends FatModel
 
         $receipentsInfo = User::getSubUsersReceipents($productInfo['user_id'], 'canViewProducts');
         $bccEmails = $receipentsInfo['email'];
-        self::sendMailTpl($productInfo["credential_email"], "threshold_notification_vendor", $langId, $arrReplacements, '', 0, array(), $bccEmails);
+
+        $mailerObj = (new FatMailer($langId, 'threshold_notification_vendor'))
+                ->setTo($productInfo["credential_email"])
+                ->setVariables($arrReplacements);
+
+        foreach ($bccEmails as $emailId => $emailName) {
+            $mailerObj->addBcc($emailId, $emailName);
+        }
+
+        $mailerObj->send();
 
         $phoneNumbers = $receipentsInfo['phone'];
         $userPhone = !empty($productInfo['user_phone']) ? ValidateElement::formatDialCode($productInfo['user_phone_dcode']) . $productInfo['user_phone'] : '';
@@ -888,9 +1021,9 @@ class EmailHandler extends FatModel
             $shippingArr = array();
             if (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) {
                 $shippingArr = $addresses[Orders::SHIPPING_ADDRESS_TYPE];
-            } /*else {
-                $shippingArr = $billingArr;
-            }*/
+            } /* else {
+              $shippingArr = $billingArr;
+              } */
             $orderVendors = $orderObj->getChildOrders(array("order" => $orderId), $orderDetail['order_type'], $orderDetail['order_language_id']);
             foreach ($orderVendors as $key => $val) :
                 $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($val['op_selprod_user_id'], $val['opshipping_by_seller_user_id']);
@@ -939,7 +1072,15 @@ class EmailHandler extends FatModel
 
                 $receipentsInfo = User::getSubUsersReceipents($val['op_selprod_user_id'], 'canViewSales');
                 $bccEmails = $receipentsInfo['email'];
-                self::sendMailTpl($val["op_shop_owner_email"], $tpl, $langId, $arrReplacements, '', 0, array(), $bccEmails);
+
+                $mailerObj = (new FatMailer($langId, $tpl))
+                        ->setTo($productInfo["credential_email"])
+                        ->setVariables($arrReplacements);
+
+                foreach ($bccEmails as $emailId => $emailName) {
+                    $mailerObj->addBcc($emailId, $emailName);
+                }
+                $mailerObj->send();
 
                 if (!in_array(strtolower($paymentType), ['vendor_bank_transfer_order_email'])) {
                     $sellerInfo = User::getAttributesById($val['op_selprod_user_id'], array('user_phone_dcode', 'user_phone'));
@@ -975,7 +1116,7 @@ class EmailHandler extends FatModel
         $buyerId = FatUtility::int($buyerId);
 
         $orderObj = new Orders();
-        $orderComment = $orderObj->getOrderComments($langId, array("id" => $commentId, "buyer_id" => $buyerId), 1); /*1 no of records*/
+        $orderComment = $orderObj->getOrderComments($langId, array("id" => $commentId, "buyer_id" => $buyerId), 1); /* 1 no of records */
 
         if ($orderComment && $orderComment["oshistory_customer_notified"]) {
             $msgComments = '';
@@ -986,12 +1127,12 @@ class EmailHandler extends FatModel
             $shipmentInformation = '';
             if ($orderComment['oshistory_tracking_number'] != "") {
                 $shipmentInformation = Labels::getLabel('MSG_Shipment_Information', $langId) . ": " . Labels::getLabel('MSG_Tracking_Number', $langId) . " " . $orderComment['oshistory_tracking_number'] . " " . Labels::getLabel('LBL_Via', $langId) . " " . $orderComment["op_shipping_duration_name"];
-                if(!empty($orderComment['oshistory_tracking_url'])){
-                    $shipmentInformation.=' <a href="'.$orderComment['oshistory_tracking_url'].'" target="_blank">'.$orderComment['oshistory_tracking_url'].'</a>';
-                }                
-                $shipmentInformation.="<br>";                
+                if (!empty($orderComment['oshistory_tracking_url'])) {
+                    $shipmentInformation .= ' <a href="' . $orderComment['oshistory_tracking_url'] . '" target="_blank">' . $orderComment['oshistory_tracking_url'] . '</a>';
+                }
+                $shipmentInformation .= "<br>";
             }
-            
+
             $charges = $orderObj->getOrderProductChargesArr($orderComment['op_id']);
             $orderComment['charges'] = $charges;
 
@@ -1013,7 +1154,11 @@ class EmailHandler extends FatModel
                 '{order_admin_comments}' => nl2br($msgComments),
                 '{shipment_information}' => "<br/><br/>" . $shipmentInformation,
             );
-            self::sendMailTpl($orderComment["buyer_email"], "child_order_status_change", $langId, $arrReplacements);
+            $sendEmail = (new FatMailer($langId, 'child_order_status_change'))
+                    ->setTo($orderComment["buyer_email"])
+                    ->setVariables($arrReplacements)
+                    ->send();
+
             $this->sendSms("child_order_status_change", ValidateElement::formatDialCode($orderComment['buyer_phone_dcode']) . $orderComment["buyer_phone"], $arrReplacements, $langId);
             $replaceVal = array(
                 '{INVOICE}' => $orderComment["op_invoice_number"],
@@ -1092,7 +1237,10 @@ class EmailHandler extends FatModel
                 '{order_admin_comments}' => nl2br($msgComments),
                 '{shipment_information}' => "<br/><br/>" . $shipmentInformation,
             );
-            self::sendMailTpl($orderComment["seller_email"], "child_order_status_change", $langId, $arrReplacements);
+            $sendEmail = (new FatMailer($langId, 'child_order_status_change'))
+                    ->setTo($orderComment["seller_email"])
+                    ->setVariables($arrReplacements)
+                    ->send();
             $this->sendSms("child_order_status_change", ValidateElement::formatDialCode($orderComment['seller_phone_dcode']) . $orderComment["seller_phone"], $arrReplacements, $langId);
             return true;
         } else {
@@ -1107,13 +1255,18 @@ class EmailHandler extends FatModel
         $defaultSiteLangId = FatApp::getConfig('conf_default_site_lang');
         $arrReplacements = array(
             '{invoice_number}' => $data['op_invoice_number'],
-            '{error_message}' => $data['op_invoerror_messageice_number']
+            '{error_message}' => $data['error_message']
         );
 
-        if (self::sendMailTpl($adminEmail, $tpl, $langId, $arrReplacements)) {
-            return true;
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($adminEmail)
+                ->setVariables($arrReplacements)
+                ->send();
+
+        if (false == $sendEmail) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     public function sendTxnNotification($txnId, $langId)
@@ -1132,7 +1285,10 @@ class EmailHandler extends FatModel
             '{txn_amount}' => CommonHelper::displayMoneyFormat($txnAmount, true, true),
             '{txn_comments}' => Transactions::formatTransactionComments($txnDetail["utxn_comments"]),
         );
-        self::sendMailTpl($txnDetail["credential_email"], "account_credited_debited", $langId, $arrReplacements);
+        $sendEmail = (new FatMailer($langId, 'account_credited_debited'))
+                ->setTo($txnDetail["credential_email"])
+                ->setVariables($arrReplacements)
+                ->send();
         $phone = !empty($txnDetail['user_phone']) ? ValidateElement::formatDialCode($txnDetail['user_phone_dcode']) . $txnDetail['user_phone'] : '';
         $this->sendSms("account_credited_debited", $phone, $arrReplacements, $langId);
         $notiArrReplacements = array(
@@ -1171,9 +1327,9 @@ class EmailHandler extends FatModel
         $srch->joinForUserBalance();
         $srch->joinTable(User::DB_TBL_USR_WITHDRAWAL_REQ_SPEC, 'LEFT JOIN', User::DB_TBL_USR_WITHDRAWAL_REQ_SPEC_PREFIX . 'withdrawal_id = tuwr.withdrawal_id');
         $srch->addMultipleFields(
-            array(
-                'tuwr.*', 'GROUP_CONCAT(CONCAT(`uwrs_key`, ":", `uwrs_value`)) as payout_detail', 'user_name', 'credential_email as user_email', 'credential_username as user_username', 'user_phone_dcode', 'user_phone'
-            )
+                array(
+                    'tuwr.*', 'GROUP_CONCAT(CONCAT(`uwrs_key`, ":", `uwrs_value`)) as payout_detail', 'user_name', 'credential_email as user_email', 'credential_username as user_username', 'user_phone_dcode', 'user_phone'
+                )
         );
         $srch->addCondition('tuwr.withdrawal_id', '=', $requestId);
         $srch->doNotCalculateRecords();
@@ -1203,14 +1359,12 @@ class EmailHandler extends FatModel
             '{request_id}' => $formattedRequestValue,
             '{username}' => $withdrawalRequestData['user_username'],
             '{request_amount}' => CommonHelper::displayMoneyFormat($withdrawalRequestData["withdrawal_amount"], true, true),
-
             '{request_bank}' => $withdrawalRequestData['withdrawal_bank'],
             '{request_account_holder}' => $withdrawalRequestData['withdrawal_account_holder_name'],
             '{request_account_number}' => $withdrawalRequestData['withdrawal_account_number'],
             '{request_ifsc_swift_number}' => $withdrawalRequestData['withdrawal_ifc_swift_code'],
             '{request_bank_address}' => $withdrawalRequestData['withdrawal_bank_address'],
             '{request_comments}' => $withdrawalRequestData['withdrawal_instructions'],
-
             '{request_status}' => $statusArr[$withdrawalRequestData['withdrawal_status']],
             '{withdrawal_detail_table_format_html}' => $withdrawalDetailsTableFormatHtml,
             '{user_name}' => $withdrawalRequestData['user_name'],
@@ -1222,8 +1376,10 @@ class EmailHandler extends FatModel
             $tpl = 'withdrawal_request_admin';
             $phone = ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE');
         } else {
-            self::sendMailTpl($withdrawalRequestData["user_email"], "withdrawal_request_approved_declined", $langId, $arrReplacements);
-
+            $sendEmail = (new FatMailer($langId, 'withdrawal_request_approved_declined'))
+                    ->setTo($withdrawalRequestData["user_email"])
+                    ->setVariables($arrReplacements)
+                    ->send();
             $tpl = 'withdrawal_request_approved_declined';
             $phone = !empty($withdrawalRequestData['user_phone']) ? ValidateElement::formatDialCode($withdrawalRequestData['user_phone_dcode']) . $withdrawalRequestData['user_phone'] : '';
         }
@@ -1285,7 +1441,11 @@ class EmailHandler extends FatModel
             '{message}' => nl2br($message['message_text']),
             '{click_here}' => $url,
         );
-        self::sendMailTpl($message["message_to_email"], "send_message", $langId, $arrReplacements);
+
+        $sendEmail = (new FatMailer($langId, 'send_message'))
+                ->setTo($message["message_to_email"])
+                ->setVariables($arrReplacements)
+                ->send();
 
         $uData = User::getAttributesById($message["message_to"], ['user_phone_dcode', 'user_phone']);
         if (!empty($uData)) {
@@ -1341,7 +1501,15 @@ class EmailHandler extends FatModel
 
         $receipentsInfo = User::getSubUsersReceipents($ocRequestRow["seller_id"], 'canViewCancellationRequests');
         $bccEmails = $receipentsInfo['email'];
-        self::sendMailTpl($ocRequestRow["op_shop_owner_email"], $tpl, $langId, $arrReplacements, '', 0, array(), $bccEmails);
+
+        $mailerObj = (new FatMailer($langId, $tpl))
+                ->setTo($ocRequestRow["op_shop_owner_email"])
+                ->setVariables($arrReplacements);
+
+        foreach ($bccEmails as $emailId => $emailName) {
+            $mailerObj->addBcc($emailId, $emailName);
+        }
+        $mailerObj->send();
 
         $phoneNumbers = $receipentsInfo['phone'];
         $phoneNumbers[] = $ocRequestRow["op_shop_owner_phone_dcode"] . $ocRequestRow["op_shop_owner_phone"];
@@ -1398,12 +1566,12 @@ class EmailHandler extends FatModel
         $srch->doNotLimitRecords();
         $srch->addCondition('orrmsg_id', '=', $orrmsg_id);
         $srch->addMultipleFields(
-            array(
-                'op_selprod_id', 'op_selprod_user_id', 'op_is_batch', 'orrmsg_orrequest_id', 'op_product_name', 'op_selprod_title',
-                'op_shop_owner_name', 'buyer_cred.credential_username as buyer_username', 'orrequest_qty', 'orrequest_type', 'orrequest_reference',
-                'IFNULL(orreason_title, orreason_identifier) as orreason_title', 'orrmsg_msg', 'op_shop_owner_email', 'op_shop_owner_phone_dcode', 'op_shop_owner_phone',
-                'op_selprod_options', 'op_brand_name', 'op_invoice_number', 'orrequest_user_id'
-            )
+                array(
+                    'op_selprod_id', 'op_selprod_user_id', 'op_is_batch', 'orrmsg_orrequest_id', 'op_product_name', 'op_selprod_title',
+                    'op_shop_owner_name', 'buyer_cred.credential_username as buyer_username', 'orrequest_qty', 'orrequest_type', 'orrequest_reference',
+                    'IFNULL(orreason_title, orreason_identifier) as orreason_title', 'orrmsg_msg', 'op_shop_owner_email', 'op_shop_owner_phone_dcode', 'op_shop_owner_phone',
+                    'op_selprod_options', 'op_brand_name', 'op_invoice_number', 'orrequest_user_id'
+                )
         );
         $rs = $srch->getResultSet();
         if (!$msgDetail = FatApp::getDb()->fetch($rs)) {
@@ -1447,14 +1615,21 @@ class EmailHandler extends FatModel
 
         $receipentsInfo = User::getSubUsersReceipents($msgDetail['op_selprod_user_id'], 'canViewReturnRequests');
         $bccEmails = $receipentsInfo['email'];
-        self::sendMailTpl($msgDetail["op_shop_owner_email"], "product_return", $langId, $arrReplacements, '', 0, array(), $bccEmails);
+        $mailerObj = (new FatMailer($langId, 'product_return'))
+                ->setTo($msgDetail["op_shop_owner_email"])
+                ->setVariables($arrReplacements);
+
+        foreach ($bccEmails as $emailId => $emailName) {
+            $mailerObj->addBcc($emailId, $emailName);
+        }
+        $mailerObj->send();
 
         $phoneNumbers = $receipentsInfo['phone'];
         $phoneNumbers[] = $msgDetail["op_shop_owner_phone_dcode"] . $msgDetail["op_shop_owner_phone"];
         foreach ($phoneNumbers as $phone) {
             $this->sendSms("product_return", $phone, $arrReplacements, $langId);
         }
-        /**** Notification For Seller ***********/
+        /*         * ** Notification For Seller ********** */
 
         $notiArrReplacements = array(
             '{username}' => $msgDetail['buyer_username'],
@@ -1474,10 +1649,10 @@ class EmailHandler extends FatModel
             $this->error = $notificationObj->getError();
             return false;
         }
-        /**** End Notification For Seller ***********/
+        /*         * ** End Notification For Seller ********** */
 
 
-        /**** Notification For Buyer ***********/
+        /*         * ** Notification For Buyer ********** */
         $notiArrReplacements = array(
             '{returnprodtitle}' => $prodTitleAnchor,
             '{returnrequestid}' => $msgDetail['orrequest_reference'],
@@ -1493,7 +1668,7 @@ class EmailHandler extends FatModel
             $this->error = $notificationObj->getError();
             return false;
         }
-        /**** End Notification For Buyer ***********/
+        /*         * ** End Notification For Buyer ********** */
 
 
         $arrReplacements["{user_name}"] = Labels::getLabel("LBL_Admin", $langId);
@@ -1525,15 +1700,15 @@ class EmailHandler extends FatModel
         $srch->doNotLimitRecords();
         $srch->addCondition('orrmsg_id', '=', $orrmsg_id);
         $srch->addMultipleFields(
-            array(
-                'op_selprod_id', 'op_is_batch', 'op_product_name', 'op_selprod_title',
-                'op_shop_owner_name', 'op_shop_owner_username', 'op_shop_owner_email', 'op_shop_owner_phone_dcode', 'op_shop_owner_phone',  'op_selprod_user_id',
-                'buyer_cred.credential_username as buyer_username', 'buyer_cred.credential_email as buyer_email',
-                'orrequest_id', 'orrequest_qty', 'orrequest_reference', 'orrequest_type', 'orrequest_user_id', 'orrmsg_from_user_id',
-                'IFNULL(orreason_title, orreason_identifier) as orreason_title',
-                'orrmsg_msg', 'orrequest_status', 'buyer.user_name as buyer_name', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'buyer.user_id as buyer_id', 'op_selprod_user_id as seller_id',
-                'orrmsg_from_admin_id', 'admin_name', 'admin_username'
-            )
+                array(
+                    'op_selprod_id', 'op_is_batch', 'op_product_name', 'op_selprod_title',
+                    'op_shop_owner_name', 'op_shop_owner_username', 'op_shop_owner_email', 'op_shop_owner_phone_dcode', 'op_shop_owner_phone', 'op_selprod_user_id',
+                    'buyer_cred.credential_username as buyer_username', 'buyer_cred.credential_email as buyer_email',
+                    'orrequest_id', 'orrequest_qty', 'orrequest_reference', 'orrequest_type', 'orrequest_user_id', 'orrmsg_from_user_id',
+                    'IFNULL(orreason_title, orreason_identifier) as orreason_title',
+                    'orrmsg_msg', 'orrequest_status', 'buyer.user_name as buyer_name', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'buyer.user_id as buyer_id', 'op_selprod_user_id as seller_id',
+                    'orrmsg_from_admin_id', 'admin_name', 'admin_username'
+                )
         );
         $rs = $srch->getResultSet();
         if (!$msgDetail = FatApp::getDb()->fetch($rs)) {
@@ -1562,7 +1737,10 @@ class EmailHandler extends FatModel
             if ($msgDetail['orrmsg_from_admin_id']) {
                 $arrReplacements["{username}"] = FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId);
             }
-            self::sendMailTpl($msgDetail["buyer_email"], "return_request_message_user", $langId, $arrReplacements);
+            $sendEmail = (new FatMailer($langId, 'return_request_message_user'))
+                    ->setTo($msgDetail["buyer_email"])
+                    ->setVariables($arrReplacements)
+                    ->send();
             $this->sendSms("return_request_message_user", ValidateElement::formatDialCode($msgDetail['buyer_phone_dcode']) . $msgDetail['buyer_phone'], $arrReplacements, $langId);
         }
         /* ] */
@@ -1579,13 +1757,20 @@ class EmailHandler extends FatModel
             $requestDetailUrl = '<a href="' . $requestDetailUrl . '">' . Labels::getLabel('LBL_Click_here', $langId) . '</a>';
             $arrReplacements['{click_here}'] = $requestDetailUrl;
             /* if ($return_request['refmsg_from_type']=="U"){
-            $arr_replacements["{username}"] = $return_request["message_sent_by_username"];
-            } */
+              $arr_replacements["{username}"] = $return_request["message_sent_by_username"];
+              } */
 
             $receipentsInfo = User::getSubUsersReceipents($msgDetail["seller_id"], 'canViewReturnRequests');
             $bccEmails = $receipentsInfo['email'];
 
-            self::sendMailTpl($msgDetail["buyer_email"], "return_request_message_user", $langId, $arrReplacements, '', 0, array(), $bccEmails);
+            $mailerObj = (new FatMailer($langId, 'return_request_message_user'))
+                    ->setTo($msgDetail["buyer_email"])
+                    ->setVariables($arrReplacements);
+
+            foreach ($bccEmails as $emailId => $emailName) {
+                $mailerObj->addBcc($emailId, $emailName);
+            }
+            $mailerObj->send();
 
             $phoneNumbers = $receipentsInfo['phone'];
             $phoneNumbers[] = ValidateElement::formatDialCode($msgDetail['op_shop_owner_phone_dcode']) . $msgDetail['op_shop_owner_phone'];
@@ -1630,59 +1815,59 @@ class EmailHandler extends FatModel
         /* ] */
         return true;
         /* $p=new Products();
-        $return_request=$p->getReturnRequestMessage($return_request_message);
-        if ( $return_request ){
-        $return_request_id = $return_request["refund_id"];
-        $url = generateAbsoluteUrl('account', 'view_return_request',array($return_request_id),CONF_WEBROOT_URL);
-        $url = '<a href="'.$url.'">'.getLabel('M_click_here').'</a>';
+          $return_request=$p->getReturnRequestMessage($return_request_message);
+          if ( $return_request ){
+          $return_request_id = $return_request["refund_id"];
+          $url = generateAbsoluteUrl('account', 'view_return_request',array($return_request_id),CONF_WEBROOT_URL);
+          $url = '<a href="'.$url.'">'.getLabel('M_click_here').'</a>';
 
-        //Buyer Notification
-        $arr_replacements = array(
-        '{site_domain}' => CONF_SERVER_PATH,
-        '{website_name}' => Settings::getSetting("CONF_WEBSITE_NAME"),
-        '{username}' => Settings::getSetting("CONF_WEBSITE_NAME"),
-        '{request_number}' => format_return_request_number($return_request_id),
-        '{message}' => nl2br($return_request["refmsg_text"]),
-        '{user_full_name}' => $return_request["buyer_name"],
-        '{click_here}' => $url,
-        );
+          //Buyer Notification
+          $arr_replacements = array(
+          '{site_domain}' => CONF_SERVER_PATH,
+          '{website_name}' => Settings::getSetting("CONF_WEBSITE_NAME"),
+          '{username}' => Settings::getSetting("CONF_WEBSITE_NAME"),
+          '{request_number}' => format_return_request_number($return_request_id),
+          '{message}' => nl2br($return_request["refmsg_text"]),
+          '{user_full_name}' => $return_request["buyer_name"],
+          '{click_here}' => $url,
+          );
 
-        if ($return_request["refund_user_id"]!=$return_request["refmsg_from"]){
-        $arr_replacements["{user_full_name}"] = $return_request["buyer_name"];
-        if ($return_request['refmsg_from_type']=="U"){
-        $arr_replacements["{username}"] = $return_request["opr_shop_owner_username"];
-        }
-        sendMailTpl($return_request["buyer_email"], "return_request_message_user", $arr_replacements);
-        }
-        //End Buyer Notification
+          if ($return_request["refund_user_id"]!=$return_request["refmsg_from"]){
+          $arr_replacements["{user_full_name}"] = $return_request["buyer_name"];
+          if ($return_request['refmsg_from_type']=="U"){
+          $arr_replacements["{username}"] = $return_request["opr_shop_owner_username"];
+          }
+          sendMailTpl($return_request["buyer_email"], "return_request_message_user", $arr_replacements);
+          }
+          //End Buyer Notification
 
-        //Vendor Notification
-        if ($return_request["shop_user_id"]!=$return_request["refmsg_from"]){
-        $arr_replacements["{user_full_name}"] = $return_request["opr_shop_owner_name"];
-        if ($return_request['refmsg_from_type']=="U"){
-        $arr_replacements["{username}"] = $return_request["message_sent_by_username"];
-        }
-        sendMailTpl($return_request["opr_shop_owner_email"], "return_request_message_user", $arr_replacements);
-        }
-        //End Vendor Notification
+          //Vendor Notification
+          if ($return_request["shop_user_id"]!=$return_request["refmsg_from"]){
+          $arr_replacements["{user_full_name}"] = $return_request["opr_shop_owner_name"];
+          if ($return_request['refmsg_from_type']=="U"){
+          $arr_replacements["{username}"] = $return_request["message_sent_by_username"];
+          }
+          sendMailTpl($return_request["opr_shop_owner_email"], "return_request_message_user", $arr_replacements);
+          }
+          //End Vendor Notification
 
-        if (($return_request["refund_request_status"]==1) && ($return_request['refmsg_from_type']=="U")){
-        $url = generateAbsoluteUrl('returnrequests', 'view_return_request',array($return_request_id),'/manager/');
-        $url='<a href="'.$url.'">'.getLabel('M_click_here').'</a>';
-        $arr_replacements["{user_full_name}"]="Admin";
-        $arr_replacements["{click_here}"]=$url;
-        sendMailTpl(Settings::getSetting("CONF_ADMIN_EMAIL"), "return_request_message_user", $arr_replacements);
-        $emails = explode(',', Settings::getSetting("CONF_ADDITIONAL_ALERT_EMAILS",FatUtility::VAR_STRING,''));
-        foreach ($emails as $email) {
-        if (strlen($email) > 0 && preg_match('/^[^\@]+@.*.[a-z]{2,15}$/i', $email)) {
-         sendMailTpl($email, "return_request_message_user", $langId, $arr_replacements);
-        }
-        }
-        }
-        return true;
-        }else{
-        $this->error = getLabel('M_INVALID_REQUEST');
-        } */
+          if (($return_request["refund_request_status"]==1) && ($return_request['refmsg_from_type']=="U")){
+          $url = generateAbsoluteUrl('returnrequests', 'view_return_request',array($return_request_id),'/manager/');
+          $url='<a href="'.$url.'">'.getLabel('M_click_here').'</a>';
+          $arr_replacements["{user_full_name}"]="Admin";
+          $arr_replacements["{click_here}"]=$url;
+          sendMailTpl(Settings::getSetting("CONF_ADMIN_EMAIL"), "return_request_message_user", $arr_replacements);
+          $emails = explode(',', Settings::getSetting("CONF_ADDITIONAL_ALERT_EMAILS",FatUtility::VAR_STRING,''));
+          foreach ($emails as $email) {
+          if (strlen($email) > 0 && preg_match('/^[^\@]+@.*.[a-z]{2,15}$/i', $email)) {
+          sendMailTpl($email, "return_request_message_user", $langId, $arr_replacements);
+          }
+          }
+          }
+          return true;
+          }else{
+          $this->error = getLabel('M_INVALID_REQUEST');
+          } */
     }
 
     public function sendCatalogRequestMessageNotification($scatrequestmsg_id, $langId)
@@ -1705,11 +1890,11 @@ class EmailHandler extends FatModel
         $srch->doNotLimitRecords();
         $srch->addCondition('scatrequestmsg_id', '=', $scatrequestmsg_id);
         $srch->addMultipleFields(
-            array(
-                'scatrequestmsg_from_user_id',
-                'scatrequestmsg_msg', 'scatrequest_status', 'scatrequest_id', 'scatrequest_user_id',
-                'scatrequestmsg_from_admin_id', 'admin_name', 'admin_username', 'receiver_user.user_name', 'receiver_user_cred.credential_email'
-            )
+                array(
+                    'scatrequestmsg_from_user_id',
+                    'scatrequestmsg_msg', 'scatrequest_status', 'scatrequest_id', 'scatrequest_user_id',
+                    'scatrequestmsg_from_admin_id', 'admin_name', 'admin_username', 'receiver_user.user_name', 'receiver_user_cred.credential_email'
+                )
         );
         $rs = $srch->getResultSet();
         if (!$msgDetail = FatApp::getDb()->fetch($rs)) {
@@ -1733,7 +1918,10 @@ class EmailHandler extends FatModel
             if ($msgDetail['scatrequestmsg_from_admin_id']) {
                 $arrReplacements["{username}"] = FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId);
             }
-            self::sendMailTpl($msgDetail["credential_email"], "catalog_request_message_user", $langId, $arrReplacements);
+            $sendEmail = (new FatMailer($langId, 'catalog_request_message_user'))
+                    ->setTo($msgDetail["credential_email"])
+                    ->setVariables($arrReplacements)
+                    ->send();
         }
         /* ] */
 
@@ -1768,11 +1956,11 @@ class EmailHandler extends FatModel
         $srch->doNotLimitRecords();
         $srch->addCondition('orrequest_id', '=', $orrequest_id);
         $srch->addMultipleFields(
-            array(
-                'orrequest_id', 'orrequest_user_id', 'orrequest_status', 'orrequest_reference',
-                'buyer.user_name as buyer_name', 'buyer_cred.credential_email as buyer_email', 'op_selprod_user_id', 'seller.user_name as seller_name',
-                'seller_cred.credential_email as seller_email'
-            )
+                array(
+                    'orrequest_id', 'orrequest_user_id', 'orrequest_status', 'orrequest_reference',
+                    'buyer.user_name as buyer_name', 'buyer_cred.credential_email as buyer_email', 'op_selprod_user_id', 'seller.user_name as seller_name',
+                    'seller_cred.credential_email as seller_email'
+                )
         );
         $rs = $srch->getResultSet();
         $request = $db->fetch($rs);
@@ -1791,10 +1979,10 @@ class EmailHandler extends FatModel
         $msgSrch->setPageNumber(1);
         $msgSrch->setPageSize(1);
         $msgSrch->addMultipleFields(
-            array(
-                'orrmsg_id', 'orrmsg_from_user_id', 'user_name', 'user_phone_dcode', 'user_phone',
-                'orrmsg_from_admin_id', 'admin_name', 'admin_username'
-            )
+                array(
+                    'orrmsg_id', 'orrmsg_from_user_id', 'user_name', 'user_phone_dcode', 'user_phone',
+                    'orrmsg_from_admin_id', 'admin_name', 'admin_username'
+                )
         );
         $msgRs = $msgSrch->getResultSet();
         $lastMsgRow = $db->fetch($msgRs);
@@ -1811,12 +1999,18 @@ class EmailHandler extends FatModel
         }
 
         if ($lastMsgRow && $lastMsgRow['orrmsg_from_user_id'] != $request['orrequest_user_id']) {
-            self::sendMailTpl($request["buyer_email"], "return_request_status_change_notification", $langId, $arrReplacements);
+            $sendEmail = (new FatMailer($langId, 'return_request_status_change_notification'))
+                    ->setTo($request["buyer_email"])
+                    ->setVariables($arrReplacements)
+                    ->send();
         }
 
         if ($lastMsgRow && $lastMsgRow["orrmsg_from_user_id"] != $request["op_selprod_user_id"]) {
             $arrReplacements["{user_full_name}"] = $request["seller_name"];
-            self::sendMailTpl($request["seller_email"], "return_request_status_change_notification", $langId, $arrReplacements);
+            $sendEmail = (new FatMailer($langId, 'return_request_status_change_notification'))
+                    ->setTo($request["seller_email"])
+                    ->setVariables($arrReplacements)
+                    ->send();
         }
         $phone = !empty($lastMsgRow['user_phone']) ? ValidateElement::formatDialCode($lastMsgRow['user_phone_dcode']) . $lastMsgRow['user_phone'] : '';
         $this->sendSms("return_request_status_change_notification", $phone, $arrReplacements, $langId);
@@ -1831,47 +2025,47 @@ class EmailHandler extends FatModel
         /* ] */
         return true;
         /* global $return_status_arr;
-        $p=new Products();
-        $return_request=$p->getReturnRequest($return_request);
-        $last_updated_by=$return_request["last_updated_by"]!=""?$return_request["last_updated_by"]:Settings::getSetting("CONF_WEBSITE_NAME");
-        if ($return_request){
-        $arr_replacements = array(
-        '{site_domain}' => CONF_SERVER_PATH,
-        '{website_name}' => Settings::getSetting("CONF_WEBSITE_NAME"),
-        '{username}' => $last_updated_by,
-        '{request_number}' => format_return_request_number($return_request['refund_id']),
-        '{user_full_name}' => $return_request["buyer_name"],
-        '{new_status_name}' => $return_status_arr[$return_request["refund_request_status"]],
-        );
+          $p=new Products();
+          $return_request=$p->getReturnRequest($return_request);
+          $last_updated_by=$return_request["last_updated_by"]!=""?$return_request["last_updated_by"]:Settings::getSetting("CONF_WEBSITE_NAME");
+          if ($return_request){
+          $arr_replacements = array(
+          '{site_domain}' => CONF_SERVER_PATH,
+          '{website_name}' => Settings::getSetting("CONF_WEBSITE_NAME"),
+          '{username}' => $last_updated_by,
+          '{request_number}' => format_return_request_number($return_request['refund_id']),
+          '{user_full_name}' => $return_request["buyer_name"],
+          '{new_status_name}' => $return_status_arr[$return_request["refund_request_status"]],
+          );
 
-        if ($return_request['refmsg_from_type']=="A") {
-        $arr_replacements["{username}"]=Settings::getSetting("CONF_WEBSITE_NAME");
-        }
+          if ($return_request['refmsg_from_type']=="A") {
+          $arr_replacements["{username}"]=Settings::getSetting("CONF_WEBSITE_NAME");
+          }
 
-        if ($return_request["refund_request_updated_by"]!=$return_request["refund_user_id"]){
-        sendMailTpl($return_request["buyer_email"], "return_request_status_change_notification",$arr_replacements);
-        }
+          if ($return_request["refund_request_updated_by"]!=$return_request["refund_user_id"]){
+          sendMailTpl($return_request["buyer_email"], "return_request_status_change_notification",$arr_replacements);
+          }
 
-        if ($return_request["refund_request_updated_by"]!=$return_request["shop_user_id"]){
-        $arr_replacements["{user_full_name}"]=$return_request["vendor_name"];
-        sendMailTpl($return_request["opr_shop_owner_email"], "return_request_status_change_notification",$arr_replacements);
-        }
+          if ($return_request["refund_request_updated_by"]!=$return_request["shop_user_id"]){
+          $arr_replacements["{user_full_name}"]=$return_request["vendor_name"];
+          sendMailTpl($return_request["opr_shop_owner_email"], "return_request_status_change_notification",$arr_replacements);
+          }
 
-        if ($return_request['refund_request_action_by']=="U") {
-        $arr_replacements["{user_full_name}"]="Admin";
-        sendMailTpl(Settings::getSetting("CONF_ADMIN_EMAIL"), "return_request_status_change_notification", $arr_replacements);
-        $emails = explode(',', Settings::getSetting("CONF_ADDITIONAL_ALERT_EMAILS",FatUtility::VAR_STRING,''));
-        foreach ($emails as $email) {
-        if (mb_strlen($email) > 0 && preg_match('/^[^\@]+@.*.[a-z]{2,15}$/i', $email)) {
-         sendMailTpl($email, "return_request_status_change_notification", $langId, $arr_replacements);
-        }
-        }
+          if ($return_request['refund_request_action_by']=="U") {
+          $arr_replacements["{user_full_name}"]="Admin";
+          sendMailTpl(Settings::getSetting("CONF_ADMIN_EMAIL"), "return_request_status_change_notification", $arr_replacements);
+          $emails = explode(',', Settings::getSetting("CONF_ADDITIONAL_ALERT_EMAILS",FatUtility::VAR_STRING,''));
+          foreach ($emails as $email) {
+          if (mb_strlen($email) > 0 && preg_match('/^[^\@]+@.*.[a-z]{2,15}$/i', $email)) {
+          sendMailTpl($email, "return_request_status_change_notification", $langId, $arr_replacements);
+          }
+          }
 
-        }
-        return true;
-        } else{
-        $this->error = getLabel('M_INVALID_REQUEST');
-        } */
+          }
+          return true;
+          } else{
+          $this->error = getLabel('M_INVALID_REQUEST');
+          } */
     }
 
     public function sendOrderCancellationRequestUpdateNotification($ocrequest_id, $langId)
@@ -1881,7 +2075,7 @@ class EmailHandler extends FatModel
         if (!$ocrequest_id || !$langId) {
             trigger_error(Labels::getLabel('MSG_Invalid_Argument_Passed.', $this->commonLangId), E_USER_ERROR);
         }
-        
+
         $srch = new OrderCancelRequestSearch();
         $srch->joinOrderProducts();
         $srch->joinOrders();
@@ -1890,10 +2084,10 @@ class EmailHandler extends FatModel
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(
-            array(
-                'ocrequest_id', 'ocrequest_op_id', 'ocrequest_ocreason_id', 'ocrequest_status',
-                'op_invoice_number', 'buyer.user_name as buyer_name', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'buyer_cred.credential_email as buyer_email', 'buyer.user_id as buyer_id'
-            )
+                array(
+                    'ocrequest_id', 'ocrequest_op_id', 'ocrequest_ocreason_id', 'ocrequest_status',
+                    'op_invoice_number', 'buyer.user_name as buyer_name', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'buyer_cred.credential_email as buyer_email', 'buyer.user_id as buyer_id'
+                )
         );
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
@@ -1906,7 +2100,10 @@ class EmailHandler extends FatModel
             '{request_status}' => OrderCancelRequest::getRequestStatusArr($langId)[$row['ocrequest_status']],
             '{user_name}' => $row['buyer_name'],
         );
-        self::sendMailTpl($row['buyer_email'], "cancellation_request_approved_declined", $langId, $arrReplacements);
+        $sendEmail = (new FatMailer($langId, 'cancellation_request_approved_declined'))
+                ->setTo($row['buyer_email'])
+                ->setVariables($arrReplacements)
+                ->send();
         $this->sendSms("cancellation_request_approved_declined", ValidateElement::formatDialCode($row['buyer_phone_dcode']) . $row['buyer_phone'], $arrReplacements, $langId);
         $notiArrReplacements = array(
             '{invoicenumber}' => $row["op_invoice_number"],
@@ -1944,10 +2141,10 @@ class EmailHandler extends FatModel
         $srch->joinShops($langId);
         $srch->addCondition('sreport_id', '=', $sreport_id);
         $srch->addMultipleFields(
-            array(
-                'sreport_id', 'sreport_reportreason_id', 'IFNULL(shop_name, shop_identifier) as shop_name',
-                'credential_username', 'sreport_message'
-            )
+                array(
+                    'sreport_id', 'sreport_reportreason_id', 'IFNULL(shop_name, shop_identifier) as shop_name',
+                    'credential_username', 'sreport_message'
+                )
         );
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
@@ -1979,7 +2176,11 @@ class EmailHandler extends FatModel
             '{posted_on_datetime}' => $d['bcontributions_added_on'],
         );
 
-        if (!self::sendMailTpl($d['bcontributions_author_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($d['bcontributions_author_email'])
+                ->setVariables($vars)
+                ->send();
+        if (false === $sendEmail) {
             return false;
         }
         $phone = ValidateElement::formatDialCode($d['bcontributions_author_phone_dcode']) . $d['bcontributions_author_phone'];
@@ -1999,9 +2200,14 @@ class EmailHandler extends FatModel
             '{posted_on_datetime}' => $d['bpcomment_added_on'],
         );
 
-        if (!self::sendMailTpl($d['bpcomment_author_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($d['bpcomment_author_email'])
+                ->setVariables($vars)
+                ->send();
+        if (false === $sendEmail) {
             return false;
         }
+
         $uData = User::getAttributesById($d['bpcomment_user_id'], ['user_phone_dcode', 'user_phone']);
         if (is_array($uData) && 0 < count($uData)) {
             $phone = ValidateElement::formatDialCode($uData['user_phone_dcode']) . $uData['user_phone'];
@@ -2045,7 +2251,10 @@ class EmailHandler extends FatModel
                 '{order_items_table_format}' => $orderItemsTableFormatHtml,
                 '{review_page_url}' => UrlHelper::generateFullUrl('Buyer', 'orderFeedback', array($orderProduct['op_id']), CONF_WEBROOT_FRONT_URL),
             );
-            self::sendMailTpl($userInfo["credential_email"], "buyer_notification_review_order_product", $langId, $arrReplacements);
+            $sendEmail = (new FatMailer($langId, 'buyer_notification_review_order_product'))
+                    ->setTo($userInfo["credential_email"])
+                    ->setVariables($arrReplacements)
+                    ->send();
             $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
             $this->sendSms("buyer_notification_review_order_product", $phone, $arrReplacements, $langId);
             return true;
@@ -2092,8 +2301,11 @@ class EmailHandler extends FatModel
             '{new_status}' => $newStatus,
             '{product_link}' => $prodTitleAnchor
         );
+        $sendEmail = (new FatMailer($langId, 'buyer_notification_review_status_updated'))
+                ->setTo($spreviewData["credential_email"])
+                ->setVariables($arrReplacements)
+                ->send();
 
-        self::sendMailTpl($spreviewData["credential_email"], "buyer_notification_review_status_updated", $langId, $arrReplacements);
         $phone = !empty($spreviewData['user_phone']) ? ValidateElement::formatDialCode($spreviewData['user_phone_dcode']) . $spreviewData['user_phone'] : '';
         $this->sendSms("buyer_notification_review_status_updated", $phone, $arrReplacements, $langId);
         return true;
@@ -2131,7 +2343,11 @@ class EmailHandler extends FatModel
             return $this->sendMailToAdminAndAdditionalEmails("admin_notification_abusive_review_posted", $arrReplacements, static::NO_ADDITIONAL_ALERT, static::NOT_ONLY_SUPER_ADMIN, $langId);
         }
 
-        self::sendMailTpl($to, "admin_notification_abusive_review_posted", $langId, $arrReplacements);
+        $sendEmail = (new FatMailer($langId, 'admin_notification_abusive_review_posted'))
+                ->setTo($to)
+                ->setVariables($arrReplacements)
+                ->send();
+
         $this->sendSms("admin_notification_abusive_review_posted", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
         return true;
     }
@@ -2218,7 +2434,10 @@ class EmailHandler extends FatModel
                 '{discount_value}' => $discountValue,
                 '{expired_on}' => FatDate::format($row["coupon_end_date"]),
             );
-            self::sendMailTpl($row['credential_email'], 'user_discount_coupon_notification', $langId, $arrReplacements);
+            $sendEmail = (new FatMailer($langId, 'user_discount_coupon_notification'))
+                    ->setTo($row['credential_email'])
+                    ->setVariables($arrReplacements)
+                    ->send();
             $phone = !empty($row['user_phone']) ? ValidateElement::formatDialCode($row['user_phone_dcode']) . $row['user_phone'] : '';
             $this->sendSms('user_discount_coupon_notification', $phone, $arrReplacements, $langId);
         }
@@ -2242,7 +2461,12 @@ class EmailHandler extends FatModel
             '{invitation_message}' => $personalMsg,
         );
 
-        if (!self::sendMailTpl($receiverEmail, $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($receiverEmail)
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
 
@@ -2269,7 +2493,12 @@ class EmailHandler extends FatModel
             '{invitation_message}' => $personalMsg,
         );
 
-        if (!self::sendMailTpl($receiverEmail, $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($receiverEmail)
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
 
@@ -2293,7 +2522,6 @@ class EmailHandler extends FatModel
         $userObj = new User($user_id);
         $userInfo = $userObj->getUserInfo(array('user_name', 'user_phone_dcode', 'user_phone', 'credential_email'));
 
-
         $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($langId, $user_id, array('ossubs_subscription_name'));
         if (!$currentPlanData) {
             return false;
@@ -2305,9 +2533,14 @@ class EmailHandler extends FatModel
             '{spackage_name}' => $spackage_name
         );
 
-        if (!self::sendMailTpl($userInfo['credential_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($userInfo['credential_email'])
+                ->setVariables($vars)
+                ->send();
+        if (false === $sendEmail) {
             return false;
         }
+
         $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
         $this->sendSms($tpl, $phone, $vars, $langId);
         return true;
@@ -2328,9 +2561,14 @@ class EmailHandler extends FatModel
             '{pending_days}' => $pending_days
         );
 
-        if (!self::sendMailTpl($data['credential_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($data['credential_email'])
+                ->setVariables($vars)
+                ->send();
+        if (false === $sendEmail) {
             return false;
         }
+
         $phone = !empty($data['user_phone']) ? ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone'] : '';
         $this->sendSms($tpl, $phone, $vars, $langId);
         return true;
@@ -2371,7 +2609,10 @@ class EmailHandler extends FatModel
             $this->sendMailToAdminAndAdditionalEmails("new_subscription_purchase_admin", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
             $this->sendSms("new_subscription_purchase_admin", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
 
-            self::sendMailTpl($userInfo["credential_email"], "new_subscription_purchase", $orderDetail['order_language_id'], $arrReplacements);
+            $sendEmail = (new FatMailer($orderDetail['order_language_id'], 'new_subscription_purchase'))
+                    ->setTo($userInfo['credential_email'])
+                    ->setVariables($arrReplacements)
+                    ->send();
             $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
             $this->sendSms("new_subscription_purchase", $phone, $arrReplacements, $langId);
         }
@@ -2398,7 +2639,6 @@ class EmailHandler extends FatModel
         $rs = $srch->getResultSet();
         $orderDetail = FatApp::getDb()->fetch($rs);
 
-
         if ($orderDetail) {
             $tpl = new FatTemplate('', '');
             $tpl->set('orderDetail', $orderDetail);
@@ -2415,24 +2655,29 @@ class EmailHandler extends FatModel
             $this->sendMailToAdminAndAdditionalEmails("subscription_renew_admin", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
             $this->sendSms("subscription_renew_admin", ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
 
-            self::sendMailTpl($userInfo["credential_email"], "subscription_renew_user", $orderDetail['order_language_id'], $arrReplacements);
+            $sendEmail = (new FatMailer($orderDetail['order_language_id'], 'subscription_renew_user'))
+                    ->setTo($userInfo['credential_email'])
+                    ->setVariables($arrReplacements)
+                    ->send();
+
             $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
             $this->sendSms("subscription_renew_user", $phone, $arrReplacements, $orderDetail['order_language_id']);
         }
         return true;
     }
 
-    public static function sendSmtpTestEmail(int $langId, $smtpObj = null, $vars = array())
-    {               
+    public static function sendSmtpTestEmail(int $langId, $smtpArr = null, $vars = array())
+    {
         $obj = new FatMailer($langId, 'test_email');
         $obj->setTo(FatApp::getConfig("CONF_SITE_OWNER_EMAIL"));
-        if(!empty($smtpObj)){
-            $obj->setSmtpDetails($smtpObj); 
-        }               
-        if(!empty($vars)){
-           $obj->setVariables($vars); 
+        $obj->forceSmtp();
+        if (!empty($smtpArr)) {
+            $obj->setSmtpDetails($smtpArr);
         }
-        return $obj->sendMail();
+        if (!empty($vars)) {
+            $obj->setVariables($vars);
+        }
+        return $obj->send();
     }
 
     public function sendLowBalancePromotionalNotification($langId, $userId, $balanceRequired)
@@ -2444,9 +2689,12 @@ class EmailHandler extends FatModel
         $arrReplacements = array(
             '{user_name}' => trim($userInfo["user_name"]),
             '{requiredBalance}' => CommonHelper::displayMoneyFormat($balanceRequired, true, true),
-
         );
-        self::sendMailTpl($userInfo["credential_email"], "low_balance_promotional_email", $langId, $arrReplacements);
+        $mailerObj = (new FatMailer($langId, 'low_balance_promotional_email'))
+                ->setTo($userInfo["credential_email"])
+                ->setVariables($arrReplacements)
+                ->send();
+
         $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
         $this->sendSms("low_balance_promotional_email", $phone, $arrReplacements, $langId);
         return true;
@@ -2462,7 +2710,11 @@ class EmailHandler extends FatModel
             '{user_name}' => trim($userInfo["user_name"]),
             '{requiredBalance}' => CommonHelper::displayMoneyFormat($balanceRequired, true, true),
         );
-        self::sendMailTpl($userInfo["credential_email"], "low_balance_subscription_email", $langId, $arrReplacements);
+
+        (new FatMailer($langId, 'low_balance_subscription_email'))
+                ->setTo($userInfo["credential_email"])
+                ->setVariables($arrReplacements)
+                ->send();
         $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
         $this->sendSms("low_balance_subscription_email", $phone, $arrReplacements, $langId);
         return true;
@@ -2482,9 +2734,15 @@ class EmailHandler extends FatModel
             '{new_request_status}' => $statusArr[$d['promotion_approved']],
         );
 
-        if (!self::sendMailTpl($userInfo['credential_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($userInfo["credential_email"])
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
+
         $phone = !empty($userInfo['user_phone']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'] : '';
         (new self())->sendSms($tpl, $phone, $vars, $langId);
         return true;
@@ -2500,7 +2758,6 @@ class EmailHandler extends FatModel
         $vars = array(
             '{user_full_name}' => $userInfo['user_name'],
             '{promotion_name}' => isset($promotionDetails['promotion_name']) ? $promotionDetails['promotion_name'] : $d['promotion_identifier'],
-
         );
         if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, static::NO_ADDITIONAL_ALERT, static::NOT_ONLY_SUPER_ADMIN, $langId)) {
             return false;
@@ -2538,13 +2795,13 @@ class EmailHandler extends FatModel
         $prodSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $prodSrch->doNotLimitRecords();
         $prodSrch->addMultipleFields(
-            array(
-                'product_id', 'product_identifier', 'IFNULL(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn',
-                'selprod_id', 'selprod_user_id', 'selprod_condition', 'selprod_price', 'special_price_found', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
-                'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name', 'user_name',
-                'shop_id', 'shop_name',
-                'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price'
-            )
+                array(
+                    'product_id', 'product_identifier', 'IFNULL(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn',
+                    'selprod_id', 'selprod_user_id', 'selprod_condition', 'selprod_price', 'special_price_found', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+                    'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name', 'user_name',
+                    'shop_id', 'shop_name',
+                    'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price'
+                )
         );
         $productRs = $prodSrch->getResultSet();
         $products = FatApp::getDb()->fetchAll($productRs);
@@ -2560,7 +2817,12 @@ class EmailHandler extends FatModel
             '{products_in_cart_format}' => $productsInCartFormatHtml,
         );
 
-        if (!self::sendMailTpl($d['user_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($d['user_email'])
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
         $this->sendSms($tpl, ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'], $vars, $langId);
@@ -2592,13 +2854,13 @@ class EmailHandler extends FatModel
         $prodSrch->addGroupBy('selprod_id');
         $prodSrch->setPageSize(9);
         $prodSrch->addMultipleFields(
-            array(
-                'product_id', 'product_identifier', 'IFNULL(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn',
-                'selprod_id', 'selprod_user_id', 'selprod_condition', 'selprod_price', 'special_price_found', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
-                'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name', 'user_name',
-                'shop_id', 'shop_name',
-                'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price'
-            )
+                array(
+                    'product_id', 'product_identifier', 'IFNULL(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn',
+                    'selprod_id', 'selprod_user_id', 'selprod_condition', 'selprod_price', 'special_price_found', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+                    'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name', 'user_name',
+                    'shop_id', 'shop_name',
+                    'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price'
+                )
         );
         $productRs = $prodSrch->getResultSet();
         $products = FatApp::getDb()->fetchAll($productRs);
@@ -2614,7 +2876,12 @@ class EmailHandler extends FatModel
             '{products_in_wishlist_format}' => $productsInWishlistFormatHtml,
         );
 
-        if (!self::sendMailTpl($d['user_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($d['user_email'])
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
         $this->sendSms($tpl, ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'], $vars, $langId);
@@ -2629,7 +2896,12 @@ class EmailHandler extends FatModel
             '{user_full_name}' => $data['user_name'],
         );
 
-        if (!self::sendMailTpl($data['credential_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($data['credential_email'])
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             return true;
         }
         $this->sendSms($tpl, ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone'], $vars, $langId);
@@ -2647,7 +2919,6 @@ class EmailHandler extends FatModel
             '{username}' => $userInfo['credential_username'],
             '{user_phone}' => ValidateElement::formatDialCode($userInfo['user_phone_dcode']) . $userInfo['user_phone'],
             '{ureq_purpose}' => $data['ureq_purpose'],
-
         );
 
         if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, static::NO_ADDITIONAL_ALERT, static::NOT_ONLY_SUPER_ADMIN, $langId)) {
@@ -2675,9 +2946,12 @@ class EmailHandler extends FatModel
             '{username}' => $userInfo['credential_username'],
             '{request_type}' => $reqTypeName,
         );
-        
+
         if (!empty($userInfo['credential_email'])) {
-            self::sendMailTpl($userInfo['credential_email'], $tpl, $langId, $vars);
+            $sendEmail = (new FatMailer($langId, $tpl))
+                    ->setTo($userInfo['credential_email'])
+                    ->setVariables($vars)
+                    ->send();
         }
 
         if (!empty($userInfo['user_phone'])) {
@@ -2697,7 +2971,12 @@ class EmailHandler extends FatModel
             '{admin_message}' => $data["mail_message"]
         );
 
-        if (!self::sendMailTpl($data['credential_email'], $tpl, $langId, $replacements)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($data['credential_email'])
+                ->setVariables($replacements)
+                ->send();
+
+        if (false === $sendEmail) {
             return false;
         }
 
@@ -2757,7 +3036,12 @@ class EmailHandler extends FatModel
             '{OTP}' => $d['otp'],
         );
 
-        if (!self::sendMailTpl($d['credential_email'], $tpl, $langId, $vars)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($d['credential_email'])
+                ->setVariables($vars)
+                ->send();
+
+        if (false === $sendEmail) {
             $this->error = Labels::getLabel("MSG_UNABLE_TO_SEND_EMAIL", $langId);
             return false;
         }
@@ -2806,4 +3090,5 @@ class EmailHandler extends FatModel
 
         return true;
     }
+
 }
