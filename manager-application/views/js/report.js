@@ -60,7 +60,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
         }
 
         if (typeof withloader == 'undefined' || withloader != false) {
-            $(dv).html(fcom.getLoader());
+            $(dv).prepend(fcom.getLoader());
         }
 
         fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {

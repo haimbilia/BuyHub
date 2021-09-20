@@ -573,10 +573,12 @@ function selectAll(obj) {
 
     var faceboxActionBtns = (0 < $("#facebox").length && $("#facebox").is(":visible")) ? "#facebox " : '';
 
-    if ($(obj).prop("checked") == false) {
-        $(faceboxActionBtns + ".toolbar-btn-js").addClass('d-none');
-    } else {
-        $(faceboxActionBtns + ".toolbar-btn-js").removeClass('d-none');
+    if (0 < $(faceboxActionBtns + ".toolbar-btn-js").length) {
+        if ($(obj).prop("checked") == false) {
+            $(faceboxActionBtns + ".toolbar-btn-js").addClass('disabled');
+        } else {
+            $(faceboxActionBtns + ".toolbar-btn-js").removeClass('disabled');
+        }
     }
 }
 

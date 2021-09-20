@@ -5,16 +5,37 @@
         <span class="text-muted"><?php echo sprintf(Labels::getLabel('LBL_OVER_%S_NEW_PRODUCTS', $adminLangId), $recordCount); ?></span>
     </h3>
     <div class="card-toolbar">
-        <a href="javascript:void(0);" onclick="addNew()" class="btn btn-sm btn-light btn-light">
-            <span class="svg-icon svg-icon-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black">
-                    </rect>
-                    <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black"></rect>
-                </svg>
-            </span>
-            <?php echo Labels::getLabel('LBL_NEW', $adminLangId); ?>
-        </a>
+        <ul class="actions">
+            <li>
+                <a href="javascript:void(0);" onclick="addNew()" class="btn btn-icon btn-light btn-add">
+                    <i class="icn">
+                    <svg class="svg">
+                        <use
+                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
+                        </use>
+                    </svg></i>
+                   <span> <?php echo Labels::getLabel('LBL_NEW', $adminLangId); ?></span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)" class="toolbar-btn-js disabled" title="<?php echo Labels::getLabel('LBL_PUBLISH', $adminLangId); ?>" onclick="toggleBulkStatues(1)">
+                    <svg class="svg" width="18" height="18">
+                        <use
+                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#show">
+                        </use>
+                    </svg>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)" class="toolbar-btn-js disabled" title="<?php echo Labels::getLabel('LBL_UNPUBLISH', $adminLangId); ?>" onclick="toggleBulkStatues(0)">
+                    <svg class="svg" width="18" height="18">
+                        <use
+                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#hide">
+                        </use>
+                    </svg>
+                </a>
+            </li>
+        </ul>
     </div>
 </div>
 <div class="card-body">
@@ -83,6 +104,7 @@
                 switch ($key) {
                     case 'select_all':
                         $td->appendElement('plaintext', [], '');
+                        $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="country_ids[]" value=' . $row['country_id'] . '><i class="input-helper"></i></label>', true);
                         break;
                     case 'listSerial':
                         $td->appendElement('plaintext', [], $serialNo);
@@ -130,10 +152,18 @@
                 Labels::getLabel('LBL_No_Records_Found', $adminLangId)
             );
         }
-        echo $tbl->getHtml();
-        ?>
-    </div>
 
+        $frm = new Form('frmCountryListing', array('id' => 'frmCountryListing'));
+        $frm->setFormTagAttribute('class', 'actionButtons-js');
+        $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
+        $frm->setFormTagAttribute('action', UrlHelper::generateUrl('Countries', 'toggleBulkStatuses'));
+        $frm->addHiddenField('', 'status');
+
+        echo $frm->getFormTag();
+        echo $frm->getFieldHtml('status');
+        echo $tbl->getHtml(); ?>
+        </form>
+    </div>
 </div>
 <div class="card-foot">
     <?php $postedData['page'] = $page;
