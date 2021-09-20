@@ -1,20 +1,32 @@
-$(document).ready(function () {
-    searchReport(document.frmReportSearch);
-});
-
 $(document).on("click", ".headerColumnJs", function (e) {
     var fld = $(this).attr('data-field');
     var frm = document.frmReportSearchPaging;
     document.getElementById("sortBy").value = fld;
+    var sortingUp = '<svg class="svg" width="18" height="18"><use xlink: href = "' + siteConstants.webroot + 'images/retina/sprite-actions.svg#arrow-up"></use > </svg>';
+    var sortingDown = '<svg class="svg" width="18" height="18"><use xlink: href = "' + siteConstants.webroot + 'images/retina/sprite-actions.svg#arrow-down"></use > </svg>';
+
+    var sortIcn = "";
+
     $(frm.sortBy).val(fld);
+    $(frm.page).val(1);
+    $('.sortingIconJs').remove();
     if (document.getElementById("sortOrder").value == 'ASC') {
         $(frm.sortOrder).val('DESC');
         document.getElementById("sortOrder").value = 'DESC';
+        sortIcn = sortingUp;
     } else {
         $(frm.sortOrder).val('ASC');
         document.getElementById("sortOrder").value = 'ASC';
+        sortIcn = sortingDown;
     }
-    searchReport(frm, false);
+
+    if (0 < $(this).find('.icn').length) {
+        $(this).find('.icn').html(sortIcn);
+    } else {
+        $(this).find('span').append('<i class="icn sortingIconJs">' + sortIcn + '</i>');
+    }
+
+    searchReport(frm);
 });
 
 /* $(function () {
@@ -26,7 +38,8 @@ $(document).on("click", ".headerColumnJs", function (e) {
 }); */
 
 (function () {
-    var dv = '#listing';
+    var dv = '.listingRecordJs';
+    var paginationDv = '.listingPaginationJs';
 
     goToSearchPage = function (page) {
         if (typeof page == undefined || page == null) {
@@ -47,26 +60,24 @@ $(document).on("click", ".headerColumnJs", function (e) {
         window.location = redirecrt;
     }
 
-    reloadList = function (withloader) {
+    reloadList = function () {
         var frm = document.frmReportSearchPaging;
-        searchReport(frm, withloader);
+        searchReport(frm);
     };
 
-    searchReport = function (frm, withloader) {
+    searchReport = function (frm) {
         setColumnsData(frm);
         var data = '';
         if (frm) {
             data = fcom.frmData(frm);
         }
 
-        if (typeof withloader == 'undefined' || withloader != false) {
-            $('.listingTableJs').html(fcom.getLoader());
-        } else {
-            $('.listingTableJs').prepend(fcom.getLoader());
-        }
+        $('.listingTableJs').prepend(fcom.getLoader());
 
         fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
-            $(dv).html(res);
+            var res = $.parseJSON(res);
+            $(dv).replaceWith(res.listingHtml);
+            $(paginationDv).replaceWith(res.paginationHtml);
             fcom.removeLoader();
         });
     };
@@ -105,14 +116,14 @@ $(document).on("click", ".headerColumnJs", function (e) {
             reloadList();
         });
     };
-    
+
     addNew = function () {
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(controllerName, 'form'), '', function (t) {
             $.ykmodal(t);
         });
     };
-    
+
     editRecord = function (recordId) {
         $.ykmodal(fcom.getLoader());
         data = 'recordId=' + recordId;
@@ -121,7 +132,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
             fcom.removeLoader();
         });
     };
-    
+
     editLangData = function (recordId, langId, autoFillLangData = 0) {
         $.ykmodal(fcom.getLoader());
         data = 'recordId=' + recordId + '&langId=' + langId;

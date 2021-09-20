@@ -18,10 +18,11 @@ class CountriesController extends AdminBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_COUNTRIES', $this->adminLangId));
         $this->_template->addJs('js/report.js');
+        $this->getListingData();
         $this->_template->render();
     }
 
-    public function search()
+    private function getListingData()
     {
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();
@@ -41,6 +42,7 @@ class CountriesController extends AdminBaseController
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
             $sortOrder = applicationConstants::SORT_DESC;
         }
+
         $srchFrm = $this->getSearchForm($fields);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
@@ -87,7 +89,16 @@ class CountriesController extends AdminBaseController
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
         $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
-        $this->_template->render(false, false);
+    }
+
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'countries/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     public function editRecord()
@@ -107,7 +118,7 @@ class CountriesController extends AdminBaseController
             $data = Countries::getAttributesById($recordId);
 
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request);
             }
             $frm->fill($data);
         }
@@ -126,8 +137,7 @@ class CountriesController extends AdminBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $languages = Language::getAllNames();
@@ -147,8 +157,7 @@ class CountriesController extends AdminBaseController
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $newTabLangId = 0;

@@ -1,8 +1,8 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage'); 
+<?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
-$statusButtons = isset($statusButtons) ? $statusButtons : false; 
-$deleteButton = isset($deleteButton) ? $deleteButton : false; 
-$newRecord = isset($newRecord) ? $newRecord : false; 
+$statusButtons = isset($statusButtons) ? $statusButtons : false;
+$deleteButton = isset($deleteButton) ? $deleteButton : false;
+$newRecordBtn = isset($newRecordBtn) ? $newRecordBtn : false;
 $otherButtons = isset($otherButtons) ? $otherButtons : []; ?>
 
 <div class="card-head">
@@ -15,16 +15,16 @@ $otherButtons = isset($otherButtons) ? $otherButtons : []; ?>
         <?php } ?>
     </h3>
     <div class="card-toolbar">
-        <?php if ($canEdit) {
-                $data = [
-                    'adminLangId' => $adminLangId,
-                    'newRecord' => $newRecord,
-                    'statusButtons' => $statusButtons,
-                    'deleteButton' => $deleteButton,
-                    'otherButtons' => $otherButtons
-                ];
-
-            $this->includeTemplate('_partial/listing/action-buttons.php', $data, false);
-        } ?>
+        <?php
+        $data = [
+            'canEdit' => $canEdit,
+            'adminLangId' => $adminLangId,
+            'newRecordBtn' => $newRecordBtn,
+            'statusButtons' => $statusButtons,
+            'deleteButton' => $deleteButton,
+            'otherButtons' => $otherButtons
+        ];
+        $this->includeTemplate('_partial/listing/action-buttons.php', $data, false);
+        ?>
     </div>
 </div>

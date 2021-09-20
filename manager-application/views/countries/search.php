@@ -1,150 +1,69 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$printData = false;
+if (!isset($tbody)) {
+    $printData = true;
+    $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
+}
+$serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 
-if ($canEdit) {
-    $data = [
-        'canEdit' => $canEdit,
-        'adminLangId' => $adminLangId,
-        'cardHeadTitle' => Labels::getLabel('LBL_COUNTRIES', $adminLangId),
-        'recordsTitle' => sprintf(Labels::getLabel('LBL_OVER_%S_COUNTRIES', $adminLangId), $recordCount),
-        'newRecord' => true,
-        'statusButtons' => true
-    ];
+foreach ($arrListing as $sn => $row) {
+    $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
+    $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
+    foreach ($fields as $key => $val) {
+        $cls = ('action' == $key) ? 'align-right' : '';
+        $td = $tr->appendElement('td', ['class' => $cls]);
 
-    $this->includeTemplate('_partial/listing/listing-head.php', $data, false);
-} ?>
+        switch ($key) {
+            case 'select_all':
+                $td->appendElement('plaintext', [], '');
+                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="country_ids[]" value=' . $row['country_id'] . '><i class="input-helper"></i></label>', true);
+                break;
+            case 'listSerial':
+                $td->appendElement('plaintext', [], $serialNo);
+                break;
+            case 'country_active':
+                '(obj, recordId, status)';
+                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['country_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
+                $statusClass = ($canEdit) ? '' : 'disabled';
+                $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
 
-<div class="card-body">
-    <div class="table-responsive listingTableJs">
-        <?php $tbl = new HtmlElement(
-            'table',
-            array('width' => '100%', 'class' => 'table table-dashed')
-        );
-        $th = $tbl->appendElement('thead')->appendElement('tr');
-        foreach ($fields as $key => $val) {
-
-            $headColumData = HtmlHelper::getListingHeaderColumnHtml($key, $sortBy, $sortOrder);
-            $cls = '';
-            $html = '';
-            if (in_array($key, $allowedKeysForSorting)) {
-                $cls .= 'headerColumnJs sorting ' . $headColumData['class'];
-                $html = $headColumData['html'];
-            }
-
-            if ('action' == strtolower($key)) {
-                $cls .= 'align-right';
-            }
-
-            switch ($key) {
-                case 'select_all':
-                    $thWidth = '5%';
-                    break;
-                case 'action':
-                    $thWidth = '10%';
-                case 'listSerial':
-                case 'country_code':
-                case 'country_code_alpha3':
-                case 'country_active':
-                    $thWidth = '14%';
-                    break;
-                case 'country_name':
-                    $thWidth = '29%';
-                    break;
-                default:
-                    $thWidth = '';
-                    break;
-            }
-            $td = $th->appendElement('th', ['class' => $cls, 'data-field' => $key, 'width' => $thWidth]);
-            $span = $td->appendElement('span');
-
-            switch ($key) {
-                case 'select_all':
-                    $span->appendElement('plaintext', [], '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
-                    break;
-                default:
-                    $span->appendElement('plaintext', [], $val . $html, true);
-                    break;
-            }
-        }
-
-        $tbody = $tbl->appendElement('tbody');
-        $serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
-
-        foreach ($arrListing as $sn => $row) {
-            $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
-            $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
-            foreach ($fields as $key => $val) {
-                $cls = ('action' == $key) ? 'align-right' : '';
-                $td = $tr->appendElement('td', ['class' => $cls]);
-
-                switch ($key) {
-                    case 'select_all':
-                        $td->appendElement('plaintext', [], '');
-                        $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="country_ids[]" value=' . $row['country_id'] . '><i class="input-helper"></i></label>', true);
-                        break;
-                    case 'listSerial':
-                        $td->appendElement('plaintext', [], $serialNo);
-                        break;
-                    case 'country_active':
-                        '(obj, recordId, status)';
-                        $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['country_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
-                        $statusClass = ($canEdit) ? '' : 'disabled';
-                        $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
-
-                        $htm = '<span class="switch switch--sm switch--icon">
+                $htm = '<span class="switch switch--sm switch--icon">
                                     <label>
                                         <input type="checkbox" value="' . $row['country_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
                                         <span></span>
                                     </label>
                                 </span>';
-                        $td->appendElement('plaintext', array(), $htm, true);
-                        break;
-                    case 'action':
-                        $data = [
-                            'adminLangId' => $adminLangId,
-                            'recordId' => $row['country_id']
-                        ];
+                $td->appendElement('plaintext', array(), $htm, true);
+                break;
+            case 'action':
+                $data = [
+                    'adminLangId' => $adminLangId,
+                    'recordId' => $row['country_id']
+                ];
 
-                        if ($canEdit) {
-                            $data['editButton'] = [];
-                            $data['deleteButton'] = [];
-                        }
-                        $actionItems = $this->includeTemplate('_partial/listing-action-buttons.php', $data, false, true);
-                        $td->appendElement('plaintext', ['class' => $cls], $actionItems, true);
-                        break;
-                    default:
-                        $td->appendElement('plaintext', array(), $row[$key], true);
-                        break;
+                if ($canEdit) {
+                    $data['editButton'] = [];
+                    $data['deleteButton'] = [];
                 }
-            }
-            $serialNo--;
+                $actionItems = $this->includeTemplate('_partial/listing-action-buttons.php', $data, false, true);
+                $td->appendElement('plaintext', ['class' => $cls], $actionItems, true);
+                break;
+            default:
+                $td->appendElement('plaintext', array(), $row[$key], true);
+                break;
         }
-        if (count($arrListing) == 0) {
-            $tbl->appendElement('tr')->appendElement(
-                'td',
-                array(
-                    'colspan' => count($fields)
-                ),
-                Labels::getLabel('LBL_No_Records_Found', $adminLangId)
-            );
-        }
-
-        $frm = new Form('frmCountryListing', array('id' => 'frmCountryListing'));
-        $frm->setFormTagAttribute('class', 'actionButtons-js');
-        $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
-        $frm->setFormTagAttribute('action', UrlHelper::generateUrl('Countries', 'toggleBulkStatuses'));
-        $frm->addHiddenField('', 'status');
-
-        echo $frm->getFormTag();
-        echo $frm->getFieldHtml('status');
-        echo $tbl->getHtml(); ?>
-        </form>
-    </div>
-</div>
-<div class="card-foot">
-    <?php $postedData['page'] = $page;
-    echo FatUtility::createHiddenFormFromData($postedData, array(
-        'name' => 'frmReportSearchPaging'
-    ));
-    $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'pageSize' => $pageSize, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
-    $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
-</div>
+    }
+    $serialNo--;
+}
+if (count($arrListing) == 0) {
+    $tbody->appendElement('tr')->appendElement(
+        'td',
+        array(
+            'colspan' => count($fields)
+        ),
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId)
+    );
+}
+if ($printData) {
+    echo $tbody->getHtml();
+}

@@ -5,7 +5,7 @@ if (isset($htmlContent) && $htmlContent != '') {
     $ul->appendElement('li', [], $htmlContent, true);
 }
 
-if (isset($newRecord) && true === $newRecord) {
+if (isset($newRecord) && true === $newRecord && $canEdit) {
     $li = $ul->appendElement('li');
     $li->appendElement(
         'a',
@@ -27,17 +27,17 @@ if (isset($newRecord) && true === $newRecord) {
 }
 
 $msg = isset($msg) ? $msg : '';
-if (isset($statusButtons) && true === $statusButtons) {
+if (isset($statusButtons) && true === $statusButtons && $canEdit) {
     $li = $ul->appendElement('li');
 
     $li->appendElement(
-        'a', 
+        'a',
         [
             'href' => 'javascript:void(0)',
             'class' => 'toolbar-btn-js disabled',
             'title' => Labels::getLabel('LBL_PUBLISH', $adminLangId),
             'onclick' => "toggleBulkStatues(1, '" . $msg . "')"
-        ], 
+        ],
         '<svg class="svg" width="18" height="18">
             <use
                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#show">
@@ -45,10 +45,10 @@ if (isset($statusButtons) && true === $statusButtons) {
         </svg>',
         true
     );
-    
+
     $li = $ul->appendElement('li');
     $li->appendElement(
-        'a', 
+        'a',
         [
             'href' => 'javascript:void(0)',
             'class' => 'toolbar-btn-js disabled',
@@ -64,7 +64,7 @@ if (isset($statusButtons) && true === $statusButtons) {
     );
 }
 
-if (isset($deleteButton) && true === $deleteButton) {
+if (isset($deleteButton) && true === $deleteButton && $canEdit) {
     $li = $ul->appendElement('li');
     $li->appendElement(
         'a',
@@ -83,7 +83,7 @@ if (isset($deleteButton) && true === $deleteButton) {
     );
 }
 
-if (isset($otherButtons) && is_array($otherButtons)) {
+if (isset($otherButtons) && is_array($otherButtons) && $canEdit) {
     foreach ($otherButtons as $attr) {
         $li = $ul->appendElement('li');
         $li->appendElement('a', $attr['attr'], (string) $attr['label'], true);
