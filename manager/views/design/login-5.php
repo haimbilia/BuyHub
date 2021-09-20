@@ -48,7 +48,7 @@
 								<div class="row pt-3 pb-3">
 									<div class="col-6">
 										<div class="field-set ">
-											<label class="switch switch--sm remember-me">
+											<label class="switch switch-sm remember-me">
 												<input type="checkbox" name="">
 												<span></span>Remember Me </label>
 										</div>

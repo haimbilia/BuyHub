@@ -465,113 +465,112 @@
                                                                                     Selection</a></li>
                                                                             <li><a href="row-details.php">Row
                                                                                     Details</a></li>
-                                                                            <li><a href="modal.php">Modal
-                                                                                    Examples</a>
-                                                                            </li>
-                                                                            <li><a href="column-rendering.php">Column
-                                                                                    Rendering</a></li>
-                                                                            <li><a href="column-width.php">Column
-                                                                                    Width</a></li>
-                                                                            <li><a href="vertical.php">Vertical
-                                                                                    Scrolling</a></li>
-                                                                        </ul>
-                                                                    </li>
-                                                                    <li><a href="#">Child Datatables</a>
-                                                                        <ul>
-                                                                            <li><a href="data-local.php">Local
-                                                                                    Data</a>
-                                                                            </li>
-                                                                            <li><a href="data-ajax.php">Remote
-                                                                                    Data</a>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </li>
-                                                                    <li><a href="#">API</a>
-                                                                        <ul>
-                                                                            <li><a href="methods.php">API
-                                                                                    Methods</a>
-                                                                            </li>
-                                                                            <li><a href="events.php">Events</a></li>
-                                                                        </ul>
-                                                                    </li>
-                                                                </ul>
-                                                            </li>
 
-                                                            <li><a href="#">Datatables.net</a>
+                                                                    </li>
+                                                                    <li><a href="column-rendering.php">Column
+                                                                            Rendering</a></li>
+                                                                    <li><a href="column-width.php">Column
+                                                                            Width</a></li>
+                                                                    <li><a href="vertical.php">Vertical
+                                                                            Scrolling</a></li>
+                                                                </ul>
+                                                            </li>
+                                                            <li><a href="#">Child Datatables</a>
                                                                 <ul>
-                                                                    <li><a href="#">Basic</a>
-                                                                        <ul>
-                                                                            <li><a href="basic.php">Basic Tables</a>
-                                                                            </li>
-                                                                            <li><a href="scrollable.php">Scrollable
-                                                                                    Tables</a></li>
-                                                                            <li><a href="headers.php">Complex
-                                                                                    Headers</a></li>
-                                                                            <li><a href="pagination.php">Pagination
-                                                                                    Options</a></li>
-                                                                        </ul>
+                                                                    <li><a href="data-local.php">Local
+                                                                            Data</a>
                                                                     </li>
-                                                                    <li><a href="#">Advanced</a>
-                                                                        <ul>
-                                                                            <li><a href="column-rendering.php">Column
-                                                                                    Rendering</a></li>
-                                                                            <li><a href="multiple-controls.php">Multiple
-                                                                                    Controls</a></li>
-                                                                            <li><a href="column-visibilty.php">Column
-                                                                                    Visibility</a></li>
-                                                                            <li><a href="row-callback.php">Row
-                                                                                    Callback</a></li>
-                                                                            <li><a href="row-grouping.php">Row
-                                                                                    Grouping</a></li>
-                                                                            <li><a href="footer-callback.php">Footer
-                                                                                    Callback</a></li>
-                                                                        </ul>
-                                                                    </li>
-                                                                    <li><a href="#">Data sources</a>
-                                                                        <ul>
-                                                                            <li><a href="html.php">HTML</a></li>
-                                                                            <li><a href="javascript.php">Javascript</a>
-                                                                            </li>
-                                                                            <li><a href="ajax-client-side.php">Ajax
-                                                                                    Client-side</a></li>
-                                                                            <li><a href="ajax-server-side.php">Ajax
-                                                                                    Server-side</a></li>
-                                                                        </ul>
-                                                                    </li>
-                                                                    <li><a href="#">Search Options</a>
-                                                                        <ul>
-                                                                            <li><a href="column-search.php">Column
-                                                                                    Search</a></li>
-                                                                            <li><a href="advanced-search.php">Advanced
-                                                                                    Search</a></li>
-                                                                        </ul>
-                                                                    </li>
-                                                                    <li><a href="#">Extensions</a>
-                                                                        <ul>
-                                                                            <li><a href="buttons.php">Buttons</a>
-                                                                            </li>
-                                                                            <li><a href="colreorder.php">ColReorder</a>
-                                                                            </li>
-                                                                            <li><a href="keytable.php">KeyTable</a>
-                                                                            </li>
-                                                                            <li><a href="responsive.php">Responsive</a>
-                                                                            </li>
-                                                                            <li><a href="rowgroup.php">RowGroup</a>
-                                                                            </li>
-                                                                            <li><a href="rowreorder.php">RowReorder</a>
-                                                                            </li>
-                                                                            <li><a href="scroller.php">Scroller</a>
-                                                                            </li>
-                                                                            <li><a href="select.php">Select</a></li>
-                                                                        </ul>
+                                                                    <li><a href="data-ajax.php">Remote
+                                                                            Data</a>
                                                                     </li>
                                                                 </ul>
                                                             </li>
-                                                            <li><a href="#">File Upload</a>
+                                                            <li><a href="#">API</a>
                                                                 <ul>
-                                                                    <li><a href="avatar.php">Avatar</a></li>
-                                                                    <li><a href="dropzone.php">DropzoneJS</a></li>
+                                                                    <li><a href="methods.php">API
+                                                                            Methods</a>
+                                                                    </li>
+                                                                    <li><a href="events.php">Events</a></li>
                                                                 </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+
+                                                    <li><a href="#">Datatables.net</a>
+                                                        <ul>
+                                                            <li><a href="#">Basic</a>
+                                                                <ul>
+                                                                    <li><a href="basic.php">Basic Tables</a>
+                                                                    </li>
+                                                                    <li><a href="scrollable.php">Scrollable
+                                                                            Tables</a></li>
+                                                                    <li><a href="headers.php">Complex
+                                                                            Headers</a></li>
+                                                                    <li><a href="pagination.php">Pagination
+                                                                            Options</a></li>
+                                                                </ul>
+                                                            </li>
+                                                            <li><a href="#">Advanced</a>
+                                                                <ul>
+                                                                    <li><a href="column-rendering.php">Column
+                                                                            Rendering</a></li>
+                                                                    <li><a href="multiple-controls.php">Multiple
+                                                                            Controls</a></li>
+                                                                    <li><a href="column-visibilty.php">Column
+                                                                            Visibility</a></li>
+                                                                    <li><a href="row-callback.php">Row
+                                                                            Callback</a></li>
+                                                                    <li><a href="row-grouping.php">Row
+                                                                            Grouping</a></li>
+                                                                    <li><a href="footer-callback.php">Footer
+                                                                            Callback</a></li>
+                                                                </ul>
+                                                            </li>
+                                                            <li><a href="#">Data sources</a>
+                                                                <ul>
+                                                                    <li><a href="html.php">HTML</a></li>
+                                                                    <li><a href="javascript.php">Javascript</a>
+                                                                    </li>
+                                                                    <li><a href="ajax-client-side.php">Ajax
+                                                                            Client-side</a></li>
+                                                                    <li><a href="ajax-server-side.php">Ajax
+                                                                            Server-side</a></li>
+                                                                </ul>
+                                                            </li>
+                                                            <li><a href="#">Search Options</a>
+                                                                <ul>
+                                                                    <li><a href="column-search.php">Column
+                                                                            Search</a></li>
+                                                                    <li><a href="advanced-search.php">Advanced
+                                                                            Search</a></li>
+                                                                </ul>
+                                                            </li>
+                                                            <li><a href="#">Extensions</a>
+                                                                <ul>
+                                                                    <li><a href="buttons.php">Buttons</a>
+                                                                    </li>
+                                                                    <li><a href="colreorder.php">ColReorder</a>
+                                                                    </li>
+                                                                    <li><a href="keytable.php">KeyTable</a>
+                                                                    </li>
+                                                                    <li><a href="responsive.php">Responsive</a>
+                                                                    </li>
+                                                                    <li><a href="rowgroup.php">RowGroup</a>
+                                                                    </li>
+                                                                    <li><a href="rowreorder.php">RowReorder</a>
+                                                                    </li>
+                                                                    <li><a href="scroller.php">Scroller</a>
+                                                                    </li>
+                                                                    <li><a href="select.php">Select</a></li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li><a href="#">File Upload</a>
+                                                        <ul>
+                                                            <li><a href="avatar.php">Avatar</a></li>
+                                                            <li><a href="dropzone.php">DropzoneJS</a></li>
+                                                        </ul>
                                                         </ul>
                                                     </li>
                                                     </li>

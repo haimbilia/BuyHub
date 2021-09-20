@@ -260,7 +260,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row justify-content-center"><label class="col-lg-4 col-form-label">Enable Dark Mode</label>
-                                                                <div class="col-lg-6"><label class="switch switch--sm"><input type="checkbox" name="ADMIN_DARK_MODE_ENABLE"> <span></span></label></div>
+                                                                <div class="col-lg-6"><label class="switch switch-sm"><input type="checkbox" name="ADMIN_DARK_MODE_ENABLE"> <span></span></label></div>
                                                             </div>
                                                             <div class="form-group row justify-content-center align-items-center"><label class="col-md-4 col-form-label">Backend Theme Color</label>
                                                                 <div class="col-md-6">

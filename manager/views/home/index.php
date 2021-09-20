@@ -1738,7 +1738,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                                 <div class="card-foot">
                                     <div class="tables-length">
@@ -1773,7 +1773,7 @@
                                     </div>
 
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -1852,7 +1852,7 @@
                                     <div class="card-foot">
                                         <div class="row">
                                             <div class="col"><button type="reset"
-                                                    class="btn btn-outline-brand">Discard</button>
+                                                    class="btn btn-outline-brand">Cancel</button>
                                             </div>
                                             <div class="col-auto">
                                                 <button type="submit"

@@ -172,7 +172,7 @@
                                             </td>
                                             <td class="datatable__cell"><span>706</span></td>
                                             <td class="datatable__cell"><span>$10000</span></td>
-                                            <td class="datatable__cell"><span class="switch switch--sm">
+                                            <td class="datatable__cell"><span class="switch switch-sm">
                                                     <label>
                                                         <input type="checkbox" checked="checked" name="">
                                                         <span></span>
@@ -198,7 +198,7 @@
                                             <td class="datatable__cell"><span>Apple phone</span></td>
                                             <td class="datatable__cell"><span>706</span></td>
                                             <td class="datatable__cell"><span>$10000</span></td>
-                                            <td class="datatable__cell"><span class="switch switch--sm">
+                                            <td class="datatable__cell"><span class="switch switch-sm">
                                                     <label>
                                                         <input type="checkbox" checked="checked" name="">
                                                         <span></span>
@@ -222,7 +222,7 @@
                                             <td class="datatable__cell"><span>Apple phone</span></td>
                                             <td class="datatable__cell"><span>706</span></td>
                                             <td class="datatable__cell"><span>$10000</span></td>
-                                            <td class="datatable__cell"><span class="switch switch--sm">
+                                            <td class="datatable__cell"><span class="switch switch-sm">
                                                     <label>
                                                         <input type="checkbox" checked="checked" name="">
                                                         <span></span>

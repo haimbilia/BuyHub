@@ -341,7 +341,7 @@
                                                         <td><span class="badge badge-success">Approved</span></td>
 
                                                         <td>
-                                                            <span class="switch switch--sm switch--icon">
+                                                            <span class="switch switch-sm switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" checked="checked" name="">
                                                                     <span></span>
@@ -404,7 +404,7 @@
                                                         <td>$4,000.00</td>
                                                         <td><span class="badge badge-warning">In Progress</span></td>
                                                         <td>
-                                                            <span class="switch switch--sm switch--icon">
+                                                            <span class="switch switch-sm switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" name="">
                                                                     <span></span>
@@ -469,7 +469,7 @@
                                                         <td>$4,000.00</td>
                                                         <td><span class="badge badge-danger">Success</span></td>
                                                         <td>
-                                                            <span class="switch switch--sm switch--icon">
+                                                            <span class="switch switch-sm switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" checked="checked" name="">
                                                                     <span></span>
@@ -533,7 +533,7 @@
                                                         <td>$4,000.00</td>
                                                         <td><span class="badge badge-info">Rejected</span></td>
                                                         <td>
-                                                            <span class="switch switch--sm switch--icon">
+                                                            <span class="switch switch-sm switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" checked="checked" name="">
                                                                     <span></span>
@@ -597,7 +597,7 @@
                                                         <td>$4,000.00</td>
                                                         <td><span class="badge badge-primary">Approved</span></td>
                                                         <td>
-                                                            <span class="switch switch--sm switch--icon">
+                                                            <span class="switch switch-sm switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" name="">
                                                                     <span></span>
@@ -661,7 +661,7 @@
                                                         <td>$4,000.00</td>
                                                         <td><span class="badge badge-info">Pending</span></td>
                                                         <td>
-                                                            <span class="switch switch--sm switch--icon">
+                                                            <span class="switch switch-sm switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" name="">
                                                                     <span></span>
@@ -725,7 +725,7 @@
                                                         <td>$4,000.00</td>
                                                         <td><span class="badge badge-info">Pending</span></td>
                                                         <td>
-                                                            <span class="switch switch--sm switch--icon">
+                                                            <span class="switch switch-sm switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" checked="checked" name="">
                                                                     <span></span>
@@ -886,7 +886,7 @@
                                             <div class="form-edit-foot">
                                                 <div class="row">
                                                     <div class="col"><button type="reset"
-                                                            class="btn btn-outline-brand">Discard</button>
+                                                            class="btn btn-outline-brand">Cancel</button>
                                                     </div>
                                                     <div class="col-auto">
                                                         <button type="submit"
