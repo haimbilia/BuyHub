@@ -60,11 +60,14 @@ $(document).on("click", ".headerColumnJs", function (e) {
         }
 
         if (typeof withloader == 'undefined' || withloader != false) {
-            $(dv).prepend(fcom.getLoader());
+            $('.listingTableJs').html(fcom.getLoader());
+        } else {
+            $('.listingTableJs').prepend(fcom.getLoader());
         }
 
         fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
             $(dv).html(res);
+            fcom.removeLoader();
         });
     };
 
@@ -81,7 +84,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
                 $(this).prop('checked', false);
             }
         });
-        searchReport(document.frmReportSearch);
+        searchReport(document.frmReportSearch, false);
     };
 
     setColumnsData = function (frm) {

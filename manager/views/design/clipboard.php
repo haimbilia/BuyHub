@@ -199,7 +199,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="card__foot">
+							<div class="card-foot">
 								<div class=" ">
 									<div class="row">
 										<div class="col-lg-9 ml-lg-auto">

@@ -104,7 +104,7 @@
                                             <span class="form-text text-muted">Example help text that remains unchanged.</span>
                                         </div>
                                     </div>
-                                    <div class="card__foot">
+                                    <div class="card-foot">
                                         <div class="form__actions">
                                             <button type="submit" class="btn btn-primary">Submit</button>
                                             <button type="submit" class="btn btn-secondary">Cancel</button>
@@ -143,7 +143,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card__foot">
+                                    <div class="card-foot">
                                         <div class="form__actions">
                                             <div class="row">
                                                 <div class="col-lg-9 ml-lg-auto">
@@ -188,7 +188,7 @@
                                             <span class="form-text text-muted">Example help text that remains unchanged.</span>
                                         </div>
                                     </div>
-                                    <div class="card__foot">
+                                    <div class="card-foot">
                                         <div class="form__actions">
                                             <button type="submit" class="btn btn-success">Submit</button>
                                             <button type="submit" class="btn btn-secondary">Cancel</button>
@@ -289,7 +289,7 @@
                                             <span class="form-text text-muted">Example help text that remains unchanged.</span>
                                         </div>
                                     </div>
-                                    <div class="card__foot">
+                                    <div class="card-foot">
                                         <div class="form__actions form__actions">
                                             <button type="submit" class="btn btn-brand">Submit</button>
                                             <button type="submit" class="btn btn-secondary">Cancel</button>
@@ -331,7 +331,7 @@
                                             <span class="form-text text-muted">Example help text that remains unchanged.</span>
                                         </div>
                                     </div>
-                                    <div class="card__foot">
+                                    <div class="card-foot">
                                         <div class="form__actions">
                                             <button type="submit" class="btn btn-brand">Submit</button>
                                             <button type="submit" class="btn btn-secondary">Cancel</button>

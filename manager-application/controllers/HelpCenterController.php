@@ -59,6 +59,6 @@ class HelpCenterController extends AdminBaseController
         $json['msg'] = Labels::getLabel('MSG_SUCCESS', $this->adminLangId);
 
         CacheHelper::create($cacheKey, json_encode($json), CacheHelper::TYPE_HELP_CENTER);
-        FatUtility::dieJsonSuccess($json);
+        LibHelper::dieJsonSuccess($json);
     }
 }

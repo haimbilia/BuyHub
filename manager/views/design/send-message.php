@@ -126,7 +126,7 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="card__foot">
+                                <div class="card-foot">
                                     <div class="comments-body pb-4">
                                         <div class="comment-group mb-4">
                                             <div class="chat__user">

@@ -586,7 +586,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card__foot">
+                <div class="card-foot">
                     <div class="form__actions space-between">
                         <a href="#" class="btn btn-label-brand btn-sm btn-bold">Manage company</a>
 

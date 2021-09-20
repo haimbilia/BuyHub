@@ -382,7 +382,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="card__foot card__foot--fit-x">
+							<div class="card-foot card-foot-fit-x">
 								<div class="form__actions">
 									<div class="row">
 										<div class="col-lg-9 ml-lg-auto">

@@ -202,7 +202,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<button type="reset" class="btn btn-primary">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>
@@ -332,7 +332,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<button type="reset" class="btn btn-success">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>

@@ -136,7 +136,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<button type="reset" class="btn btn-primary">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>
@@ -199,7 +199,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<button type="reset" class="btn btn-primary">Submit</button>
 											<button type="reset" class="btn btn-secondary">Cancel</button>
@@ -282,7 +282,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<div class="row">
 												<div class="col-lg-3"></div>
@@ -371,7 +371,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="card__foot">
+									<div class="card-foot">
 										<div class="form__actions">
 											<div class="row">
 												<div class="col-lg-3"></div>

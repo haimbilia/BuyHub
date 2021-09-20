@@ -39,7 +39,7 @@
     </div>
 </div>
 <div class="card-body">
-    <div class="table-responsive">
+    <div class="table-responsive listingTableJs">
         <?php $tbl = new HtmlElement(
             'table',
             array('width' => '100%', 'class' => 'table table-dashed')
@@ -47,7 +47,7 @@
         $th = $tbl->appendElement('thead')->appendElement('tr');
         foreach ($fields as $key => $val) {
 
-            $headColumData = Common::getListingHeaderColumnHtml($key, $sortBy, $sortOrder);
+            $headColumData = HtmlHelper::getListingHeaderColumnHtml($key, $sortBy, $sortOrder);
             $cls = '';
             $html = '';
             if (in_array($key, $allowedKeysForSorting)) {
