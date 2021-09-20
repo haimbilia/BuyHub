@@ -16,8 +16,7 @@ class CountriesController extends AdminBaseController
 
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_COUNTRIES', $this->adminLangId));
-        $this->_template->addJs('js/report.js');
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_COUNTRIES', $this->adminLangId));        
         $this->getListingData();
         $this->_template->render();
     }
@@ -409,7 +408,7 @@ class CountriesController extends AdminBaseController
 
     private function getSearchForm($fields = [])
     {
-        $frm = new Form('frmReportSearch');
+        $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
 
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');

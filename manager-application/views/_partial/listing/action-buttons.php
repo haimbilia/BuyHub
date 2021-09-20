@@ -40,7 +40,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         ],
         '<svg class="svg" width="18" height="18">
             <use
-                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#show">
+                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#toggle-on">
             </use>
         </svg>',
         true
@@ -57,7 +57,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         ],
         '<svg class="svg" width="18" height="18">
             <use
-                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#hide">
+                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#toggle-off">
             </use>
         </svg>',
         true

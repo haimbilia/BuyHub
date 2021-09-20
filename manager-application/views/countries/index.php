@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frmSearch->setFormTagAttribute('onsubmit', 'searchReport(this, false); return(false);');
+$frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this, false); return(false);');
 $frmSearch->setFormTagAttribute('id', 'frmSearch');
 $frmSearch->setFormTagAttribute('class', 'form');
 
@@ -102,7 +102,7 @@ $btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
 
                                 switch ($key) {
                                     case 'select_all':
-                                        $span->appendElement('plaintext', [], '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
+                                        $span->appendElement('plaintext', [], '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAllJs"><i class="input-helper"></i></label>', true);
                                         break;
                                     default:
                                         $span->appendElement('plaintext', [], $val . $html, true);

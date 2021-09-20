@@ -24,9 +24,13 @@ class AdminBaseController extends FatController
 
         if (!AdminAuthentication::isAdminLogged()) {
             CommonHelper::initCommonVariables(true);
-            $msg = Labels::getLabel('LBL_Your_session_seems_to_be_expired', CommonHelper::getLangId());
-            $redirect =  FatApp::redirectUser(UrlHelper::generateUrl('AdminGuest', 'loginForm'));
-            LibHelper::exitWithError($msg, true, $redirect);
+            if (FatUtility::isAjaxCall()) {
+                if (FatUtility::isAjaxCall()) {
+                    Message::addErrorMessage(Labels::getLabel('LBL_YOUR_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId()));
+                    FatUtility::dieWithError(Message::getHtml());
+                }
+            }
+            FatApp::redirectUser(UrlHelper::generateUrl('AdminGuest', 'loginForm'));
         }
 
         $this->objPrivilege = AdminPrivilege::getInstance();

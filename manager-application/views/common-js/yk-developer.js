@@ -1,3 +1,10 @@
+$(document).ready(function () {
+    if (/ip(hone|od)|ipad/i.test(navigator.userAgent)) {
+        $("body").css("cursor", "pointer");
+    }
+});
+
+
 (function () {
     var screenHeight = $(window).height() - 100;
     window.onresize = function (event) {

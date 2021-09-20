@@ -125,15 +125,15 @@ var fcom = {
 
 	updateWithAjax: function (url, data, fn, options, autoClose = true) {
 		/*this.addTrailingSlash();*/
-		$.systemMessage(langLbl.processing, 'alert--process', autoClose);
+		$.mbsmessage(langLbl.processing, autoClose, 'alert--process');
 		var o = $.extend(true, { fOutMode: 'json' }, options);
 		this.ajax(url, data, function (ans) {
 			if (ans.status != 1) {
 				$(document).trigger('close.mbsmessage');
-				$.systemMessage(ans.msg, 'alert--danger');
+				$.mbsmessage(ans.msg, autoClose, 'alert--danger');
 				return;
 			}
-			$.systemMessage(ans.msg, 'alert--success');
+			$.mbsmessage(ans.msg, autoClose, 'alert--success');
 			fn(ans);
 		}, o);
 	},
