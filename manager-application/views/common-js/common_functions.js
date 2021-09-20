@@ -554,7 +554,7 @@ function setSiteDefaultLang(langId) {
 }
 
 function getNotifications() {
-    $("#notificationList").html(fcom.getLoader());
+    $("#notificationList").prepend(fcom.getLoader());
 
     fcom.ajax(fcom.makeUrl('Notifications', 'notificationList'), '', function (res) {
         $("#notificationList").html(res);
@@ -588,11 +588,13 @@ function formAction(frm, callback) {
         return false;
     }
 
-    $.systemMessage.loading();
+    if (0 < $('.listingTableJs').length) {
+        $('.listingTableJs').prepend(fcom.getLoader());
+    }
+    
     data = fcom.frmData(frm);
 
     fcom.updateWithAjax(frm.action, data, function (resp) {
-        console.log(callback);
         callback();
         showActionsBtns();
     });
