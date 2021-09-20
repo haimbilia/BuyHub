@@ -4,7 +4,8 @@ if ($canEdit) {
     $data = [
         'canEdit' => $canEdit,
         'adminLangId' => $adminLangId,
-        'recordCount' => $recordCount,
+        'cardHeadTitle' => Labels::getLabel('LBL_COUNTRIES', $adminLangId),
+        'recordsTitle' => sprintf(Labels::getLabel('LBL_OVER_%S_COUNTRIES', $adminLangId), $recordCount),
         'newRecord' => true,
         'statusButtons' => true
     ];
