@@ -16,12 +16,12 @@ class CountriesController extends AdminBaseController
 
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_COUNTRIES', $this->adminLangId));
-        $this->_template->addJs('js/report.js');
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_COUNTRIES', $this->adminLangId));        
+        $this->getListingData();
         $this->_template->render();
     }
 
-    public function search()
+    private function getListingData()
     {
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();
@@ -37,10 +37,11 @@ class CountriesController extends AdminBaseController
             $sortBy = current($allowedKeysForSorting);
         }
 
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
-            $sortOrder = applicationConstants::SORT_DESC;
+            $sortOrder = applicationConstants::SORT_ASC;
         }
+
         $srchFrm = $this->getSearchForm($fields);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
@@ -87,7 +88,16 @@ class CountriesController extends AdminBaseController
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
         $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
-        $this->_template->render(false, false);
+    }
+
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'countries/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     public function editRecord()
@@ -107,7 +117,7 @@ class CountriesController extends AdminBaseController
             $data = Countries::getAttributesById($recordId);
 
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request);
             }
             $frm->fill($data);
         }
@@ -126,8 +136,7 @@ class CountriesController extends AdminBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $languages = Language::getAllNames();
@@ -138,8 +147,6 @@ class CountriesController extends AdminBaseController
             $post['country_language_id'] = $lang_id;
         }
 
-
-
         $countryId = $post['country_id'];
         unset($post['country_id']);
 
@@ -147,8 +154,7 @@ class CountriesController extends AdminBaseController
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $newTabLangId = 0;
@@ -181,7 +187,7 @@ class CountriesController extends AdminBaseController
         // $lang_id = FatUtility::int($lang_id);
 
         if ($recordId == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request);
         }
 
         $langFrm = $this->getLangForm($recordId, $lang_id);
@@ -189,8 +195,7 @@ class CountriesController extends AdminBaseController
             $updateLangDataobj = new TranslateLangData(Countries::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($recordId, $lang_id);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError());
             }
             $langData = current($translatedData);
         } else {
@@ -227,8 +232,7 @@ class CountriesController extends AdminBaseController
 
 
         if ($countryId == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id);
         }
 
         $frm = $this->getLangForm($countryId, $lang_id);
@@ -245,23 +249,21 @@ class CountriesController extends AdminBaseController
         $countryObj = new Countries($countryId);
 
         if (!$countryObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($countryObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($countryObj->getError());
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Countries::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($countryId)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError());
             }
         }
 
         $newTabLangId = 0;
         $languages = Language::getAllNames();
         foreach ($languages as $langId => $langName) {
-            if (!$row = Countries::getAttributesByLangId($langId, $countryId)) {
+            if (!Countries::getAttributesByLangId($langId, $countryId)) {
                 $newTabLangId = $langId;
                 break;
             }
@@ -279,28 +281,32 @@ class CountriesController extends AdminBaseController
 
         $frm = new Form('frmCountry');
         $frm->addHiddenField('', 'country_id', $countryId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Country_code', $this->adminLangId), 'country_code');
-        $frm->addTextBox(Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->adminLangId), 'country_code_alpha3');
+
+        // $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_NAME', $this->adminLangId), 'country_name');
+
+        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_CODE', $this->adminLangId), 'country_code');
+        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->adminLangId), 'country_code_alpha3');
 
         $zoneArr = Zone::getAllZones($this->adminLangId, true);
-        $frm->addSelectBox(Labels::getLabel('LBL_Zone', $this->adminLangId), 'country_zone_id', $zoneArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_ZONE', $this->adminLangId), 'country_zone_id', $zoneArr, '', [], Labels::getLabel('LBL_SELECT', $this->adminLangId));
+        $fld->requirements()->setRequired();
 
         $currencyArr = Currency::getCurrencyNameWithCode($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Currency', $this->adminLangId), 'country_currency_id', $currencyArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
-
+        $currencyId = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
+        $currencyData = Currency::getAttributesById($currencyId, array('currency_code'));
+        $defaultCurrentySelect = Labels::getLabel('LBL_DEFAULT', $this->adminLangId) . '(' . $currencyData['currency_code'] . ')';
+        $frm->addSelectBox(Labels::getLabel('LBL_CURRENCY', $this->adminLangId), 'country_currency_id', $currencyArr, '', [], $defaultCurrentySelect);
 
         $languageArr = Language::getAllNames();
-
         if (count($languageArr) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'country_language_id', $languageArr, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'country_language_id', $languageArr, '', array(), '');
         } else {
-            $lang_id = array_key_first($languageArr);
-            $frm->addHiddenField('', 'country_language_id', $lang_id);
+            $langId = array_key_first($languageArr);
+            $frm->addHiddenField('', 'country_language_id', $langId);
         }
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'country_active', $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->adminLangId), 'country_active', $activeInactiveArr, '', array(), '');
         // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
@@ -402,13 +408,13 @@ class CountriesController extends AdminBaseController
 
     private function getSearchForm($fields = [])
     {
-        $frm = new Form('frmReportSearch');
+        $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
 
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
         if (!empty($fields)) {
             $frm->addHiddenField('', 'sortBy', 'listSerial');
-            $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_DESC);
+            $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
             $frm->addHiddenField('', 'pageSize', FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
         }
