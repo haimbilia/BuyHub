@@ -1,43 +1,17 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="card-head">
-    <h3 class="card-head-label">
-        <span class="card-head-title"><?php echo Labels::getLabel('LBL_NEW_PRODUCTS', $adminLangId); ?></span>
-        <span class="text-muted"><?php echo sprintf(Labels::getLabel('LBL_OVER_%S_NEW_PRODUCTS', $adminLangId), $recordCount); ?></span>
-    </h3>
-    <div class="card-toolbar">
-        <ul class="actions">
-            <li>
-                <a href="javascript:void(0);" onclick="addNew()" class="btn btn-icon btn-light btn-add">
-                    <i class="icn">
-                    <svg class="svg">
-                        <use
-                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
-                        </use>
-                    </svg></i>
-                   <span> <?php echo Labels::getLabel('LBL_NEW', $adminLangId); ?></span>
-                </a>
-            </li>
-            <li>
-                <a href="javascript:void(0)" class="toolbar-btn-js disabled" title="<?php echo Labels::getLabel('LBL_PUBLISH', $adminLangId); ?>" onclick="toggleBulkStatues(1)">
-                    <svg class="svg" width="18" height="18">
-                        <use
-                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#show">
-                        </use>
-                    </svg>
-                </a>
-            </li>
-            <li>
-                <a href="javascript:void(0)" class="toolbar-btn-js disabled" title="<?php echo Labels::getLabel('LBL_UNPUBLISH', $adminLangId); ?>" onclick="toggleBulkStatues(0)">
-                    <svg class="svg" width="18" height="18">
-                        <use
-                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#hide">
-                        </use>
-                    </svg>
-                </a>
-            </li>
-        </ul>
-    </div>
-</div>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
+if ($canEdit) {
+    $data = [
+        'canEdit' => $canEdit,
+        'adminLangId' => $adminLangId,
+        'recordCount' => $recordCount,
+        'newRecord' => true,
+        'statusButtons' => true
+    ];
+
+    $this->includeTemplate('_partial/listing/listing-head.php', $data, false);
+} ?>
+
 <div class="card-body">
     <div class="table-responsive listingTableJs">
         <?php $tbl = new HtmlElement(
