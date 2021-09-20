@@ -5,7 +5,7 @@ if (isset($htmlContent) && $htmlContent != '') {
     $ul->appendElement('li', [], $htmlContent, true);
 }
 
-if (isset($newRecord) && true === $newRecord && $canEdit) {
+if (isset($newRecordBtn) && true === $newRecordBtn && $canEdit) {
     $li = $ul->appendElement('li');
     $li->appendElement(
         'a',
