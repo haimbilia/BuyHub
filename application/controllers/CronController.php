@@ -22,14 +22,12 @@ class CronController extends FatController
             }
 
             $arr = explode('/', $row['cron_command']);
-            $class = $arr[0];
-            
-            $obj = new $class();
+            $class = $arr[0];            
             array_shift($arr);
             $action = $arr[0];
             array_shift($arr);
 
-            $success = call_user_func_array(array($obj, $action), $arr);
+            $success = call_user_func_array([$class, $action], $arr);
 
             if ($success !== false) {
                 $cron->markFinished($logId, 'Response Got: ' . $success);
