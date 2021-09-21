@@ -1,19 +1,17 @@
 <?php
 class ZonesController extends AdminBaseController
 {
-    private $canEdit;
     public function __construct($action)
     {
         parent::__construct($action);
         $this->objPrivilege->canViewZones();
-        $this->canEdit = $this->objPrivilege->canEditZones(AdminAuthentication::getLoggedAdminId(), true);
-        $this->set("canEdit", $this->canEdit);
     }
 
     public function index()
     {
-        $search = $this->getSearchForm();
-        $this->set("search", $search);
+        $frmSearch = $this->getSearchForm();
+        $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
+        $this->set("frmSearch", $frmSearch);
         $this->_template->render();
     }
 

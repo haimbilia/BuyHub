@@ -17,6 +17,7 @@ class CountriesController extends AdminBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_COUNTRIES', $this->adminLangId));        
         $this->getListingData();
+        
         $this->_template->render();
     }
 
