@@ -815,4 +815,15 @@ class AdminBaseController extends FatController
     {
         $this->_template->render(false, false, '_partial/record-info-section.php');
     }
+
+    protected function addSortingElements(Form $frm, string $sortBy = 'listSerial', string $sortOrder = applicationConstants::SORT_ASC, int $pageSize = 0): void
+    {
+        $sortOrder = ($sortOrder != applicationConstants::SORT_ASC) ? applicationConstants::SORT_DESC : $sortOrder;
+        $pageSize = empty($pageSize) ? FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10) : $pageSize;
+
+        $frm->addHiddenField('', 'sortBy', $sortBy);
+        $frm->addHiddenField('', 'sortOrder', $sortOrder);
+        $frm->addHiddenField('', 'pageSize', $pageSize);
+        $frm->addHiddenField('', 'reportColumns', '');
+    }
 }

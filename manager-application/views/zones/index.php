@@ -1,65 +1,78 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class='page'>
-    <div class='container container-fluid'>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this, false); return(false);');
+$frmSearch->setFormTagAttribute('id', 'frmSearch');
+$frmSearch->setFormTagAttribute('class', 'form');
+
+$fld  = $frmSearch->getField('keyword');
+$fld->developerTags['noCaptionTag'] = true;
+$fld->developerTags['col'] = 8;
+$fld->addFieldtagAttribute('class', 'form-control');
+$fld->setFieldtagAttribute('placeholder', Labels::getLabel('LBL_SEARCH_ZONES', $adminLangId));
+
+/* No sorting functionality required if no record found. */
+if (1 > count($arrListing)) {
+    $allowedKeysForSorting = [];
+}
+
+$tableHeadAttrArr = [
+    'select_all' => [
+        'width' => '5%',
+    ],
+    'action' => [
+        'width' => '10%',
+    ],
+    'listSerial' => [
+        'width' => '14%',
+    ],
+    'zone_identifier' => [
+        'width' => '29%',
+    ],
+    'zone_name' => [
+        'width' => '29%',
+    ],
+    'zone_active' => [
+        'width' => '14%',
+    ],
+];
+
+$controller = str_replace('Controller', '', FatApp::getController());
+?>
+<main class="main mainJs">
+    <div class="container">
         <div class="row">
-            <div class="col-lg-12 col-md-12 space">
-                <div class="page__title">
-                    <div class="row">
-                        <div class="col--first col-lg-6">
-                            <span class="page__icon"><i class="ion-android-star"></i></span>
-                            <h5><?php echo Labels::getLabel('LBL_Manage_Zones', $adminLangId); ?></h5> 
-                            <?php $this->includeTemplate('_partial/header/header-breadcrumb.php'); ?>
-                        </div>
-                    </div>
-                </div>
-                <section class="section searchform_filter">
-                    <div class="sectionhead">
-                        <h4> <?php echo Labels::getLabel('LBL_Search...', $adminLangId); ?></h4>
-                    </div>
-                    <div class="sectionbody space togglewrap" style="display:none;">
-                        <?php
-                        $search->setFormTagAttribute('onsubmit', 'searchZone(this); return(false);');
-                        $search->setFormTagAttribute('id', 'frmSearch');
-                        $search->setFormTagAttribute('class', 'web_form');
-                        $search->developerTags['colClassPrefix'] = 'col-md-';
-                        $search->developerTags['fld_default_col'] = 6;
+            <div class="col-md-12">
+                <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
+                <div class="card">
+                    <?php $data = [
+                        'canEdit' => $canEdit,
+                        'adminLangId' => $adminLangId,
+                        'cardHeadTitle' => Labels::getLabel('LBL_ZONES', $adminLangId),
+                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_ZONES', $adminLangId), ['{COUNT}' => $recordCount]),
+                        'newRecordBtn' => true,
+                        'statusButtons' => true
+                    ];
+                    $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
+                    <div class="card-body">
+                        <div class="table-responsive listingTableJs">
+                            <?php
+                            require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
+                            require_once(CONF_THEME_PATH . 'zones/search.php');
 
-                        $search->getField('keyword')->addFieldtagAttribute('class', 'search-input');
-                        $search->getField('btn_clear')->addFieldtagAttribute('onclick', 'clearSearch();');
-
-                        echo  $search->getFormHtml(); ?> 
-                    </div>
-                </section>
-                <section class="section">
-                    <div class="sectionhead">
-                        <h4><?php echo Labels::getLabel('LBL_Zones_Listing', $adminLangId); ?></h4>
-                        <?php
-                        if ($canEdit) {
                             $data = [
-                                'adminLangId' => $adminLangId,
-                                'statusButtons' => true,
-                                'otherButtons' => [
-                                    [
-                                        'attr' => [
-                                            'href' => 'javascript:void(0)',
-                                            'onclick' => 'addZoneForm(0)',
-                                            'title' => Labels::getLabel('LBL_Add_Zone', $adminLangId)
-                                        ],
-                                        'label' => '<i class="fas fa-plus"></i>'
-                                    ],
-                                ]
+                                'tbl' => $tbl,
+                                'controller' => $controller /* Used in case of toggle bulk status. */
                             ];
-            
-                            $this->includeTemplate('_partial/action-buttons.php', $data, false);
-                        } ?>
-                    </div>
-                    <div class="sectionbody">
-                        <div class="tablewrap">
-                            <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $adminLangId); ?></div>
+                            $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
                         </div>
                     </div>
-                </section>
+                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-foot.php'); ?>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</main>
+
+<script>
+    var controllerName = '<?php echo $controller; ?>';
+    getHelpCenterContent(controllerName);
+</script>

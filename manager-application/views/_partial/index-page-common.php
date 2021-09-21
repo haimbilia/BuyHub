@@ -35,7 +35,7 @@ $listingLabel = isset($listingLabel) ? $listingLabel : "";
                             <?php
                             if ($canEdit && isset($data) && is_array($data) && 0 < count($data)) {
                                 if (true === $actionButtons) {
-                                    $this->includeTemplate('_partial/action-buttons.php', $data, false);
+                                    $this->includeTemplate('_partial/listing/action-buttons.php', $data, false);
                                 } else { ?>
                                     <ul class="actions actions--centered">
                                         <li class="droplink">

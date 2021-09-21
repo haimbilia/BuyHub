@@ -10,7 +10,7 @@ $arr_flds = array(
     'product_name' => Labels::getLabel('LBL_Product_Name', $adminLangId),
     'selprod_stock' => Labels::getLabel('LBL_Stock_left', $adminLangId),
     'selprod_threshold_stock_level' => Labels::getLabel('LBL_Threshold_Stock', $adminLangId),
-    'emailarchive_sent_on' => Labels::getLabel('LBL_Last_Email_Sent', $adminLangId),
+    'earch_sent_on' => Labels::getLabel('LBL_Last_Email_Sent', $adminLangId),
     'action' => Labels::getLabel('LBL_Action', $adminLangId),
 );
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive'));

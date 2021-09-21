@@ -1,31 +1,13 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-$langFrm->setCustomRendererClass('FormRendererBS');
 
-/* For Each Row On Above Elements */
-$langFrm->developerTags['colWidthClassesDefault'] = ['col-md-', null, null];
-$langFrm->developerTags['colWidthValuesDefault'] = [12, null, null];
-/* For Each Row On Above Elements */
-
-/* For Input Fields */
-$langFrm->developerTags['fldWidthClassesDefault'] = ['', '', '', ''];
-$langFrm->developerTags['fldWidthValuesDefault'] = ['', '', '', ''];
-/* For Input Fields */
-
-/* For Labels Fields */
-$langFrm->developerTags['labelWidthClassesDefault'] = ['label', 'label', 'label', 'label'];
-$langFrm->developerTags['labelWidthValuesDefault'] = ['', '', '', ''];
-/* For Labels Fields */
-
-/* Group Label and Input field. */
-$langFrm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
-/* Group Label and Input field. */
+HtmlHelper::formatFormFields($langFrm);
 
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit layout--' . $formLayout);
 $langFrm->setFormTagAttribute('onsubmit', 'saveLangData(this); return(false);');
 
 $langFld = $langFrm->getField('lang_id');
-$langFld->setfieldTagAttribute('onChange', "editLangData(" . $countryId . ", this.value);");
+$langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this.value);");
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
@@ -35,10 +17,10 @@ $langFld->setfieldTagAttribute('onChange', "editLangData(" . $countryId . ", thi
 <div class="modal-body form-edit">
     <div class="form-edit-head">
         <nav class="nav nav-tabs">
-            <a class="nav-link" href="javascript:void(0)" onclick="editRecord(<?php echo $countryId ?>);">
+            <a class="nav-link" href="javascript:void(0)" onclick="editRecord(<?php echo $recordId ?>);">
                 <?php echo Labels::getLabel('LBL_GENERAL', $adminLangId); ?>
             </a>
-            <a class="nav-link active" href="javascript:void(0);" <?php echo (0 < $countryId) ? "onclick='editLangData(" . $countryId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
+            <a class="nav-link active" href="javascript:void(0);" <?php echo (0 < $recordId) ? "onclick='editLangData(" . $recordId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
                 <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $adminLangId); ?>
             </a>
         </nav>
@@ -54,7 +36,7 @@ $langFld->setfieldTagAttribute('onChange', "editLangData(" . $countryId . ", thi
                     <input class="btn btn-brand" 
                         type="button" 
                         value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" 
-                        onClick="editLangData(<?php echo $countryId; ?>, <?php echo $lang_id; ?>, 1)">
+                        onClick="editLangData(<?php echo $recordId; ?>, <?php echo $lang_id; ?>, 1)">
                 </div>
             </div>
         <?php } ?>

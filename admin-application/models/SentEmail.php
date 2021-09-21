@@ -3,7 +3,7 @@
 class SentEmail extends MyAppModel
 {
     public const DB_TBL = 'tbl_email_archives';
-    public const DB_TBL_PREFIX = 'emailarchive_';
+    public const DB_TBL_PREFIX = 'earch_';
     
     public function __construct($adminId = 0)
     {
@@ -14,7 +14,7 @@ class SentEmail extends MyAppModel
     public function getSearchObject()
     {
         $srch = new SearchBase(static::DB_TBL, 'm');
-        $srch->addOrder('m.emailarchive_sent_on', 'DESC');
+        $srch->addOrder('m.earch_sent_on', 'DESC');
         return $srch;
     }
 }
