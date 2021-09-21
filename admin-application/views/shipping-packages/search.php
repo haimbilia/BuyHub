@@ -3,7 +3,7 @@ if (count($arrListing) == 0) {
     $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $adminLangId));
 } else {
     $arr_flds = array(
-        'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+        'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
         'shippack_name' => Labels::getLabel('LBL_Name', $adminLangId),
         'shippack_units' => Labels::getLabel('LBL_Dimensions', $adminLangId),
         'action' => Labels::getLabel('', $adminLangId)
@@ -23,7 +23,7 @@ if (count($arrListing) == 0) {
         foreach ($arr_flds as $key => $val) {
             $td = $tr->appendElement('td');
             switch ($key) {
-                case 'listserial':
+                case 'listSerial':
                     $td->appendElement('plaintext', array(), $sr_no);
                     break;
                 case 'shippack_units':

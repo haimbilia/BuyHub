@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
     'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'user_name' => Labels::getLabel('LBL_Owner', $adminLangId),
     'shop_identifier' => Labels::getLabel('LBL_Name', $adminLangId),
     'numOfProducts' => Labels::getLabel('LBL_Products', $adminLangId),
@@ -34,9 +34,9 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="shop_ids[]" value=' . $row['shop_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="shop_ids[]" value=' . $row['shop_id'] . '><i class="input-helper"></i></label>', true);
                 break;
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'shop_supplier_display_status':

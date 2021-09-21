@@ -6,7 +6,7 @@ if (count($arrListing) == 0) {
 
 $arr_flds = array(
     'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
 );
 /* if( count($arrListing) && is_array($arrListing) && is_array($arrListing[0]['options']) && count($arrListing[0]['options']) ){ */
 $arr_flds['name'] = Labels::getLabel('LBL_Name', $adminLangId);
@@ -32,7 +32,7 @@ foreach ($arr_flds as $key => $val) {
         $e = $th->appendElement('th', array('width' => '7%'), $val);
     } else if ('action' == $key) {
         $e = $th->appendElement('th', array('width' => '15%'), $val);
-    } else if ('listserial' == $key) {
+    } else if ('listSerial' == $key) {
         $e = $th->appendElement('th', array('width' => '5%'), $val);
     } else if ('name' == $key) {
         $e = $th->appendElement('th', array('width' => '30%'), $val);
@@ -47,9 +47,9 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[]" value=' . $row['selprod_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="selprod_ids[]" value=' . $row['selprod_id'] . '><i class="input-helper"></i></label>', true);
                 break;
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'name':

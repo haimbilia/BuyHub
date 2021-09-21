@@ -33,7 +33,7 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td');
         switch ($column) {
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="selprod_ids[' . $splPriceId . ']" value=' . $selProdId . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="selprod_ids[' . $splPriceId . ']" value=' . $selProdId . '><i class="input-helper"></i></label>', true);
                 break;
             case 'product_name':
                 // last Param of getProductDisplayTitle function used to get title in html form.

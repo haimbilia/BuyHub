@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $arr_flds = array(
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'coupon_identifier' => Labels::getLabel('LBL_Coupon_Title', $adminLangId),
     'coupon_code' => Labels::getLabel('LBL_Coupon_Code', $adminLangId),
     'coupon_type' => Labels::getLabel('LBL_Coupon_Type', $adminLangId),
@@ -31,7 +31,7 @@ foreach ($arrListing as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'coupon_identifier':

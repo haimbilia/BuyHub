@@ -3,7 +3,7 @@ if (count($arrListing) == 0) {
     $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $adminLangId));
 } else {
 $arr_flds = array(
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'product_identifier' => Labels::getLabel('LBL_Product', $adminLangId),
     'tags' => Labels::getLabel('LBL_Tags', $adminLangId)
 );
@@ -11,7 +11,7 @@ $arr_flds = array(
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--orders'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
 foreach ($arr_flds as $key => $val) {
-    if ($key == 'listserial') {
+    if ($key == 'listSerial') {
         $e = $th->appendElement('th', array('width' => '5%'), $val);
     } elseif ($key == 'product_identifier') {
         $e = $th->appendElement('th', array('width' => '30%'), $val);
@@ -28,7 +28,7 @@ foreach ($arrListing as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
             case 'product_identifier':

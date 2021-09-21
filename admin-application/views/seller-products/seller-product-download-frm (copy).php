@@ -33,7 +33,7 @@
                         <div class="col-md-12 filesList">
                             <?php
                             $arr_flds = array(
-                                'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+                                'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
                                 'afile_name' => Labels::getLabel('LBL_File', $adminLangId),
                                 'afile_lang_id' => Labels::getLabel('LBL_Language', $adminLangId),
                                 'action' => Labels::getLabel('LBL_Action', $adminLangId),
@@ -53,7 +53,7 @@
                                 foreach ($arr_flds as $key => $val) {
                                     $td = $tr->appendElement('td');
                                     switch ($key) {
-                                        case 'listserial':
+                                        case 'listSerial':
                                             $td->appendElement('plaintext', array(), $sr_no, true);
                                             break;
                                         case 'afile_lang_id':

@@ -14,7 +14,7 @@
                             <div class="tabs_panel">
                                 <?php
                                 $arr_flds = array(
-                                    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+                                    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
                                     'voldiscount_min_qty' => Labels::getLabel('LBL_Minimum_Quantity', $adminLangId),
                                     'voldiscount_percentage' => Labels::getLabel('LBL_Discount', $adminLangId) . ' (%)',
                                     'action'    =>    Labels::getLabel('LBL_Action', $adminLangId),
@@ -33,7 +33,7 @@
                                     foreach ($arr_flds as $key => $val) {
                                         $td = $tr->appendElement('td');
                                         switch ($key) {
-                                            case 'listserial':
+                                            case 'listSerial':
                                                 $td->appendElement('plaintext', array(), '' . $sr_no, true);
                                                 break;
                                             case 'action':

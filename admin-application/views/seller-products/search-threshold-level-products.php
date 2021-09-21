@@ -6,7 +6,7 @@ if (count($arrListing) == 0) {
 }else{
 
 $arr_flds = array(
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'product_name' => Labels::getLabel('LBL_Product_Name', $adminLangId),
     'selprod_stock' => Labels::getLabel('LBL_Stock_left', $adminLangId),
     'selprod_threshold_stock_level' => Labels::getLabel('LBL_Threshold_Stock', $adminLangId),
@@ -31,7 +31,7 @@ foreach ($arrListing as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'action':

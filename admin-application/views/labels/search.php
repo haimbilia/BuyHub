@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'label_key' => Labels::getLabel('LBL_Key', $adminLangId),
     'label_caption' => Labels::getLabel('LBL_Caption', $adminLangId),
     'label_type' => Labels::getLabel('LBL_Type', $adminLangId),
@@ -27,7 +27,7 @@ foreach ($arrListing as $sn => $row) {
             $td->setAttribute('class', 'word-break');
         }
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
             case 'label_caption':

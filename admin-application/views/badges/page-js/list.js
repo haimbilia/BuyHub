@@ -117,7 +117,7 @@ $(document).on('change', '.icon-language-js', function () {
     }
 
     deleteSelected = function () {
-        if (1 > $('.selectItem--js:checked').length) {
+        if (1 > $('.selectItemJs:checked').length) {
             fcom.displayErrorMessage(langLbl.atleastOneRecord);
             return;
         }

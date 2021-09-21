@@ -16,7 +16,7 @@
                         <div class="tabs_panel">
                             <?php
                             $arr_flds = array(
-                                'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+                                'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
                                 'taxcat_name' => Labels::getLabel('LBL_Tax_Category', $adminLangId),
                                 'action'    =>    Labels::getLabel('LBL_Action', $adminLangId),
                             );
@@ -36,7 +36,7 @@
                                         foreach ($arr_flds as $key => $val) {
                                             $td = $tr->appendElement('td');
                                             switch ($key) {
-                                                case 'listserial':
+                                                case 'listSerial':
                                                     $td->appendElement('plaintext', array(), '' . $sr_no, true);
                                                     break;
                                                 case 'action':

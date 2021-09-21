@@ -43,7 +43,7 @@ foreach ($arrListing as $sn => $row) {
         }
 
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
                 $span->appendElement('plaintext', array(), $sr_no);
                 break;
 

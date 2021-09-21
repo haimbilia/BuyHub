@@ -2,7 +2,7 @@
 <?php
 $arr_flds = array(
     'dragdrop' => '',
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'qbank_name' => Labels::getLabel('LBL_Question_Bank', $adminLangId),
     'question_title' => Labels::getLabel('LBL_Question', $adminLangId),
     'action' => Labels::getLabel('LBL_Action', $adminLangId),
@@ -30,7 +30,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('i', array('class' => 'ion-arrow-move icon'));
                 $td->setAttribute("class", 'dragHandle');
                 break;
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'question_identifier':

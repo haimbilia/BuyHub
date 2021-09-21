@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
     'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'user' => Labels::getLabel('LBL_User', $adminLangId),
     'afile_physical_path' => Labels::getLabel('LBL_FILE_LOCATION', $adminLangId),
     // 'afile_name'    => Labels::getLabel( 'LBL_File_Name', $adminLangId ),
@@ -30,9 +30,9 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="uploadDirs[]" value=' . base64_encode(AttachedFile::FILETYPE_BULK_IMAGES_PATH . $row['afile_physical_path']) . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="uploadDirs[]" value=' . base64_encode(AttachedFile::FILETYPE_BULK_IMAGES_PATH . $row['afile_physical_path']) . '><i class="input-helper"></i></label>', true);
                 break;
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'user':

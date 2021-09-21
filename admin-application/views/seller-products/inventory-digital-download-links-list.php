@@ -1,6 +1,6 @@
 <?php
 $arr_flds = array(
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     /* 'pdl_download_link' => Labels::getLabel('LBL_Download_Link', $adminLangId), */
     'pdl_preview_link' => Labels::getLabel('LBL_Preview_Link', $adminLangId),
     // 'pddr_options_code' => Labels::getLabel('LBL_Link_Option', $adminLangId),
@@ -21,7 +21,7 @@ foreach ($records as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
             case 'pdl_lang_id':

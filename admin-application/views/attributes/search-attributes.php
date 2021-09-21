@@ -4,7 +4,7 @@ $arr_flds = array();
 if ($canEdit) {
     $arr_flds['dragdrop'] = '';
 }
-$arr_flds['listserial'] =  Labels::getLabel('LBL_#', $adminLangId);
+$arr_flds['listSerial'] =  Labels::getLabel('LBL_#', $adminLangId);
 $arr_flds['attr_identifier'] =  Labels::getLabel('LBL_Attribute', $adminLangId);
 if ($canEdit) {
     $arr_flds['action'] = Labels::getLabel('LBL_Action', $adminLangId);
@@ -28,7 +28,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('i', array('class' => 'ion-arrow-move icon'));
                 $td->setAttribute("class", 'dragHandle');
                 break;
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'attr_identifier':

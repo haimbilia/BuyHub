@@ -22,7 +22,7 @@
         <?php /* if( isset($arrListing) && count($arrListing) ){ */
         $arr_flds = array(
             'dragdrop' => '',
-            'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
             'nlink_identifier' => Labels::getLabel('LBL_caption', $adminLangId),
             'action' => '',
         );
@@ -47,7 +47,7 @@
                         $td->appendElement('i', array('class' => 'ion-arrow-move icon'));
                         $td->setAttribute("class", 'dragHandle');
                         break;
-                    case 'listserial':
+                    case 'listSerial':
                         $td->appendElement('plaintext', array(), $sr_no);
                         break;
                     case 'nlink_identifier':

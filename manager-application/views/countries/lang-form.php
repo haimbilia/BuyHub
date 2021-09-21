@@ -8,23 +8,10 @@ $langFrm->setFormTagAttribute('onsubmit', 'saveLangData(this); return(false);');
 
 $langFld = $langFrm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this.value);");
-?>
-<div class="modal-header">
-    <h5 class="modal-title">
-        <?php echo Labels::getLabel('LBL_COUNTRY_SETUP', $adminLangId); ?>
-    </h5>
-</div>
-<div class="modal-body form-edit">
-    <div class="form-edit-head">
-        <nav class="nav nav-tabs">
-            <a class="nav-link" href="javascript:void(0)" onclick="editRecord(<?php echo $recordId ?>);">
-                <?php echo Labels::getLabel('LBL_GENERAL', $adminLangId); ?>
-            </a>
-            <a class="nav-link active" href="javascript:void(0);" <?php echo (0 < $recordId) ? "onclick='editLangData(" . $recordId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $adminLangId); ?>
-            </a>
-        </nav>
-    </div>
+
+$activeLangtab = true;
+
+require_once(CONF_THEME_PATH . 'countries/form-head.php'); ?>
 
     <div class="form-edit-body loaderContainerJs">
         <?php

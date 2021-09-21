@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arrFlds = array(
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'product_name' => Labels::getLabel('LBL_Product_Name', $adminLangId),
     'afile_physical_path'    =>    Labels::getLabel('LBL_Path', $adminLangId),
     'afile_downloaded' => Labels::getLabel('LBL_Is_Downloaded', $adminLangId),
@@ -26,7 +26,7 @@ foreach ($arrListing as $sn => $row) {
     foreach ($arrFlds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'afile_downloaded':

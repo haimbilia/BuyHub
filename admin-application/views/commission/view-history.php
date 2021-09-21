@@ -6,7 +6,7 @@
             <div class="tabs_panel">
                 <?php
                 $arr_flds = array(
-                    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+                    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
                     'csh_commsetting_prodcat_id' => Labels::getLabel('LBL_Category', $adminLangId),
                     'csh_commsetting_user_id' => Labels::getLabel('LBL_Seller', $adminLangId),
                     'csh_commsetting_product_id' => Labels::getLabel('LBL_Product', $adminLangId),
@@ -27,7 +27,7 @@
                     foreach ($arr_flds as $key => $val) {
                         $td = $tr->appendElement('td');
                         switch ($key) {
-                            case 'listserial':
+                            case 'listSerial':
                                 $td->appendElement('plaintext', array(), $sr_no);
                                 break;
                             case 'csh_commsetting_prodcat_id':
