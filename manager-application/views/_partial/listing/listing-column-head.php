@@ -29,7 +29,7 @@ foreach ($fields as $key => $val) {
 
     switch ($key) {
         case 'select_all':
-            $span->appendElement('plaintext', [], '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAllJs"><i class="input-helper"></i></label>', true);
+            $span->appendElement('plaintext', [], '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll(this)" class="selectAllJs"><i class="input-helper"></i></label>', true);
             break;
         default:
             $span->appendElement('plaintext', [], $val . $html, true);

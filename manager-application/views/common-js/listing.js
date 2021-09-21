@@ -125,7 +125,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
     editRecord = function (recordId) {
         $.ykmodal(fcom.getLoader());
         data = 'recordId=' + recordId;
-        fcom.ajax(fcom.makeUrl(controllerName, 'editRecord'), data, function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
             $.ykmodal(t);
             fcom.removeLoader();
         });
@@ -171,8 +171,14 @@ $(document).on("click", ".headerColumnJs", function (e) {
         $.ykmodal(fcom.getLoader());
 
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (res) {
             fcom.removeLoader();
+            var t = $.parseJSON(res);
+            if (t.status == 0) {
+                $.mbsmessage(t.msg, true, "alert--danger alert");
+                return false;
+            }
+
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
@@ -185,8 +191,14 @@ $(document).on("click", ".headerColumnJs", function (e) {
         $.ykmodal(fcom.getLoader());
 
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langSetup'), data, function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'langSetup'), data, function (res) {
             fcom.removeLoader();
+            var t = $.parseJSON(res);
+            if (t.status == 0) {
+                $.mbsmessage(t.msg, true, "alert--danger alert");
+                return false;
+            }
+            
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
@@ -194,7 +206,8 @@ $(document).on("click", ".headerColumnJs", function (e) {
         });
     };
 
-    selectAll = function (obj) {
+    selectAll = function (element) {
+        var obj = $(element);
         var parentForm = obj.closest('form').attr('id');
         $("#" + parentForm + " .selectItemJs").each(function () {
             if (obj.prop("checked") == false) {
@@ -239,7 +252,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
         if ($(element).is(":hidden")) {
             element = '';
         }
-        element = element + 'form.actionButtons-js';
+        element = element + 'form.actionButtonsJs';
         if (1 > $(element).length) {
             $.mbsmessage(langLbl.actionButtonsClass, true, 'alert--danger');
             return false;

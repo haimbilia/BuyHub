@@ -1,13 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
-$defaultFormWithActionBtns = isset($defaultFormWithActionBtns) ? $defaultFormWithActionBtns : true;
 $formFields = isset($formFields) ? $formFields : [];
 
-if (false === $defaultFormWithActionBtns) {
+if (isset($defaultFormWithActionBtns) && false === $defaultFormWithActionBtns) {
     echo $tbl->getHtml();
 } else if (empty($formFields) && isset($controller)) {
     $attr = [
-        'class' => 'actionButtons-js',
+        'class' => 'actionButtonsJs',
         'onsubmit' => 'formAction(this, reloadList); return(false);',
         'action' => UrlHelper::generateUrl($controller, 'toggleBulkStatuses'),
     ];
@@ -18,7 +17,9 @@ if (false === $defaultFormWithActionBtns) {
     echo $frm->getFieldHtml('status');
     echo $tbl->getHtml(); 
     echo '</form>';
-} else if (!empty($formFields)) {
+} 
+/* Not in use right now. */
+/* else if (!empty($formFields)) {
     $formName = isset($formFields['name']) ? $formFields['name'] : 'listingForm';
     $formAttr = isset($formFields['attr']) ? $formFields['attr'] : [];
     $hiddenFields = isset($hiddenFields['hiddenFields']) ? $hiddenFields['hiddenFields'] : [];
@@ -32,4 +33,4 @@ if (false === $defaultFormWithActionBtns) {
     }
     echo $tbl->getHtml();
     echo '</form>';
-}
+} */

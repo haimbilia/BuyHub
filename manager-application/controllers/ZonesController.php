@@ -9,32 +9,57 @@ class ZonesController extends AdminBaseController
 
     public function index()
     {
-        $frmSearch = $this->getSearchForm();
-        $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ZONES', $this->adminLangId));
+        $this->getListingData();
+
         $this->_template->render();
     }
 
-    private function getSearchForm()
+    private function getSearchForm($fields = [])
     {
-        $frm = new Form('frmSearch');
+        $frm = new Form('frmRecordSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld_submit=$frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
-        $fld_submit->attachField($fld_cancel);
+        
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         return $frm;
     }
 
-    public function search()
+    private function getListingData()
     {
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $searchForm = $this->getSearchForm();
         $data = FatApp::getPostedData();
+
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        $searchForm = $this->getSearchForm($fields);
+
         $page = (empty($data['page']) || $data['page'] <= 0)?1:$data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         $srch = Zone::getSearchObject(false, $this->adminLangId);
         $srch->addFld('zone.* , z_l.zone_name');
-        $srch->addOrder('zone_name', 'ASC');
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('zone.zone_identifier', 'like', '%'.$post['keyword'].'%');
             $condition->attachCondition('z_l.zone_name', 'like', '%'.$post['keyword'].'%', 'OR');
@@ -44,6 +69,9 @@ class ZonesController extends AdminBaseController
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
+
+        $srch->addOrder($sortBy, $sortOrder);
+
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
         
@@ -54,23 +82,39 @@ class ZonesController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
     }
 
-    public function form($zoneId)
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'zones/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    public function form()
     {
         $this->objPrivilege->canEditZones();
-        $zoneId =  FatUtility::int($zoneId);
-        $frm = $this->getForm($zoneId);
-        if (0 < $zoneId) {
-            $data = Zone::getAttributesById($zoneId);
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $frm = $this->getForm($recordId);
+        if (0 < $recordId) {
+            $data = Zone::getAttributesById($recordId);
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
         $this->set('languages', Language::getAllNames());
-        $this->set('zone_id', $zoneId);
+        $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
     }
@@ -81,67 +125,65 @@ class ZonesController extends AdminBaseController
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $zoneId = $post['zone_id'];
+        $recordId = $post['zone_id'];
         unset($post['zone_id']);
 
-        $record = new Zone($zoneId);
+        $record = new Zone($recordId);
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $newTabLangId = 0;
-        if ($zoneId > 0) {
+        if ($recordId > 0) {
             $languages = Language::getAllNames();
             foreach ($languages as $langId => $langName) {
-                if (!$row = Zone::getAttributesByLangId($langId, $zoneId)) {
+                if (!$row = Zone::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
         } else {
-            $zoneId = $record->getMainTableRecordId();
+            $recordId = $record->getMainTableRecordId();
             $newTabLangId=FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
         $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
-        $this->set('zoneId', $zoneId);
+        $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($zoneId = 0, $langId = 0 ,$autoFillLangData = 0)
+    public function langForm($autoFillLangData = 0)
     {
-        $zoneId = FatUtility::int($zoneId);
-        $langId = FatUtility::int($langId);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
 
-        if ($zoneId == 0 || $langId == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+        if (1 > $recordId || 1 > $langId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $langFrm = $this->getLangForm($zoneId, $langId);        
+        $langFrm = $this->getLangForm($recordId, $langId);        
         if (0 < $autoFillLangData) {
-            $updateLangDataobj = new TranslateLangData(Countries::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($zoneId, $lang_id);
+            $updateLangDataobj = new TranslateLangData(Zone::DB_TBL_LANG);
+            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
-            $langData = Zone::getAttributesByLangId($langId, $zoneId);
-        }     
+            $langData = Zone::getAttributesByLangId($langId, $recordId);
+        }  
+
         if ($langData) {
             $langFrm->fill($langData);
         }
 
         $this->set('languages', Language::getAllNames());
-        $this->set('zoneId', $zoneId);
+        $this->set('recordId', $recordId);
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
@@ -153,7 +195,7 @@ class ZonesController extends AdminBaseController
         $this->objPrivilege->canEditZones();
         $post = FatApp::getPostedData();
 
-        $zoneId = $post['zone_id'];
+        $recordId = $post['zone_id'];
         $languages = Language::getAllNames();
 		if(count($languages) > 1){
 			 $lang_id = $post['lang_id'];
@@ -161,61 +203,67 @@ class ZonesController extends AdminBaseController
 			$lang_id = array_key_first($languages); 
 		}
        
-        if ($zoneId == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+        if ($recordId == 0 || $lang_id == 0) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $frm = $this->getLangForm($zoneId, $lang_id);
+        $frm = $this->getLangForm($recordId, $lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         unset($post['zone_id']);
         unset($post['lang_id']);
 
         $data = array(
             'zonelang_lang_id' => $lang_id,
-            'zonelang_zone_id' => $zoneId,
+            'zonelang_zone_id' => $recordId,
             'zone_name'=>$post['zone_name']
         );
 
-        $zoneObj = new Zone($zoneId);
+        $zoneObj = new Zone($recordId);
 
         if (!$zoneObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($zoneObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($zoneObj->getError(), true);
+        }
+
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataobj = new TranslateLangData(Zone::DB_TBL_LANG);
+            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            }
         }
 
         $newTabLangId = 0;
         $languages = Language::getAllNames();
         foreach ($languages as $langId =>$langName) {
-            if (!$row = Zone::getAttributesByLangId($langId, $zoneId)) {
+            if (!$row = Zone::getAttributesByLangId($langId, $recordId)) {
                 $newTabLangId = $langId;
                 break;
             }
         }
 
         $this->set('msg', $this->str_setup_successful);
-        $this->set('zoneId', $zoneId);
+        $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getForm($zoneId = 0)
+    private function getForm($recordId = 0)
     {
-        $zoneId = FatUtility::int($zoneId);
+        $recordId = FatUtility::int($recordId);
         $frm = new Form('frmZone');
-        $frm->addHiddenField('', 'zone_id', $zoneId);
+        $frm->addHiddenField('', 'zone_id', $recordId);
         $frm->addRequiredField(Labels::getLabel('LBL_Zone_Identifier', $this->adminLangId), 'zone_identifier');
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'zone_active', $activeInactiveArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 
-    private function getLangForm($zoneId = 0, $lang_id = 0)
+    private function getLangForm($recordId = 0, $lang_id = 0)
     {
         $frm = new Form('frmZoneLang');
-        $frm->addHiddenField('', 'zone_id', $zoneId);
+        $frm->addHiddenField('', 'zone_id', $recordId);
 
         $languages = Language::getAllNames();
 		if(count($languages) > 1){
@@ -233,29 +281,27 @@ class ZonesController extends AdminBaseController
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 
-    public function changeStatus()
+    public function updateStatus()
     {
         $this->objPrivilege->canEditZones();
-        $zoneId = FatApp::getPostedData('zoneId', FatUtility::VAR_INT, 0);
-        if (0 >= $zoneId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (0 >= $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $data = Zone::getAttributesById($zoneId, array('zone_active'));
+        $data = Zone::getAttributesById($recordId, array('zone_active'));
 
         if ($data==false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $status = ($data['zone_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
 
-        $this->updateZoneStatus($zoneId, $status);
+        $this->changeStatus($recordId, $status);
         FatUtility::dieJsonSuccess($this->str_update_record);
     }
 
@@ -263,36 +309,68 @@ class ZonesController extends AdminBaseController
     {
         $this->objPrivilege->canEditZones();
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $zoneIdsArr = FatUtility::int(FatApp::getPostedData('zone_ids'));
-        if (empty($zoneIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('zone_ids'));
+        if (empty($recordIdsArr) || -1 == $status) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
-        foreach ($zoneIdsArr as $zoneId) {
-            if (1 > $zoneId) {
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
                 continue;
             }
-            $this->updateZoneStatus($zoneId, $status);
+            $this->changeStatus($recordId, $status);
         }
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function updateZoneStatus($zoneId, $status)
+    private function changeStatus($recordId, $status)
     {
         $status = FatUtility::int($status);
-        $zoneId = FatUtility::int($zoneId);
-        if (1 > $zoneId || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
 
-        $zoneObj = new Zone($zoneId);
+        $zoneObj = new Zone($recordId);
         if (!$zoneObj->changeStatus($status)) {
-            Message::addErrorMessage($zoneObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($zoneObj->getError(), true);
         }
+    }
+
+    private function getFormColumns(): array
+    {
+        $zoneTblHeadingCols = CacheHelper::get('zoneTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($zoneTblHeadingCols) {
+            return json_decode($zoneTblHeadingCols);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
+            'zone_identifier' => Labels::getLabel('LBL_ZONE_IDENTIFIER', $this->adminLangId),
+            'zone_name' => Labels::getLabel('LBL_ZONE_NAME', $this->adminLangId),
+            'zone_active' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
+            'action' =>  Labels::getLabel('LBL_ACTION', $this->adminLangId),
+        ];
+        CacheHelper::create('zoneTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return [
+            'select_all',
+            'listSerial',
+            'zone_identifier',
+            'zone_name',
+            'zone_active',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['zone_active'], Common::excludeKeysForSort());
     }
 }

@@ -1,24 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this, false); return(false);');
-$frmSearch->setFormTagAttribute('id', 'frmSearch');
-$frmSearch->setFormTagAttribute('class', 'form');
-
-$sortByFld = $frmSearch->getField('sortBy');
-$sortByFld->setFieldTagAttribute('id', 'sortBy');
-
-$sortOrderFld = $frmSearch->getField('sortOrder');
-$sortOrderFld->setFieldTagAttribute('id', 'sortOrder');
-
-$keyword  = $frmSearch->getField('keyword');
-$keyword->addFieldtagAttribute('class', 'form-control');
-$keyword->setFieldtagAttribute('placeholder', Labels::getLabel('LBL_SEARCH_COUNTRIES', $adminLangId));
-
-$submit  = $frmSearch->getField('btn_submit');
-$submit->addFieldtagAttribute('class', 'btn btn-brand btn-block');
-
-$btn_clear = $frmSearch->getField('btn_clear');
-$btn_clear->addFieldtagAttribute('class', 'btn btn-link');
-$btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
+$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_COUNTRIES', $adminLangId);
 
 /* No sorting functionality required if no record found. */
 if (1 > count($arrListing)) {
@@ -55,30 +36,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <?php
-                echo $frmSearch->getFormTag(); ?>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <?php echo $frmSearch->getFieldHTML('keyword'); ?>
-                            </div>
-                            <div class="col-md-2">
-                                <?php echo $frmSearch->getFieldHTML('btn_submit'); ?>
-                            </div>
-                            <div class="col-md-2">
-                                <?php echo $frmSearch->getFieldHTML('btn_clear'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <?php
-                echo $frmSearch->getFieldHTML('sortBy');
-                echo $frmSearch->getFieldHTML('sortOrder');
-                echo $frmSearch->getFieldHTML('reportColumns');
-                echo $frmSearch->getFieldHTML('pageSize');
-                echo $frmSearch->getExternalJS(); ?>
-                </form>
+                <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
@@ -93,13 +51,12 @@ $controller = str_replace('Controller', '', FatApp::getController());
                     <div class="card-body">
                         <div class="table-responsive listingTableJs">
                             <?php
-
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
                             require_once(CONF_THEME_PATH . 'countries/search.php');
-                            
+
                             $data = [
                                 'tbl' => $tbl,
-                                'controller' => $controller
+                                'controller' => $controller /* Used in case of toggle bulk status. */
                             ];
                             $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
                         </div>

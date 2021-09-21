@@ -67,6 +67,7 @@ if (count($arrListing) == 0) {
         Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId)
     );
 }
+
 if ($printData) {
     echo $tbody->getHtml();
 }

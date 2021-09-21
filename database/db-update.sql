@@ -1210,3 +1210,4 @@ UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_template
 
 -- ---- Email Functionality update ---- --
 
+ALTER TABLE `tbl_zones_lang` CHANGE `zone_name` `zone_name` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
