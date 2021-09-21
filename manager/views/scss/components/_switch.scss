@@ -181,12 +181,12 @@
             &:empty {
                 ~ {
                     span {
-                        line-height: 24px;
+                        line-height: 20px;
                         margin: 2px 0;
-                        height: 24px;
+                        height: 20px;
                         width: 40px;
                         border-radius: 12px;
-                        margin-inline-end: 10px;
+                        margin-#{$end-direction}: 10px;
                         &:before {
                             width: 38px;
                             border-radius: 12px;
@@ -194,13 +194,13 @@
                         &:after {
                             width: 38px;
                             border-radius: 12px;
-                            height: 20px;
-                            width: 20px;
-                            line-height: 20px;
+                            height: 16px;
+                            width: 16px;
+                            line-height: 16px;
                             top: 2px;
                             bottom: 2px;
-                            margin-left: 2px;
-                            font-size: 0.8em;
+                            margin-#{$start-direction}: 2px;
+                            font-size: 0.7rem;
                             text-align: center;
                             vertical-align: middle;
                         }
@@ -211,7 +211,7 @@
                 ~ {
                     span {
                         &:after {
-                            margin-left: 16px;
+                            margin-#{$start-direction}: 20px;
                         }
                     }
                 }
@@ -219,7 +219,7 @@
         }
     }
     &#{&}-brand {
-        &:not(.switch--outline) {
+        &:not(.switch-outline) {
             input {
                 &:empty {
                     ~ {
@@ -251,7 +251,7 @@
         }
     }
     &#{&}-outline {
-        &.switch--brand {
+        &.switch-brand {
             input {
                 &:empty {
                     ~ {
@@ -283,7 +283,7 @@
         }
     }
     &#{&}-light {
-        &:not(.switch--outline) {
+        &:not(.switch-outline) {
             input {
                 &:empty {
                     ~ {
@@ -315,7 +315,7 @@
         }
     }
     &#{&}-outline {
-        &.switch--light {
+        &.switch-light {
             input {
                 &:empty {
                     ~ {
@@ -347,7 +347,7 @@
         }
     }
     &#{&}-dark {
-        &:not(.switch--outline) {
+        &:not(.switch-outline) {
             input {
                 &:empty {
                     ~ {
@@ -379,7 +379,7 @@
         }
     }
     &#{&}-outline {
-        &.switch--dark {
+        &.switch-dark {
             input {
                 &:empty {
                     ~ {
@@ -411,7 +411,7 @@
         }
     }
     &#{&}-primary {
-        &:not(.switch--outline) {
+        &:not(.switch-outline) {
             input {
                 &:empty {
                     ~ {
@@ -443,7 +443,7 @@
         }
     }
     &#{&}-outline {
-        &.switch--primary {
+        &.switch-primary {
             input {
                 &:empty {
                     ~ {
@@ -475,7 +475,7 @@
         }
     }
     &#{&}-success {
-        &:not(.switch--outline) {
+        &:not(.switch-outline) {
             input {
                 &:empty {
                     ~ {
@@ -507,7 +507,7 @@
         }
     }
     &#{&}-outline {
-        &.switch--success {
+        &.switch-success {
             input {
                 &:empty {
                     ~ {
@@ -539,7 +539,7 @@
         }
     }
     &#{&}-info {
-        &:not(.switch--outline) {
+        &:not(.switch-outline) {
             input {
                 &:empty {
                     ~ {
@@ -571,7 +571,7 @@
         }
     }
     &#{&}-outline {
-        &.switch--info {
+        &.switch-info {
             input {
                 &:empty {
                     ~ {
@@ -603,7 +603,7 @@
         }
     }
     &#{&}-warning {
-        &:not(.switch--outline) {
+        &:not(.switch-outline) {
             input {
                 &:empty {
                     ~ {
@@ -635,7 +635,7 @@
         }
     }
     &#{&}-outline {
-        &.switch--warning {
+        &.switch-warning {
             input {
                 &:empty {
                     ~ {
@@ -667,7 +667,7 @@
         }
     }
     &#{&}-danger {
-        &:not(.switch--outline) {
+        &:not(.switch-outline) {
             input {
                 &:empty {
                     ~ {
@@ -699,7 +699,7 @@
         }
     }
     &#{&}-outline {
-        &.switch--danger {
+        &.switch-danger {
             input {
                 &:empty {
                     ~ {
@@ -735,12 +735,12 @@
 .form-group.row {
     .switch {
         margin-top: 0.15rem;
-        &.switch--lg {
+        &.switch-lg {
             margin-top: 0rem;
             position: relative;
             top: -0.3rem;
         }
-        &.switch--sm {
+        &.switch-sm {
             margin-top: 0.3rem;
         }
     }
