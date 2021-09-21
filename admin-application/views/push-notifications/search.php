@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $arr_flds = [
-    'listserial' => [
+    'listSerial' => [
         'title' => Labels::getLabel('LBL_#', $adminLangId),
         'attributes' => [
             'width' => '7%'
@@ -64,7 +64,7 @@ foreach ($arrListing as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             /* case 'pnotification_type':

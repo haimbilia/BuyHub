@@ -188,7 +188,7 @@ $(document).on('blur', ".js--splPriceCol:not(.date_js)", function () {
         });
     }
     deleteSpecialPriceRows = function () {
-        if (typeof $(".selectItem--js:checked").val() === 'undefined') {
+        if (typeof $(".selectItemJs:checked").val() === 'undefined') {
             $.systemMessage(langLbl.atleastOneRecord, 'alert--danger');
             return false;
         }

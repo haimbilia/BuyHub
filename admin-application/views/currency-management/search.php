@@ -3,7 +3,7 @@
 $arr_flds = array(
         'dragdrop' => '',
         'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
-        'listserial' =>  Labels::getLabel('LBL_#', $adminLangId) ,
+        'listSerial' =>  Labels::getLabel('LBL_#', $adminLangId) ,
         'currency_code' =>  Labels::getLabel('LBL_Currency', $adminLangId) ,
         'currency_symbol_left' =>  Labels::getLabel('LBL_Symbol_Left', $adminLangId),
         'currency_symbol_right' =>  Labels::getLabel('LBL_Symbol_Right', $adminLangId),
@@ -40,9 +40,9 @@ foreach ($arrListing as $sn => $row) {
                 }
                 break;
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="currency_ids[]" value=' . $row['currency_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="currency_ids[]" value=' . $row['currency_id'] . '><i class="input-helper"></i></label>', true);
                 break;
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'currency_symbol_left':

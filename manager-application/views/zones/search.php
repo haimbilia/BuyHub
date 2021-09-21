@@ -45,18 +45,6 @@ foreach ($arrListing as $sn => $row) {
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
-                /* $ul = $td->appendElement("ul", array("class" => "actions actions--centered"));
-                if ($canEdit) {
-                    $li = $ul->appendElement("li", array('class' => 'droplink'));
-
-                    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $adminLangId)), '<i class="ion-android-more-horizontal icon"></i>', true);
-
-                    $innerDiv = $li->appendElement('div', array('class' => 'dropwrap'));
-                    $innerUl = $innerDiv->appendElement('ul', array('class' => 'linksvertical'));
-
-                    $innerLiEdit = $innerUl->appendElement('li');
-                    $innerLiEdit->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $adminLangId), "onclick" => "editZoneFormNew(" . $row['zone_id'] . ")"), Labels::getLabel('LBL_Edit', $adminLangId), true);
-                } */
                 break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);
@@ -64,6 +52,7 @@ foreach ($arrListing as $sn => $row) {
         }
     }
 }
+
 if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($fields)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
 }

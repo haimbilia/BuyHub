@@ -1,33 +1,13 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-/* $frm->setFormTagAttribute('class', 'web_form form_horizontal');
-$frm->setFormTagAttribute('onsubmit', 'setupZone(this); return(false);');
-$frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 12; */
 
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form form-edit');
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 
 $disabled = (0 == $recordId) ? 'disabled' : '';
-?>
+$activeGentab = true;
 
-<div class="modal-header">
-    <h5 class="modal-title">
-        <?php echo Labels::getLabel('LBL_ZONE_SETUP', $adminLangId); ?>
-    </h5>
-</div>
-<div class="modal-body form-edit">
-    <div class="form-edit-head">
-        <nav class="nav nav-tabs">
-            <a class="nav-link active" href="javascript:void(0)" onclick="editRecord(<?php echo $recordId ?>);">
-                <?php echo Labels::getLabel('LBL_General', $adminLangId); ?>
-            </a>
-            <a class="nav-link <?php echo $disabled; ?>" href="javascript:void(0);" <?php echo (0 < $recordId) ? "onclick='editLangData(" . $recordId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                <?php echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
-            </a>
-        </nav>
-    </div>
-
+require_once(CONF_THEME_PATH . 'zones/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>
     </div>
@@ -47,4 +27,4 @@ $disabled = (0 == $recordId) ? 'disabled' : '';
             </div>
         </div>
     </div>
-</div>
+</div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->

@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
     'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'scollection_identifier' => Labels::getLabel('LBL_Collection_Name', $adminLangId),
     'scollection_active' => Labels::getLabel('LBL_Status', $adminLangId),
     'action' => Labels::getLabel('LBL_Action', $adminLangId),
@@ -32,9 +32,9 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="scollection_ids[]" value=' . $row['scollection_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="scollection_ids[]" value=' . $row['scollection_id'] . '><i class="input-helper"></i></label>', true);
                 break;
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'scollection_identifier':

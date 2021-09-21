@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
     'dragdrop' => '',
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'sstory_identifier' => Labels::getLabel('LBL_Title', $adminLangId),
     'sstory_featured' => Labels::getLabel('LBL_Featured', $adminLangId),
     'action' => Labels::getLabel('LBL_Action', $adminLangId),
@@ -36,7 +36,7 @@ foreach ($arrListing as $sn => $row) {
                     $td->setAttribute("class", 'dragHandle');
                 }
                 break;
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'sstory_identifier':

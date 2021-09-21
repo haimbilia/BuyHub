@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
     'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'ratingtype_name' => Labels::getLabel('LBL_RATING_TYPE', $adminLangId),
     'ratingtype_type' => Labels::getLabel('LBL_TYPE', $adminLangId),
     'ratingtype_active' => Labels::getLabel('LBL_STATUS', $adminLangId),
@@ -33,10 +33,10 @@ foreach ($arrListing as $sn => $row) {
         switch ($key) {
             case 'select_all':
                 if ($row['ratingtype_id'] != RatingType::TYPE_PRODUCT) {
-                    $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="ratingtypeIds[]" value=' . $row['ratingtype_id'] . '><i class="input-helper"></i></label>', true);
+                    $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="ratingtypeIds[]" value=' . $row['ratingtype_id'] . '><i class="input-helper"></i></label>', true);
                 }
                 break;
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
             case 'ratingtype_type':

@@ -2,7 +2,7 @@
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $arr_flds = array(
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'earch_subject' => Labels::getLabel('LBL_Subject', $adminLangId),
     'earch_to_email' => Labels::getLabel('LBL_Sent_To', $adminLangId),  
     'earch_sent_on' => Labels::getLabel('LBL_Sent_On', $adminLangId),
@@ -23,7 +23,7 @@ foreach ($arrListing as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'action':

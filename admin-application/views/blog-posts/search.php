@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
     'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'post_title' => Labels::getLabel('LBL_Post_Title', $adminLangId),
     'categories' => Labels::getLabel('LBL_Category', $adminLangId),
     'post_published_on' => Labels::getLabel('LBL_Published_Date', $adminLangId),
@@ -35,7 +35,7 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="post_ids[]" value=' . $row['post_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="post_ids[]" value=' . $row['post_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'post_published_on':
                 $td->appendElement('plaintext', array(), FatDate::format($row['post_published_on'], true));
@@ -43,7 +43,7 @@ foreach ($arrListing as $sn => $row) {
             case 'post_added_on':
                 $td->appendElement('plaintext', array(), FatDate::format($row['post_added_on'], true));
                 break;
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'post_title':

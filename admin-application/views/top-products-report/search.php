@@ -25,7 +25,7 @@ foreach ($arrListing as $sn=>$row){
 	foreach ($arrFlds as $key=>$val){
 		$td = $tr->appendElement('td');
 		switch ($key){
-			case 'listserial':
+			case 'listSerial':
 				$td->appendElement('plaintext', array(), $sr_no);
 			break;
 			

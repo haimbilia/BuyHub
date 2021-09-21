@@ -1,13 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this, false); return(false);');
-$frmSearch->setFormTagAttribute('id', 'frmSearch');
-$frmSearch->setFormTagAttribute('class', 'form');
-
-$fld  = $frmSearch->getField('keyword');
-$fld->developerTags['noCaptionTag'] = true;
-$fld->developerTags['col'] = 8;
-$fld->addFieldtagAttribute('class', 'form-control');
-$fld->setFieldtagAttribute('placeholder', Labels::getLabel('LBL_SEARCH_ZONES', $adminLangId));
+$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_ZONES', $adminLangId);
 
 /* No sorting functionality required if no record found. */
 if (1 > count($arrListing)) {

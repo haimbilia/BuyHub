@@ -42,7 +42,7 @@ foreach ($arrListing as $sn => $row) {
 			$span = $td->appendElement('span');
 		}
 		switch ($key) {
-			case 'listserial':
+			case 'listSerial':
 				$span->appendElement('plaintext', array(), $sr_no);
 				break;						
 			case 'transactionAmount':

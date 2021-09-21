@@ -1,5 +1,5 @@
 <?php
-$arr_flds['listserial'] = Labels::getLabel('LBL_#', $adminLangId);
+$arr_flds['listSerial'] = Labels::getLabel('LBL_#', $adminLangId);
 if (0 == $product['product_seller_id']) {
     $arr_flds['pdl_download_link'] = Labels::getLabel('pdl_download_link', $adminLangId);
 }
@@ -27,7 +27,7 @@ foreach ($links as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
             case 'pdl_lang_id':

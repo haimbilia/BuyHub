@@ -6,7 +6,7 @@
 <div class="sectionbody">
     <?php
     $arr_flds = array(
-        'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+        'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
         'scatrequest_reference' => Labels::getLabel('LBL_Reference_number', $adminLangId),
         'scatrequest_title' => Labels::getLabel('LBL_Title', $adminLangId),
         'scatrequest_status' => Labels::getLabel('LBL_Status', $adminLangId),
@@ -26,7 +26,7 @@
         foreach ($arr_flds as $key => $val) {
             $td = $tr->appendElement('td');
             switch ($key) {
-                case 'listserial':
+                case 'listSerial':
                     $td->appendElement('plaintext', array(), '<span class="caption--td">' . $val . '</span>' . $sr_no, true);
                     break;
                 case 'scatrequest_title':

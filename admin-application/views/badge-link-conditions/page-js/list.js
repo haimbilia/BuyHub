@@ -3,8 +3,8 @@ $(document).ready(function () {
     bindSellerSelect2();
 });
 
-$(document).on('click', '.selectAll-js, .selectItem--js', function () {
-    if (0 < $('.selectItem--js:checked').length) {
+$(document).on('click', '.selectAll-js, .selectItemJs', function () {
+    if (0 < $('.selectItemJs:checked').length) {
         $('.deleteSelectedConds--js').removeClass('d-none');
     } else {
         $('.deleteSelectedConds--js').addClass('d-none');
@@ -69,7 +69,7 @@ $(document).on('click', '.selectAll-js, .selectItem--js', function () {
     };
 
     deleteSelected = function (e) {
-        if (1 > $('.selectItem--js:checked').length) {
+        if (1 > $('.selectItemJs:checked').length) {
             fcom.displayErrorMessage(langLbl.atleastOneRecord);
             return;
         }

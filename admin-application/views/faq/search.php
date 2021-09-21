@@ -2,7 +2,7 @@
 <?php
 $arr_flds = array(
     'dragdrop' => '',
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'faq_identifier' => Labels::getLabel('LBL_Faq_Title', $adminLangId),
     'action' => '',
 );
@@ -36,7 +36,7 @@ foreach ($arrListing as $sn => $row) {
                     $td->setAttribute("class", 'dragHandle');
                 }
                 break;
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'faq_identifier':
