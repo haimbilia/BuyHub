@@ -1176,3 +1176,37 @@ CREATE TABLE `tbl_help_center_lang` (
 
 ALTER TABLE `tbl_help_center_lang` ADD UNIQUE( `hclang_hc_id`, `hclang_lang_id`);
 -- ----- Task : 89922 Help Center -------- --
+
+-- ---- Email Functionality update ---- --
+ALTER TABLE `tbl_email_templates` ADD `etpl_priority` TINYINT NOT NULL COMMENT '5 means immediate, Others must be less than 5' AFTER `etpl_replacements`;
+
+DROP TABLE tbl_email_archives;
+CREATE TABLE `tbl_email_archives` (
+  `earch_id` int NOT NULL,
+  `earch_to_email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_to_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_cc_email` json DEFAULT NULL,
+  `earch_bcc_email` json DEFAULT NULL,
+  `earch_tpl_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_subject` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_body` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_attachments` json DEFAULT NULL,
+  `earch_priority` tinyint NOT NULL COMMENT '5 = immediate ,Others must be less than 5',
+  `earch_added` datetime NOT NULL,
+  `earch_sent_on` datetime DEFAULT NULL,
+  `earch_from_email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_from_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `tbl_email_archives`
+  ADD PRIMARY KEY (`earch_id`);
+
+ALTER TABLE `tbl_email_archives`
+  MODIFY `earch_id` int NOT NULL AUTO_INCREMENT;
+
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'account_credited_debited'
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'admin_forgot_password'
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'admin_new_user_creation_email'
+
+-- ---- Email Functionality update ---- --
+

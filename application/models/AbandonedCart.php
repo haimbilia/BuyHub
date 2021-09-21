@@ -209,7 +209,11 @@ class AbandonedCart extends MyAppModel
         if ($abandonedData['abandonedcart_action'] == static::ACTION_DELETED) {
             $tpl = "abandoned_cart_deleted_discount_notification";
         }
-        if (!EmailHandler::sendMailTpl($abandonedData['credential_email'], $tpl, $this->commonLangId, $arrReplacements)) {
+        $sendEmail = (new FatMailer($this->commonLangId, $tpl))
+                ->setTo($abandonedData['credential_email'])
+                ->setVariables($arrReplacements)
+                ->send();
+        if (false === $sendEmail) {
             $this->error = Labels::getLabel('MSG_Email_Not_Sent', $this->commonLangId);
             return false;
         }
@@ -287,7 +291,11 @@ class AbandonedCart extends MyAppModel
         );
         $tpl = "abandoned_cart_email";
         $langId = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
-        if (!EmailHandler::sendMailTpl($userEmail, $tpl, $langId, $arrReplacements)) {
+        $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($userEmail)
+                ->setVariables($arrReplacements)
+                ->send();  
+        if (false === $sendEmail) {
             return false;
         }
         return true;

@@ -3,10 +3,9 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $adminLangId),
-    'emailarchive_subject' => Labels::getLabel('LBL_Subject', $adminLangId),
-    'emailarchive_to_email' => Labels::getLabel('LBL_Sent_To', $adminLangId),
-    'emailarchive_headers' => Labels::getLabel('LBL_Email_Headers', $adminLangId),
-    'emailarchive_sent_on' => Labels::getLabel('LBL_Sent_On', $adminLangId),
+    'earch_subject' => Labels::getLabel('LBL_Subject', $adminLangId),
+    'earch_to_email' => Labels::getLabel('LBL_Sent_To', $adminLangId),  
+    'earch_sent_on' => Labels::getLabel('LBL_Sent_On', $adminLangId),
     'action' => 'Action'
 );
 
@@ -35,7 +34,7 @@ foreach ($arrListing as $sn => $row) {
                     array('href' => UrlHelper::generateUrl(
                         'SentEmails',
                         'view',
-                        array($row['emailarchive_id'])
+                        array($row['earch_id'])
                     ), 'class' => 'button small green', 'title' => Labels::getLabel('LBL_View_Details', $adminLangId)),
                     '<i class="far fa-eye icon"></i>',
                     true

@@ -87,24 +87,12 @@ class EmailTemplatesController extends AdminBaseController
         if (empty($tpl)) {
             FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_TEMPLATE', $this->adminLangId));
         }
-
-        if (!EmailHandler::sendMailTpl($to, $tpl, $langId)) {
+        
+        if (false == (new FatMailer($langId, $tpl))->setTo($to)) {
             FatUtility::dieJsonError(Labels::getLabel('LBL_MAIL_NOT_SENT', $this->adminLangId));
         }
 
         $this->set('msg', Labels::getLabel('LBL_Mail_Sent_Successfully', $this->adminLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function testEmailTemplate($tpl)
-    {
-        $to = FatApp::getConfig("CONF_SITE_OWNER_EMAIL");
-        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 1);
-        if (!EmailHandler::sendMailTpl($to, $tpl, $langId)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_MAIL_NOT_SENT', $this->adminLangId));
-        }
-
-        $this->set('msg', Labels::getLabel('LBL_MAIL_SENT', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
