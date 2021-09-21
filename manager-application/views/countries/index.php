@@ -11,7 +11,7 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder');
 
 $keyword  = $frmSearch->getField('keyword');
 $keyword->addFieldtagAttribute('class', 'form-control');
-$keyword->setFieldtagAttribute('placeholder', Labels::getLabel('LBL_Search', $adminLangId));
+$keyword->setFieldtagAttribute('placeholder', Labels::getLabel('LBL_SEARCH_COUNTRIES', $adminLangId));
 
 $submit  = $frmSearch->getField('btn_submit');
 $submit->addFieldtagAttribute('class', 'btn btn-brand btn-block');
