@@ -1154,6 +1154,38 @@ UPDATE `tbl_admin` SET `admin_password_old` = '' WHERE `tbl_admin`.`admin_id` = 
 INSERT INTO `tbl_extra_pages` (`epage_id`, `epage_identifier`, `epage_type`, `epage_content_for`, `epage_active`, `epage_default`, `epage_default_content`) VALUES (NULL, 'Admin Zones', '45', '1', '1', '0', '<br />\r\n\r\n<h2>Zones Content File</h2> <br />\r\n\r\n<h3>Zone Identifier</h3>User defined unique identifier for the Zone. This works as a unique key for the system to identify a particular Zone. <br />\r\n<br />\r\n\r\n<h3>Zone name</h3>User defined name for the Zone.<br />\r\n<br />\r\n\r\n<h3>Active</h3>User defined field to mark a particular zone as active in the system or not. Possible inputs for this field are \'Yes\' &amp; \'No\'. Default value should be set as \'Yes\'.');
 INSERT INTO `tbl_extra_pages_lang` (`epagelang_epage_id`, `epagelang_lang_id`, `epage_label`, `epage_content`) VALUES ((select epage_id from tbl_extra_pages where epage_type='45'), '1', 'Admin Zones', '<br />\r\n\r\n<h2>Zones Content File</h2> <br />\r\n\r\n<h3>Zone Identifier</h3>User defined unique identifier for the Zone. This works as a unique key for the system to identify a particular Zone. <br />\r\n<br />\r\n\r\n<h3>Zone name</h3>User defined name for the Zone.<br />\r\n<br />\r\n\r\n<h3>Active</h3>User defined field to mark a particular zone as active in the system or not. Possible inputs for this field are \'Yes\' &amp; \'No\'. Default value should be set as \'Yes\'.');
 
+
+-- ---- Email Functionality update ---- --
 ALTER TABLE `tbl_email_templates` ADD `etpl_priority` TINYINT NOT NULL COMMENT '5 means immediate, Others must be less than 5' AFTER `etpl_replacements`;
+
+DROP TABLE tbl_email_archives;
+CREATE TABLE `tbl_email_archives` (
+  `earch_id` int NOT NULL,
+  `earch_to_email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_to_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_cc_email` json DEFAULT NULL,
+  `earch_bcc_email` json DEFAULT NULL,
+  `earch_tpl_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_subject` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_body` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_attachments` json DEFAULT NULL,
+  `earch_priority` tinyint NOT NULL COMMENT '5 = immediate ,Others must be less than 5',
+  `earch_added` datetime NOT NULL,
+  `earch_sent_on` datetime DEFAULT NULL,
+  `earch_from_email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_from_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `tbl_email_archives`
+  ADD PRIMARY KEY (`earch_id`);
+
+ALTER TABLE `tbl_email_archives`
+  MODIFY `earch_id` int NOT NULL AUTO_INCREMENT;
+
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'account_credited_debited'
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'admin_forgot_password'
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'admin_new_user_creation_email'
+
+-- ---- Email Functionality update ---- --
 
 

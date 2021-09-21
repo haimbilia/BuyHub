@@ -147,7 +147,7 @@ class EmailHandler extends FatModel
         );
 
         $sendEmail = (new FatMailer($langId, $tpl))
-                ->setTo($d['user_email'])
+                ->setTo($d['user_new_email'])
                 ->setVariables($vars)
                 ->send();
 
@@ -312,7 +312,6 @@ class EmailHandler extends FatModel
         if (false === $sendEmail) {
             return false;
         }
-
         $this->sendSms($tpl, ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'], $vars, $langId);
         return true;
     }
@@ -353,7 +352,7 @@ class EmailHandler extends FatModel
                 ->setTo($d['credential_email'])
                 ->setVariables($vars)
                 ->send();
-
+        
         if (false === $sendEmail) {
             return false;
         }
@@ -379,8 +378,7 @@ class EmailHandler extends FatModel
         if (false === $sendEmail) {
             return false;
         }
-
-        $phone = array_key_exists('user_phone', $d) ? ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'] : '';
+        $phone = array_key_exists('user_phone', $d) ? ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone']  : '';
         $this->sendSms($tpl, $phone, $vars, $langId);
         return true;
     }
@@ -517,7 +515,6 @@ class EmailHandler extends FatModel
         if (false === $mailerObj->send()) {
             return false;
         }
-
         $userPhone = !empty($userInfo['user_phone']) ? $userInfo['user_phone'] : '';
         $dialCode = !empty($userInfo['user_phone_dcode']) ? ValidateElement::formatDialCode($userInfo['user_phone_dcode']) : '';
         $phoneNumbers[] = $dialCode . $userPhone;
@@ -632,7 +629,6 @@ class EmailHandler extends FatModel
         if (false === $sendEmail) {
             return false;
         }
-
         $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
         return true;
     }
@@ -1074,7 +1070,7 @@ class EmailHandler extends FatModel
                 $bccEmails = $receipentsInfo['email'];
 
                 $mailerObj = (new FatMailer($langId, $tpl))
-                        ->setTo($productInfo["credential_email"])
+                        ->setTo($val["op_shop_owner_email"])
                         ->setVariables($arrReplacements);
 
                 foreach ($bccEmails as $emailId => $emailName) {
@@ -1116,7 +1112,7 @@ class EmailHandler extends FatModel
         $buyerId = FatUtility::int($buyerId);
 
         $orderObj = new Orders();
-        $orderComment = $orderObj->getOrderComments($langId, array("id" => $commentId, "buyer_id" => $buyerId), 1); /* 1 no of records */
+        $orderComment = $orderObj->getOrderComments($langId, array("id" => $commentId, "buyer_id" => $buyerId), 1); /*1 no of records*/
 
         if ($orderComment && $orderComment["oshistory_customer_notified"]) {
             $msgComments = '';
@@ -2207,7 +2203,6 @@ class EmailHandler extends FatModel
         if (false === $sendEmail) {
             return false;
         }
-
         $uData = User::getAttributesById($d['bpcomment_user_id'], ['user_phone_dcode', 'user_phone']);
         if (is_array($uData) && 0 < count($uData)) {
             $phone = ValidateElement::formatDialCode($uData['user_phone_dcode']) . $uData['user_phone'];

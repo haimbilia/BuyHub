@@ -187,24 +187,24 @@ class FatMailer extends FatModel
             return 'Email is disabled';
         }
 
-        $srch = new SearchBase(self::DB_TBL_ARCHIVE);
-        $srch->addCondition('earch_sent_on', '=', 'mysql_func_null', true);
+        $srch = new SearchBase(self::DB_TBL_ARCHIVE);      
+        $srch->addCondition('earch_sent_on', 'is', 'mysql_func_null', 'and', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(50);
-        $srch->addOrder('earch_priority DESC');
-        $archives = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $srch->addOrder('earch_priority','DESC');       
+        $archives = FatApp::getDb()->fetchAll($srch->getResultSet());      
         $fatMailerObj = new self(1, '');
         foreach ($archives as $archive) {
             $fatMailerObj->toEmail = $archive['earch_to_email'];
             $fatMailerObj->toName = $archive['earch_to_name'];
             $fatMailerObj->fromEmail = $archive['earch_from_email'];
             $fatMailerObj->fromName = $archive['earch_from_name'];
-            $fatMailerObj->ccArr = $archive['earch_cc_email'] ? json_decode($archive['earch_cc_email'], true) : null;
-            $fatMailerObj->bccArr = $archive['earch_bcc_email'] ? json_decode($archive['earch_bcc_email'], true) : null;
-            $fatMailerObj->attachments = $archive['earch_attachments'] ? json_decode($archive['earch_attachments'], true) : null;
-            if ($this->sendByPhpMailer($archive['earch_subject'], $archive['earch_body'])) {
-                $this->archiveId = $archive['earch_id'];
-                $this->markArchiveSent();
+            $fatMailerObj->ccArr = $archive['earch_cc_email'] ? json_decode($archive['earch_cc_email'], true) : [];
+            $fatMailerObj->bccArr = $archive['earch_bcc_email'] ? json_decode($archive['earch_bcc_email'], true) : [];
+            $fatMailerObj->attachments = $archive['earch_attachments'] ? json_decode($archive['earch_attachments'], true) : [];
+            if ($fatMailerObj->sendByPhpMailer($archive['earch_subject'], $archive['earch_body'])) {
+                $fatMailerObj->archiveId = $archive['earch_id'];
+                $fatMailerObj->markArchiveSent();
             }
         }
         return true;
@@ -319,12 +319,12 @@ class FatMailer extends FatModel
             'earch_to_name' => $this->toName,
             'earch_from_email' => $this->fromEmail,
             'earch_from_name' => $this->fromName,
-            'earch_cc_email' => $this->ccArr ? json_encode($this->ccArr) : null,
-            'earch_bcc_email' => $this->bccArr ? json_encode($this->bccArr) : null,
+            'earch_cc_email' => json_encode($this->ccArr),
+            'earch_bcc_email' => json_encode($this->ccArr),
             'earch_tpl_name' => $this->template,
             'earch_subject' => $subject,
             'earch_body' => $body,
-            'earch_attachments' => $this->attachments ? json_encode($this->attachments) : null,
+            'earch_attachments' => json_encode($this->attachments),
             'earch_added' => date('Y-m-d H:i:s'),
             'earch_priority' => $this->priority ?? $priority,
         ];
