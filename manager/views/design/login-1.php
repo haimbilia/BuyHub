@@ -30,17 +30,23 @@
                             </div>
                             <div class="card-body">
                                 <div class="title">
-                                    <h2>Sign In to Yokart</h2>
+                                    <h2>Sign In </h2>
                                 </div>
                                 <form class="form form-login">
-                                    <div class="form-group"><input class="form-control" title="Username"
-                                            placeholder="Username" type="text" value="">
-                                        <input class="form-control" title="Password" placeholder="Password"
-                                            type="password" value="">
+                                    <div class="form-group">
+                                        <label class="label">Username</label>
+                                        <input class="form-control" title="Username" placeholder="" type="text"
+                                            value="">
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">Password</label>
+                                        <input class="form-control" title="Password" placeholder="" type="password"
+                                            value="">
                                     </div>
                                     <div class="row py-3">
                                         <div class="col-12">
-                                            <label class="switch switch--sm remember-me">
+                                            <label class="switch switch-sm remember-me">
                                                 <input type="checkbox" name="">
                                                 <span></span>Remember Me </label>
 
@@ -62,7 +68,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <p class="version">Admin version 2019</p>
+                        <p class="version">Admin version 2021</p>
                     </div>
                 </div>
             </div>

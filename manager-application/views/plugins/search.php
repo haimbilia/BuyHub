@@ -159,7 +159,7 @@ $frm->addHiddenField('', 'plugin_type', $pluginType); ?>
         }
 
         if (!empty($data)) {
-            $this->includeTemplate('_partial/action-buttons.php', $data, false);
+            $this->includeTemplate('_partial/listing/action-buttons.php', $data, false);
         }
         ?>
     </div>

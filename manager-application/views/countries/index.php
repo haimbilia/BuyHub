@@ -24,7 +24,8 @@ $btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <?php echo $frmSearch->getFormTag(); ?>
+                <?php 
+                echo $frmSearch->getFormTag(); ?>
                 <div class="card">
                     <div class="card-body">
                         <div class="row">

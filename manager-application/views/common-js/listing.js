@@ -10,8 +10,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
     $(frm.sortBy).val(fld);
     $(frm.page).val(1);
     $('.sortingIconJs').remove();
-    $(this).removeClass('sorting_asc');
-    $(this).removeClass('sorting_desc');
+    $('.headerColumnJs').removeClass('sorting_asc sorting_desc');
 
     if (document.getElementById("sortOrder").value == 'ASC') {
         $(frm.sortOrder).val('DESC');

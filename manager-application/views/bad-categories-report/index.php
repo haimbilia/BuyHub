@@ -52,7 +52,7 @@
                                 ]
                             ];
         
-                            $this->includeTemplate('_partial/action-buttons.php', $data, false);
+                            $this->includeTemplate('_partial/listing/action-buttons.php', $data, false);
                         ?>
                         <!--<a href="javascript:void(0)" class="themebtn btn-default btn-sm" onClick="exportReport()"><?php echo Labels::getLabel('LBL_Export', $adminLangId); ?></a>-->
                     </div>

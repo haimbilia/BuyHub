@@ -153,7 +153,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                 }
                             }
 
-                        $this->includeTemplate('_partial/action-buttons.php', $data, false);
+                        $this->includeTemplate('_partial/listing/action-buttons.php', $data, false);
                         } ?>
                     </div>
                     <div class="sectionbody">

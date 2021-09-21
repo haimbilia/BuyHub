@@ -2,7 +2,6 @@
 
 class CountriesController extends AdminBaseController
 {
-
     public function __construct($action)
     {
         parent::__construct($action);

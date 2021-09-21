@@ -35,8 +35,8 @@
                                 </div>
                                 <form class="form form-login">
                                     <div class="form-group">
-                                        <input class="form-control" title="Email" placeholder="Email" type="text"
-                                            value="">
+                                        <label class="label">Email</label>
+                                        <input class="form-control" title="Email" placeholder="" type="text" value="">
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">

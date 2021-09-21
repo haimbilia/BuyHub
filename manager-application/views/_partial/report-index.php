@@ -75,7 +75,7 @@ if (!empty($fields)) {
                         ] + $actionButtons;
 
                         $actionButtons['otherButtons'] = array_merge($actionButtons['otherButtons'],  $otherButton);
-                        $this->includeTemplate('_partial/action-buttons.php', $actionButtons, false); ?>
+                        $this->includeTemplate('_partial/listing/action-buttons.php', $actionButtons, false); ?>
                     </div>
                     <div class="sectionbody">
                         <div class="tablewrap">
