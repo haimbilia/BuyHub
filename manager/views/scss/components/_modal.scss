@@ -40,3 +40,19 @@
      font-weight: 400;
      font-size: 1.5rem;
  }
+ 
+ .dialogue {
+     .icn {
+         font-size: 5rem;
+         margin-bottom: 2rem;
+         &-warning {
+             color: $warning-color;
+         }
+         &-success {
+             color: $success-color;
+         }
+         &-danger {
+             color: $danger-color;
+         }
+     }
+ }
