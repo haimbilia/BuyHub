@@ -1,5 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
+$canEdit = isset($canEdit) ? $canEdit : false;
+
 $ul = new HtmlElement("ul", array("class" => "actions"));
 if (isset($htmlContent) && $htmlContent != '') {
     $ul->appendElement('li', [], $htmlContent, true);

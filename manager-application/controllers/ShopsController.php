@@ -2,21 +2,10 @@
 
 class ShopsController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
-        $ajaxCallArray = array('form', 'langForm', 'search', 'setup', 'langSetup');
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die($this->str_invalid_Action);
-        }
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewShops($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditShops($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewShops();   
     }
 
     public function index()
@@ -28,21 +17,20 @@ class ShopsController extends AdminBaseController
             unset($data['id']);
             $frmSearch->fill($data);
         }
-        $this->objPrivilege->canViewShops();
-        $this->_template->addCss('css/cropper.css');
-        $this->_template->addJs('js/cropper.js');
-        $this->_template->addJs('js/cropper-main.js');
+
+        $this->set("canEdit", $this->objPrivilege->canEditShops(AdminAuthentication::getLoggedAdminId(), true));
+        // $this->_template->addCss('css/cropper.css');
+        // $this->_template->addJs('js/cropper.js');
+        // $this->_template->addJs('js/cropper-main.js');
         $this->set("includeEditor", true);
         $this->set("frmSearch", $frmSearch);
-        $this->_template->addJs(array('js/select2.js'));
-        $this->_template->addCss(array('css/select2.min.css'));
+        // $this->_template->addJs(array('js/select2.js'));
+        // $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
     }
 
     public function search()
     {
-        $this->objPrivilege->canViewShops();
-
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         $searchForm = $this->getSearchForm();
         $data = FatApp::getPostedData();
@@ -139,7 +127,8 @@ class ShopsController extends AdminBaseController
 
         $this->set('canViewShopReports', $this->objPrivilege->canViewShopReports(0, true));
         $this->set('canViewSellerProducts', $this->objPrivilege->canViewSellerProducts(0, true));
-
+        $this->set("canEdit", $this->objPrivilege->canEditShops(AdminAuthentication::getLoggedAdminId(), true));
+        
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -450,7 +439,6 @@ class ShopsController extends AdminBaseController
 
     public function media($shop_id)
     {
-        $this->objPrivilege->canViewShops();
         $shop_id = FatUtility::int($shop_id);
 
         $shopLogoFrm = $this->getShopLogoForm($shop_id, $this->adminLangId);
@@ -476,7 +464,6 @@ class ShopsController extends AdminBaseController
 
     public function images($shop_id, $imageType = '', $lang_id = 0, $slide_screen = 0)
     {
-        $this->objPrivilege->canViewShops();
         $shop_id = FatUtility::int($shop_id);
 		
 		$languages = Language::getAllNames();
@@ -536,8 +523,6 @@ class ShopsController extends AdminBaseController
 
     public function autoComplete()
     {
-        $this->objPrivilege->canViewShops();
-
         $srch = Shop::getSearchObject(false, $this->adminLangId);
 
         $post = FatApp::getPostedData();
@@ -1401,6 +1386,7 @@ class ShopsController extends AdminBaseController
         $this->updateShopStatus($shopId, $status);
         Product::updateMinPrices(0, $shopId);
         //FatUtility::dieJsonSuccess($this->str_update_record);
+
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }

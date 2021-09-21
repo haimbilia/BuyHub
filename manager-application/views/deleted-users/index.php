@@ -52,7 +52,7 @@
                             ]
                         ];
     
-                        $this->includeTemplate('_partial/action-buttons.php', $data, false);
+                        $this->includeTemplate('_partial/listing/action-buttons.php', $data, false);
                         ?>
                     </div>
                     <div class="sectionbody">

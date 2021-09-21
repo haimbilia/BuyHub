@@ -49,7 +49,7 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                             ]
                         ];
 
-                        $this->includeTemplate('_partial/action-buttons.php', $data, false);
+                        $this->includeTemplate('_partial/listing/action-buttons.php', $data, false);
                         ?>
                     </div>
                     <div class="sectionbody">

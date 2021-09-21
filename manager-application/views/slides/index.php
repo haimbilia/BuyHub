@@ -39,7 +39,7 @@ $btn_clear->addFieldTagAttribute('onClick', 'clearSearch()'); */
                                     'label' => '<i class="fas fa-plus"></i>'
                                 ],
                             ];
-                            $this->includeTemplate('_partial/action-buttons.php', ['otherButtons' => $otherButtons, 'adminLangId' => $adminLangId,
+                            $this->includeTemplate('_partial/listing/action-buttons.php', ['otherButtons' => $otherButtons, 'adminLangId' => $adminLangId,
                             'statusButtons' => true,
                             'deleteButton' => true], false);
                         } ?>
