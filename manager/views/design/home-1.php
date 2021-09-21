@@ -24,11 +24,11 @@
         <?php
   include 'includes/header.php';
 ?>
-        <div class="body grid__item grid__item--fluid grid grid--hor grid--stretch" id="body">
-            <div class="content content--fit-top  grid__item grid__item--fluid grid grid--hor" id="content">
+        <div class="body " id="body">
+            <div class="content " id="content">
 
                 <!-- begin CONTAINER-->
-                <div class="container  grid__item grid__item--fluid mt-30">
+                <div class="container mt-30">
                     <!-- begin POPRTAL -->
                     <div class="card card--height-fluid">
                         <div class="card-body align-items-center card__body--fluid">

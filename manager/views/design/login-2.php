@@ -9,16 +9,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-	<script>
-		WebFont.load({
-			google: {
-				"families": ["Poppins:300,400,500,600,700"]
-			},
-			active: function() {
-				sessionStorage.fonts = true;
-			}
-		});
-	</script>
+	
 	
 	<link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
 	<link href="css/loginv2.css" rel="stylesheet" type="text/css" />

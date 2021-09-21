@@ -27,8 +27,8 @@
         <?php
   include 'includes/header.php';
 ?>
-        <div class="body grid__item grid__item--fluid grid grid--hor grid--stretch" id="body">
-            <div class="content content--fit-top  grid__item grid__item--fluid grid grid--hor" id="content">
+        <div class="body " id="body">
+            <div class="content " id="content">
 
                 <!-- begin:: Subheader -->
                 <div class="subheader   grid__item" id="subheader">
@@ -74,7 +74,7 @@
                 <!-- end:: Subheader -->
 
                 <!-- begin:: Content -->
-                <div class="container  grid__item grid__item--fluid">
+                <div class="container">
                     <div class="card card--height-fluid">
                         <div class="card-body card__body--fluid">
                             <p>The idle timer is built on jQuery and provides two events: idle.idleTimerand active.idleTimer, which fire when the user's idle state has changed. When you move your mouse over the page or start typing, you're considered active. On this page we have two idle timers. One for the entire document. Another for the text area on the right (or bottom if your on mobile).</p>

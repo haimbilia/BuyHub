@@ -25,8 +25,8 @@
             <?php
   include 'includes/header.php';
 ?>
-            <div class="body grid__item grid__item--fluid grid grid--hor grid--stretch" id="YK_body">
-                <div class="content content--fit-top  grid__item grid__item--fluid grid grid--hor" id="YK_content">
+            <div class="body " id="YK_body">
+                <div class="content " id="YK_content">
 
                     <!-- begin:: Subheader -->
                     <div class="subheader   grid__item" id="YK_subheader">
@@ -65,7 +65,7 @@
                     <!-- end:: Subheader -->
 
                     <!-- begin:: Content -->
-                    <div class="container  grid__item grid__item--fluid">
+                    <div class="container">
                         <!--Begin:: card-->
                         <div class="card">
                             <div class="card-body">
