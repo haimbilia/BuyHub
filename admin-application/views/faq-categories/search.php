@@ -20,10 +20,10 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 
-//$sr_no = $page==1?0:$pageSize*($page-1);
-$sr_no = 0;
+//$serialNo = $page==1?0:$pageSize*($page-1);
+$serialNo = 0;
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr');
     if ($row['faqcat_active'] == applicationConstants::ACTIVE) {
         $tr->setAttribute("id", $row['faqcat_id']);
@@ -45,7 +45,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="faqcat_ids[]" value=' . $row['faqcat_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'faqcat_identifier':
                 if ($row['faqcat_name'] != '') {

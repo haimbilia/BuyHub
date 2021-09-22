@@ -1,12 +1,16 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
+$frm->setFormTagAttribute('class', 'modal-body form form-edit layout--' . $formLayout);
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
+?>
 
-$activeGentab = true;
-require_once(CONF_THEME_PATH . 'countries/form-head.php'); ?>
-
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php echo Labels::getLabel('LBL_LANGUAGE_SETUP', $adminLangId); ?>
+    </h5>
+</div>
+<div class="modal-body form-edit">
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>
     </div>

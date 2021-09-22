@@ -10,26 +10,26 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
-    $tr->setAttribute("id", $row['state_id']);
+    $tr->setAttribute("id", $row['language_id']);
 
     foreach ($fields as $key => $val) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="state_ids[]" value=' . $row['state_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="language_ids[]" value=' . $row['language_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
                 $td->appendElement('plaintext', array(), $serialNo);
                 break;
-            case 'state_active':
-                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['state_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
+            case 'language_active':
+                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['language_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
                 $statusClass = ($canEdit) ? '' : 'disabled';
                 $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
 
                 $htm = '<span class="switch switch--sm switch--icon">
                                     <label>
-                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['state_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
+                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['language_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
                                         <span></span>
                                     </label>
                                 </span>';
@@ -38,7 +38,7 @@ foreach ($arrListing as $sn => $row) {
             case 'action':
                 $data = [
                     'adminLangId' => $adminLangId,
-                    'recordId' => $row['state_id']
+                    'recordId' => $row['language_id']
                 ];
 
                 if ($canEdit) {
@@ -61,3 +61,4 @@ if (count($arrListing) == 0) {
 if ($printData) {
     echo $tbody->getHtml();
 }
+

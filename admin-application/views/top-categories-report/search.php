@@ -13,16 +13,16 @@ foreach ($arrFlds as $val) {
 	$e = $th->appendElement('th', array(), $val, true);
 }
 
-$sr_no = 0;
+$serialNo = 0;
 foreach ($arrListing as $sn=>$row){
-	$sr_no++;
+	$serialNo++;
 	$tr = $tbl->appendElement('tr', array('class' => ($row['prodcat_active'] != applicationConstants::ACTIVE || $row['prodcat_deleted'] == applicationConstants::YES) ? 'fat-inactive' : '', 'title' => ($row['prodcat_active'] != applicationConstants::ACTIVE || $row['prodcat_deleted'] == applicationConstants::YES) ? 'In-Active Or Record Deleted' : '' ));
 		
 	foreach ($arrFlds as $key=>$val){
 		$td = $tr->appendElement('td');
 		switch ($key){
 			case 'listSerial':
-				$td->appendElement('plaintext', array(), $sr_no);
+				$td->appendElement('plaintext', array(), $serialNo);
 			break;
 			
 			case 'prodcat_name':

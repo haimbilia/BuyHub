@@ -141,15 +141,17 @@ $(document).on("click", ".headerColumnJs", function (e) {
     };
 
     updateStatus = function (e, obj, recordId, status) {
+        e.stopPropagation();
         if (!confirm(langLbl.confirmUpdateStatus)) {
             e.preventDefault();
             return false;
         }
-
+        
+        var oldStatus = $(obj).data("old-status");
         $(listingTableJs).prepend(fcom.getLoader());
-
-        if (recordId < 1) {
-            e.preventDefault();
+        
+        if (1 > recordId) {
+            $(obj).prop('checked', (1 == oldStatus));
             $.ykmsg.error(langLbl.invalidRequest);
             fcom.removeLoader();
             return false;
@@ -157,10 +159,14 @@ $(document).on("click", ".headerColumnJs", function (e) {
 
         data = 'recordId=' + recordId + '&status=' + status;
         fcom.ajax(fcom.makeUrl(controllerName, 'updateStatus'), data, function (res) {
+            $(obj).prop('checked', (1 == status));
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
                 $.ykmsg.success(ans.msg);
                 $(obj).toggleClass("active");
+            } else {
+                $(obj).prop('checked', (1 == oldStatus));
+                $.ykmsg.error(ans.msg);
             }
             fcom.removeLoader();
         });
@@ -178,6 +184,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
                 $.ykmsg.error(t.msg);
                 return false;
             }
+            $.ykmsg.success(t.msg);
 
             reloadList();
             if (t.langId > 0) {
@@ -240,10 +247,17 @@ $(document).on("click", ".headerColumnJs", function (e) {
 
         data = fcom.frmData(frm);
 
-        fcom.updateWithAjax(frm.action, data, function (resp) {
+        fcom.ajax(frm.action, data, function (res) {
+            fcom.removeLoader();
+            $(".selectAllJs").prop("checked", false);
             callback();
             showActionsBtns();
-            $(".selectAllJs").prop("checked", false);
+
+            var t = $.parseJSON(res);
+            if (t.status == 0) {
+                $.ykmsg.error(t.msg);
+            }
+            $(".toolbar-btn-js").addClass('disabled').removeClass('selected');
         });
     }
 

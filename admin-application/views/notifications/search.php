@@ -9,10 +9,10 @@ $arr_flds = array(
 $tbl = new HtmlElement('table', array('class'=>'table--listing','id'=>'post'));
 $th = $tbl->appendElement('thead')->appendElement('tr',array('class'=>'tr--first'));
 
-$sr_no = $page==1?0:$pageSize*($page-1);
+$serialNo = $page==1?0:$pageSize*($page-1);
 
 foreach ($arrListing as $sn=>$row){
-	$sr_no++;
+	$serialNo++;
 	/* CommonHelper::printArray($labelArr); die; */
 
 	if(!$row['notification_marked_read']){

@@ -1,9 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
 
-$sr_no = $page==1 ? 0 : $pageSize*($page-1);
+$serialNo = $page==1 ? 0 : $pageSize*($page-1);
 foreach ($messagesList as $sn=>$row){
 
-	$sr_no++;
+	$serialNo++;
 	$tr = $tbl->appendElement('tr');
 	
 	foreach ($arr_flds as $key=>$val){

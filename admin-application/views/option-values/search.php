@@ -14,9 +14,9 @@ foreach ($arr_flds as $val) {
 	$e = $th->appendElement('th', array(), $val);
 }
 
-$sr_no = 0;
+$serialNo = 0;
 foreach ($arrListing as $sn=>$row){
-	$sr_no++;
+	$serialNo++;
 	$tr = $tbl->appendElement('tr');
 	$tr->setAttribute ("id",$row['optionvalue_id']);	
 	foreach ($arr_flds as $key=>$val){

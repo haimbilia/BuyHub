@@ -9,7 +9,6 @@ if ($defaultCurrency) {
     $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_This_is_your_default_currency', $adminLangId) . '</small>';
 }
 
-$disabled = (0 == $recordId) ? 'disabled' : '';
 $activeGentab = true;
 require_once(CONF_THEME_PATH . 'states/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">

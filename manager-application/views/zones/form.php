@@ -4,9 +4,7 @@ HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form form-edit');
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 
-$disabled = (0 == $recordId) ? 'disabled' : '';
 $activeGentab = true;
-
 require_once(CONF_THEME_PATH . 'zones/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>

@@ -41,7 +41,7 @@ foreach ($arrListing as $sn => $row) {
 
                 $htm = '<span class="switch switch--sm switch--icon">
                                     <label>
-                                        <input type="checkbox" value="' . $row['currency_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
+                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['currency_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
                                         <span></span>
                                     </label>
                                 </span>';

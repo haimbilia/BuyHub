@@ -13,7 +13,7 @@ $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($arr_flds as $key => $val) {
     $e = $th->appendElement('th', array(), $val);
 }
-$sr_no = count($arrListing);
+$serialNo = count($arrListing);
 foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['addr_id']);
@@ -22,7 +22,7 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'addr_id':
                 $addr2 = (strlen($row['addr_address2']) > 0) ? ', ' . $row['addr_address2'] . '<br>' : '';
@@ -51,7 +51,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
-    $sr_no--;
+    $serialNo--;
 }
 
 if (count($arrListing) == 0) {

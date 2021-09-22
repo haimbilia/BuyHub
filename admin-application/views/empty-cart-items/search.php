@@ -19,9 +19,9 @@ foreach ($arr_flds as $key => $val) {
         $e = $th->appendElement('th', array(), $val);
     }
 }
-$sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
+$serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr', array());
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
@@ -30,7 +30,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="emptycartitem_ids[]" value=' . $row['emptycartitem_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'emptycartitem_url':
                 $itemUrl = str_replace('{SITEROOT}', UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL), $row[$key]);

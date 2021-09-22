@@ -18,16 +18,16 @@
         $e = $th->appendElement('th', array(), $val);
     }
 
-    $sr_no = ($page == 1) ? 0 : ($pageSize * ($page - 1));
+    $serialNo = ($page == 1) ? 0 : ($pageSize * ($page - 1));
     foreach ($arrListing as $sn => $row) {
-        $sr_no++;
+        $serialNo++;
         $tr = $tbl->appendElement('tr', array('class' => ''));
 
         foreach ($arr_flds as $key => $val) {
             $td = $tr->appendElement('td');
             switch ($key) {
                 case 'listSerial':
-                    $td->appendElement('plaintext', array(), '<span class="caption--td">' . $val . '</span>' . $sr_no, true);
+                    $td->appendElement('plaintext', array(), '<span class="caption--td">' . $val . '</span>' . $serialNo, true);
                     break;
                 case 'scatrequest_title':
                     $td->appendElement('plaintext', array(), '<span class="caption--td">' . $val . '</span>' . $row[$key] . '<br>', true);

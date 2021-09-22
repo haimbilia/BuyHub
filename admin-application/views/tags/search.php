@@ -20,7 +20,7 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 $productsArr = array();
-$sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
+$serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 foreach ($arrListing as $sn => $row) {
     $productsArr[] = $row['product_id'];
     $tr = $tbl->appendElement('tr', array('class' => ''));
@@ -29,7 +29,7 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no, true);
+                $td->appendElement('plaintext', array(), $serialNo, true);
                 break;
             case 'product_identifier':
                 $td->appendElement(
@@ -54,7 +54,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
-    $sr_no--;
+    $serialNo--;
 }
 if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));

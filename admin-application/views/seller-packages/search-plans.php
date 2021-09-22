@@ -51,9 +51,9 @@
             $e = $th->appendElement('th', array(), $val);
         }
 
-        $sr_no = 0;
+        $serialNo = 0;
         foreach ($arrListing as $sn => $row) {
-            $sr_no++;
+            $serialNo++;
             $tr = $tbl->appendElement('tr');
             $tr->setAttribute("id", $row[SellerPackagePlans::DB_TBL_PREFIX . 'id']);
             if ($row['spplan_active'] != applicationConstants::ACTIVE) {
@@ -63,7 +63,7 @@
                 $td = $tr->appendElement('td');
                 switch ($key) {
                     case 'listSerial':
-                        $td->appendElement('plaintext', array(), $sr_no);
+                        $td->appendElement('plaintext', array(), $serialNo);
                         break;
                     case SellerPackagePlans::DB_TBL_PREFIX . 'price':
                         $td->appendElement('plaintext', array(), SellerPackagePlans::getPlanPriceWithPeriod($row, $row[SellerPackagePlans::DB_TBL_PREFIX . 'price']), true);

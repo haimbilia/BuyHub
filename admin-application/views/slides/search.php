@@ -28,9 +28,9 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 
-$sr_no = 0;
+$serialNo = 0;
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     /* $tr = $tbl->appendElement('tr',array('class' => ($row['slide_active'] != applicationConstants::ACTIVE) ? 'fat-inactive' : '' )); */
     $tr = $tbl->appendElement('tr', array());
     $tr->setAttribute("id", $row['slide_id']);
@@ -47,7 +47,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="slide_ids[]" value=' . $row['slide_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'slide_identifier':
                 if ($row['slide_title'] != '') {

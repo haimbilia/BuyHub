@@ -19,7 +19,7 @@ foreach ($arr_flds as $key => $val) {
     $e = $th->appendElement('th', array(), $val);
 }
 
-$sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
+$serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['prodcat_id']);
@@ -28,7 +28,7 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'shop_name':
                 $name = (0 < $row['prodcat_seller_id'] ? $row['shop_name'] . '(' . $row['user_name'] . ')' : Labels::getLabel('LBL_ADMIN', $adminLangId));
@@ -61,7 +61,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
-    $sr_no--;
+    $serialNo--;
 }
 echo $tbl->getHtml();
 
