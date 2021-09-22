@@ -150,7 +150,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
 
         if (recordId < 1) {
             e.preventDefault();
-            fcom.displayErrorMessage(langLbl.invalidRequest);
+            $.ykmsg.error(langLbl.invalidRequest);
             fcom.removeLoader();
             return false;
         }
@@ -159,7 +159,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
         fcom.ajax(fcom.makeUrl(controllerName, 'updateStatus'), data, function (res) {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
-                $.mbsmessage(ans.msg, true, "alert--success alert");
+                $.ykmsg.success(ans.msg);
                 $(obj).toggleClass("active");
             }
             fcom.removeLoader();
@@ -175,7 +175,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
             fcom.removeLoader();
             var t = $.parseJSON(res);
             if (t.status == 0) {
-                $.mbsmessage(t.msg, true, "alert--danger alert");
+                $.ykmsg.error(t.msg);
                 return false;
             }
 
@@ -195,7 +195,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
             fcom.removeLoader();
             var t = $.parseJSON(res);
             if (t.status == 0) {
-                $.mbsmessage(t.msg, true, "alert--danger alert");
+                $.ykmsg.error(t.msg);
                 return false;
             }
             
@@ -230,7 +230,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
 
     formAction = function (frm, callback) {
         if (typeof $(".selectItemJs:checked").val() === 'undefined') {
-            $.mbsmessage(langLbl.atleastOneRecord, false, 'alert--danger');
+            $.ykmsg.error(langLbl.atleastOneRecord);
             return false;
         }
 
@@ -254,7 +254,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
         }
         element = element + 'form.actionButtonsJs';
         if (1 > $(element).length) {
-            $.mbsmessage(langLbl.actionButtonsClass, true, 'alert--danger');
+            $.ykmsg.error(langLbl.actionButtonsClass);
             return false;
         }
         msg = ('' == msg) ? langLbl.confirmUpdateStatus : msg;
