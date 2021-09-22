@@ -46,7 +46,6 @@ foreach ($arrListing as $sn => $row) {
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
-
                 break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);

@@ -189,7 +189,6 @@ class StatesController extends AdminBaseController
 
     public function langForm($autoFillLangData = 0)
     {
-        $this->objPrivilege->canViewStates();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
 

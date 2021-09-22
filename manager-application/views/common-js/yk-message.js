@@ -40,6 +40,9 @@
         error: function (message) {
             toastr["error"](message);
         },
+        close: function () {
+            toastr.clear();
+        }
     });
 })(jQuery);
 

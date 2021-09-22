@@ -1,9 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $tableHeadAttrArr = isset($tableHeadAttrArr) ? $tableHeadAttrArr : [];
+$tableId = isset($tableId) ?  $tableId : '';
 
 $tbl = new HtmlElement(
     'table',
-    array('width' => '100%', 'class' => 'table table-dashed')
+    array('width' => '100%', 'class' => 'table table-dashed', 'id' => $tableId)
 );
 $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($fields as $key => $val) {

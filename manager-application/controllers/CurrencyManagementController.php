@@ -2,73 +2,133 @@
 
 class CurrencyManagementController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewCurrencyManagement($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditCurrencyManagement($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewCurrencyManagement();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewCurrencyManagement();
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $this->set('canEdit', $this->objPrivilege->canEditCurrencyManagement($this->admin_id, true));
+        $this->set("frmSearch", $frmSearch);
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_CURRENCIES', $this->adminLangId));
+        $this->_template->addJs('extra-js/jquery.tablednd.js');
+        $this->getListingData();
+
         $this->_template->render();
     }
 
-    public function search()
+    private function getSearchForm($fields = [])
     {
-        $this->objPrivilege->canViewCurrencyManagement();
+        $frm = new Form('frmRecordSearch');
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        return $frm;
+    }
+
+    private function getListingData()
+    {
+        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $data = FatApp::getPostedData();
+
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortBy = 'currency_code' == $sortBy ? 'currency_name' : $sortBy;
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        $searchForm = $this->getSearchForm($fields);
+        
+        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
+        $post = $searchForm->getFormDataFromArray($data);
 
         $srch = Currency::getSearchObject($this->adminLangId, false);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addOrder('currency_display_order', 'ASC');
+
+        if (!empty($post['keyword'])) {
+            $srch->addCondition('curr_l.currency_name', 'like', '%' . $post['keyword'] . '%');
+        }
+
+        $page = (empty($page) || $page <= 0) ? 1 : $page;
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
+        $srch->addOrder($sortBy, $sortOrder);
 
         $rs = $srch->getResultSet();
-        $records = array();
-        if ($rs) {
-            $records = FatApp::getDb()->fetchAll($rs);
-        }
+        $records = FatApp::getDb()->fetchAll($rs);
+
         $defaultCurrencyId = FatApp::getConfig("CONF_CURRENCY", FatUtility::VAR_INT, 1);
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
+        $this->set("defaultCurrencyId", $defaultCurrencyId);        
         $this->set("arrListing", $records);
-        $this->set("defaultCurrencyId", $defaultCurrencyId);
-        $this->_template->render(false, false);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pagesize);
+        $this->set('postedData', $post);
+        
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
     }
 
-    public function form($currencyId = 0)
+    public function search()
     {
-        $this->objPrivilege->canViewCurrencyManagement();
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'currency-management/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        $currencyId = FatUtility::int($currencyId);
-
-        $frm = $this->getForm($currencyId);
-
-        if (0 > $currencyId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+    public function form()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (0 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
+
+        $frm = $this->getForm($recordId);
         $defaultCurrencyId = FatApp::getConfig("CONF_CURRENCY", FatUtility::VAR_INT, 1);
         
         $defaultCurrency = 0;
-        if ($currencyId > 0) {
-            $data = Currency::getAttributesById($currencyId, array('currency_id', 'currency_code', 'currency_active', 'currency_symbol_left', 'currency_symbol_right', 'currency_value'));
+        if ($recordId > 0) {
+            $data = Currency::getAttributesById($recordId, array('currency_id', 'currency_code', 'currency_active', 'currency_symbol_left', 'currency_symbol_right', 'currency_value'));
 
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $defaultCurrency = ($data['currency_id'] == $defaultCurrencyId) ? 1 : 0;
             $frm->fill($data);
         }
 
         $this->set('languages', Language::getAllNames());
-        $this->set('currency_id', $currencyId);
+        $this->set('recordId', $recordId);
         $this->set('defaultCurrency', $defaultCurrency);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
@@ -82,78 +142,73 @@ class CurrencyManagementController extends AdminBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $currencyId = FatUtility::int($post['currency_id']);
+        $recordId = FatUtility::int($post['currency_id']);
         unset($post['currency_id']);
-        if ($currencyId > 0) {
+        if ($recordId > 0) {
             $defaultCurrencyId = FatApp::getConfig("CONF_CURRENCY", FatUtility::VAR_INT, 1);
-            if ($currencyId == $defaultCurrencyId) {
+            if ($recordId == $defaultCurrencyId) {
                 unset($post['currency_value']);
             }
         }
-        $record = new Currency($currencyId);
+        $record = new Currency($recordId);
         $post['currency_date_modified'] = date('Y-m-d H:i:s');
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $newTabLangId = 0;
-        if ($currencyId > 0) {
+        if ($recordId > 0) {
             $languages = Language::getAllNames();
             foreach ($languages as $langId => $langName) {
-                if (!$row = Currency::getAttributesByLangId($langId, $currencyId)) {
+                if (!$row = Currency::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
         } else {
-            $currencyId = $record->getMainTableRecordId();
+            $recordId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
         $this->set('msg', $this->str_setup_successful);
-        $this->set('currencyId', $currencyId);
+        $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($currencyId = 0, $lang_id = 0, $autoFillLangData = 0)
+    public function langForm($autoFillLangData = 0)
     {
-        $this->objPrivilege->canViewCurrencyManagement();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
 
-        $currencyId = FatUtility::int($currencyId);
-        $lang_id = FatUtility::int($lang_id);
-
-        if ($currencyId == 0 || $lang_id == 0) {
+        if (1 > $recordId || 1 > $langId) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
 
-        $langFrm = $this->getLangForm($currencyId, $lang_id);
+        $langFrm = $this->getLangForm($recordId, $langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(Currency::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($currencyId, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
-            $langData = Currency::getAttributesByLangId($lang_id, $currencyId);
+            $langData = Currency::getAttributesByLangId($langId, $recordId);
         }
         if ($langData) {
             $langFrm->fill($langData);
         }
 
         $this->set('languages', Language::getAllNames());
-        $this->set('currencyId', $currencyId);
-        $this->set('lang_id', $lang_id);
+        $this->set('recordId', $recordId);
+        $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($lang_id));
+        $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->_template->render(false, false);
     }
 
@@ -162,52 +217,49 @@ class CurrencyManagementController extends AdminBaseController
         $this->objPrivilege->canEditCurrencyManagement();
         $post = FatApp::getPostedData();
 
-        $currencyId = $post['currency_id'];
+        $recordId = $post['currency_id'];
         $lang_id = $post['lang_id'];
 
-        if ($currencyId == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+        if ($recordId == 0 || $lang_id == 0) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $frm = $this->getLangForm($currencyId, $lang_id);
+        $frm = $this->getLangForm($recordId, $lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         unset($post['currency_id']);
         unset($post['lang_id']);
 
         $data = array(
         'currencylang_lang_id' => $lang_id,
-        'currencylang_currency_id' => $currencyId,
+        'currencylang_currency_id' => $recordId,
         'currency_name' => $post['currency_name']
         );
 
-        $currencyObj = new Currency($currencyId);
+        $currencyObj = new Currency($recordId);
 
         if (!$currencyObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($currencyObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($currencyObj->getError(), true);
         }
         
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Currency::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($currencyId)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
         $newTabLangId = 0;
         $languages = Language::getAllNames();
         foreach ($languages as $langId => $langName) {
-            if (!$row = Currency::getAttributesByLangId($langId, $currencyId)) {
+            if (!$row = Currency::getAttributesByLangId($langId, $recordId)) {
                 $newTabLangId = $langId;
                 break;
             }
         }
 
         $this->set('msg', $this->str_setup_successful);
-        $this->set('currencyId', $currencyId);
+        $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -219,9 +271,8 @@ class CurrencyManagementController extends AdminBaseController
         $post = FatApp::getPostedData();
         if (!empty($post)) {
             $currencyObj = new Currency();
-            if (!$currencyObj->updateOrder($post['currencyList'])) {
-                Message::addErrorMessage($currencyObj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
+            if (!$currencyObj->updateOrder($post['currencyIds'])) {
+                LibHelper::exitWithError($currencyObj->getError(), true);
             }
 
             $this->set('msg', Labels::getLabel('LBL_Order_Updated_Successfully', $this->adminLangId));
@@ -229,25 +280,58 @@ class CurrencyManagementController extends AdminBaseController
         }
     }
 
-    public function changeStatus()
+    private function getForm($currencyId = 0)
+    {
+        $currencyId = FatUtility::int($currencyId);
+
+        $frm = new Form('frmCurrency');
+        $frm->addHiddenField('', 'currency_id', $currencyId);
+        $frm->addRequiredField(Labels::getLabel('LBL_Currency_code', $this->adminLangId), 'currency_code');
+        $frm->addTextbox(Labels::getLabel('LBL_Currency_Symbol_Left', $this->adminLangId), 'currency_symbol_left');
+        $frm->addTextbox(Labels::getLabel('LBL_Currency_Symbol_Right', $this->adminLangId), 'currency_symbol_right');
+        $frm->addFloatField(Labels::getLabel('LBL_Currency_Conversion_Value', $this->adminLangId), 'currency_value');
+
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
+
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'currency_active', $activeInactiveArr, '', array(), '');
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        return $frm;
+    }
+
+    private function getLangForm($currencyId = 0, $lang_id = 0)
+    {
+        $frm = new Form('frmCurrencyLang');
+        $frm->addHiddenField('', 'currency_id', $currencyId);
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Currency_Name', $this->adminLangId), 'currency_name');
+        
+        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+
+        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        return $frm;
+    }
+
+    public function updateStatus()
     {
         $this->objPrivilege->canEditCurrencyManagement();
         $currencyId = FatApp::getPostedData('currencyId', FatUtility::VAR_INT, 0);
         if (0 >= $currencyId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $data = Currency::getAttributesById($currencyId, array('currency_id', 'currency_active'));
 
         if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $status = ($data['currency_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
 
-        $this->updateCurrencyStatus($currencyId, $status);
+        $this->changeStatus($currencyId, $status);
 
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
@@ -270,13 +354,13 @@ class CurrencyManagementController extends AdminBaseController
                 continue;
             }
 
-            $this->updateCurrencyStatus($currencyId, $status);
+            $this->changeStatus($currencyId, $status);
         }
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function updateCurrencyStatus($currencyId, $status)
+    private function changeStatus($currencyId, $status)
     {
         $status = FatUtility::int($status);
         $currencyId = FatUtility::int($currencyId);
@@ -288,45 +372,48 @@ class CurrencyManagementController extends AdminBaseController
 
         $obj = new Currency($currencyId);
         if (!$obj->changeStatus($status)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
     }
 
-    private function getForm($currencyId = 0)
+    private function getFormColumns(): array
     {
-        $this->objPrivilege->canViewCurrencyManagement();
-        $currencyId = FatUtility::int($currencyId);
+        $currencyTblHeadingCols = CacheHelper::get('currencyTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($currencyTblHeadingCols) {
+            return json_decode($currencyTblHeadingCols);
+        }
 
-        $frm = new Form('frmCurrency');
-        $frm->addHiddenField('', 'currency_id', $currencyId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Currency_code', $this->adminLangId), 'currency_code');
-        $frm->addTextbox(Labels::getLabel('LBL_Currency_Symbol_Left', $this->adminLangId), 'currency_symbol_left');
-        $frm->addTextbox(Labels::getLabel('LBL_Currency_Symbol_Right', $this->adminLangId), 'currency_symbol_right');
-        $frm->addFloatField(Labels::getLabel('LBL_Currency_Conversion_Value', $this->adminLangId), 'currency_value');
-
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'currency_active', $activeInactiveArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
-        return $frm;
-    }
-
-    private function getLangForm($currencyId = 0, $lang_id = 0)
-    {
-        $this->objPrivilege->canViewCurrencyManagement();
-        $frm = new Form('frmCurrencyLang');
-        $frm->addHiddenField('', 'currency_id', $currencyId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Currency_Name', $this->adminLangId), 'currency_name');
+        $arr = [
+            'dragdrop' => '',
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId) ,
+            'currency_code' => Labels::getLabel('LBL_Currency', $this->adminLangId) ,
+            'currency_symbol_left' => Labels::getLabel('LBL_Symbol_Left', $this->adminLangId),
+            'currency_symbol_right' => Labels::getLabel('LBL_Symbol_Right', $this->adminLangId),
+            'currency_active' => Labels::getLabel('LBL_Status', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_Action', $this->adminLangId),
+        ];
+        CacheHelper::create('currencyTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        return $arr;
+    }
 
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
-        return $frm;
+    private function getDefaultColumns(): array
+    {
+        return [
+            'dragdrop',
+            'select_all',
+            'listSerial',
+            'currency_code',
+            'currency_symbol_left',
+            'currency_symbol_right',
+            'currency_active',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['dragdrop', 'currency_active', 'currency_symbol_left', 'currency_symbol_right'], Common::excludeKeysForSort());
     }
 }
