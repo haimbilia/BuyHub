@@ -2,7 +2,7 @@
     <div id="catalogToolTip">
     <h2 class="block-title"><?php echo Labels::getLabel('LBL_Sellers_List', $adminLangId); ?></h2>
         <?php $arr_flds = array(
-            'listserial'    =>    Labels::getLabel('LBL_#', $adminLangId),
+            'listSerial'    =>    Labels::getLabel('LBL_#', $adminLangId),
             'user_name' => Labels::getLabel('LBL_Seller_name', $adminLangId),
             'shop_identifier' => Labels::getLabel('LBL_shop_name', $adminLangId),
         );
@@ -18,7 +18,7 @@
             foreach ($arr_flds as $key => $val) {
                 $td = $tr->appendElement('td');
                 switch ($key) {
-                    case 'listserial':
+                    case 'listSerial':
                         $td->appendElement('plaintext', array(), $sr_no);
                         break;
                     case 'user_name':

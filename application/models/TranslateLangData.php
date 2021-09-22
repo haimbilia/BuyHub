@@ -174,7 +174,7 @@ class TranslateLangData
         if (false === $data || empty($data) || 1 > count($data)) {
             return false;
         }
-
+        
         foreach ($data as $translatedData) {
             if (!FatApp::getDB()->insertFromArray($this->tbl, $translatedData, false, array(), $translatedData)) {
                 $this->error = Labels::getLabel('MSG_UNABLE_TO_UPDATE_DATA', CommonHelper::getLangId());

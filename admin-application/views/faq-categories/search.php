@@ -2,7 +2,7 @@
 $arr_flds = array(
     'dragdrop' => '',
     'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'faqcat_identifier' => Labels::getLabel('LBL_category_Name', $adminLangId),
     'faqcat_active'    => Labels::getLabel('LBL_Status', $adminLangId),
     'action' => Labels::getLabel('LBL_Action', $adminLangId),
@@ -42,9 +42,9 @@ foreach ($arrListing as $sn => $row) {
                 }
                 break;
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="faqcat_ids[]" value=' . $row['faqcat_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="faqcat_ids[]" value=' . $row['faqcat_id'] . '><i class="input-helper"></i></label>', true);
                 break;
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'faqcat_identifier':

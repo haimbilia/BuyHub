@@ -1,6 +1,6 @@
 <?php
 $arr_flds = array(
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'mainfile' => Labels::getLabel('LBL_DD_File', $adminLangId),
     'preview' => Labels::getLabel('LBL_DD_Preview', $adminLangId),
     'pddr_options_code' => Labels::getLabel('LBL_DD_Option', $adminLangId),
@@ -25,7 +25,7 @@ foreach ($attachments as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
             case 'mainfile':

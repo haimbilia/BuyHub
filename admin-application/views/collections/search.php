@@ -2,7 +2,7 @@
 $arr_flds = array(
     'dragdrop' => '',
     'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
-    // 'listserial' => Labels::getLabel('LBL_Display_Order', $adminLangId),
+    // 'listSerial' => Labels::getLabel('LBL_Display_Order', $adminLangId),
     'collection_identifier' => Labels::getLabel('LBL_Collection_Identifier/Name', $adminLangId),
     'collection_type' => Labels::getLabel('LBL_Type', $adminLangId),
     'collection_layout_type' => Labels::getLabel('LBL_Layout_Type', $adminLangId),
@@ -43,9 +43,9 @@ foreach ($arrListing as $sn => $row) {
                 }
                 break;
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="collection_ids[]" value='.$row['collection_id'].'><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="collection_ids[]" value='.$row['collection_id'].'><i class="input-helper"></i></label>', true);
                 break;
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'collection_identifier':

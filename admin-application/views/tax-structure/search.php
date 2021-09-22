@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'taxstr_identifier' => Labels::getLabel('LBL_Tax_Structure_Name', $adminLangId),
     'taxstr_is_combined' => Labels::getLabel('LBL_Combined_Tax', $adminLangId),
     'action' => Labels::getLabel('LBL_Action', $adminLangId),
@@ -27,7 +27,7 @@ foreach ($listing as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'taxstr_identifier':

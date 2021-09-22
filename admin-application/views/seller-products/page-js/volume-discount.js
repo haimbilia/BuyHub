@@ -178,7 +178,7 @@ $(document).on('blur', ".js--volDiscountCol", function(){
 		});
 	}
     deleteVolumeDiscountRows = function(){
-        if (typeof $(".selectItem--js:checked").val() === 'undefined') {
+        if (typeof $(".selectItemJs:checked").val() === 'undefined') {
 	        $.systemMessage(langLbl.atleastOneRecord, 'alert--danger');
 	        return false;
 	    }

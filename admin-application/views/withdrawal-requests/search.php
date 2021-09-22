@@ -4,7 +4,7 @@ $paymentMethods = User::getAffiliatePaymentMethodArr($adminLangId);
 $payoutPlugins = Plugin::getNamesByType(Plugin::TYPE_PAYOUTS, $adminLangId);
 
 $arr_flds = array(
-    'listserial' => Labels::getLabel('LBL_ID', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_ID', $adminLangId),
     'user_details' => Labels::getLabel('LBL_User_Details', $adminLangId),
     'user_balance' => Labels::getLabel('LBL_Balance', $adminLangId),
     'withdrawal_amount' => Labels::getLabel('LBL_Amount', $adminLangId),
@@ -35,7 +35,7 @@ foreach ($arrListing as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), '#' . str_pad($row["withdrawal_id"], 6, '0', STR_PAD_LEFT));
                 break;
             case 'user_details':

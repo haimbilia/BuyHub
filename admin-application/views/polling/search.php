@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'polling_question' => Labels::getLabel('LBL_Question', $adminLangId),
     'count_yes' => Labels::getLabel('LBL_Yes', $adminLangId),
     'count_no' => Labels::getLabel('LBL_No', $adminLangId),
@@ -24,7 +24,7 @@ foreach ($arrListing as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'polling_question':

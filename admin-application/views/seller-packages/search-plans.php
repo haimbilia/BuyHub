@@ -36,7 +36,7 @@
     <div class="tablewrap">
         <?php
         $arr_flds = array(
-            'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
             SellerPackagePlans::DB_TBL_PREFIX . 'price' => Labels::getLabel('LBL_Plan_Price', $adminLangId),
             'action' => '',
         );
@@ -62,7 +62,7 @@
             foreach ($arr_flds as $key => $val) {
                 $td = $tr->appendElement('td');
                 switch ($key) {
-                    case 'listserial':
+                    case 'listSerial':
                         $td->appendElement('plaintext', array(), $sr_no);
                         break;
                     case SellerPackagePlans::DB_TBL_PREFIX . 'price':

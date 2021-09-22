@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php
 $arr_flds = array(
-		'listserial'=>'Sr no.',
+		'listSerial'=>'Sr no.',
 		'meta_identifier'=>'Identifier',	
 		'meta_title'=>'Title',	
 		'action' => 'Action',
@@ -22,7 +22,7 @@ foreach ($arr_listing as $sn=>$row){
 	foreach ($arr_flds as $key=>$val){
 		$td = $tr->appendElement('td');
 		switch ($key){
-			case 'listserial':
+			case 'listSerial':
 				$td->appendElement('plaintext', array(), $sr_no);
 			break;
 			case 'action':

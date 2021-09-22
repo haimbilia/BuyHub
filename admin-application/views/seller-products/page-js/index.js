@@ -466,7 +466,7 @@ $(document).ready(function(){
 		$("#frmSelProdListing").attr("action",fcom.makeUrl('SellerProducts','deleteSelected')).submit();
 	};
     addSpecialPrice = function(){
-		if (typeof $(".selectItem--js:checked").val() === 'undefined') {
+		if (typeof $(".selectItemJs:checked").val() === 'undefined') {
 	        $.systemMessage(langLbl.atleastOneRecord, 'alert--danger');
 	        return false;
 	    }
@@ -476,7 +476,7 @@ $(document).ready(function(){
 	};
 
 	addVolumeDiscount = function(){
-		if (typeof $(".selectItem--js:checked").val() === 'undefined') {
+		if (typeof $(".selectItemJs:checked").val() === 'undefined') {
 	        $.systemMessage(langLbl.atleastOneRecord, 'alert--danger');
 	        return false;
 	    }

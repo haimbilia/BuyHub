@@ -22,7 +22,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'country_name':
                 $countryName = '<figure class="user-profile_photo"><img width="40" height="40" title="' . $row['country_name'] . '" alt="' . $row['country_code'] . '" src="' . CONF_WEBROOT_FRONTEND . 'images/flags/round/' . $row['country_code'] . '.svg"></figure>';
-                $countryName .= '<div class="user-profile_data">' . $row['country_name'] . '</div>';
+                $countryName .= '<div class="user-profile_data"><span class="user-profile_title">' . $row['country_name'] . '</span></div>';
                 $td->appendElement('plaintext', [], '<div class="user-profile">' . $countryName . '</div>', true);
                 break;
             case 'country_active':
@@ -67,6 +67,7 @@ if (count($arrListing) == 0) {
         Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId)
     );
 }
+
 if ($printData) {
     echo $tbody->getHtml();
 }

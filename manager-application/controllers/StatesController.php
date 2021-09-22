@@ -2,50 +2,66 @@
 
 class StatesController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewStates($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditStates($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewStates();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewStates();
-        $search = $this->getSearchForm();
-        $this->set("search", $search);
-        $this->_template->addJs('js/import-export.js');
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
+        $this->set("frmSearch", $frmSearch);
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_STATES', $this->adminLangId));
+        $this->getListingData();
+
         $this->_template->render();
     }
 
-    private function getSearchForm()
+    private function getSearchForm($fields = [])
     {
-        $frm = new Form('frmSearch');
+        $frm = new Form('frmRecordSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-
+        
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId, true);
 
         $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'country', $countriesArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
-        $fld_submit->attachField($fld_cancel);
+
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         return $frm;
     }
 
-    public function search()
+    private function getListingData()
     {
-        $this->objPrivilege->canViewStates();
-
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $searchForm = $this->getSearchForm();
         $data = FatApp::getPostedData();
+
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        $searchForm = $this->getSearchForm($fields);
+        
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
@@ -76,7 +92,7 @@ class StatesController extends AdminBaseController
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        $srch->addOrder('state_name', 'ASC');
+        $srch->addOrder($sortBy, $sortOrder);
 
         $rs = $srch->getResultSet();
         $records = array();
@@ -91,29 +107,43 @@ class StatesController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
+    }
+
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'states/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
 
-    public function form($stateId)
+    public function form()
     {
         $this->objPrivilege->canEditStates();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
-        $stateId = FatUtility::int($stateId);
+        $frm = $this->getForm($recordId);
 
-        $frm = $this->getForm($stateId);
-
-        if (0 < $stateId) {
-            $data = States::getAttributesById($stateId, array('state_id', 'state_code', 'state_country_id', 'state_identifier', 'state_active'));
+        if (0 < $recordId) {
+            $data = States::getAttributesById($recordId, array('state_id', 'state_code', 'state_country_id', 'state_identifier', 'state_active'));
 
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
 
         $this->set('languages', Language::getAllNames());
-        $this->set('state_id', $stateId);
+        $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
     }
@@ -125,61 +155,58 @@ class StatesController extends AdminBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $stateId = $post['state_id'];
+        $recordId = $post['state_id'];
         unset($post['state_id']);
-        $record = new States($stateId);
+        $record = new States($recordId);
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $newTabLangId = 0;
-        if ($stateId > 0) {
+        if ($recordId > 0) {
             $languages = Language::getAllNames();
             foreach ($languages as $langId => $langName) {
-                if (!$row = States::getAttributesByLangId($langId, $stateId)) {
+                if (!$row = States::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
         } else {
-            $stateId = $record->getMainTableRecordId();
+            $recordId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
-        Product::updateMinPrices(0, 0, 0, 0, $stateId);
+        Product::updateMinPrices(0, 0, 0, 0, $recordId);
         $this->set('msg', $this->str_setup_successful);
-        $this->set('stateId', $stateId);
+        $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($stateId = 0, $lang_id = 0, $autoFillLangData = 0)
+    public function langForm($autoFillLangData = 0)
     {
         $this->objPrivilege->canViewStates();
-        $stateId = FatUtility::int($stateId);
-        $lang_id = FatUtility::int($lang_id);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
 
-        if ($stateId == 0 || $lang_id == 0) {
+        if (1 > $recordId || 1 > $langId) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
 
-        $langFrm = $this->getLangForm($stateId, $lang_id);
+        $langFrm = $this->getLangForm($recordId, $langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(States::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($stateId, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
-            $langData = States::getAttributesByLangId($lang_id, $stateId);
+            $langData = States::getAttributesByLangId($langId, $recordId);
         }
 
         if ($langData) {
@@ -187,10 +214,10 @@ class StatesController extends AdminBaseController
         }
 
         $this->set('languages', Language::getAllNames());
-        $this->set('stateId', $stateId);
-        $this->set('lang_id', $lang_id);
+        $this->set('recordId', $recordId);
+        $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($lang_id));
+        $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->_template->render(false, false);
     }
 
@@ -199,7 +226,7 @@ class StatesController extends AdminBaseController
         $this->objPrivilege->canEditStates();
         $post = FatApp::getPostedData();
 
-        $stateId = $post['state_id'];
+        $recordId = $post['state_id'];
 
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
@@ -210,60 +237,56 @@ class StatesController extends AdminBaseController
         }
 
 
-        if ($stateId == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+        if ($recordId == 0 || $lang_id == 0) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $frm = $this->getLangForm($stateId, $lang_id);
+        $frm = $this->getLangForm($recordId, $lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         unset($post['state_id']);
         unset($post['lang_id']);
 
         $data = array(
             'statelang_lang_id' => $lang_id,
-            'statelang_state_id' => $stateId,
+            'statelang_state_id' => $recordId,
             'state_name' => $post['state_name']
         );
 
-        $stateObj = new States($stateId);
+        $stateObj = new States($recordId);
 
         if (!$stateObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($stateObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($stateObj->getError(), true);
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(States::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($stateId)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
         $newTabLangId = 0;
         $languages = Language::getAllNames();
         foreach ($languages as $langId => $langName) {
-            if (!$row = States::getAttributesByLangId($langId, $stateId)) {
+            if (!$row = States::getAttributesByLangId($langId, $recordId)) {
                 $newTabLangId = $langId;
                 break;
             }
         }
 
         $this->set('msg', $this->str_setup_successful);
-        $this->set('stateId', $stateId);
+        $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getForm($stateId = 0)
+    private function getForm($recordId = 0)
     {
-        $this->objPrivilege->canViewStates();
-        $stateId = FatUtility::int($stateId);
+        $recordId = FatUtility::int($recordId);
 
         $frm = new Form('frmState');
-        $frm->addHiddenField('', 'state_id', $stateId);
+        $frm->addHiddenField('', 'state_id', $recordId);
         $frm->addRequiredField(Labels::getLabel('LBL_State_Identifier', $this->adminLangId), 'state_identifier');
         $frm->addRequiredField(Labels::getLabel('LBL_State_Code', $this->adminLangId), 'state_code');
         $countryObj = new Countries();
@@ -273,15 +296,15 @@ class StatesController extends AdminBaseController
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'state_active', $activeInactiveArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 
-    private function getLangForm($stateId = 0, $lang_id = 0)
+    private function getLangForm($recordId = 0, $lang_id = 0)
     {
         $this->objPrivilege->canViewStates();
         $frm = new Form('frmStateLang');
-        $frm->addHiddenField('', 'state_id', $stateId);
+        $frm->addHiddenField('', 'state_id', $recordId);
 
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
@@ -300,69 +323,107 @@ class StatesController extends AdminBaseController
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 
-    public function changeStatus()
+    public function updateStatus()
     {
         $this->objPrivilege->canEditStates();
-        $stateId = FatApp::getPostedData('stateId', FatUtility::VAR_INT, 0);
-        if (0 >= $stateId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (0 >= $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $data = States::getAttributesById($stateId, array('state_id', 'state_active'));
+        $data = States::getAttributesById($recordId, array('state_id', 'state_active'));
 
         if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $status = ($data['state_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
 
-        $this->updateStatesStatus($stateId, $status);
-        Product::updateMinPrices(0, 0, 0, 0, $stateId);
+        $this->changeStatus($recordId, $status);
+        Product::updateMinPrices(0, 0, 0, 0, $recordId);
         FatUtility::dieJsonSuccess($this->str_update_record);
     }
     public function toggleBulkStatuses()
     {
         $this->objPrivilege->canEditStates();
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $statesIdsArr = FatUtility::int(FatApp::getPostedData('state_ids'));
-        if (empty($statesIdsArr) || -1 == $status) {
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('state_ids'));
+        if (empty($recordIdsArr) || -1 == $status) {
             FatUtility::dieWithError(
                 Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
             );
         }
 
-        foreach ($statesIdsArr as $stateId) {
-            if (1 > $stateId) {
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
                 continue;
             }
 
-            $this->updateStatesStatus($stateId, $status);
+            $this->changeStatus($recordId, $status);
         }
         Product::updateMinPrices();
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function updateStatesStatus($stateId, $status)
+    private function changeStatus($recordId, $status)
     {
         $status = FatUtility::int($status);
-        $stateId = FatUtility::int($stateId);
-        if (1 > $stateId || -1 == $status) {
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
             FatUtility::dieWithError(
                 Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
             );
         }
 
-        $stateObj = new States($stateId);
+        $stateObj = new States($recordId);
         if (!$stateObj->changeStatus($status)) {
-            Message::addErrorMessage($stateObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($stateObj->getError(), true);
         }
+    }
+
+    private function getFormColumns(): array
+    {
+        $statesTblHeadingCols = CacheHelper::get('statesTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($statesTblHeadingCols) {
+            return json_decode($statesTblHeadingCols);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
+            'state_identifier' => Labels::getLabel('LBL_State_Identifier', $this->adminLangId),
+            'state_name' => Labels::getLabel('LBL_State_Name', $this->adminLangId),
+            'state_code' => Labels::getLabel('LBL_State_Code', $this->adminLangId),
+            'country_name' => Labels::getLabel('LBL_Country_Name', $this->adminLangId),
+            'state_active' => Labels::getLabel('LBL_Status', $this->adminLangId),
+            'action' => '',
+        ];
+        CacheHelper::create('statesTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return [
+            'select_all',
+            'listSerial',
+            'state_identifier',
+            'state_name',
+            'state_code',
+            'country_name',
+            'state_active',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['state_active'], Common::excludeKeysForSort());
     }
 }

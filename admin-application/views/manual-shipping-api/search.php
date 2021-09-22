@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'mshipapi_sduration_id' => Labels::getLabel('LBL_Duration', $adminLangId),
     'mshipapi_volume_upto' => Labels::getLabel('LBL_Volume(cc)', $adminLangId),
     'mshipapi_weight_upto' => Labels::getLabel('LBL_Weight(gm)', $adminLangId),
@@ -25,7 +25,7 @@ foreach ($arrListing as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no, true);
                 break;
             case 'mshipapi_state_id':

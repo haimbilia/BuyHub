@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
-    'listserial' => Labels::getLabel('LBL_#', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
     'user' => Labels::getLabel('LBL_User', $adminLangId),
     'afile_physical_path' => Labels::getLabel('LBL_FILE_LOCATION', $adminLangId),
     'files'    => Labels::getLabel('LBL_Files', $adminLangId),
@@ -13,7 +13,7 @@ if (!$canEdit) {
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive'));
 $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($arr_flds as $key => $val) {
-    if ($key == 'listserial') {
+    if ($key == 'listSerial') {
         $e = $th->appendElement('th', array('width' => '5%'), $val);
     } elseif ($key == 'user') {
         $e = $th->appendElement('th', array('width' => '15%'), $val);
@@ -33,7 +33,7 @@ foreach ($records as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'user':

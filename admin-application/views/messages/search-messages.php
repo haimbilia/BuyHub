@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
-        'listserial'=>'',
+        'listSerial'=>'',
         'message_text'=>'',
         'action' => '',
     );
@@ -17,7 +17,7 @@ foreach ($arrListing as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
-            case 'listserial':
+            case 'listSerial':
 /*$img = '<img src="'.UrlHelper::generateFileUrl('Image','user',array($row['message_sent_by'],'THUMB',true),CONF_WEBROOT_FRONT_URL).'" />';
                 $td->appendElement('plaintext', array(), $img ,true); */
 

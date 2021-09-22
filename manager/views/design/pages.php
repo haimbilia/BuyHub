@@ -18,8 +18,7 @@
         include 'includes/header.php';
         ?>
             <div class="body" id="body">
-                <div class="content content--fit-top  grid__item grid__item--fluid grid grid--hor" id="content">
-
+                <div class="content " id="content">
                     <!-- begin:: Subheader -->
                     <div id="subheader" class="subheader">
                         <div class="container">
@@ -67,8 +66,7 @@
                     </div>
                     <!-- end:: Subheader -->
                     <!-- begin:: Content -->
-                    <div class="container  grid__item grid__item--fluid">
-
+                    <div class="container">
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="card">
@@ -79,6 +77,7 @@
                                     </div>
                                     <div class="card-body">
                                         <ul class="pages__list-wrapper">
+                                            <li><a href="theme-setting.php">Theme Setting</a></li>
                                             <li><a href="listing.php">Listing</a></li>
                                             <li><a href="login-1.php">Login</a></li>
                                             <li><a href="password-reset.php">Password Reset</a></li>

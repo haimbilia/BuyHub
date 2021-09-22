@@ -1,48 +1,40 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$langFrm->setFormTagAttribute('class', 'web_form form_horizontal layout--'.$formLayout);
-$langFrm->setFormTagAttribute('onsubmit', 'setupLangZone(this); return(false);');
-$langFrm->developerTags['colClassPrefix'] = 'col-md-';
-$langFrm->developerTags['fld_default_col'] = 12;
+
+HtmlHelper::formatFormFields($langFrm);
+
+$langFrm->setFormTagAttribute('class', 'modal-body form form-edit layout--' . $formLayout);
+$langFrm->setFormTagAttribute('onsubmit', 'saveLangData(this); return(false);');
 
 $langFld = $langFrm->getField('lang_id');
-$langFld->setfieldTagAttribute('onChange', "editZoneLangForm(" . $zoneId . ", this.value);");
+$langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this.value);");
 
-?>
-<section class="section">
-	<div class="sectionhead">
+$activeLangtab = true;
 
-		<h4><?php echo Labels::getLabel('LBL_Zone_Setup',$adminLangId); ?></h4>
-	</div>
-	<div class="sectionbody space">
-		<div class="row">	
-
-<div class="col-sm-12">
-	<div class="tabs_nav_container responsive flat">
-		<ul class="tabs_nav">
-			<li><a href="javascript:void(0);" onclick="editZoneForm(<?php echo $zoneId ?>);"><?php echo Labels::getLabel('LBL_General',$adminLangId); ?></a></li>
-                        <li class="<?php echo (0 == $zoneId) ? 'fat-inactive' : ''; ?>">
-                            <a class="active" href="javascript:void(0);" <?php echo (0 < $zoneId) ? "onclick='editZoneLangForm(" . $zoneId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                                <?php echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
-                            </a>
-                        </li>			
-		</ul>
-                <div class="tabs_panel_wrap">
-                    <?php
-                    $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-                    $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-                    if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) { ?> 
-                        <div class="row justify-content-end"> 
-                            <div class="col-auto mb-4">
-                                <input class="btn btn-brand" 
-                                    type="button" 
-                                    value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" 
-                                    onClick="editZoneLangForm(<?php echo $zoneId; ?>, <?php echo $lang_id; ?>, 1)">
-                            </div>
-                        </div>
-                    <?php } ?>
-                    <div class="tabs_panel">
-                        <?php echo $langFrm->getFormHtml(); ?>
-                    </div>
+require_once(CONF_THEME_PATH . 'zones/form-head.php'); ?>
+    <div class="form-edit-body loaderContainerJs">
+        <?php
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) { ?> 
+            <div class="row justify-content-end"> 
+                <div class="col-auto mb-4">
+                    <input class="btn btn-brand" 
+                        type="button" 
+                        value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" 
+                        onClick="editLangData(<?php echo $recordId; ?>, <?php echo $lang_id; ?>, 1)">
                 </div>
-	</div>	
-</div>
+            </div>
+        <?php } ?>
+        <?php echo $langFrm->getFormHtml(); ?>
+    </div>
+
+    <div class="form-edit-foot">
+        <div class="row">
+            <div class="col-auto">
+                <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
+                    <?php echo Labels::getLabel('LBL_UPDATE', $adminLangId); ?>
+                </button>
+            </div>
+        </div>
+    </div>
+</div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->

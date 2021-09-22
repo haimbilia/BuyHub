@@ -35,4 +35,28 @@ class HtmlHelper
             'html' => ''
         ];
     }
+
+    public static function formatFormFields(Form &$form)
+    {
+        $form->setCustomRendererClass('FormRendererBS');
+
+        /* For Each Row On Above Elements */
+        $form->developerTags['colWidthClassesDefault'] = ['col-md-', null, null];
+        $form->developerTags['colWidthValuesDefault'] = [12, null, null];
+        /* For Each Row On Above Elements */
+
+        /* For Input Fields */
+        $form->developerTags['fldWidthClassesDefault'] = ['', '', '', ''];
+        $form->developerTags['fldWidthValuesDefault'] = ['', '', '', ''];
+        /* For Input Fields */
+
+        /* For Labels Fields */
+        $form->developerTags['labelWidthClassesDefault'] = ['label', 'label', 'label', 'label'];
+        $form->developerTags['labelWidthValuesDefault'] = ['', '', '', ''];
+        /* For Labels Fields */
+
+        /* Group Label and Input field. */
+        $form->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
+        /* Group Label and Input field. */
+    }
 }

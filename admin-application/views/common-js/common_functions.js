@@ -513,18 +513,18 @@ $(document).ready(function () {
         $.systemMessage.close();
     });
 
-    $(document).on("click", ".selectItem--js", function () {
+    $(document).on("click", ".selectItemJs", function () {
         var parentForm = $(this.form).attr("id");
         if ($(this).prop("checked") == false) {
             $("#" + parentForm + " .selectAll-js").prop("checked", false);
         }
 
-        if ($("#" + parentForm + " .selectItem--js").length == $("#" + parentForm + " .selectItem--js:checked").length) {
+        if ($("#" + parentForm + " .selectItemJs").length == $("#" + parentForm + " .selectItemJs:checked").length) {
             $("#" + parentForm + " .selectAll-js").prop("checked", true);
         }
 
         var faceboxActionBtns = (0 < $("#facebox").length && $("#facebox").is(":visible")) ? "#facebox " : '';
-        if ($("#" + parentForm + " .selectItem--js:checked").length == 0) {
+        if ($("#" + parentForm + " .selectItemJs:checked").length == 0) {
             $(faceboxActionBtns + " .toolbar-btn-js").addClass('d-none');
         } else {
             $(faceboxActionBtns + " .toolbar-btn-js").removeClass('d-none');
@@ -563,7 +563,7 @@ function getNotifications() {
 
 function selectAll(obj) {
     var parentForm = obj.closest('form').attr('id');
-    $("#" + parentForm + " .selectItem--js").each(function () {
+    $("#" + parentForm + " .selectItemJs").each(function () {
         if (obj.prop("checked") == false) {
             $(this).prop("checked", false);
         } else {
@@ -581,7 +581,7 @@ function selectAll(obj) {
 }
 
 function formAction(frm, callback) {
-    if (typeof $(".selectItem--js:checked").val() === 'undefined') {
+    if (typeof $(".selectItemJs:checked").val() === 'undefined') {
         $.systemMessage(langLbl.atleastOneRecord, 'alert--danger');
         return false;
     }
@@ -616,7 +616,7 @@ function toggleBulkStatues(status, msg = '') {
 };
 
 function showActionsBtns() {
-    if (typeof $(".selectItem--js:checked").val() === 'undefined') {
+    if (typeof $(".selectItemJs:checked").val() === 'undefined') {
         $(".toolbar-btn-js").addClass('d-none');
     } else {
         $(".toolbar-btn-js").removeClass('d-none');

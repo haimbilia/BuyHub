@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php 
 $arr_flds = array(
-	'listserial'	=>	'',
+	'listSerial'	=>	'',
 	'user_name'=>Labels::getLabel('LBL_User',$adminLangId),
 	'selprod_title'=>Labels::getLabel('LBL_Seller_product',$adminLangId),
     'abandonedcart_qty'=>Labels::getLabel('LBL_Qty',$adminLangId),
@@ -42,7 +42,7 @@ foreach ($records as $sn=>$row){
 	foreach ($arr_flds as $key=>$val){
 		$td = $tr->appendElement('td');
 		switch ($key){
-			case 'listserial':
+			case 'listSerial':
 				$td->appendElement('plaintext', array(), $sr_no);
 			break;
 			case 'abandonedcart_action': 

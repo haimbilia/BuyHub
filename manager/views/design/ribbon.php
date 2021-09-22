@@ -9,16 +9,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-	<script>
-		WebFont.load({
-			google: {
-				"families": ["Poppins:300,400,500,600,700"]
-			},
-			active: function() {
-				sessionStorage.fonts = true;
-			}
-		});
-	</script>
+	
 	
 	<link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
 	
@@ -33,8 +24,8 @@
 		<?php
   include 'includes/header.php';
 ?>
-		<div class="body grid__item grid__item--fluid grid grid--hor grid--stretch" id="body">
-			<div class="content content--fit-top  grid__item grid__item--fluid grid grid--hor" id="content">
+		<div class="body " id="body">
+			<div class="content " id="content">
 
 				<!-- begin:: Subheader -->
 				<div class="subheader   grid__item" id="subheader">
@@ -82,7 +73,7 @@
 				<!-- end:: Subheader -->
 
 				<!-- begin:: Content -->
-				<div class="container  grid__item grid__item--fluid">
+				<div class="container">
 					<!--begin: Row -->
 					<div class="row">
 						<div class="col-lg-4">
