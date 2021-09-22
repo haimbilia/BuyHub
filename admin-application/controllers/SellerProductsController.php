@@ -1843,7 +1843,7 @@ class SellerProductsController extends AdminBaseController
         }
         $post = FatApp::getPostedData();
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
-        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
+        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
         $cRequestObj = new User();
         $srch = $cRequestObj->getUserCatalogRequestsObj();
@@ -2184,8 +2184,8 @@ class SellerProductsController extends AdminBaseController
     {
         $frmSearchCatalogProduct = $this->getCatalogProductSearchForm();
         $post = $frmSearchCatalogProduct->getFormDataFromArray(FatApp::getPostedData());
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
-        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
+        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);       
+        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
         $srch = Product::getSearchObject($this->adminLangId);
         $srch->joinTable(AttributeGroup::DB_TBL, 'LEFT OUTER JOIN', 'product_attrgrp_id = attrgrp_id', 'attrgrp');
@@ -2633,8 +2633,10 @@ class SellerProductsController extends AdminBaseController
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $sellerId = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);
+        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         $srch = SellerProduct::searchSpecialPriceProductsObj($this->adminLangId, $selProdId, $keyword, $sellerId);
         $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
         $arrListing = $db->fetchAll($rs);
@@ -2645,7 +2647,7 @@ class SellerProductsController extends AdminBaseController
         $this->set('pageCount', $srch->pages());
         $this->set('postedData', $post);
         $this->set('recordCount', $srch->recordCount());
-        $this->set('pageSize', FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10));
+        $this->set('pageSize', $pagesize);
         $this->_template->render(false, false);
     }
 
@@ -2655,8 +2657,9 @@ class SellerProductsController extends AdminBaseController
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $sellerId = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);
+        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         $srch = SellerProduct::searchVolumeDiscountProducts($this->adminLangId, $selProdId, $keyword, $sellerId);
-
+        $srch->setPageSize($pagesize);
         $srch->setPageNumber($page);
         $srch->addOrder('voldiscount_id', 'DESC');
 
@@ -2670,7 +2673,7 @@ class SellerProductsController extends AdminBaseController
         $this->set('pageCount', $srch->pages());
         $this->set('postedData', FatApp::getPostedData());
         $this->set('recordCount', $srch->recordCount());
-        $this->set('pageSize', FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10));
+        $this->set('pageSize', $pagesize);
         $this->_template->render(false, false);
     }
 
@@ -2989,7 +2992,7 @@ class SellerProductsController extends AdminBaseController
         $this->set('pageCount', $prodSrch->pages());
         $this->set('postedData', FatApp::getPostedData());
         $this->set('recordCount', $prodSrch->recordCount());
-        $this->set('pageSize', FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10));
+        $this->set('pageSize', $pagesize);
         $this->_template->render(false, false);
     }
 
@@ -3173,7 +3176,7 @@ class SellerProductsController extends AdminBaseController
         $this->set('pageCount', $prodSrch->pages());
         $this->set('postedData', FatApp::getPostedData());
         $this->set('recordCount', $prodSrch->recordCount());
-        $this->set('pageSize', FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10));
+        $this->set('pageSize', $pagesize);
         $this->_template->render(false, false);
     }
 
