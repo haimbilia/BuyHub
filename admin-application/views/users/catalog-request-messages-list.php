@@ -16,10 +16,10 @@ if($page == 1 ){
 	} 	
 }
 
-$sr_no = $page==1 ? 0 : $pageSize*($page-1);
+$serialNo = $page==1 ? 0 : $pageSize*($page-1);
 foreach ($messagesList as $sn=>$row){
 
-	$sr_no++;
+	$serialNo++;
 	$tr = $tbl->appendElement('tr');
 	
 	foreach ($arr_flds as $key=>$val){

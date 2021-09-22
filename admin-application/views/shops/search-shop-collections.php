@@ -22,9 +22,9 @@ foreach ($arr_flds as $key => $val) {
         $th->appendElement('th', array(), $val);
     }
 }
-$sr_no = 0;
+$serialNo = 0;
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['scollection_id']);
 
@@ -35,7 +35,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="scollection_ids[]" value=' . $row['scollection_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'scollection_identifier':
                 $td->appendElement('plaintext', array(), $row[$key], true);

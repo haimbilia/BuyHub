@@ -22,9 +22,9 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 
-$sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
+$serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr');
 
     foreach ($arr_flds as $key => $val) {
@@ -36,7 +36,7 @@ foreach ($arrListing as $sn => $row) {
                 }
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'afcommsetting_prodcat_id':
                 $td->appendElement('plaintext', array(), CommonHelper::displayText($row['prodcat_name']), true);

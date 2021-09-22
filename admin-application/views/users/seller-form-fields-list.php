@@ -20,9 +20,9 @@ foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
 
-$sr_no = 0;
+$serialNo = 0;
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['sformfield_id']);
 
@@ -34,7 +34,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->setAttribute("class", 'dragHandle');
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'sformfield_required':
                 $td->appendElement('plaintext', array(), $yesNoArr[$row[$key]], true);

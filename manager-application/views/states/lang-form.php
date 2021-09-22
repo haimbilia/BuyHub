@@ -9,7 +9,6 @@ $langFld = $langFrm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this.value);");
 
 $activeLangtab = true;
-
 require_once(CONF_THEME_PATH . 'states/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
         <?php

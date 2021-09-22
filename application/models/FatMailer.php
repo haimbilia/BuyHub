@@ -40,37 +40,37 @@ class FatMailer extends FatModel
         $this->template = $template;
     }
 
-    public function setFrom(string $email, string $name = '')
+    public function setFrom(string $email, string $name = ''): object
     {
         $this->addAnAddress('from', $email, $name);
         return $this;
     }
 
-    public function setReplyTo(string $email, string $name = '')
+    public function setReplyTo(string $email, string $name = ''): object
     {
         $this->addAnAddress('replyTo', $email, $name);
         return $this;
     }
 
-    public function addCc(string $email, string $name = '')
+    public function addCc(string $email, string $name = ''): object
     {
         $this->addAnAddress('cc', $email, $name);
         return $this;
     }
 
-    public function addBcc(string $email, string $name = '')
+    public function addBcc(string $email, string $name = ''): object
     {
         $this->addAnAddress('bcc', $email, $name);
         return $this;
     }
 
-    public function setTo(string $email, string $name = '')
+    public function setTo(string $email, string $name = ''): object
     {
         $this->addAnAddress('to', $email, $name);
         return $this;
     }
 
-    public function setVariables(array $variables)
+    public function setVariables(array $variables): object
     {
         $this->variables = $variables;
         return $this;
@@ -81,7 +81,7 @@ class FatMailer extends FatModel
      * @param string $name attachment name.
      * 
      */
-    public function addAttachment($path, $name)
+    public function addAttachment($path, $name): object
     {
         array_push($this->attachments, ['path' => $path, 'name' => $name]);
         return $this;
@@ -92,7 +92,7 @@ class FatMailer extends FatModel
      * @param int $priority higher priority email will go first [range 0 - 5]
      * 5 means immediate  
      */
-    public function setPriority(int $priority)
+    public function setPriority(int $priority): object
     {
         $this->priority = $priority;
         return $this;
@@ -103,14 +103,14 @@ class FatMailer extends FatModel
      * @param type $smtpArr
      *  $smtpArr = ["host" => '',"port" =>'' ,"username" => '', "password" =>'' , "secure" => '' ];
      */
-    public function setSmtpDetails(array $smtpArr)
+    public function setSmtpDetails(array $smtpArr): object
     {
         $this->smtpArr = $smtpArr;
         $this->forceSmtp();
         return $this;
     }
 
-    public function forceSmtp()
+    public function forceSmtp(): object
     {
         $this->forceSmtp = true;
         return $this;
@@ -181,18 +181,19 @@ class FatMailer extends FatModel
         return true;
     }
 
-    public static function sendArchivedEmail()
+    public static function sendArchivedEmails(): bool
     {
         if (FatApp::getConfig('CONF_SEND_EMAIL') == applicationConstants::NO || !ALLOW_EMAILS) {
             return 'Email is disabled';
         }
 
-        $srch = new SearchBase(self::DB_TBL_ARCHIVE);      
+        $srch = new SearchBase(self::DB_TBL_ARCHIVE);
         $srch->addCondition('earch_sent_on', 'is', 'mysql_func_null', 'and', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(50);
-        $srch->addOrder('earch_priority','DESC');       
-        $archives = FatApp::getDb()->fetchAll($srch->getResultSet());      
+        $srch->addOrder('earch_priority', 'DESC');
+        $srch->addOrder('earch_added', 'ASC');
+        $archives = FatApp::getDb()->fetchAll($srch->getResultSet());
         $fatMailerObj = new self(1, '');
         foreach ($archives as $archive) {
             $fatMailerObj->toEmail = $archive['earch_to_email'];
@@ -257,9 +258,9 @@ class FatMailer extends FatModel
         return true;
     }
 
-    private function addAnAddress(string $type, string $email, string $name)
+    private function addAnAddress(string $type, string $email, string $name): void
     {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (false == filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return;
         }
         switch ($type) {
@@ -286,7 +287,7 @@ class FatMailer extends FatModel
         }
     }
 
-    private function getTemplate()
+    private function getTemplate(): array
     {
         $row = $this->getMailTpl($this->langId);
         if (!$row) {
@@ -295,7 +296,7 @@ class FatMailer extends FatModel
         return $row;
     }
 
-    private function getMailTpl($langId)
+    private function getMailTpl($langId): array
     {
         $srch = new SearchBase(self::DB_TBL);
         $srch->addCondition('etpl_code', '=', $this->template);
@@ -381,7 +382,7 @@ class FatMailer extends FatModel
         return array_unique($emails);
     }
 
-    private function commonVars($langId)
+    private function commonVars($langId): array
     {
         $srch = SocialPlatform::getSearchObject($langId);
         $srch->doNotCalculateRecords();

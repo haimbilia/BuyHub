@@ -23,9 +23,9 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 
-$sr_no = 0;
+$serialNo = 0;
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr');
     if ($row['bpcategory_active'] == applicationConstants::ACTIVE) {
         $tr->setAttribute("id", $row['bpcategory_id']);
@@ -47,7 +47,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="bpcategory_ids[]" value=' . $row['bpcategory_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'bpcategory_identifier':
                 if ($row['bpcategory_name'] != '') {

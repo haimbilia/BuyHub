@@ -29,7 +29,7 @@ foreach ($arrListing as $sn => $row) {
 
                 $htm = '<span class="switch switch--sm switch--icon">
                                     <label>
-                                        <input type="checkbox" value="' . $row['state_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
+                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['state_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
                                         <span></span>
                                     </label>
                                 </span>';
@@ -46,7 +46,6 @@ foreach ($arrListing as $sn => $row) {
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
-
                 break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);
@@ -56,7 +55,7 @@ foreach ($arrListing as $sn => $row) {
 }
 
 if (count($arrListing) == 0) {
-    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($fields)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
+    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($fields)), Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId));
 }
 
 if ($printData) {

@@ -15,10 +15,10 @@ foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
 
-//$sr_no = $page==1?0:$pageSize*($page-1);
-$sr_no = 0;
+//$serialNo = $page==1?0:$pageSize*($page-1);
+$serialNo = 0;
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr');
     if ($row['sstory_active'] == applicationConstants::ACTIVE) {
         $tr->setAttribute("id", $row['sstory_id']);
@@ -37,7 +37,7 @@ foreach ($arrListing as $sn => $row) {
                 }
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'sstory_identifier':
                 if ($row['sstory_title'] != '') {

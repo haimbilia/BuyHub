@@ -1204,9 +1204,95 @@ ALTER TABLE `tbl_email_archives`
 ALTER TABLE `tbl_email_archives`
   MODIFY `earch_id` int NOT NULL AUTO_INCREMENT;
 
-UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'account_credited_debited'
-UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'admin_forgot_password'
-UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'admin_new_user_creation_email'
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'account_credited_debited';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'admin_forgot_password';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'admin_new_user_creation_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'abandoned_cart_deleted_discount_notification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'abandoned_cart_discount_notification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'abandoned_cart_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'admin_notification_abusive_review_posted';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'admin_order_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'ADMIN_ORDER_PAYMENT_TRANSFERRED_TO_BANK';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'affiliate_share_invitation_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'affiliate_welcome_registration';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'blog_comment_status_changed';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'blog_contribution_status_changed';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'buyer_notification_review_order_product';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'buyer_notification_review_status_updated';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'cancellation_request_approved_declined';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'cancel_subscription_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'catalog_request_message_user';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'child_order_status_change';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'COD_OTP_VERIFICATION';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'contact_us';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'customer_digital_order_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'customer_order_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'data_request_notification_to_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'failed_login_attempt';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'forgot_password';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'gdpr_request_status_update_notification_to_user';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'guest_welcome_registration';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'low_balance_promotional_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'low_balance_subscription_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'new_affiliate_registration_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'new_catalog_request_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'new_custom_catalog_request_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'new_registration_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'new_subscription_purchase';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'new_subscription_purchase_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'new_supplier_approval_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'order_cancellation_notification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'password_changed_successfully';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'primary_order_bank_transfer_payment_status_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'primary_order_bank_transfer_payment_status_buyer';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'primary_order_payment_status_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'primary_order_payment_status_buyer';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'primary_order_payment_status_change_buyer';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'product_return';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'promotion_approval_required_to_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'promotion_request_status_change';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'reminder_for_items_in_cart';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'reminder_for_items_in_wishlist';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'report_shop';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'return_request_message_user';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'return_request_status_change_notification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'reward_points_credited_debited';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'seller_brand_request_admin_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'seller_brand_request_status_change';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'seller_category_request_admin_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'seller_custom_catalog_request_status_change';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'seller_custom_catalog_request_status_change';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'share_earn_invitation_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'send_message';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'subscription_free_package_reminder_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'subscription_renew_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'subscription_renew_user';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'subscription_reminder_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'supplier_request_status_change_buyer';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'taxapi_order_creation_failure';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'test_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'threshold_notification_vendor';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'threshold_notification_vendor_custom';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'user_admin_password_changed_successfully';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'user_change_email_request_notification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'user_discount_coupon_notification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'user_email_changed_notification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'user_email_verification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'user_send_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'user_signup_verification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'vendor_bank_transfer_order_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'vendor_cod_order_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'vendor_digital_order_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'vendor_order_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'welcome_registration';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'withdrawal_request_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'withdrawal_request_approved_declined';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'new_seller_approved_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'primary_order_payment_status_change_admin';
+
+
+INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Send Archive Emails', 'FatMailer/sendArchivedEmails', '5', '1');
 
 -- ---- Email Functionality update ---- --
 

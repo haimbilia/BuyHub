@@ -31,7 +31,7 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 
-$sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
+$serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
     $name = $row[Badge::DB_TBL_PREFIX . 'identifier'];
@@ -45,7 +45,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="badgeIds[]" value=' . $row['badge_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', [], $sr_no, true);
+                $td->appendElement('plaintext', [], $serialNo, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'name':
                 $td->appendElement('plaintext', [], $name, true);
@@ -102,7 +102,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
-    $sr_no--;
+    $serialNo--;
 }
 if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), 'No records found');

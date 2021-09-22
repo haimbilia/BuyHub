@@ -23,7 +23,6 @@
     $submitBtn->addFieldTagAttribute('class', 'btn btn-brand btn-lg btn-block');
 
     ?>
- <div id="particles-js"></div>
  <div class="login-page login-1">
      <div class="container">
          <div class="row align-item-center justify-content-center">

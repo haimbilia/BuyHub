@@ -124,16 +124,15 @@ var fcom = {
 	},
 
 	updateWithAjax: function (url, data, fn, options, autoClose = true) {
-		/*this.addTrailingSlash();*/
-		$.mbsmessage(langLbl.processing, autoClose, 'alert--process');
+        $.ykmsg.info(langLbl.processing);
 		var o = $.extend(true, { fOutMode: 'json' }, options);
 		this.ajax(url, data, function (ans) {
+            $.ykmsg.close();
 			if (ans.status != 1) {
-				$(document).trigger('close.mbsmessage');
-				$.mbsmessage(ans.msg, autoClose, 'alert--danger');
+                $.ykmsg.error(ans.msg);
 				return;
 			}
-			$.mbsmessage(ans.msg, autoClose, 'alert--success');
+            $.ykmsg.success(ans.msg);
 			fn(ans);
 		}, o);
 	},
@@ -214,7 +213,11 @@ var fcom = {
 		}
 
 		return obj;
-	}
+	},
+
+    displayProcessing: function() {
+        $.ykmsg.info(langLbl.processing);
+    }
 };
 
 $.fn.selectRange = function (start, end) {

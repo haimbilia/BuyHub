@@ -26,7 +26,7 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 
-$sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
+$serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['brand_id']);
@@ -39,7 +39,7 @@ foreach ($arrListing as $sn => $row) {
         }
         switch ($key) {
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'shop_name':
                 $name = $row['shop_name'] . '(' . $row['user_name'] . ')';
@@ -85,7 +85,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
-    $sr_no--;
+    $serialNo--;
 }
 echo $tbl->getHtml();
 $postedData['page'] = $page;

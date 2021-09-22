@@ -30,7 +30,7 @@ if (count($arrListing) == 0) {
         }
     }
 
-    $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
+    $serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
     foreach ($arrListing as $sn => $row) {
         $tr = $tbl->appendElement('tr', array());
 
@@ -41,7 +41,7 @@ if (count($arrListing) == 0) {
                     $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="product_ids[]" value=' . $row['product_id'] . '><i class="input-helper"></i></label>', true);
                     break;
                 case 'listSerial':
-                    $td->appendElement('plaintext', array(), $sr_no);
+                    $td->appendElement('plaintext', array(), $serialNo);
                     break;
                 case 'product_identifier':
                     $td->appendElement('plaintext', array(), $row['product_name'] . '<br>', true);
@@ -91,7 +91,7 @@ if (count($arrListing) == 0) {
                     break;
             }
         }
-        $sr_no--;
+        $serialNo--;
     }
 
 
