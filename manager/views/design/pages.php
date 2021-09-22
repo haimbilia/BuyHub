@@ -165,6 +165,9 @@
                                                                     <li>
                                                                         <a href="#">Icon</a>
                                                                         <ul>
+                                                                            <li><a href="feathericons.php">Feather
+                                                                                </a>
+                                                                            </li>
                                                                             <li><a href="flaticon.php">Flaticon</a>
                                                                             </li>
                                                                             <li><a href="fontawesome5.php">Fontawesome

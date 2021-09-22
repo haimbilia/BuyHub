@@ -65,6 +65,9 @@
  }
  
  .form {
+     .form-group {
+         margin-bottom: 1rem;
+     }
      .field-set {
          margin: 0.5rem 0;
      }
@@ -261,6 +264,10 @@
      }
  }
  
+ .form-control {
+     @include input;
+ }
+ 
  .required {
      &:after {
          content: "*";
@@ -453,7 +460,6 @@
          .svg {
              width: 16px;
              height: 16px;
-             fill: currentColor;
          }
          &:hover {
              box-shadow: none;

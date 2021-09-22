@@ -595,11 +595,10 @@
                 height: 16px;
                 [fill]:not(.permanent):not(g) {
                     transition: fill .3s ease;
-                    fill: currentColor;
                     // fill: $brand-color;
                 }
             }
-            &.disabled{
+            &.disabled {
                 opacity: 0.65;
                 pointer-events: none;
             }
