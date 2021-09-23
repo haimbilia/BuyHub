@@ -68,5 +68,11 @@ $(document).ready(function () {
         },
     });
 
+    clearCache = function () {
+        // $(document.body).prepend(fcom.getLoader());
+        fcom.updateWithAjax(fcom.makeUrl('Home', 'clear'), '', function (t) {            
+            window.location.reload();
+        });
+    }
 
 })();
