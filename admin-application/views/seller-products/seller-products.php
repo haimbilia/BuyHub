@@ -39,7 +39,7 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 
-$sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
+$serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr', array());
 
@@ -50,7 +50,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="selprod_ids[]" value=' . $row['selprod_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'name':
                 $variantStr = ($row['selprod_title'] != '') ? $row['selprod_title'] . '<br/>' : '';
@@ -112,7 +112,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
-    $sr_no--;
+    $serialNo--;
 }
 if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement(

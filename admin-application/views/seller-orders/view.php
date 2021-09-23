@@ -560,7 +560,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                     <th><?php echo Labels::getLabel('LBL_Expired_on', $adminLangId); ?></th>
                                     <th><?php echo Labels::getLabel('LBL_Action', $adminLangId); ?></th>
                                 </tr>
-                                <?php $sr_no = 1;
+                                <?php $serialNo = 1;
                                 foreach ($digitalDownloads as $key => $row) {
                                     $lang_name = Labels::getLabel('LBL_All', $adminLangId);
                                     if ($row['afile_lang_id'] > 0) {
@@ -578,7 +578,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                         $expiry = FatDate::Format($row['expiry_date']);
                                     } ?>
                                     <tr>
-                                        <td><?php echo $sr_no; ?></td>
+                                        <td><?php echo $serialNo; ?></td>
                                         <td><?php echo '<div class="text-break">' . $fileName . '</div>'; ?></td>
                                         <td><?php echo $lang_name; ?></td>
                                         <td><?php echo $row['afile_downloaded_times']; ?></td>
@@ -604,7 +604,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                     <th><?php echo Labels::getLabel('LBL_Downloaded_count', $adminLangId); ?></th>
                                     <th><?php echo Labels::getLabel('LBL_Expired_on', $adminLangId); ?></th>
                                 </tr>
-                                <?php $sr_no = 1;
+                                <?php $serialNo = 1;
                                 foreach ($digitalDownloadLinks as $key => $row) {
                                     /* $fileName = '<a href="'.UrlHelper::generateUrl('Seller','downloadDigitalFile',array($row['afile_id'],$row['afile_record_id'],AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)).'">'.$row['afile_name'].'</a>'; */
                                     /* $downloads = '<li><a href="'.UrlHelper::generateUrl('Seller','downloadDigitalFile',array($row['afile_id'],$row['afile_record_id'],AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)).'"><i class="fa fa-download"></i></a></li>'; */
@@ -619,7 +619,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                         $downloadableCount = $row['downloadable_count'];
                                     } ?>
                                     <tr>
-                                        <td><?php echo $sr_no; ?></td>
+                                        <td><?php echo $serialNo; ?></td>
                                         <td><div class="text-break"><a target="_blank" href="<?php echo $row['opddl_downloadable_link']; ?>" title="<?php echo Labels::getLabel('LBL_Click_to_download', $adminLangId); ?>"><?php echo $row['opddl_downloadable_link']; ?></a></div></td>
                                         <td><?php echo $downloadableCount; ?></td>
                                         <td><?php echo $row['opddl_downloaded_times']; ?></td>

@@ -20,7 +20,7 @@ foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
 
-$sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
+$serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr', array('class' => ''));
 
@@ -28,7 +28,7 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'shop_name':
                 $td->appendElement('plaintext', array(), $row[$key] . '<br>', true);
@@ -77,7 +77,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
-    $sr_no--;
+    $serialNo--;
 }
 echo $tbl->getHtml();
 if (count($arrListing) == 0) {

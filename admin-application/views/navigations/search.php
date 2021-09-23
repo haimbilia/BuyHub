@@ -35,9 +35,9 @@
             }
         }
 
-        $sr_no = 0;
+        $serialNo = 0;
         foreach ($arrListing as $sn => $row) {
-            $sr_no++;
+            $serialNo++;
             $tr = $tbl->appendElement('tr', array());
             foreach ($arr_flds as $key => $val) {
                 $td = $tr->appendElement('td');
@@ -46,7 +46,7 @@
                         $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="nav_ids[]" value=' . $row['nav_id'] . '><i class="input-helper"></i></label>', true);
                         break;
                     case 'listSerial':
-                        $td->appendElement('plaintext', array(), $sr_no);
+                        $td->appendElement('plaintext', array(), $serialNo);
                         break;
                     case 'nav_identifier':
                         if ($row['nav_name'] != '') {

@@ -21,9 +21,9 @@ foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
 
-$sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
+$serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr');
     /* if($row['coupon_active'] != applicationConstants::ACTIVE) {
 		$tr->setAttribute ("class","fat-inactive");
@@ -32,7 +32,7 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'coupon_identifier':
                 if ($row['coupon_title'] != '') {

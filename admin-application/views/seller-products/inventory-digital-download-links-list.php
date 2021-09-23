@@ -13,16 +13,16 @@ $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--
 foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
-$sr_no = 0;
+$serialNo = 0;
 foreach ($records as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr', array('id' => $row['pdl_id'] . '_' . $row['pdl_record_id']));
 
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no, true);
+                $td->appendElement('plaintext', array(), $serialNo, true);
                 break;
             case 'pdl_lang_id':
                 if (array_key_exists($row['pdl_lang_id'], $languages)) {

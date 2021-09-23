@@ -27,9 +27,9 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 
-$sr_no = 0;
+$serialNo = 0;
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr', array());
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
@@ -38,7 +38,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="epage_ids[]" value=' . $row['epage_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'epage_identifier':
                 if ($row['epage_label'] != '') {

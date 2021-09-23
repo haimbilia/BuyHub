@@ -43,7 +43,7 @@
     background-color: $bg-white;
     background-clip: padding-box;
     border: 1px solid rgba(0, 0, 0, .15);
-    border-radius: .25rem;
+    border-radius: $radius-common;
     &-left {
         right: auto;
         left: 0
@@ -248,7 +248,6 @@
     border-radius: 0;
     min-width: 14rem;
     padding: 0;
-    -webkit-box-shadow: 0 0 50px 0 rgba(82, 63, 105, .15);
     box-shadow: 0 0 50px 0 rgba(82, 63, 105, .15);
     padding: 1rem 0;
     border-radius: 4px;

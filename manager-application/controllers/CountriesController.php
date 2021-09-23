@@ -163,7 +163,7 @@ class CountriesController extends AdminBaseController
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
         Product::updateMinPrices(0, 0, 0, $recordId);
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId));
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');

@@ -23,7 +23,7 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 
-$sr_no = $recordCount;
+$serialNo = $recordCount;
 foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
 
@@ -34,7 +34,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="admin_ids[]" value=' . $row['admin_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'action':
                 if ($canEdit) {
@@ -66,7 +66,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
-    $sr_no--;
+    $serialNo--;
 }
 if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));

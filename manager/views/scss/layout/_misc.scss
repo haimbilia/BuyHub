@@ -155,3 +155,37 @@
         }
     }
 }
+
+.text-xs {
+    font-size: 0.8rem;
+}
+
+.palette {
+    background-color: $bg-gray;
+    border-radius: $radius-common;
+    padding: 10px 0;
+    padding-bottom: 0;
+}
+
+.color-data {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    .color-swatch {
+        input {
+            padding: 0;
+            outline: none;
+            border: none;
+            background: none;
+            height: 40px;
+            border-radius: 4px;
+        }
+    }
+    .color-label {
+        padding: 0 1rem;
+    }
+    h5 {
+        margin: 0;
+        font-size: 0.85rem;
+    }
+}

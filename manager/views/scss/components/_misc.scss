@@ -41,7 +41,7 @@ img {
     max-width: 100%;
 }
 
-svg {
+.svg {
     fill: currentColor;
 }
 
@@ -2003,11 +2003,10 @@ strong {
     border-radius: 4px;
     line-height: 16px;
     font-size: 1rem;
-    svg {
+    .svg {
         width: 18px;
         height: 18px;
         margin-#{$end-direction}: 5px;
-        fill: currentColor;
     }
 }
 
@@ -2040,12 +2039,6 @@ strong {
             margin: 0;
         }
     }
-}
-
-.palette {
-    background-color: #eef0f8;
-    border-radius: 4px;
-    padding: 10px 0;
 }
 
 .search-magni {

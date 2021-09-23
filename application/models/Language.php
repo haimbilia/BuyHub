@@ -49,10 +49,7 @@ class Language extends MyAppModel
         } else {
             $langData = FatApp::getDb()->fetchAll($srch->getResultSet(), static::tblFld('id'));
         }
-        $defaultLangData = $langData[$siteDefaultLang];
-        unset($langData[$siteDefaultLang]);
-        $langData = [$siteDefaultLang => $defaultLangData] + $langData;
-
+        
         CacheHelper::create('languageGetAllNames' . $cacheKey, FatUtility::convertToJson($langData), CacheHelper::TYPE_LANGUAGE);
         return $langData;
     }

@@ -54,12 +54,11 @@ a {
         border-radius: 0.2rem;
     }
     &.btn-arrow {
-        svg {
+        .svg {
             width: 12px;
             height: 12px;
             margin-top: -4px;
             margin-#{$end-direction}: 5px;
-            fill: currentColor;
         }
     }
     &.btn-link {
@@ -74,7 +73,6 @@ a {
                 width: 12px;
                 height: 12px;
                 margin-#{$end-direction}: 5px;
-                fill: currentcolor;
             }
         }
         &:hover {
@@ -87,10 +85,9 @@ a {
         outline: none !important;
     }
     .icn {
-        svg {
+        .svg {
             width: 16px;
             height: 16px;
-            fill: currentColor;
         }
     }
 }

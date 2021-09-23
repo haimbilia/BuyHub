@@ -22,10 +22,10 @@ foreach ($arr_flds as $key => $val) {
 }
 
 
-$sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
+$serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
 
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr');
     if ($row['post_published'] == 1) {
         $tr->setAttribute("id", $row['post_id']);
@@ -44,7 +44,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), FatDate::format($row['post_added_on'], true));
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'post_title':
                 if ($row['post_title'] != '') {

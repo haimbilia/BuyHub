@@ -21,9 +21,9 @@
 				foreach ($arr_flds as $key=>$val) {					
 					$e = $th->appendElement('th', array(), $val,true);
 				}
-				$sr_no = 0;
+				$serialNo = 0;
 				foreach ($arrListing as $sn=>$row){ 
-					$sr_no++;
+					$serialNo++;
 					$tr = $tbl->appendElement('tr');
 					
 					foreach ($arr_flds as $key=>$val){

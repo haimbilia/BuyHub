@@ -18,9 +18,9 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 
-$sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
+$serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['zone_id']);
 
@@ -31,7 +31,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="zone_ids[]" value=' . $row['zone_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'action':
                 $ul = $td->appendElement("ul", array("class" => "actions actions--centered"));

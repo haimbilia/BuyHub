@@ -21,9 +21,9 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 
-$sr_no = 0;
+$serialNo = 0;
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['ppoint_id']);
 
@@ -34,7 +34,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="ppoint_ids[]" value=' . $row['ppoint_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'ppoint_type':
                 $td->appendElement('plaintext', array(), $policyPointTypeArr[$row['ppoint_type']], true);

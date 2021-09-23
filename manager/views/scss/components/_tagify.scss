@@ -1,0 +1,33 @@
+.tagify {
+    height: auto;
+    &--outside {
+        display: flex;
+        border: none !important;
+        .tagify__input {
+            order: -1;
+            flex: 100%;
+            border: none;
+            padding: 0;
+            margin: 0;
+            margin-bottom: 1em;
+            transition: .1s;
+            &:hover {
+                border-color: inherit;
+            }
+        }
+        &.tagify--focus .tagify__input {
+            transition: 0s;
+            border-color: inherit;
+        }
+    }
+    &__dropdown {
+        &__wrapper {
+            font-size: 0.85rem;
+            background-color: $bg-white;
+            border: none;
+            border-radius: $radius-common;
+            box-shadow: $shadow1;
+            // @extend .dropdown-menu;
+        }
+    }
+}

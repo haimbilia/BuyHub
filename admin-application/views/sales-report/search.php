@@ -29,10 +29,10 @@ foreach ($fields as $key => $val) {
 
 $tbody = $tbl->appendElement('tbody', ['class' => 'datatable__body']);
 
-$sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
+$serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 foreach ($arrListing as $sn => $row) {
-    $cls = (($sr_no % 2) == 0) ? 'datatable__row datatable__row--even' : 'datatable__row';
-    $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $sr_no]);
+    $cls = (($serialNo % 2) == 0) ? 'datatable__row datatable__row--even' : 'datatable__row';
+    $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
 
     foreach ($fields as $key => $val) {
         if (in_array($key, $staticFlds)) {
@@ -45,7 +45,7 @@ foreach ($arrListing as $sn => $row) {
 
         switch ($key) {
             case 'listSerial':
-                $span->appendElement('plaintext', array(), $sr_no);
+                $span->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'orderDate':
                 $span->appendElement('plaintext', array(), '<a href="' . UrlHelper::generateUrl('SalesReport', 'index', array($row[$key])) . '">' . FatDate::format($row[$key]) . '</a>', true);
@@ -81,7 +81,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
-    $sr_no++;
+    $serialNo++;
 }
 if (count($arrListing) == 0) {
     $tbl->appendElement('tr')->appendElement(
