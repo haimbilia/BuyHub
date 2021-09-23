@@ -191,18 +191,6 @@
      }
      button {
          @include submit;
-         &:before {
-             content: "";
-             position: absolute;
-             left: 0;
-             right: 0;
-             top: 0;
-             bottom: 0;
-             background-color: $bg-white;
-             opacity: 0;
-             transition: opacity 0.2s;
-             pointer-events: none;
-         }
          i {
              &:before {
                  opacity: 1 !important;
@@ -223,21 +211,6 @@
                  /*opacity: 0;*/
              }
          }
-         &:after {
-             pointer-events: none;
-             content: "";
-             position: absolute;
-             left: 50%;
-             top: 18px;
-             border-radius: 50%;
-             padding: 50%;
-             width: 32px;
-             height: 32px;
-             background-color: currentColor;
-             opacity: 0;
-             transform: translate(-50%, -50%) scale(1);
-             transition: opacity 1s, transform 0.5s;
-         }
          &:active {
               :after {
                  opacity: 0.4;
@@ -253,14 +226,11 @@
              }
          }
      }
-     .no--focus {
+     .no-focus {
          &:focus {
              outline: none !important;
              border-color: inherit !important;
          }
-     }
-     .text--small {
-         display: block;
      }
  }
  
@@ -302,29 +272,26 @@
      overflow: hidden;
      position: relative;
      cursor: pointer;
- }
- 
- .btn--fileupload input {
-     opacity: 0;
-     position: absolute;
-     #{$start-direction}: 0;
-     #{$end-direction}: 0;
-     top: 0;
-     bottom: 0;
-     cursor: pointer;
-     height: auto !important;
- }
- 
- .uploadedphoto {
-     margin: 25px 0;
-     display: block;
- }
- 
- .uploadedphoto img {
-     display: inline-block;
-     vertical-align: top;
-     margin-#{$end-direction}: 10px;
-     max-width: 150px;
+     & input {
+         opacity: 0;
+         position: absolute;
+         #{$start-direction}: 0;
+         #{$end-direction}: 0;
+         top: 0;
+         bottom: 0;
+         cursor: pointer;
+         height: auto !important;
+     }
+     & .uploadedphoto {
+         margin: 25px 0;
+         display: block;
+         img {
+             display: inline-block;
+             vertical-align: top;
+             margin-#{$end-direction}: 10px;
+             max-width: 150px;
+         }
+     }
  }
  
  form.custom-form {
