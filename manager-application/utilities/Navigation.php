@@ -83,14 +83,14 @@ class Navigation
         $selProdSrchObj->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
         $selProdSrchObj->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = '.CommonHelper::getLangId(), 'p_l');
         $selProdSrchObj->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'cred.credential_user_id = selprod_user_id', 'cred');
-        $selProdSrchObj->joinTable('tbl_email_archives', 'LEFT OUTER JOIN', 'arch.emailarchive_to_email = cred.credential_email', 'arch');        
+        $selProdSrchObj->joinTable('tbl_email_archives', 'LEFT OUTER JOIN', 'arch.earch_to_email = cred.credential_email', 'arch');        
         $selProdSrchObj->addDirectCondition('selprod_stock <= selprod_threshold_stock_level');
         $selProdSrchObj->addDirectCondition('selprod_track_inventory = '.Product::INVENTORY_TRACK);
         
-        $selProdSrchObj->addCondition('emailarchive_tpl_name', 'LIKE', 'threshold_notification_vendor_custom');
+        $selProdSrchObj->addCondition('earch_tpl_name', 'LIKE', 'threshold_notification_vendor_custom');
         $selProdSrchObj->addMultipleFields(array('count(selprod_id) as countOfRec'));
         $threshSelProdResult = $db->fetch($selProdSrchObj->getResultset());
-        $threshSelProdCount = FatUtility::int($threshSelProdResult['countOfRec']);    
+        $threshSelProdCount = FatUtility::int($threshSelProdResult['countOfRec']); 
         
         /* seller orders */
         $sellerOrderStatus = FatApp::getConfig('CONF_BADGE_COUNT_ORDER_STATUS', FatUtility::VAR_STRING, '0');
