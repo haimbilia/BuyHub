@@ -170,13 +170,16 @@
                                                                     Should Be In Contrast To The Theme Color</div>
                                                             </div>
 
-
-
-
-                                                            <div class="form-group ">
-                                                                <button type="button"
-                                                                    class="btn btn-brand btn-block loading">Update</button>
+                                                            <div class="row">
+                                                                <div class="col"><button type="reset"
+                                                                        class="btn btn-outline-brand">Reset</button>
+                                                                </div>
+                                                                <div class="col-auto">
+                                                                    <button type="submit"
+                                                                        class="btn btn-brand loading">Update</button>
+                                                                </div>
                                                             </div>
+
                                                         </div>
                                                     </form>
 
