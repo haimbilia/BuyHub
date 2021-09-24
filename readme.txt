@@ -291,6 +291,14 @@ Enhancements :
    => Price surge based on special price. 
    => Admin Reports.
    => Map listing for products & shops 
+
+Admin UI/UX Enhancements pages:
+   => Manage Countries
+   => Manage States
+   => Manage Zones
+   => Manage Curriences
+   => Manage Languages
+
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

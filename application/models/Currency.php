@@ -68,6 +68,7 @@ class Currency extends MyAppModel
         $srch = self::getListingObj($langId, array('currency_id', 'currency_code'));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
+        $srch->addOrder(self::DB_TBL_PREFIX . 'display_order');
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAllAssoc($rs);
 
@@ -90,6 +91,7 @@ class Currency extends MyAppModel
         );
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
+        $srch->addOrder(self::DB_TBL_PREFIX . 'display_order');
 
         $rs = $srch->getResultSet();
 
