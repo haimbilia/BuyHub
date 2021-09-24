@@ -77,6 +77,7 @@
                                     </div>
                                     <div class="card-body">
                                         <ul class="pages__list-wrapper">
+                                            <li><a href="products.php">Products</a></li>
                                             <li><a href="theme-setting.php">Theme Setting</a></li>
                                             <li><a href="listing.php">Listing</a></li>
                                             <li><a href="login-1.php">Login</a></li>

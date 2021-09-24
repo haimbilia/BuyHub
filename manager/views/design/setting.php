@@ -43,7 +43,7 @@
                                             </span>
                                         </div>
                                         <div class="setting__detail">
-                                            <h6>System</h6>
+                                            <h6>General Settings</h6>
                                             <span>Display, Sound, notifications, power</span>
                                         </div>
                                     </a>
@@ -59,7 +59,7 @@
                                             </span>
                                         </div>
                                         <div class="setting__detail">
-                                            <h6>System</h6>
+                                            <h6>Plugins</h6>
                                             <span>Display, Sound, notifications, power</span>
                                         </div>
                                     </a>
@@ -75,7 +75,7 @@
                                             </span>
                                         </div>
                                         <div class="setting__detail">
-                                            <h6>System</h6>
+                                            <h6>Theme Settings</h6>
                                             <span>Display, Sound, notifications, power</span>
                                         </div>
                                     </a>
@@ -91,7 +91,7 @@
                                             </span>
                                         </div>
                                         <div class="setting__detail">
-                                            <h6>System</h6>
+                                            <h6>Currency Management</h6>
                                             <span>Display, Sound, notifications, power</span>
                                         </div>
                                     </a>
@@ -107,7 +107,7 @@
                                             </span>
                                         </div>
                                         <div class="setting__detail">
-                                            <h6>System</h6>
+                                            <h6>Commission Settings</h6>
                                             <span>Display, Sound, notifications, power</span>
                                         </div>
                                     </a>
@@ -123,7 +123,7 @@
                                             </span>
                                         </div>
                                         <div class="setting__detail">
-                                            <h6>System</h6>
+                                            <h6>Affiliate Commission Settings</h6>
                                             <span>Display, Sound, notifications, power</span>
                                         </div>
                                     </a>
@@ -139,7 +139,7 @@
                                             </span>
                                         </div>
                                         <div class="setting__detail">
-                                            <h6>System</h6>
+                                            <h6>Subscription Packages Management</h6>
                                             <span>Display, Sound, notifications, power</span>
                                         </div>
                                     </a>
