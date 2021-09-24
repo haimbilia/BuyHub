@@ -49,28 +49,25 @@ class AdminGuestController extends FatController
     }
 
     public function forgotPasswordForm()
-    {
-        $frm = $this->getLoginForm();
-        $frmForgot = $this->getForgotForm();
-
-        $this->set('frm', $frm);
-        $this->set('frmForgot', $frmForgot);
-
+    {   
+        $this->set('frm', $this->getForgotForm());
         $this->_template->render();
     }
 
     public function login()
-    {
-        $username = FatApp::getPostedData('username');
-        $password = FatApp::getPostedData('password');
+    {        
+        $frm = $this->getLoginForm();
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        if (false == $post) {
+            LibHelper::dieJsonError(current($frm->getValidationErrors()));
+        } 
 
         $adminAuthObj = AdminAuthentication::getInstance();
-        if (!$adminAuthObj->login($username, $password, $_SERVER['REMOTE_ADDR'])) {
-            LibHelper::exitWithError($adminAuthObj->getError(), true);
+        if (!$adminAuthObj->login($post['username'], $post['password'], CommonHelper::getClientIp())) {
+            LibHelper::dieJsonError($adminAuthObj->getError(), true);
         }
-
-        $rememberme = FatApp::getPostedData('rememberme', FatUtility::VAR_INT, 0);
-        if ($rememberme == 1) {
+        
+        if (FatUtility::int($post['rememberme']) == 1) {
             $this->setAdminLoginCookie();
         }
 
@@ -142,13 +139,9 @@ class AdminGuestController extends FatController
     }
 
     public function forgotPassword()
-    {
-        if (!FatUtility::isAjaxCall()) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->adminLangId));
-        }
+    {        
         $frm = $this->getForgotForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
         if (false == $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
@@ -161,7 +154,6 @@ class AdminGuestController extends FatController
         }
 
         $adminAuthObj = AdminAuthentication::getInstance();
-
         $admin = $adminAuthObj->checkAdminEmail($adminEmail);
 
         if (!$admin) {
@@ -178,9 +170,7 @@ class AdminGuestController extends FatController
         $token = FatUtility::getRandomString(30);
 
         $data = array('admin_id' => $admin['admin_id'], 'token' => $token);
-        $reset_url = UrlHelper::generateFullUrl('adminGuest', 'resetPwd', array($admin['admin_id'], $token));
-        $website_url_scheme = FatUtility::getUrlScheme();
-        $website_url = UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONTEND);
+        $reset_url = UrlHelper::generateFullUrl('adminGuest', 'resetPwd', array($admin['admin_id'], $token)); 
         $adminAuthObj->deleteOldPasswordResetRequest();
         if (!$adminAuthObj->addPasswordResetRequest($data)) {
             Message::addErrorMessage($adminAuthObj->getError());
@@ -192,16 +182,17 @@ class AdminGuestController extends FatController
             '{site_domain}' => UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONTEND),
             '{user_full_name}' => trim($admin['admin_name']),
         );
-        if (!EmailHandler::sendMailTpl(
-            $admin['admin_email'],
-            'admin_forgot_password',
-            $this->adminLangId,
-            $replacements
-        )) {
+        
+        $sendEmail = (new FatMailer($this->adminLangId, 'admin_forgot_password'))
+                ->setTo($admin['admin_email'])
+                ->setVariables($replacements)
+                ->send();
+
+        if (false === $sendEmail) {
             Message::addErrorMessage(Labels::getLabel('MSG_Unable_to_send_email', $this->adminLangId));
             $this->set('msg', Message::getHtml());
             $this->_template->render(false, false, 'json-error.php', true, false);
-        }
+        }        
         $emaiHandObj = new EmailHandler();
         $emaiHandObj->sendSms('admin_forgot_password', FatApp::getConfig('CONF_SITE_PHONE'), $replacements, $this->adminLangId);
 
@@ -398,8 +389,8 @@ class AdminGuestController extends FatController
         }
 
         $frm = new Form('frmLogin');
-        $frm->addTextBox('', 'username', $userName)->requirements()->setRequired();
-        $frm->addPasswordField('', 'password', $pass)->requirements()->setRequired();
+        $frm->addTextBox(Labels::getlabel('LBL_USERNAME', $this->adminLangId), 'username', $userName)->requirements()->setRequired();
+        $frm->addPasswordField(Labels::getlabel('LBL_PASSWORD', $this->adminLangId), 'password', $pass)->requirements()->setRequired();
         $frm->addCheckBox('', 'rememberme', 1);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Sign_In', $this->adminLangId));
         return $frm;
@@ -408,7 +399,7 @@ class AdminGuestController extends FatController
     private function getForgotForm()
     {
         $frm = new Form('adminFrmForgot');
-        $frm->addEmailField('', 'admin_email', '', array('placeholder' => Labels::getLabel('LBL_Enter_Your_Email_Address', $this->adminLangId)))->requirements()->setRequired();
+        $frm->addEmailField(Labels::getLabel('LBL_Enter_Your_Email_Address', $this->adminLangId), 'admin_email')->requirements()->setRequired();
         CommonHelper::addCaptchaField($frm);
         $frm->addSubmitButton('', 'btn_forgot', Labels::getLabel('LBL_Send_Reset_Pasword_Email', $this->adminLangId));
         return $frm;
