@@ -31,10 +31,10 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 $aspectRatioArr = AttachedFile::getRatioTypeArray($adminLangId);
-$sr_no = 0;
+$serialNo = 0;
 $msg = '';
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr', array('id' => $row['plugin_id'], 'class' => ''));
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
@@ -49,7 +49,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="plugin_ids[]" value=' . $row['plugin_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'plugin_icon':
                 $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $row['plugin_id']);

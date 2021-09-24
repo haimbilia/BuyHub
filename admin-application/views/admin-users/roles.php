@@ -12,16 +12,16 @@
         $e = $th->appendElement('th', array(), $val);
     }
 
-    $sr_no = 0;
+    $serialNo = 0;
     foreach ($arrListing as $sn => $row) {
-        $sr_no++;
+        $serialNo++;
         $tr = $tbl->appendElement('tr');
 
         foreach ($arr_flds as $key => $val) {
             $td = $tr->appendElement('td');
             switch ($key) {
                 case 'listSerial':
-                    $td->appendElement('plaintext', array(), $sr_no);
+                    $td->appendElement('plaintext', array(), $serialNo);
                     break;
                 case 'module':
                     $td->appendElement('plaintext', array(), $row, true);

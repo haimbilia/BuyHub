@@ -18,9 +18,9 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 
-$sr_no = 0;
+$serialNo = 0;
 foreach ($listing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr', array());
     $tr->setAttribute("id", $row['taxstr_id']);
 
@@ -28,7 +28,7 @@ foreach ($listing as $sn => $row) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'taxstr_identifier':
                 if (empty($row['taxstr_name'])) {

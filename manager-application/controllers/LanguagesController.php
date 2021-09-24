@@ -2,45 +2,62 @@
 
 class LanguagesController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
-
-
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewLanguage($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditLanguage($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewLanguage();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewLanguage();
-        $search = $this->getSearchForm();
-        $this->set("search", $search);
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $this->set('canEdit', $this->objPrivilege->canEditLanguage($this->admin_id, true));
+        $this->set("frmSearch", $frmSearch);
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_STATES', $this->adminLangId));
+        $this->getListingData();
+
         $this->_template->render();
     }
 
-    private function getSearchForm()
+    private function getSearchForm($fields = [])
     {
-        $frm = new Form('frmSearch');
+        $frm = new Form('frmRecordSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
-        $fld_submit->attachField($fld_cancel);
+
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         return $frm;
     }
 
-    public function search()
-    {
-        $this->objPrivilege->canViewLanguage();
 
+    private function getListingData()
+    {
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $searchForm = $this->getSearchForm();
         $data = FatApp::getPostedData();
+
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        $searchForm = $this->getSearchForm($fields);
+        
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
@@ -71,19 +88,32 @@ class LanguagesController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
     }
 
-    public function form($languageId)
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'languages/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    public function form()
     {
         $this->objPrivilege->canEditLanguage();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $frm = $this->getForm($recordId);
 
-        $languageId = FatUtility::int($languageId);
-
-        $frm = $this->getForm($languageId);
-
-        if (0 < $languageId) {
-            $data = Language::getAttributesById($languageId, array('language_id', 'language_code', 'language_name', 'language_active', 'language_layout_direction', 'language_country_code'));
+        if (0 < $recordId) {
+            $data = Language::getAttributesById($recordId, array('language_id', 'language_code', 'language_name', 'language_active', 'language_layout_direction', 'language_country_code'));
 
             if ($data === false) {
                 FatUtility::dieWithError($this->str_invalid_request);
@@ -91,9 +121,12 @@ class LanguagesController extends AdminBaseController
             $frm->fill($data);
         }
 
+        $langId = 1 > $recordId ? $this->adminLangId : $recordId;
+
         $this->set('languages', Language::getAllNames());
-        $this->set('language_id', $languageId);
+        $this->set('recordId', $recordId);
         $this->set('frm', $frm);
+        $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->_template->render(false, false);
     }
 
@@ -104,114 +137,127 @@ class LanguagesController extends AdminBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 		
-		$languageId = FatApp::getPostedData('language_id', FatUtility::VAR_INT, 0);
+		$recordId = FatApp::getPostedData('language_id', FatUtility::VAR_INT, 0);
 		unset($post['language_id']);
 
-        $record = new Language($languageId);
+        $status = FatApp::getPostedData('language_active', FatUtility::VAR_INT, 0);
+        if($status == applicationConstants::INACTIVE && 1 > count(Language::getAllNames()) ){
+            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->adminLangId), true);
+        }
+
+        $record = new Language($recordId);
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_This_language_code_is_not_available', $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_This_language_code_is_not_available', $this->adminLangId), true);
         }
-        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->adminLangId));
+
+        $msg = Labels::getLabel('MSG_ADDED_SUCCESSFULLY', $this->adminLangId);
+        if (0 < $recordId) {
+            $msg = Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId);
+        }
+        $this->set('msg', $msg);
         $this->_template->render(false, false, 'json-success.php');
     }
 
 
-    private function getForm($languageId = 0)
+    private function getForm($recordId = 0)
     {
-        $this->objPrivilege->canViewLanguage();
-        $languageId = FatUtility::int($languageId);
+        $recordId = FatUtility::int($recordId);
+        
+        $adminLangId = $this->adminLangId;
+        if (0 < $recordId) {
+            $adminLangId = $recordId;
+        }
 
         $frm = new Form('frmLanguage');
-        $frm->addHiddenField('', 'language_id', $languageId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Language_code', $this->adminLangId), 'language_code');
-        $frm->addRequiredField(Labels::getLabel('LBL_Language_name', $this->adminLangId), 'language_name');
+        $frm->addHiddenField('', 'language_id', $recordId);
+        $frm->addRequiredField(Labels::getLabel('LBL_Language_code', $adminLangId), 'language_code');
+        $frm->addRequiredField(Labels::getLabel('LBL_Language_name', $adminLangId), 'language_name');
         $fld = $frm->addRadioButtons(
-            Labels::getLabel("LBL_Language_Layout_Direction", $this->adminLangId),
+            Labels::getLabel("LBL_Language_Layout_Direction", $adminLangId),
             'language_layout_direction',
-            applicationConstants::getLayoutDirections($this->adminLangId),
+            applicationConstants::getLayoutDirections($adminLangId),
             '',
             array('class' => 'list-inline')
         );
+
 		$countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId, true, 'country_code');
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'language_country_code', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
+        $countriesArr = $countryObj->getCountriesAssocArr($adminLangId, true, 'country_code');
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $adminLangId), 'language_country_code', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $adminLangId));
         $fld->requirement->setRequired(true);
-        /* $arrFlags = $this->getlanguageFlags();
-        $arrFlag= array();
-        $dir    = '..'.CONF_WEBROOT_FRONT_URL.'public/images/flags/';
-        foreach($arrFlags  as  $flag){
-        $arrFlag []= '<img src ="'.$dir.$flag.'">';
-        }
-        $fld =$frm->addRadioButtons(Labels::getLabel("LBL_Language_Flag",$this->adminLangId),'language_flag',
-        $arrFlag,'',array('class'=>'list-inline')); */
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'language_active', $activeInactiveArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($adminLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $adminLangId), 'language_active', $activeInactiveArr, '', array(), '');
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $adminLangId));
         return $frm;
     }
 
-    public function getLanguageFlags()
-    {
-        $flagType = FatApp::getConfig('CONF_COUNTRY_FLAG_TYPE', FatUtility::VAR_STRING, 'round');
-        $arrFlag = array();
-        $dir = CONF_INSTALLATION_PATH . 'public/images/flags/'.$flagType;
-        $arrFlags = array_diff(scandir($dir, 1), array(".", ".."));
-
-        return $arrFlags;
-    }
-
-    public function media($languageId)
+    public function updateStatus()
     {
         $this->objPrivilege->canEditLanguage();
-
-        if (0 >= $languageId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $selectedFlag = Language::getAttributesById($languageId, 'language_flag');
-        $flags = $this->getlanguageFlags();
-        $this->set('selectedFlag', $selectedFlag);
-        $this->set('flags', $flags);
-        $this->set('language_id', $languageId);
-        $this->_template->render(false, false);
-    }
-
-    public function changeStatus()
-    {
-        $this->objPrivilege->canEditLanguage();
-        $languageId = FatApp::getPostedData('languageId', FatUtility::VAR_INT, 0);
-        if (0 >= $languageId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (0 >= $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $data = Language::getAttributesById($languageId, array('language_active'));
+        $data = Language::getAttributesById($recordId, array('language_active'));
 
         if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }            
 
         $status = ($data['language_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
+
+        $this->changeStatus($recordId, $status);
+
+        FatUtility::dieJsonSuccess($this->str_update_record);
+    }
+
+    public function toggleBulkStatuses()
+    {
+        $this->objPrivilege->canEditStates();
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('language_ids'));
+        if (empty($recordIdsArr) || -1 == $status) {
+            FatUtility::dieWithError(
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+            );
+        }
+
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
+                continue;
+            }
+
+            $this->changeStatus($recordId, $status);
+        }
         
-        if($status == applicationConstants::INACTIVE && 1 >= count(Language::getAllNames()) ){
-           Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml()); 
+        FatUtility::dieJsonSuccess($this->str_update_record);
+    }
+
+    private function changeStatus($recordId, $status)
+    {
+        $status = FatUtility::int($status);
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
+            FatUtility::dieWithError(
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+            );
+        }
+
+        if($status == applicationConstants::INACTIVE && 1 > count(Language::getAllNames()) ){
+            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->adminLangId), true);
         } 
 
-        $countryObj = new Language($languageId);
+        $countryObj = new Language($recordId);
         if (!$countryObj->changeStatus($status)) {
-            Message::addErrorMessage($countryObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            FatUtility::dieWithError($countryObj->getError()::getHtml());
         }
-        if ($status == applicationConstants::INACTIVE && ($languageId == FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1) || $languageId ==  FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1))) {
+        if ($status == applicationConstants::INACTIVE && ($recordId == FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1) || $recordId ==  FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1))) {
             $srch = Language::getSearchObject();
             $srch->addFld('language_id');
             $srch->doNotCalculateRecords();
@@ -220,47 +266,54 @@ class LanguagesController extends AdminBaseController
             if (!empty($firstActivelangData)) {                
                 $configuration = new Configurations();
                 $dataToUpdate = [];
-                if(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)  == $languageId){
+                if(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)  == $recordId){
                     $dataToUpdate['CONF_DEFAULT_SITE_LANG'] = $firstActivelangData['language_id']; 
                 }
-                if(FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1)  == $languageId){
+                if(FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1)  == $recordId){
                     $dataToUpdate['CONF_ADMIN_DEFAULT_LANG'] = $firstActivelangData['language_id']; 
                     $_COOKIE['defaultAdminSiteLang'] = $firstActivelangData['language_id'];
                 }
                 if (!$configuration->update($dataToUpdate)) {
-                    Message::addErrorMessage($configuration->getError());
-                    FatUtility::dieJsonError(Message::getHtml());
+                    LibHelper::exitWithError($configuration->getError(), true);
                 }
             }
         }
-
-        FatUtility::dieJsonSuccess($this->str_update_record);
     }
-    public function updateImage()
+
+    private function getFormColumns(): array
     {
-        $this->objPrivilege->canEditLanguage();
-        $languageId = FatApp::getPostedData('languageId', FatUtility::VAR_INT, 0);
-        $flag = FatApp::getPostedData('flag', FatUtility::VAR_STRING, '');
-        if (0 >= $languageId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+        $languagesTblHeadingCols = CacheHelper::get('languagesTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($languagesTblHeadingCols) {
+            return json_decode($languagesTblHeadingCols);
         }
 
-        $data = Language::getAttributesById($languageId, array('language_active'));
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
+            'language_code' => Labels::getLabel('LBL_Language_Code', $this->adminLangId),
+            'language_name' => Labels::getLabel('LBL_Language_Name', $this->adminLangId),
+            'language_active' => Labels::getLabel('LBL_Status', $this->adminLangId),
+            'action' =>  '',
+        ];
+        CacheHelper::create('languagesTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        
+        return $arr;
+    }
 
-        if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $data['language_flag'] = $flag;
-        $record = new Language($languageId);
-        $record->assignValues($data);
+    private function getDefaultColumns(): array
+    {
+        return [
+            'select_all',
+            'listSerial',
+            'language_code',
+            'language_name',
+            'language_active',
+            'action',
+        ];
+    }
 
-        if (!$record->save()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Unable_to_set_image', $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        FatUtility::dieJsonSuccess($this->str_update_record);
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['language_active'], Common::excludeKeysForSort());
     }
 }

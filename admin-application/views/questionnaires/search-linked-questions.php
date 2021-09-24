@@ -17,9 +17,9 @@ foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
 
-$sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
+$serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['question_id']);
 
@@ -31,7 +31,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->setAttribute("class", 'dragHandle');
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'question_identifier':
                 if (!empty($row['question_title'])) {

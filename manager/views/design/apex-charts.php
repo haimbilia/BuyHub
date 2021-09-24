@@ -174,12 +174,8 @@
                                     <div class="scroll ps" data-scroll="true" data-height="200"
                                         style="height: 200px; overflow: hidden;">
                                         <ul id="apps_user_fetch_records_selected"></ul>
-                                        <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
-                                            <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
-                                        </div>
-                                        <div class="ps__rail-y" style="top: 0px; right: 0px;">
-                                            <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
-                                        </div>
+
+
                                     </div>
                                 </div>
                                 <div class="modal-footer">

@@ -77,6 +77,7 @@
                                     </div>
                                     <div class="card-body">
                                         <ul class="pages__list-wrapper">
+                                            <li><a href="products.php">Products</a></li>
                                             <li><a href="theme-setting.php">Theme Setting</a></li>
                                             <li><a href="listing.php">Listing</a></li>
                                             <li><a href="login-1.php">Login</a></li>
@@ -165,6 +166,9 @@
                                                                     <li>
                                                                         <a href="#">Icon</a>
                                                                         <ul>
+                                                                            <li><a href="feathericons.php">Feather
+                                                                                </a>
+                                                                            </li>
                                                                             <li><a href="flaticon.php">Flaticon</a>
                                                                             </li>
                                                                             <li><a href="fontawesome5.php">Fontawesome

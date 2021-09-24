@@ -267,6 +267,10 @@
     }
 }
 
+.form-control {
+    @include input;
+}
+
 .note-messages {
     font-size: 13px;
     color: #cea14b;

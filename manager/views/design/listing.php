@@ -197,7 +197,7 @@
                                 <div class="card">
                                     <div class="card-head">
                                         <h3 class="card-head-label">
-                                            <span class="card-head-title">New Products</span>
+                                            <span class="card-head-title">Catalog Products </span>
                                             <span class="text-muted">Over 500 new products</span>
                                         </h3>
                                         <div class="card-toolbar">
@@ -213,12 +213,19 @@
                                                         <span>New</span>
                                                     </a></li>
                                                 <li>
-                                                    <a class="" href="#" data-toggle="modal" data-target="#edit"
-                                                        title="Edit">
-
+                                                    <a class="" href="#" title="">
                                                         <svg class="svg" width="18" height="18">
                                                             <use
-                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#active">
+                                                            </use>
+                                                        </svg>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="" href="#" title="">
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#in-active">
                                                             </use>
                                                         </svg>
                                                     </a>

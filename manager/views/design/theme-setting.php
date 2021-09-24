@@ -8,7 +8,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
             rel="stylesheet">
+        <link href="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
+
+
         <link rel="shortcut icon" href="images/favicon.ico" />
     </head>
 
@@ -84,320 +87,303 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-md-3">
-                                                <div class="" id="theme-form-js">
-                                                    <form name="frmGoogleFonts" method="post"
-                                                        id="frm_fat_id_frmGoogleFonts" class="form"
-                                                        onsubmit="setupTheme(this); return(false);">
+                                            <div class="col-md-4">
+                                                <div class="mr-5">
+                                                    <form class="form">
                                                         <div class="form">
                                                             <div class="form-group">
-                                                                <label class="label"> Select Font Family </label>
-                                                                <select class="">
-                                                                    <option style="font-family: arial">Arial</option>
-                                                                    <option style="font-family: 'Times New Roman'">Times
-                                                                        New Roman</option>
-                                                                    <option style="font-family: Verdana">Verdana
-                                                                    </option>
-                                                                    <option style="font-family: 'Comic Sans Serif'">
-                                                                        Comic Sans Serif</option>
-                                                                    <option style="font-family: 'Trebuchet MS'">
-                                                                        Trebuchet MS</option>
-                                                                </select>
-
+                                                                <label class="label">Font Family </label>
+                                                                <input type="search" placeholder="Search fonts">
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="label">Select Font Weight </label>
-                                                                <select class="">
-                                                                    <option>300</option>
-                                                                    <option>400</option>
-                                                                    <option>500</option>
-                                                                    <option>600</option>
-                                                                    <option>800</option>
-                                                                </select>
+
+                                                                <input name='tags-outside'
+                                                                    class='form-control tagify--outside'
+                                                                    placeholder='write some tags'>
                                                             </div>
                                                             <div class="form-group">
-                                                                <label class="label"> Theme Color </label>
+                                                                <label class="label">Theme Color </label>
 
-                                                                <div class="input-group color-picker">
-                                                                    <input class="form-control jscolor themeColor--js"
-                                                                        data-bg="none" data-jscolor="{}"
-                                                                        data-field-caption="Theme Color"
-                                                                        data-fatreq="{&quot;required&quot;:true}"
-                                                                        type="text" name="theme_color"
-                                                                        value="rgb(11,35,63)" autocomplete="off"
-                                                                        autocorrect="off" autocapitalize="off"
-                                                                        spellcheck="false"
-                                                                        data-current-color="rgb(11,35,63)"
-                                                                        style="background-image: linear-gradient(to right, rgb(11, 35, 63) 0%, rgb(11, 35, 63) 30px, rgba(0, 0, 0, 0) 31px, rgba(0, 0, 0, 0) 100%), url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAUCAYAAAD/Rn+7AAAAAXNSR0IArs4c6QAAAHxJREFUSEvtlbENACEMA52CARiBFWAndmIC1mABWtb5byhoglz8d04dRZbjXKy19oCoOSfRBZRSqL7bvJwzYoxYa3WTQMdPOegFTRn0nNEVH84IMwypaczUWqlP8sV1nsJv81JKCCFgjNFNAp19y8E/eakMMphRBpXBDeoX4UvU0aCtejMAAAAASUVORK5CYII=&quot;) !important; background-position: left top, left top !important; background-size: auto, 32px 16px !important; background-repeat: repeat-y, repeat-y !important; background-origin: padding-box, padding-box !important; padding-left: 40px !important;">
+
+                                                                <div class="color-data">
+                                                                    <div class="color-swatch" title="Selected color">
+                                                                        <input type="color" value="#1DB8CE"
+                                                                            id="colorPicker">
+                                                                    </div>
+                                                                    <div class="color-label">
+                                                                        <h5>HEX</h5>
+                                                                        <span class="hex">#5aff22</span>
+                                                                    </div>
+
+                                                                    <div class="color-label">
+                                                                        <h5>RGB</h5>
+                                                                        <span class="rgb">90, 255,
+                                                                            34</span>
+                                                                    </div>
+
+                                                                    <div class="color-label">
+                                                                        <h5>HSL</h5>
+                                                                        <span class="hsl">105, 86%,
+                                                                            57%</span>
+                                                                    </div>
+
+
                                                                 </div>
+
 
 
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="label"> Theme Color Inverse </label>
-                                                                <div name="backendbgcolorprimaryinverse">
-                                                                    <div class="input-group color-picker">
-                                                                        <input
-                                                                            class="form-control jscolor themeColorInverse--js"
-                                                                            data-bg="none" data-jscolor="{}"
-                                                                            data-field-caption="Theme Color Inverse"
-                                                                            data-fatreq="{&quot;required&quot;:true}"
-                                                                            type="text" name="theme_color_inverse"
-                                                                            value="rgb(255,255,255)" autocomplete="off"
-                                                                            autocorrect="off" autocapitalize="off"
-                                                                            spellcheck="false"
-                                                                            data-current-color="rgb(255,255,255)"
-                                                                            style="background-image: linear-gradient(to right, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 30px, rgba(0, 0, 0, 0) 31px, rgba(0, 0, 0, 0) 100%), url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAUCAYAAAD/Rn+7AAAAAXNSR0IArs4c6QAAAHxJREFUSEvtlbENACEMA52CARiBFWAndmIC1mABWtb5byhoglz8d04dRZbjXKy19oCoOSfRBZRSqL7bvJwzYoxYa3WTQMdPOegFTRn0nNEVH84IMwypaczUWqlP8sV1nsJv81JKCCFgjNFNAp19y8E/eakMMphRBpXBDeoX4UvU0aCtejMAAAAASUVORK5CYII=&quot;) !important; background-position: left top, left top !important; background-size: auto, 32px 16px !important; background-repeat: repeat-y, repeat-y !important; background-origin: padding-box, padding-box !important; padding-left: 40px !important;">
+                                                                <div class="color-data">
+                                                                    <div class="color-swatch" title="Selected color">
+                                                                        <input type="color" value="#D4D4D4"
+                                                                            id="colorPicker">
                                                                     </div>
+                                                                    <div class="color-label">
+                                                                        <h5>HEX</h5>
+                                                                        <span class="hex">#D4D4D4</span>
+                                                                    </div>
+
+                                                                    <div class="color-label">
+                                                                        <h5>RGB</h5>
+                                                                        <span class="rgb">212, 212,
+                                                                            212</span>
+                                                                    </div>
+
+                                                                    <div class="color-label">
+                                                                        <h5>HSL</h5>
+                                                                        <span class="hsl">0, 0%,
+                                                                            83%</span>
+                                                                    </div>
+
+
                                                                 </div>
 
                                                             </div>
-                                                            <div class="form-group">
-                                                                <div class="">
-                                                                    <p class="img-disclaimer disclaimer-alert">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                            version="1.1" id="Capa_1" x="0px" y="0px"
-                                                                            viewBox="0 0 512 512" xml:space="preserve">
-                                                                            <g transform="translate(1 1)">
-                                                                                <g>
-                                                                                    <g>
-                                                                                        <path
-                                                                                            d="M436.016,73.984c-99.979-99.979-262.075-99.979-362.033,0.002c-99.978,99.978-99.978,262.073,0.004,362.031     c99.954,99.978,262.05,99.978,362.029-0.002C535.995,336.059,535.995,173.964,436.016,73.984z M405.848,405.844     c-83.318,83.318-218.396,83.318-301.691,0.004c-83.318-83.299-83.318-218.377-0.002-301.693     c83.297-83.317,218.375-83.317,301.691,0S489.162,322.549,405.848,405.844z">
-                                                                                        </path>
-                                                                                        <path
-                                                                                            d="M254.996,84.338c-11.782,0-21.333,9.551-21.333,21.333v213.333c0,11.782,9.551,21.333,21.333,21.333     c11.782,0,21.333-9.551,21.333-21.333V105.671C276.329,93.889,266.778,84.338,254.996,84.338z">
-                                                                                        </path>
-                                                                                        <path
-                                                                                            d="M254.996,383.004c-11.776,0-21.333,9.557-21.333,21.333s9.557,21.333,21.333,21.333c11.776,0,21.333-9.557,21.333-21.333     S266.772,383.004,254.996,383.004z">
-                                                                                        </path>
-                                                                                    </g>
-                                                                                </g>
-                                                                            </g>
-                                                                        </svg>
-                                                                        Disclaimer: Inverse Color Should Be In Contrast
-                                                                        To The Theme Color
-                                                                    </p>
+                                                            <div class="alert alert-solid-brand " role="alert">
+                                                                <div class="alert-icon"><i class="flaticon-warning"></i>
+                                                                </div>
+                                                                <div class="alert-text text-xs"> Disclaimer: Inverse
+                                                                    Color
+                                                                    Should Be In Contrast To The Theme Color</div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="col"><button type="reset"
+                                                                        class="btn btn-outline-brand">Reset</button>
+                                                                </div>
+                                                                <div class="col-auto">
+                                                                    <button type="submit"
+                                                                        class="btn btn-brand loading">Update</button>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group ">
-                                                                <button type="button"
-                                                                    class="btn btn-brand btn-wide gb-btn gb-btn-primary">Update</button>
-                                                            </div>
+
                                                         </div>
                                                     </form>
 
                                                 </div>
                                             </div>
-                                            <div class="col-md-9">
-                                                <div class="py-4">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="palette googleFonts--js">
-                                                                <svg version="1.1" id="Layer_1"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-                                                                    y="0px" viewBox="0 0 1098 666"
-                                                                    enable-background="new 0 0 1098 666"
-                                                                    xml:space="preserve">
-                                                                    <g transform="translate(25 12)">
-                                                                        <g transform="translate(352)">
-                                                                            <g>
-                                                                                <path id="B" fill-rule="evenodd"
-                                                                                    clip-rule="evenodd"
-                                                                                    d="M1,0h334c0.6,0,1,0.4,1,1v444c0,0.6-0.4,1-1,1H1c-0.6,0-1-0.4-1-1V1 C0,0.4,0.4,0,1,0z">
-                                                                                </path>
-                                                                            </g>
-                                                                            <g>
-                                                                                <path id="B_1_" fill-rule="evenodd"
-                                                                                    clip-rule="evenodd" fill="#FFFFFF"
-                                                                                    stroke="#F1F2F3" stroke-width="2"
-                                                                                    d="M1,0h334c0.6,0,1,0.4,1,1v444c0,0.6-0.4,1-1,1H1c-0.6,0-1-0.4-1-1V1C0,0.4,0.4,0,1,0z">
-                                                                                </path>
-                                                                            </g> <text transform="matrix(1 0 0 1 21 44)"
-                                                                                fill="#8798AD" font-family="Poppins"
-                                                                                font-size="13px"
-                                                                                letter-spacing="1">Integer Maximus
-                                                                                Ante</text>
-                                                                            <g>
-                                                                                <path id="A" fill-rule="evenodd"
-                                                                                    clip-rule="evenodd" fill="#BFC5D2"
-                                                                                    d="M301,41.5c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5S301.8,41.5,301,41.5z M307,41.5c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5S307.8,41.5,307,41.5zM313,41.5c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5S313.8,41.5,313,41.5z">
-                                                                                </path>
-                                                                            </g>
-                                                                            <g>
-                                                                                <path opacity="0.304" fill="none"
-                                                                                    stroke="#8097B1" stroke-width="0.5"
-                                                                                    stroke-linecap="square"
-                                                                                    stroke-dasharray="2,2,2"
-                                                                                    enable-background="new    "
-                                                                                    d="M125.1,94.8v206.1 M185.9,94.8v206.1 M245.8,94.8v206.1 M306.5,94.8v206.1">
-                                                                                </path>
-                                                                                <path opacity="0.378" fill="none"
-                                                                                    stroke="#8097B1" stroke-width="0.5"
-                                                                                    stroke-linecap="square"
-                                                                                    stroke-dasharray="2,2,2,2"
-                                                                                    enable-background="new    " d="
-        M64.7,249.2h242.2 M64.3,195.3h242.2 M64.7,144.8h242.2 M64.3,94.2h242.2"></path>
-                                                                            </g>
-                                                                            <path fill="none" stroke="#E0E7FF"
-                                                                                stroke-linecap="square"
-                                                                                d="M63.7,95.2v205.5 M64.3,301.1h242.2">
-                                                                            </path> <text
-                                                                                transform="matrix(1 0 0 1 35.36 250)"
-                                                                                fill="#B0BAC9" font-family="Poppins"
-                                                                                font-size="15px">25</text> <text
-                                                                                transform="matrix(1 0 0 1 43.505 302)"
-                                                                                fill="#B0BAC9" font-family="Poppins"
-                                                                                font-size="15px">0</text> <text
-                                                                                transform="matrix(1 0 0 1 102.01 319)"
-                                                                                fill="#B0BAC9" font-family="Poppins"
-                                                                                font-size="15px">Jan</text> <text
-                                                                                transform="matrix(1 0 0 1 174.689 319)"
-                                                                                fill="#B0BAC9" font-family="Poppins"
-                                                                                font-size="15px">Feb</text> <text
-                                                                                transform="matrix(1 0 0 1 232.079 319)"
-                                                                                fill="#B0BAC9" font-family="Poppins"
-                                                                                font-size="15px">March</text> <text
-                                                                                transform="matrix(1 0 0 1 34.625 197)"
-                                                                                fill="#B0BAC9" font-family="Poppins"
-                                                                                font-size="15px">50</text> <text
-                                                                                transform="matrix(1 0 0 1 36.47 147)"
-                                                                                fill="#B0BAC9" font-family="Poppins"
-                                                                                font-size="15px">75</text> <text
-                                                                                transform="matrix(1 0 0 1 27.635 100)"
-                                                                                fill="#B0BAC9" font-family="Poppins"
-                                                                                font-size="15px">100</text>
-                                                                            <path fill-rule="evenodd"
-                                                                                clip-rule="evenodd" fill="#0073CF" d="M110.8,178.2c1.7,0,3,1.3,3,3v116.4c0,1.7-1.3,3-3,3s-3-1.3-3-3
-        V181.2C107.8,179.5,109.2,178.2,110.8,178.2z"></path>
-                                                                            <path fill-rule="evenodd"
-                                                                                clip-rule="evenodd" fill="#F1F2F3" d="M123.4,158.1c1.3,0.4,2.1,1.6,2.1,3v136.3c0,1.5-1,2.8-2.4,3.1
-        c-1.9,0.4-3.6-1.1-3.6-2.9V161C119.5,159,121.3,157.5,123.4,158.1z"></path>
-                                                                            <path fill-rule="evenodd"
-                                                                                clip-rule="evenodd" fill="#0073CF" d="M180.5,162.4L180.5,162.4c1.7,0,3,1.3,3,3v132.1c0,1.7-1.3,3-3,3
-        l0,0c-1.7,0-3-1.3-3-3V165.4C177.5,163.8,178.9,162.4,180.5,162.4z"></path>
-                                                                            <path fill-rule="evenodd"
-                                                                                clip-rule="evenodd" fill="#F1F2F3" d="M192.1,125.4L192.1,125.4c1.7,0,3,1.3,3,3v169.1c0,1.7-1.3,3-3,3
-        l0,0c-1.7,0-3-1.3-3-3V128.4C189.1,126.7,190.5,125.4,192.1,125.4z"></path>
-                                                                            <path fill-rule="evenodd"
-                                                                                clip-rule="evenodd" fill="#0073CF" d="M248.4,116.4c1.7,0,3,1.3,3,3v178.1c0,1.7-1.3,3-3,3s-3-1.3-3-3
-        V119.4C245.4,117.8,246.8,116.4,248.4,116.4z"></path>
-                                                                            <path fill-rule="evenodd"
-                                                                                clip-rule="evenodd" fill="#F1F2F3" d="M260,99.6c1.7,0,3,1.3,3,3v195c0,1.7-1.3,3-3,3s-3-1.3-3-3v-195
-        C257,100.9,258.4,99.6,260,99.6z"></path> <text transform="matrix(1 0 0 1 48.509 386)" fill="#2E384D"
-                                                                                font-family="Poppins" font-size="34px"
-                                                                                font-weight="600">1,555</text> <text
-                                                                                transform="matrix(1 0 0 1 66.509 409.429)"
-                                                                                fill="#8798AD" font-family="Poppins"
-                                                                                font-size="15px">Silver</text>
-                                                                            <circle fill-rule="evenodd"
-                                                                                clip-rule="evenodd" fill="#0073CF"
-                                                                                cx="54" cy="404.9" r="5.5"></circle>
-                                                                            <text
-                                                                                transform="matrix(1 0 0 1 220.407 409.429)"
-                                                                                fill="#8798AD" font-family="Poppins"
-                                                                                font-size="15px">Gold</text>
-                                                                            <circle fill-rule="evenodd"
-                                                                                clip-rule="evenodd" fill="#F1F2F3"
-                                                                                cx="208.9" cy="404.9" r="5.5"></circle>
-                                                                            <text
-                                                                                transform="matrix(1 0 0 1 203.509 386)"
-                                                                                fill="#2E384D" font-family="Poppins"
-                                                                                font-size="34px"
-                                                                                font-weight="600">3,079</text>
+                                            <div class="col-md-8">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="palette">
+                                                            <svg version="1.1" id="Layer_1"
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+                                                                y="0px" viewBox="0 0 1098 666"
+                                                                enable-background="new 0 0 1098 666"
+                                                                xml:space="preserve">
+                                                                <g transform="translate(25 12)">
+                                                                    <g transform="translate(352)">
+                                                                        <g>
+                                                                            <path id="B" fill-rule="evenodd"
+                                                                                clip-rule="evenodd"
+                                                                                d="M1,0h334c0.6,0,1,0.4,1,1v444c0,0.6-0.4,1-1,1H1c-0.6,0-1-0.4-1-1V1 C0,0.4,0.4,0,1,0z">
+                                                                            </path>
                                                                         </g>
-                                                                        <g transform="translate(712)">
-                                                                            <g>
-                                                                                <path id="D" fill-rule="evenodd"
-                                                                                    clip-rule="evenodd" d="M1,0h334c0.6,0,1,0.4,1,1v444c0,0.6-0.4,1-1,1H1c-0.6,0-1-0.4-1-1V1
+                                                                        <g>
+                                                                            <path id="B_1_" fill-rule="evenodd"
+                                                                                clip-rule="evenodd" fill="#FFFFFF"
+                                                                                stroke="#F1F2F3" stroke-width="2"
+                                                                                d="M1,0h334c0.6,0,1,0.4,1,1v444c0,0.6-0.4,1-1,1H1c-0.6,0-1-0.4-1-1V1C0,0.4,0.4,0,1,0z">
+                                                                            </path>
+                                                                        </g> <text transform="matrix(1 0 0 1 21 44)"
+                                                                            fill="#8798AD" font-family="Poppins"
+                                                                            font-size="13px" letter-spacing="1">Integer
+                                                                            Maximus
+                                                                            Ante</text>
+                                                                        <g>
+                                                                            <path id="A" fill-rule="evenodd"
+                                                                                clip-rule="evenodd" fill="#BFC5D2"
+                                                                                d="M301,41.5c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5S301.8,41.5,301,41.5z M307,41.5c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5S307.8,41.5,307,41.5zM313,41.5c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5S313.8,41.5,313,41.5z">
+                                                                            </path>
+                                                                        </g>
+                                                                        <g>
+                                                                            <path opacity="0.304" fill="none"
+                                                                                stroke="#8097B1" stroke-width="0.5"
+                                                                                stroke-linecap="square"
+                                                                                stroke-dasharray="2,2,2"
+                                                                                enable-background="new    "
+                                                                                d="M125.1,94.8v206.1 M185.9,94.8v206.1 M245.8,94.8v206.1 M306.5,94.8v206.1">
+                                                                            </path>
+                                                                            <path opacity="0.378" fill="none"
+                                                                                stroke="#8097B1" stroke-width="0.5"
+                                                                                stroke-linecap="square"
+                                                                                stroke-dasharray="2,2,2,2"
+                                                                                enable-background="new    " d="
+        M64.7,249.2h242.2 M64.3,195.3h242.2 M64.7,144.8h242.2 M64.3,94.2h242.2"></path>
+                                                                        </g>
+                                                                        <path fill="none" stroke="#E0E7FF"
+                                                                            stroke-linecap="square"
+                                                                            d="M63.7,95.2v205.5 M64.3,301.1h242.2">
+                                                                        </path> <text
+                                                                            transform="matrix(1 0 0 1 35.36 250)"
+                                                                            fill="#B0BAC9" font-family="Poppins"
+                                                                            font-size="15px">25</text> <text
+                                                                            transform="matrix(1 0 0 1 43.505 302)"
+                                                                            fill="#B0BAC9" font-family="Poppins"
+                                                                            font-size="15px">0</text> <text
+                                                                            transform="matrix(1 0 0 1 102.01 319)"
+                                                                            fill="#B0BAC9" font-family="Poppins"
+                                                                            font-size="15px">Jan</text> <text
+                                                                            transform="matrix(1 0 0 1 174.689 319)"
+                                                                            fill="#B0BAC9" font-family="Poppins"
+                                                                            font-size="15px">Feb</text> <text
+                                                                            transform="matrix(1 0 0 1 232.079 319)"
+                                                                            fill="#B0BAC9" font-family="Poppins"
+                                                                            font-size="15px">March</text> <text
+                                                                            transform="matrix(1 0 0 1 34.625 197)"
+                                                                            fill="#B0BAC9" font-family="Poppins"
+                                                                            font-size="15px">50</text> <text
+                                                                            transform="matrix(1 0 0 1 36.47 147)"
+                                                                            fill="#B0BAC9" font-family="Poppins"
+                                                                            font-size="15px">75</text> <text
+                                                                            transform="matrix(1 0 0 1 27.635 100)"
+                                                                            fill="#B0BAC9" font-family="Poppins"
+                                                                            font-size="15px">100</text>
+                                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                            fill="#0073CF" d="M110.8,178.2c1.7,0,3,1.3,3,3v116.4c0,1.7-1.3,3-3,3s-3-1.3-3-3
+        V181.2C107.8,179.5,109.2,178.2,110.8,178.2z"></path>
+                                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                            fill="#F1F2F3" d="M123.4,158.1c1.3,0.4,2.1,1.6,2.1,3v136.3c0,1.5-1,2.8-2.4,3.1
+        c-1.9,0.4-3.6-1.1-3.6-2.9V161C119.5,159,121.3,157.5,123.4,158.1z"></path>
+                                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                            fill="#0073CF" d="M180.5,162.4L180.5,162.4c1.7,0,3,1.3,3,3v132.1c0,1.7-1.3,3-3,3
+        l0,0c-1.7,0-3-1.3-3-3V165.4C177.5,163.8,178.9,162.4,180.5,162.4z"></path>
+                                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                            fill="#F1F2F3" d="M192.1,125.4L192.1,125.4c1.7,0,3,1.3,3,3v169.1c0,1.7-1.3,3-3,3
+        l0,0c-1.7,0-3-1.3-3-3V128.4C189.1,126.7,190.5,125.4,192.1,125.4z"></path>
+                                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                            fill="#0073CF" d="M248.4,116.4c1.7,0,3,1.3,3,3v178.1c0,1.7-1.3,3-3,3s-3-1.3-3-3
+        V119.4C245.4,117.8,246.8,116.4,248.4,116.4z"></path>
+                                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                            fill="#F1F2F3" d="M260,99.6c1.7,0,3,1.3,3,3v195c0,1.7-1.3,3-3,3s-3-1.3-3-3v-195
+        C257,100.9,258.4,99.6,260,99.6z"></path> <text transform="matrix(1 0 0 1 48.509 386)" fill="#2E384D"
+                                                                            font-family="Poppins" font-size="34px"
+                                                                            font-weight="600">1,555</text> <text
+                                                                            transform="matrix(1 0 0 1 66.509 409.429)"
+                                                                            fill="#8798AD" font-family="Poppins"
+                                                                            font-size="15px">Silver</text>
+                                                                        <circle fill-rule="evenodd" clip-rule="evenodd"
+                                                                            fill="#0073CF" cx="54" cy="404.9" r="5.5">
+                                                                        </circle>
+                                                                        <text
+                                                                            transform="matrix(1 0 0 1 220.407 409.429)"
+                                                                            fill="#8798AD" font-family="Poppins"
+                                                                            font-size="15px">Gold</text>
+                                                                        <circle fill-rule="evenodd" clip-rule="evenodd"
+                                                                            fill="#F1F2F3" cx="208.9" cy="404.9"
+                                                                            r="5.5"></circle>
+                                                                        <text transform="matrix(1 0 0 1 203.509 386)"
+                                                                            fill="#2E384D" font-family="Poppins"
+                                                                            font-size="34px"
+                                                                            font-weight="600">3,079</text>
+                                                                    </g>
+                                                                    <g transform="translate(712)">
+                                                                        <g>
+                                                                            <path id="D" fill-rule="evenodd"
+                                                                                clip-rule="evenodd" d="M1,0h334c0.6,0,1,0.4,1,1v444c0,0.6-0.4,1-1,1H1c-0.6,0-1-0.4-1-1V1
         C0,0.4,0.4,0,1,0z"></path>
-                                                                            </g>
-                                                                            <g>
-                                                                                <path id="D_1_" fill-rule="evenodd"
-                                                                                    clip-rule="evenodd" fill="#FFFFFF"
-                                                                                    stroke="#F1F2F3" stroke-width="2" d="M1,0h334
+                                                                        </g>
+                                                                        <g>
+                                                                            <path id="D_1_" fill-rule="evenodd"
+                                                                                clip-rule="evenodd" fill="#FFFFFF"
+                                                                                stroke="#F1F2F3" stroke-width="2" d="M1,0h334
         c0.6,0,1,0.4,1,1v444c0,0.6-0.4,1-1,1H1c-0.6,0-1-0.4-1-1V1C0,0.4,0.4,0,1,0z"></path>
-                                                                            </g>
-                                                                            <g transform="translate(40 35)">
-                                                                                <g transform="translate(0 23)">
+                                                                        </g>
+                                                                        <g transform="translate(40 35)">
+                                                                            <g transform="translate(0 23)">
+                                                                                <g>
                                                                                     <g>
-                                                                                        <g>
-                                                                                            <path id="E_1_"
-                                                                                                fill-rule="evenodd"
-                                                                                                clip-rule="evenodd"
-                                                                                                fill="#0073CF"
-                                                                                                d="M208,83.9V89c0,0.6-0.4,1-1,1
-                    c-0.3,0-0.6-0.1-0.8-0.4l-4.7-5.7H17c-9.4,0-17-7.6-17-17V17C0,7.6,7.6,0,17,0h174c9.4,0,17,7.6,17,17V83.9z"></path>
-                                                                                        </g>
-                                                                                        <defs>
-                                                                                            <filter
-                                                                                                id="Adobe_OpacityMaskFilter"
-                                                                                                filterUnits="userSpaceOnUse"
-                                                                                                x="0" y="0" width="208"
-                                                                                                height="90">
-                                                                                                <feColorMatrix
-                                                                                                    type="matrix"
-                                                                                                    values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0">
-                                                                                                </feColorMatrix>
-                                                                                            </filter>
-                                                                                        </defs>
-                                                                                        <mask maskUnits="userSpaceOnUse"
-                                                                                            x="0" y="0" width="208"
-                                                                                            height="90" id="W_1_">
-                                                                                            <g
-                                                                                                filter="url(#Adobe_OpacityMaskFilter)">
-                                                                                                <path id="E_2_"
-                                                                                                    fill-rule="evenodd"
-                                                                                                    clip-rule="evenodd"
-                                                                                                    fill="#FFFFFF"
-                                                                                                    d="M208,83.9V89c0,0.6-0.4,1-1,1
-                        c-0.3,0-0.6-0.1-0.8-0.4l-4.7-5.7H17c-9.4,0-17-7.6-17-17V17C0,7.6,7.6,0,17,0h174c9.4,0,17,7.6,17,17V83.9z">
-                                                                                                </path>
-                                                                                            </g>
-                                                                                        </mask>
-                                                                                        <g mask="url(#W_1_)">
-                                                                                            <path fill-rule="evenodd"
-                                                                                                clip-rule="evenodd"
-                                                                                                fill="#0073CF"
-                                                                                                d="M0,0h208v90H0V0z">
-                                                                                            </path>
-                                                                                        </g>
-                                                                                    </g> <text
-                                                                                        transform="matrix(1 0 0 1 148.63 74)"
-                                                                                        fill="#E4E8F0"
-                                                                                        font-family="Poppins"
-                                                                                        font-size="11px"
-                                                                                        font-weight="400"
-                                                                                        letter-spacing="2">12:24</text>
-                                                                                    <text
-                                                                                        transform="matrix(1 0 0 1 16 23)"
-                                                                                        fill="#FFFFFF"
-                                                                                        font-family="Poppins"
-                                                                                        font-size="13px">Sed vulputate
-                                                                                        ac ex nec</text> <text
-                                                                                        transform="matrix(1 0 0 1 16 41)"
-                                                                                        fill="#FFFFFF"
-                                                                                        font-family="Poppins"
-                                                                                        font-size="13px">imperdiet.
-                                                                                        Curabitur</text> <text
-                                                                                        transform="matrix(1 0 0 1 16 59)"
-                                                                                        fill="#FFFFFF"
-                                                                                        font-family="Poppins"
-                                                                                        font-size="13px">bibendum
-                                                                                        neque.</text>
-                                                                                </g>
-                                                                                <g transform="translate(216 73)">
-                                                                                    <g>
-                                                                                        <circle id="F_1_"
+                                                                                        <path id="E_1_"
                                                                                             fill-rule="evenodd"
                                                                                             clip-rule="evenodd"
-                                                                                            fill="#031B4E" cx="20"
-                                                                                            cy="20" r="20"></circle>
+                                                                                            fill="#0073CF"
+                                                                                            d="M208,83.9V89c0,0.6-0.4,1-1,1
+                    c-0.3,0-0.6-0.1-0.8-0.4l-4.7-5.7H17c-9.4,0-17-7.6-17-17V17C0,7.6,7.6,0,17,0h174c9.4,0,17,7.6,17,17V83.9z"></path>
                                                                                     </g>
-                                                                                    <image overflow="visible"
-                                                                                        width="100" height="100"
-                                                                                        xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
+                                                                                    <defs>
+                                                                                        <filter
+                                                                                            id="Adobe_OpacityMaskFilter"
+                                                                                            filterUnits="userSpaceOnUse"
+                                                                                            x="0" y="0" width="208"
+                                                                                            height="90">
+                                                                                            <feColorMatrix type="matrix"
+                                                                                                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0">
+                                                                                            </feColorMatrix>
+                                                                                        </filter>
+                                                                                    </defs>
+                                                                                    <mask maskUnits="userSpaceOnUse"
+                                                                                        x="0" y="0" width="208"
+                                                                                        height="90" id="W_1_">
+                                                                                        <g
+                                                                                            filter="url(#Adobe_OpacityMaskFilter)">
+                                                                                            <path id="E_2_"
+                                                                                                fill-rule="evenodd"
+                                                                                                clip-rule="evenodd"
+                                                                                                fill="#FFFFFF"
+                                                                                                d="M208,83.9V89c0,0.6-0.4,1-1,1
+                        c-0.3,0-0.6-0.1-0.8-0.4l-4.7-5.7H17c-9.4,0-17-7.6-17-17V17C0,7.6,7.6,0,17,0h174c9.4,0,17,7.6,17,17V83.9z">
+                                                                                            </path>
+                                                                                        </g>
+                                                                                    </mask>
+                                                                                    <g mask="url(#W_1_)">
+                                                                                        <path fill-rule="evenodd"
+                                                                                            clip-rule="evenodd"
+                                                                                            fill="#0073CF"
+                                                                                            d="M0,0h208v90H0V0z">
+                                                                                        </path>
+                                                                                    </g>
+                                                                                </g> <text
+                                                                                    transform="matrix(1 0 0 1 148.63 74)"
+                                                                                    fill="#E4E8F0" font-family="Poppins"
+                                                                                    font-size="11px" font-weight="400"
+                                                                                    letter-spacing="2">12:24</text>
+                                                                                <text transform="matrix(1 0 0 1 16 23)"
+                                                                                    fill="#FFFFFF" font-family="Poppins"
+                                                                                    font-size="13px">Sed vulputate
+                                                                                    ac ex nec</text> <text
+                                                                                    transform="matrix(1 0 0 1 16 41)"
+                                                                                    fill="#FFFFFF" font-family="Poppins"
+                                                                                    font-size="13px">imperdiet.
+                                                                                    Curabitur</text> <text
+                                                                                    transform="matrix(1 0 0 1 16 59)"
+                                                                                    fill="#FFFFFF" font-family="Poppins"
+                                                                                    font-size="13px">bibendum
+                                                                                    neque.</text>
+                                                                            </g>
+                                                                            <g transform="translate(216 73)">
+                                                                                <g>
+                                                                                    <circle id="F_1_"
+                                                                                        fill-rule="evenodd"
+                                                                                        clip-rule="evenodd"
+                                                                                        fill="#031B4E" cx="20" cy="20"
+                                                                                        r="20"></circle>
+                                                                                </g>
+                                                                                <image overflow="visible" width="100"
+                                                                                    height="100" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
                                                                     bWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdp
                                                                     bj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6
                                                                     eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2
@@ -878,61 +864,61 @@
                                                                     ABZ+6X6vl4a7/ZQFidVra1RnqIa4bnN2ktlukZOEpdAuFhtIcHc3iGWBHC0nOZ0dtLa0RvF4Qs75
                                                                     +FxtAtB/BahtdfY53bhxnTZDO7SyuEgToBG9QRBaQOOJkQEyWdliwym2SwHk6qcLa/TBn/8l/Z8A
                                                                     AwCRyl2SFX0gNAAAAABJRU5ErkJggg=="
-                                                                                        transform="matrix(0.41 0 0 0.41 -0.9706 -0.106)">
-                                                                                    </image>
-                                                                                </g> <text
-                                                                                    transform="matrix(1 0 0 1 152.462 12)"
-                                                                                    fill="#8097B1" font-family="Poppins"
-                                                                                    font-size="13px">Jasmeen</text>
-                                                                                <g transform="translate(0 238)">
-                                                                                    <g transform="translate(0 23)">
-                                                                                        <g>
-                                                                                            <path id="G_1_"
-                                                                                                fill-rule="evenodd"
-                                                                                                clip-rule="evenodd"
-                                                                                                fill="#0073CF"
-                                                                                                d="M208,106.9v7.2c0,0.6-0.4,1-1,1
+                                                                                    transform="matrix(0.41 0 0 0.41 -0.9706 -0.106)">
+                                                                                </image>
+                                                                            </g> <text
+                                                                                transform="matrix(1 0 0 1 152.462 12)"
+                                                                                fill="#8097B1" font-family="Poppins"
+                                                                                font-size="13px">Jasmeen</text>
+                                                                            <g transform="translate(0 238)">
+                                                                                <g transform="translate(0 23)">
+                                                                                    <g>
+                                                                                        <path id="G_1_"
+                                                                                            fill-rule="evenodd"
+                                                                                            clip-rule="evenodd"
+                                                                                            fill="#0073CF"
+                                                                                            d="M208,106.9v7.2c0,0.6-0.4,1-1,1
                     c-0.3,0-0.6-0.1-0.8-0.4l-6.4-7.8H17c-9.4,0-17-7.6-17-17V17C0,7.6,7.6,0,17,0h174c9.4,0,17,7.6,17,17V106.9z"></path>
-                                                                                        </g> <text
-                                                                                            transform="matrix(1 0 0 1 148.63 97)"
-                                                                                            fill="#E4E8F0"
-                                                                                            font-family="Poppins"
-                                                                                            font-size="11px"
-                                                                                            font-weight="400"
-                                                                                            letter-spacing="2">12:25</text>
-                                                                                        <text
-                                                                                            transform="matrix(1 0 0 1 16 23)"
-                                                                                            fill="#FFFFFF"
-                                                                                            font-family="Poppins"
-                                                                                            font-size="13px">Nunc diam
-                                                                                            diam, venenatis</text> <text
-                                                                                            transform="matrix(1 0 0 1 16 41)"
-                                                                                            fill="#FFFFFF"
-                                                                                            font-family="Poppins"
-                                                                                            font-size="13px">ac mattis
-                                                                                            ut, suscipit ut</text> <text
-                                                                                            transform="matrix(1 0 0 1 16 59)"
-                                                                                            fill="#FFFFFF"
-                                                                                            font-family="Poppins"
-                                                                                            font-size="13px">nulla. Sed
-                                                                                            lacus ipsum,</text> <text
-                                                                                            transform="matrix(1 0 0 1 16 77)"
-                                                                                            fill="#FFFFFF"
-                                                                                            font-family="Poppins"
-                                                                                            font-size="13px">dignissim
-                                                                                            sed.</text>
+                                                                                    </g> <text
+                                                                                        transform="matrix(1 0 0 1 148.63 97)"
+                                                                                        fill="#E4E8F0"
+                                                                                        font-family="Poppins"
+                                                                                        font-size="11px"
+                                                                                        font-weight="400"
+                                                                                        letter-spacing="2">12:25</text>
+                                                                                    <text
+                                                                                        transform="matrix(1 0 0 1 16 23)"
+                                                                                        fill="#FFFFFF"
+                                                                                        font-family="Poppins"
+                                                                                        font-size="13px">Nunc diam
+                                                                                        diam, venenatis</text> <text
+                                                                                        transform="matrix(1 0 0 1 16 41)"
+                                                                                        fill="#FFFFFF"
+                                                                                        font-family="Poppins"
+                                                                                        font-size="13px">ac mattis
+                                                                                        ut, suscipit ut</text> <text
+                                                                                        transform="matrix(1 0 0 1 16 59)"
+                                                                                        fill="#FFFFFF"
+                                                                                        font-family="Poppins"
+                                                                                        font-size="13px">nulla. Sed
+                                                                                        lacus ipsum,</text> <text
+                                                                                        transform="matrix(1 0 0 1 16 77)"
+                                                                                        fill="#FFFFFF"
+                                                                                        font-family="Poppins"
+                                                                                        font-size="13px">dignissim
+                                                                                        sed.</text>
+                                                                                </g>
+                                                                                <g transform="translate(216 98)">
+                                                                                    <g>
+                                                                                        <circle id="H_1_"
+                                                                                            fill-rule="evenodd"
+                                                                                            clip-rule="evenodd"
+                                                                                            fill="#031B4E" cx="20"
+                                                                                            cy="20" r="20"></circle>
                                                                                     </g>
-                                                                                    <g transform="translate(216 98)">
-                                                                                        <g>
-                                                                                            <circle id="H_1_"
-                                                                                                fill-rule="evenodd"
-                                                                                                clip-rule="evenodd"
-                                                                                                fill="#031B4E" cx="20"
-                                                                                                cy="20" r="20"></circle>
-                                                                                        </g>
-                                                                                        <image overflow="visible"
-                                                                                            width="100" height="100"
-                                                                                            xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
+                                                                                    <image overflow="visible"
+                                                                                        width="100" height="100"
+                                                                                        xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
                                                                         bWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdp
                                                                         bj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6
                                                                         eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2
@@ -1413,52 +1399,45 @@
                                                                         ABZ+6X6vl4a7/ZQFidVra1RnqIa4bnN2ktlukZOEpdAuFhtIcHc3iGWBHC0nOZ0dtLa0RvF4Qs75
                                                                         +FxtAtB/BahtdfY53bhxnTZDO7SyuEgToBG9QRBaQOOJkQEyWdliwym2SwHk6qcLa/TBn/8l/Z8A
                                                                         AwCRyl2SFX0gNAAAAABJRU5ErkJggg=="
-                                                                                            transform="matrix(0.41 0 0 0.41 -0.5 -0.5)">
-                                                                                        </image>
-                                                                                    </g> <text
-                                                                                        transform="matrix(1 0 0 1 150.462 12)"
-                                                                                        fill="#8097B1"
-                                                                                        font-family="Poppins"
-                                                                                        font-size="13px">Jasmeen</text>
-                                                                                </g>
-                                                                                <g transform="translate(0 122)">
-                                                                                    <path fill-rule="evenodd"
-                                                                                        clip-rule="evenodd"
-                                                                                        fill="#FFFFFF" stroke="#979797"
-                                                                                        stroke-opacity="0.15" d="M49.4,106.4l4.6-5.7
+                                                                                        transform="matrix(0.41 0 0 0.41 -0.5 -0.5)">
+                                                                                    </image>
+                                                                                </g> <text
+                                                                                    transform="matrix(1 0 0 1 150.462 12)"
+                                                                                    fill="#8097B1" font-family="Poppins"
+                                                                                    font-size="13px">Jasmeen</text>
+                                                                            </g>
+                                                                            <g transform="translate(0 122)">
+                                                                                <path fill-rule="evenodd"
+                                                                                    clip-rule="evenodd" fill="#FFFFFF"
+                                                                                    stroke="#979797"
+                                                                                    stroke-opacity="0.15" d="M49.4,106.4l4.6-5.7
             h185c9.1,0,16.5-7.4,16.5-16.5V40c0-9.1-7.4-16.5-16.5-16.5H65c-9.1,0-16.5,7.4-16.5,16.5v66.1c0,0.3,0.2,0.5,0.5,0.5
             C49.1,106.6,49.3,106.5,49.4,106.4L49.4,106.4z"></path> <text transform="matrix(1 0 0 1 196.63 92)"
-                                                                                        fill="#8097B1"
-                                                                                        font-family="Poppins"
-                                                                                        font-size="11px"
-                                                                                        font-weight="400"
-                                                                                        letter-spacing="2">12:25</text>
-                                                                                    <text
-                                                                                        transform="matrix(1 0 0 1 64 47)"
-                                                                                        fill="#2E384D"
-                                                                                        font-family="Poppins"
-                                                                                        font-size="13px">Morbi maximus
-                                                                                        lacus ex, sed</text> <text
-                                                                                        transform="matrix(1 0 0 1 64 65)"
-                                                                                        fill="#2E384D"
-                                                                                        font-family="Poppins"
-                                                                                        font-size="13px">molestie diam
-                                                                                        convallis ac.</text> <text
-                                                                                        transform="matrix(1 0 0 1 48 12)"
-                                                                                        fill="#8097B1"
-                                                                                        font-family="Poppins"
-                                                                                        font-size="13px">Scarlett</text>
-                                                                                    <g transform="translate(0 67)">
-                                                                                        <g>
-                                                                                            <circle id="I_1_"
-                                                                                                fill-rule="evenodd"
-                                                                                                clip-rule="evenodd"
-                                                                                                fill="#031B4E" cx="20"
-                                                                                                cy="20" r="20"></circle>
-                                                                                        </g>
-                                                                                        <image overflow="visible"
-                                                                                            width="100" height="100"
-                                                                                            xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
+                                                                                    fill="#8097B1" font-family="Poppins"
+                                                                                    font-size="11px" font-weight="400"
+                                                                                    letter-spacing="2">12:25</text>
+                                                                                <text transform="matrix(1 0 0 1 64 47)"
+                                                                                    fill="#2E384D" font-family="Poppins"
+                                                                                    font-size="13px">Morbi maximus
+                                                                                    lacus ex, sed</text> <text
+                                                                                    transform="matrix(1 0 0 1 64 65)"
+                                                                                    fill="#2E384D" font-family="Poppins"
+                                                                                    font-size="13px">molestie diam
+                                                                                    convallis ac.</text> <text
+                                                                                    transform="matrix(1 0 0 1 48 12)"
+                                                                                    fill="#8097B1" font-family="Poppins"
+                                                                                    font-size="13px">Scarlett</text>
+                                                                                <g transform="translate(0 67)">
+                                                                                    <g>
+                                                                                        <circle id="I_1_"
+                                                                                            fill-rule="evenodd"
+                                                                                            clip-rule="evenodd"
+                                                                                            fill="#031B4E" cx="20"
+                                                                                            cy="20" r="20"></circle>
+                                                                                    </g>
+                                                                                    <image overflow="visible"
+                                                                                        width="100" height="100"
+                                                                                        xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
         bWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdp
         bj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6
         eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2
@@ -1905,88 +1884,84 @@
         SxX48jRybe1rutuijba6iQ9y1XZnPtrY3eyiBMbPg+d0GVl6KLNulzXtcdsmaFKM0QCO0GWM0PWc
         pA35OK38hCEQUNVDsWM+pYV2rrvRXeg6Lfx5owLNqNKyV5VtdsE0Wj8Uzr4YRipITAq1RsDAlp1P
         4id3nUZi9DA9yDq8+Ze9klq339yPyeIc/i/AAGBuBaCuxHTqAAAAAElFTkSuQmCC" transform="matrix(0.41 0 0 0.41 -0.5 -0.5)">
-                                                                                        </image>
-                                                                                    </g>
+                                                                                    </image>
                                                                                 </g>
                                                                             </g>
                                                                         </g>
-                                                                        <g transform="translate(0 466)">
-                                                                            <g transform="translate(356)">
-                                                                                <g>
-                                                                                    <path id="J" fill-rule="evenodd"
-                                                                                        clip-rule="evenodd" d="M1.3,0h333.5c0.7,0,1.3,0.6,1.3,1.3v146.7c0,0.7-0.6,1.3-1.3,1.3H1.3
+                                                                    </g>
+                                                                    <g transform="translate(0 466)">
+                                                                        <g transform="translate(356)">
+                                                                            <g>
+                                                                                <path id="J" fill-rule="evenodd"
+                                                                                    clip-rule="evenodd" d="M1.3,0h333.5c0.7,0,1.3,0.6,1.3,1.3v146.7c0,0.7-0.6,1.3-1.3,1.3H1.3
             c-0.7,0-1.3-0.6-1.3-1.3V1.3C0,0.6,0.6,0,1.3,0z"></path>
-                                                                                </g>
-                                                                                <g>
-                                                                                    <path id="J_1_" fill-rule="evenodd"
-                                                                                        clip-rule="evenodd"
-                                                                                        fill="#FFFFFF" stroke="#F1F2F3"
-                                                                                        stroke-width="2" d="M1.3,0h333.5
+                                                                            </g>
+                                                                            <g>
+                                                                                <path id="J_1_" fill-rule="evenodd"
+                                                                                    clip-rule="evenodd" fill="#FFFFFF"
+                                                                                    stroke="#F1F2F3" stroke-width="2" d="M1.3,0h333.5
             c0.7,0,1.3,0.6,1.3,1.3v146.7c0,0.7-0.6,1.3-1.3,1.3H1.3c-0.7,0-1.3-0.6-1.3-1.3V1.3C0,0.6,0.6,0,1.3,0z">
-                                                                                    </path>
-                                                                                </g> <text
-                                                                                    transform="matrix(1 0 0 1 113.13 118.29)"
-                                                                                    fill="#8798AD" font-family="Poppins"
-                                                                                    font-size="18.855px"> Sed vulputate
-                                                                                    ac</text> <text
-                                                                                    transform="matrix(1 0 0 1 113.13 84.641)"
-                                                                                    fill="#2E384D" font-family="Poppins"
-                                                                                    font-size="60.336px"
-                                                                                    font-weight="600">25m</text>
-                                                                                <g>
-                                                                                    <circle opacity="0.15"
-                                                                                        fill-rule="evenodd"
-                                                                                        clip-rule="evenodd"
-                                                                                        fill="#F1F2F3"
-                                                                                        enable-background="new    "
-                                                                                        cx="61.6" cy="71.6" r="31.4">
-                                                                                    </circle>
-                                                                                    <path fill-rule="evenodd"
-                                                                                        clip-rule="evenodd"
-                                                                                        fill="#F1F2F3" d="M54.2,71.5h9.1v-1.8h-9.1V71.5z M54.2,67.8h12.7V66H54.2V67.8z
+                                                                                </path>
+                                                                            </g> <text
+                                                                                transform="matrix(1 0 0 1 113.13 118.29)"
+                                                                                fill="#8798AD" font-family="Poppins"
+                                                                                font-size="18.855px"> Sed vulputate
+                                                                                ac</text> <text
+                                                                                transform="matrix(1 0 0 1 113.13 84.641)"
+                                                                                fill="#2E384D" font-family="Poppins"
+                                                                                font-size="60.336px"
+                                                                                font-weight="600">25m</text>
+                                                                            <g>
+                                                                                <circle opacity="0.15"
+                                                                                    fill-rule="evenodd"
+                                                                                    clip-rule="evenodd" fill="#F1F2F3"
+                                                                                    enable-background="new    "
+                                                                                    cx="61.6" cy="71.6" r="31.4">
+                                                                                </circle>
+                                                                                <path fill-rule="evenodd"
+                                                                                    clip-rule="evenodd" fill="#F1F2F3"
+                                                                                    d="M54.2,71.5h9.1v-1.8h-9.1V71.5z M54.2,67.8h12.7V66H54.2V67.8z
                 M68.7,75.1h-4.5v4.4c-2.1-0.4-3.6-2.3-3.6-4.5h-8.2V62.4h16.4L68.7,75.1L68.7,75.1z M68.7,60.6H52.3c-1,0-1.8,0.8-1.8,1.8v12.7
             c0,1,0.8,1.8,1.8,1.8H59c0.8,2.6,3.2,4.5,6.1,4.5H66v-4.5h2.7c1,0,1.8-0.8,1.8-1.8V62.4C70.5,61.4,69.7,60.6,68.7,60.6
             L68.7,60.6z"></path>
-                                                                                </g>
                                                                             </g>
-                                                                            <path fill-rule="evenodd"
-                                                                                clip-rule="evenodd" fill="#FFFFFF"
-                                                                                stroke="#F1F2F3" stroke-width="2" d="M1.5,0.5h333c0.6,0,1,0.4,1,1
+                                                                        </g>
+                                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                            fill="#FFFFFF" stroke="#F1F2F3"
+                                                                            stroke-width="2" d="M1.5,0.5h333c0.6,0,1,0.4,1,1
         v147c0,0.6-0.4,1-1,1H1.5c-0.6,0-1-0.4-1-1V1.5C0.5,0.9,0.9,0.5,1.5,0.5z"></path>
-                                                                            <path fill-rule="evenodd"
-                                                                                clip-rule="evenodd" fill="#0073CF" d="M25,94h132c2.2,0,4,1.8,4,4v32c0,2.2-1.8,4-4,4H25
+                                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                            fill="#0073CF" d="M25,94h132c2.2,0,4,1.8,4,4v32c0,2.2-1.8,4-4,4H25
         c-2.2,0-4-1.8-4-4V98C21,95.8,22.8,94,25,94z"></path> <text transform="matrix(1 0 0 1 48.603 118)"
-                                                                                fill="#FFFFFF" font-family="Poppins"
-                                                                                font-size="15px" font-weight="400">Edit
-                                                                                Profile</text>
-                                                                            <g>
-                                                                                <path opacity="0.2" fill-rule="evenodd"
-                                                                                    clip-rule="evenodd" fill="#0073CF"
-                                                                                    enable-background="new    " d="M179,94h132
+                                                                            fill="#FFFFFF" font-family="Poppins"
+                                                                            font-size="15px" font-weight="400">Edit
+                                                                            Profile</text>
+                                                                        <g>
+                                                                            <path opacity="0.2" fill-rule="evenodd"
+                                                                                clip-rule="evenodd" fill="#0073CF"
+                                                                                enable-background="new    " d="M179,94h132
         c2.2,0,4,1.8,4,4v32c0,2.2-1.8,4-4,4H179c-2.2,0-4-1.8-4-4V98C175,95.8,176.8,94,179,94z"></path> <text
-                                                                                    transform="matrix(1 0 0 1 212.255 118)"
-                                                                                    fill="#0073CF" font-family="Poppins"
-                                                                                    font-size="15px"
-                                                                                    font-weight="400">Message</text>
+                                                                                transform="matrix(1 0 0 1 212.255 118)"
+                                                                                fill="#0073CF" font-family="Poppins"
+                                                                                font-size="15px"
+                                                                                font-weight="400">Message</text>
+                                                                        </g>
+                                                                        <g transform="translate(23 24)"><text
+                                                                                transform="matrix(1 0 0 1 70 43)"
+                                                                                fill="#8798AD" font-family="Poppins"
+                                                                                font-size="15px">Sales
+                                                                                Manager</text> <text
+                                                                                transform="matrix(1 0 0 1 70 23)"
+                                                                                fill="#2E384D" font-family="Poppins"
+                                                                                font-size="15px"
+                                                                                font-weight="400">Jasmeen</text>
+                                                                            <g>
+                                                                                <circle id="M_1_" fill-rule="evenodd"
+                                                                                    clip-rule="evenodd" fill="#031B4E"
+                                                                                    cx="30" cy="30" r="30"></circle>
                                                                             </g>
-                                                                            <g transform="translate(23 24)"><text
-                                                                                    transform="matrix(1 0 0 1 70 43)"
-                                                                                    fill="#8798AD" font-family="Poppins"
-                                                                                    font-size="15px">Sales
-                                                                                    Manager</text> <text
-                                                                                    transform="matrix(1 0 0 1 70 23)"
-                                                                                    fill="#2E384D" font-family="Poppins"
-                                                                                    font-size="15px"
-                                                                                    font-weight="400">Jasmeen</text>
-                                                                                <g>
-                                                                                    <circle id="M_1_"
-                                                                                        fill-rule="evenodd"
-                                                                                        clip-rule="evenodd"
-                                                                                        fill="#031B4E" cx="30" cy="30"
-                                                                                        r="30"></circle>
-                                                                                </g>
-                                                                                <image overflow="visible" width="100"
-                                                                                    height="100" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
+                                                                            <image overflow="visible" width="100"
+                                                                                height="100" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
         bWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdp
         bj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6
         eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2
@@ -2467,322 +2442,302 @@
         ABZ+6X6vl4a7/ZQFidVra1RnqIa4bnN2ktlukZOEpdAuFhtIcHc3iGWBHC0nOZ0dtLa0RvF4Qs75
         +FxtAtB/BahtdfY53bhxnTZDO7SyuEgToBG9QRBaQOOJkQEyWdliwym2SwHk6qcLa/TBn/8l/Z8A
         AwCRyl2SFX0gNAAAAABJRU5ErkJggg==" transform="matrix(0.61 0 0 0.61 -0.5 -0.276)"></image>
-                                                                            </g>
-                                                                            <g transform="translate(712)">
-                                                                                <g>
-                                                                                    <path id="N" fill-rule="evenodd"
-                                                                                        clip-rule="evenodd" d="M1.3,0h333.5c0.7,0,1.3,0.6,1.3,1.3v146.7c0,0.7-0.6,1.3-1.3,1.3H1.3
+                                                                        </g>
+                                                                        <g transform="translate(712)">
+                                                                            <g>
+                                                                                <path id="N" fill-rule="evenodd"
+                                                                                    clip-rule="evenodd" d="M1.3,0h333.5c0.7,0,1.3,0.6,1.3,1.3v146.7c0,0.7-0.6,1.3-1.3,1.3H1.3
             c-0.7,0-1.3-0.6-1.3-1.3V1.3C0,0.6,0.6,0,1.3,0z"></path>
-                                                                                </g>
-                                                                                <g>
-                                                                                    <path id="N_1_" fill-rule="evenodd"
-                                                                                        clip-rule="evenodd"
-                                                                                        fill="#FFFFFF" stroke="#F1F2F3"
-                                                                                        stroke-width="2" d="M1.3,0h333.5
+                                                                            </g>
+                                                                            <g>
+                                                                                <path id="N_1_" fill-rule="evenodd"
+                                                                                    clip-rule="evenodd" fill="#FFFFFF"
+                                                                                    stroke="#F1F2F3" stroke-width="2" d="M1.3,0h333.5
             c0.7,0,1.3,0.6,1.3,1.3v146.7c0,0.7-0.6,1.3-1.3,1.3H1.3c-0.7,0-1.3-0.6-1.3-1.3V1.3C0,0.6,0.6,0,1.3,0z">
-                                                                                    </path>
-                                                                                </g> <text
-                                                                                    transform="matrix(1 0 0 1 113.13 118.29)"
-                                                                                    fill="#8798AD" font-family="Poppins"
-                                                                                    font-size="18.855px">Sed lacus
-                                                                                    ipsum</text> <text
-                                                                                    transform="matrix(1 0 0 1 113.13 84.641)"
-                                                                                    fill="#2E384D" font-family="Poppins"
-                                                                                    font-size="60.336px"
-                                                                                    font-weight="600">8.09</text>
-                                                                                <g>
-                                                                                    <circle opacity="0.15"
-                                                                                        fill-rule="evenodd"
-                                                                                        clip-rule="evenodd"
-                                                                                        fill="#F1F2F3"
-                                                                                        enable-background="new    "
-                                                                                        cx="61.6" cy="71.6" r="31.4">
-                                                                                    </circle>
-                                                                                    <path fill-rule="evenodd"
-                                                                                        clip-rule="evenodd"
-                                                                                        fill="#F1F2F3" d="M52.4,66.7v-3.8h1.9v1.9h1.9v-1.9H60v1.9h1.9v-1.9h3.8v1.9h1.9
+                                                                                </path>
+                                                                            </g> <text
+                                                                                transform="matrix(1 0 0 1 113.13 118.29)"
+                                                                                fill="#8798AD" font-family="Poppins"
+                                                                                font-size="18.855px">Sed lacus
+                                                                                ipsum</text> <text
+                                                                                transform="matrix(1 0 0 1 113.13 84.641)"
+                                                                                fill="#2E384D" font-family="Poppins"
+                                                                                font-size="60.336px"
+                                                                                font-weight="600">8.09</text>
+                                                                            <g>
+                                                                                <circle opacity="0.15"
+                                                                                    fill-rule="evenodd"
+                                                                                    clip-rule="evenodd" fill="#F1F2F3"
+                                                                                    enable-background="new    "
+                                                                                    cx="61.6" cy="71.6" r="31.4">
+                                                                                </circle>
+                                                                                <path fill-rule="evenodd"
+                                                                                    clip-rule="evenodd" fill="#F1F2F3"
+                                                                                    d="M52.4,66.7v-3.8h1.9v1.9h1.9v-1.9H60v1.9h1.9v-1.9h3.8v1.9h1.9
             v-1.9h1.9v3.8H52.4z M52.4,78.1h17.1v-9.5H52.4V78.1z M67.6,61v-1.9h-1.9V61h-3.8v-1.9H60V61h-3.8v-1.9h-1.9V61h-3.8v19h20.9V61
             H67.6L67.6,61z"></path>
-                                                                                </g>
                                                                             </g>
                                                                         </g>
-                                                                        <g>
-                                                                            <path id="O" fill-rule="evenodd"
-                                                                                clip-rule="evenodd" d="M1,0h334c0.6,0,1,0.4,1,1v444c0,0.6-0.4,1-1,1H1c-0.6,0-1-0.4-1-1V1
+                                                                    </g>
+                                                                    <g>
+                                                                        <path id="O" fill-rule="evenodd"
+                                                                            clip-rule="evenodd" d="M1,0h334c0.6,0,1,0.4,1,1v444c0,0.6-0.4,1-1,1H1c-0.6,0-1-0.4-1-1V1
         C0,0.4,0.4,0,1,0z"></path>
-                                                                        </g>
-                                                                        <g>
-                                                                            <path id="O_1_" fill-rule="evenodd"
-                                                                                clip-rule="evenodd" fill="#FFFFFF"
-                                                                                stroke="#F1F2F3" stroke-width="2" d="M1,0h334
+                                                                    </g>
+                                                                    <g>
+                                                                        <path id="O_1_" fill-rule="evenodd"
+                                                                            clip-rule="evenodd" fill="#FFFFFF"
+                                                                            stroke="#F1F2F3" stroke-width="2" d="M1,0h334
         c0.6,0,1,0.4,1,1v444c0,0.6-0.4,1-1,1H1c-0.6,0-1-0.4-1-1V1C0,0.4,0.4,0,1,0z"></path>
-                                                                        </g> <text transform="matrix(1 0 0 1 20 44)"
-                                                                            fill="#8798AD" font-family="Poppins"
-                                                                            font-size="13px"
-                                                                            letter-spacing="1">Pellentesque Habitant
-                                                                            Morbi</text>
-                                                                        <g>
-                                                                            <path id="A_1_" fill-rule="evenodd"
-                                                                                clip-rule="evenodd" fill="#BFC5D2" d="M301,41.5c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5
+                                                                    </g> <text transform="matrix(1 0 0 1 20 44)"
+                                                                        fill="#8798AD" font-family="Poppins"
+                                                                        font-size="13px" letter-spacing="1">Pellentesque
+                                                                        Habitant
+                                                                        Morbi</text>
+                                                                    <g>
+                                                                        <path id="A_1_" fill-rule="evenodd"
+                                                                            clip-rule="evenodd" fill="#BFC5D2" d="M301,41.5c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5
         s1.5,0.7,1.5,1.5S301.8,41.5,301,41.5z M307,41.5c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5S307.8,41.5,307,41.5z
         M313,41.5c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5s1.5,0.7,1.5,1.5S313.8,41.5,313,41.5z"></path>
-                                                                        </g>
-                                                                        <g transform="translate(60 80)">
-                                                                            <g transform="translate(13 30)">
-                                                                                <g>
-                                                                                    <path id="P_1_" fill="#464D53" d="M95,172c42.5,0,77-34.5,77-77s-34.5-77-77-77S18,52.5,18,95S52.5,172,95,172z M95,190
-            c-52.5,0-95-42.5-95-95S42.5,0,95,0s95,42.5,95,95S147.5,190,95,190z"></path>
-                                                                                </g>
-                                                                            </g>
-                                                                            <g transform="translate(13 125)">
-                                                                                <defs>
-                                                                                    <filter
-                                                                                        id="Adobe_OpacityMaskFilter_1_"
-                                                                                        filterUnits="userSpaceOnUse"
-                                                                                        x="0" y="-95" width="190"
-                                                                                        height="203">
-                                                                                        <feColorMatrix type="matrix"
-                                                                                            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0">
-                                                                                        </feColorMatrix>
-                                                                                    </filter>
-                                                                                </defs>
-                                                                                <mask maskUnits="userSpaceOnUse" x="0"
-                                                                                    y="-95" width="190" height="203"
-                                                                                    id="b_1_">
-                                                                                    <g
-                                                                                        filter="url(#Adobe_OpacityMaskFilter_1_)">
-                                                                                        <path id="Q_1_"
-                                                                                            fill-rule="evenodd"
-                                                                                            clip-rule="evenodd"
-                                                                                            fill="#FFFFFF"
-                                                                                            d="M95,0L59,111.5l-58.5-40L95,0z">
-                                                                                        </path>
-                                                                                    </g>
-                                                                                </mask>
-                                                                                <g mask="url(#b_1_)">
-                                                                                    <g transform="translate(0 -95)">
-                                                                                        <g>
-                                                                                            <path id="R_1_"
-                                                                                                fill="#2E384D" d="M95,172c42.5,0,77-34.5,77-77s-34.5-77-77-77S18,52.5,18,95S52.5,172,95,172z M95,190
-                    c-52.5,0-95-42.5-95-95S42.5,0,95,0s95,42.5,95,95S147.5,190,95,190z"></path>
-                                                                                        </g>
-                                                                                        <defs>
-                                                                                            <filter
-                                                                                                id="Adobe_OpacityMaskFilter_2_"
-                                                                                                filterUnits="userSpaceOnUse"
-                                                                                                x="5" y="127" width="90"
-                                                                                                height="76">
-                                                                                                <feColorMatrix
-                                                                                                    type="matrix"
-                                                                                                    values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0">
-                                                                                                </feColorMatrix>
-                                                                                            </filter>
-                                                                                        </defs>
-                                                                                        <mask maskUnits="userSpaceOnUse"
-                                                                                            x="5" y="127" width="90"
-                                                                                            height="76" id="c_1_">
-                                                                                            <g
-                                                                                                filter="url(#Adobe_OpacityMaskFilter_2_)">
-                                                                                                <path id="R_2_"
-                                                                                                    fill-rule="evenodd"
-                                                                                                    clip-rule="evenodd"
-                                                                                                    fill="#FFFFFF"
-                                                                                                    d="M95,172c42.5,0,77-34.5,77-77s-34.5-77-77-77
-                        S18,52.5,18,95S52.5,172,95,172z M95,190c-52.5,0-95-42.5-95-95S42.5,0,95,0s95,42.5,95,95S147.5,190,95,190z">
-                                                                                                </path>
-                                                                                            </g>
-                                                                                        </mask>
-                                                                                        <g mask="url(#c_1_)">
-                                                                                            <path fill-rule="evenodd"
-                                                                                                clip-rule="evenodd"
-                                                                                                fill="#F1F2F3"
-                                                                                                d="M5,127h90v76H5V127z">
-                                                                                            </path>
-                                                                                        </g>
-                                                                                    </g>
-                                                                                </g>
-                                                                            </g>
-                                                                            <g transform="translate(0 32)">
-                                                                                <defs>
-                                                                                    <filter
-                                                                                        id="Adobe_OpacityMaskFilter_3_"
-                                                                                        filterUnits="userSpaceOnUse"
-                                                                                        x="7" y="-2" width="196"
-                                                                                        height="190">
-                                                                                        <feColorMatrix type="matrix"
-                                                                                            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0">
-                                                                                        </feColorMatrix>
-                                                                                    </filter>
-                                                                                </defs>
-                                                                                <mask maskUnits="userSpaceOnUse" x="7"
-                                                                                    y="-2" width="196" height="190"
-                                                                                    id="d_1_">
-                                                                                    <g
-                                                                                        filter="url(#Adobe_OpacityMaskFilter_3_)">
-                                                                                        <path id="S_1_"
-                                                                                            fill-rule="evenodd"
-                                                                                            clip-rule="evenodd"
-                                                                                            fill="#FFFFFF"
-                                                                                            d="M108,93L0.5,196L2,0.5L108,93z">
-                                                                                        </path>
-                                                                                    </g>
-                                                                                </mask>
-                                                                                <g mask="url(#d_1_)">
-                                                                                    <g transform="translate(13 -2)">
-                                                                                        <g>
-                                                                                            <path id="T_1_"
-                                                                                                fill="#F1F2F3" d="M95,172c42.5,0,77-34.5,77-77s-34.5-77-77-77S18,52.5,18,95S52.5,172,95,172z M95,190
-                    c-52.5,0-95-42.5-95-95S42.5,0,95,0s95,42.5,95,95S147.5,190,95,190z"></path>
-                                                                                        </g>
-                                                                                        <defs>
-                                                                                            <filter
-                                                                                                id="Adobe_OpacityMaskFilter_4_"
-                                                                                                filterUnits="userSpaceOnUse"
-                                                                                                x="-6" y="28"
-                                                                                                width="101"
-                                                                                                height="156">
-                                                                                                <feColorMatrix
-                                                                                                    type="matrix"
-                                                                                                    values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0">
-                                                                                                </feColorMatrix>
-                                                                                            </filter>
-                                                                                        </defs>
-                                                                                        <mask maskUnits="userSpaceOnUse"
-                                                                                            x="-6" y="28" width="101"
-                                                                                            height="156" id="e_1_">
-                                                                                            <g
-                                                                                                filter="url(#Adobe_OpacityMaskFilter_4_)">
-                                                                                                <path id="T_2_"
-                                                                                                    fill-rule="evenodd"
-                                                                                                    clip-rule="evenodd"
-                                                                                                    fill="#FFFFFF"
-                                                                                                    d="M95,172c42.5,0,77-34.5,77-77s-34.5-77-77-77
-                        S18,52.5,18,95S52.5,172,95,172z M95,190c-52.5,0-95-42.5-95-95S42.5,0,95,0s95,42.5,95,95S147.5,190,95,190z">
-                                                                                                </path>
-                                                                                            </g>
-                                                                                        </mask>
-                                                                                        <g mask="url(#e_1_)">
-                                                                                            <path fill-rule="evenodd"
-                                                                                                clip-rule="evenodd"
-                                                                                                fill="#F1F2F3"
-                                                                                                d="M-6,28H95v156H-6V28z">
-                                                                                            </path>
-                                                                                        </g>
-                                                                                    </g>
-                                                                                </g>
-                                                                            </g>
-                                                                            <g transform="translate(7)">
-                                                                                <defs>
-                                                                                    <filter
-                                                                                        id="Adobe_OpacityMaskFilter_5_"
-                                                                                        filterUnits="userSpaceOnUse"
-                                                                                        x="0" y="15" width="200"
-                                                                                        height="211">
-                                                                                        <feColorMatrix type="matrix"
-                                                                                            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0">
-                                                                                        </feColorMatrix>
-                                                                                    </filter>
-                                                                                </defs>
-                                                                                <mask maskUnits="userSpaceOnUse" x="0"
-                                                                                    y="15" width="200" height="211"
-                                                                                    id="f_1_">
-                                                                                    <g
-                                                                                        filter="url(#Adobe_OpacityMaskFilter_5_)">
-                                                                                        <path id="U_1_"
-                                                                                            fill-rule="evenodd"
-                                                                                            clip-rule="evenodd"
-                                                                                            fill="#FFFFFF"
-                                                                                            d="M102,130L0,47.5l102-47V130z">
-                                                                                        </path>
-                                                                                    </g>
-                                                                                </mask>
-                                                                                <g mask="url(#f_1_)">
-                                                                                    <g transform="translate(0 26)">
-                                                                                        <g>
-                                                                                            <path id="V_1_"
-                                                                                                fill="#0073CF" d="M100,172c39.8,0,72-32.2,72-72s-32.2-72-72-72s-72,32.2-72,72S60.2,172,100,172z M100,200
-                    C44.8,200,0,155.2,0,100S44.8,0,100,0s100,44.8,100,100S155.2,200,100,200z"></path>
-                                                                                        </g>
-                                                                                        <defs>
-                                                                                            <filter
-                                                                                                id="Adobe_OpacityMaskFilter_6_"
-                                                                                                filterUnits="userSpaceOnUse"
-                                                                                                x="13" y="-11"
-                                                                                                width="106" height="89">
-                                                                                                <feColorMatrix
-                                                                                                    type="matrix"
-                                                                                                    values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0">
-                                                                                                </feColorMatrix>
-                                                                                            </filter>
-                                                                                        </defs>
-                                                                                        <mask maskUnits="userSpaceOnUse"
-                                                                                            x="13" y="-11" width="106"
-                                                                                            height="89" id="g_1_">
-                                                                                            <g
-                                                                                                filter="url(#Adobe_OpacityMaskFilter_6_)">
-                                                                                                <path id="V_2_"
-                                                                                                    fill-rule="evenodd"
-                                                                                                    clip-rule="evenodd"
-                                                                                                    fill="#FFFFFF"
-                                                                                                    d="M100,172c39.8,0,72-32.2,72-72s-32.2-72-72-72
-                        s-72,32.2-72,72S60.2,172,100,172z M100,200C44.8,200,0,155.2,0,100S44.8,0,100,0s100,44.8,100,100S155.2,200,100,200z">
-                                                                                                </path>
-                                                                                            </g>
-                                                                                        </mask>
-                                                                                        <g mask="url(#g_1_)">
-                                                                                            <path fill-rule="evenodd"
-                                                                                                clip-rule="evenodd"
-                                                                                                fill="#0073CF"
-                                                                                                d="M13-11h106v89H13V-11z">
-                                                                                            </path>
-                                                                                        </g>
-                                                                                    </g>
-                                                                                </g>
-                                                                            </g> <text
-                                                                                transform="matrix(1 0 0 1 75.5 133)"
-                                                                                fill="#2E384D" font-family="Poppins"
-                                                                                font-size="32px"
-                                                                                font-weight="600">14.5</text> <text
-                                                                                transform="matrix(1 0 0 1 138.5 115)"
-                                                                                fill="#2E384D" font-family="Poppins"
-                                                                                font-size="15px"
-                                                                                font-weight="400">%</text> <text
-                                                                                transform="matrix(1 0 0 1 79.357 151)"
-                                                                                fill="#B0BAC9" font-family="Poppins"
-                                                                                font-size="12px" font-weight="400"
-                                                                                letter-spacing="1">ULTRICES</text> <text
-                                                                                transform="matrix(1 0 0 1 81.233 165)"
-                                                                                fill="#B0BAC9" font-family="Poppins"
-                                                                                font-size="12px" font-weight="400"
-                                                                                letter-spacing="1">MATTIS</text>
-                                                                        </g> <text transform="matrix(1 0 0 1 53 373)"
-                                                                            fill="#2E384D" font-family="Poppins"
-                                                                            font-size="15px">Donec nec</text>
-                                                                        <circle fill-rule="evenodd" clip-rule="evenodd"
-                                                                            fill="#0073CF" cx="37" cy="369" r="6">
-                                                                        </circle>
-                                                                        <circle fill-rule="evenodd" clip-rule="evenodd"
-                                                                            fill="#F1F2F3" cx="37" cy="403" r="6">
-                                                                        </circle> <text
-                                                                            transform="matrix(1 0 0 1 53 407)"
-                                                                            fill="#2E384D" font-family="Poppins"
-                                                                            font-size="15px">Morbi eleifend</text>
-                                                                        <circle fill-rule="evenodd" clip-rule="evenodd"
-                                                                            fill="#F1F2F3" cx="193" cy="369" r="6">
-                                                                        </circle> <text
-                                                                            transform="matrix(1 0 0 1 209 373)"
-                                                                            fill="#2E384D" font-family="Poppins"
-                                                                            font-size="15px">Curabitur</text>
-                                                                        <circle fill-rule="evenodd" clip-rule="evenodd"
-                                                                            fill="#464D53" cx="193" cy="403" r="6">
-                                                                        </circle> <text
-                                                                            transform="matrix(1 0 0 1 209 407)"
-                                                                            fill="#2E384D" font-family="Poppins"
-                                                                            font-size="15px">Nam hendrerit</text>
                                                                     </g>
-                                                                </svg>
-                                                            </div>
+                                                                    <g transform="translate(60 80)">
+                                                                        <g transform="translate(13 30)">
+                                                                            <g>
+                                                                                <path id="P_1_" fill="#464D53" d="M95,172c42.5,0,77-34.5,77-77s-34.5-77-77-77S18,52.5,18,95S52.5,172,95,172z M95,190
+            c-52.5,0-95-42.5-95-95S42.5,0,95,0s95,42.5,95,95S147.5,190,95,190z"></path>
+                                                                            </g>
+                                                                        </g>
+                                                                        <g transform="translate(13 125)">
+                                                                            <defs>
+                                                                                <filter id="Adobe_OpacityMaskFilter_1_"
+                                                                                    filterUnits="userSpaceOnUse" x="0"
+                                                                                    y="-95" width="190" height="203">
+                                                                                    <feColorMatrix type="matrix"
+                                                                                        values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0">
+                                                                                    </feColorMatrix>
+                                                                                </filter>
+                                                                            </defs>
+                                                                            <mask maskUnits="userSpaceOnUse" x="0"
+                                                                                y="-95" width="190" height="203"
+                                                                                id="b_1_">
+                                                                                <g
+                                                                                    filter="url(#Adobe_OpacityMaskFilter_1_)">
+                                                                                    <path id="Q_1_" fill-rule="evenodd"
+                                                                                        clip-rule="evenodd"
+                                                                                        fill="#FFFFFF"
+                                                                                        d="M95,0L59,111.5l-58.5-40L95,0z">
+                                                                                    </path>
+                                                                                </g>
+                                                                            </mask>
+                                                                            <g mask="url(#b_1_)">
+                                                                                <g transform="translate(0 -95)">
+                                                                                    <g>
+                                                                                        <path id="R_1_" fill="#2E384D"
+                                                                                            d="M95,172c42.5,0,77-34.5,77-77s-34.5-77-77-77S18,52.5,18,95S52.5,172,95,172z M95,190
+                    c-52.5,0-95-42.5-95-95S42.5,0,95,0s95,42.5,95,95S147.5,190,95,190z"></path>
+                                                                                    </g>
+                                                                                    <defs>
+                                                                                        <filter
+                                                                                            id="Adobe_OpacityMaskFilter_2_"
+                                                                                            filterUnits="userSpaceOnUse"
+                                                                                            x="5" y="127" width="90"
+                                                                                            height="76">
+                                                                                            <feColorMatrix type="matrix"
+                                                                                                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0">
+                                                                                            </feColorMatrix>
+                                                                                        </filter>
+                                                                                    </defs>
+                                                                                    <mask maskUnits="userSpaceOnUse"
+                                                                                        x="5" y="127" width="90"
+                                                                                        height="76" id="c_1_">
+                                                                                        <g
+                                                                                            filter="url(#Adobe_OpacityMaskFilter_2_)">
+                                                                                            <path id="R_2_"
+                                                                                                fill-rule="evenodd"
+                                                                                                clip-rule="evenodd"
+                                                                                                fill="#FFFFFF"
+                                                                                                d="M95,172c42.5,0,77-34.5,77-77s-34.5-77-77-77
+                        S18,52.5,18,95S52.5,172,95,172z M95,190c-52.5,0-95-42.5-95-95S42.5,0,95,0s95,42.5,95,95S147.5,190,95,190z">
+                                                                                            </path>
+                                                                                        </g>
+                                                                                    </mask>
+                                                                                    <g mask="url(#c_1_)">
+                                                                                        <path fill-rule="evenodd"
+                                                                                            clip-rule="evenodd"
+                                                                                            fill="#F1F2F3"
+                                                                                            d="M5,127h90v76H5V127z">
+                                                                                        </path>
+                                                                                    </g>
+                                                                                </g>
+                                                                            </g>
+                                                                        </g>
+                                                                        <g transform="translate(0 32)">
+                                                                            <defs>
+                                                                                <filter id="Adobe_OpacityMaskFilter_3_"
+                                                                                    filterUnits="userSpaceOnUse" x="7"
+                                                                                    y="-2" width="196" height="190">
+                                                                                    <feColorMatrix type="matrix"
+                                                                                        values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0">
+                                                                                    </feColorMatrix>
+                                                                                </filter>
+                                                                            </defs>
+                                                                            <mask maskUnits="userSpaceOnUse" x="7"
+                                                                                y="-2" width="196" height="190"
+                                                                                id="d_1_">
+                                                                                <g
+                                                                                    filter="url(#Adobe_OpacityMaskFilter_3_)">
+                                                                                    <path id="S_1_" fill-rule="evenodd"
+                                                                                        clip-rule="evenodd"
+                                                                                        fill="#FFFFFF"
+                                                                                        d="M108,93L0.5,196L2,0.5L108,93z">
+                                                                                    </path>
+                                                                                </g>
+                                                                            </mask>
+                                                                            <g mask="url(#d_1_)">
+                                                                                <g transform="translate(13 -2)">
+                                                                                    <g>
+                                                                                        <path id="T_1_" fill="#F1F2F3"
+                                                                                            d="M95,172c42.5,0,77-34.5,77-77s-34.5-77-77-77S18,52.5,18,95S52.5,172,95,172z M95,190
+                    c-52.5,0-95-42.5-95-95S42.5,0,95,0s95,42.5,95,95S147.5,190,95,190z"></path>
+                                                                                    </g>
+                                                                                    <defs>
+                                                                                        <filter
+                                                                                            id="Adobe_OpacityMaskFilter_4_"
+                                                                                            filterUnits="userSpaceOnUse"
+                                                                                            x="-6" y="28" width="101"
+                                                                                            height="156">
+                                                                                            <feColorMatrix type="matrix"
+                                                                                                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0">
+                                                                                            </feColorMatrix>
+                                                                                        </filter>
+                                                                                    </defs>
+                                                                                    <mask maskUnits="userSpaceOnUse"
+                                                                                        x="-6" y="28" width="101"
+                                                                                        height="156" id="e_1_">
+                                                                                        <g
+                                                                                            filter="url(#Adobe_OpacityMaskFilter_4_)">
+                                                                                            <path id="T_2_"
+                                                                                                fill-rule="evenodd"
+                                                                                                clip-rule="evenodd"
+                                                                                                fill="#FFFFFF"
+                                                                                                d="M95,172c42.5,0,77-34.5,77-77s-34.5-77-77-77
+                        S18,52.5,18,95S52.5,172,95,172z M95,190c-52.5,0-95-42.5-95-95S42.5,0,95,0s95,42.5,95,95S147.5,190,95,190z">
+                                                                                            </path>
+                                                                                        </g>
+                                                                                    </mask>
+                                                                                    <g mask="url(#e_1_)">
+                                                                                        <path fill-rule="evenodd"
+                                                                                            clip-rule="evenodd"
+                                                                                            fill="#F1F2F3"
+                                                                                            d="M-6,28H95v156H-6V28z">
+                                                                                        </path>
+                                                                                    </g>
+                                                                                </g>
+                                                                            </g>
+                                                                        </g>
+                                                                        <g transform="translate(7)">
+                                                                            <defs>
+                                                                                <filter id="Adobe_OpacityMaskFilter_5_"
+                                                                                    filterUnits="userSpaceOnUse" x="0"
+                                                                                    y="15" width="200" height="211">
+                                                                                    <feColorMatrix type="matrix"
+                                                                                        values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0">
+                                                                                    </feColorMatrix>
+                                                                                </filter>
+                                                                            </defs>
+                                                                            <mask maskUnits="userSpaceOnUse" x="0"
+                                                                                y="15" width="200" height="211"
+                                                                                id="f_1_">
+                                                                                <g
+                                                                                    filter="url(#Adobe_OpacityMaskFilter_5_)">
+                                                                                    <path id="U_1_" fill-rule="evenodd"
+                                                                                        clip-rule="evenodd"
+                                                                                        fill="#FFFFFF"
+                                                                                        d="M102,130L0,47.5l102-47V130z">
+                                                                                    </path>
+                                                                                </g>
+                                                                            </mask>
+                                                                            <g mask="url(#f_1_)">
+                                                                                <g transform="translate(0 26)">
+                                                                                    <g>
+                                                                                        <path id="V_1_" fill="#0073CF"
+                                                                                            d="M100,172c39.8,0,72-32.2,72-72s-32.2-72-72-72s-72,32.2-72,72S60.2,172,100,172z M100,200
+                    C44.8,200,0,155.2,0,100S44.8,0,100,0s100,44.8,100,100S155.2,200,100,200z"></path>
+                                                                                    </g>
+                                                                                    <defs>
+                                                                                        <filter
+                                                                                            id="Adobe_OpacityMaskFilter_6_"
+                                                                                            filterUnits="userSpaceOnUse"
+                                                                                            x="13" y="-11" width="106"
+                                                                                            height="89">
+                                                                                            <feColorMatrix type="matrix"
+                                                                                                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0">
+                                                                                            </feColorMatrix>
+                                                                                        </filter>
+                                                                                    </defs>
+                                                                                    <mask maskUnits="userSpaceOnUse"
+                                                                                        x="13" y="-11" width="106"
+                                                                                        height="89" id="g_1_">
+                                                                                        <g
+                                                                                            filter="url(#Adobe_OpacityMaskFilter_6_)">
+                                                                                            <path id="V_2_"
+                                                                                                fill-rule="evenodd"
+                                                                                                clip-rule="evenodd"
+                                                                                                fill="#FFFFFF"
+                                                                                                d="M100,172c39.8,0,72-32.2,72-72s-32.2-72-72-72
+                        s-72,32.2-72,72S60.2,172,100,172z M100,200C44.8,200,0,155.2,0,100S44.8,0,100,0s100,44.8,100,100S155.2,200,100,200z">
+                                                                                            </path>
+                                                                                        </g>
+                                                                                    </mask>
+                                                                                    <g mask="url(#g_1_)">
+                                                                                        <path fill-rule="evenodd"
+                                                                                            clip-rule="evenodd"
+                                                                                            fill="#0073CF"
+                                                                                            d="M13-11h106v89H13V-11z">
+                                                                                        </path>
+                                                                                    </g>
+                                                                                </g>
+                                                                            </g>
+                                                                        </g> <text transform="matrix(1 0 0 1 75.5 133)"
+                                                                            fill="#2E384D" font-family="Poppins"
+                                                                            font-size="32px"
+                                                                            font-weight="600">14.5</text> <text
+                                                                            transform="matrix(1 0 0 1 138.5 115)"
+                                                                            fill="#2E384D" font-family="Poppins"
+                                                                            font-size="15px" font-weight="400">%</text>
+                                                                        <text transform="matrix(1 0 0 1 79.357 151)"
+                                                                            fill="#B0BAC9" font-family="Poppins"
+                                                                            font-size="12px" font-weight="400"
+                                                                            letter-spacing="1">ULTRICES</text> <text
+                                                                            transform="matrix(1 0 0 1 81.233 165)"
+                                                                            fill="#B0BAC9" font-family="Poppins"
+                                                                            font-size="12px" font-weight="400"
+                                                                            letter-spacing="1">MATTIS</text>
+                                                                    </g> <text transform="matrix(1 0 0 1 53 373)"
+                                                                        fill="#2E384D" font-family="Poppins"
+                                                                        font-size="15px">Donec nec</text>
+                                                                    <circle fill-rule="evenodd" clip-rule="evenodd"
+                                                                        fill="#0073CF" cx="37" cy="369" r="6">
+                                                                    </circle>
+                                                                    <circle fill-rule="evenodd" clip-rule="evenodd"
+                                                                        fill="#F1F2F3" cx="37" cy="403" r="6">
+                                                                    </circle> <text transform="matrix(1 0 0 1 53 407)"
+                                                                        fill="#2E384D" font-family="Poppins"
+                                                                        font-size="15px">Morbi eleifend</text>
+                                                                    <circle fill-rule="evenodd" clip-rule="evenodd"
+                                                                        fill="#F1F2F3" cx="193" cy="369" r="6">
+                                                                    </circle> <text transform="matrix(1 0 0 1 209 373)"
+                                                                        fill="#2E384D" font-family="Poppins"
+                                                                        font-size="15px">Curabitur</text>
+                                                                    <circle fill-rule="evenodd" clip-rule="evenodd"
+                                                                        fill="#464D53" cx="193" cy="403" r="6">
+                                                                    </circle> <text transform="matrix(1 0 0 1 209 407)"
+                                                                        fill="#2E384D" font-family="Poppins"
+                                                                        font-size="15px">Nam hendrerit</text>
+                                                                </g>
+                                                            </svg>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -2806,6 +2761,25 @@
                 <?php
         include 'includes/footer.php';
         ?>
+
+                <script src="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.min.js"></script>
+                <script src="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.polyfills.min.js"></script>
+
+                <script>
+                var input = document.querySelector('input[name=tags-outside]')
+                // init Tagify script on the above inputs
+                var tagify = new Tagify(input, {
+                    whitelist: ["Thin 100", "Thin 100 italic", "Light 300", "Light 300 italic", "Regular 400",
+                        "Regular 400 italic",
+                        "Medium 500", "Medium 500 italic", "Bold 700", "Bold 700 italic",
+                        "Black 900"
+                    ],
+                    dropdown: {
+                        position: "input",
+                        enabled: 0 // always opens dropdown when input gets focus
+                    }
+                })
+                </script>
 
 
             </div>

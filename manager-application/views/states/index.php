@@ -57,7 +57,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                             require_once(CONF_THEME_PATH . 'states/search.php');
 
                             $data = [
-                                'tbl' => $tbl,
+                                'tbl' => $tbl, /* Received from listing-column-head.php file. */
                                 'controller' => $controller /* Used in case of toggle bulk status. */
                             ];
                             $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>

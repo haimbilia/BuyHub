@@ -19,16 +19,16 @@ foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
 
-$sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
+$serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     /* $tr = $tbl->appendElement('tr',array('class' => ($row['banner_active'] != applicationConstants::ACTIVE) ? 'fat-inactive' : '' )); */
     $tr = $tbl->appendElement('tr', array());
     foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'banner_target':
                 $td->appendElement('plaintext', array(), $linkTargetsArr[$row[$key]], true);

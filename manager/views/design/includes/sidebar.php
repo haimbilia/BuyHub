@@ -7,10 +7,12 @@
     <div class="sidebar-menu">
         <ul class="menu">
             <li class="menu-item dropdown">
-                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                    <span class="menu-icon"> 
-                        <svg width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-store"></use>
+                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"
+                    aria-haspopup="true" aria-expanded="false">
+                    <span class="menu-icon">
+                        <svg class="svg" width="24" height="24">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-store">
+                            </use>
                         </svg>
                     </span>
                 </button>
@@ -174,133 +176,108 @@
                         </li>
                     </ul>
                 </div>
-            </li>           
+            </li>
             <li class="menu-item dropdown">
-                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                    <span class="menu-icon"> 
-                        <svg width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-catelog"></use>
+                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"
+                    aria-haspopup="true" aria-expanded="false">
+                    <span class="menu-icon">
+                        <svg class="svg" width="24" height="24">
+                            <use
+                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-catelog">
+                            </use>
                         </svg>
                     </span>
                 </button>
                 <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu"></div>
             </li>
             <li class="menu-item dropdown">
-                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                    <span class="menu-icon"> 
-                        <svg width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-promotions"></use>
+                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"
+                    aria-haspopup="true" aria-expanded="false">
+                    <span class="menu-icon">
+                        <svg class="svg" width="24" height="24">
+                            <use
+                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-promotions">
+                            </use>
                         </svg>
                     </span>
                 </button>
                 <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu"></div>
             </li>
             <li class="menu-item dropdown">
-                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"  aria-haspopup="true" aria-expanded="false">
-                    <span class="menu-icon"> 
-                        <svg width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-buyer-orders"></use>
+                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"
+                    aria-haspopup="true" aria-expanded="false">
+                    <span class="menu-icon">
+                        <svg class="svg" width="24" height="24">
+                            <use
+                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-buyer-orders">
+                            </use>
                         </svg>
                     </span>
                 </button>
                 <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu"></div>
             </li>
             <li class="menu-item dropdown">
-                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                    <span class="menu-icon"> 
-                        <svg width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-users"></use>
+                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"
+                    aria-haspopup="true" aria-expanded="false">
+                    <span class="menu-icon">
+                        <svg class="svg" width="24" height="24">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-users">
+                            </use>
                         </svg>
                     </span>
                 </button>
                 <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu"></div>
             </li>
             <li class="menu-item dropdown">
-                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                    <span class="menu-icon"> 
-                        <svg width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-reports"></use>
+                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"
+                    aria-haspopup="true" aria-expanded="false">
+                    <span class="menu-icon">
+                        <svg class="svg" width="24" height="24">
+                            <use
+                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-reports">
+                            </use>
+                        </svg>
+                    </span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu"></div>
+            </li>
+
+
+            <li class="menu-item dropdown">
+                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"
+                    aria-haspopup="true" aria-expanded="false">
+                    <span class="menu-icon">
+                        <svg class="svg" width="24" height="24">
+                            <use
+                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-sales-tax">
+                            </use>
+                        </svg>
+                    </span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu"></div>
+            </li>
+
+            <li class="menu-item dropdown">
+                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"
+                    aria-haspopup="true" aria-expanded="false">
+                    <span class="menu-icon">
+                        <svg class="svg" width="24" height="24">
+                            <use
+                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-import-export">
+                            </use>
                         </svg>
                     </span>
                 </button>
                 <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu"></div>
             </li>
             <li class="menu-item dropdown">
-                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"  aria-haspopup="true" aria-expanded="false">
-                    <span class="menu-icon"> 
-                        <svg width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-reports"></use>
-                        </svg>
-                    </span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu"></div>
-            </li>
-            <li class="menu-item dropdown">
-                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                    <span class="menu-icon"> 
-                        <svg width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-reports"></use>
-                        </svg>
-                    </span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu"></div>
-            </li>
-            <li class="menu-item dropdown">
-                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                    <span class="menu-icon"> 
-                        <svg width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-reports"></use>
-                        </svg>
-                    </span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu"></div>
-            </li>
-            <li class="menu-item dropdown">
-                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"  aria-haspopup="true" aria-expanded="false">
-                    <span class="menu-icon"> 
-                        <svg width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-reports"></use>
-                        </svg>
-                    </span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu"></div>
-            </li>
-            <li class="menu-item dropdown">
-                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                    <span class="menu-icon"> 
-                        <svg width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-shipping-pickup"></use>
-                        </svg>
-                    </span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu"></div>
-            </li>
-            <li class="menu-item dropdown">
-                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                    <span class="menu-icon"> 
-                        <svg width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-sales-tax"></use>
-                        </svg>
-                    </span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu"></div>
-            </li>
-            
-            <li class="menu-item dropdown">
-                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"  aria-haspopup="true" aria-expanded="false">
-                    <span class="menu-icon"> 
-                        <svg width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-import-export"></use>
-                        </svg>
-                    </span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu"></div>
-            </li>
-            <li class="menu-item dropdown">
-                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"  aria-haspopup="true" aria-expanded="false">
-                    <span class="menu-icon"> 
-                        <svg width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-sitemap"></use>
+                <button type="button" class="menu-link" data-toggle="dropdown" data-display="static"
+                    aria-haspopup="true" aria-expanded="false">
+                    <span class="menu-icon">
+                        <svg class="svg" width="24" height="24">
+                            <use
+                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-sitemap">
+                            </use>
                         </svg>
                     </span>
                 </button>
@@ -308,11 +285,12 @@
             </li>
         </ul>
     </div>
-    <div class="sidebar-foot">   
+    <div class="sidebar-foot">
         <a href="">
-            <span class="menu-icon"> 
-                <svg width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-system-setting"></use>
+            <span class="menu-icon">
+                <svg class="svg" width="24" height="24">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-system-setting">
+                    </use>
                 </svg>
             </span>
         </a>

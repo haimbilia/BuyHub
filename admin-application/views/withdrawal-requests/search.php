@@ -24,12 +24,12 @@ foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
 }
 
-$sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
+$serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
 foreach ($arrListing as $sn => $row) {    
     if ($row['withdrawal_payment_method'] == 0) {
         $row['withdrawal_payment_method'] = User::AFFILIATE_PAYMENT_METHOD_BANK;
     }
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr');
 
     foreach ($arr_flds as $key => $val) {

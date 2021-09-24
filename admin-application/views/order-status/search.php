@@ -22,9 +22,9 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 
-$sr_no = $page == 1 ? 0 : $pageSize * ($page - 1);
+$serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
 foreach ($arrListing as $sn => $row) {
-    $sr_no++;
+    $serialNo++;
     $tr = $tbl->appendElement('tr', array());
     $tr->setAttribute("id", $row['orderstatus_id']);
     foreach ($arr_flds as $key => $val) {
@@ -40,7 +40,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="orderstatus_ids[]" value=' . $row['orderstatus_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $sr_no);
+                $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'orderstatus_is_active':
                 $active = "active";

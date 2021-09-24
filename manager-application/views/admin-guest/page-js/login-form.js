@@ -3,16 +3,16 @@
         if (!$(frm).validate()) return;
         if (!v.isValid()) return;
         var data = fcom.frmData(frm);
-        $.mbsmessage(langLbl.processing, false, 'alert--process');
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('AdminGuest', 'login'), data, function (t) {
-            $.mbsmessage.close();
+            $.ykmsg.close();
             try {
                 t = $.parseJSON(t);
                 if (t.errorMsg) {
-                    $.mbsmessage(t.errorMsg, true, 'alert--danger');
+                    $.ykmsg.error(t.errorMsg);
                     return false;
                 }
-                $.mbsmessage(t.msg, true, 'alert--success');
+                $.ykmsg.success(t.msg);
             }
             catch (exc) {
                 console.log(exc);
@@ -25,13 +25,12 @@
         if (user == '') {
             return false;
         }
-        $.mbsmessage(langLbl.processing, false, 'alert--process');
+        fcom.displayProcessing();
         fcom.updateWithAjax(fcom.makeUrl("adminGuest", "sendResetPasswordLink", [user]), '', function (t) {
             if (t.status) {
-                $.mbsmessage(t.msg, true, 'alert--success');
-            }
-            else {
-                $.mbsmessage(t.msg, true, 'alert--danger');
+                $.ykmsg.success(t.msg);
+            } else {
+                $.ykmsg.error(t.errorMsg);
             }
         });
         return false;

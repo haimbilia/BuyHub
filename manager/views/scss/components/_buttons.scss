@@ -1,3 +1,21 @@
+@-webkit-keyframes spin {
+    from {
+        transform: rotate(0)
+    }
+    to {
+        transform: rotate(1turn)
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0)
+    }
+    to {
+        transform: rotate(1turn)
+    }
+}
+
 a {
     color: $body-color;
 }
@@ -7,62 +25,64 @@ a {
     font-size: 0.85rem;
     line-height: 1.5;
     border-radius: 1px !important;
-    &.btn-brand {
+    &:focus {
+        outline: none !important;
+    }
+    &-brand {
         background-color: var(--brand-color);
         color: var(--brand-color-inverse);
     }
-    &.btn-outline-brand {
+    &-outline-brand {
         border-color: var(--brand-color);
         color: var(--brand-color-inverse);
     }
-    &.btn--white {
-        background: #fff;
-        color: #000;
-    }
-    &.btn-outline-brand {
+    &-outline-brand {
         background: none;
         border-color: $brand-color;
         color: $brand-color;
     }
-    &.btn-outline-secondary {
+    &-outline-secondary {
         background: none;
         border-color: $secondary-color;
         color: $secondary-color;
     }
-    &.btn-outline-white {
+    &-white {
+        background: #fff;
+        color: #000;
+    }
+    &-outline-white {
         background: none;
         border-color: #fff;
         color: #fff;
     }
-    &.btn-outline-gray {
+    &-outline-gray {
         background: none;
         border-color: $border-color;
         color: $body-color;
     }
-    &.btn-block {
-        display: block;
-        width: 100%;
+    &-block {
+        display: block !important;
+        width: 100% !important;
     }
-    &.btn-wide {
+    &-wide {
         padding-left: 2rem;
         padding-right: 2rem;
     }
-    &.btn-sm {
+    &-sm {
         padding: 0.25rem 0.5rem;
         font-size: 0.875rem;
         line-height: 1.5;
         border-radius: 0.2rem;
     }
-    &.btn-arrow {
-        svg {
+    &-arrow {
+        .svg {
             width: 12px;
             height: 12px;
             margin-top: -4px;
             margin-#{$end-direction}: 5px;
-            fill: currentColor;
         }
     }
-    &.btn-link {
+    &-link {
         text-decoration: none;
         color: $body-color;
         line-height: 2;
@@ -74,7 +94,6 @@ a {
                 width: 12px;
                 height: 12px;
                 margin-#{$end-direction}: 5px;
-                fill: currentcolor;
             }
         }
         &:hover {
@@ -83,14 +102,40 @@ a {
             }
         }
     }
-    &:focus {
-        outline: none !important;
-    }
     .icn {
-        svg {
+        .svg {
             width: 16px;
             height: 16px;
-            fill: currentColor;
+        }
+    }
+    &.loading {
+        color: transparent;
+        --btn-color: transparent;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &:before {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            position: absolute;
+            content: "";
+            background: 0 0;
+            border: 2px solid #fff;
+            clip-path: inset(0 0 50% 0);
+            transform: rotate(0);
+            animation: spin .6s linear infinite;
+        }
+    }
+    &-add {
+        display: flex;
+        align-items: center;
+        .icn {
+            margin-#{$end-direction}: 8px;
+            .svg {
+                width: 12px;
+                height: 12px;
+            }
         }
     }
 }
@@ -146,18 +191,6 @@ a.link {
             width: 100%;
             height: 100%;
             display: flex;
-        }
-    }
-}
-
-.btn-add {
-    display: flex;
-    align-items: center;
-    .icn {
-        margin-#{$end-direction}: 8px;
-        .svg {
-            width: 12px;
-            height: 12px;
         }
     }
 }

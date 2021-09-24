@@ -174,6 +174,7 @@ class AdminBaseController extends FatController
             );
             $languages = Language::getAllNames(false);
             foreach ($languages as $val) {
+                if (empty($val)) {continue;}
                 $jsVariables['language' . $val['language_id']] = $val['language_layout_direction'];
             }
             $jsVariables['languages'] = $languages;

@@ -23,7 +23,7 @@
         border-radius: 4px;
     }
     &.media {
-        &--fixed {
+        &-fixed {
             width: 50px;
             height: 50px;
             img {
@@ -32,58 +32,58 @@
                 max-width: auto;
             }
         }
-        &--default {
+        &-default {
             background-color: #ebedf2;
         }
-        &--brand {
+        &-brand {
             span {
                 background: rgba(54, 108, 243, 0.1);
                 color: $brand-color;
             }
         }
-        &--light {
+        &-light {
             span {
                 background: rgba(255, 255, 255, 0.1);
                 color: #ffffff;
             }
         }
-        &--dark {
+        &-dark {
             span {
                 background: rgba(40, 42, 60, 0.1);
                 color: $dark-color;
             }
         }
-        &--primary {
+        &-primary {
             span {
                 background: rgba(88, 103, 221, 0.1);
                 color: $primary-color;
             }
         }
-        &--success {
+        &-success {
             span {
                 background: rgba(29, 201, 183, 0.1);
                 color: $success-color;
             }
         }
-        &--info {
+        &-info {
             span {
                 background: rgba(85, 120, 235, 0.1);
                 color: $info-color;
             }
         }
-        &--warning {
+        &-warning {
             span {
                 background: rgba(255, 184, 34, 0.1);
                 color: $warning-color;
             }
         }
-        &--danger {
+        &-danger {
             span {
                 background: rgba(253, 57, 122, 0.1);
                 color: $danger-color;
             }
         }
-        &--xs {
+        &-xs {
             img {
                 width: 100%;
                 max-width: 24px;
@@ -94,7 +94,7 @@
                 height: 24px;
                 font-size: 0.8rem;
             }
-            &.media--fixed {
+            &.media-fixed {
                 width: 24px;
                 height: 24px;
                 img {
@@ -104,18 +104,20 @@
                 }
             }
         }
-        &--sm {
+        &-sm {
+            margin-left: 1rem;
             img {
                 width: 100%;
                 max-width: 30px;
                 height: 30px;
+                min-width: 30px;
             }
             span {
                 width: 30px;
                 height: 30px;
                 font-size: 0.9rem;
             }
-            &.media--fixed {
+            &.media-fixed {
                 width: 30px;
                 height: 30px;
                 img {
@@ -125,7 +127,7 @@
                 }
             }
         }
-        &--md {
+        &-md {
             img {
                 width: 100%;
                 max-width: 47px;
@@ -136,7 +138,7 @@
                 height: 47px;
                 font-size: 1rem;
             }
-            &.media--fixed {
+            &.media-fixed {
                 width: 47px;
                 height: 47px;
                 img {
@@ -146,7 +148,7 @@
                 }
             }
         }
-        &--lg {
+        &-lg {
             img {
                 width: 100%;
                 max-width: 65px;
@@ -157,7 +159,7 @@
                 height: 65px;
                 font-size: 1.3rem;
             }
-            &.media--fixed {
+            &.media-fixed {
                 width: 65px;
                 height: 65px;
                 img {
@@ -167,7 +169,7 @@
                 }
             }
         }
-        &--xl {
+        &-xl {
             img {
                 width: 100%;
                 max-width: 80px;
@@ -178,7 +180,7 @@
                 height: 80px;
                 font-size: 1.7rem;
             }
-            &.media--fixed {
+            &.media-fixed {
                 width: 80px;
                 height: 80px;
                 img {
@@ -188,7 +190,7 @@
                 }
             }
         }
-        &--circle {
+        &-circle {
             border-radius: 50%;
             img {
                 border-radius: 50%;
