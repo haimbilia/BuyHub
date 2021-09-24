@@ -76,6 +76,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
             $(dv).replaceWith(res.listingHtml);
             $(paginationDv).replaceWith(res.paginationHtml);
             fcom.removeLoader();
+            $('.selectAllJs').prop('checked', false);
         });
     };
 
@@ -147,7 +148,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
             return false;
         }
         
-        var oldStatus = $(obj).data("old-status");
+        var oldStatus = $(obj).attr("data-old-status");
         $(listingTableJs).prepend(fcom.getLoader());
         
         if (1 > recordId) {
@@ -163,7 +164,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
                 $.ykmsg.success(ans.msg);
-                $(obj).toggleClass("active");
+                $(obj).attr({'onclick' : 'updateStatus(event, this, ' + recordId + ', ' + oldStatus + ')', 'data-old-status' : status});
             } else {
                 $(obj).prop('checked', (1 == oldStatus));
                 $.ykmsg.error(ans.msg);
@@ -286,6 +287,110 @@ $(document).on("click", ".headerColumnJs", function (e) {
             $(".toolbar-btn-js").removeClass('disabled').addClass('selected');
 
         }
+    }
+
+    /* Media Form & Image Management */
+    loadImages = function (recordId, fileType, slide_screen, langId) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'images', [recordId, fileType, langId, slide_screen]), '', function (t) {
+            if (fileType == 'logo') {
+                $('#logoListingJs').html(t);
+                return;
+            }
+
+            $('#imageListingJs').html(t);
+        });
+    };
+
+    mediaForm = function (recordId, langId = 0, slide_screen = 1) {
+        $.ykmodal(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl(controllerName, 'media', [recordId, langId, slide_screen]), '', function (t) {
+            fcom.removeLoader();
+            loadImages(recordId, 'logo', slide_screen, langId);
+            loadImages(recordId, 'image', slide_screen, langId);
+            $.ykmodal(t);
+        });
+    };
+
+    deleteMedia = function (recordId, fileType, afileId) {
+        if (!confirm(langLbl.confirmDelete)) { return; }
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeMedia', [recordId, fileType, afileId]), '', function (t) {
+            loadImages(recordId, fileType, slide_screen, langId);
+            reloadList();
+        });
+    };
+
+    loadImageCropper = function (inputBtn) {
+        if (inputBtn.files && inputBtn.files[0]) {
+            fcom.ajax(fcom.makeUrl(controllerName, 'imgCropper'), '', function (t) {
+                $('#cropperBoxJs').html(t);
+                $("#mediaFormJs").css("display", "none");
+                var file = inputBtn.files[0];
+                var minWidth = document.frmRecordImage.min_width.value;
+                var minHeight = document.frmRecordImage.min_height.value;
+                if (minWidth == minHeight) {
+                    var aspectRatio = 1 / 1
+                } else {
+                    var aspectRatio = 16 / 9;
+                }
+                var options = {
+                    aspectRatio: aspectRatio,
+                    data: {
+                        width: minWidth,
+                        height: minHeight,
+                    },
+                    minCropBoxWidth: minWidth,
+                    minCropBoxHeight: minHeight,
+                    toggleDragModeOnDblclick: false,
+                    imageSmoothingQuality: 'high',
+                    imageSmoothingEnabled: true,
+                };
+                $(inputBtn).val('');
+                return cropImage(file, options, 'uploadImages', inputBtn);
+            });
+        }
+    };
+
+    uploadImages = function (formData) {
+        var frmName = formData.get("frmName");
+        var recordId = document.frmName.record_id.value;
+        var langId = document.frmName.lang_id.value;
+        var fileType = document.frmName.file_type.value;
+        var imageType = document.frmName.file_type.value;
+        var ratio_type = $('input[name="ratio_type"]:checked').val();
+
+        formData.append('recordId', recordId);
+        formData.append('slide_screen', slideScreen);
+        formData.append('lang_id', langId);
+        formData.append('file_type', fileType);
+        formData.append('ratio_type', ratio_type);
+        $.ajax({
+            url: fcom.makeUrl(controllerName, 'uploadMedia'),
+            type: 'post',
+            dataType: 'json',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $.ykmodal(fcom.getLoader());
+            },
+            complete: function () {
+                $.ykmodal(fcom.getLoader());
+            },
+            success: function (ans) {
+                fcom.removeLoader();
+                if (ans.status == 0) {
+                    $.ykmsg.error(ans.msg);
+                    return;
+                }
+                $.ykmsg.success(ans.msg);
+                mediaForm(ans.recordId, imageType, langId, slideScreen);
+                reloadList();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $.ykmsg.error(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
     }
 })();
 

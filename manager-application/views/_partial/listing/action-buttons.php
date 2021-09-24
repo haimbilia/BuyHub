@@ -37,12 +37,12 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         [
             'href' => 'javascript:void(0)',
             'class' => 'toolbar-btn-js disabled',
-            'title' => Labels::getLabel('LBL_PUBLISH', $adminLangId),
+            'title' => Labels::getLabel('LBL_ACTIVE', $adminLangId),
             'onclick' => "toggleBulkStatues(1, '" . $msg . "')"
         ],
         '<svg class="svg" width="18" height="18">
             <use
-                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#toggle-on">
+                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#active">
             </use>
         </svg>',
         true
@@ -54,12 +54,12 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         [
             'href' => 'javascript:void(0)',
             'class' => 'toolbar-btn-js disabled',
-            'title' => Labels::getLabel('LBL_UNPUBLISH', $adminLangId),
+            'title' => Labels::getLabel('LBL_IN-ACTIVE', $adminLangId),
             'onclick' => "toggleBulkStatues(0, '" . $msg . "')"
         ],
         '<svg class="svg" width="18" height="18">
             <use
-                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#toggle-off">
+                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#in-active">
             </use>
         </svg>',
         true
@@ -78,7 +78,7 @@ if (isset($deleteButton) && true === $deleteButton && $canEdit) {
         ],
         '<svg class="svg" width="18" height="18">
             <use
-                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#trash">
+                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
             </use>
         </svg>',
         true

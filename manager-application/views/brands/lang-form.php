@@ -10,7 +10,7 @@ $langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this
 
 $activeLangtab = true;
 
-require_once(CONF_THEME_PATH . 'countries/form-head.php'); ?>
+require_once(CONF_THEME_PATH . 'brands/form-head.php'); ?>
 
     <div class="form-edit-body loaderContainerJs">
         <?php

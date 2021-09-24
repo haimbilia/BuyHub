@@ -35,7 +35,10 @@ class ZonesController extends AdminBaseController
 
     private function getListingData()
     {
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
         $data = FatApp::getPostedData();
 
         $fields = $this->getFormColumns();
@@ -59,7 +62,7 @@ class ZonesController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0)?1:$data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         $srch = Zone::getSearchObject(false, $this->adminLangId);
-        $srch->addFld('zone.* , z_l.zone_name');
+        $srch->addFld('zone.* , z_l.zone_name, zone.zone_id as listSerial');
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('zone.zone_identifier', 'like', '%'.$post['keyword'].'%');
             $condition->attachCondition('z_l.zone_name', 'like', '%'.$post['keyword'].'%', 'OR');
@@ -68,19 +71,19 @@ class ZonesController extends AdminBaseController
         $page = (empty($page) || $page <= 0)?1:$page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->setPageSize($pageSize);
 
         $srch->addOrder($sortBy, $sortOrder);
 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        
+
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
         
         $this->set('sortBy', $sortBy);

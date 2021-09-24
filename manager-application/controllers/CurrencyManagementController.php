@@ -16,7 +16,7 @@ class CurrencyManagementController extends AdminBaseController
         $this->set('canEdit', $this->objPrivilege->canEditCurrencyManagement($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
         $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_CURRENCIES', $this->adminLangId));
-        $this->_template->addJs('extra-js/jquery.tablednd.js');
+        $this->_template->addJs('js/jquery.tablednd.js');
         $this->getListingData();
 
         $this->_template->render();
@@ -37,7 +37,11 @@ class CurrencyManagementController extends AdminBaseController
 
     private function getListingData()
     {
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
+
         $data = FatApp::getPostedData();
 
         $fields = $this->getFormColumns();
@@ -71,9 +75,10 @@ class CurrencyManagementController extends AdminBaseController
             $srch->addCondition('curr_l.currency_name', 'like', '%' . $post['keyword'] . '%');
         }
 
+        $srch->addMultipleFields(['curr.*', 'curr_l.*', 'curr.currency_id as listSerial']);
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
 
         $rs = $srch->getResultSet();
@@ -86,7 +91,7 @@ class CurrencyManagementController extends AdminBaseController
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
         
         $this->set('sortBy', $sortBy);
@@ -186,7 +191,7 @@ class CurrencyManagementController extends AdminBaseController
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
 
         if (1 > $recordId || 1 > $langId) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $langFrm = $this->getLangForm($recordId, $langId);
@@ -344,9 +349,7 @@ class CurrencyManagementController extends AdminBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $currencyIdsArr = FatUtility::int(FatApp::getPostedData('currency_ids'));
         if (empty($currencyIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
 
         foreach ($currencyIdsArr as $currencyId) {
@@ -365,9 +368,7 @@ class CurrencyManagementController extends AdminBaseController
         $status = FatUtility::int($status);
         $currencyId = FatUtility::int($currencyId);
         if (1 > $currencyId || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
 
         $obj = new Currency($currencyId);
