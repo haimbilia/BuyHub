@@ -79,7 +79,7 @@ class Commission extends MyAppModel
         return false;
     }
 
-    public static function getCommissionSettingsObj($langId, $trashed = 0)
+    public static function getCommissionSettingsObj($langId, $trashed = 0, $attr = [])
     {
         $langId = FatUtility::int($langId);
 
@@ -96,14 +96,15 @@ class Commission extends MyAppModel
 
         $srch->addCondition('tcs.commsetting_deleted', '=', FatUtility::int($trashed));
 
-        $srch->addMultipleFields(
-            array(
-            'tcs.*',
-            'IFNULL(tp_l.product_name,tp.product_identifier)as product_name',
-            'IFNULL(tpc_l.prodcat_name,tpc.prodcat_identifier)as prodcat_name',
-            'CONCAT(tu.user_name," [",tuc.credential_username,"]") as vendor'
-            )
-        );
+        if (empty($attr)) {
+            $attr = array(
+                'tcs.*',
+                'IFNULL(tp_l.product_name,tp.product_identifier)as product_name',
+                'IFNULL(tpc_l.prodcat_name,tpc.prodcat_identifier)as prodcat_name',
+                'CONCAT(tu.user_name," [",tuc.credential_username,"]") as vendor'
+            );
+        }
+        $srch->addMultipleFields($attr);
 
         return $srch;
     }

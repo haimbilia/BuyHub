@@ -5,59 +5,113 @@ class CommissionController extends AdminBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewCommissionSettings($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditCommissionSettings($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewCommissionSettings();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewCommissionSettings();
-        $frmSearch = $this->getSearchForm();
-        $this->set("frmSearch", $frmSearch);
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $this->set('frmSearch', $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_COMMISSION', $this->adminLangId));
+        $this->getListingData();
+
         $this->_template->render();
     }
 
-    public function search()
+    private function getListingData()
     {
-        $this->objPrivilege->canViewCommissionSettings();
+        $db = FatApp::getDb();
+        $post = FatApp::getPostedData();
 
-        $searchForm = $this->getSearchForm();
-        $data = FatApp::getPostedData();
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
-        $post = $searchForm->getFormDataFromArray($data);
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
-        $srch = Commission::getCommissionSettingsObj($this->adminLangId);
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        $srchFrm = $this->getSearchForm($fields);
+
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
+
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
+
+        $attr = array(
+            'tcs.*',
+            'IFNULL(tp_l.product_name,tp.product_identifier)as product_name',
+            'IFNULL(tpc_l.prodcat_name,tpc.prodcat_identifier)as prodcat_name',
+            'CONCAT(tu.user_name," [",tuc.credential_username,"]") as vendor',
+            'commsetting_id as listSerial'
+        );
+        $srch = Commission::getCommissionSettingsObj($this->adminLangId, 0, $attr);
 
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('prodcat_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('tuc.credential_username', 'like', '%' . $post['keyword'] . '%', 'OR');
             $cond->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
-        $srch->addOrder('commsetting_id', 'DESC');
-        /* echo $srch->getQuery();die; */
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
 
-        $this->set("arrListing", $records);
-        $this->_template->render(false, false);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        $srch->addOrder($sortBy, $sortOrder);
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $rs = $srch->getResultSet();
+        $arrListing = $db->fetchAll($rs);
+
+        $this->set("arrListing", $arrListing);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('postedData', $post);
+
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
     }
 
-    public function form($commissionId)
+    public function search()
     {
-        $this->objPrivilege->canViewCommissionSettings();
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'commission/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        $commissionId = FatUtility::int($commissionId);
+    public function form()
+    {
+        $this->objPrivilege->canEditCommissionSettings();
 
-        $frm = $this->getForm($commissionId);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $frm = $this->getForm($recordId);
 
-        if (0 < $commissionId) {
+        if (0 < $recordId) {
             $data = Commission::getAttributesById(
-                $commissionId,
+                $recordId,
                 array('commsetting_id', 'commsetting_product_id', 'commsetting_user_id', 'commsetting_prodcat_id', 'commsetting_fees')
             );
             if ($data === false) {
@@ -91,7 +145,7 @@ class CommissionController extends AdminBaseController
             $frm->fill($data);
         }
 
-        $this->set('commsetting_id', $commissionId);
+        $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
     }
@@ -108,15 +162,15 @@ class CommissionController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $commissionId = $post['commsetting_id'];
+        $recordId = $post['commsetting_id'];
         unset($post['commsetting_id']);
 
         $isMandatory = false;
-        if ($data = Commission::getAttributesById($commissionId, array('commsetting_is_mandatory'))) {
+        if ($data = Commission::getAttributesById($recordId, array('commsetting_is_mandatory'))) {
             $isMandatory = $data['commsetting_is_mandatory'];
         }
-        
-        if (false == $isMandatory && 1 < $commissionId && (empty($post['commsetting_prodcat_id']) && empty($post['commsetting_user_id']) && empty($post['commsetting_product_id']))) {
+
+        if (false == $isMandatory && 1 < $recordId && (empty($post['commsetting_prodcat_id']) && empty($post['commsetting_user_id']) && empty($post['commsetting_product_id']))) {
             Message::addErrorMessage(Labels::getLabel('LBL_Please_add_commission_corresponding_to_product,_category_or_user', $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
@@ -127,7 +181,7 @@ class CommissionController extends AdminBaseController
             $post['commsetting_prodcat_id'] = 0;
         }
 
-        $record = new Commission($commissionId);
+        $record = new Commission($recordId);
         if (!$record->addUpdateData($post)) {
             Message::addErrorMessage($record->getError());
             FatUtility::dieJsonError(Message::getHtml());
@@ -142,16 +196,15 @@ class CommissionController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->adminLangId));
-        $this->set('commissionId', $commissionId);
+        $this->set('msg', Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('recordId', $recordId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function viewHistory($commsettingId = 0)
+    public function viewHistory()
     {
-        $this->objPrivilege->canViewCommissionSettings();
-        $commsettingId = FatUtility::int($commsettingId);
-        if (1 > $commsettingId) {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (1 > $recordId) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
 
@@ -161,7 +214,7 @@ class CommissionController extends AdminBaseController
         $page = (empty($page) || $page <= 0) ? 1 : FatUtility::int($page);
 
         $srch = Commission::getCommissionHistorySettingsObj($this->adminLangId);
-        $srch->addCondition('tcsh.csh_commsetting_id', '=', $commsettingId);
+        $srch->addCondition('tcsh.csh_commsetting_id', '=', $recordId);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
@@ -181,18 +234,18 @@ class CommissionController extends AdminBaseController
     {
         $this->objPrivilege->canEditCommissionSettings();
 
-        $commissionId = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
-        if ($commissionId < 1) {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
             FatUtility::dieJsonError($this->str_invalid_request_id);
         }
 
-        $row = Commission::getAttributesById($commissionId, array('commsetting_id', 'commsetting_is_mandatory'));
+        $row = Commission::getAttributesById($recordId, array('commsetting_id', 'commsetting_is_mandatory'));
         if ($row == false || ($row != false && $row['commsetting_is_mandatory'] == 1)) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $this->markAsDeleted($commissionId);
+        $this->markAsDeleted($recordId);
 
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
@@ -201,33 +254,33 @@ class CommissionController extends AdminBaseController
     public function deleteSelected()
     {
         $this->objPrivilege->canEditCommissionSettings();
-        $commissionIdsArr = FatUtility::int(FatApp::getPostedData('commsetting_ids'));
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('commsetting_ids'));
 
-        if (empty($commissionIdsArr)) {
+        if (empty($recordIdsArr)) {
             FatUtility::dieWithError(
                 Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
             );
         }
 
-        foreach ($commissionIdsArr as $commissionId) {
-            if (1 > $commissionId) {
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
                 continue;
             }
-            $this->markAsDeleted($commissionId);
+            $this->markAsDeleted($recordId);
         }
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($commissionId)
+    private function markAsDeleted($recordId)
     {
-        $commissionId = FatUtility::int($commissionId);
-        if (1 > $commissionId) {
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
             FatUtility::dieWithError(
                 Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
             );
         }
-        $obj = new Commission($commissionId);
+        $obj = new Commission($recordId);
         $obj->assignValues(array('commsetting_deleted' => 1));
         if (!$obj->save()) {
             Message::addErrorMessage($obj->getError());
@@ -237,7 +290,6 @@ class CommissionController extends AdminBaseController
 
     public function userAutoComplete()
     {
-        $this->objPrivilege->canViewCommissionSettings();
         $userObj = new User();
         $srch = $userObj->getUserSearchObj(array('u.user_name', 'u.user_id', 'credential_username'));
         $srch->addCondition('user_is_supplier', '=', 1);
@@ -254,8 +306,8 @@ class CommissionController extends AdminBaseController
         $json = array();
         foreach ($users as $key => $user) {
             $json[] = array(
-            'id' => $key,
-            'name' => strip_tags(html_entity_decode($user['credential_username'], ENT_QUOTES, 'UTF-8'))
+                'id' => $key,
+                'name' => strip_tags(html_entity_decode($user['credential_username'], ENT_QUOTES, 'UTF-8'))
             );
         }
         die(json_encode($json));
@@ -263,8 +315,6 @@ class CommissionController extends AdminBaseController
 
     public function productAutoComplete()
     {
-        $this->objPrivilege->canViewCommissionSettings();
-
         $srch = Product::getSearchObject($this->adminLangId);
 
         $post = FatApp::getPostedData();
@@ -272,7 +322,6 @@ class CommissionController extends AdminBaseController
             $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
         }
 
-        // $srch->setPageSize(FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
         $srch->setPageSize(10);
         $srch->addMultipleFields(array('product_id', 'IFNULL(product_name,product_identifier) as product_name'));
         $rs = $srch->getResultSet();
@@ -281,24 +330,23 @@ class CommissionController extends AdminBaseController
         $json = array();
         foreach ($products as $key => $product) {
             $json[] = array(
-            'id' => $key,
-            'name' => strip_tags(html_entity_decode($product['product_name'], ENT_QUOTES, 'UTF-8'))
+                'id' => $key,
+                'name' => strip_tags(html_entity_decode($product['product_name'], ENT_QUOTES, 'UTF-8'))
             );
         }
         die(json_encode($json));
     }
 
-    private function getForm($commissionId = 0)
+    private function getForm($recordId = 0)
     {
-        $this->objPrivilege->canViewCommissionSettings();
-        $commissionId = FatUtility::int($commissionId);
+        $recordId = FatUtility::int($recordId);
         $isMandatory = false;
-        if ($data = Commission::getAttributesById($commissionId, array('commsetting_is_mandatory'))) {
+        if ($data = Commission::getAttributesById($recordId, array('commsetting_is_mandatory'))) {
             $isMandatory = $data['commsetting_is_mandatory'];
         }
         $frm = new Form('frmCommission');
-        $frm->addHiddenField('', 'commsetting_id', $commissionId);
-        
+        $frm->addHiddenField('', 'commsetting_id', $recordId);
+
         if (!$isMandatory) {
             $frm->addTextBox(Labels::getLabel('LBL_Category_Name', $this->adminLangId), 'category_name');
             $frm->addTextBox(Labels::getLabel('LBL_Seller', $this->adminLangId), 'user_name');
@@ -311,18 +359,60 @@ class CommissionController extends AdminBaseController
 
         $fld = $frm->addFloatField(Labels::getLabel('LBL_Commission_fees_(%)', $this->adminLangId), 'commsetting_fees');
         $fld->requirements()->setRange('0', '100');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 
-    private function getSearchForm()
+    private function getSearchForm($fields = [])
     {
-        $this->objPrivilege->canViewCommissionSettings();
         $frm = new Form('frmCommissionSearch');
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
+
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
+
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
+    }
+    
+    private function getFormColumns(): array
+    {
+        $commissionTblHeadingCols = CacheHelper::get('commissionTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($commissionTblHeadingCols) {
+            return json_decode($commissionTblHeadingCols);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
+            'commsetting_prodcat_id' => Labels::getLabel('LBL_Category', $this->adminLangId),
+            'commsetting_user_id' => Labels::getLabel('LBL_Seller', $this->adminLangId),
+            'commsetting_product_id' => Labels::getLabel('LBL_Product', $this->adminLangId),
+            'commsetting_fees' => Labels::getLabel('LBL_Fees_[%]', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_Action', $this->adminLangId),
+        ];
+        CacheHelper::create('commissionTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return [    
+            'select_all',
+            'listSerial',
+            'commsetting_prodcat_id',
+            'commsetting_user_id',
+            'commsetting_product_id',
+            'commsetting_fees',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }
