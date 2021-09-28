@@ -27,6 +27,13 @@ if (isset($deleteButton) && is_array($deleteButton)) {
 </svg>', true);
     $actionItems = true;
 }
+   
+if (isset($otherButtons) && is_array($otherButtons)) {
+    foreach ($otherButtons as $attr) {
+        $li = $ul->appendElement('li');
+        $li->appendElement('a', $attr['attr'], (string) $attr['label'], true);
+    }
+}
 
 if (true == $actionItems) {
     echo $ul->getHtml();

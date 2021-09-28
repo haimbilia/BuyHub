@@ -23,16 +23,16 @@ foreach ($arrListing as $sn => $row) {
                 }
                 break;
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="currency_ids[]" value=' . $row['currency_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="currency_ids[]" value=' . $row['currency_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $serialNo);
+                $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'currency_symbol_left':
-                $td->appendElement('plaintext', array(), CommonHelper::displayNotApplicable($adminLangId, $row[$key]), true);
+                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayNotApplicable($adminLangId, $row[$key]), true);
                 break;
             case 'currency_symbol_right':
-                $td->appendElement('plaintext', array(), CommonHelper::displayNotApplicable($adminLangId, $row[$key]), true);
+                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayNotApplicable($adminLangId, $row[$key]), true);
                 break;
             case 'currency_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['currency_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
@@ -83,7 +83,3 @@ if (count($arrListing) == 0) {
 if ($printData) {
     echo $tbody->getHtml();
 }
-
-if (count($arrListing) == 0) {
-    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($fields)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
-} ?>

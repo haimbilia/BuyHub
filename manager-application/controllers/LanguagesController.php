@@ -37,7 +37,10 @@ class LanguagesController extends AdminBaseController
 
     private function getListingData()
     {
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
         $data = FatApp::getPostedData();
 
         $fields = $this->getFormColumns();
@@ -63,7 +66,7 @@ class LanguagesController extends AdminBaseController
 
         $srch = Language::getSearchObject(false, $this->adminLangId);
 
-        $srch->addFld('l.* ');
+        $srch->addFld('l.*, l.language_id as listSerial');
 
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('l.language_code', 'like', '%' . $post['keyword'] . '%');
@@ -73,20 +76,17 @@ class LanguagesController extends AdminBaseController
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->setPageSize($pageSize);
 
         $rs = $srch->getResultSet();
-        $records = array();
-        if ($rs) {
-            $records = FatApp::getDb()->fetchAll($rs);
-        }
+        $records = FatApp::getDb()->fetchAll($rs);
 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
         
         $this->set('sortBy', $sortBy);
@@ -116,7 +116,7 @@ class LanguagesController extends AdminBaseController
             $data = Language::getAttributesById($recordId, array('language_id', 'language_code', 'language_name', 'language_active', 'language_layout_direction', 'language_country_code'));
 
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
@@ -223,9 +223,7 @@ class LanguagesController extends AdminBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('language_ids'));
         if (empty($recordIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -244,9 +242,7 @@ class LanguagesController extends AdminBaseController
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         if($status == applicationConstants::INACTIVE && 1 > count(Language::getAllNames()) ){
@@ -255,7 +251,7 @@ class LanguagesController extends AdminBaseController
 
         $countryObj = new Language($recordId);
         if (!$countryObj->changeStatus($status)) {
-            FatUtility::dieWithError($countryObj->getError()::getHtml());
+            LibHelper::exitWithError($countryObj->getError(), true);
         }
         if ($status == applicationConstants::INACTIVE && ($recordId == FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1) || $recordId ==  FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1))) {
             $srch = Language::getSearchObject();

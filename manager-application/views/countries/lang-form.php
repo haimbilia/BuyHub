@@ -1,6 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-
 HtmlHelper::formatFormFields($langFrm);
 
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit layout--' . $formLayout);

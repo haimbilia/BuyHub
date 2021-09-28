@@ -10,7 +10,7 @@
             "newestOnTop": true,
             "progressBar": progressBar,
             "positionClass": positionClass,
-            "preventDuplicates": true,
+            "preventDuplicates": false,
             "onclick": null,
             "showDuration": "300",
             "hideDuration": "1000",
