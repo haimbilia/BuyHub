@@ -234,6 +234,7 @@ class ProductCategoriesController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
         $productCategory->updateCatCode();
+        FatApp::getDb()->query('CALL updateCategoryRelations(0)');
         $this->set('categoryId', $productCategory->getMainTableRecordId());
         $this->set('msg', Labels::getLabel('LBL_SETUP_SUCCESSFUL', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');

@@ -68,5 +68,44 @@ $(document).ready(function () {
         },
     });
 
+    clearCache = function () {
+        // $(document.body).prepend(fcom.getLoader());
+        fcom.updateWithAjax(fcom.makeUrl('Home', 'clear'), '', function (t) {
+            window.location.reload();
+        });
+    };
+
+    quickMenuItemSearch = function (e) {
+        var value = e.val().toLowerCase();
+        if (value.length < 1) {
+            return;
+        }
+        $(".navMenuItems li").each(function () {
+            if ($(this).find('h6').text().toLowerCase().search(value) > -1 || $(this).find('a').text().toLowerCase().search(value) > -1) {
+                $(this).show();
+                $('.navMenuItems').show();
+            } else {
+                $(this).hide();
+                $('.navMenuItems').show();
+            }
+        });
+    };
 
 })();
+
+$(document).on("search", "#quickSearch", function (e) {
+    quickMenuItemSearch($(this));
+});
+
+$(document).on("keyup", "#quickSearch", function (e) {
+    quickMenuItemSearch($(this));
+});
+
+$(window).keydown(function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
+        if (!$('#quickSearchCtrl').is(':checked')) {
+            $(".quickSearchMain").trigger('click');
+            e.preventDefault();
+        }
+    }
+});

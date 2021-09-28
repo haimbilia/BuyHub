@@ -66,8 +66,8 @@
             $("body").append(htm)
         }
 
-        if (!$("body ." + $.ykmodal.element + " .modal-dialog").hasClass(modalClass)) {
-            $("body ." + $.ykmodal.element + " .modal-dialog").addClass(modalClass)
+        if (dialogClass != '' && !$("body ." + $.ykmodal.element + " .modal-dialog").hasClass(dialogClass)) {
+            $("body ." + $.ykmodal.element + " .modal-dialog").addClass(dialogClass)
         }
     }
 

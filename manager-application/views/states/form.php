@@ -5,7 +5,7 @@ $frm->setFormTagAttribute('class', 'modal-body form form-edit');
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 
 $activeGentab = true;
-
+$disabled = (1 > $recordId) ? 'disabled' : '';
 require_once(CONF_THEME_PATH . 'states/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>

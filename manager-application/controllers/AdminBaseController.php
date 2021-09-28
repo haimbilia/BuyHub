@@ -37,7 +37,7 @@ class AdminBaseController extends FatController
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
 
         $this->setCommonValues();
-        $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css');
+        $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css');        
     }
 
     /*
@@ -171,6 +171,7 @@ class AdminBaseController extends FatController
                 'remove' => Labels::getLabel('LBL_REMOVE', $this->adminLangId),
                 'alreadySelected' => Labels::getLabel('MSG_ALREADY_SELECTED', $this->adminLangId),
                 'invalidSeller' => Labels::getLabel('MSG_PLEASE_SELECT_THE_SELLER_FIRST', $this->adminLangId),
+                'controllerNameRequired' => Labels::getLabel('MSG_CONTROLLER_NAME_MUST_BE_DECLARED', $this->adminLangId),
             );
             $languages = Language::getAllNames(false);
             foreach ($languages as $val) {

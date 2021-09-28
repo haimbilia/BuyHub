@@ -2,6 +2,7 @@
 
 $keywordPlaceholder = isset($keywordPlaceholder) ? $keywordPlaceholder : Labels::getLabel('LBL_SEARCH', $adminLangId);
 
+$frmSearch->setFormTagAttribute('name', 'frmRecordSearch');
 $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this, false); return(false);');
 $frmSearch->setFormTagAttribute('id', 'frmRecordSearch');
 $frmSearch->setFormTagAttribute('class', 'form');

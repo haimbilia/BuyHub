@@ -41,7 +41,11 @@ class StatesController extends AdminBaseController
 
     private function getListingData()
     {
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
+
         $data = FatApp::getPostedData();
 
         $fields = $this->getFormColumns();
@@ -78,7 +82,7 @@ class StatesController extends AdminBaseController
             'c'
         );
 
-        $srch->addMultipleFields(array('st.*', 'st_l.state_name', 'c.country_name'));
+        $srch->addMultipleFields(array('st.*', 'st_l.state_name', 'c.country_name', 'st.state_id as listSerial'));
 
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('st.state_identifier', 'like', '%' . $post['keyword'] . '%');
@@ -91,21 +95,18 @@ class StatesController extends AdminBaseController
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
 
         $rs = $srch->getResultSet();
-        $records = array();
-        if ($rs) {
-            $records = FatApp::getDb()->fetchAll($rs);
-        }
+        $records = FatApp::getDb()->fetchAll($rs);
 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
         
         $this->set('sortBy', $sortBy);
@@ -180,11 +181,31 @@ class StatesController extends AdminBaseController
             $recordId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
+        CacheHelper::clear(CacheHelper::TYPE_ZONE);
         Product::updateMinPrices(0, 0, 0, 0, $recordId);
         $this->set('msg', $this->str_setup_successful);
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
+    }
+
+    private function getForm($recordId = 0)
+    {
+        $recordId = FatUtility::int($recordId);
+
+        $frm = new Form('frmState');
+        $frm->addHiddenField('', 'state_id', $recordId);
+        $frm->addRequiredField(Labels::getLabel('LBL_State_Identifier', $this->adminLangId), 'state_identifier');
+        $frm->addRequiredField(Labels::getLabel('LBL_State_Code', $this->adminLangId), 'state_code');
+        $countryObj = new Countries();
+        $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId, true);
+
+        $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'state_country_id', $countriesArr, '', array(), '');
+
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'state_active', $activeInactiveArr, '', array(), '');
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        return $frm;
     }
 
     public function langForm($autoFillLangData = 0)
@@ -256,6 +277,7 @@ class StatesController extends AdminBaseController
         if (!$stateObj->updateLangData($lang_id, $data)) {
             LibHelper::exitWithError($stateObj->getError(), true);
         }
+        CacheHelper::clear(CacheHelper::TYPE_ZONE);
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
@@ -278,25 +300,6 @@ class StatesController extends AdminBaseController
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    private function getForm($recordId = 0)
-    {
-        $recordId = FatUtility::int($recordId);
-
-        $frm = new Form('frmState');
-        $frm->addHiddenField('', 'state_id', $recordId);
-        $frm->addRequiredField(Labels::getLabel('LBL_State_Identifier', $this->adminLangId), 'state_identifier');
-        $frm->addRequiredField(Labels::getLabel('LBL_State_Code', $this->adminLangId), 'state_code');
-        $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId, true);
-
-        $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'state_country_id', $countriesArr, '', array(), '');
-
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'state_active', $activeInactiveArr, '', array(), '');
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
-        return $frm;
     }
 
     private function getLangForm($recordId = 0, $lang_id = 0)
@@ -379,6 +382,7 @@ class StatesController extends AdminBaseController
         if (!$stateObj->changeStatus($status)) {
             LibHelper::exitWithError($stateObj->getError(), true);
         }
+        CacheHelper::clear(CacheHelper::TYPE_ZONE);
     }
 
     private function getFormColumns(): array

@@ -1,3 +1,7 @@
+$(document).ready(function () {
+    checkControllerName();
+});
+
 $(document).on("click", ".headerColumnJs", function (e) {
     var fld = $(this).attr('data-field');
     var frm = document.frmRecordSearchPaging;
@@ -38,6 +42,14 @@ $(document).on("click", ".headerColumnJs", function (e) {
     var paginationDv = '.listingPaginationJs';
     var listingTableJs = '.listingTableJs';
 
+    checkControllerName = function () {
+        if ('undefined' == typeof controllerName || '' == controllerName) {
+            $.ykmsg.error(langLbl.controllerNameRequired);
+            return false;
+        }
+        return true;
+    }
+
     goToSearchPage = function (page) {
         if (typeof page == undefined || page == null) {
             page = 1;
@@ -63,6 +75,10 @@ $(document).on("click", ".headerColumnJs", function (e) {
     };
 
     searchRecords = function (frm) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
         setColumnsData(frm);
         var data = '';
         if (frm) {
@@ -76,10 +92,14 @@ $(document).on("click", ".headerColumnJs", function (e) {
             $(dv).replaceWith(res.listingHtml);
             $(paginationDv).replaceWith(res.paginationHtml);
             fcom.removeLoader();
+            $('.selectAllJs').prop('checked', false);
         });
     };
 
     exportRecords = function () {
+        if (false === checkControllerName()) {
+            return false;
+        }
         setColumnsData(document.frmRecordSearch);
         document.frmRecordSearch.action = fcom.makeUrl(controllerName, 'search', ['export']);
         document.frmRecordSearch.submit();
@@ -105,6 +125,10 @@ $(document).on("click", ".headerColumnJs", function (e) {
     };
 
     deleteRecord = function (recordId) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
         if (!confirm(langLbl.confirmDelete)) {
             return;
         }
@@ -114,7 +138,18 @@ $(document).on("click", ".headerColumnJs", function (e) {
         });
     };
 
+    deleteSelected = function () {
+        if (!confirm(langLbl.confirmDelete)) {
+            return false;
+        }
+        $("form.actionButtonsJs").attr("action", fcom.makeUrl(controllerName, 'deleteSelected')).submit();
+    };
+
     addNew = function () {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(controllerName, 'form'), '', function (t) {
             $.ykmodal(t);
@@ -123,6 +158,10 @@ $(document).on("click", ".headerColumnJs", function (e) {
     };
 
     editRecord = function (recordId) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
         $.ykmodal(fcom.getLoader());
         data = 'recordId=' + recordId;
         fcom.ajax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
@@ -132,6 +171,10 @@ $(document).on("click", ".headerColumnJs", function (e) {
     };
 
     editLangData = function (recordId, langId, autoFillLangData = 0) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
         $.ykmodal(fcom.getLoader());
         data = 'recordId=' + recordId + '&langId=' + langId;
         fcom.ajax(fcom.makeUrl(controllerName, 'langForm', [autoFillLangData]), data, function (t) {
@@ -141,15 +184,19 @@ $(document).on("click", ".headerColumnJs", function (e) {
     };
 
     updateStatus = function (e, obj, recordId, status) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
         e.stopPropagation();
         if (!confirm(langLbl.confirmUpdateStatus)) {
             e.preventDefault();
             return false;
         }
-        
-        var oldStatus = $(obj).data("old-status");
+
+        var oldStatus = $(obj).attr("data-old-status");
         $(listingTableJs).prepend(fcom.getLoader());
-        
+
         if (1 > recordId) {
             $(obj).prop('checked', (1 == oldStatus));
             $.ykmsg.error(langLbl.invalidRequest);
@@ -163,7 +210,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
                 $.ykmsg.success(ans.msg);
-                $(obj).toggleClass("active");
+                $(obj).attr({ 'onclick': 'updateStatus(event, this, ' + recordId + ', ' + oldStatus + ')', 'data-old-status': status });
             } else {
                 $(obj).prop('checked', (1 == oldStatus));
                 $.ykmsg.error(ans.msg);
@@ -173,6 +220,10 @@ $(document).on("click", ".headerColumnJs", function (e) {
     };
 
     saveRecord = function (frm) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
         if (!$(frm).validate()) { return; }
         $.ykmodal(fcom.getLoader());
 
@@ -194,6 +245,10 @@ $(document).on("click", ".headerColumnJs", function (e) {
     };
 
     saveLangData = function (frm) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
         if (!$(frm).validate()) { return; }
         $.ykmodal(fcom.getLoader());
 
@@ -205,7 +260,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
                 $.ykmsg.error(t.msg);
                 return false;
             }
-            
+
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
@@ -275,6 +330,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
         if (!confirm(msg)) {
             return false;
         }
+        $(element).attr('action', fcom.makeUrl(controllerName, 'toggleBulkStatuses'))
         $(element + " input[name='status']").val(status);
         $(element).submit();
     };
@@ -286,6 +342,130 @@ $(document).on("click", ".headerColumnJs", function (e) {
             $(".toolbar-btn-js").removeClass('disabled').addClass('selected');
 
         }
+    }
+
+    /* Media Form & Image Management */
+    loadImages = function (recordId, fileType, slide_screen, langId) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
+        fcom.ajax(fcom.makeUrl(controllerName, 'images', [recordId, fileType, langId, slide_screen]), '', function (t) {
+            if (fileType == 'logo') {
+                $('#logoListingJs').html(t);
+                return;
+            }
+
+            $('#imageListingJs').html(t);
+        });
+    };
+
+    mediaForm = function (recordId, langId = 0, slide_screen = 1) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
+        $.ykmodal(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl(controllerName, 'media', [recordId, langId, slide_screen]), '', function (t) {
+            fcom.removeLoader();
+            loadImages(recordId, 'logo', slide_screen, langId);
+            loadImages(recordId, 'image', slide_screen, langId);
+            $.ykmodal(t);
+        });
+    };
+
+    deleteMedia = function (recordId, fileType, afileId) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
+        if (!confirm(langLbl.confirmDelete)) { return; }
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeMedia', [recordId, fileType, afileId]), '', function (t) {
+            loadImages(recordId, fileType, slide_screen, langId);
+            reloadList();
+        });
+    };
+
+    loadImageCropper = function (inputBtn) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
+        if (inputBtn.files && inputBtn.files[0]) {
+            fcom.ajax(fcom.makeUrl(controllerName, 'imgCropper'), '', function (t) {
+                $('#cropperBoxJs').html(t);
+                $("#mediaFormJs").css("display", "none");
+                var file = inputBtn.files[0];
+                var minWidth = document.frmRecordImage.min_width.value;
+                var minHeight = document.frmRecordImage.min_height.value;
+                if (minWidth == minHeight) {
+                    var aspectRatio = 1 / 1
+                } else {
+                    var aspectRatio = 16 / 9;
+                }
+                var options = {
+                    aspectRatio: aspectRatio,
+                    data: {
+                        width: minWidth,
+                        height: minHeight,
+                    },
+                    minCropBoxWidth: minWidth,
+                    minCropBoxHeight: minHeight,
+                    toggleDragModeOnDblclick: false,
+                    imageSmoothingQuality: 'high',
+                    imageSmoothingEnabled: true,
+                };
+                $(inputBtn).val('');
+                return cropImage(file, options, 'uploadImages', inputBtn);
+            });
+        }
+    };
+
+    uploadImages = function (formData) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
+        var frmName = formData.get("frmName");
+        var recordId = document.frmName.record_id.value;
+        var langId = document.frmName.lang_id.value;
+        var fileType = document.frmName.file_type.value;
+        var imageType = document.frmName.file_type.value;
+        var ratio_type = $('input[name="ratio_type"]:checked').val();
+
+        formData.append('recordId', recordId);
+        formData.append('slide_screen', slideScreen);
+        formData.append('lang_id', langId);
+        formData.append('file_type', fileType);
+        formData.append('ratio_type', ratio_type);
+        $.ajax({
+            url: fcom.makeUrl(controllerName, 'uploadMedia'),
+            type: 'post',
+            dataType: 'json',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $.ykmodal(fcom.getLoader());
+            },
+            complete: function () {
+                $.ykmodal(fcom.getLoader());
+            },
+            success: function (ans) {
+                fcom.removeLoader();
+                if (ans.status == 0) {
+                    $.ykmsg.error(ans.msg);
+                    return;
+                }
+                $.ykmsg.success(ans.msg);
+                mediaForm(ans.recordId, imageType, langId, slideScreen);
+                reloadList();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $.ykmsg.error(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
     }
 })();
 

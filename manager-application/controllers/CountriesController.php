@@ -367,23 +367,6 @@ class CountriesController extends AdminBaseController
         LibHelper::dieJsonSuccess(['msg' => $this->str_update_record]);
     }
 
-    public function deleteRecord()
-    {
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-
-        if (1 >  $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $country = new Countries($recordId);
-        $country->assignValues(array(Countries::tblFld('deleted') => 1));
-        if (!$country->save()) {
-            LibHelper::exitWithError($country->getError(), true);
-        }
-
-        LibHelper::dieJsonSuccess(['msg' => $this->str_update_record]);
-    }
-
     private function changeStatus(int $recordId, int $status)
     {
         if (1 > $recordId || -1 == $status) {
