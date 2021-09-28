@@ -89,7 +89,7 @@ $("document").ready(function(){
         'classes': {
             "ui-autocomplete": "custom-ui-autocomplete"
         },
-        'source': function(request, response) {
+        source: function(request, response) {
 			$.ajax({
 				url: fcom.makeUrl('productCategories', 'links_autocomplete'),
 				data: {keyword: request['term'],fIsAjax:1},

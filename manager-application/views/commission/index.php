@@ -17,10 +17,10 @@ $tableHeadAttrArr = [
         'width' => '20%'
     ],
     'commsetting_user_id' => [
-        'width' => '15%'
+        'width' => '20%'
     ],
     'commsetting_product_id' => [
-        'width' => '30%'
+        'width' => '25%'
     ],
     'commsetting_fees' => [
         'width' => '10%'
@@ -56,7 +56,8 @@ $controller = str_replace('Controller', '', FatApp::getController());
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */
-                                'controller' => $controller /* Used in case of toggle bulk status. */
+                                'controller' => $controller, /* Used in case of toggle bulk status. */
+                                'formAction' => 'deleteSelected'
                             ];
                             $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
                         </div>
@@ -67,3 +68,8 @@ $controller = str_replace('Controller', '', FatApp::getController());
         </div>
     </div>
 </main>
+
+<script>
+    var controllerName = '<?php echo $controller; ?>';
+    getHelpCenterContent(controllerName);
+</script>

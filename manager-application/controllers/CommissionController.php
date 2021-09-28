@@ -56,10 +56,12 @@ class CommissionController extends AdminBaseController
             'tcs.*',
             'IFNULL(tp_l.product_name,tp.product_identifier)as product_name',
             'IFNULL(tpc_l.prodcat_name,tpc.prodcat_identifier)as prodcat_name',
-            'CONCAT(tu.user_name," [",tuc.credential_username,"]") as vendor',
+            'CONCAT(COALESCE(s_l.shop_name, shop.shop_identifier), " ( ", tuc.credential_username, " )") as vendor',
             'commsetting_id as listSerial'
         );
         $srch = Commission::getCommissionSettingsObj($this->adminLangId, 0, $attr);
+        $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(tu.user_parent > 0, user_parent, tu.user_id)', 'shop');
+        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->adminLangId, 's_l');
 
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('prodcat_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
@@ -147,6 +149,7 @@ class CommissionController extends AdminBaseController
 
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
+        $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
         $this->_template->render(false, false);
     }
 
@@ -276,9 +279,7 @@ class CommissionController extends AdminBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
         }
         $obj = new Commission($recordId);
         $obj->assignValues(array('commsetting_deleted' => 1));
@@ -291,23 +292,28 @@ class CommissionController extends AdminBaseController
     public function userAutoComplete()
     {
         $userObj = new User();
-        $srch = $userObj->getUserSearchObj(array('u.user_name', 'u.user_id', 'credential_username'));
+        $srch = $userObj->getUserSearchObj(array('u.user_name', 'u.user_id', 'credential_username', 'COALESCE(s_l.shop_name, shop.shop_identifier) as shop_name'));
+        $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
+        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->adminLangId, 's_l');
         $srch->addCondition('user_is_supplier', '=', 1);
 
         $post = FatApp::getPostedData();
         if (!empty($post['keyword'])) {
-            $srch->addCondition('u.user_name', 'LIKE', '%' . $post['keyword'] . '%')
-                ->attachCondition('uc.credential_username', 'LIKE', '%' . $post['keyword'] . '%');
+            $cnd = $srch->addCondition('u.user_name', 'LIKE', '%' . $post['keyword'] . '%');
+            $cnd->attachCondition('uc.credential_username', 'LIKE', '%' . $post['keyword'] . '%');
+            $cnd->attachCondition('shop.shop_identifier', 'LIKE', '%' . $post['keyword'] . '%');
+            $cnd->attachCondition('s_l.shop_name', 'LIKE', '%' . $post['keyword'] . '%');
         }
 
         $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $users = $db->fetchAll($rs, 'user_id');
+        $users = FatApp::getDb()->fetchAll($rs, 'user_id');
+
         $json = array();
         foreach ($users as $key => $user) {
+            $shopName = $user['shop_name'];
             $json[] = array(
                 'id' => $key,
-                'name' => strip_tags(html_entity_decode($user['credential_username'], ENT_QUOTES, 'UTF-8'))
+                'name' => $shopName . ' ( ' . strip_tags(html_entity_decode($user['credential_username'], ENT_QUOTES, 'UTF-8')) . ' )'
             );
         }
         die(json_encode($json));
@@ -365,16 +371,15 @@ class CommissionController extends AdminBaseController
 
     private function getSearchForm($fields = [])
     {
-        $frm = new Form('frmCommissionSearch');
+        $frm = new Form('frmRecordSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
 
         if (!empty($fields)) {
             $this->addSortingElements($frm);
         }
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
-        $fld_submit->attachField($fld_cancel);
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         return $frm;
     }
     
