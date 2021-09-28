@@ -1,0 +1,99 @@
+.categories-accordion {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    &-items {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 1px;
+        border: dashed 1px $border-color;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    &-title {
+        font-weight: 600;
+    }
+    .count {
+        margin-#{$start-direction}: 10px;
+    }
+    &-label {}
+    &-action {
+        display: flex;
+        align-items: center;
+        .btn {
+            margin-#{$end-direction}: 10px;
+            background: lighten($bg-gray, 0.1);
+            color: darken($bg-gray, 50);
+            //color: $brand-color-inverse;
+            padding: 10px;
+            // width: 30px;
+            // height: 30px;
+            line-height: 1.4;
+            text-align: center;
+            font-size: 0.8rem;
+            //border: solid 1px #dee2e6; 
+            border-radius: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            &:hover {
+                background: lighten($bg-gray, 0.20);
+            }
+            .svg {
+                width: 16px;
+                height: 16px;
+                [fill]:not(.permanent):not(g) {
+                    transition: fill .3s ease;
+                    // fill: $brand-color;
+                }
+            }
+            &.disabled {
+                opacity: 0.65;
+                pointer-events: none;
+            }
+            &:last-child {
+                margin-#{$end-direction}: 0;
+            }
+        }
+    }
+    .switch {
+        margin: 0;
+        margin-#{$end-direction}: 10px;
+    }
+    .accordion__label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: solid 1px #ddd;
+        margin: 0 0 10px 0;
+        padding: 10px;
+        border-radius: 4px;
+    }
+    .handle {
+        cursor: grab;
+    }
+    &:hover {
+        cursor: pointer;
+    }
+    a {
+        color: $txt-body;
+        display: block;
+        &[data-option='on'] {
+            .fa-angle-right {
+                transform: rotate(90deg);
+            }
+        }
+        &:hover {
+            text-decoration: none;
+        }
+    }
+    .draggable-placeholder-inner {
+        border: 1px dashed #0088F8;
+        background: rgba(0, 136, 249, 0.09);
+        padding: 0;
+        display: flex;
+        align-items: center;
+    }
+}

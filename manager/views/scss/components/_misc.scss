@@ -56,12 +56,6 @@ ul {
     display: none !important;
 }
 
-.login-page {
-    height: 100%;
-    display: flex;
-    align-items: center;
-}
-
 .not-allowed,
 input.not-allowed {
     cursor: not-allowed !important;
@@ -1372,46 +1366,6 @@ strong {
     }
     .row.row-col-separator-xl>div:last-child {
         border-right: 0;
-    }
-}
-
-.accordion {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    .accordion__label {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border: solid 1px #ddd;
-        margin: 0 0 10px 0;
-        padding: 10px;
-        border-radius: 4px;
-    }
-    .handle {
-        cursor: grab;
-    }
-    &:hover {
-        cursor: pointer;
-    }
-    a {
-        color: $txt-body;
-        display: block;
-        &[data-option='on'] {
-            .fa-angle-right {
-                transform: rotate(90deg);
-            }
-        }
-        &:hover {
-            text-decoration: none;
-        }
-    }
-    .draggable-placeholder-inner {
-        border: 1px dashed #0088F8;
-        background: rgba(0, 136, 249, 0.09);
-        padding: 0;
-        display: flex;
-        align-items: center;
     }
 }
 

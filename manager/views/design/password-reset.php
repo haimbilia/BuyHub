@@ -16,47 +16,47 @@
         <div id="particles-js"></div>
         <div class="login-page login-1">
             <div class="container">
-                <div class="row align-item-center justify-content-center">
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-head">
-                                <div class="logo">
-                                    <a href="index.php">
-                                        <img title="Yo!Kart"
-                                            src="<?php echo CONF_WEBROOT_URL;?>images/logos/logo-coloured.png"
-                                            alt="Yo!Kart">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="title">
-                                    <h2>Forgot your password?</h2>
-                                    <p>Enter your email to reset your password.</p>
-                                </div>
-                                <form class="form form-login">
-                                    <div class="form-group">
-                                        <label class="label">Email</label>
-                                        <input class="form-control" title="Email" placeholder="" type="text" value="">
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <button disabled class="btn btn-brand btn-lg btn-block not-allowed"
-                                                type="button">Submit</button>
 
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="card-foot">
-                                <ul class="other-links">
-                                    <li><a href="#" class="">Go back to the sign in page</a></li>
-
-                                </ul>
+                <div class="login-block">
+                    <div class="card">
+                        <div class="card-head">
+                            <div class="logo">
+                                <a href="index.php">
+                                    <img title="Yo!Kart"
+                                        src="<?php echo CONF_WEBROOT_URL;?>images/logos/logo-coloured.png"
+                                        alt="Yo!Kart">
+                                </a>
                             </div>
                         </div>
-                        <p class="version"> Admin version 2019</p>
+                        <div class="card-body">
+                            <div class="title">
+                                <h2>Forgot your password?</h2>
+                                <p>Enter your email to reset your password.</p>
+                            </div>
+                            <form class="form form-login">
+                                <div class="form-group">
+                                    <label class="label">Email</label>
+                                    <input class="form-control" title="Email" placeholder="" type="text" value="">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button disabled class="btn btn-brand btn-lg btn-block not-allowed"
+                                            type="button">Submit</button>
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-foot">
+                            <ul class="other-links">
+                                <li><a href="#" class="">Go back to the sign in page</a></li>
+
+                            </ul>
+                        </div>
                     </div>
+                    <p class="version"> Admin version 2019</p>
                 </div>
+
             </div>
         </div>
         <script src="js/vendors/particles.min.js"></script>

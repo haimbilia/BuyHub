@@ -1,542 +1,286 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" dir="ltr">
-
+<html lang="en" data-theme="light" dir="ltr">
 
     <head>
         <meta charset="utf-8" />
         <title>FATbit | Dashboard</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
             rel="stylesheet">
-
-
         <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-        <link rel="shortcut icon" href="../images/favicon.ico" />
+        <link rel="shortcut icon" href="images/favicon.ico" />
     </head>
 
-
-
-    <body class="subheader--transparent page--loading">
-        <div class="wrapper">
-
+    <body class="fb-body">
+        <div class="app">
             <?php
-  include 'includes/header.php';
-?>
-            <div class="body" id="body">
-                <div class="content " id="content">
-                    <!-- begin:: Subheader -->
-                    <div id="subheader" class="subheader">
-                        <div class="container ">
-                            <div class="subheader__main">
-                                <h3 class="subheader__title">Category</h3>
-                                <div class="subheader__breadcrumbs">
-                                    <a javascript:void(0) class="subheader__breadcrumbs-home"><i
-                                            class="flaticon2-shelter"></i></a>
-                                    <span class="subheader__breadcrumbs-separator"></span>
-                                    <a href="" class="subheader__breadcrumbs-link">
-                                        Crud </a>
-                                    <span class="subheader__breadcrumbs-separator"></span>
-                                    <a href="" class="subheader__breadcrumbs-link">
-                                        Forms &amp; Controls </a>
-                                    <span class="subheader__breadcrumbs-separator"></span>
-                                    <a href="" class="subheader__breadcrumbs-link">
-                                        Form Controls </a>
-                                    <span class="subheader__breadcrumbs-separator"></span>
-                                    <a href="" class="subheader__breadcrumbs-link">
-                                        Mega Options </a>
-                                </div>
+        include 'includes/sidebar.php';
+        ?>
 
+            <div class="wrap">
+                <?php
+        include 'includes/new-header.php';
+        ?>
+
+                <button class="help-btn btn btn-light" data-toggle="modal" data-target="#help">
+                    <span class="help_label">Help</span>
+                </button>
+
+                <div class="modal fixed-right fade" id="help" tabindex="-1" role="dialog" aria-labelledby="help"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-vertical" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                            <div class="subheader__toolbar">
-                                <div class="subheader__wrapper">
+                            <div class="modal-body">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="help-window">
+                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/retina/no-data-cuate.svg"
+                                                alt="">
+
+                                            <div class="data">
+                                                <h6>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
+                                                    consectetur, adipisci velit...</h6>
+                                                <ul>
+                                                    <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+                                                    <li>Sed aliquam turpis ac justo accumsan volutpat.</li>
+                                                    <li>Donec commodo augue id justo molestie luctus mattis id mi.</li>
+                                                    <li>Sed ut tellus rutrum, egestas lectus at, ultrices arcu.</li>
+                                                    <li>Phasellus posuere lectus vitae arcu volutpat, et consectetur
+                                                        lacus vestibulum.</li>
+                                                    <li>Sed ullamcorper lectus nec risus tincidunt, eu tempor ipsum
+                                                        viverra.</li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
 
                                 </div>
                             </div>
+
                         </div>
                     </div>
-                    <!-- end:: Subheader -->
-                    <!-- begin:: Content -->
-                    <div class="container grid__item grid__item--fluid">
-                        <div class="row">
-                            <div class="col">
-                                <div class="alert alert-light alert-elevate fade show" role="alert">
-                                    <div class="alert-icon"><i class="flaticon-warning font-info"></i></div>
-                                    <div class="alert-text">Use this section to manage categories within the system.
-                                        Click on the category item to edit. Categories can be dragged to re-order.</div>
-                                </div>
-                            </div>
-                        </div>
+                </div>
 
+                <main class="main">
+                    <div class="container">
                         <div class="row">
-                            <div class="col-md-6">
-                                <!--begin::card-->
+                            <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-head">
                                         <div class="card-head-label">
-                                            <h3 class="card-head-title">Categories</h3>
+                                            <h3 class="card-head-label">
+                                                <span class="card-head-title">Catagories</span>
+                                                <span class="text-muted">Lorem ipsum dolor sit amet consectetur
+                                                </span>
+                                            </h3>
+
                                         </div>
-                                        <div class="card-head-toolbar">
-                                            <div class="card-head-actions">
-                                                <a javascript:void(0) class="btn btn-clean btn-sm btn-icon btn-icon-md">
-                                                    <i class="flaticon2-add-1"></i>
-                                                </a>
-                                            </div>
+                                        <div class="card-toolbar">
+
+                                            <ul class="actions">
+                                                <li> <a href="#" class="btn btn-icon btn-light btn-add">
+                                                        <i class="icn">
+                                                            <svg class="svg">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
+                                                                </use>
+                                                            </svg></i>
+                                                        <span>New</span>
+                                                    </a></li>
+                                                <li>
+                                                    <a class="" href="#" title="">
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#active">
+                                                            </use>
+                                                        </svg>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="" href="#" title="">
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#in-active">
+                                                            </use>
+                                                        </svg>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0)" class="">
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                            </use>
+                                                        </svg>
+                                                    </a>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <ul class="js-accordion accordion">
-                                            <li class="accordion__items" draggable="false">
-                                                <a javascript:void(0)>
-                                                    <div class="accordion__label">
-                                                        <div class="">
-                                                            <i class="fa fa-arrows-alt handle m-2"></i>
-                                                            <i class="fa fa-angle-right m-2"></i>
-                                                            <span class="accordion__txt mr-2">Category 1</span>
-                                                            <span class="badge badge--success">8</span>
-                                                        </div>
+                                        <div class="categories-accordion" id="categories-accordion">
+                                            <div class="categories-accordion-items">
+                                                <div class="categories-accordion-label">
+                                                    <i class="icn icn-drag">
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#drag">
+                                                            </use>
+                                                        </svg>
+                                                    </i>
+                                                    <span class="categories-accordion-title" data-toggle="collapse"
+                                                        data-target="#categoriesOne" aria-expanded="true"
+                                                        aria-controls="categoriesOne">
+                                                        <i class="categories-accordion">
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#expand">
+                                                                </use>
+                                                            </svg>
+                                                        </i> Category 1 <span
+                                                            class="count badge badge-success">8</span></span>
 
-                                                        <div class=""><button type="button"
-                                                                class="btn btn-clean btn-sm btn-icon"><i
-                                                                    class="fa fa-trash"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <ul>
-                                                    <li>
-                                                        <a javascript:void(0)>
-                                                            <div class="accordion__label">
-                                                                <div class="">
-                                                                    <i class="fa fa-arrows-alt handle m-2"></i>
-                                                                    <i class="fa fa-angle-right m-2"></i>
-                                                                    <span class="accordion__txt mr-2">Category
-                                                                        1.1</span>
-                                                                    <span class="badge badge--success">2</span>
-                                                                </div>
-
-                                                                <div class=""><button type="button"
-                                                                        class="btn btn-clean btn-sm btn-icon"><i
-                                                                            class="fa fa-trash"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <ul>
-                                                            <li>
-                                                                <a javascript:void(0)>
-                                                                    <div class="accordion__label">
-                                                                        <div class="">
-                                                                            <i class="fa fa-arrows-alt handle m-2"></i>
-                                                                            <i class="fa fa-angle-right m-2"></i>
-                                                                            <span class="accordion__txt mr-2">Category
-                                                                                1.1.1</span>
-                                                                            <span class="badge badge--success">8</span>
-                                                                        </div>
-
-                                                                        <div class=""><button type="button"
-                                                                                class="btn btn-clean btn-sm btn-icon"><i
-                                                                                    class="fa fa-trash"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </a>
-                                                                <ul>
-                                                                    <li>
-                                                                        <a javascript:void(0)>
-                                                                            <div class="accordion__label">
-                                                                                <div class="">
-                                                                                    <i
-                                                                                        class="fa fa-arrows-alt handle m-2"></i>
-                                                                                    <i
-                                                                                        class="fa fa-angle-right m-2"></i>
-                                                                                    <span
-                                                                                        class="accordion__txt mr-2">Category
-                                                                                        1.1.1.1</span>
-                                                                                    <span
-                                                                                        class="badge badge--success">8</span>
-                                                                                </div>
-
-                                                                                <div class=""><button type="button"
-                                                                                        class="btn btn-clean btn-sm btn-icon"><i
-                                                                                            class="fa fa-trash"></i>
-                                                                                    </button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li class="accordion__items" draggable="false">
-                                                <a javascript:void(0)>
-                                                    <div class="accordion__label">
-                                                        <div class="">
-                                                            <i class="fa fa-arrows-alt handle m-2"></i>
-                                                            <i class="fa fa-angle-right m-2"></i>
-                                                            <span class="accordion__txt mr-2">Category 2</span>
-                                                            <span class="badge badge--success">8</span>
-                                                        </div>
-
-                                                        <div class=""><button type="button"
-                                                                class="btn btn-clean btn-sm btn-icon"><i
-                                                                    class="fa fa-trash"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <ul>
-                                                    <li>
-                                                        <a javascript:void(0)>
-                                                            <div class="accordion__label">
-                                                                <div class="">
-                                                                    <i class="fa fa-arrows-alt handle m-2"></i>
-                                                                    <i class="fa fa-angle-right m-2"></i>
-                                                                    <span class="accordion__txt mr-2">Category
-                                                                        2.1</span>
-                                                                    <span class="badge badge--success">8</span>
-                                                                </div>
-
-                                                                <div class=""><button type="button"
-                                                                        class="btn btn-clean btn-sm btn-icon"><i
-                                                                            class="fa fa-trash"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <ul>
-                                                            <li>
-                                                                <a javascript:void(0)>
-                                                                    <div class="accordion__label">
-                                                                        <div class="">
-                                                                            <i class="fa fa-arrows-alt handle m-2"></i>
-                                                                            <i class="fa fa-angle-right m-2"></i>
-                                                                            <span class="accordion__txt mr-2">Category
-                                                                                2.1.1</span>
-                                                                            <span class="badge badge--success">8</span>
-                                                                        </div>
-
-                                                                        <div class=""><button type="button"
-                                                                                class="btn btn-clean btn-sm btn-icon"><i
-                                                                                    class="fa fa-trash"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </a>
-                                                                <ul>
-                                                                    <li>
-                                                                        <a javascript:void(0)>
-                                                                            <div class="accordion__label">
-                                                                                <div class="">
-                                                                                    <i
-                                                                                        class="fa fa-arrows-alt handle m-2"></i>
-                                                                                    <i
-                                                                                        class="fa fa-angle-right m-2"></i>
-                                                                                    <span
-                                                                                        class="accordion__txt mr-2">Category
-                                                                                        2.1.1.1</span>
-                                                                                    <span
-                                                                                        class="badge badge--success">8</span>
-                                                                                </div>
-
-                                                                                <div class=""><button type="button"
-                                                                                        class="btn btn-clean btn-sm btn-icon"><i
-                                                                                            class="fa fa-trash"></i>
-                                                                                    </button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                            </li>
-
-                                            <li class="accordion__items" draggable="false">
-                                                <a javascript:void(0)>
-                                                    <div class="accordion__label">
-                                                        <div class="">
-                                                            <i class="fa fa-arrows-alt handle m-2"></i>
-                                                            <i class="fa fa-angle-right m-2"></i>
-                                                            <span class="accordion__txt mr-2">Category 3</span>
-                                                            <span class="badge badge--success">8</span>
-                                                        </div>
-
-                                                        <div class=""><button type="button"
-                                                                class="btn btn-clean btn-sm btn-icon"><i
-                                                                    class="fa fa-trash"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <ul>
-                                                    <li>
-                                                        <a javascript:void(0)>
-                                                            <div class="accordion__label">
-                                                                <div class="">
-                                                                    <i class="fa fa-arrows-alt handle m-2"></i>
-                                                                    <i class="fa fa-angle-right m-2"></i>
-                                                                    <span class="accordion__txt mr-2">Category
-                                                                        3.1</span>
-                                                                    <span class="badge badge--success">8</span>
-                                                                </div>
-
-                                                                <div class=""><button type="button"
-                                                                        class="btn btn-clean btn-sm btn-icon"><i
-                                                                            class="fa fa-trash"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <ul>
-                                                            <li>
-                                                                <a javascript:void(0)>
-                                                                    <div class="accordion__label">
-                                                                        <div class="">
-                                                                            <i class="fa fa-arrows-alt handle m-2"></i>
-                                                                            <i class="fa fa-angle-right m-2"></i>
-                                                                            <span class="accordion__txt mr-2">Category
-                                                                                3.1.1</span>
-                                                                            <span class="badge badge--success">8</span>
-                                                                        </div>
-
-                                                                        <div class=""><button type="button"
-                                                                                class="btn btn-clean btn-sm btn-icon"><i
-                                                                                    class="fa fa-trash"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </a>
-                                                                <ul>
-                                                                    <li>
-                                                                        <a javascript:void(0)>
-                                                                            <div class="accordion__label">
-                                                                                <div class="">
-                                                                                    <i
-                                                                                        class="fa fa-arrows-alt handle m-2"></i>
-                                                                                    <i
-                                                                                        class="fa fa-angle-right m-2"></i>
-                                                                                    <span
-                                                                                        class="accordion__txt mr-2">Category
-                                                                                        3.1.1.1</span>
-                                                                                    <span
-                                                                                        class="badge badge--success">8</span>
-                                                                                </div>
-
-                                                                                <div class=""><button type="button"
-                                                                                        class="btn btn-clean btn-sm btn-icon"><i
-                                                                                            class="fa fa-trash"></i>
-                                                                                    </button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li class="accordion__items" draggable="false">
-                                                <a javascript:void(0)>
-                                                    <div class="accordion__label">
-                                                        <div class="">
-                                                            <i class="fa fa-arrows-alt handle m-2"></i>
-                                                            <i class="fa fa-angle-right m-2"></i>
-                                                            <span class="accordion__txt mr-2">Category 4</span>
-                                                            <span class="badge badge--success">8</span>
-                                                        </div>
-
-                                                        <div class=""><button type="button"
-                                                                class="btn btn-clean btn-sm btn-icon"><i
-                                                                    class="fa fa-trash"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <ul>
-                                                    <li>
-                                                        <a javascript:void(0)>
-                                                            <div class="accordion__label">
-                                                                <div class="">
-                                                                    <i class="fa fa-arrows-alt handle m-2"></i>
-                                                                    <i class="fa fa-angle-right m-2"></i>
-                                                                    <span class="accordion__txt mr-2">Category
-                                                                        4.1</span>
-                                                                    <span class="badge badge--success">8</span>
-                                                                </div>
-
-                                                                <div class=""><button type="button"
-                                                                        class="btn btn-clean btn-sm btn-icon"><i
-                                                                            class="fa fa-trash"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <ul>
-                                                            <li>
-                                                                <a javascript:void(0)>
-                                                                    <div class="accordion__label">
-                                                                        <div class="">
-                                                                            <i class="fa fa-arrows-alt handle m-2"></i>
-                                                                            <i class="fa fa-angle-right m-2"></i>
-                                                                            <span class="accordion__txt mr-2">Category
-                                                                                4.1.1</span>
-                                                                            <span class="badge badge--success">8</span>
-                                                                        </div>
-
-                                                                        <div class=""><button type="button"
-                                                                                class="btn btn-clean btn-sm btn-icon"><i
-                                                                                    class="fa fa-trash"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </a>
-                                                                <ul>
-                                                                    <li>
-                                                                        <a javascript:void(0)>
-                                                                            <div class="accordion__label">
-                                                                                <div class="">
-                                                                                    <i
-                                                                                        class="fa fa-arrows-alt handle m-2"></i>
-                                                                                    <i
-                                                                                        class="fa fa-angle-right m-2"></i>
-                                                                                    <span
-                                                                                        class="accordion__txt mr-2">Category
-                                                                                        4.1.1.1</span>
-                                                                                    <span
-                                                                                        class="badge badge--success">2</span>
-                                                                                </div>
-
-                                                                                <div class=""><button type="button"
-                                                                                        class="btn btn-clean btn-sm btn-icon"><i
-                                                                                            class="fa fa-trash"></i>
-                                                                                    </button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                </div>
-                                <!--end::card-->
-                            </div>
-                            <div class="col-md-6">
-                                <!--begin::card-->
-                                <div class="card">
-                                    <div class="card-head">
-                                        <div class="card-head-label">
-                                            <h3 class="card-head-title">
-                                                Category Name
-                                            </h3>
-                                        </div>
-                                        <div class="card-head-toolbar">
-                                            <button type="reset" class="btn btn-brand btn-sm">Save</button>
-                                            <button type="reset" class="btn btn-secondary btn-sm ml-2">Cancel</button>
-                                        </div>
-                                    </div>
-                                    <form class="form">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label>Category Name</label>
-                                                        <input type="" class="form-control" placeholder="Category 2">
-                                                    </div>
                                                 </div>
 
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label>Parent Category</label>
-                                                        <select class="form-control">
-                                                            <option>Select Option</option>
-                                                        </select>
-                                                    </div>
+                                                <div class="categories-accordion-action">
+
+                                                    <label class="switch switch-sm switch-icon">
+                                                        <input type="checkbox" checked="checked" name="">
+                                                        <span></span>
+                                                    </label>
+
+
+                                                    <button type="button" class="btn btn-clean btn-sm btn-icon">
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#link">
+                                                            </use>
+                                                        </svg>
+
+                                                    </button>
+                                                    <button type="button" class="btn btn-clean btn-sm btn-icon">
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#view">
+                                                            </use>
+                                                        </svg>
+                                                    </button>
+                                                    <button type="button" class="btn btn-clean btn-sm btn-icon">
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                            </use>
+                                                        </svg>
+                                                    </button>
+                                                    <button type="button" class="btn btn-clean btn-sm btn-icon">
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                            </use>
+                                                        </svg>
+                                                    </button>
+
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label>Description
-                                                            <a href="#" data-container="body" data-toggle="popover"
-                                                                data-trigger="focus" data-placement="top"
-                                                                data-content="Make sure your active theme UI supports this functionality. "
-                                                                data-original-title="" title=""><i
-                                                                    class="fa fa-info-circle"></i></a>
 
+                                            <div id="categoriesOne" class="collapse show"
+                                                aria-labelledby="categoriesOne" data-parent="#categories-accordion">
+
+                                                <div class="categories-accordion-items">
+                                                    <div class="categories-accordion-label">
+                                                        <i class="icn">
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#drag">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+
+                                                        <span class="categories-accordion-title" data-toggle="collapse"
+                                                            data-target="#categoriesOne" aria-expanded="true"
+                                                            aria-controls="categoriesOne">
+                                                            <i class="categories-accordion">
+                                                                <svg class="svg" width="18" height="18">
+                                                                    <use
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#expand">
+                                                                    </use>
+                                                                </svg>
+                                                            </i> Category 1 <span
+                                                                class="count badge badge-success">25</span>
+                                                        </span>
+
+                                                    </div>
+
+                                                    <div class="categories-accordion-action">
+
+                                                        <label class="switch switch-sm switch-icon">
+                                                            <input type="checkbox" checked="checked" name="">
+                                                            <span></span>
                                                         </label>
-                                                        <img src="../media/editor.jpg">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12"></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label>Category Banner Image <a href="#" data-container="body"
-                                                                data-toggle="popover" data-trigger="focus"
-                                                                data-placement="top"
-                                                                data-content="Make sure your active theme UI supports this functionality. "
-                                                                data-original-title="" title=""><i
-                                                                    class="fa fa-info-circle"></i></a></label>
-                                                        <div class="dropzone dropzone-default dropzone-brand dz-clickable"
-                                                            id="dropzone_2">
-                                                            <div class="dropzone-msg dz-message needsclick">
-                                                                <h3 class="dropzone-msg-title">Drop files here or click
-                                                                    to upload.</h3>
-                                                            </div>
-                                                        </div>
+
+
+                                                        <button type="button" class="btn btn-clean btn-sm btn-icon">
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#link">
+                                                                </use>
+                                                            </svg>
+
+                                                        </button>
+                                                        <button type="button" class="btn btn-clean btn-sm btn-icon">
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#view">
+                                                                </use>
+                                                            </svg>
+                                                        </button>
+                                                        <button type="button" class="btn btn-clean btn-sm btn-icon">
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                </use>
+                                                            </svg>
+                                                        </button>
+                                                        <button type="button" class="btn btn-clean btn-sm btn-icon">
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                                </use>
+                                                            </svg>
+                                                        </button>
 
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                    </form>
-
-
+                                    </div>
                                 </div>
-                                <!--end::card-->
                             </div>
-
                         </div>
+
                     </div>
-                    <!-- end:: Content -->
-                </div>
+                </main>
+
+                <?php
+        include 'includes/footer.php';
+        ?>
+
+
             </div>
 
-            <?php
-  include 'includes/footer.php';
-?>
-
-            <script type="text/javascript" src="js/vendors/vmenuModule.js"></script>
-            <script type="text/javascript">
-            $(document).ready(function() {
-                $(".js-accordion").vmenuModule({
-                    Speed: 200,
-                    autostart: false,
-                    autohide: false,
-                });
-            });
-            </script>
         </div>
 
     </body>
-
 
 </html>
