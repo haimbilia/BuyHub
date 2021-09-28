@@ -57,3 +57,24 @@ function googleCaptcha() {
         }
     }, 200);
 }
+
+getSlugUrl = function (obj, str, extra, pos) {
+    if (pos == undefined)
+        pos = 'pre';
+    var str = str.toString().toLowerCase()
+        .replace(/\s+/g, '-') /* Replace spaces with - */
+        .replace(/[^\w\-\/]+/g, '') /* Remove all non-word chars */
+        .replace(/\-\-+/g, '-') /* Replace multiple - with single - */
+        .replace(/^-+/, '') /* Trim - from start of text */
+        .replace(/-+$/, '');
+    if (extra && pos == 'pre') {
+        str = extra + '/' + str;
+    }
+    if (extra && pos == 'post') {
+        str = str + '/' + extra;
+    }
+
+    $(obj).next().html(SITE_ROOT_URL + str);
+
+};
+

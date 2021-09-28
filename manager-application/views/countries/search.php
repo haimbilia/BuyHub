@@ -46,7 +46,6 @@ foreach ($arrListing as $sn => $row) {
 
                 if ($canEdit) {
                     $data['editButton'] = [];
-                    $data['deleteButton'] = [];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
@@ -58,6 +57,7 @@ foreach ($arrListing as $sn => $row) {
     }
     $serialNo--;
 }
+
 if (count($arrListing) == 0) {
     $tbody->appendElement('tr')->appendElement(
         'td',

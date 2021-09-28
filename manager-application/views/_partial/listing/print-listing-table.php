@@ -5,10 +5,11 @@ $formFields = isset($formFields) ? $formFields : [];
 if (isset($defaultFormWithActionBtns) && false === $defaultFormWithActionBtns) {
     echo $tbl->getHtml();
 } else if (empty($formFields) && isset($controller)) {
+    $formAction = isset($formAction) ? $formAction : 'toggleBulkStatuses';
     $attr = [
         'class' => 'actionButtonsJs',
         'onsubmit' => 'formAction(this, reloadList); return(false);',
-        'action' => UrlHelper::generateUrl($controller, 'toggleBulkStatuses'),
+        'action' => UrlHelper::generateUrl($controller, $formAction),
     ];
     $frm = new Form('listingForm', $attr);
     $frm->addHiddenField('', 'status');

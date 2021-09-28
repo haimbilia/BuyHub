@@ -90,7 +90,7 @@ class Navigation
         $selProdSrchObj->addCondition('earch_tpl_name', 'LIKE', 'threshold_notification_vendor_custom');
         $selProdSrchObj->addMultipleFields(array('count(selprod_id) as countOfRec'));
         $threshSelProdResult = $db->fetch($selProdSrchObj->getResultset());
-        $threshSelProdCount = FatUtility::int($threshSelProdResult['countOfRec']);    
+        $threshSelProdCount = FatUtility::int($threshSelProdResult['countOfRec']); 
         
         /* seller orders */
         $sellerOrderStatus = FatApp::getConfig('CONF_BADGE_COUNT_ORDER_STATUS', FatUtility::VAR_STRING, '0');

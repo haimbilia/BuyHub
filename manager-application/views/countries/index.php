@@ -1,4 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
 $keywordPlaceholder = Labels::getLabel('LBL_SEARCH_COUNTRIES', $adminLangId);
 
 /* No sorting functionality required if no record found. */

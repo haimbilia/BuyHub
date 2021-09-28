@@ -20,7 +20,7 @@ class Brand extends MyAppModel
         $this->db = FatApp::getDb();
     }
 
-    public static function getSearchObject($langId = 0, $isDeleted = true, $isActive = false)
+    public static function getSearchObject($langId = 0, $isDeleted = true, $isActive = false, $addOrderBy = true)
     {
         $srch = new SearchBase(static::DB_TBL, 'b');
 
@@ -41,7 +41,9 @@ class Brand extends MyAppModel
             );
         }
 
-        $srch->addOrder('b.' . static::DB_TBL_PREFIX . 'active', 'DESC');
+        if (true === $addOrderBy) {
+            $srch->addOrder('b.' . static::DB_TBL_PREFIX . 'active', 'DESC');
+        }
         return $srch;
     }
 

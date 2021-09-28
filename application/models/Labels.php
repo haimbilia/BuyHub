@@ -76,7 +76,7 @@ class Labels extends MyAppModel
         return $srch;
     }
 
-    public static function getLabel($lblKey, $langId, $type = Labels::TYPE_WEB)
+    public static function getLabel(string $lblKey, int $langId, int $type = Labels::TYPE_WEB)
     {
         if (empty($lblKey)) {
             return;
@@ -300,10 +300,10 @@ class Labels extends MyAppModel
                 return false;
             }
         }
-        
-        if($type == Labels::TYPE_WEB){
+
+        if ($type == Labels::TYPE_WEB) {
             CacheHelper::clear(CacheHelper::TYPE_LABELS);
-        }       
+        }
 
         return true;
     }
