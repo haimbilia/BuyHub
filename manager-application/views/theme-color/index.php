@@ -41,7 +41,7 @@ if (!empty($googleFontFamilyUrl)) {
                             <div class="col-md-4">
                                 <div class="mr-5">
                                     <?php echo $frm->getFormTag();
-                                    if (null != $googleFontFamilyUrl) {
+                                    if (null != $frm->getField('CONF_THEME_FONT_FAMILY_URL')) {
                                         echo $frm->getFieldHtml('CONF_THEME_FONT_FAMILY_URL');
                                     }
                                     ?>
