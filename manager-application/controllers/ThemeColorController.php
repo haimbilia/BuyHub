@@ -32,8 +32,8 @@ class ThemeColorController extends AdminBaseController
         $frm->fill($record);
         $this->set('frm', $frm);
         $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
-        $this->_template->addJs(array('js/select2.js', 'js/jscolor.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
-        $this->_template->addCss(array('css/select2.min.css', 'css/tagify.min.css'));
+        $this->_template->addJs(array('js/tagify.min.js', 'js/tagify.polyfills.min.js'));
+        $this->_template->addCss(array('css/tagify.min.css'));
         $this->_template->render();
     }
 
