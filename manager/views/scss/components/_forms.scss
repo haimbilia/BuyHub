@@ -677,17 +677,25 @@
      position: absolute;
      #{$start-direction}: 4px;
      top: 3px;
-     -webkit-transition: all ease .3s;
      transition: all ease .3s;
  }
  
  .switch-button.is--active:after {
      #{$start-direction}: auto;
      #{$end-direction}: 4px;
-     -webkit-transition: all ease .3s;
      transition: all ease .3s;
  }
  
  .switch-links a.is--active {
      color: $brand-color;
+ }
+ 
+ .omni-search {
+     height: 3.2rem !important;
+     border: $border !important;
+     border-radius: 4px !important;
+     background-color: #fff !important;
+     &:focus {
+         border-color: $brand-color !important;
+     }
  }

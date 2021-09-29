@@ -1089,6 +1089,8 @@ class AttachedFile extends MyAppModel
         $langId = FatUtility::int($langId);
         $allowedFileTypes = [
             AttachedFile::FILETYPE_ADMIN_LOGO,
+            AttachedFile::FILETYPE_ADMIN_PROFILE_CROPED_IMAGE,
+            AttachedFile::FILETYPE_ADMIN_PROFILE_IMAGE,  
             AttachedFile::FILETYPE_FRONT_LOGO,
             AttachedFile::FILETYPE_EMAIL_LOGO,
             AttachedFile::FILETYPE_FAVICON,
@@ -1107,7 +1109,7 @@ class AttachedFile extends MyAppModel
         ];
         //if (!in_array($fileType, $allowedFileTypes) && (!$fileType || !$recordId)) {
         // Remove condition of $recordId for handle all data of add/edit product category in single form
-        if (!in_array($fileType, $allowedFileTypes) && !$fileType) {
+        if (!in_array($fileType, $allowedFileTypes) || 1 > $fileType) {
             $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
             return false;
         }

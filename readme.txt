@@ -298,6 +298,8 @@ Admin UI/UX Enhancements pages:
    => Manage Zones
    => Manage Curriences
    => Manage Languages
+   => login and forgot password 
+   => Admin Profile info 
 
     
 Known Issues and Problems :

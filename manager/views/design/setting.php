@@ -25,8 +25,8 @@
                                     <form class="form">
                                         <div class="row justify-content-center">
                                             <div class="col-md-12">
-                                                <input type="search" class="form-control" name="search" value=""
-                                                    placeholder="Search">
+                                                <input type="search" class="form-control omni-search" name="search"
+                                                    value="" placeholder="Search">
                                             </div>
                                         </div>
                                     </form>

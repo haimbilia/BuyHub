@@ -29,16 +29,16 @@
 
     $.extend($.ykmsg, {
         success: function (message) {
-            toastr["success"](message);
+            setOptions('success', message);
         },
         info: function (message) {
-            toastr["info"](message);
+            setOptions('info', message);
         },
         warning: function (message) {
-            toastr["warning"](message);
+            setOptions('warning', message);
         },
         error: function (message) {
-            toastr["error"](message);
+            setOptions('error', message);
         },
         close: function () {
             toastr.clear();

@@ -12,20 +12,15 @@ class ProfileController extends AdminBaseController
         $this->_adminProfileObj = new AdminUsers($this->_adminId);
     }
 
-    public function index()
-    {
-        $this->_template->addJs('js/jquery.form.js');
+    public function index($tab = '')
+    {           
+        $adminDetails = AdminUsers::getAttributesById($this->_adminId);
         $this->_template->addCss('css/cropper.css');
         $this->_template->addJs('js/cropper.js');
         $this->_template->addJs('js/cropper-main.js');
+        $this->set('adminDetails', $adminDetails); 
+        $this->set('tab', $tab); 
         $this->_template->render();
-    }
-
-    public function profileImageForm()
-    {
-        $imgFrm = $this->getImageForm();
-        $this->set('imgFrm', $imgFrm);
-        $this->_template->render(false, false);
     }
 
     public function imgCropper()
@@ -37,20 +32,17 @@ class ProfileController extends AdminBaseController
     public function profileInfoForm()
     {
         $imgFrm = $this->getImageForm();
-        $admin_row = AdminUsers::getAttributesById($this->_adminId);
+        $adminRow = AdminUsers::getAttributesById($this->_adminId);
         $frm = $this->getProfileInfoForm();
-        $frm->fill($admin_row);
+        $frm->fill($adminRow);
 
-        $mode = 'Add';
-        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_PROFILE_IMAGE, $this->_adminId);
-        if ($file_row != false) {
-            $mode = 'Edit';
-        }
-        $this->set('mode', $mode);
-        $this->set('imgFrm', $imgFrm);
-        $this->set('frm', $frm);
-        $this->set('admin_row', $admin_row);
-        $this->set('clss', 'chg_pass');
+        $newImage = true;
+        $fileRow = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_PROFILE_IMAGE, $this->_adminId);
+        if ($fileRow != false  &&  0 < $fileRow['afile_id']) {
+            $newImage = false;
+        }        
+        $this->set('newImage', $newImage);
+        $this->set('frm', $frm);         
         $this->_template->render(false, false);
     }
 
@@ -112,12 +104,13 @@ class ProfileController extends AdminBaseController
 
     private function getProfileInfoForm()
     {
-        $frm = new Form('frmProfileInfo');
-        $frm->addHiddenField('', ' admin_id', $this->admin_id);
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Username', $this->adminLangId), 'admin_username', '');
+        $frm = new Form('frmProfileInfo');        
+        $frm->addHiddenField('', 'admin_id', $this->admin_id);
+        $frm->addFileUpload(Labels::getLabel('LBL_Profile_Picture', $this->adminLangId), 'user_profile_image');
+        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Username', $this->adminLangId), 'admin_username');
         $fld->setUnique('tbl_admin', 'admin_username', 'admin_id', 'admin_id', 'admin_id');
 
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Email', $this->adminLangId), 'admin_email', '');
+        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Email', $this->adminLangId), 'admin_email');
         $fld->setUnique('tbl_admin', 'admin_email', 'admin_id', 'admin_id', 'admin_id');
 
         $frm->addRequiredField(Labels::getLabel('LBL_Full_Name', $this->adminLangId), 'admin_name');
@@ -221,13 +214,8 @@ class ProfileController extends AdminBaseController
 
     public function changePassword()
     {
-        $pwdFrm = $this->getPwdFrm();
-        $admin_row = AdminUsers::getAttributesById($this->_adminId);
-        /* $imgForm = $this->getImageForm();
-        $this->set('imgForm', $imgForm); */
-        $this->set('pwdFrm', $pwdFrm);
-        //$this->set('data', $admin_row);
-        $this->set('clss', 'chg_pass');
+        $pwdFrm = $this->getPwdFrm();  
+        $this->set('pwdFrm', $pwdFrm);          
         $this->_template->render();
     }
 

@@ -1,22 +1,16 @@
 (function () {
     login = function (frm, v) {
-        if (!$(frm).validate()) return;
-        if (!v.isValid()) return;
+        if (!$(frm).validate()){
+            return;
+        }            
+        if (!v.isValid()){
+           return; 
+        }            
         var data = fcom.frmData(frm);
         fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('AdminGuest', 'login'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('AdminGuest', 'login'), data, function (t) {
             $.ykmsg.close();
-            try {
-                t = $.parseJSON(t);
-                if (t.errorMsg) {
-                    $.ykmsg.error(t.errorMsg);
-                    return false;
-                }
-                $.ykmsg.success(t.msg);
-            }
-            catch (exc) {
-                console.log(exc);
-            }
+            $.ykmsg.success(t.msg);
             location.href = t.redirectUrl;
         });
     }

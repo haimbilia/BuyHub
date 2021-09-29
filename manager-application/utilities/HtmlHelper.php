@@ -42,7 +42,7 @@ class HtmlHelper
 
         /* For Each Row On Above Elements */
         $form->developerTags['colWidthClassesDefault'] = ['col-md-', null, null];
-        $form->developerTags['colWidthValuesDefault'] = [12, null, null];
+        $form->developerTags['colWidthValuesDefault'] = [($form->developerTags['fld_default_col'] ?? 12), null, null];
         /* For Each Row On Above Elements */
 
         /* For Input Fields */

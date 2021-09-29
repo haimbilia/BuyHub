@@ -43,7 +43,8 @@
                                         <div class="quick-search">
                                             <form method="get" class="form form--quick-search">
                                                 <div class="quick-search__form">
-                                                    <input type="search" class="form-control" placeholder="Go to...">
+                                                    <input type="search" class="form-control omni-search"
+                                                        placeholder="Go to...">
                                                 </div>
                                                 <div class="quick-search__wrapper">
                                                     <ul class="list list--search-result">
