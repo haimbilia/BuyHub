@@ -32,11 +32,13 @@
         border-top: dashed 1px $border-color;
     }
     tr {
-        td:first-child {
-            padding-left: 0;
-        }
-        td:last-child {
-            padding-right: 0;
+        td {
+            &:first-child {
+                padding-left: 0;
+            }
+            &:last-child {
+                padding-right: 0;
+            }
         }
     }
     &-sm {
@@ -544,6 +546,29 @@
             height: 100%;
             display: flex;
             min-height: 30px;
+        }
+    }
+    &-packages {
+        border-spacing: 0 10px;
+        border-collapse: separate;
+        tbody {
+            tr {
+                td {
+                    padding: .75rem 1.25rem;
+                    border: none;
+                    background-color: #fff;
+                    &:first-child {
+                        padding-left: 1.25rem;
+                        border-top-left-radius: .375rem;
+                        border-bottom-left-radius: .375rem;
+                    }
+                    &:last-child {
+                        padding-right: 1.25rem;
+                        border-top-right-radius: .375rem;
+                        border-bottom-right-radius: .375rem;
+                    }
+                }
+            }
         }
     }
 }

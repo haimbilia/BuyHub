@@ -71,88 +71,13 @@
                             <button class="app__aside-close d-none" id="user_profile_aside_close">
                                 <i class="la la-close"></i>
                             </button>
-                            <!--End:: App Aside Mobile Toggle-->
 
-                            <!--Begin:: App Aside-->
+
+
                             <div class="grid__item app__toggle app__aside" id="user_profile_aside" style="opacity: 1;">
-                                <!--begin:: Widgets/Applications/User/Profile1-->
+
                                 <div class="card card--height-fluid-">
-                                    <div class="card-head  card-head--noborder">
-                                        <div class="card-head-label">
-                                            <h3 class="card-head-title">
-                                            </h3>
-                                        </div>
-                                        <div class="card-head-toolbar">
-                                            <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md"
-                                                data-toggle="dropdown">
-                                                <i class="flaticon-more-1"></i>
-                                            </a>
-                                            <div
-                                                class="dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-md">
-                                                <!--begin::Nav-->
-                                                <ul class="nav nav--block">
-                                                    <li class="nav__head">
-                                                        Export Options
-                                                        <span data-toggle="tooltip" data-placement="right" title=""
-                                                            data-original-title="Click to learn more...">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                                height="24px" viewBox="0 0 24 24" version="1.1"
-                                                                class="svg-icon svg-icon--brand svg-icon--md1">
-                                                                <g stroke="none" stroke-width="1" fill="none"
-                                                                    fill-rule="evenodd">
-                                                                    <rect x="0" y="0" width="24" height="24"></rect>
-                                                                    <circle fill="#000000" opacity="0.3" cx="12" cy="12"
-                                                                        r="10"></circle>
-                                                                    <rect fill="#000000" x="11" y="10" width="2"
-                                                                        height="7" rx="1"></rect>
-                                                                    <rect fill="#000000" x="11" y="7" width="2"
-                                                                        height="2" rx="1"></rect>
-                                                                </g>
-                                                            </svg> </span>
-                                                    </li>
-                                                    <li class="nav__separator"></li>
-                                                    <li class="nav__item">
-                                                        <a href="#" class="nav__link">
-                                                            <i class="nav__link-icon flaticon2-drop"></i>
-                                                            <span class="nav__link-text">Activity</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav__item">
-                                                        <a href="#" class="nav__link">
-                                                            <i class="nav__link-icon flaticon2-calendar-8"></i>
-                                                            <span class="nav__link-text">FAQ</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav__item">
-                                                        <a href="#" class="nav__link">
-                                                            <i class="nav__link-icon flaticon2-telegram-logo"></i>
-                                                            <span class="nav__link-text">Settings</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav__item">
-                                                        <a href="#" class="nav__link">
-                                                            <i class="nav__link-icon flaticon2-new-email"></i>
-                                                            <span class="nav__link-text">Support</span>
-                                                            <span class="nav__link-badge">
-                                                                <span
-                                                                    class="badge badge--success badge--rounded">5</span>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav__separator"></li>
-                                                    <li class="nav__foot">
-                                                        <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade
-                                                            plan</a>
-                                                        <a class="btn btn-clean btn-bold btn-sm" href="#"
-                                                            data-toggle="tooltip" data-placement="right" title=""
-                                                            data-original-title="Click to learn more...">Learn more</a>
-                                                    </li>
-                                                </ul>
-                                                <!--end::Nav-->
-                                            </div>
-                                        </div>
-                                    </div>
+
                                     <div class="card-body">
                                         <!--begin::Widget -->
                                         <div class="widget widget--user-profile-1">
@@ -170,8 +95,6 @@
                                                             Head of Development
                                                         </span>
                                                     </div>
-
-
                                                 </div>
                                             </div>
                                             <div class="widget__body">
@@ -389,81 +312,52 @@
                                         <!--end::Widget -->
                                     </div>
                                 </div>
-                                <!--end:: Widgets/Applications/User/Profile1-->
+
                             </div>
-                            <!--End:: App Aside-->
-                            <!--Begin:: App Content-->
+
                             <div class="grid__item grid__item--fluid app__content">
                                 <div class="row">
                                     <div class="col-xl-12">
                                         <div class="card">
-                                            <!--begin::Card header-->
+
                                             <div class="card-head">
-                                                <!--begin::Card title-->
+
                                                 <div class="card-head-label">
                                                     <h3 class="card-head-title">Profile Details</h3>
                                                 </div>
-                                                <!--end::Card title-->
-                                            </div>
-                                            <!--begin::Card header-->
-                                            <!--begin::Content-->
 
-                                            <!--begin::Form-->
+                                            </div>
+
+
+
                                             <form id="_form" class="form form-horizontal" novalidate="novalidate">
-                                                <!--begin::Card body-->
+
                                                 <div class="card-body">
                                                     <!--begin::Input group-->
-                                                    <div class="row form-group">
-                                                        <!--begin::Label-->
-                                                        <label class="col-lg-4 col-form-label label">Avatar</label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Col-->
-                                                        <div class="col-lg-8">
+                                                    <div class="row form-group justify-content-center">
+
+                                                        <div class="col-lg-3 text-center">
                                                             <!--begin::Image input-->
-                                                            <div class="image-input image-input-outline"
-                                                                data-image-input="true"
-                                                                style="background-image: url(/yokart/demo2/assets/media/avatars/blank.png)">
-                                                                <!--begin::Preview existing avatar-->
-                                                                <div class="image-input-wrapper w-125px h-125px"
-                                                                    style="background-image: url(/yokart/demo2/assets/media/avatars/150-26.jpg)">
+                                                            <div class="avatar avatar-outline avatar-circle"
+                                                                id="user_avatar_3">
+                                                                <div class="avatar__holder"
+                                                                    style="background-image: url(<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg)">
                                                                 </div>
-                                                                <!--end::Preview existing avatar-->
-                                                                <!--begin::Label-->
-                                                                <label
-                                                                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                                    data-image-input-action="change"
-                                                                    data-toggle="tooltip" title=""
-                                                                    data-original-title="Change avatar">
-                                                                    <i class="bi bi-pencil-fill fs-7"></i>
-                                                                    <!--begin::Inputs-->
-                                                                    <input type="file" name="avatar"
+                                                                <label class="avatar__upload" data-toggle="tooltip"
+                                                                    title="" data-original-title="Change avatar">
+                                                                    <i class="fa fa-pen"></i>
+                                                                    <input type="file" name="profile_avatar"
                                                                         accept=".png, .jpg, .jpeg">
-                                                                    <input type="hidden" name="avatar_remove">
-                                                                    <!--end::Inputs-->
                                                                 </label>
-                                                                <!--end::Label-->
-                                                                <!--begin::Cancel-->
-                                                                <span
-                                                                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                                    data-image-input-action="cancel"
-                                                                    data-toggle="tooltip" title=""
-                                                                    data-original-title="Cancel avatar">
-                                                                    <i class="bi bi-x fs-2"></i>
+                                                                <span class="avatar__cancel" data-toggle="tooltip"
+                                                                    title="" data-original-title="Cancel avatar">
+                                                                    <i class="fa fa-times"></i>
                                                                 </span>
-
-
-                                                                <span
-                                                                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                                    data-image-input-action="remove"
-                                                                    data-toggle="tooltip" title=""
-                                                                    data-original-title="Remove avatar">
-                                                                    <i class="bi bi-x fs-2"></i>
-                                                                </span>
-                                                                <!--end::Remove-->
                                                             </div>
                                                             <!--end::Image input-->
                                                             <!--begin::Hint-->
-                                                            <div class="form-text">Allowed file types: png, jpg,
+                                                            <div class="form-text">Allowed file types: png,
+                                                                jpg,
                                                                 jpeg.</div>
                                                             <!--end::Hint-->
                                                         </div>
