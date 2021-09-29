@@ -3,36 +3,41 @@
     var dv = '#mainProfileBlockJs';
     var mtabId = '#mainProfileTabBlockJs';
     profileInfoForm = function () {
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
+        markMainTabActive();
         fcom.ajax(fcom.makeUrl('Profile', 'profileInfoForm'), '', function (t) {
             $(dv).html(t);
             fcom.removeLoader();
         });
     };
-    
+
     changePassword = function () {
-        $(dv).html(fcom.getLoader());
+        $(dv).prepend(fcom.getLoader());
+        markMainTabActive();
         fcom.ajax(fcom.makeUrl('Profile', 'changePassword'), '', function (t) {
             $(dv).html(t);
             fcom.removeLoader();
         });
     };
-    
-    openProfileTab = function (tab = '') {  
-        if(tab == ''){
-           tab =  'profileInfoForm';
-        }      
-        let currentTabEle = $(mtabId).find( "a[onclick^='"+tab+"']" ); 
-          console.log("a[onclick^='"+tab+"']");
-        currentTabEle.siblings().removeClass('widget__item--active');
-        currentTabEle.addClass('widget__item--active').trigger("click"); 
+
+    openProfileTab = function (tab = '') {
+        if (tab == '') {
+            tab = 'profileInfoForm';
+        }
+        $(mtabId).find("a[onclick^='" + tab + "']").trigger("click");
     };
+
+    markMainTabActive = function () {
+        let currentTabEle = $(mtabId).find("a[onclick^='" + markMainTabActive.caller.name + "']");
+        currentTabEle.siblings().removeClass('widget__item--active');
+        currentTabEle.addClass('widget__item--active');
+    }
 
     updateProfileInfo = function (frm) {
         if (!$(frm).validate())
             return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Profile', 'updateProfileInfo'), data, function (t) {           
+        fcom.updateWithAjax(fcom.makeUrl('Profile', 'updateProfileInfo'), data, function (t) {
         });
     };
 

@@ -114,6 +114,7 @@ class AdminAuthentication extends FatModel
         'admin_id' => $row['admin_id'],
         'admin_name' => $row['admin_name'],
         'admin_username' => $row['admin_username'],
+        'admin_email' => $row['admin_email'],
         'admin_ip' => $row['admin_ip']
         );
     }
