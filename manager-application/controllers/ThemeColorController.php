@@ -182,13 +182,16 @@ class ThemeColorController extends AdminBaseController
     {
         $this->objPrivilege->canEditThemeColor();
 
-        $font = empty($this->apiKey) ? 'Poppins' : 'Poppins-regular';
-
         $data = [
             "CONF_THEME_FONT_FAMILY_URL" => "",
-            "CONF_THEME_FONT_FAMILY" => $font,
-            "CONF_THEME_COLOR" => "rgb(255,58,89)",
-            "CONF_THEME_COLOR_INVERSE" => "rgb(255,255,255)",
+            "CONF_THEME_FONT_FAMILY" => 'Poppins',
+            "CONF_THEME_COLOR" => "#FF3A59",
+            "CONF_THEME_COLOR_RGB" => "255,58,89",
+            "CONF_THEME_COLOR_HSL" => "351,100%,61%",
+            "CONF_THEME_COLOR_INVERSE" => "#ffffff",
+            "CONF_THEME_COLOR_INVERSE_RGB" => "255,255,255",
+            "CONF_THEME_COLOR_INVERSE_HSL" => "0,0%,100%",
+            "CONF_THEME_FONT_WEIGHT" => '[{"id":"regular","value":"Poppins - Regular","subset":["devanagari","latin","latin-ext"]}]',
         ];
 
         $record = new Configurations();
