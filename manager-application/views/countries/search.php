@@ -23,14 +23,14 @@ foreach ($arrListing as $sn => $row) {
             case 'country_name':
                 $countryName = '<figure class="user-profile_photo"><img width="40" height="40" title="' . $row['country_name'] . '" alt="' . $row['country_code'] . '" src="' . CONF_WEBROOT_FRONTEND . 'images/flags/round/' . $row['country_code'] . '.svg"></figure>';
                 $countryName .= '<div class="user-profile_data"><span class="user-profile_title">' . $row['country_name'] . '</span></div>';
-                $td->appendElement('plaintext', [], '<div class="user-profile">' . $countryName . '</div>', true);
+                $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $countryName . '</div>', true);
                 break;
             case 'country_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['country_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
                 $statusClass = ($canEdit) ? '' : 'disabled';
                 $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
 
-                $htm = '<span class="switch switch--sm switch--icon">
+                $htm = '<span class="switch switch-sm switch-icon">
                                     <label>
                                         <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['country_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
                                         <span></span>
@@ -51,7 +51,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
         }
     }

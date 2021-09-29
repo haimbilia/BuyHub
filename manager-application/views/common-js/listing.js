@@ -1,7 +1,3 @@
-$(document).ready(function () {
-    checkControllerName();
-});
-
 $(document).on("click", ".headerColumnJs", function (e) {
     var fld = $(this).attr('data-field');
     var frm = document.frmRecordSearchPaging;

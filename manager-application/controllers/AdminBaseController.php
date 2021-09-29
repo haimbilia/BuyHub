@@ -172,6 +172,7 @@ class AdminBaseController extends FatController
                 'alreadySelected' => Labels::getLabel('MSG_ALREADY_SELECTED', $this->adminLangId),
                 'invalidSeller' => Labels::getLabel('MSG_PLEASE_SELECT_THE_SELLER_FIRST', $this->adminLangId),
                 'controllerNameRequired' => Labels::getLabel('MSG_CONTROLLER_NAME_MUST_BE_DECLARED', $this->adminLangId),
+                'selectFont' => Labels::getLabel('MSG_PLEASE_SELECT_FONT_FAMILY', $this->adminLangId),
             );
             $languages = Language::getAllNames(false);
             foreach ($languages as $val) {

@@ -15,8 +15,10 @@ $disabled = !empty($disabled) ? ' disabled' : '';
             <a class="nav-link <?php echo $activeGentab; ?>" href="javascript:void(0)" onclick="editRecord(<?php echo $recordId ?>);">
                 <?php echo Labels::getLabel('LBL_GENERAL', $adminLangId); ?>
             </a>
-            <a class="nav-link <?php echo $activeLangtab . $disabled; ?>" href="javascript:void(0);" <?php echo (0 < $recordId) ? "onclick='editLangData(" . $recordId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $adminLangId); ?>
-            </a>
+            <?php if(1 < count($languages)) {?>
+                <a class="nav-link <?php echo $activeLangtab . $disabled; ?>" href="javascript:void(0);" <?php echo (0 < $recordId) ? "onclick='editLangData(" . $recordId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
+                    <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $adminLangId); ?>
+                </a>
+            <?php } ?>
         </nav>
     </div>

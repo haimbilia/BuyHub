@@ -27,7 +27,7 @@ foreach ($arrListing as $sn => $row) {
                 $statusClass = ($canEdit) ? '' : 'disabled';
                 $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
 
-                $htm = '<span class="switch switch--sm switch--icon">
+                $htm = '<span class="switch switch-sm switch-icon">
                                     <label>
                                         <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['language_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
                                         <span></span>
@@ -48,7 +48,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
         }
     }

@@ -6,11 +6,9 @@
         if (!v.isValid()){
            return; 
         }            
-        var data = fcom.frmData(frm);
-        fcom.displayProcessing();
+        var data = fcom.frmData(frm);       
         fcom.updateWithAjax(fcom.makeUrl('AdminGuest', 'login'), data, function (t) {
-            $.ykmsg.close();
-            $.ykmsg.success(t.msg);
+            $.ykmsg.close();           
             location.href = t.redirectUrl;
         });
     }

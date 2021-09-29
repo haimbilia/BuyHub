@@ -69,39 +69,6 @@ class ProfileController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    /* function updatePassword(){
-    $pwdFrm = $this->getPwdFrm();
-    $post = $pwdFrm->getFormDataFromArray(FatApp::getPostedData());
-    if(!$pwdFrm->validate($post)){
-    Message::addErrorMessage($pwdFrm->getValidationErrors());
-    FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));
-    }
-
-    if(!$curDbPassword = AdminUsers::getAttributesById($this->_adminId, 'admin_password')){
-    Message::addErrorMessage($this->_adminProfileObj->getError());
-    FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));
-    }
-
-    $newPassword = UserAuthentication::encryptPassword(FatApp::getPostedData('new_password'));
-    $currentPassword = UserAuthentication::encryptPassword(FatApp::getPostedData('current_password'));
-
-    if($curDbPassword != $currentPassword){
-    Message::addErrorMessage(Labels::getLabel('LBL_Your_current_Password_mis-matched!',$this->adminLangId));
-    FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));
-    }
-
-    $data = array( 'admin_password' => $newPassword);
-
-    $this->_adminProfileObj->assignValues($data);
-    if(!$this->_adminProfileObj->save()){
-    Message::addErrorMessage($this->_adminProfileObj->getError());
-    FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));
-    }
-
-    Message::addMessage(Labels::getLabel('LBL_Password_Updated_Successfully',$this->adminLangId));
-    FatApp::redirectUser(UrlHelper::generateUrl('profile','changePassword'));
-    } */
-
     private function getProfileInfoForm()
     {
         $frm = new Form('frmProfileInfo');        
@@ -213,10 +180,9 @@ class ProfileController extends AdminBaseController
     }
 
     public function changePassword()
-    {
-        $pwdFrm = $this->getPwdFrm();  
-        $this->set('pwdFrm', $pwdFrm);          
-        $this->_template->render();
+    {       
+        $this->set('frm', $this->getPwdFrm());          
+        $this->_template->render(false, false);
     }
 
     public function updatePassword()

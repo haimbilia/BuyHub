@@ -39,7 +39,7 @@ foreach ($arrListing as $sn => $row) {
                 $statusClass = ($canEdit) ? '' : 'disabled';
                 $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
 
-                $htm = '<span class="switch switch--sm switch--icon">
+                $htm = '<span class="switch switch-sm switch-icon">
                                     <label>
                                         <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['currency_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
                                         <span></span>
@@ -50,11 +50,11 @@ foreach ($arrListing as $sn => $row) {
             case 'currency_code':
                 if ($row['currency_name'] != '') {
                     $default = ($row['currency_id'] == $defaultCurrencyId) ? '<span class="badge badge--unified-brand badge--inline badge--pill">' . Labels::getLabel('LBL_DEFAULT', $adminLangId) . '</span>' : '';
-                    $td->appendElement('plaintext', array(), $row['currency_name'], true);
-                    $td->appendElement('br', array());
-                    $td->appendElement('plaintext', array(), '(' . $row[$key] . ') ' . $default, true);
+                    $td->appendElement('plaintext', $tdAttr, $row['currency_name'], true);
+                    $td->appendElement('br', $tdAttr);
+                    $td->appendElement('plaintext', $tdAttr, '(' . $row[$key] . ') ' . $default, true);
                 } else {
-                    $td->appendElement('plaintext', array(), $row[$key], true);
+                    $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 }
                 break;
             case 'action':
@@ -70,7 +70,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
         }
     }

@@ -1,4 +1,4 @@
-<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+<?php  defined('SYSTEM_INIT') or die('Invalid Usage.');
 $keywordPlaceholder = Labels::getLabel('LBL_SEARCH_COUNTRIES', $adminLangId);
 
 /* No sorting functionality required if no record found. */
@@ -56,7 +56,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */
-                                'controller' => $controller /* Used in case of toggle bulk status. */
+                                'controller' => $controller /* Used in case of performing bulk action. */
                             ];
                             $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
                         </div>
