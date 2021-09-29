@@ -412,4 +412,18 @@ class CommissionController extends AdminBaseController
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_COMMISSION', $this->adminLangId)]
+                ];
+        }
+        return $this->nodes;
+    }
 }

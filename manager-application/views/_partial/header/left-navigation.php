@@ -18,8 +18,8 @@
             ) {    ?>
                 <li class="menu-item dropdown">
                     <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('LBL_CMS', $adminLangId); ?>">
-                        <span class="menu-icon" >
-                            <svg class="svg" width="24" height="24" >
+                        <span class="menu-icon">
+                            <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-store">
                                 </use>
                             </svg>
@@ -116,7 +116,7 @@
         </ul>
     </div>
     <div class="sidebar-foot">
-        <a href="">
+        <a href="<?php echo UrlHelper::generateUrl('Settings'); ?>">
             <span class="menu-icon">
                 <svg class="svg" width="24" height="24">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-system-setting">

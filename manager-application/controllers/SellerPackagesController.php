@@ -21,7 +21,7 @@ class SellerPackagesController extends AdminBaseController
     {
         $this->objPrivilege->canViewSellerPackages($this->admin_id);
         $srch = SellerPackages::getSearchObject($this->adminLangId);
-        $srch->addMultipleFields(array( "sp.*", "IFNULL( spl." . SellerPackages::DB_TBL_PREFIX . "name, sp." . SellerPackages::DB_TBL_PREFIX . "identifier ) as " . SellerPackages::DB_TBL_PREFIX . "name"));
+        $srch->addMultipleFields(array("sp.*", "IFNULL( spl." . SellerPackages::DB_TBL_PREFIX . "name, sp." . SellerPackages::DB_TBL_PREFIX . "identifier ) as " . SellerPackages::DB_TBL_PREFIX . "name"));
         $srch->addOrder(SellerPackages::DB_TBL_PREFIX . 'active', 'DESC');
         $srch->addOrder(SellerPackages::DB_TBL_PREFIX . 'id', 'DESC');
         $srch->addOrder(SellerPackages::DB_TBL_PREFIX . "display_order");
@@ -182,10 +182,10 @@ class SellerPackagesController extends AdminBaseController
         unset($post['lang_id']);
 
         $data = array(
-        'spackagelang_lang_id' => $lang_id,
-        'spackagelang_spackage_id' => $spackageId,
-        SellerPackages::DB_TBL_PREFIX . 'name' => $post[SellerPackages::DB_TBL_PREFIX . 'name'],
-        SellerPackages::DB_TBL_PREFIX . 'text' => $post[SellerPackages::DB_TBL_PREFIX . 'text']
+            'spackagelang_lang_id' => $lang_id,
+            'spackagelang_spackage_id' => $spackageId,
+            SellerPackages::DB_TBL_PREFIX . 'name' => $post[SellerPackages::DB_TBL_PREFIX . 'name'],
+            SellerPackages::DB_TBL_PREFIX . 'text' => $post[SellerPackages::DB_TBL_PREFIX . 'text']
         );
 
         $obj = new SellerPackages($spackageId);
@@ -194,7 +194,7 @@ class SellerPackagesController extends AdminBaseController
             Message::addErrorMessage($obj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
-        
+
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(SellerPackages::DB_TBL_LANG);
@@ -227,14 +227,14 @@ class SellerPackagesController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Package_Name', $this->adminLangId), SellerPackages::DB_TBL_PREFIX . 'name');
         $frm->addTextarea(Labels::getLabel('LBL_Package_Description', $this->adminLangId), SellerPackages::DB_TBL_PREFIX . 'text');
-        
+
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        
+
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->adminLangId));
         return $frm;
     }
@@ -409,8 +409,8 @@ class SellerPackagesController extends AdminBaseController
         $json = array();
         foreach ($plans as $key => $plan) {
             $json[] = array(
-            'id' => $plan['spplan_id'],
-            'name' => DiscountCoupons::getPlanTitle($plan, $this->adminLangId),
+                'id' => $plan['spplan_id'],
+                'name' => DiscountCoupons::getPlanTitle($plan, $this->adminLangId),
 
             );
         }
@@ -427,7 +427,7 @@ class SellerPackagesController extends AdminBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $data = SellerPackages::getAttributesById($spackageId, array( 'spackage_id', 'spackage_active'));
+        $data = SellerPackages::getAttributesById($spackageId, array('spackage_id', 'spackage_active'));
 
         if ($data == false) {
             Message::addErrorMessage($this->str_invalid_request);
@@ -480,5 +480,19 @@ class SellerPackagesController extends AdminBaseController
             Message::addErrorMessage($obj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES', $this->adminLangId)]
+                ];
+        }
+        return $this->nodes;
     }
 }
