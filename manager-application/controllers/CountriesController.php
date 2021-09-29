@@ -24,7 +24,6 @@ class CountriesController extends AdminBaseController
     private function getListingData()
     {
         $db = FatApp::getDb();
-        $post = FatApp::getPostedData();
 
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
@@ -171,6 +170,8 @@ class CountriesController extends AdminBaseController
 
     public function langForm($autoFillLangData = 0)
     {
+        $this->objPrivilege->canEditCountries();
+
         $loadTabs = FatApp::getPostedData('loadTabs', FatUtility::VAR_INT, 0);
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
@@ -373,9 +374,9 @@ class CountriesController extends AdminBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $countryObj = new Countries($recordId);
-        if (!$countryObj->changeStatus($status)) {
-            LibHelper::exitWithError($countryObj->getError(), true);
+        $obj = new Countries($recordId);
+        if (!$obj->changeStatus($status)) {
+            LibHelper::exitWithError($obj->getError(), true);
         }
     }
 
