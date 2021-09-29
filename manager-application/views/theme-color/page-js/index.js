@@ -1,50 +1,52 @@
 $(document).ready(function () {
     var fontFamilyElement = $("input[name='CONF_THEME_FONT_FAMILY']");
-    if ('' != fontFamilyElement.val()) {
-        $('.tagifyWeightJs').removeAttr('disabled');
-    }
+    if (0 < fontFamilyElement.length) {
+        if ('' != fontFamilyElement.val()) {
+            $('.tagifyWeightJs').removeAttr('disabled');
+        }
 
-    $.ajax({
-        url: fcom.makeUrl('ThemeColor', 'getGoogleFonts'),
-        type: 'post',
-        dataType: 'json',
-        success: function (data) {
-            if (0 == data.status) {
-                return;
-            }
-            var fonts = $.map(data.fonts, function (item) {
-                return { label: item['text'], value: item['text'], id: item['weight'] };
-            });
-
-            fontFamilyElement.autocomplete({
-                'source': fonts,
-                'minLength': 0,
-                'scroll': true,
-                'change': function (request, ui) {
-                    if (null == ui.item) {
-                        $('.tagifyWeightJs').val("").attr('disabled', 'disabled');
-                    }
-                },
-                'select': function (event, ui) {
-                    if (null != ui.item) {
-                        $('.tagifyWeightJs').removeAttr('disabled');
-                    }
+        $.ajax({
+            url: fcom.makeUrl('ThemeColor', 'getGoogleFonts'),
+            type: 'post',
+            dataType: 'json',
+            success: function (data) {
+                if (0 == data.status) {
+                    return;
                 }
-            }).focus(function () {
-                $(this).autocomplete("search", $(this).val());
-            });
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            $.ykmsg.error(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-        }
-    });
+                var fonts = $.map(data.fonts, function (item) {
+                    return { label: item['text'], value: item['text'], id: item['weight'] };
+                });
 
-    fontFamilyElement.on('search', function () {
-        if ('' == $(this).val()) {
-            $('.tagifyWeightJs').val("").attr('disabled', 'disabled');
-        }
-    });
+                fontFamilyElement.autocomplete({
+                    'source': fonts,
+                    'minLength': 0,
+                    'scroll': true,
+                    'change': function (request, ui) {
+                        if (null == ui.item) {
+                            $('.tagifyWeightJs').val("").attr('disabled', 'disabled');
+                        }
+                    },
+                    'select': function (event, ui) {
+                        if (null != ui.item) {
+                            $('.tagifyWeightJs').removeAttr('disabled');
+                        }
+                    }
+                }).focus(function () {
+                    $(this).autocomplete("search", $(this).val());
+                });
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $.ykmsg.error(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
 
+        fontFamilyElement.on('search', function () {
+            if ('' == $(this).val()) {
+                $('.tagifyWeightJs').val("").attr('disabled', 'disabled');
+            }
+        });
+    }
+    
     if (0 < $(".colorPickerJs").length) {
         $(document).on("input", ".colorPickerJs", function () {
             var hex = $(this).val();
@@ -163,6 +165,10 @@ $(document).ready(function () {
 
     tagifyElement = function () {
         var input = document.querySelector('input[name=CONF_THEME_FONT_WEIGHT]');
+        if (null == input) {
+            return false;
+        }
+
         tagify = new Tagify(input, {
             whitelist: [],
         }).on('input', getVariants).on('focus', getVariants).on('add', addElement);
