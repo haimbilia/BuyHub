@@ -123,7 +123,7 @@ class UrlRewritingController extends AdminBaseController
             }
 
             if (empty($data)) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
@@ -143,8 +143,7 @@ class UrlRewritingController extends AdminBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $recordId = FatUtility::int($post['urlrewrite_id']);
@@ -164,8 +163,7 @@ class UrlRewritingController extends AdminBaseController
         }
 
         if (empty($originalUrl)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
 
         $langArr = Language::getAllNames();
@@ -188,8 +186,7 @@ class UrlRewritingController extends AdminBaseController
             $record->assignValues($data);
 
             if (!$record->save()) {
-                Message::addErrorMessage($record->getError());
-                FatUtility::dieJsonError(Message::getHtml());
+                LibHelper::exitWithError($record->getError(), true);
             }
         }
 
@@ -204,13 +201,12 @@ class UrlRewritingController extends AdminBaseController
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if ($recordId < 1) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $res = UrlRewrite::getAttributesById($recordId, array('urlrewrite_id'));
         if ($res == false) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $this->markAsDeleted($recordId);
@@ -224,9 +220,7 @@ class UrlRewritingController extends AdminBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('urlrewrite_ids'));
 
         if (empty($recordIdsArr)) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -243,14 +237,11 @@ class UrlRewritingController extends AdminBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
         $obj = new UrlRewrite($recordId);
         if (!$obj->deleteRecord(false)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
     }
 
