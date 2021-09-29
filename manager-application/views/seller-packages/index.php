@@ -1,5 +1,5 @@
-<?php  defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_COUNTRIES', $adminLangId);
+<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_SUBSCRIPTION_PACKAGE', $adminLangId);
 
 /* No sorting functionality required if no record found. */
 if (1 > count($arrListing)) {
@@ -8,25 +8,19 @@ if (1 > count($arrListing)) {
 
 $tableHeadAttrArr = [
     'select_all' => [
-        'width' => '5%',
-    ],
-    'action' => [
-        'width' => '10%',
+        'width' => '5%'
     ],
     'listSerial' => [
-        'width' => '14%',
+        'width' => '15%'
     ],
-    'country_code' => [
-        'width' => '14%',
+    'spackage_identifier' => [
+        'width' => '40%'
     ],
-    'country_code_alpha3' => [
-        'width' => '14%',
+    'spackage_active' => [
+        'width' => '25%'
     ],
-    'country_active' => [
-        'width' => '14%',
-    ],
-    'country_name' => [
-        'width' => '29%',
+    'action' => [
+        'width' => '15%'
     ],
 ];
 
@@ -41,8 +35,8 @@ $controller = str_replace('Controller', '', FatApp::getController());
                     <?php $data = [
                         'canEdit' => $canEdit,
                         'adminLangId' => $adminLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_COUNTRIES', $adminLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_COUNTRIES', $adminLangId), ['{COUNT}' => $recordCount]),
+                        'cardHeadTitle' => Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES', $adminLangId),
+                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_PACKAGES', $adminLangId), ['{COUNT}' => $recordCount]),
                         'newRecordBtn' => true,
                         'statusButtons' => true
                     ];
@@ -52,7 +46,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         <div class="table-responsive listingTableJs">
                             <?php
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
-                            require_once(CONF_THEME_PATH . 'countries/search.php');
+                            require_once(CONF_THEME_PATH . 'seller-packages/search.php');
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */

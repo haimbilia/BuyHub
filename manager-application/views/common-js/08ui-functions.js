@@ -102,10 +102,10 @@ $(".theme-switch").on("click", function (e) {
   switchTheme();
 });
 
-$(".dropdown-menu").on("click", function (e) {
+$(document).on('click', '.dropdown-menu', function (e) {
   e.stopPropagation();
 });
 
-$(".collapse").on("click", function (e) {
+$(document).on('click', '.collapse', function (e) {
   e.stopPropagation();
 });
