@@ -7,89 +7,130 @@ use Curl\Curl;
 
 class ThemeColorController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
     private $apiKey;
 
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewThemeColor($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditThemeColor($this->admin_id, true);
+        $this->objPrivilege->canViewThemeColor();
+
         $this->apiKey = FatApp::getConfig('CONF_GOOGLE_FONTS_API_KEY', FatUtility::VAR_STRING, '');
         $this->set("apiKey", $this->apiKey);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewThemeColor();
-
         $record = Configurations::getConfigurations();
 
         $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
         if (!empty($this->apiKey) && array_key_exists('CONF_THEME_FONT_FAMILY', $record) && ('' == $record['CONF_THEME_FONT_FAMILY'] || 'Poppins' == $googleFontFamily)) {
-            $record['CONF_THEME_FONT_FAMILY'] = 'Poppins-regular';
+            $record['CONF_THEME_FONT_FAMILY'] = 'Poppins';
+            $record['CONF_THEME_FONT_WEIGHT'] = '[{"id":"regular","value":"Poppins - Regular","subset":["devanagari","latin","latin-ext"]}]';
         }
         
         $frm = $this->getFontsForm();
         $frm->fill($record);
         $this->set('frm', $frm);
         $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
-        $this->_template->addJs(array('js/select2.js', 'js/jscolor.js'));
-        $this->_template->addCss(array('css/select2.min.css'));
+        $this->_template->addJs(array('js/select2.js', 'js/jscolor.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
+        $this->_template->addCss(array('css/select2.min.css', 'css/tagify.min.css'));
         $this->_template->render();
     }
 
     private function getFontsForm()
     {
         $frm = new Form('frmGoogleFonts');
+        $frm->addHiddenField("", 'CONF_THEME_COLOR_RGB');
+        $frm->addHiddenField("", 'CONF_THEME_COLOR_HSL');
+        $frm->addHiddenField("", 'CONF_THEME_COLOR_INVERSE_RGB');
+        $frm->addHiddenField("", 'CONF_THEME_COLOR_INVERSE_HSL');
 
         if (!empty($this->apiKey)) {
             $frm->addHiddenField("", 'CONF_THEME_FONT_FAMILY_URL');
-            $fld = $frm->addSelectBox(Labels::getLabel('LBL_FONT_FAMILY:', $this->adminLangId), 'CONF_THEME_FONT_FAMILY', [], '', array('placeholder' => Labels::getLabel('LBL_FONT_FAMILY:', $this->adminLangId)));
-            $fld->requirement->setRequired(true);
+            $fld = $frm->addRequiredField(Labels::getLabel('LBL_FONT_FAMILY:', $this->adminLangId), 'CONF_THEME_FONT_FAMILY');
             $link = "<a href='https://fonts.google.com' target='_blank'>https://fonts.google.com</a>";
             $url = CommonHelper::replaceStringData(Labels::getLabel('LBL_REFERENCE_:_{URL}', $this->adminLangId), ['{URL}' => $link]);
             $fld->htmlAfterField = '<small>' . $url . ' </small>';
+            $frm->addRequiredField(Labels::getLabel('LBL_FONT_WEIGHT:', $this->adminLangId), 'CONF_THEME_FONT_WEIGHT');
         }
 
         $frm->addRequiredField(Labels::getLabel('LBL_THEME_COLOR', $this->adminLangId), 'CONF_THEME_COLOR');
         $frm->addRequiredField(Labels::getLabel('LBL_THEME_COLOR_INVERSE', $this->adminLangId), 'CONF_THEME_COLOR_INVERSE');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_RESET', $this->adminLangId), ['title' => Labels::getLabel('LBL_RESET_TO_DEFAULT_VALUES', $this->adminLangId)]);
-        $fld_submit->attachField($fld_cancel);
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->adminLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_RESET', $this->adminLangId), ['title' => Labels::getLabel('LBL_RESET_TO_DEFAULT_VALUES', $this->adminLangId)]);
         return $frm;
     }
 
-    public function getGoogleFonts()
+    private function getFonts(): array
     {
         $this->objPrivilege->canEditThemeColor();
 
         if (empty($this->apiKey)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_API_KEY_FOR_GOOGLE_FONTS_NOT_CONFIGURED', $this->adminLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_API_KEY_FOR_GOOGLE_FONTS_NOT_CONFIGURED', $this->adminLangId), true);
         }
 
-        $curl = new Curl();
-        $curl->get('https://www.googleapis.com/webfonts/v1/webfonts?key=' . $this->apiKey);
-        if ($curl->error) {
-            FatUtility::dieJsonError($curl->errorCode . ': ' . $curl->errorMessage);
-        }
+        $googleFonts = CacheHelper::get('googleFonts' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($googleFonts) {
+            $fontsArr = json_decode($googleFonts, true);
+        } else {
+            $curl = new Curl();
+            $curl->get('https://www.googleapis.com/webfonts/v1/webfonts?key=' . $this->apiKey);
+            if ($curl->error) {
+                LibHelper::exitWithError($curl->errorCode . ': ' . $curl->errorMessage, true);
+            }
 
-        if (!isset($curl->response->items)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_UNABLE_TO_LOAD_FONTS', $this->adminLangId));
-        }
+            if (!isset($curl->response->items)) {
+                LibHelper::exitWithError(Labels::getLabel('MSG_UNABLE_TO_LOAD_FONTS', $this->adminLangId), true);
+            }
 
-        $googleFontsResp = json_decode(json_encode($curl->response), true);
-        
+            $fontsArr = json_decode(json_encode($curl->response), true);
+            CacheHelper::create('googleFonts' . $this->adminLangId, json_encode($fontsArr));
+        }
+        return $fontsArr;
+    }
+
+    public function getGoogleFonts()
+    {
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        $fontsArr = $this->getFonts();
+
         $fonts = [];
-        foreach ($googleFontsResp['items'] as $font) {
+        foreach ($fontsArr['items'] as $font) {
+            if (!empty($keyword) && false === strpos(strtolower($font['family']), strtolower($keyword))) {
+                continue;
+            }
+
             $fontName = str_replace(' ', '+', $font['family']);
-            $i = 1;
-            $allWeights = [];
-            $allSubsets = [];
+            $fonts[] = [
+                'id' => $fontName,
+                'name' => $fontName,
+                'text' => $font['family'],
+            ];
+        }
+
+        FatUtility::dieJsonSuccess(['fonts' => $fonts]);
+    }
+        
+    public function getVariants()
+    {
+        $selectedFont = FatApp::getPostedData('fontName', FatUtility::VAR_STRING, '');
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        if (empty($selectedFont)) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $fontsArr = $this->getFonts();
+
+        $fonts = [];
+        foreach ($fontsArr['items'] as $font) {
+            if (strtolower($selectedFont) != strtolower($font['family'])) {
+                continue;
+            }
+
+            $fontName = str_replace(' ', '+', $font['family']);
+            if (!empty($keyword) && false === strpos(strtolower($fontName), strtolower($keyword))) {
+                continue;
+            }
             foreach ($font['variants'] as $variant) {
                 $name = $fontName . '-' . $variant;
                 $fonts[] = [
@@ -97,21 +138,8 @@ class ThemeColorController extends AdminBaseController
                     'name' => $font['family'] . ' - ' . ucwords($variant),
                     'text' => $name,
                     'weight' => $variant,
-                    'subset' => implode(',', $font['subsets']),
+                    'subset' => $font['subsets'],
                 ];
-
-                $allWeights[] = $variant;
-                $allSubsets = array_merge($allSubsets, $font['subsets']);
-                if (1 < count($font['variants']) && $i == count($font['variants'])) {
-                    $fonts[] = [
-                        'id' => $fontName . '-' . Labels::getLabel('LBL_ALL', $this->adminLangId),
-                        'name' => $font['family'] . ' - ' . Labels::getLabel('LBL_ALL', $this->adminLangId),
-                        'text' => $fontName . '-' . Labels::getLabel('LBL_ALL', $this->adminLangId),
-                        'weight' => implode(',', $allWeights),
-                        'subset' => implode(',', array_unique($allSubsets)),
-                    ];
-                }
-                $i++;
             }
         }
 
@@ -122,7 +150,7 @@ class ThemeColorController extends AdminBaseController
     {
         if (empty(FatApp::getPostedData('name', FatUtility::VAR_STRING, ''))) {
             $json['html'] = '';
-            FatUtility::dieJsonError($json);
+            LibHelper::exitWithError($json, true);
         }
         $font = new GoogleFonts(FatApp::getPostedData(), true);
         $json['html'] = $font->load();
@@ -137,14 +165,13 @@ class ThemeColorController extends AdminBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         $fontFamily = FatApp::getPostedData('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
         $post['CONF_THEME_FONT_FAMILY'] = empty($this->apiKey) ? 'Poppins' : $fontFamily;
-
         $record = new Configurations();
         if (!$record->update($post)) {
-            FatUtility::dieJsonError($record->getError());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFULLY', $this->adminLangId));
@@ -166,7 +193,7 @@ class ThemeColorController extends AdminBaseController
 
         $record = new Configurations();
         if (!$record->update($data)) {
-            FatUtility::dieJsonError($record->getError());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel('MSG_COMPLETED', $this->adminLangId));
