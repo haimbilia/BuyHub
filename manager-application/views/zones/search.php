@@ -47,7 +47,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
         }
     }

@@ -33,7 +33,7 @@ foreach ($arrListing as $sn => $row) {
                                     <span class="user-profile_title">' . $row[$key] . '</span>
                                 </div>';
                 }
-                $td->appendElement('plaintext', [], '<div class="user-profile">' . $brandImage . $brandName . '</div>', true);
+                $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $brandImage . $brandName . '</div>', true);
                 break;
             case 'brand_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['brand_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
@@ -62,7 +62,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
         }
     }

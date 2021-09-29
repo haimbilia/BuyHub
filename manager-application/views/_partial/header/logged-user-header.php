@@ -29,13 +29,13 @@
                                 <div class="header-action__target modal fade" id="search-main">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
-                                            <div class="modal-body p-5">                                            
-                                             <?php 
-                                             $data = [
-                                                 'adminLangId' => $adminLangId
-                                             ];
-                                             $this->includeTemplate('_partial/navigation/quick-search.php', $data, false); ?>
-                                                
+                                            <div class="modal-body p-5">
+                                                <?php
+                                                $data = [
+                                                    'adminLangId' => $adminLangId
+                                                ];
+                                                $this->includeTemplate('_partial/navigation/quick-search.php', $data, false); ?>
+
                                             </div>
                                             <div class="modal-footer">
                                                 <div class="search-native">
@@ -349,45 +349,47 @@
                             <div class="header-action__item dropdown header-account">
                                 <a class="header-action__trigger dropdown-toggle no-after" data-toggle="dropdown" href="">
                                     <span class="header-account__img">
-                                        <img aria-expanded="false" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg" alt="">
+                                        <img aria-expanded="false" src="<?php echo UrlHelper::generateFileUrl('Image','profileImage',array(AdminAuthentication::getLoggedAdminId(),'croped',true));?>" alt="">
                                     </span>
                                 </a>
                                 <div class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim">
                                     <div class="header-account__avtar">
                                         <div class="profile">
                                             <div class="profile__img">
-                                                <img alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg">
+                                                <img alt="" src="<?php echo UrlHelper::generateFileUrl('Image','profileImage',array(AdminAuthentication::getLoggedAdminId(),'croped',true));?>">
                                             </div>
                                             <div class="profile__detail">
-                                                <h6>Hi, Michael Williams <h6>
-                                                        <a href="#" class="">max@kt.com</a>
+                                                <h6><?php echo  Labels::getLabel('LBL_HI', $adminLangId); ?>, <?php echo AdminAuthentication::getLoggedAdminAttribute('admin_name',true);?> <h6>
+                                                        <a href="mailto:<?php echo AdminAuthentication::getLoggedAdminAttribute('admin_email',true);?>" ><?php echo AdminAuthentication::getLoggedAdminAttribute('admin_email',true);?></a>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="separator m-0"></div>
                                     <nav class="nav nav--header-account">
-                                        <a href="#">View Profile</a>
-                                        <a href="#">Orders</a>
-                                        <a href="#">Change password</a>
+                                        <a href="<?php echo UrlHelper::generateUrl('profile'); ?>"> <?php echo  Labels::getLabel('LBL_MY_PROFILE', $adminLangId); ?></a>                                      
+                                        <a href="<?php echo UrlHelper::generateUrl('profile','index',['changePassword']); ?>"><?php echo  Labels::getLabel('LBL_CHANGE_PASSWORD', $adminLangId); ?></a>
                                     </nav>
                                     <div class="separator m-0"></div>
                                     <nav class="nav nav--header-account">
-                                        <a href="#" class="language-selector">
-                                            Language
-                                            <span class="selected-language">
-                                                English
-                                                <span>
-                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/flags/009-australia.svg" alt=""></span>
-                                            </span>
-                                            <div class="languages">
-                                                <span onclick="">English</span>
-                                                <span onclick="">Arabic</span>
-                                            </div>
-                                        </a>
-                                        <a href="#">Account Setting</a>
-                                        <a href="#">Sign out</a>
+                                        <?php if (1 < count($languages)) {
+                                             ?>
+                                                <a href="javascript:void(0)" class="language-selector">
+                                                    Language
+                                                    <span class="selected-language">
+                                                        <?php echo CommonHelper::getLangCode() ?>
+                                                        <span> 
+                                                            <img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/flags/round/<?php echo CommonHelper::getLangCountryCode() ?>.svg"></span>
+                                                    </span>
+                                                    <div class="languages">
+                                                    <?php foreach ($languages as $langId => $language) { ?>
+                                                        <span <?php echo ($adminLangId == $langId) ? 'class="is--active"' : ''; ?> onClick="setSiteDefaultLang(<?php echo $langId; ?>)"><?php echo $language['language_name']; ?></span>                                                       
+                                                        <?php } ?>
+                                                    </div>
+                                                </a>
+                                        <?php 
+                                        } ?>                                       
+                                        <a href="<?php echo UrlHelper::generateUrl('profile','logout'); ?>"><?php echo  Labels::getLabel('LBL_LOGOUT', $adminLangId); ?></a>
                                     </nav>
-
                                 </div>
                             </div>
 
