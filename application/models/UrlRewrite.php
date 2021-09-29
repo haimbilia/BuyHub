@@ -14,8 +14,7 @@ class UrlRewrite extends MyAppModel
 
     public static function getSearchObject()
     {
-        $srch = new SearchBase(static::DB_TBL, 'ur');
-        return $srch;
+        return new SearchBase(static::DB_TBL, 'ur');
     }
 
     public static function remove($originalUrl)

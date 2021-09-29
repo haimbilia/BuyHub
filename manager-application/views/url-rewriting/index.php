@@ -1,5 +1,5 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_COUNTRIES', $adminLangId);
+$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_URL', $adminLangId);
 
 /* No sorting functionality required if no record found. */
 if (1 > count($arrListing)) {
@@ -8,25 +8,22 @@ if (1 > count($arrListing)) {
 
 $tableHeadAttrArr = [
     'select_all' => [
-        'width' => '5%',
-    ],
-    'action' => [
-        'width' => '10%',
+        'width' => '5%'
     ],
     'listSerial' => [
-        'width' => '14%',
+        'width' => '15%'
     ],
-    'country_code' => [
-        'width' => '14%',
+    'urlrewrite_original' => [
+        'width' => '30%'
     ],
-    'country_code_alpha3' => [
-        'width' => '14%',
+    'language_code' => [
+        'width' => '10%'
     ],
-    'country_active' => [
-        'width' => '14%',
+    'urlrewrite_custom' => [
+        'width' => '30%'
     ],
-    'country_name' => [
-        'width' => '29%',
+    'action' => [
+        'width' => '10%'
     ],
 ];
 
@@ -41,10 +38,10 @@ $controller = str_replace('Controller', '', FatApp::getController());
                     <?php $data = [
                         'canEdit' => $canEdit,
                         'adminLangId' => $adminLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_COUNTRIES', $adminLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_COUNTRIES', $adminLangId), ['{COUNT}' => $recordCount]),
+                        'cardHeadTitle' => Labels::getLabel('LBL_URL_LIST', $adminLangId),
+                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_URL', $adminLangId), ['{COUNT}' => $recordCount]),
                         'newRecordBtn' => true,
-                        'statusButtons' => true
+                        'deleteButton' => true,
                     ];
 
                     $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
@@ -52,11 +49,12 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         <div class="table-responsive listingTableJs">
                             <?php
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
-                            require_once(CONF_THEME_PATH . 'countries/search.php');
+                            require_once(CONF_THEME_PATH . 'url-rewriting/search.php');
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */
-                                'controller' => $controller /* Used in case of performing bulk action. */
+                                'controller' => $controller, /* Used in case of performing bulk action. */
+                                'formAction' => 'deleteSelected'
                             ];
                             $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
                         </div>
