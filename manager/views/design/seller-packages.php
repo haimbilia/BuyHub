@@ -76,7 +76,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="xxx">
+                                <div class="card">
                                     <div class="card-head">
                                         <div class="card-head-label">
                                             <h3 class="card-head-title">Subscription Packages</h3><span
@@ -221,30 +221,12 @@
 
                                                     </td>
                                                 </tr>
-
-
-
-
-
                                             </tbody>
-
                                         </table>
-
-
-
                                     </div>
-
                                 </div>
-
-
                             </div>
-
-
-
-
-
                         </div>
-
                     </div>
                 </main>
 
