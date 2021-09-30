@@ -39,7 +39,7 @@ class AffiliateCommissionController extends AdminBaseController
         $srch->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'prod_cat.prodcat_id = afcs.afcommsetting_prodcat_id', 'prod_cat');
         $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT OUTER JOIN', 'prod_cat.prodcat_id = prd_cat_l.prodcatlang_prodcat_id AND prd_cat_l.prodcatlang_lang_id = ' . $this->adminLangId, 'prd_cat_l');
 
-        $srch->addMultipleFields(array( 'afcs.*', 'affiliate_cred.credential_username', 'IFNULL(prd_cat_l.prodcat_name, prod_cat.prodcat_identifier) as prodcat_name' ));
+        $srch->addMultipleFields(array('afcs.*', 'affiliate_cred.credential_username', 'IFNULL(prd_cat_l.prodcat_name, prod_cat.prodcat_identifier) as prodcat_name'));
         $srch->addOrder('afcommsetting_is_mandatory', 'DESC');
         $srch->addOrder('afcommsetting_fees', 'DESC');
         $srch->addOrder('afcommsetting_id', 'DESC');
@@ -71,7 +71,7 @@ class AffiliateCommissionController extends AdminBaseController
         if ($afcommsetting_id > 0) {
             $data = AffiliateCommission::getAttributesById(
                 $afcommsetting_id,
-                array( 'afcommsetting_id', 'afcommsetting_prodcat_id', 'afcommsetting_user_id', 'afcommsetting_fees' )
+                array('afcommsetting_id', 'afcommsetting_prodcat_id', 'afcommsetting_user_id', 'afcommsetting_fees')
             );
             if ($data === false) {
                 FatUtility::dieWithError($this->str_invalid_request);
@@ -119,7 +119,7 @@ class AffiliateCommissionController extends AdminBaseController
         $afcommsetting_id = FatApp::getPostedData('afcommsetting_id', FatUtility::VAR_INT, 0);
         $isMandatory = false;
         if ($afcommsetting_id > 0) {
-            $data = AffiliateCommission::getAttributesById($afcommsetting_id, array( 'afcommsetting_is_mandatory' ));
+            $data = AffiliateCommission::getAttributesById($afcommsetting_id, array('afcommsetting_is_mandatory'));
             if ($data['afcommsetting_is_mandatory']) {
                 $isMandatory = true;
             }
@@ -249,7 +249,7 @@ class AffiliateCommissionController extends AdminBaseController
             Message::addErrorMessage(Labels::getLabel("LBL_Default_record_cannot_be_deleted", $this->adminLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
-        FatApp::getDb()->deleteRecords(AffiliateCommission::DB_TBL, array( 'smt' => 'afcommsetting_id = ?', 'vals' => array( $afcommsettingId )));
+        FatApp::getDb()->deleteRecords(AffiliateCommission::DB_TBL, array('smt' => 'afcommsetting_id = ?', 'vals' => array($afcommsettingId)));
     }
 
     private function getForm($afcommsetting_id = 0)
@@ -261,7 +261,7 @@ class AffiliateCommissionController extends AdminBaseController
         $frm->addHiddenField('', 'afcommsetting_id', $afcommsetting_id);
         $isMandatory = false;
         if ($afcommsetting_id > 0) {
-            $data = AffiliateCommission::getAttributesById($afcommsetting_id, array( 'afcommsetting_is_mandatory' ));
+            $data = AffiliateCommission::getAttributesById($afcommsetting_id, array('afcommsetting_is_mandatory'));
             $isMandatory = $data['afcommsetting_is_mandatory'];
         }
 
@@ -289,5 +289,19 @@ class AffiliateCommissionController extends AdminBaseController
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_AFFILIATE_COMMISSION', $this->adminLangId)]
+                ];
+        }
+        return $this->nodes;
     }
 }

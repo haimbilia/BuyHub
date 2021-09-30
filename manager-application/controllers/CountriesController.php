@@ -17,7 +17,7 @@ class CountriesController extends AdminBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_COUNTRIES', $this->adminLangId));
         $this->getListingData();
-        
+
         $this->_template->render();
     }
 
@@ -105,8 +105,13 @@ class CountriesController extends AdminBaseController
         $frm = $this->getForm($recordId);
 
         if (0 < $recordId) {
-            $data = Countries::getAttributesById($recordId);
-
+            $languageArr = Language::getAllNames();
+            if (1 < count($languageArr)) {
+                $data = Countries::getAttributesById($recordId);
+            } else {
+                $langId = array_key_first($languageArr);
+                $data = Countries::getAttributesByLangId($langId, $recordId, null, true);
+            }
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request);
             }
@@ -147,19 +152,27 @@ class CountriesController extends AdminBaseController
         if (!$record->save()) {
             LibHelper::exitWithError($record->getError(), true);
         }
+        $langCount  = count($languages);
+        if ($langCount == 1) {
+            if (!$record->updateLangData($lang_id, ['country_name' => $post['country_name']])) {
+                LibHelper::exitWithError($record->getError(), true);
+            }
+        }
 
         $newTabLangId = 0;
-        if ($recordId > 0) {
-            $languages = Language::getAllNames();
-            foreach ($languages as $langId => $langName) {
-                if (!$row = Countries::getAttributesByLangId($langId, $recordId)) {
-                    $newTabLangId = $langId;
-                    break;
+        if (1 < $langCount) {         
+            if ($recordId > 0) {
+                $languages = Language::getAllNames();
+                foreach ($languages as $langId => $langName) {
+                    if (!$row = Countries::getAttributesByLangId($langId, $recordId)) {
+                        $newTabLangId = $langId;
+                        break;
+                    }
                 }
+            } else {              
+                $recordId = $record->getMainTableRecordId();
+                $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
             }
-        } else {
-            $recordId = $record->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
         Product::updateMinPrices(0, 0, 0, $recordId);
         $this->set('msg', Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId));
@@ -293,6 +306,7 @@ class CountriesController extends AdminBaseController
             $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'country_language_id', $languageArr, '', array(), '');
         } else {
             $langId = array_key_first($languageArr);
+            $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_NAME', $this->adminLangId), 'country_name');
             $frm->addHiddenField('', 'country_language_id', $langId);
         }
 
@@ -316,7 +330,7 @@ class CountriesController extends AdminBaseController
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
-        $frm->addRequiredField(Labels::getLabel('LBL_Country_Name', $this->adminLangId), 'country_name');
+        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_NAME', $this->adminLangId), 'country_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');

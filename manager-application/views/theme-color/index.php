@@ -153,7 +153,7 @@ if (!empty($googleFontFamilyUrl)) {
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="palette googleFontsJs">
-                                            <?php require_once(CONF_THEME_PATH . 'images/retina/theme-settings.svg'); ?>
+                                            <?php require_once('theme-color-svg.html'); ?>
                                         </div>
                                     </div>
                                 </div>

@@ -27,7 +27,7 @@ class ThemeColorController extends AdminBaseController
             $record['CONF_THEME_FONT_FAMILY'] = 'Poppins';
             $record['CONF_THEME_FONT_WEIGHT'] = '[{"id":"regular","value":"Poppins - Regular","subset":["devanagari","latin","latin-ext"]}]';
         }
-        
+
         $frm = $this->getFontsForm();
         $frm->fill($record);
         $this->set('frm', $frm);
@@ -110,7 +110,7 @@ class ThemeColorController extends AdminBaseController
 
         FatUtility::dieJsonSuccess(['fonts' => $fonts]);
     }
-        
+
     public function getVariants()
     {
         $selectedFont = FatApp::getPostedData('fontName', FatUtility::VAR_STRING, '');
@@ -201,5 +201,19 @@ class ThemeColorController extends AdminBaseController
 
         $this->set('msg', Labels::getLabel('MSG_COMPLETED', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_MANAGE_THEME', $this->adminLangId)]
+                ];
+        }
+        return $this->nodes;
     }
 }
