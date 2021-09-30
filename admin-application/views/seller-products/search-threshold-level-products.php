@@ -28,7 +28,7 @@ foreach ($arrListing as $sn => $row) {
     if ($row['selprod_threshold_stock_level'] < $row['selprod_stock']) {
         $tr->setAttribute("class", "fat-inactive");
     }
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':

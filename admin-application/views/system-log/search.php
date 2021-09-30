@@ -12,7 +12,7 @@ $arr_flds = array(
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive'));
 $th = $tbl->appendElement('thead')->appendElement('tr');
 
-foreach ($arr_flds as $key => $val) {
+foreach ($fields as $key => $val) {
    $e = $th->appendElement('th', array(), $val);
 }
 
@@ -20,7 +20,7 @@ $serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCoun
 foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr', array());
 
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':

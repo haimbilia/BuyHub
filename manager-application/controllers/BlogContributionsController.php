@@ -2,43 +2,56 @@
 
 class BlogContributionsController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
     public function __construct($action)
     {
-        $ajaxCallArray = array('deleteRecord', 'search', 'view', 'updateStatus');
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die(Labels::getLabel('MSG_Invalid_Action', $this->adminLangId));
-        }
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewBlogContributions($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditBlogContributions($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
-    }
-    public function index()
-    {
         $this->objPrivilege->canViewBlogContributions();
 
-        $search = $this->getSearchForm();
-        $data = FatApp::getPostedData();
-        if ($data) {
-            $data['bcontributions_id'] = $data['id'];
-            unset($data['id']);
-            $search->fill($data);
-        }
-        $this->set("search", $search);
+    }
+
+    public function index()
+    {
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $this->set('frmSearch', $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_BLOG_CONTRIBUTIONS', $this->adminLangId));
+        $this->getListingData();
+
         $this->_template->render();
     }
-    public function search()
+
+    private function getListingData()
     {
-        $this->objPrivilege->canViewBlogContributions();
-        $searchForm = $this->getSearchForm();
-        $data = FatApp::getPostedData();
-        $post = $searchForm->getFormDataFromArray($data);
+        $db = FatApp::getDb();
+
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        $srchFrm = $this->getSearchForm($fields);
+
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
+
         $srch = BlogContribution::getSearchObject();
 
         if (!empty($post['keyword'])) {
@@ -54,22 +67,34 @@ class BlogContributionsController extends AdminBaseController
         if (isset($post['bcontributions_id']) && $post['bcontributions_id'] != '') {
             $srch->addCondition('bcontributions_id', '=', $post['bcontributions_id']);
         }
-        $srch->addMultipleFields(array('*', 'concat(bcontributions_author_first_name," ",bcontributions_author_last_name) author_name'));
+        $srch->addMultipleFields(array('*', 'concat(bcontributions_author_first_name," ",bcontributions_author_last_name) author_name', 'bcontributions_id as listSerial'));
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-        $srch->addOrder('bcontributions_id', 'DESC');
-        $rs = $srch->getResultSet();
-        $pageCount = $srch->pages();
-
-        $records = FatApp::getDb()->fetchAll($rs);
+        $srch->setPageSize($pageSize);
+        
+        $srch->addOrder($sortBy, $sortOrder);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
 
-        $this->_template->render(false, false);
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
+    }
+
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'blog-contributions/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     public function downloadAttachedFile($recordId, $recordSubid = 0)
@@ -77,96 +102,87 @@ class BlogContributionsController extends AdminBaseController
         $recordId = FatUtility::int($recordId);
 
         if (1 > $recordId) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BLOG_CONTRIBUTION, $recordId, $recordSubid);
 
         if (false == $file_row) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $fileName = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         AttachedFile::downloadAttachment($fileName, $file_row['afile_name']);
     }
-    public function view($bcontributions_id)
+
+    public function form()
     {
-        $this->objPrivilege->canViewBlogContributions();
-        $bcontributions_id = FatUtility::int($bcontributions_id);
-        if ($bcontributions_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+        $this->objPrivilege->canEditBlogContributions();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        $frm = $this->getForm($bcontributions_id);
-        $data = BlogContribution::getAttributesById($bcontributions_id);
+        $frm = $this->getForm($recordId);
+        $data = BlogContribution::getAttributesById($recordId);
         if ($data === false) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->adminLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->adminLangId), true);
         }
         $frm->fill($data);
-        $statusArr = applicationConstants::getBlogContributionStatusArr($this->adminLangId);
-        if ($attachedFile = AttachedFile::getAttachment(AttachedFile::FILETYPE_BLOG_CONTRIBUTION, $bcontributions_id)) {
+        $statusArr = BlogContribution::getBlogContributionStatusArr($this->adminLangId);
+        if ($attachedFile = AttachedFile::getAttachment(AttachedFile::FILETYPE_BLOG_CONTRIBUTION, $recordId)) {
             $this->set('attachedFile', $attachedFile['afile_name']);
         }
 
         $this->set('statusArr', $statusArr);
         $this->set('data', $data);
         $this->set('frm', $frm);
-        $this->set('bcontributions_id', $bcontributions_id);
+        $this->set('recordId', $recordId);
+        $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
         $this->_template->render(false, false);
     }
-    public function updateStatus()
+
+    public function setup()
     {
         $this->objPrivilege->canEditBlogContributions();
 
-        $bcontributions_id = FatApp::getPostedData('bcontributions_id', FatUtility::VAR_INT, 0);
-        if ($bcontributions_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+        $recordId = FatApp::getPostedData('bcontributions_id', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        $frm = $this->getForm($bcontributions_id);
+        $frm = $this->getForm($recordId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $bcontributions_id = FatUtility::int($post['bcontributions_id']);
-        unset($post['bcontributions_id']);
-
-        $oldData = BlogContribution::getAttributesById($bcontributions_id);
-        $record = new BlogContribution($bcontributions_id);
+        $oldData = BlogContribution::getAttributesById($recordId);
+        $record = new BlogContribution($recordId);
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         /* code for sending email on changing status [
         */
-        $newData = BlogContribution::getAttributesById($bcontributions_id);
+        $newData = BlogContribution::getAttributesById($recordId);
         if ($oldData['bcontributions_status'] != $newData['bcontributions_status']) {
             $this->sendEmail($newData);
         }
         /*
         ] */
 
-        $this->set('msg', Labels::getLabel('MSG_Blog_Post_Setup_Successful', $this->adminLangId));
-        $this->set('bcontributionsId', $bcontributions_id);
-        $this->_template->render(false, false, 'json-success.php');
+        LibHelper::dieJsonSuccess(['msg' => $this->str_update_record]);
     }
 
     public function deleteRecord()
     {
         $this->objPrivilege->canEditBlogContributions();
-        $bcontributions_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
-        if ($bcontributions_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        $this->markAsDeleted($bcontributions_id);
+        $this->markAsDeleted($recordId);
 
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
@@ -174,39 +190,33 @@ class BlogContributionsController extends AdminBaseController
     public function deleteSelected()
     {
         $this->objPrivilege->canEditBlogContributions();
-        $bcontributionsIdsArr = FatUtility::int(FatApp::getPostedData('bcontributions_ids'));
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('bcontributions_ids'));
 
-        if (empty($bcontributionsIdsArr)) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+        if (empty($recordIdsArr)) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
 
-        foreach ($bcontributionsIdsArr as $bcontributionsId) {
-            if (1 > $bcontributionsId) {
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
                 continue;
             }
-            $this->markAsDeleted($bcontributionsId);
+            $this->markAsDeleted($recordId);
         }
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($bcontributionsId)
+    private function markAsDeleted($recordId)
     {
-        $bcontributionsId = FatUtility::int($bcontributionsId);
-        if (1 > $bcontributionsId) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
-        $obj = new BlogContribution($bcontributionsId);
+        $obj = new BlogContribution($recordId);
         if (!$obj->deleteRecord()) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
     }
-
 
     private function sendEmail($data)
     {
@@ -217,30 +227,73 @@ class BlogContributionsController extends AdminBaseController
         $emailObj->sendBlogContributionStatusChangeEmail($this->adminLangId, $data);
     }
 
-    private function getForm($bcontributions_id = 0)
+    private function getForm($recordId = 0)
     {
-        $bcontributions_id = FatUtility::int($bcontributions_id);
+        $recordId = FatUtility::int($recordId);
 
         $frm = new Form('frmBlogContribution', array('id' => 'frmBlogContribution'));
-        $frm->addHiddenField('', 'bcontributions_id', $bcontributions_id);
-        $statusArr = applicationConstants::getBlogContributionStatusArr($this->adminLangId);
+        $frm->addHiddenField('', 'bcontributions_id', $recordId);
+        $statusArr = BlogContribution::getBlogContributionStatusArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Contribution_Status', $this->adminLangId), 'bcontributions_status', $statusArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 
-    private function getSearchForm()
+    private function getSearchForm($fields = [])
     {
-        $frm = new Form('frmSearch', array('id' => 'frmSearch'));
-
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('class' => 'search-input'));
-        $statusArr = applicationConstants::getBlogContributionStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Contribution_Status', $this->adminLangId), 'bcontributions_status', $statusArr, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
+        $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'bcontributions_id');
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
-        $fld_submit->attachField($fld_cancel);
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
+
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('class' => 'search-input'));
+        $statusArr = BlogContribution::getBlogContributionStatusArr($this->adminLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Contribution_Status', $this->adminLangId), 'bcontributions_status', $statusArr, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));        
+        
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         return $frm;
+    }
+
+    private function getFormColumns(): array
+    {
+        $blogContributionTblHeadingCols = CacheHelper::get('blogContributionTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($blogContributionTblHeadingCols) {
+            return json_decode($blogContributionTblHeadingCols);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
+            'author_name' => Labels::getLabel('LBL_Author_Name', $this->adminLangId),
+            'bcontributions_author_email' => Labels::getLabel('LBL_Author_Email', $this->adminLangId),
+            'bcontributions_author_phone' => Labels::getLabel('LBL_Author_Phone', $this->adminLangId),
+            'bcontributions_status' => Labels::getLabel('LBL_Status', $this->adminLangId),
+            'bcontributions_added_on' => Labels::getLabel('LBL_Posted_On', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
+        ];
+        CacheHelper::create('blogContributionTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return [
+            'select_all',
+            'listSerial',
+            'author_name',
+            'bcontributions_author_email',
+            'bcontributions_author_phone',
+            'bcontributions_status',
+            'bcontributions_added_on',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }
