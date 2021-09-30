@@ -1,5 +1,5 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
-$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_COUNTRIES', $adminLangId);
+$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_COMMISSION', $adminLangId);
 
 /* No sorting functionality required if no record found. */
 if (1 > count($arrListing)) {

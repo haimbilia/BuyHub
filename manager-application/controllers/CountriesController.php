@@ -113,7 +113,7 @@ class CountriesController extends AdminBaseController
                 $data = Countries::getAttributesByLangId($langId, $recordId, null, true);
             }
             if ($data === false) {
-                LibHelper::exitWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
@@ -191,7 +191,7 @@ class CountriesController extends AdminBaseController
         $lang_id = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
 
         if (1 > $recordId || 1 > $lang_id) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $langFrm = $this->getLangForm($recordId, $lang_id);
@@ -199,7 +199,7 @@ class CountriesController extends AdminBaseController
             $updateLangDataobj = new TranslateLangData(Countries::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($recordId, $lang_id);
             if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataobj->getError());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {

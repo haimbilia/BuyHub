@@ -7,7 +7,7 @@ $arr_flds = array(
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive'));
 $th = $tbl->appendElement('thead')->appendElement('tr');
-foreach ($arr_flds as $key => $val) {
+foreach ($fields as $key => $val) {
     $e = $th->appendElement('th', array(), $val);
 }
 
@@ -19,7 +19,7 @@ foreach ($carriers as $sn => $row) {
     //$tr->setAttribute("data-ship-code", $row['tccr_shipapi_courier_code']);
     //$tr->setAttribute("data-tracking-id", $row['tccr_tracking_plugin_id']);
 
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':

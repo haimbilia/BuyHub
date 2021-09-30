@@ -17,7 +17,7 @@ if (1 > FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0)) {
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive'));
 $th = $tbl->appendElement('thead')->appendElement('tr');
-foreach ($arr_flds as $key => $val) {
+foreach ($fields as $key => $val) {
     if ('select_all' == $key) {
         $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
     } else {
@@ -29,7 +29,7 @@ $serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCoun
 foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
 
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'select_all':

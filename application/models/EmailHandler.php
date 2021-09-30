@@ -2165,7 +2165,7 @@ class EmailHandler extends FatModel
     public function sendBlogContributionStatusChangeEmail($langId, $d)
     {
         $tpl = 'blog_contribution_status_changed';
-        $statusArr = applicationConstants::getBlogContributionStatusArr(FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG'));
+        $statusArr = BlogContribution::getBlogContributionStatusArr(FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG'));
         $vars = array(
             '{user_full_name}' => $d['bcontributions_author_first_name'],
             '{new_status}' => $statusArr[$d['bcontributions_status']],
@@ -2187,7 +2187,7 @@ class EmailHandler extends FatModel
     public function sendBlogCommentStatusChangeEmail($langId, $d)
     {
         $tpl = 'blog_comment_status_changed';
-        $statusArr = applicationConstants::getBlogCommentStatusArr(FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG'));
+        $statusArr = BlogComment::getBlogCommentStatusArr(FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG'));
         $vars = array(
             '{user_full_name}' => $d['bpcomment_author_name'],
             '{new_status}' => $statusArr[$d['bpcomment_approved']],

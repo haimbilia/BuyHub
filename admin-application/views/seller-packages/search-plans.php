@@ -59,7 +59,7 @@
             if ($row['spplan_active'] != applicationConstants::ACTIVE) {
                 $tr->setAttribute("class", "fat-inactive nodrag nodrop");
             }
-            foreach ($arr_flds as $key => $val) {
+            foreach ($fields as $key => $val) {
                 $td = $tr->appendElement('td');
                 switch ($key) {
                     case 'listSerial':
