@@ -107,11 +107,11 @@
                                                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/banners/hero-1.jpg" title="">
                                                     <div class="upload__action">
                                                         <button type="button"><svg>
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#delete-icon"></use>
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#delete-icon"></use>
                                                             </svg></button>
                                                              <button type="button">
                                                                  <svg>
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#edit-icon"></use>
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#edit-icon"></use>
                                                             </svg>
                                                         </button>
                                                         </div>
@@ -144,7 +144,7 @@
                                             <div class="upload_cover">
                                                 <div clas="img--container  ">
                                                     <div class="file-upload">
-                                                        <img src="http://yokart.local.4livedemo.com/manager/images/upload/upload_img.png">
+                                                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
                                                     </div>
                                                 </div>
                                                 <div class="needsclick">
@@ -204,7 +204,7 @@
         include 'includes/footer.php';
         ?>
 
-        <script src="common-js/vendors/dropzone.js"></script>
+        <script src="<?php echo JS_PATH; ?>vendors/dropzone.js"></script>
         <script>
             $(document).ready(function() {
                 $(".upload_cover").hover(function() {
