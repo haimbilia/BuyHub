@@ -10,7 +10,7 @@ $arr_flds = array(
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--orders'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
-foreach ($arr_flds as $key => $val) {
+foreach ($fields as $key => $val) {
     if ($key == 'listSerial') {
         $e = $th->appendElement('th', array('width' => '5%'), $val);
     } elseif ($key == 'product_identifier') {
@@ -25,7 +25,7 @@ foreach ($arrListing as $sn => $row) {
     $productsArr[] = $row['product_id'];
     $tr = $tbl->appendElement('tr', array('class' => ''));
 
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':

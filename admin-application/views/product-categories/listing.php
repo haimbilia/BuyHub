@@ -22,7 +22,7 @@ foreach ($arrListing as $sn => $row) {
     if ($row['prodcat_active'] == 0) {
         $tr->setAttribute("class", "inactive-tr");
     }
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':

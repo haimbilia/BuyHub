@@ -339,19 +339,6 @@ class applicationConstants
         );
     }
 
-    public static function getBlogCommentStatusArr($langId)
-    {
-        $langId = FatUtility::int($langId);
-        if ($langId < 1) {
-            $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
-        }
-
-        return array(
-            static::INACTIVE => Labels::getLabel('LBL_Pending', $langId),
-            static::ACTIVE => Labels::getLabel('LBL_Approved', $langId)
-        );
-    }
-
     public static function getGenderArr($langId)
     {
         $langId = FatUtility::int($langId);

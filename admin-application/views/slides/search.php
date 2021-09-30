@@ -20,7 +20,7 @@ if (!$canEdit) {
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive table--hovered', 'id' => 'slideList'));
 $th = $tbl->appendElement('thead')->appendElement('tr');
-foreach ($arr_flds as $key => $val) {
+foreach ($fields as $key => $val) {
     if ('select_all' == $key) {
         $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
     } else {
@@ -34,7 +34,7 @@ foreach ($arrListing as $sn => $row) {
     /* $tr = $tbl->appendElement('tr',array('class' => ($row['slide_active'] != applicationConstants::ACTIVE) ? 'fat-inactive' : '' )); */
     $tr = $tbl->appendElement('tr', array());
     $tr->setAttribute("id", $row['slide_id']);
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'dragdrop':

@@ -15,7 +15,7 @@ if (!$canEdit) {
 }
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive table--hovered'));
 $th = $tbl->appendElement('thead')->appendElement('tr');
-foreach ($arr_flds as $key => $val) {
+foreach ($fields as $key => $val) {
     if ("brand_logo" == $key) {
         $e = $th->appendElement('th', array('style' => 'text-align:center; width: 20px;'), $val);
     } elseif ('select_all' == $key) {
@@ -30,7 +30,7 @@ foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['brand_id']);
 
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         if ($key == "brand_logo") {
             $td = $tr->appendElement('td', array('style' => 'text-align:center;'));
         } else {
