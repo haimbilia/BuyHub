@@ -551,19 +551,31 @@
     &-packages {
         border-spacing: 0 10px;
         border-collapse: separate;
+        thead {
+            th {
+                color: #000;
+                border: none;
+                &:first-child {
+                    padding-left: 1.2rem;
+                }
+                &:last-child {
+                    padding-right: 1.2rem;
+                }
+            }
+        }
         tbody {
             tr {
                 td {
-                    padding: .75rem 1.25rem;
+                    padding: 1rem 1.2rem;
                     border: none;
                     background-color: #fff;
                     &:first-child {
-                        padding-left: 1.25rem;
+                        padding-left: 1.2rem;
                         border-top-left-radius: .375rem;
                         border-bottom-left-radius: .375rem;
                     }
                     &:last-child {
-                        padding-right: 1.25rem;
+                        padding-right: 1.2rem;
                         border-top-right-radius: .375rem;
                         border-bottom-right-radius: .375rem;
                     }
@@ -592,12 +604,12 @@
     li {
         display: inline-block;
         vertical-align: top;
-        margin-#{$end-direction}: 10px;
+        //margin-#{$end-direction}: 10px;
         &:last-child {
             margin-#{$end-direction}: 0;
         }
         a {
-            background: lighten($bg-gray, 0.1);
+            //background: lighten($bg-gray, 0.1);
             color: darken($bg-gray, 50);
             //color: $brand-color-inverse;
             padding: 10px;

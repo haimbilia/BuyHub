@@ -61,13 +61,6 @@ $input-border-radius:1px;
     cursor: pointer;
     //border-color: transparent;
     width: auto;
-    &:focus,
-    &:hover {
-        color: currentColor;
-         :after {
-            opacity: 0.2;
-        }
-    }
 }
 
 .form {

@@ -103,11 +103,17 @@
                                         <table class="table table-packages">
                                             <thead>
                                                 <tr>
-                                                    <th><label class="checkbox">
+                                                    <th>
+                                                        <label class="checkbox">
                                                             <input type="checkbox" value="1">
-                                                        </label></th>
+                                                        </label>
+                                                    </th>
 
-                                                    <th width="60%">Package Name</th>
+                                                    <th>Package Name</th>
+                                                    <th>Commision Rate</th>
+                                                    <th>Products/Inventory Allowed</th>
+                                                    <th>Images Per Catalog</th>
+                                                    <th>Display Order</th>
                                                     <th>Status</th>
                                                     <th class="align-right">Actions</th>
                                                 </tr>
@@ -121,35 +127,33 @@
                                                     </td>
                                                     <td>
                                                         <div class="packages-data">
-                                                            <div class="h6">Silver Plan
-                                                                <i class="" type="button" data-toggle="collapse"
-                                                                    data-target="#plan1" aria-expanded="false"
-                                                                    aria-controls="plan1">
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#expand">
-                                                                        </use>
-                                                                    </svg>
+                                                            <div class="h6">
+                                                                <a href="" data-toggle="collapse" data-target="#plan1"
+                                                                    aria-expanded="false" aria-controls="plan1">
+                                                                    Silver Plan
+                                                                    <i class="">
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#expand">
+                                                                            </use>
+                                                                        </svg>
 
-                                                                </i>
-
-
-
-
-
+                                                                    </i></a>
 
                                                             </div>
-                                                            <ul class="list-bullet collapse" class="" id="plan1">
-                                                                <li>$110.00 / Per 60 Days</li>
-                                                                <li> $140.00 / Per 90 Days</li>
-                                                                <li> $990.00 / Unlimited</li>
-                                                            </ul>
+
                                                         </div>
                                                     </td>
-                                                    <td><label class="switch switch-sm switch-icon">
+                                                    <td>99%</td>
+                                                    <td>250/285 Allowed</td>
+                                                    <td>800</td>
+                                                    <td>02</td>
+                                                    <td>
+                                                        <label class="switch switch-sm switch-icon">
                                                             <input type="checkbox" checked="checked" name="">
                                                             <span></span>
-                                                        </label></td>
+                                                        </label>
+                                                    </td>
                                                     <td class="align-right">
                                                         <ul class="actions">
                                                             <li>
@@ -177,263 +181,54 @@
 
                                                 </tr>
                                                 <tr>
-                                                    <td>
-                                                        <label class="checkbox">
-                                                            <input type="checkbox" value="1">
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <div class="packages-data">
-                                                            <div class="h6">Silver Plan
-                                                                <i class="" type="button" data-toggle="collapse"
-                                                                    data-target="#plan2" aria-expanded="false"
-                                                                    aria-controls="plan2">
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#expand">
-                                                                        </use>
-                                                                    </svg>
-
-                                                                </i>
-
-
-
-
-
-
-                                                            </div>
-                                                            <ul class="list-bullet collapse" class="" id="plan2">
-                                                                <li>$110.00 / Per 60 Days</li>
-                                                                <li> $140.00 / Per 90 Days</li>
-                                                                <li> $990.00 / Unlimited</li>
+                                                    <td colspan="8">
+                                                        <div class="collapse" id="plan1">
+                                                            <ul class="list-chips">
+                                                                <li>
+                                                                    <a href="#">
+                                                                        <i class="icn">
+                                                                            <svg class="svg">
+                                                                                <use
+                                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
+                                                                                </use>
+                                                                            </svg></i>
+                                                                        <span>New</span>
+                                                                    </a>
+                                                                </li>
+                                                                <li> <a href="">
+                                                                        <i class="icn">
+                                                                            <svg class="svg" width="18" height="18">
+                                                                                <use
+                                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                </use>
+                                                                            </svg>
+                                                                        </i>
+                                                                        $110.00 / Per 60 Days</a> </li>
+                                                                <li> <a href=""> <i class="icn">
+                                                                            <svg class="svg" width="18" height="18">
+                                                                                <use
+                                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                </use>
+                                                                            </svg></i> $140.00 / Per 90 Days </a></li>
+                                                                <li> <a href=""> <i class="icn">
+                                                                            <svg class="svg" width="18" height="18">
+                                                                                <use
+                                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                </use>
+                                                                            </svg></i> $990.00 / Unlimited </a></li>
                                                             </ul>
                                                         </div>
-                                                    </td>
-                                                    <td><label class="switch switch-sm switch-icon">
-                                                            <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
-                                                        </label></td>
-                                                    <td class="align-right">
-                                                        <ul class="actions">
-                                                            <li>
-                                                                <a href="#" data-toggle="modal" data-target="#edit"
-                                                                    title="Edit">
 
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
-                                                                        </use>
-                                                                    </svg>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0)" class="">
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
-                                                                        </use>
-                                                                    </svg>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
                                                     </td>
-
                                                 </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label class="checkbox">
-                                                            <input type="checkbox" value="1">
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <div class="packages-data">
-                                                            <div class="h6">Silver Plan
-                                                                <i class="" type="button" data-toggle="collapse"
-                                                                    data-target="#plan3" aria-expanded="false"
-                                                                    aria-controls="plan3">
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#expand">
-                                                                        </use>
-                                                                    </svg>
-
-                                                                </i>
 
 
 
 
 
-
-                                                            </div>
-                                                            <ul class="list-bullet collapse" class="" id="plan3">
-                                                                <li>$110.00 / Per 60 Days</li>
-                                                                <li> $140.00 / Per 90 Days</li>
-                                                                <li> $990.00 / Unlimited</li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                    <td><label class="switch switch-sm switch-icon">
-                                                            <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
-                                                        </label></td>
-                                                    <td class="align-right">
-                                                        <ul class="actions">
-                                                            <li>
-                                                                <a href="#" data-toggle="modal" data-target="#edit"
-                                                                    title="Edit">
-
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
-                                                                        </use>
-                                                                    </svg>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0)" class="">
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
-                                                                        </use>
-                                                                    </svg>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label class="checkbox">
-                                                            <input type="checkbox" value="1">
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <div class="packages-data">
-                                                            <div class="h6">Silver Plan
-                                                                <i class="" type="button" data-toggle="collapse"
-                                                                    data-target="#plan4" aria-expanded="false"
-                                                                    aria-controls="plan4">
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#expand">
-                                                                        </use>
-                                                                    </svg>
-
-                                                                </i>
-
-
-
-
-
-
-                                                            </div>
-                                                            <ul class="list-bullet collapse" class="" id="plan4">
-                                                                <li>$110.00 / Per 60 Days</li>
-                                                                <li> $140.00 / Per 90 Days</li>
-                                                                <li> $990.00 / Unlimited</li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                    <td><label class="switch switch-sm switch-icon">
-                                                            <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
-                                                        </label></td>
-                                                    <td class="align-right">
-                                                        <ul class="actions">
-                                                            <li>
-                                                                <a href="#" data-toggle="modal" data-target="#edit"
-                                                                    title="Edit">
-
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
-                                                                        </use>
-                                                                    </svg>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0)" class="">
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
-                                                                        </use>
-                                                                    </svg>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label class="checkbox">
-                                                            <input type="checkbox" value="1">
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <div class="packages-data">
-                                                            <div class="h6">Silver Plan
-                                                                <i class="" type="button" data-toggle="collapse"
-                                                                    data-target="#plan5" aria-expanded="false"
-                                                                    aria-controls="plan5">
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#expand">
-                                                                        </use>
-                                                                    </svg>
-
-                                                                </i>
-
-
-
-
-
-
-                                                            </div>
-                                                            <ul class="list-bullet collapse" class="" id="plan5">
-                                                                <li>$110.00 / Per 60 Days</li>
-                                                                <li> $140.00 / Per 90 Days</li>
-                                                                <li> $990.00 / Unlimited</li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                    <td><label class="switch switch-sm switch-icon">
-                                                            <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
-                                                        </label></td>
-                                                    <td class="align-right">
-                                                        <ul class="actions">
-                                                            <li>
-                                                                <a href="#" data-toggle="modal" data-target="#edit"
-                                                                    title="Edit">
-
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
-                                                                        </use>
-                                                                    </svg>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0)" class="">
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
-                                                                        </use>
-                                                                    </svg>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-
-                                                </tr>
                                             </tbody>
 
                                         </table>
-
-
-
 
 
 
