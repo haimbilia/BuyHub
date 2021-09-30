@@ -117,13 +117,13 @@
                                                         <div class="upload__action">
                                                             <button type="button"><svg>
                                                                     <use
-                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#delete-icon">
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#delete-icon">
                                                                     </use>
                                                                 </svg></button>
                                                             <button type="button">
                                                                 <svg>
                                                                     <use
-                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite.svg#edit-icon">
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#edit-icon">
                                                                     </use>
                                                                 </svg>
                                                             </button>
@@ -222,7 +222,7 @@
         include 'includes/footer.php';
         ?>
 
-            <script src="common-js/vendors/dropzone.js"></script>
+            <script src="<?php echo JS_PATH; ?>vendors/dropzone.js"></script>
             <script>
             $(document).ready(function() {
                 $(".upload_cover").hover(function() {
