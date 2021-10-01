@@ -39,12 +39,17 @@ $frmFields = [
 ];
 
 $i = $x = 0;
+$haveExtraFlds = false;
 foreach ($frmSearch->getAllFields() as $key => $frmFld) {
     if ('submit' == $frmFld->fldType || 'keyword' == $frmFld->getName()) {
         continue;
     } else if ('hidden' == $frmFld->fldType) {
         $frmFields['hidden'][] = $frmFld->getName();
     } else {
+        if ('btn_clear' != $frmFld->getName() && false === $haveExtraFlds) {
+            $haveExtraFlds = true;
+        }
+
         $frmFields['advSrchFlds'][$x][] = [
             'name' => $frmFld->getName(),
             'caption' => $frmFld->getCaption()
@@ -58,8 +63,6 @@ foreach ($frmSearch->getAllFields() as $key => $frmFld) {
         } 
     }
 }
-
-$haveExtraFlds = (0 < count($frmFields['advSrchFlds']));
 
 echo $frmSearch->getFormTag(); 
     foreach ($frmFields['hidden'] as $fldName) {

@@ -218,7 +218,7 @@ class AbusiveWordsController extends AdminBaseController
         $languages = Language::getAllNames();
         $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $languages);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
         return $frm;
     }
 
