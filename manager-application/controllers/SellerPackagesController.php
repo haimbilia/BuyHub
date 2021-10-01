@@ -521,8 +521,8 @@ class SellerPackagesController extends AdminBaseController
     {
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
-
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld->overrideFldType('search');
 
         if (!empty($fields)) {
             $this->addSortingElements($frm);

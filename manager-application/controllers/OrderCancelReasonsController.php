@@ -2,68 +2,113 @@
 
 class OrderCancelReasonsController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
-        $ajaxCallArray = array('deleteRecord', 'form', 'langForm', 'search', 'setup', 'langSetup');
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die($this->str_invalid_Action);
-        }
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewOrderCancelReasons($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditOrderCancelReasons($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewOrderCancelReasons();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewOrderCancelReasons();
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $this->set('frmSearch', $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ORDER_CANCEL_REASONS', $this->adminLangId));
+        $this->getListingData();
+
         $this->_template->render();
+    }
+
+    private function getListingData()
+    {
+        $db = FatApp::getDb();
+        $post = FatApp::getPostedData();
+
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        $srchFrm = $this->getSearchForm($fields);
+
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
+
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
+
+        $srch = OrderCancelReason::getSearchObject($this->adminLangId);
+        $srch->addMultipleFields(array('ocreason.*', 'ocreason_l.ocreason_title', 'ocreason_id as listSerial'));
+
+        if (!empty($post['keyword'])) {
+            $cond = $srch->addCondition('ocreason_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
+            $cond->attachCondition('ocreason_title', 'like', '%' . $post['keyword'] . '%', 'OR');
+        }
+
+        $srch->addOrder($sortBy, $sortOrder);
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $rs = $srch->getResultSet();
+        $arrListing = $db->fetchAll($rs);
+
+        $this->set("arrListing", $arrListing);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('postedData', $post);
+
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
     }
 
     public function search()
     {
-        $this->objPrivilege->canViewOrderCancelReasons();
-
-        $srch = OrderCancelReason::getSearchObject($this->adminLangId);
-
-        $srch->addMultipleFields(array('ocreason.*', 'ocreason_l.ocreason_title'));
-        $srch->addOrder('ocreason_id', 'DESC');
-        $rs = $srch->getResultSet();
-        $records = array();
-        if ($rs) {
-            $records = FatApp::getDb()->fetchAll($rs);
-        }
-
-        $this->set("arrListing", $records);
-        $this->set('recordCount', $srch->recordCount());
-        $this->_template->render(false, false);
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'order-cancel-reasons/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
 
-    public function form($reasonId)
+    public function form()
     {
-        $this->objPrivilege->canViewOrderCancelReasons();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
-        $reasonId = FatUtility::int($reasonId);
+        $frm = $this->getForm($recordId);
 
-        $frm = $this->getForm($reasonId);
-
-        if (0 < $reasonId) {
-            $data = OrderCancelReason::getAttributesById($reasonId, array('ocreason_id', 'ocreason_identifier'));
+        if (0 < $recordId) {
+            $data = OrderCancelReason::getAttributesById($recordId, array('ocreason_id', 'ocreason_identifier'));
 
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
 
         $this->set('languages', Language::getAllNames());
-        $this->set('ocreason_id', $reasonId);
+        $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
     }
@@ -75,60 +120,56 @@ class OrderCancelReasonsController extends AdminBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $reasonId = $post['ocreason_id'];
+        $recordId = $post['ocreason_id'];
         unset($post['ocreason_id']);
-        $record = new OrderCancelReason($reasonId);
+        $record = new OrderCancelReason($recordId);
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $newTabLangId = 0;
-        if ($reasonId > 0) {
+        if ($recordId > 0) {
             $languages = Language::getAllNames();
             foreach ($languages as $langId => $langName) {
-                if (!$row = OrderCancelReason::getAttributesByLangId($langId, $reasonId)) {
+                if (!$row = OrderCancelReason::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
         } else {
-            $reasonId = $record->getMainTableRecordId();
+            $recordId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('reasonId', $reasonId);
+        $this->set('msg', Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($reasonId = 0, $lang_id = 0, $autoFillLangData = 0)
+    public function langForm($autoFillLangData = 0)
     {
-        $this->objPrivilege->canViewOrderCancelReasons();
-        $reasonId = FatUtility::int($reasonId);
-        $lang_id = FatUtility::int($lang_id);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
 
-        if ($reasonId == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+        if (1 > $recordId || 1 > $langId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $langFrm = $this->getLangForm($reasonId, $lang_id);
+        $langFrm = $this->getLangForm($recordId, $langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(OrderCancelReason::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($reasonId, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
-            $langData = OrderCancelReason::getAttributesByLangId($lang_id, $reasonId);
+            $langData = OrderCancelReason::getAttributesByLangId($langId, $recordId);
         }
 
         if ($langData) {
@@ -136,10 +177,10 @@ class OrderCancelReasonsController extends AdminBaseController
         }
 
         $this->set('languages', Language::getAllNames());
-        $this->set('reasonId', $reasonId);
-        $this->set('lang_id', $lang_id);
+        $this->set('recordId', $recordId);
+        $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($lang_id));
+        $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->_template->render(false, false);
     }
 
@@ -148,7 +189,7 @@ class OrderCancelReasonsController extends AdminBaseController
         $this->objPrivilege->canEditOrderCancelReasons();
         $post = FatApp::getPostedData();
 
-        $reasonId = $post['ocreason_id'];
+        $recordId = $post['ocreason_id'];
 
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
@@ -158,72 +199,67 @@ class OrderCancelReasonsController extends AdminBaseController
             $post['lang_id'] = $lang_id;
         }
 
-        if ($reasonId == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+        if ($recordId == 0 || $lang_id == 0) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $frm = $this->getLangForm($reasonId, $lang_id);
+        $frm = $this->getLangForm($recordId, $lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         unset($post['ocreason_id']);
         unset($post['lang_id']);
 
         $data = array(
             'ocreasonlang_lang_id' => $lang_id,
-            'ocreasonlang_ocreason_id' => $reasonId,
+            'ocreasonlang_ocreason_id' => $recordId,
             'ocreason_title' => $post['ocreason_title'],
             // 'ocreason_description'=>$post['ocreason_description']
         );
 
-        $reasonObj = new OrderCancelReason($reasonId);
+        $reasonObj = new OrderCancelReason($recordId);
 
         if (!$reasonObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($reasonObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($reasonObj->getError(), true);
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(OrderCancelReason::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($reasonId)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
         $newTabLangId = 0;
         $languages = Language::getAllNames();
         foreach ($languages as $langId => $langName) {
-            if (!$row = OrderCancelReason::getAttributesByLangId($langId, $reasonId)) {
+            if (!$row = OrderCancelReason::getAttributesByLangId($langId, $recordId)) {
                 $newTabLangId = $langId;
                 break;
             }
         }
 
         $this->set('msg', $this->str_setup_successful);
-        $this->set('reasonId', $reasonId);
+        $this->set('reasonId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getForm($reasonId = 0)
+    private function getForm($recordId = 0)
     {
-        $this->objPrivilege->canViewOrderCancelReasons();
-        $reasonId = FatUtility::int($reasonId);
+        $recordId = FatUtility::int($recordId);
 
         $frm = new Form('frmOrderCancelReason');
-        $frm->addHiddenField('', 'ocreason_id', $reasonId);
+        $frm->addHiddenField('', 'ocreason_id', $recordId);
         $frm->addRequiredField(Labels::getLabel('LBL_Reason_Identifier', $this->adminLangId), 'ocreason_identifier');
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 
-    private function getLangForm($reasonId = 0, $lang_id = 0)
+    private function getLangForm($recordId = 0, $lang_id = 0)
     {
-        $this->objPrivilege->canViewOrderCancelReasons();
         $frm = new Form('frmOrderCancelReasonLang');
-        $frm->addHiddenField('', 'ocreason_id', $reasonId);
+        $frm->addHiddenField('', 'ocreason_id', $recordId);
 
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
@@ -243,7 +279,21 @@ class OrderCancelReasonsController extends AdminBaseController
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        return $frm;
+    }
+
+    private function getSearchForm($fields = [])
+    {
+        $frm = new Form('frmRecordSearch');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
+        $fld->overrideFldType('search');
+
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
+
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
         return $frm;
     }
 
@@ -251,13 +301,12 @@ class OrderCancelReasonsController extends AdminBaseController
     {
         $this->objPrivilege->canEditOrderCancelReasons();
 
-        $reasonId = FatApp::getPostedData('reasonId', FatUtility::VAR_INT, 0);
-        if ($reasonId < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $this->markAsDeleted($reasonId);
+        $this->markAsDeleted($recordId);
 
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
@@ -265,36 +314,66 @@ class OrderCancelReasonsController extends AdminBaseController
     public function deleteSelected()
     {
         $this->objPrivilege->canEditOrderCancelReasons();
-        $ocreasonIdsArr = FatUtility::int(FatApp::getPostedData('ocreason_ids'));
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('ocreason_ids'));
 
-        if (empty($ocreasonIdsArr)) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+        if (empty($recordIdsArr)) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
 
-        foreach ($ocreasonIdsArr as $reasonId) {
-            if (1 > $reasonId) {
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
                 continue;
             }
-            $this->markAsDeleted($reasonId);
+            $this->markAsDeleted($recordId);
         }
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($reasonId)
+    private function markAsDeleted($recordId)
     {
-        $reasonId = FatUtility::int($reasonId);
-        if (1 > $reasonId) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
-        $obj = new OrderCancelReason($reasonId);
+        $obj = new OrderCancelReason($recordId);
         if (!$obj->deleteRecord(true)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
+    }
+
+    private function getFormColumns(): array
+    {
+        $ordercancelReasonTblHeadingCols = CacheHelper::get('ordercancelReasonTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($ordercancelReasonTblHeadingCols) {
+            return json_decode($ordercancelReasonTblHeadingCols);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
+            'ocreason_identifier' => Labels::getLabel('LBL_REASON_IDENTIFIER', $this->adminLangId),
+            'ocreason_title' => Labels::getLabel('LBL_REASON_TITLE', $this->adminLangId),
+            'action' =>  Labels::getLabel('LBL_ACTION', $this->adminLangId),
+        ];
+        CacheHelper::create('ordercancelReasonTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return [
+            'select_all',
+            'listSerial',
+            'ocreason_identifier',
+            'ocreason_title',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }

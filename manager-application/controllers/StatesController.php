@@ -24,7 +24,8 @@ class StatesController extends AdminBaseController
     private function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld->overrideFldType('search');
         
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId, true);

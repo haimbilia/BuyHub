@@ -173,8 +173,9 @@ class CatalogReportController extends AdminBaseController
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
         }
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld->overrideFldType('search');
 
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);

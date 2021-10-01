@@ -240,7 +240,9 @@ class BlogCommentsController extends AdminBaseController
             $this->addSortingElements($frm);
         }
 
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld->overrideFldType('search');
+
         $statusArr = BlogComment::getBlogCommentStatusArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Comment_Status', $this->adminLangId), 'bpcomment_approved', $statusArr, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
         
