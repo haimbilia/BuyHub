@@ -1,77 +1,78 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');?>
-<div class='page'>
-    <div class='container container-fluid'>
-        <div class="row">
-            <div class="col-lg-12 col-md-12 space">
-                <div class="page__title">
-                    <div class="row">
-                        <div class="col--first col-lg-6">
-                            <span class="page__icon">
-                                <i class="ion-android-star"></i></span>
-                            <h5><?php echo Labels::getLabel('LBL_Manage_Abusive_Words', $adminLangId); ?> </h5>
-                             <?php $this->includeTemplate('_partial/header/header-breadcrumb.php'); ?>
-                        </div>
-                    </div>
-                </div>
-                <section class="section searchform_filter">
-                    <div class="sectionhead">
-                        <h4> <?php echo Labels::getLabel('LBL_Search...', $adminLangId); ?></h4>
-                    </div>
-                    <div class="sectionbody space togglewrap" style="display:none;">
-                        <?php
-                            $frmSearch->setFormTagAttribute('onsubmit', 'searchWords(this); return(false);');
-                            $frmSearch->setFormTagAttribute('id', 'frmLabelsSearch');
-                            $frmSearch->setFormTagAttribute('class', 'web_form');
-                            $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
-                            $frmSearch->developerTags['fld_default_col'] = 6;
+<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_ABUSIVE_WORDS', $adminLangId);
 
-                            $btn = $frmSearch->getField('btn_clear');
-                            $btn->setFieldTagAttribute('onClick', 'clearSearch()');
-                            echo  $frmSearch->getFormHtml();
-                        ?>
-                    </div>
-                </section>
-                <section class="section">
-                    <div class="sectionhead">
-                        <h4><?php echo Labels::getLabel('LBL_Abusive_Keyword_List', $adminLangId); ?> </h4>
-                        <?php
-                            if ($canEdit) {
-                                $data = [
-                                    'adminLangId' => $adminLangId,
-                                    'deleteButton' => true,
-                                    'otherButtons' => [
-                                        [
-                                            'attr' => [
-                                                'href' => 'javascript:void(0)',
-                                                'onclick' => 'abusiveKeywordForm(0)',
-                                                'title' => Labels::getLabel('LBL_Add_Keyword', $adminLangId)
-                                            ],
-                                            'label' => '<i class="fas fa-plus"></i>'
-                                        ],
-                                    ]
-                                ];
-            
-                                $this->includeTemplate('_partial/action-buttons.php', $data, false);
-                            }
-                        ?>
-                    </div>
-                    <div class="sectionbody">
-                        <div class="tablewrap">
-                            <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $adminLangId); ?> </div>
+/* No sorting functionality required if no record found. */
+if (1 > count($arrListing)) {
+    $allowedKeysForSorting = [];
+}
+
+$tableHeadAttrArr = [
+    'select_all' => [
+        'width' => '5%'
+    ],
+    'listSerial' => [
+        'width' => '10%'
+    ],
+    'abusive_keyword' => [
+        'width' => '35%'
+    ],
+    'language_name' => [
+        'width' => '35%'
+    ],
+    'action' => [
+        'width' => '15%'
+    ],
+];
+
+$langLayout = [];
+foreach ($languages as $langId => $langName) {
+    $layOutDir = Language::getLayoutDirection($langId);
+    $langLayout[$langId] = $layOutDir;
+}
+
+$controller = str_replace('Controller', '', FatApp::getController());
+?>
+<main class="main mainJs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
+                <div class="card">
+                    <?php $data = [
+                        'canEdit' => $canEdit,
+                        'adminLangId' => $adminLangId,
+                        'cardHeadTitle' => Labels::getLabel('LBL_ABUSIVE_WORDS', $adminLangId),
+                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_ABUSIVE_WORDS', $adminLangId), ['{COUNT}' => $recordCount]),
+                        'newRecordBtn' => true,
+                        'deleteButton' => true
+                    ];
+
+                    $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
+                    <div class="card-body">
+                        <div class="table-responsive listingTableJs">
+                            <?php
+                            require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
+                            require_once(CONF_THEME_PATH . 'abusive-words/search.php');
+
+                            $data = [
+                                'tbl' => $tbl, /* Received from listing-column-head.php file. */
+                                'controller' => $controller, /* Used in case of performing bulk action. */
+                                'formAction' => 'deleteSelected'
+                            ];
+                            $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
                         </div>
                     </div>
-                </section>
+                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-foot.php'); ?>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<script type="text/javascript">
-    var langLayOuts = {
-        <?php foreach ($languages as $langId => $langName) {
-            $layOutDir = Language::getLayoutDirection($langId);
-            echo '"'.$langId.'":"'.$layOutDir.'",';
-        } ?>
-    };
+</main>
+
+<script>
+    var controllerName = '<?php echo $controller; ?>';
+    getHelpCenterContent(controllerName);
+    var langLayOuts = <?php echo json_encode($langLayout); ?>;
     (function() {
         changeFormLayOut = function(el) {
             var langId = $(el).val();
