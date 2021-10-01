@@ -431,6 +431,8 @@
                                                                             <li><a href="local-sort.php">Local
                                                                                     Sort</a>
                                                                             </li>
+                                                                            <li><a href="responsive-datatable.php">Responsive Data Table</a>
+                                                                            </li>
                                                                             <li><a
                                                                                     href="translation.php">Translation</a>
                                                                             </li>
