@@ -2,54 +2,72 @@
 
 class AbusiveWordsController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
-        $ajaxCallArray = array('deleteRecord', 'form', 'search', 'setup');
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die('Invalid Action.');
-        }
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewAbusiveWords($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditAbusiveWords($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewAbusiveWords();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewAbusiveWords();
-        $frmSearch = $this->getSearchForm();
-        $this->set("frmSearch", $frmSearch);
-        //$this->set('languages', Language::getAllNames());
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $this->set('frmSearch', $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('languages', Language::getAllNames());
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ABUSIVE_WORDS', $this->adminLangId));
+        $this->getListingData();
+
         $this->_template->render();
     }
 
-    public function search()
+    private function getListingData()
     {
-        $this->objPrivilege->canViewAbusiveWords();
+        $db = FatApp::getDb();
+        $post = FatApp::getPostedData();
 
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $searchForm = $this->getSearchForm();
-        $data = FatApp::getPostedData();
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
-        $post = $searchForm->getFormDataFromArray($data);
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        $srchFrm = $this->getSearchForm($fields);
+
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
+
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
 
         $srch = Abusive::getSearchObject();
-        $srch->joinTable('tbl_languages', 'inner join', 'abusive_lang_id = language_id and language_active = ' . applicationConstants::ACTIVE);
-        $srch->addOrder('aw.' . Abusive::DB_TBL_PREFIX . 'lang_id', 'ASC');
+        $srch->addMultipleFields(['aw.*', 'tl.*', 'abusive_id as listSerial']);
+        $srch->joinTable('tbl_languages', 'inner join', 'abusive_lang_id = language_id and language_active = ' . applicationConstants::ACTIVE, 'tl');
+        
+        $srch->addOrder($sortBy, $sortOrder);
+
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->setPageSize($pageSize);
 
         if (!empty($post['keyword'])) {
-            $cond = $srch->addCondition('aw.abusive_keyword', 'like', '%' . $post['keyword'] . '%');
+            $srch->addCondition('aw.abusive_keyword', 'like', '%' . $post['keyword'] . '%');
         }
 
         if ($post['lang_id'] > 0) {
-            $cond = $srch->addCondition('aw.abusive_lang_id', '=', $post['lang_id']);
+            $srch->addCondition('aw.abusive_lang_id', '=', $post['lang_id']);
         }
 
         $rs = $srch->getResultSet();
@@ -59,32 +77,46 @@ class AbusiveWordsController extends AdminBaseController
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
     }
 
-    public function form($abusive_id)
+    public function search()
     {
-        $this->objPrivilege->canViewAbusiveWords();
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'abusive-words/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        $abusive_id = FatUtility::int($abusive_id);
+    public function form()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
-        $frm = $this->getForm($abusive_id);
+        $frm = $this->getForm($recordId);
 
-        $data = array('abusive_id' => $abusive_id);
-        if ($abusive_id > 0) {
-            $data = Abusive::getAttributesById($abusive_id);
+        $data = array('abusive_id' => $recordId);
+        if ($recordId > 0) {
+            $data = Abusive::getAttributesById($recordId);
             if ($data == false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
         }
 
         $frm->fill($data);
 
-        $this->set('abusive_id', $abusive_id);
+        $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('languages', Language::getAllNames());
+        $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
         $this->_template->render(false, false);
     }
 
@@ -105,21 +137,19 @@ class AbusiveWordsController extends AdminBaseController
 		}
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $abusive_id = FatUtility::int($post['abusive_id']);
+        $recordId = FatUtility::int($post['abusive_id']);
         unset($post['abusive_id']);
 
-        $record = new Abusive($abusive_id);
+        $record = new Abusive($recordId);
         $record->assignValues($post);
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
-        $this->set('msg', 'Set up successful');
+        $this->set('msg', Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -127,19 +157,17 @@ class AbusiveWordsController extends AdminBaseController
     {
         $this->objPrivilege->canEditAbusiveWords();
 
-        $abusive_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
-        if ($abusive_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $data = Abusive::getAttributesById($abusive_id);
+        $data = Abusive::getAttributesById($recordId);
         if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $this->markAsDeleted($abusive_id);
+        $this->markAsDeleted($recordId);
 
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
@@ -147,71 +175,98 @@ class AbusiveWordsController extends AdminBaseController
     public function deleteSelected()
     {
         $this->objPrivilege->canEditAbusiveWords();
-        $abusiveIdsArr = FatUtility::int(FatApp::getPostedData('abusive_ids'));
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('abusive_ids'));
 
-        if (empty($abusiveIdsArr)) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+        if (empty($recordIdsArr)) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
 
-        foreach ($abusiveIdsArr as $abusiveId) {
-            $data = Abusive::getAttributesById($abusiveId);
-            if (1 > $abusiveId || false === $data) {
+        foreach ($recordIdsArr as $recordId) {
+            $data = Abusive::getAttributesById($recordId);
+            if (1 > $recordId || false === $data) {
                 continue;
             }
 
-            $this->markAsDeleted($abusiveId);
+            $this->markAsDeleted($recordId);
         }
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($abusiveId)
+    private function markAsDeleted($recordId)
     {
-        $abusiveId = FatUtility::int($abusiveId);
-        if (1 > $abusiveId) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
-        $obj = new Abusive($abusiveId);
+        $obj = new Abusive($recordId);
         if (!$obj->deleteRecord(false)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
     }
 
-    private function getSearchForm()
+    private function getSearchForm($fields = [])
     {
-        $this->objPrivilege->canViewAbusiveWords();
-        $frm = new Form('frmWordSearch');
-        $f1 = $frm->addTextBox('Keyword', 'keyword', '');
+        $frm = new Form('frmRecordSearch');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
+        $frm->addTextBox('Keyword', 'keyword', '');
         $languages = Language::getAllNames();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', array(0 => Labels::getLabel('LBL_Does_not_Matter', $this->adminLangId)) + $languages, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', 'Search');
-        $fld_cancel = $frm->addButton("", "btn_clear", "Clear Search");
-        $fld_submit->attachField($fld_cancel);
+        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $languages);
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         return $frm;
     }
 
-    private function getForm($abusiveId = 0)
+    private function getForm($recordId = 0)
     {
-        $this->objPrivilege->canViewAbusiveWords();
         $frm = new Form('frmAbusiveWord');
-        $frm->addHiddenField('', 'abusive_id', $abusiveId);
+        $frm->addHiddenField('', 'abusive_id', $recordId);
         $languages = Language::getAllNames();
 		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'abusive_lang_id', $languages, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'abusive_lang_id', $languages);
 		} else  {
 			$lang_id = array_key_first($languages); 
 			$frm->addHiddenField('', 'abusive_lang_id', $lang_id);
 		}
-
-        
         
         $frm->addTextbox('Keyword', 'abusive_keyword');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
+    }
+
+    private function getFormColumns(): array
+    {
+        $abusiveWordsTblHeadingCols = CacheHelper::get('abusiveWordsTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($abusiveWordsTblHeadingCols) {
+            return json_decode($abusiveWordsTblHeadingCols);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
+            'abusive_keyword' => Labels::getLabel('LBL_Keyword', $this->adminLangId),
+            'language_name' => Labels::getLabel('LBL_Language', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_Action', $this->adminLangId),
+        ];
+        CacheHelper::create('abusiveWordsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return [    
+            'select_all',
+            'listSerial',
+            'abusive_keyword',
+            'language_name',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }

@@ -2070,9 +2070,55 @@ strong {
         padding: 1.5rem 2rem;
     }
 }
+
 .custom-ui-autocomplete {
     max-height: 200px;
     overflow: hidden;
     overflow-y: auto;
-	z-index:9999!important;
+    z-index: 9999!important;
+}
+
+.click-to-copy {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    li {
+        display: inline-flex;
+        align-items: center;
+        margin-#{$end-direction}: 0.7rem;
+        margin-bottom: 0.7rem;
+        &:last-child {
+            margin-#{$end-direction}: 0;
+        }
+    }
+    .text {
+        border: $border;
+        border-radius: 20px;
+        padding: 6px 1rem;
+        font-size: 0.85rem;
+        color: $txt-gray;
+        cursor: pointer;
+    }
+    .bounceIn {
+        &:focus {
+            animation: bounce-in 0.75s ease infinite;
+            outline: none;
+            @keyframes bounce-in {
+                0% {
+                    opacity: 0;
+                    transform: scale(.3);
+                }
+                50% {
+                    opacity: 1;
+                    transform: scale(1.05);
+                }
+                70% {
+                    transform: scale(.9);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+        }
+    }
 }

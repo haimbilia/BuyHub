@@ -99,3 +99,93 @@
         align-items: center;
     }
 }
+
+.accordion-categories ul {
+    background: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+#sorting-categories {
+    margin: 10px auto;
+    background: #fff;
+}
+
+#sorting-categories,
+#sorting-categories li {
+    list-style-type: none;
+    border: 1px solid #eee;
+    list-style: none;
+}
+
+#sorting-categories li {
+    padding-left: 30px;
+    margin: 5px;
+    border: 1px solid #eeeeee;
+    background-color: #f7f8fa;
+    position: relative;
+}
+
+#sorting-categories li div {
+    background-color: #fff;
+}
+
+#sorting-categories li,
+#sorting-categories ul,
+#sorting-categories div {
+    border-radius: 3px;
+}
+
+.sorting-bar {
+    position: relative;
+    padding: 10px;
+    height: 45px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+
+.sorting-title {}
+
+.sorting-actions {}
+
+.sortableListsOpener {
+    float: left;
+    background-position: center center;
+    background-repeat: no-repeat;
+    margin-right: 0px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 12px;
+    cursor: pointer;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.sortableListsOpener .sort-icon {
+    width: 30px;
+    height: 45px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}

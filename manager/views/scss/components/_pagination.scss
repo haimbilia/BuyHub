@@ -21,7 +21,7 @@
              align-items: center;
              justify-content: center;
              font-size: 0.875rem;
-             color: $body-color;
+             color: $txt-body;
              border: none;
              border: $border;
              border-radius: 1px;
@@ -40,6 +40,10 @@
                  border-color: $brand-color;
                  background: $brand-color;
                  color: $brand-color-inverse;
+                 &:hover {
+                     background-color: darken($brand-color, 5%);
+                     color: $brand-color-inverse !important;
+                 }
              }
          }
          &.disabled {

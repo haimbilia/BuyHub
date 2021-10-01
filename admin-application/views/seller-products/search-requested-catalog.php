@@ -23,7 +23,7 @@
         $serialNo++;
         $tr = $tbl->appendElement('tr', array('class' => ''));
 
-        foreach ($arr_flds as $key => $val) {
+        foreach ($fields as $key => $val) {
             $td = $tr->appendElement('td');
             switch ($key) {
                 case 'listSerial':

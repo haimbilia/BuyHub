@@ -214,7 +214,7 @@ class ZonesController extends AdminBaseController
         $recordId = $post['zone_id'];
         $languages = Language::getAllNames();
 		if(count($languages) > 1){
-			 $lang_id = $post['lang_id'];
+			$lang_id = $post['lang_id'];
 		} else  {
 			$lang_id = array_key_first($languages); 
 		}

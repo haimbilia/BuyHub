@@ -59,7 +59,7 @@
     line-height: 1.5;
     img {
         margin: 2rem auto;
-        max-width: 400px;
+        max-width: 200px;
     }
     .data {
         h6 {
@@ -202,4 +202,23 @@
     }
 }
 
-.packages-data {}
+.list-chips {
+    display: flex;
+    align-items: center;
+    li {
+        display: inline-block;
+        background-color: $bg-gray;
+        border-radius: 20px;
+        padding: 0.5rem 1rem;
+        margin-#{$end-direction}: 1rem;
+        a {
+            display: flex;
+            align-items: center;
+            .svg {
+                width: 12px;
+                height: 12px;
+                margin-#{$end-direction}: 10px;
+            }
+        }
+    }
+}

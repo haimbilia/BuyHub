@@ -197,7 +197,7 @@ class SellerPackagesController extends AdminBaseController
         $lang_id = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
 
         if (1 > $recordId || 1 > $lang_id) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $langFrm = $this->getLangForm($recordId, $lang_id);

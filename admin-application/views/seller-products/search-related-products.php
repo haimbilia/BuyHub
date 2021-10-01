@@ -9,7 +9,7 @@ $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table
 $thead = $tbl->appendElement('thead');
 $th = $thead->appendElement('tr', array('class' => ''));
 
-foreach ($arr_flds as $key => $val) {
+foreach ($fields as $key => $val) {
     if ('product_name' == $key) {
         $th->appendElement('th', array('width' => '25%'), $val);
     } else {
@@ -19,7 +19,7 @@ foreach ($arr_flds as $key => $val) {
 
 foreach ($arrListing as $selProdId => $relatedProds) {
     $tr = $tbl->appendElement('tr', array());
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $tr->setAttribute('id', 'row-' . $selProdId);
         if ($key == 'product_name') {
             $td = $tr->appendElement('td', array('class' => 'js-product-edit pointer', 'row-id' => $selProdId, 'title' => Labels::getLabel('LBL_Click_Here_For_Edit', $adminLangId)));

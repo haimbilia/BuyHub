@@ -232,7 +232,7 @@ class StatesController extends AdminBaseController
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
 
         if (1 > $recordId || 1 > $langId) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $langFrm = $this->getLangForm($recordId, $langId);
@@ -340,7 +340,7 @@ class StatesController extends AdminBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('state_ids'));
         if (empty($recordIdsArr) || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -360,7 +360,7 @@ class StatesController extends AdminBaseController
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
 
         $stateObj = new States($recordId);

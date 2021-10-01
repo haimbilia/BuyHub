@@ -41,11 +41,6 @@ class applicationConstants
     public const PUBLISHED = 1;
     public const DRAFT = 0;
 
-    public const BLOG_CONTRIBUTION_PENDING = 0;
-    public const BLOG_CONTRIBUTION_APPROVED = 1;
-    public const BLOG_CONTRIBUTION_POSTED = 2;
-    public const BLOG_CONTRIBUTION_REJECTED = 3;
-
     public const GENDER_MALE = 1;
     public const GENDER_FEMALE = 2;
     public const GENDER_OTHER = 3;
@@ -341,34 +336,6 @@ class applicationConstants
         return array(
             static::DRAFT => Labels::getLabel('LBL_Draft', $langId),
             static::PUBLISHED => Labels::getLabel('LBL_Published', $langId),
-        );
-    }
-
-    public static function getBlogContributionStatusArr($langId)
-    {
-        $langId = FatUtility::int($langId);
-        if ($langId < 1) {
-            $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
-        }
-
-        return array(
-            static::BLOG_CONTRIBUTION_PENDING => Labels::getLabel('LBL_Pending', $langId),
-            static::BLOG_CONTRIBUTION_APPROVED => Labels::getLabel('LBL_Approved', $langId),
-            static::BLOG_CONTRIBUTION_POSTED => Labels::getLabel('LBL_Posted', $langId),
-            static::BLOG_CONTRIBUTION_REJECTED => Labels::getLabel('LBL_Rejected', $langId),
-        );
-    }
-
-    public static function getBlogCommentStatusArr($langId)
-    {
-        $langId = FatUtility::int($langId);
-        if ($langId < 1) {
-            $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
-        }
-
-        return array(
-            static::INACTIVE => Labels::getLabel('LBL_Pending', $langId),
-            static::ACTIVE => Labels::getLabel('LBL_Approved', $langId)
         );
     }
 

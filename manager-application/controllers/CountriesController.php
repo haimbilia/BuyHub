@@ -107,7 +107,7 @@ class CountriesController extends AdminBaseController
         if (0 < $recordId) {     
             $data = Countries::getAttributesByLangId(FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1), $recordId, null, true);
             if ($data === false) {
-                LibHelper::exitWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
@@ -177,15 +177,15 @@ class CountriesController extends AdminBaseController
         $lang_id = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
 
         if (1 > $recordId || 1 > $lang_id) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $langFrm = $this->getLangForm($recordId, $lang_id);
         if (0 < $autoFillLangData) {
             $updateLangDataObj = new TranslateLangData(Countries::DB_TBL_LANG);
             $translatedData = $updateLangDataObj->getTranslatedData($recordId, $lang_id);
-            if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataObj->getError());
+            if (false === $translatedData) {            
+                LibHelper::exitWithError($updateLangDataObj->getError(), true);
             }
             $langData = current($translatedData);
         } else {

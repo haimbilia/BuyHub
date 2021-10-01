@@ -78,6 +78,7 @@
                                     <div class="card-body">
                                         <ul class="pages__list-wrapper">
                                             <li><a href="products.php">Products</a></li>
+                                            <li><a href="seller-packages.php">Seller Packages</a></li>
                                             <li><a href="theme-setting.php">Theme Setting</a></li>
                                             <li><a href="listing.php">Listing</a></li>
                                             <li><a href="login-1.php">Login</a></li>
@@ -97,7 +98,7 @@
                                 <div class="card">
                                     <div class="card-head">
                                         <div class="card-head-label">
-                                            <h3 class="card-head-title"> Page list </h3>
+                                            <h3 class="card-head-title"> UI Components </h3>
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -430,6 +431,9 @@
                                                                             </li>
                                                                             <li><a href="local-sort.php">Local
                                                                                     Sort</a>
+                                                                            </li>
+                                                                            <li><a href="responsive-datatable.php">Responsive
+                                                                                    Data Table</a>
                                                                             </li>
                                                                             <li><a
                                                                                     href="translation.php">Translation</a>
