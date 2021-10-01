@@ -1,68 +1,74 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+
 <div class="modal-header">
     <h5 class="modal-title">
         <?php echo Labels::getLabel('LBL_COMMISSION_HISTORY', $adminLangId); ?>
     </h5>
 </div>
-<div class="modal-body form-edit">
+<div class="modal-body form-edit scroll scroll-y ">
     <div class="form-edit-body">
-        <?php
-        $arr_flds = array(
-            'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
-            'csh_commsetting_prodcat_id' => Labels::getLabel('LBL_Category', $adminLangId),
-            'csh_commsetting_user_id' => Labels::getLabel('LBL_Seller', $adminLangId),
-            'csh_commsetting_product_id' => Labels::getLabel('LBL_Product', $adminLangId),
-            'csh_commsetting_fees' => Labels::getLabel('LBL_Fees_[%]', $adminLangId),
-            'csh_added_on' => Labels::getLabel('LBL_Added_On', $adminLangId),
-        );
-        $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive'));
-        $th = $tbl->appendElement('thead')->appendElement('tr');
-        foreach ($arr_flds as $val) {
-            $e = $th->appendElement('th', array(), $val);
-        }
-
-        $serialNo = ($page > 1) ? ($page - 1) * $pageSize : 0;
-        foreach ($arrListing as $sn => $row) {
-            $serialNo++;
-            $tr = $tbl->appendElement('tr');
-
-            foreach ($arr_flds as $key => $val) {
-                $td = $tr->appendElement('td');
-                switch ($key) {
-                    case 'listSerial':
-                        $td->appendElement('plaintext', array(), $serialNo);
-                        break;
-                    case 'csh_commsetting_prodcat_id':
-                        $td->appendElement('plaintext', array(), CommonHelper::displayText($row['prodcat_name']), true);
-                        break;
-                    case 'csh_commsetting_user_id':
-                        $td->appendElement('plaintext', array(), CommonHelper::displayText($row['vendor']), true);
-                        break;
-                    case 'csh_commsetting_product_id':
-                        $td->appendElement('plaintext', array(), CommonHelper::displayText($row['product_name']), true);
-                        break;
-                    case 'csh_commsetting_added_on':
-                        $td->appendElement('plaintext', array(), FatDate::format($row[$key]), true);
-                        break;
-                    case 'csh_commsetting_fees':
-                        $td->appendElement('plaintext', array(), CommonHelper::numberFormat($row[$key]), true);
-                        break;
-                    default:
-                        $td->appendElement('plaintext', array(), CommonHelper::displayText($row[$key]), true);
-                        break;
-                }
-            }
-        }
+        <?php 
         if (count($arrListing) == 0) {
-            $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Record_Found', $adminLangId));
-        }
-        echo $tbl->getHtml();
-        $postedData['page'] = $page;
-        echo FatUtility::createHiddenFormFromData($postedData, array(
-            'name' => 'frmHistorySearchPaging'
-        ));
-        $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'pageSize' => $pageSize, 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToHistoryPage', 'adminLangId' => $adminLangId);
-        $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
-        ?>
+            $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $adminLangId));
+        } else {
+            $dayPrint = '';
+            foreach ($arrListing as $sn => $row) {
+                $current = strtotime(date("Y-m-d"));
+                $date    = strtotime($row['csh_added_on']);
+                $time    = date('H:i', $date);
+
+                $datediff = $date - $current;
+                $difference = floor($datediff / (60 * 60 * 24));
+
+                $day = date('d-m-Y', $date);
+                if ($difference == 0) {
+                    $day = Labels::getLabel('LBL_TODAY', $adminLangId);
+                } else if ($difference == -1) {
+                    $day = Labels::getLabel('LBL_YESTERDAY', $adminLangId);
+                }
+
+                if ($dayPrint != $day) { 
+                    if ('' != $dayPrint) { ?>
+                            </ul>
+                        </div> <!-- Close Div On Every Day Change -->
+                    <?php }
+                    $dayPrint = $day; ?>
+                    
+                    <div class="timeline-v4">
+                        <div class="timeline-v4__item-date">
+                            <span class="tag">
+                                <?php echo $day; ?>
+                            </span>
+                        </div>
+                        <ul class="timeline-v4__items">
+                <?php } ?>
+                            <li class="timeline-v4__item">
+                                <span class="timeline-v4__item-time"><?php echo $time; ?></span>
+                                <div class="timeline-v4__item-desc">
+                                    <span class="timeline-v4__item-text" title="<?php echo Labels::getLabel('LBL_Fees', $adminLangId); ?>">
+                                        <span class="tag">
+                                            <?php echo CommonHelper::numberFormat($row['csh_commsetting_fees']) . '%'; ?>
+                                        </span>
+                                    </span>
+                                    <span class="timeline-v4__item-text" title="<?php echo Labels::getLabel('LBL_CATEGORY', $adminLangId); ?>">
+                                        <b><?php echo Labels::getLabel('LBL_CATEGORY', $adminLangId); ?>:</b> <?php echo CommonHelper::displayText($row['prodcat_name']); ?>
+                                    </span>
+                                    <span class="timeline-v4__item-text" title="<?php echo Labels::getLabel('LBL_PRODUCT', $adminLangId); ?>">
+                                        <b><?php echo Labels::getLabel('LBL_PRODUCT', $adminLangId); ?>:</b> <?php echo CommonHelper::displayText($row['product_name']); ?>
+                                    </span>
+                                    <span class="timeline-v4__item-user-name" title="<?php echo Labels::getLabel('LBL_Seller', $adminLangId); ?>">
+                                        <a href="#" class="link link--dark timeline-v4__item-link">
+                                            <?php
+                                                $by = Labels::getLabel('LBL_BY_{NAME}', $adminLangId);
+                                                echo CommonHelper::replaceStringData($by, ['{NAME}' => CommonHelper::displayText($row['vendor'])])
+                                            ?>
+                                        </a>
+                                    </span>
+                                </div>
+                            </li>
+            <?php } ?>
+                        </ul>
+                    </div> <!-- Close Div After Last Entry. -->      
+        <?php } ?>
     </div>
 </div>

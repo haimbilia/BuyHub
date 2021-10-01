@@ -1,24 +1,36 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('class', 'web_form form_horizontal');
-$frm->setFormTagAttribute('onsubmit', 'setupAbusiveWords(this); return(false);');
+
+HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('id', 'frmAbusiveWord');
-$frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 12;
+$frm->setFormTagAttribute('class', 'modal-body form form-edit layout--' . $formLayout);
+$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 	
-$abusive_lang_id_fld = $frm->getField('abusive_lang_id');
-$abusive_lang_id_fld->addFieldTagAttribute( 'onChange', 'changeFormLayOut(this);' );
-
+$fld = $frm->getField('abusive_lang_id');
+$fld->addFieldTagAttribute( 'onChange', 'changeFormLayOut(this);' );
 ?>
-<section class="section">
-	<div class="sectionhead">
-		<h4><?php echo Labels::getLabel('LBL_Abusive_Keyword_Setup',$adminLangId); ?></h4>
-	</div>
-	<div class="sectionbody space">
-		<div class="border-box border-box--space">
-			<?php echo $frm->getFormHtml(); ?>
-		</div>
-	</div>												
-</section>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php echo Labels::getLabel('LBL_ABUSIVE_KEYWORD_SETUP', $adminLangId); ?>
+    </h5>
+</div>
+<div class="modal-body form-edit">
+    <div class="form-edit-body loaderContainerJs">
+        <?php echo $frm->getFormHtml(); ?>
+    </div>
 
-<script type="text/javascript">
-</script>
+    <div class="form-edit-foot">
+        <div class="row">
+            <div class="col-auto">
+                <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
+                    <?php 
+                        if (0 < $recordId) {
+                            echo Labels::getLabel('LBL_UPDATE', $adminLangId); 
+                        } else {
+                            echo Labels::getLabel('LBL_SAVE', $adminLangId); 
+                        }
+                    ?>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

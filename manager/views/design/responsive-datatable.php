@@ -88,7 +88,7 @@
                         <div class="card-body card__body--fit">
                             <!--begin: Datatable -->
                             <div class="dataTables_wrapper dt-bootstrap4" id="local_data">
-                                <table class="table table-striped- table-bordered table-hover table-checkable responsive dataTable dtr-inline collapsed" id="m_table_1" role="grid" aria-describedby="m_table_1_info" >
+                                <table class="table table-dashed" id="m_table_1" role="grid" aria-describedby="m_table_1_info" >
                                     <thead>
                                         <tr role="row">
                                             <th class="sorting_asc" tabindex="0" aria-controls="m_table_1" rowspan="1" colspan="1" style="width: 50.25px;" aria-sort="ascending" aria-label="OrderID: activate to sort column descending">OrderID</th>
@@ -538,7 +538,11 @@
     <script>
         $(document).ready(function() {
     $('#m_table_1').DataTable({
-        responsive: true
+        responsive: true,
+        paging: false,
+        "searching": false,
+        "info": false,
+    
     });
 } );
     </script>

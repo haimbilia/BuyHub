@@ -15,6 +15,7 @@ class AbusiveWordsController extends AdminBaseController
 
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('languages', Language::getAllNames());
         $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ABUSIVE_WORDS', $this->adminLangId));
         $this->getListingData();
 
@@ -115,6 +116,7 @@ class AbusiveWordsController extends AdminBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('languages', Language::getAllNames());
+        $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
         $this->_template->render(false, false);
     }
 
@@ -205,13 +207,13 @@ class AbusiveWordsController extends AdminBaseController
 
     private function getSearchForm($fields = [])
     {
-        $frm = new Form('frmWordSearch');
+        $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
             $this->addSortingElements($frm);
         }
         $frm->addTextBox('Keyword', 'keyword', '');
         $languages = Language::getAllNames();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', array(0 => Labels::getLabel('LBL_Does_not_Matter', $this->adminLangId)) + $languages, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
+        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $languages);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
         $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         return $frm;
@@ -223,7 +225,7 @@ class AbusiveWordsController extends AdminBaseController
         $frm->addHiddenField('', 'abusive_id', $recordId);
         $languages = Language::getAllNames();
 		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'abusive_lang_id', $languages, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'abusive_lang_id', $languages);
 		} else  {
 			$lang_id = array_key_first($languages); 
 			$frm->addHiddenField('', 'abusive_lang_id', $lang_id);
