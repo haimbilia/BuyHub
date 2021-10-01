@@ -211,7 +211,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label class="label">Date From</label>
                                                             <input class="field--calender fld-date hasDatepicker"
@@ -219,7 +219,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label class="label">Date To </label>
                                                             <input class="field--calender fld-date hasDatepicker"
@@ -227,10 +227,9 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="label"> &nbsp; </label>
-
+                                                            <label class="label"></label>
                                                             <button type="reset"
                                                                 class="btn btn-outline-brand">Cancel</button>
                                                         </div>
@@ -1341,7 +1340,8 @@
                                             </div>
                                             <div class="form-edit-foot">
                                                 <div class="row">
-                                                    <div class="col"><button type="reset"
+                                                    <div class="col">
+                                                        <button type="reset"
                                                             class="btn btn-outline-brand">Cancel</button>
                                                     </div>
                                                     <div class="col-auto">

@@ -100,7 +100,7 @@
 
                                     </div>
                                     <div class="card-body">
-                                        <table class="table table-packages">
+                                        <table class="table">
                                             <thead>
                                                 <tr>
                                                     <th>

@@ -1,6 +1,10 @@
 :root {
     --brand-color: #0073CF;
     --brand-color-inverse: #FFFFFF;
+    --primary-color: #0073CF;
+    --primary-color-inverse: #FFFFFF;
+    --third-color: #0073CF;
+    --third-color-inverse: #FFFFFF;
 }
 
 [data-theme="dark"] {
@@ -20,12 +24,10 @@
 }
 
 //default colors
-$blue:var(--brand-color);
-$primary:#ff3a59;
 $dark-color:#888;
 //dynamic theme colors
-$brand-color: var(--brand-color);
-$brand-color-inverse:var(--brand-color-inverse);
+$brand-color: #0073CF;
+$brand-color-inverse:#FFFFFF;
 $primary-color: var(--primary-color);
 $primary-color-inverse: var(--primary-color-inverse);
 $secondary-color: #6DCDEF;
@@ -33,9 +35,8 @@ $secondary-color-inverse: #FFFFFF;
 $third-color: var(--third-color);
 $third-color-inverse:var(--third-color-inverse);
 //fixed theme colors 
-$body-color: #000;
-$txt-body:rgb(59, 59, 59);
-$txt-gray:#888;
+$txt-body:#222222;
+$txt-gray:#888888;
 //border colors
 $border-color:#dee2e6;
 $border: solid 1px $border-color;
@@ -43,7 +44,7 @@ $border-light: solid 1px lighten($border-color, 5);
 $border-transparent: solid 1px transparent;
 //backgrounds colors
 $bg-white: #fff;
-$bg-white-inverse:$body-color;
+$bg-white-inverse:$txt-body;
 $bg-black: #000;
 $bg-black-inverse:#fff;
 $bg-brand-light: rgba(var(--brand-color-alpha), 0.1);
