@@ -1,8 +1,21 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
+
 $frm->setFormTagAttribute('class', 'modal-body form form-edit');
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
+
+$fld = $frm->getField('country_code');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
+$fld = $frm->getField('country_code_alpha3');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
+$fld = $frm->getField('country_language_id');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
+$fld = $frm->getField('country_active');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $activeGentab = true;
 $disabled = (1 > $recordId) ? 'disabled' : '';

@@ -28,8 +28,7 @@ class Language extends MyAppModel
         if ($languageGetAllNames) {
             return json_decode($languageGetAllNames, true);
         }
-
-        $siteDefaultLang = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        
         $srch = new SearchBase(static::DB_TBL);
         $srch->addOrder(static::tblFld('id'));
         if ($active === true) {
@@ -101,5 +100,14 @@ class Language extends MyAppModel
             CacheHelper::create('getLayoutDirection' . $langId, FatUtility::convertToJson($langData['language_layout_direction']), CacheHelper::TYPE_LANGUAGE);
             return $langData['language_layout_direction'];
         }
+    }
+
+    public static function getDropDownList(bool $removeDefaultLang = false)
+    {
+        $arr = self::getAllNames();
+        if ($removeDefaultLang) {
+            unset($arr[FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1)]);
+        }
+        return $arr;
     }
 }

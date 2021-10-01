@@ -256,7 +256,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
                 $.ykmsg.error(t.msg);
                 return false;
             }
-
+            $.ykmsg.success(t.msg);
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
