@@ -55,7 +55,13 @@ foreach ($arrListing as $sn => $row) {
 }
 
 if (count($arrListing) == 0) {
-    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($fields)), Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId));
+    $tbody->appendElement('tr')->appendElement(
+        'td',
+        array(
+            'colspan' => count($fields)
+        ),
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId)
+    );
 }
 
 if ($printData) {
