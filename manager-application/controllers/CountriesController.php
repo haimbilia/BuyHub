@@ -102,23 +102,17 @@ class CountriesController extends AdminBaseController
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
-        $frm = $this->getForm($recordId);
+        $frm = $this->getForm();
 
-        if (0 < $recordId) {
-            $languageArr = Language::getAllNames();
-            if (1 < count($languageArr)) {
-                $data = Countries::getAttributesById($recordId);
-            } else {
-                $langId = array_key_first($languageArr);
-                $data = Countries::getAttributesByLangId($langId, $recordId, null, true);
-            }
+        if (0 < $recordId) {     
+            $data = Countries::getAttributesByLangId(FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1), $recordId, null, true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getAllNames());
+        $this->set('languages', Language::getDropDownList(true));
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
@@ -134,15 +128,7 @@ class CountriesController extends AdminBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-
-        $languages = Language::getAllNames();
-        if (count($languages) > 1) {
-            $lang_id = $post['country_language_id'];
-        } else {
-            $lang_id = array_key_first($languages);
-            $post['country_language_id'] = $lang_id;
-        }
-
+                
         $recordId = $post['country_id'];
         unset($post['country_id']);
 
@@ -152,26 +138,29 @@ class CountriesController extends AdminBaseController
         if (!$record->save()) {
             LibHelper::exitWithError($record->getError(), true);
         }
-        $langCount  = count($languages);
-        if ($langCount == 1) {
-            if (!$record->updateLangData($lang_id, ['country_name' => $post['country_name']])) {
-                LibHelper::exitWithError($record->getError(), true);
+        $recordId = $record->getMainTableRecordId();
+        
+        $defaultLang = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        if (!$record->updateLangData($defaultLang, ['country_name' => $post['country_name']])) {
+            LibHelper::exitWithError($record->getError(), true);
+        }
+
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataObj = new TranslateLangData(Countries::DB_TBL_LANG);
+            if (false === $updateLangDataObj->updateTranslatedData($recordId)) {
+                LibHelper::exitWithError($updateLangDataObj->getError(), true);
             }
         }
 
         $newTabLangId = 0;
-        if (1 < $langCount) {         
-            if ($recordId > 0) {
-                $languages = Language::getAllNames();
-                foreach ($languages as $langId => $langName) {
-                    if (!$row = Countries::getAttributesByLangId($langId, $recordId)) {
-                        $newTabLangId = $langId;
-                        break;
-                    }
+        $languages = Language::getDropDownList(true);
+        if (0 < count($languages)) {           
+            foreach ($languages as $langId => $langName) {
+                if (!$row = Countries::getAttributesByLangId($langId, $recordId)) {
+                    $newTabLangId = $langId;
+                    break;
                 }
-            } else {              
-                $recordId = $record->getMainTableRecordId();
-                $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
             }
         }
         Product::updateMinPrices(0, 0, 0, $recordId);
@@ -184,9 +173,6 @@ class CountriesController extends AdminBaseController
     public function langForm($autoFillLangData = 0)
     {
         $this->objPrivilege->canEditCountries();
-
-        $loadTabs = FatApp::getPostedData('loadTabs', FatUtility::VAR_INT, 0);
-
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
 
@@ -196,10 +182,10 @@ class CountriesController extends AdminBaseController
 
         $langFrm = $this->getLangForm($recordId, $lang_id);
         if (0 < $autoFillLangData) {
-            $updateLangDataobj = new TranslateLangData(Countries::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $lang_id);
-            if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            $updateLangDataObj = new TranslateLangData(Countries::DB_TBL_LANG);
+            $translatedData = $updateLangDataObj->getTranslatedData($recordId, $lang_id);
+            if (false === $translatedData) {            
+                LibHelper::exitWithError($updateLangDataObj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -210,8 +196,7 @@ class CountriesController extends AdminBaseController
             $langFrm->fill($langData);
         }
 
-        $this->set('languages', Language::getAllNames());
-        $this->set('loadTabs', $loadTabs);
+        $this->set('languages', Language::getDropDownList(true));
         $this->set('recordId', $recordId);
         $this->set('lang_id', $lang_id);
         $this->set('langFrm', $langFrm);
@@ -256,14 +241,6 @@ class CountriesController extends AdminBaseController
             LibHelper::exitWithError($countryObj->getError(), true);
         }
 
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(Countries::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-        }
-
         $newTabLangId = 0;
         $languages = Language::getAllNames();
         foreach ($languages as $langId => $langName) {
@@ -279,21 +256,16 @@ class CountriesController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getForm($recordId = 0)
-    {
-        $recordId = FatUtility::int($recordId);
-
+    private function getForm()
+    {        
         $frm = new Form('frmCountry');
-        $frm->addHiddenField('', 'country_id', $recordId);
-
-        // $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_NAME', $this->adminLangId), 'country_name');
-
-        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_CODE', $this->adminLangId), 'country_code');
-        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->adminLangId), 'country_code_alpha3');
+        $frm->addHiddenField('', 'country_id');
 
         $zoneArr = Zone::getAllZones($this->adminLangId, true);
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_ZONE', $this->adminLangId), 'country_zone_id', $zoneArr, '', [], Labels::getLabel('LBL_SELECT', $this->adminLangId));
         $fld->requirements()->setRequired();
+
+        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_NAME', $this->adminLangId), 'country_name');
 
         $currencyArr = Currency::getCurrencyNameWithCode($this->adminLangId);
         $currencyId = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
@@ -301,18 +273,23 @@ class CountriesController extends AdminBaseController
         $defaultCurrentySelect = Labels::getLabel('LBL_DEFAULT', $this->adminLangId) . '(' . $currencyData['currency_code'] . ')';
         $frm->addSelectBox(Labels::getLabel('LBL_CURRENCY', $this->adminLangId), 'country_currency_id', $currencyArr, '', [], $defaultCurrentySelect);
 
-        $languageArr = Language::getAllNames();
-        if (count($languageArr) > 1) {
+        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_CODE', $this->adminLangId), 'country_code');
+        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->adminLangId), 'country_code_alpha3');
+        
+        $languageArr = Language::getDropDownList();
+        if (1 < count($languageArr)) {
             $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'country_language_id', $languageArr, '', array(), '');
         } else {
-            $langId = array_key_first($languageArr);
-            $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_NAME', $this->adminLangId), 'country_name');
-            $frm->addHiddenField('', 'country_language_id', $langId);
-        }
+            $frm->addHiddenField('', 'country_language_id', FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
+        }    
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->adminLangId), 'country_active', $activeInactiveArr, '', array(), '');
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->adminLangId), 'country_active', applicationConstants::getActiveInactiveArr($this->adminLangId), '', array(), '');    
+        
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, ''); 
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        } 
+        
         return $frm;
     }
 
@@ -320,25 +297,8 @@ class CountriesController extends AdminBaseController
     {
         $frm = new Form('frmCountryLang');
         $frm->addHiddenField('', 'country_id', $recordId);
-
-
-        $languages = Language::getAllNames();
-        if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
-        } else {
-            $lang_id = array_key_first($languages);
-            $frm->addHiddenField('', 'lang_id', $lang_id);
-        }
-
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList(true), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_NAME', $this->adminLangId), 'country_name');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 

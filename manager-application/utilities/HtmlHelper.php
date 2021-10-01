@@ -45,10 +45,9 @@ class HtmlHelper
     public static function formatFormFields(Form &$form)
     {
         $form->setCustomRendererClass('FormRendererBS');
-
         /* For Each Row On Above Elements */
-        $form->developerTags['colWidthClassesDefault'] = ['col-md-', null, null];
-        $form->developerTags['colWidthValuesDefault'] = [($form->developerTags['fld_default_col'] ?? 12), null, null];
+        $form->developerTags['colWidthClassesDefault'] = [null, 'col-md-', null, null];
+        $form->developerTags['colWidthValuesDefault'] = [null, '12', null, null];
         /* For Each Row On Above Elements */
 
         /* For Input Fields */

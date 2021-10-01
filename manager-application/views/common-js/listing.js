@@ -263,7 +263,7 @@ $(document).on('search', "input[name='keyword']", function () {
                 $.ykmsg.error(t.msg);
                 return false;
             }
-
+            $.ykmsg.success(t.msg);
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
