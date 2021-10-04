@@ -24,6 +24,9 @@ class StatesController extends AdminBaseController
     private function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
         $fld->overrideFldType('search');
         
@@ -31,10 +34,6 @@ class StatesController extends AdminBaseController
         $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId, true);
 
         $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'country', $countriesArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
-
-        if (!empty($fields)) {
-            $this->addSortingElements($frm);
-        }
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
         $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
         return $frm;
