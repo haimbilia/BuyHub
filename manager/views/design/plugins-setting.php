@@ -60,6 +60,11 @@
                                             </div>
                                         </div>
                                     </div>
+
+
+
+
+
                                 </div>
                             </div>
                         </div>
@@ -368,7 +373,7 @@
 
                                                         </div>
                                                     </div>
-                                                    <div class="separator separator-dashed my-4"></div>
+                                                    <div class="separator separator-dashed my-5"></div>
 
                                                     <h3 class="form-section-head">Pickup</h3>
                                                     <div class="form-section-body">
@@ -384,7 +389,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="separator separator-dashed my-4"></div>
+                                                    <div class="separator separator-dashed my-5"></div>
                                                     <h3 class="form-section-head">Checkout Process</h3>
                                                     <div class="form-section-body">
                                                         <div class="row form-group">
@@ -486,38 +491,480 @@
                                                     </div>
 
 
-                                                    <div class="separator separator-dashed my-4"></div>
-                                                    <h3 class="form-section-head">Checkout Process</h3>
+                                                    <div class="separator separator-dashed my-5"></div>
+                                                    <h3 class="form-section-head">Section heading goes here</h3>
                                                     <div class="form-section-body">
+                                                        <div class="row form-group">
+                                                            <div class="col-md-6">
+                                                                <label class="label"> Default Child Order Status</label>
+                                                                <div class="">
+                                                                    <select
+                                                                        data-field-caption="Default Child Order Status"
+                                                                        data-fatreq="{&quot;required&quot;:false}"
+                                                                        name="CONF_DEFAULT_ORDER_STATUS">
+                                                                        <option value="1" selected="selected">Payment
+                                                                            Pending</option>
+                                                                        <option value="16">cash on delivery</option>
+                                                                        <option value="17">Pay At Store</option>
+                                                                        <option value="2">Payment Confirmed</option>
+                                                                        <option value="15">Approved</option>
+                                                                        <option value="3">In Process</option>
+                                                                        <option value="4">Shipped</option>
+                                                                        <option value="18">Ready For Pickup</option>
+                                                                        <option value="5">Delivered</option>
+                                                                        <option value="6">Return Requested</option>
+                                                                        <option value="7">Completed</option>
+                                                                        <option value="8">Cancelled</option>
+                                                                        <option value="9">Refunded/Completed</option>
+                                                                    </select>
 
-                                                        <div class="form-group">
-                                                            <label class="label">
-                                                                Default Child Order
-                                                                Status</label>
-                                                            <div class="">
-                                                                <select data-field-caption="Default Child Order Status"
-                                                                    data-fatreq="{&quot;required&quot;:false}"
-                                                                    name="CONF_DEFAULT_ORDER_STATUS">
-                                                                    <option value="1" selected="selected">Payment
-                                                                        Pending</option>
-                                                                    <option value="16">cash on delivery</option>
-                                                                    <option value="17">Pay At Store</option>
-                                                                    <option value="2">Payment Confirmed</option>
-                                                                    <option value="15">Approved</option>
-                                                                    <option value="3">In Process</option>
-                                                                    <option value="4">Shipped</option>
-                                                                    <option value="18">Ready For Pickup</option>
-                                                                    <option value="5">Delivered</option>
-                                                                    <option value="6">Return Requested</option>
-                                                                    <option value="7">Completed</option>
-                                                                    <option value="8">Cancelled</option>
-                                                                    <option value="9">Refunded/Completed</option>
-                                                                </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="label">Default Paid Order Status</label>
+                                                                <div>
 
+                                                                    <select
+                                                                        data-field-caption="Default Paid Order Status"
+                                                                        data-fatreq="{&quot;required&quot;:false}"
+                                                                        name="CONF_DEFAULT_PAID_ORDER_STATUS">
+                                                                        <option value="1">Payment Pending
+                                                                        </option>
+                                                                        <option value="16">cash on delivery
+                                                                        </option>
+                                                                        <option value="17">Pay At Store</option>
+                                                                        <option value="2" selected="selected">
+                                                                            Payment Confirmed</option>
+                                                                        <option value="15">Approved</option>
+                                                                        <option value="3">In Process</option>
+                                                                        <option value="4">Shipped</option>
+                                                                        <option value="18">Ready For Pickup
+                                                                        </option>
+                                                                        <option value="5">Delivered</option>
+                                                                        <option value="6">Return Requested
+                                                                        </option>
+                                                                        <option value="7">Completed</option>
+                                                                        <option value="8">Cancelled</option>
+                                                                        <option value="9">Refunded/Completed
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
                                                             </div>
                                                         </div>
 
+                                                        <div class="row form-group">
+                                                            <div class="col-md-6">
+                                                                <label class="label">Default Approved
+                                                                    Order
+                                                                    Status</label>
+                                                                <div>
+                                                                    <select
+                                                                        data-field-caption="Default Approved Order Status"
+                                                                        data-fatreq="{&quot;required&quot;:false}"
+                                                                        name="CONF_DEFAULT_APPROVED_ORDER_STATUS">
+                                                                        <option value="1">Payment Pending
+                                                                        </option>
+                                                                        <option value="16">cash on delivery
+                                                                        </option>
+                                                                        <option value="17">Pay At Store</option>
+                                                                        <option value="2">Payment Confirmed
+                                                                        </option>
+                                                                        <option value="15" selected="selected">
+                                                                            Approved</option>
+                                                                        <option value="3">In Process</option>
+                                                                        <option value="4">Shipped</option>
+                                                                        <option value="18">Ready For Pickup
+                                                                        </option>
+                                                                        <option value="5">Delivered</option>
+                                                                        <option value="6">Return Requested
+                                                                        </option>
+                                                                        <option value="7">Completed</option>
+                                                                        <option value="8">Cancelled</option>
+                                                                        <option value="9">Refunded/Completed
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="label">Status Used By
+                                                                    System To Mark Order As
+                                                                    Completed</label>
+                                                                <div>
+                                                                    <select
+                                                                        data-field-caption="Status Used By System To Mark Order As Completed"
+                                                                        data-fatreq="{&quot;required&quot;:false}"
+                                                                        name="CONF_DEFAULT_COMPLETED_ORDER_STATUS">
+                                                                        <option value="1" selected="selected">Payment
+                                                                            Pending</option>
+                                                                        <option value="16">cash on delivery
+                                                                        </option>
+                                                                        <option value="17">Pay At Store
+                                                                        </option>
+                                                                        <option value="2">Payment Confirmed
+                                                                        </option>
+                                                                        <option value="15">Approved</option>
+                                                                        <option value="3">In Process
+                                                                        </option>
+                                                                        <option value="4">Shipped</option>
+                                                                        <option value="18">Ready For Pickup
+                                                                        </option>
+                                                                        <option value="5">Delivered</option>
+                                                                        <option value="6">Return Requested
+                                                                        </option>
+                                                                        <option value="7">Completed</option>
+                                                                        <option value="8">Cancelled</option>
+                                                                        <option value="9">Refunded/Completed
+                                                                        </option>
+                                                                    </select>
 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <div class="field-set">
+                                                                    <div class="caption-wraper"><label
+                                                                            class="label">Default Delivered Order
+                                                                            Status</label></div>
+                                                                    <div class="field-wraper">
+                                                                        <div class="field_cover"><select
+                                                                                data-field-caption="Default Delivered Order Status"
+                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                name="CONF_DEFAULT_DEIVERED_ORDER_STATUS">
+                                                                                <option value="1">Payment Pending
+                                                                                </option>
+                                                                                <option value="16">cash on delivery
+                                                                                </option>
+                                                                                <option value="17">Pay At Store</option>
+                                                                                <option value="2">Payment Confirmed
+                                                                                </option>
+                                                                                <option value="15">Approved</option>
+                                                                                <option value="3">In Process</option>
+                                                                                <option value="4">Shipped</option>
+                                                                                <option value="18">Ready For Pickup
+                                                                                </option>
+                                                                                <option value="5" selected="selected">
+                                                                                    Delivered</option>
+                                                                                <option value="6">Return Requested
+                                                                                </option>
+                                                                                <option value="7">Completed</option>
+                                                                                <option value="8">Cancelled</option>
+                                                                                <option value="9">Refunded/Completed
+                                                                                </option>
+                                                                            </select> </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <div class="field-set">
+                                                                    <div class="caption-wraper"><label
+                                                                            class="label">Default Cancelled Order
+                                                                            Status</label></div>
+                                                                    <div class="field-wraper">
+                                                                        <div class="field_cover"><select
+                                                                                data-field-caption="Default Cancelled Order Status"
+                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                name="CONF_DEFAULT_CANCEL_ORDER_STATUS">
+                                                                                <option value="1">Payment Pending
+                                                                                </option>
+                                                                                <option value="16">cash on delivery
+                                                                                </option>
+                                                                                <option value="17">Pay At Store</option>
+                                                                                <option value="2">Payment Confirmed
+                                                                                </option>
+                                                                                <option value="15">Approved</option>
+                                                                                <option value="3">In Process</option>
+                                                                                <option value="4">Shipped</option>
+                                                                                <option value="18">Ready For Pickup
+                                                                                </option>
+                                                                                <option value="5">Delivered</option>
+                                                                                <option value="6">Return Requested
+                                                                                </option>
+                                                                                <option value="7">Completed</option>
+                                                                                <option value="8" selected="selected">
+                                                                                    Cancelled</option>
+                                                                                <option value="9">Refunded/Completed
+                                                                                </option>
+                                                                            </select> </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <div class="field-set">
+                                                                    <div class="caption-wraper"><label
+                                                                            class="label">Return Requested Order
+                                                                            Status</label></div>
+                                                                    <div class="field-wraper">
+                                                                        <div class="field_cover"><select
+                                                                                data-field-caption="Return Requested Order Status"
+                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                name="CONF_RETURN_REQUEST_ORDER_STATUS">
+                                                                                <option value="1">Payment Pending
+                                                                                </option>
+                                                                                <option value="16">cash on delivery
+                                                                                </option>
+                                                                                <option value="17">Pay At Store</option>
+                                                                                <option value="2">Payment Confirmed
+                                                                                </option>
+                                                                                <option value="15">Approved</option>
+                                                                                <option value="3">In Process</option>
+                                                                                <option value="4">Shipped</option>
+                                                                                <option value="18">Ready For Pickup
+                                                                                </option>
+                                                                                <option value="5">Delivered</option>
+                                                                                <option value="6" selected="selected">
+                                                                                    Return Requested</option>
+                                                                                <option value="7">Completed</option>
+                                                                                <option value="8">Cancelled</option>
+                                                                                <option value="9">Refunded/Completed
+                                                                                </option>
+                                                                            </select> </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <div class="field-set">
+                                                                    <div class="caption-wraper"><label
+                                                                            class="label">Return Request Withdrawn
+                                                                            Order Status</label></div>
+                                                                    <div class="field-wraper">
+                                                                        <div class="field_cover"><select
+                                                                                data-field-caption="Return Request Withdrawn Order Status"
+                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                name="CONF_RETURN_REQUEST_WITHDRAWN_ORDER_STATUS">
+                                                                                <option value="1">Payment Pending
+                                                                                </option>
+                                                                                <option value="16">cash on delivery
+                                                                                </option>
+                                                                                <option value="17">Pay At Store</option>
+                                                                                <option value="2">Payment Confirmed
+                                                                                </option>
+                                                                                <option value="15">Approved</option>
+                                                                                <option value="3">In Process</option>
+                                                                                <option value="4">Shipped</option>
+                                                                                <option value="18">Ready For Pickup
+                                                                                </option>
+                                                                                <option value="5">Delivered</option>
+                                                                                <option value="6">Return Requested
+                                                                                </option>
+                                                                                <option value="7" selected="selected">
+                                                                                    Completed</option>
+                                                                                <option value="8">Cancelled</option>
+                                                                                <option value="9">Refunded/Completed
+                                                                                </option>
+                                                                            </select> </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <div class="field-set">
+                                                                    <div class="caption-wraper"><label
+                                                                            class="label">Return Request Approved
+                                                                            Order Status</label></div>
+                                                                    <div class="field-wraper">
+                                                                        <div class="field_cover"><select
+                                                                                data-field-caption="Return Request Approved Order Status"
+                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                name="CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS">
+                                                                                <option value="1">Payment Pending
+                                                                                </option>
+                                                                                <option value="16">cash on delivery
+                                                                                </option>
+                                                                                <option value="17">Pay At Store</option>
+                                                                                <option value="2">Payment Confirmed
+                                                                                </option>
+                                                                                <option value="15">Approved</option>
+                                                                                <option value="3">In Process</option>
+                                                                                <option value="4">Shipped</option>
+                                                                                <option value="18">Ready For Pickup
+                                                                                </option>
+                                                                                <option value="5">Delivered</option>
+                                                                                <option value="6">Return Requested
+                                                                                </option>
+                                                                                <option value="7">Completed</option>
+                                                                                <option value="8">Cancelled</option>
+                                                                                <option value="9" selected="selected">
+                                                                                    Refunded/Completed</option>
+                                                                            </select> </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <div class="field-set">
+                                                                    <div class="caption-wraper"><label class="label">Pay
+                                                                            At Store Order
+                                                                            Status</label></div>
+                                                                    <div class="field-wraper">
+                                                                        <div class="field_cover"><select
+                                                                                data-field-caption="Pay At Store Order Status"
+                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                name="CONF_PAY_AT_STORE_ORDER_STATUS">
+                                                                                <option value="1">Payment Pending
+                                                                                </option>
+                                                                                <option value="16">cash on delivery
+                                                                                </option>
+                                                                                <option value="17" selected="selected">
+                                                                                    Pay At Store</option>
+                                                                                <option value="2">Payment Confirmed
+                                                                                </option>
+                                                                                <option value="15">Approved</option>
+                                                                                <option value="3">In Process</option>
+                                                                                <option value="4">Shipped</option>
+                                                                                <option value="18">Ready For Pickup
+                                                                                </option>
+                                                                                <option value="5">Delivered</option>
+                                                                                <option value="6">Return Requested
+                                                                                </option>
+                                                                                <option value="7">Completed</option>
+                                                                                <option value="8">Cancelled</option>
+                                                                                <option value="9">Refunded/Completed
+                                                                                </option>
+                                                                            </select> </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <div class="field-set">
+                                                                    <div class="caption-wraper"><label
+                                                                            class="label">Cash On Delivery Order
+                                                                            Status</label></div>
+                                                                    <div class="field-wraper">
+                                                                        <div class="field_cover"><select
+                                                                                data-field-caption="Cash On Delivery Order Status"
+                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                name="CONF_COD_ORDER_STATUS">
+                                                                                <option value="1">Payment Pending
+                                                                                </option>
+                                                                                <option value="16" selected="selected">
+                                                                                    cash on delivery</option>
+                                                                                <option value="17">Pay At Store</option>
+                                                                                <option value="2">Payment Confirmed
+                                                                                </option>
+                                                                                <option value="15">Approved</option>
+                                                                                <option value="3">In Process</option>
+                                                                                <option value="4">Shipped</option>
+                                                                                <option value="18">Ready For Pickup
+                                                                                </option>
+                                                                                <option value="5">Delivered</option>
+                                                                                <option value="6">Return Requested
+                                                                                </option>
+                                                                                <option value="7">Completed</option>
+                                                                                <option value="8">Cancelled</option>
+                                                                                <option value="9">Refunded/Completed
+                                                                                </option>
+                                                                            </select><small>Set The Cash On Delivery
+                                                                                Order Status.</small></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <div class="field-set">
+                                                                    <div class="caption-wraper"><label
+                                                                            class="label">Ready For Pickup Order
+                                                                            Status</label></div>
+                                                                    <div class="field-wraper">
+                                                                        <div class="field_cover"><select
+                                                                                data-field-caption="Ready For Pickup Order Status"
+                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                name="CONF_PICKUP_READY_ORDER_STATUS">
+                                                                                <option value="1">Payment Pending
+                                                                                </option>
+                                                                                <option value="16">cash on delivery
+                                                                                </option>
+                                                                                <option value="17">Pay At Store</option>
+                                                                                <option value="2">Payment Confirmed
+                                                                                </option>
+                                                                                <option value="15">Approved</option>
+                                                                                <option value="3">In Process</option>
+                                                                                <option value="4">Shipped</option>
+                                                                                <option value="18" selected="selected">
+                                                                                    Ready For Pickup</option>
+                                                                                <option value="5">Delivered</option>
+                                                                                <option value="6">Return Requested
+                                                                                </option>
+                                                                                <option value="7">Completed</option>
+                                                                                <option value="8">Cancelled</option>
+                                                                                <option value="9">Refunded/Completed
+                                                                                </option>
+                                                                            </select><small>Set The Ready For Pickup
+                                                                                Order Status.</small></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <div class="field-set">
+                                                                    <div class="caption-wraper"><label
+                                                                            class="label">Status Used By System To
+                                                                            Mark Order As Completed</label></div>
+                                                                    <div class="field-wraper">
+                                                                        <div class="field_cover"><select
+                                                                                data-field-caption="Status Used By System To Mark Order As Completed"
+                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                name="CONF_DEFAULT_COMPLETED_ORDER_STATUS">
+                                                                                <option value="1" selected="selected">
+                                                                                    Payment Pending</option>
+                                                                                <option value="16">cash on delivery
+                                                                                </option>
+                                                                                <option value="17">Pay At Store</option>
+                                                                                <option value="2">Payment Confirmed
+                                                                                </option>
+                                                                                <option value="15">Approved</option>
+                                                                                <option value="3">In Process</option>
+                                                                                <option value="4">Shipped</option>
+                                                                                <option value="18">Ready For Pickup
+                                                                                </option>
+                                                                                <option value="5">Delivered</option>
+                                                                                <option value="6">Return Requested
+                                                                                </option>
+                                                                                <option value="7">Completed</option>
+                                                                                <option value="8">Cancelled</option>
+                                                                                <option value="9">Refunded/Completed
+                                                                                </option>
+                                                                            </select><small>Set The Default Child Order
+                                                                                Status When An Order Is Marked
+                                                                                Completed.</small></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <div class="field-set">
+                                                                    <div class="caption-wraper"><label
+                                                                            class="label">Default Return Age
+                                                                            [days]<span
+                                                                                class="spn_must_field">*</span></label>
+                                                                    </div>
+                                                                    <div class="field-wraper">
+                                                                        <div class="field_cover"><input
+                                                                                data-field-caption="Default Return Age [days]"
+                                                                                data-fatreq="{&quot;required&quot;:true,&quot;integer&quot;:true}"
+                                                                                type="text"
+                                                                                name="CONF_DEFAULT_RETURN_AGE"
+                                                                                value="7"><small>It Will Considered If
+                                                                                No Return Age Is Defined In Shop Or
+                                                                                Seller Product.</small></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
 
 
@@ -534,6 +981,25 @@
                                         </div>
 
 
+                                    </div>
+                                    <div class="card-foot">
+
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-10">
+
+
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <button type="reset"
+                                                            class="btn btn-outline-brand">Cancel</button>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <button type="submit"
+                                                            class="btn btn-brand gb-btn gb-btn-primary ">Update</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
