@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($langFrm);
-$langFrm->setFormTagAttribute('dir', $formLayout);
+
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit layout--' . $formLayout);
 $langFrm->setFormTagAttribute('onsubmit', 'saveLangData(this); return(false);');
 
@@ -10,8 +10,7 @@ $langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this
 
 $activeLangtab = true;
 
-require_once(CONF_THEME_PATH . 'countries/form-head.php'); ?>
-
+require_once(CONF_THEME_PATH . 'order-return-reasons/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
         <?php
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -38,4 +37,4 @@ require_once(CONF_THEME_PATH . 'countries/form-head.php'); ?>
             </div>
         </div>
     </div>
-</div>
+</div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->

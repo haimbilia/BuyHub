@@ -1,26 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
-
 $frm->setFormTagAttribute('class', 'modal-body form form-edit');
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 
-$fld = $frm->getField('country_code');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
-
-$fld = $frm->getField('country_code_alpha3');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
-
-$fld = $frm->getField('country_language_id');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
-
-$fld = $frm->getField('country_active');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
-
 $activeGentab = true;
 $disabled = (1 > $recordId) ? 'disabled' : '';
-require_once(CONF_THEME_PATH . 'countries/form-head.php'); ?>
-
+require_once(CONF_THEME_PATH . 'order-cancel-reasons/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>
     </div>
@@ -40,4 +26,4 @@ require_once(CONF_THEME_PATH . 'countries/form-head.php'); ?>
             </div>
         </div>
     </div>
-</div>
+</div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->
