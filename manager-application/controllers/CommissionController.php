@@ -200,7 +200,7 @@ class CommissionController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function viewHistory()
+    public function viewLog()
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if (1 > $recordId) {
@@ -219,7 +219,7 @@ class CommissionController extends AdminBaseController
 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-
+       
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -374,7 +374,7 @@ class CommissionController extends AdminBaseController
         $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         return $frm;
     }
-    
+
     private function getFormColumns(): array
     {
         $commissionTblHeadingCols = CacheHelper::get('commissionTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
@@ -397,7 +397,7 @@ class CommissionController extends AdminBaseController
 
     private function getDefaultColumns(): array
     {
-        return [    
+        return [
             'select_all',
             'listSerial',
             'commsetting_prodcat_id',
