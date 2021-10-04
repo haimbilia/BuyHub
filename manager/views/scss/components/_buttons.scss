@@ -16,10 +16,6 @@
     }
 }
 
-a {
-    color: $body-color;
-}
-
 .btn {
     padding: 0.6rem 1.3rem;
     font-size: 0.85rem;
@@ -30,12 +26,15 @@ a {
     }
     &:hover {
         outline: none !important;
-        color: currentColor;
     }
     //varsions
     &-brand {
         background-color: var(--brand-color);
         color: var(--brand-color-inverse);
+        &:hover {
+            background-color: darken($brand-color, 5%);
+            color: $brand-color-inverse !important;
+        }
     }
     &-outline-brand {
         background: none;
@@ -59,7 +58,7 @@ a {
     &-outline-gray {
         background: none;
         border-color: $border-color;
-        color: $body-color;
+        color: $txt-body;
     }
     &-block {
         display: block !important;
@@ -86,7 +85,7 @@ a {
     }
     &-link {
         text-decoration: none;
-        color: $body-color;
+        color: $txt-body;
         line-height: 2;
         font-weight: 600;
         .arrow {
@@ -195,4 +194,9 @@ a.link {
             display: flex;
         }
     }
+}
+
+.back {
+    color: $txt-body;
+    margin-#{$end-direction}: 0.5rem;
 }

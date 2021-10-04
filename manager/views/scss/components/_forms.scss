@@ -4,10 +4,12 @@ $input-line-height:1.5;
 $input-font-size: 0.85rem;
 $input-border:none;
 $input-border-radius:1px;
+$input-bg: $bg-gray;
+$input-color: #474747;
 @mixin input {
     border: $input-border;
-    background-color: $bg-gray;
-    color: $bg-white-inverse;
+    background-color: $input-bg;
+    color: $input-color;
     height: $input-height;
     width: 100%;
     //width: fill-available;
@@ -24,7 +26,7 @@ $input-border-radius:1px;
     &:hover {
         outline: none !important;
         box-shadow: none;
-        background-color: darken($bg-gray, 05);
+        background-color: darken($input-bg, 5%);
         transition: 0.3s all ease-in-out;
     }
 }
@@ -75,15 +77,14 @@ $input-border-radius:1px;
         color: $txt-gray;
         margin: 0;
         margin-bottom: 5px;
-        min-height: 15px;
         /*for alignment issue where no content in form lebal - form button and input alignment */
         display: inline-block;
-        min-height: none;
         cursor: default;
         /*opacity: 0.6;*/
         font-weight: 500;
         &:empty {
-            min-height: 15px;
+            min-height: 21px;
+            display: block;
         }
     }
     input {
@@ -180,16 +181,16 @@ $input-border-radius:1px;
         }
     }
     [type="button"] {
-        @include submit;
+        //@include submit;
     }
     [type="reset"] {
-        @include submit;
+        // @include submit;
     }
     input button {
         @include submit;
     }
     button {
-        @include submit;
+        //@include submit;
         i {
             &:before {
                 opacity: 1 !important;
@@ -207,7 +208,7 @@ $input-border-radius:1px;
         }
         &:disabled {
              :before {
-                /*opacity: 0;*/
+                //opacity: 0; 
             }
         }
         &:active {
@@ -551,7 +552,6 @@ form.custom-form {
     width: 1rem !important;
     flex: 0 0 1rem;
     max-width: 1rem;
-    -webkit-transition: all 0.15s ease-out 0s;
     transition: all 0.15s ease-out 0s;
     border: $border;
     background: #fff;
@@ -565,6 +565,9 @@ form.custom-form {
     z-index: 1;
     border-radius: $radius-common;
     vertical-align: middle;
+    &:hover {
+        border-color: darken($border-color, 20);
+    }
 }
 
 .checkbox input:checked,
@@ -585,7 +588,6 @@ form.custom-form {
     line-height: 1rem;
     border-right: 2px solid #fff;
     border-bottom: 2px solid #fff;
-    -webkit-transform: rotate(45deg);
     transform: rotate(45deg);
     left: 50%;
     top: 50%;
@@ -610,10 +612,9 @@ form.custom-form {
 
 .radio input {
     border-radius: 50% !important;
-}
-
-.radio input::after {
-    border-radius: 50%;
+    &:after {
+        border-radius: 50%;
+    }
 }
 
 //toggles
@@ -630,7 +631,7 @@ form.custom-form {
     display: inline-block;
     vertical-align: top;
     position: relative;
-    color: lighten($body-color, 50%);
+    color: lighten($txt-body, 50%);
     font-size: 0.8em;
 }
 
@@ -692,9 +693,5 @@ form.custom-form {
 .omni-search {
     height: 3.2rem !important;
     border: $border !important;
-    border-radius: 4px !important;
     background-color: #fff !important;
-    &:focus {
-        border-color: $brand-color !important;
-    }
 }

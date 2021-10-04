@@ -80,14 +80,17 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="row">
-                                                <div class="col-md-8">
-                                                    <input type="search" class="form-control" name="search" value=""
-                                                        placeholder="Search">
+                                                <div class="col-md-10">
+                                                    <div class="input-group">
+                                                        <input type="search" class="form-control" name="search" value=""
+                                                            placeholder="Search">
+                                                        <div class="input-group-append">
+                                                            <button type="button"
+                                                                class="btn btn-brand btn-wide ml-2">Search</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-2">
-                                                    <button type="button"
-                                                        class="btn btn-brand btn-block">Search</button>
-                                                </div>
+
                                                 <div class="col-md-2">
                                                     <a class="btn btn-link" data-toggle="collapse"
                                                         href="#collapseExample" aria-expanded="false"
@@ -211,7 +214,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label class="label">Date From</label>
                                                             <input class="field--calender fld-date hasDatepicker"
@@ -219,7 +222,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label class="label">Date To </label>
                                                             <input class="field--calender fld-date hasDatepicker"
@@ -227,10 +230,9 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="label"> &nbsp; </label>
-
+                                                            <label class="label"></label>
                                                             <button type="reset"
                                                                 class="btn btn-outline-brand">Cancel</button>
                                                         </div>
@@ -294,7 +296,7 @@
                                             <!-- <div class="table-processing">
                                                 <div class="spinner spinner--sm spinner--brand"></div>
                                             </div> -->
-                                            <table width="100%" class="table table-dashed">
+                                            <table width="100%" class="table">
                                                 <thead>
                                                     <tr>
                                                         <th class="">
@@ -1341,7 +1343,8 @@
                                             </div>
                                             <div class="form-edit-foot">
                                                 <div class="row">
-                                                    <div class="col"><button type="reset"
+                                                    <div class="col">
+                                                        <button type="reset"
                                                             class="btn btn-outline-brand">Cancel</button>
                                                     </div>
                                                     <div class="col-auto">

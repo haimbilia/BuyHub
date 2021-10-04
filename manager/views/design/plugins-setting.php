@@ -67,11 +67,6 @@
                 </div>
                 <main class="main">
                     <div class="container">
-
-
-
-
-
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="card">
@@ -84,87 +79,226 @@
                                                             xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#back">
                                                         </use>
                                                     </svg>
-
                                                 </a>
-                                                Manage Theme
+                                                Plugins
                                             </h3>
                                         </div>
                                     </div>
-                                    <div class="card-body">
-                                        <form class="form">
-                                            <div class="form">
-                                                <div class="form-group">
-                                                    <label class="label">Font Family </label>
-                                                    <input type="search" placeholder="Search fonts">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="label">Select Font Weight </label>
-                                                    <input name='tags-outside' class='form-control tagify--outside'
-                                                        placeholder='write some tags'>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="label">Theme Color </label>
-                                                    <div class="color-data">
-                                                        <div class="color-swatch" title="Selected color">
-                                                            <input type="color" value="#1DB8CE" id="colorPicker">
+                                    <div class="card-body p-0">
+                                        <div class="settings-inner">
+                                            <ul>
+                                                <li class="settings-inner-item">
+                                                    <a class="settings-inner-link" href="">
+                                                        <i class="settings-inner-icn">
+                                                            <svg class="svg" width="20" height="20">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                        <div class="">
+                                                            <h6 class="settings-inner-title">Currency Converter</h6>
+                                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                                consectetur adipisicing
+                                                                elit. Suscipit est quos </span>
                                                         </div>
-                                                        <div class="color-label">
-                                                            <h5>HEX</h5>
-                                                            <span class="hex">#5aff22</span>
+                                                    </a>
+                                                </li>
+                                                <li class="settings-inner-item">
+                                                    <a class="settings-inner-link" href="">
+                                                        <i class="settings-inner-icn">
+                                                            <svg class="svg" width="20" height="20">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                        <div class="">
+                                                            <h6 class="settings-inner-title">Social Login</h6>
+                                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                                consectetur adipisicing
+                                                                elit. Suscipit est quos </span>
                                                         </div>
-                                                        <div class="color-label">
-                                                            <h5>RGB</h5>
-                                                            <span class="rgb">90, 255,
-                                                                34</span>
+                                                    </a>
+                                                </li>
+                                                <li class="settings-inner-item">
+                                                    <a class="settings-inner-link" href="">
+                                                        <i class="settings-inner-icn">
+                                                            <svg class="svg" width="20" height="20">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                        <div class="">
+                                                            <h6 class="settings-inner-title">Push Notification</h6>
+                                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                                consectetur adipisicing
+                                                                elit. Suscipit est quos </span>
                                                         </div>
-                                                        <div class="color-label">
-                                                            <h5>HSL</h5>
-                                                            <span class="hsl">105, 86%,
-                                                                57%</span>
+                                                    </a>
+                                                </li>
+                                                <li class="settings-inner-item">
+                                                    <a class="settings-inner-link" href="">
+                                                        <i class="settings-inner-icn">
+                                                            <svg class="svg" width="20" height="20">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                        <div class="">
+                                                            <h6 class="settings-inner-title">Payout</h6>
+                                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                                consectetur adipisicing
+                                                                elit. Suscipit est quos </span>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="label"> Theme Color Inverse </label>
-                                                    <div class="color-data">
-                                                        <div class="color-swatch" title="Selected color">
-                                                            <input type="color" value="#D4D4D4" id="colorPicker">
+                                                    </a>
+                                                </li>
+                                                <li class="settings-inner-item">
+                                                    <a class="settings-inner-link" href="">
+                                                        <i class="settings-inner-icn">
+                                                            <svg class="svg" width="20" height="20">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                        <div class="">
+                                                            <h6 class="settings-inner-title"> Advertisement Feed</h6>
+                                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                                consectetur adipisicing
+                                                                elit. Suscipit est quos </span>
                                                         </div>
-                                                        <div class="color-label">
-                                                            <h5>HEX</h5>
-                                                            <span class="hex">#D4D4D4</span>
+                                                    </a>
+                                                </li>
+                                                <li class="settings-inner-item">
+                                                    <a class="settings-inner-link" href="">
+                                                        <i class="settings-inner-icn">
+                                                            <svg class="svg" width="20" height="20">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                        <div class="">
+                                                            <h6 class="settings-inner-title">Sms Notification</h6>
+                                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                                consectetur adipisicing
+                                                                elit. Suscipit est quos </span>
                                                         </div>
-                                                        <div class="color-label">
-                                                            <h5>RGB</h5>
-                                                            <span class="rgb">212, 212,
-                                                                212</span>
+                                                    </a>
+                                                </li>
+                                                <li class="settings-inner-item">
+                                                    <a class="settings-inner-link" href="">
+                                                        <i class="settings-inner-icn">
+                                                            <svg class="svg" width="20" height="20">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                        <div class="">
+                                                            <h6 class="settings-inner-title">Sales Tax Services</h6>
+                                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                                consectetur adipisicing
+                                                                elit. Suscipit est quos </span>
                                                         </div>
-                                                        <div class="color-label">
-                                                            <h5>HSL</h5>
-                                                            <span class="hsl">0, 0%,
-                                                                83%</span>
+                                                    </a>
+                                                </li>
+                                                <li class="settings-inner-item">
+                                                    <a class="settings-inner-link" href="">
+                                                        <i class="settings-inner-icn">
+                                                            <svg class="svg" width="20" height="20">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                        <div class="">
+                                                            <h6 class="settings-inner-title"> Split Payment Methods
+                                                            </h6>
+                                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                                consectetur adipisicing
+                                                                elit. Suscipit est quos </span>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="alert alert-solid-brand " role="alert">
-                                                    <div class="alert-icon"><i class="flaticon-warning"></i>
-                                                    </div>
-                                                    <div class="alert-text text-xs"> Disclaimer: Inverse
-                                                        Color
-                                                        Should Be In Contrast To The Theme Color
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col"><button type="reset"
-                                                            class="btn btn-outline-brand">Reset</button>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <button type="submit"
-                                                            class="btn btn-brand loading">Update</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
+                                                    </a>
+                                                </li>
+                                                <li class="settings-inner-item">
+                                                    <a class="settings-inner-link" href="">
+                                                        <i class="settings-inner-icn">
+                                                            <svg class="svg" width="20" height="20">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                        <div class="">
+                                                            <h6 class="settings-inner-title">Regular Payment Methods
+                                                            </h6>
+                                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                                consectetur adipisicing
+                                                                elit. Suscipit est quos </span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="settings-inner-item">
+                                                    <a class="settings-inner-link" href="">
+                                                        <i class="settings-inner-icn">
+                                                            <svg class="svg" width="20" height="20">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                        <div class="">
+                                                            <h6 class="settings-inner-title"> Markeplace Channels
+                                                            </h6>
+                                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                                consectetur adipisicing
+                                                                elit. Suscipit est quos </span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="settings-inner-item">
+                                                    <a class="settings-inner-link" href="">
+                                                        <i class="settings-inner-icn">
+                                                            <svg class="svg" width="20" height="20">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                        <div class="">
+                                                            <h6 class="settings-inner-title"> Shipping Services
+                                                            </h6>
+                                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                                consectetur adipisicing
+                                                                elit. Suscipit est quos </span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="settings-inner-item">
+                                                    <a class="settings-inner-link" href="">
+                                                        <i class="settings-inner-icn">
+                                                            <svg class="svg" width="20" height="20">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                        <div class="">
+                                                            <h6 class="settings-inner-title"> Shipment Tracking
+                                                            </h6>
+                                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                                consectetur adipisicing
+                                                                elit. Suscipit est quos </span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
                                     </div>
                                 </div>
 

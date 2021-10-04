@@ -33,6 +33,13 @@ $(document).on("click", ".headerColumnJs", function (e) {
     searchRecords(frm);
 });
 
+/* Reset result on clear on keyword. */
+$(document).on('search', "input[name='keyword']", function () {
+    if ('' == $(this).val()) {
+        searchRecords(document.frmRecordSearch, false);
+    }
+});
+
 (function () {
     var dv = '.listingRecordJs';
     var paginationDv = '.listingPaginationJs';
@@ -256,7 +263,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
                 $.ykmsg.error(t.msg);
                 return false;
             }
-
+            $.ykmsg.success(t.msg);
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);

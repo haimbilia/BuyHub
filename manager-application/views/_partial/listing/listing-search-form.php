@@ -9,11 +9,11 @@ $frmSearch->setFormTagAttribute('class', 'form');
 $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
 $frmSearch->developerTags['fld_default_col'] = 12;
 
-$fld  = $frmSearch->getField('keyword');
-$fld->developerTags['noCaptionTag'] = true;
-$fld->developerTags['col'] = 8;
-$fld->addFieldtagAttribute('class', 'form-control');
-$fld->setFieldtagAttribute('placeholder', $keywordPlaceholder);
+$keyWordFld = $frmSearch->getField('keyword');
+$keyWordFld->developerTags['noCaptionTag'] = true;
+$keyWordFld->developerTags['col'] = 8;
+$keyWordFld->addFieldtagAttribute('class', 'form-control');
+$keyWordFld->setFieldtagAttribute('placeholder', $keywordPlaceholder);
 
 $sortByFld = $frmSearch->getField('sortBy');
 $sortByFld->setFieldTagAttribute('id', 'sortBy');
@@ -21,21 +21,91 @@ $sortByFld->setFieldTagAttribute('id', 'sortBy');
 $sortOrderFld = $frmSearch->getField('sortOrder');
 $sortOrderFld->setFieldTagAttribute('id', 'sortOrder');
 
-$submit  = $frmSearch->getField('btn_submit');
-$submit->addFieldtagAttribute('class', 'btn btn-brand btn-block');
-$submit->developerTags['col'] = 2;
-$submit->developerTags['noCaptionTag'] = true;
+$submitBtn = $frmSearch->getField('btn_submit');
+$submitBtn->addFieldtagAttribute('class', 'btn btn-brand btn-block');
+$submitBtn->developerTags['col'] = 2;
+$submitBtn->developerTags['noCaptionTag'] = true;
 
-$btn_clear = $frmSearch->getField('btn_clear');
-$btn_clear->addFieldtagAttribute('class', 'btn btn-link');
-$btn_clear->addFieldtagAttribute('onclick', 'clearSearch();');
-$btn_clear->developerTags['col'] = 2;
-$btn_clear->developerTags['noCaptionTag'] = true;
+$clearBtn = $frmSearch->getField('btn_clear');
+if (null != $clearBtn) {
+    $clearBtn->addFieldtagAttribute('class', 'btn btn-outline-brand');
+    $clearBtn->addFieldtagAttribute('onclick', 'clearSearch();');
+    $clearBtn->developerTags['col'] = 2;
+}
 
-echo $frmSearch->getFormTag(); ?>
-<div class="card">
-    <div class="card-body">
-        <?php echo $frmSearch->getFormHtml(false); ?>
+$frmFields = [
+    'hidden' => [],
+    'advSrchFlds' => [],
+];
+
+$i = $x = 0;
+$haveExtraFlds = false;
+foreach ($frmSearch->getAllFields() as $key => $frmFld) {
+    if ('submit' == $frmFld->fldType || 'keyword' == $frmFld->getName()) {
+        continue;
+    } else if ('hidden' == $frmFld->fldType) {
+        $frmFields['hidden'][] = $frmFld->getName();
+    } else {
+        if ('btn_clear' != $frmFld->getName() && false === $haveExtraFlds) {
+            $haveExtraFlds = true;
+        }
+
+        $frmFields['advSrchFlds'][$x][] = [
+            'name' => $frmFld->getName(),
+            'caption' => $frmFld->getCaption()
+        ];
+
+        
+        $i++;
+        if (3 == $i) {
+            $x++;
+            $i = 0;
+        } 
+    }
+}
+
+echo $frmSearch->getFormTag(); 
+    foreach ($frmFields['hidden'] as $fldName) {
+        echo $frmSearch->getFieldHtml($fldName);
+    }
+?>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+                </div>
+                <div class="col-md-2">
+                    <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                </div>                
+                <?php if ($haveExtraFlds) { ?>
+                    <div class="col-md-2">
+                        <a class="btn btn-link" data-toggle="collapse" href="#advanceSearch" aria-expanded="false" aria-controls="advanceSearch">
+                            <?php echo Labels::getLabel('LBL_ADVANCE_SEARCH', $adminLangId); ?>
+                        </a>
+                    </div>
+                <?php } ?>
+            </div>
+
+            <?php if ($haveExtraFlds) { ?>
+                <div class="collapse" id="advanceSearch">
+                    <div class="separator separator-dashed my-4"></div>
+                    <?php
+                    foreach ($frmFields['advSrchFlds'] as $fldsGroup) { ?>
+                        <div class="row"> 
+                            <?php foreach ($fldsGroup as $frmFld) { ?>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="label"><?php echo $frmFld['caption']; ?></label>
+                                        <?php echo $frmSearch->getFieldHtml($frmFld['name']); ?>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
+                </div>
+            <?php } ?>
+        </div>
     </div>
-</div>
 </form>
+<?php echo $frmSearch->getExternalJS(); ?>

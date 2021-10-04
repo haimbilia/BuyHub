@@ -78,13 +78,16 @@
                                     <div class="card-body">
                                         <ul class="pages__list-wrapper">
                                             <li><a href="products.php">Products</a></li>
-                                            <li><a href="theme-setting.php">Theme Setting</a></li>
+                                            <li><a href="seller-packages.php">Seller Packages</a></li>
+
                                             <li><a href="listing.php">Listing</a></li>
                                             <li><a href="login-1.php">Login</a></li>
                                             <li><a href="password-reset.php">Password Reset</a></li>
                                             <li><a href="profile-management.php">Profile Management</a></li>
                                             <li><a href="get-started.php">Getting Started</a></li>
                                             <li><a href="setting.php">Settings</a></li>
+                                            <li><a href="theme-setting.php">Theme Setting</a></li>
+                                            <li><a href="plugins-setting.php">Plugins Setting</a></li>
 
                                         </ul>
                                     </div>
@@ -97,7 +100,7 @@
                                 <div class="card">
                                     <div class="card-head">
                                         <div class="card-head-label">
-                                            <h3 class="card-head-title"> Page list </h3>
+                                            <h3 class="card-head-title"> UI Components </h3>
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -431,7 +434,8 @@
                                                                             <li><a href="local-sort.php">Local
                                                                                     Sort</a>
                                                                             </li>
-                                                                            <li><a href="responsive-datatable.php">Responsive Data Table</a>
+                                                                            <li><a href="responsive-datatable.php">Responsive
+                                                                                    Data Table</a>
                                                                             </li>
                                                                             <li><a
                                                                                     href="translation.php">Translation</a>
@@ -738,170 +742,222 @@
                                                     <li>
                                                         <a href="">Emails</a>
                                                         <ul>
-                                                            <li class=""><a href="email/account-verification.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/account-verification.html"
                                                                     target="_blank">Account Verification</a></li>
-                                                            <li class=""><a href="email/account-verification-admin.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/account-verification-admin.html"
                                                                     target="_blank">Account Verification Admin</a>
                                                             </li>
-                                                            <li class=""><a href="email/admin-message.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/admin-message.html"
                                                                     target="_blank">Admin Message</a></li>
                                                             <li class=""><a
-                                                                    href="email/admin-review-recived-approval.html"
+                                                                    href="<?php echo BASE_URL?>manager/design/email/admin-review-recived-approval.html"
                                                                     target="_blank">Admin Review Approval</a></li>
                                                             <li class=""><a
-                                                                    href="email/admin-review-recived-without-approval.html"
+                                                                    href="<?php echo BASE_URL?>manager/design/email/admin-review-recived-without-approval.html"
                                                                     target="_blank">Admin Review Without
                                                                     Approval</a>
                                                             </li>
-                                                            <li class=""><a href="email/buyer-give-review.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/buyer-give-review.html"
                                                                     target="_blank">Buyer Give Review</a></li>
-                                                            <li class=""><a href="email/buyer-message.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/buyer-message.html"
                                                                     target="_blank">Buyer Message</a></li>
                                                             <li class=""><a
-                                                                    href="email/cancellation-requested-admin.html"
+                                                                    href="<?php echo BASE_URL?>manager/design/email/cancellation-requested-admin.html"
                                                                     target="_blank">Cancellation Requested Admin</a>
                                                             </li>
                                                             <li class=""><a
-                                                                    href="email/cancellation-requested-buyer.html"
+                                                                    href="<?php echo BASE_URL?>manager/design/email/cancellation-requested-buyer.html"
                                                                     target="_blank">Cancellation Requested Buyer</a>
                                                             </li>
-                                                            <li class=""><a href="email/COD-payment-link.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/COD-payment-link.html"
                                                                     target="_blank">COD Payment Link</a></li>
-                                                            <li class=""><a href="email/COD-verification.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/COD-verification.html"
                                                                     target="_blank">COD Verification</a></li>
-                                                            <li class=""><a href="email/contact-us-admin.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/contact-us-admin.html"
                                                                     target="_blank">Contact Us Admin</a></li>
-                                                            <li class=""><a href="email/contact-us-buyer.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/contact-us-buyer.html"
                                                                     target="_blank">Contact Us Buyer</a></li>
-                                                            <li class=""><a href="email/digital-download.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/digital-download.html"
                                                                     target="_blank">Digital Download</a></li>
-                                                            <li class=""><a href="email/discount-coupon-buyer.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/discount-coupon-buyer.html"
                                                                     target="_blank">Discount Coupon Buyer</a></li>
-                                                            <li class=""><a href="email/email-from-admin-buyer.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/email-from-admin-buyer.html"
                                                                     target="_blank">Email from Admin To Buyer</a>
                                                             </li>
-                                                            <li class=""><a href="email/failed-login-attempt.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/failed-login-attempt.html"
                                                                     target="_blank">Failed Login Attempt</a></li>
-                                                            <li class=""><a href="email/failed-login-attempt-admin.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/failed-login-attempt-admin.html"
                                                                     target="_blank">Failed Login Attempt Admin</a>
                                                             </li>
-                                                            <li class=""><a href="email/favorite-email-buyer.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/favorite-email-buyer.html"
                                                                     target="_blank">Favorite Email Buyer</a></li>
-                                                            <li class=""><a href="email/favorite-price-drop-buyer.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/favorite-price-drop-buyer.html"
                                                                     target="_blank">Favorite Price Drop Buyer</a>
                                                             </li>
-                                                            <li class=""><a href="email/forgot-password.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/forgot-password.html"
                                                                     target="_blank">Forgot Password</a></li>
-                                                            <li class=""><a href="email/forgot-password-admin.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/forgot-password-admin.html"
                                                                     target="_blank">Forgot Password Admin</a></li>
-                                                            <li class=""><a href="email/GDPR-delete-account.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/GDPR-delete-account.html"
                                                                     target="_blank">GDPR Delete Account</a></li>
-                                                            <li class=""><a href="email/GDPR-information-buyer.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/GDPR-information-buyer.html"
                                                                     target="_blank">GDPR Information Buyer</a></li>
-                                                            <li class=""><a href="email/general-email.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/general-email.html"
                                                                     target="_blank">General Email</a></li>
-                                                            <li class=""><a href="email/new-order-admin.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/new-order-admin.html"
                                                                     target="_blank">New Order Admin</a></li>
-                                                            <li class=""><a href="email/newsletter-subscribe-admin.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/newsletter-subscribe-admin.html"
                                                                     target="_blank">Newsletter subscribe admin</a>
                                                             </li>
-                                                            <li class=""><a href="email/newsletter-subscribe-buyer.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/newsletter-subscribe-buyer.html"
                                                                     target="_blank">Newsletter subscribe buyer</a>
                                                             </li>
                                                             <li class=""><a
-                                                                    href="email/newsletter-unsubscribe-admin.html"
+                                                                    href="<?php echo BASE_URL?>manager/design/email/newsletter-unsubscribe-admin.html"
                                                                     target="_blank">Newsletter unsubscribe admin</a>
                                                             </li>
                                                             <li class=""><a
-                                                                    href="email/newsletter-unsubscribe-buyer.html"
+                                                                    href="<?php echo BASE_URL?>manager/design/email/newsletter-unsubscribe-buyer.html"
                                                                     target="_blank">Newsletter unsubscribe buyer</a>
                                                             </li>
-                                                            <li class=""><a href="email/new-user-sign-up.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/new-user-sign-up.html"
                                                                     target="_blank">New user sign up</a></li>
-                                                            <li class=""><a href="email/order-Comment-admin.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/order-Comment-admin.html"
                                                                     target="_blank">Order Comment Admin</a></li>
-                                                            <li class=""><a href="email/order-comment-buyer.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/order-comment-buyer.html"
                                                                     target="_blank">Order Comment Buyer</a></li>
-                                                            <li class=""><a href="email/order-cancelled-admin.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/order-cancelled-admin.html"
                                                                     target="_blank">Order Cancelled Admin</a></li>
-                                                            <li class=""><a href="email/order-cancelled-buyer.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/order-cancelled-buyer.html"
                                                                     target="_blank">Order cancelled buyer</a></li>
-                                                            <li class=""><a href="email/order-confirmation.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/order-confirmation.html"
                                                                     target="_blank">Order confirmation</a></li>
-                                                            <li class=""><a href="email/order-confirmation-email-2.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/order-confirmation-email-2.html"
                                                                     target="_blank">Order confirmation email-2</a>
                                                             </li>
-                                                            <li class=""><a href="email/order-confirmation-email-3.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/order-confirmation-email-3.html"
                                                                     target="_blank">Order confirmation email-3</a>
                                                             </li>
-                                                            <li class=""><a href="email/order-delivered-digital.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/order-delivered-digital.html"
                                                                     target="_blank">Order delivered digital</a></li>
-                                                            <li class=""><a href="email/order-delivered-physical.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/order-delivered-physical.html"
                                                                     target="_blank">Order delivered physical</a>
                                                             </li>
-                                                            <li class=""><a href="email/order-ready-digital.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/order-ready-digital.html"
                                                                     target="_blank">Order ready digital</a></li>
-                                                            <li class=""><a href="email/order-ready-physical.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/order-ready-physical.html"
                                                                     target="_blank">Order ready physical</a></li>
-                                                            <li class=""><a href="email/order-shipped-digital.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/order-shipped-digital.html"
                                                                     target="_blank">Order shipped digital</a></li>
-                                                            <li class=""><a href="email/order-shipped-physical.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/order-shipped-physical.html"
                                                                     target="_blank">Order shipped physical</a></li>
-                                                            <li class=""><a href="email/order-shipping-email.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/order-shipping-email.html"
                                                                     target="_blank">Order shipping email</a></li>
                                                             <li class=""><a
-                                                                    href="email/payment-failed-payment-link.html"
+                                                                    href="<?php echo BASE_URL?>manager/design/email/payment-failed-payment-link.html"
                                                                     target="_blank">Payment failed payment link</a>
                                                             </li>
-                                                            <li class=""><a href="email/pending-cart-buyer.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/pending-cart-buyer.html"
                                                                     target="_blank">Pending cart buyer</a></li>
-                                                            <li class=""><a href="email/return-requested-admin.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/return-requested-admin.html"
                                                                     target="_blank">Return requested admin</a></li>
-                                                            <li class=""><a href="email/return-requested-buyer.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/return-requested-buyer.html"
                                                                     target="_blank">Return requested buyer</a></li>
                                                             <li class=""><a
-                                                                    href="email/return-requested-buyer-approved.html"
+                                                                    href="<?php echo BASE_URL?>manager/design/email/return-requested-buyer-approved.html"
                                                                     target="_blank">Return requested buyer
                                                                     approved</a>
                                                             </li>
                                                             <li class=""><a
-                                                                    href="email/return-requested-buyer-declined.html"
+                                                                    href="<?php echo BASE_URL?>manager/design/email/return-requested-buyer-declined.html"
                                                                     target="_blank">Return requested buyer
                                                                     declined</a>
                                                             </li>
                                                             <li class=""><a
-                                                                    href="email/return-requested-buyer-item-recived.html"
+                                                                    href="<?php echo BASE_URL?>manager/design/email/return-requested-buyer-item-recived.html"
                                                                     target="_blank">Return requested buyer item
                                                                     recived</a></li>
-                                                            <li class=""><a href="email/rewards-earned-on-birthday.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/rewards-earned-on-birthday.html"
                                                                     target="_blank">Rewards earned on birthday</a>
                                                             </li>
-                                                            <li class=""><a href="email/rewards-earned-on-order.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/rewards-earned-on-order.html"
                                                                     target="_blank">Rewards earned on order</a></li>
                                                             <li class=""><a
-                                                                    href="email/rewards-earned-on-social-sharing.html"
+                                                                    href="<?php echo BASE_URL?>manager/design/email/rewards-earned-on-social-sharing.html"
                                                                     target="_blank">Rewards earned on social
                                                                     sharing</a>
                                                             </li>
-                                                            <li class=""><a href="email/rewards-share-earn.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/rewards-share-earn.html"
                                                                     target="_blank">Rewards share & earn</a></li>
-                                                            <li class=""><a href="email/rewards-expired.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/rewards-expired.html"
                                                                     target="_blank">Rewards expired</a></li>
-                                                            <li class=""><a href="email/rewards-spent-on-order.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/rewards-spent-on-order.html"
                                                                     target="_blank">Rewards spent on order</a></li>
-                                                            <li class=""><a href="email/sub-admin-welcome.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/sub-admin-welcome.html"
                                                                     target="_blank">Sub admin welcome</a></li>
-                                                            <li class=""><a href="email/test-email.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/test-email.html"
                                                                     target="_blank">Test email</a></li>
                                                             <li class=""><a
-                                                                    href="email/threshold-notification-admin.html"
+                                                                    href="<?php echo BASE_URL?>manager/design/email/threshold-notification-admin.html"
                                                                     target="_blank">Threshold notification admin</a>
                                                             </li>
-                                                            <li class=""><a href="email/to-do-assigned.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/to-do-assigned.html"
                                                                     target="_blank">To do assigned</a></li>
-                                                            <li class=""><a href="email/to-do-reminder.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/to-do-reminder.html"
                                                                     target="_blank">To do reminder</a></li>
-                                                            <li class=""><a href="email/welcome-email.html"
+                                                            <li class=""><a
+                                                                    href="<?php echo BASE_URL?>manager/design/email/welcome-email.html"
                                                                     target="_blank">Welcome email</a></li>
                                                         </ul>
                                                     </li>

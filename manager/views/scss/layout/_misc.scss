@@ -59,7 +59,7 @@
     line-height: 1.5;
     img {
         margin: 2rem auto;
-        max-width: 400px;
+        max-width: 200px;
     }
     .data {
         h6 {
@@ -161,10 +161,10 @@
 }
 
 .palette {
-    background-color: $bg-gray;
-    border-radius: $radius-common;
-    padding: 10px 0;
-    padding-bottom: 0;
+    // background-color: $bg-gray;
+    // border-radius: $radius-common;
+    // padding: 10px 0;
+    // padding-bottom: 0;
 }
 
 .color-data {
