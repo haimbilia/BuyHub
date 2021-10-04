@@ -1943,9 +1943,16 @@ strong {
         margin-bottom: 0.5rem;
         color: $txt-gray;
     }
-    li {
+    >li {
+        color: $txt-body;
+        font-size: 1rem;
+        font-weight: 600;
         ul {
             margin-#{$start-direction}: 1rem;
+            li {
+                font-weight: 400;
+                font-size: 0.8rem;
+            }
         }
     }
 }
