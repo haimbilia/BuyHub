@@ -236,6 +236,8 @@ $(document).on("click", ".headerColumnJs", function (e) {
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
+            }else if( "openMediaForm" in t){
+                mediaForm(t.recordId);
             }
         });
     };
@@ -260,7 +262,10 @@ $(document).on("click", ".headerColumnJs", function (e) {
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
+            }else if( "openMediaForm" in t){
+                mediaForm(t.recordId);
             }
+
         });
     };
 

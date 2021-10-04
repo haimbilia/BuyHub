@@ -130,7 +130,7 @@ class BrandsController extends AdminBaseController
         $frm = $this->getForm($recordId);
 
         if (0 < $recordId) {
-            $data = Brand::getAttributesById($recordId, array('brand_id', 'brand_identifier', 'brand_active', 'brand_featured'));
+            $data = Brand::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, array('brand_id', 'brand_active', 'brand_name'), true);            
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -149,7 +149,7 @@ class BrandsController extends AdminBaseController
             $frm->fill($data);
         }
         
-        $this->set('languages', Language::getAllNames());
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
@@ -169,9 +169,11 @@ class BrandsController extends AdminBaseController
         $recordId = $post['brand_id'];
         unset($post['brand_id']);
         $data = $post;
+        
+        $data['brand_identifier'] = $data['brand_name'];
 
         if ($recordId == 0) {
-            $record = Brand::getAttributesByIdentifier($post['brand_identifier']);
+            $record = Brand::getAttributesByIdentifier($data['brand_identifier']);
             if (!empty($record) && $record['brand_deleted'] == applicationConstants::YES) {
                 $recordId = $record['brand_id'];
                 $data['brand_deleted'] = applicationConstants::NO;
@@ -182,12 +184,23 @@ class BrandsController extends AdminBaseController
 
         $brand = new Brand($recordId);
         $brand->assignValues($data);
-
         if (!$brand->save()) {
             LibHelper::exitWithError($brand->getError(), true);
         }
 
         $recordId = $brand->getMainTableRecordId();
+
+        if (!$brand->updateLangData($this->getDefaultFormLangId(), ['brand_name' => $data['brand_name']])) {
+            LibHelper::exitWithError($record->getError(), true);
+        }
+
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataobj = new TranslateLangData(Brand::DB_TBL_LANG);
+            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            }
+        }
 
         /* url data[ */
         $brandOriginalUrl = $this->rewriteUrl . $recordId;
@@ -199,17 +212,14 @@ class BrandsController extends AdminBaseController
         /* ] */
 
         $newTabLangId = 0;
-        if ($recordId > 0) {
-            $languages = Language::getAllNames();
+        $languages = Language::getDropDownList($this->getDefaultFormLangId());
+        if (0 < count($languages)) {           
             foreach ($languages as $langId => $langName) {
                 if (!Brand::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
-        } else {
-            $recordId = $brand->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
 
         if ($newTabLangId == 0 && !$this->isMediaUploaded($recordId)) {
@@ -235,16 +245,21 @@ class BrandsController extends AdminBaseController
 
         $frm = new Form('frmProdBrand', array('id' => 'frmProdBrand'));
         $frm->addHiddenField('', 'brand_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_Brand_Identifier', $this->adminLangId), 'brand_identifier');
+        $frm->addRequiredField(Labels::getLabel('LBL_Brand_Name', $this->adminLangId), 'brand_name');
+        //$frm->addRequiredField(Labels::getLabel('LBL_Brand_Identifier', $this->adminLangId), 'brand_identifier');
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Brand_SEO_Friendly_URL', $this->adminLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
 
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Brand_Status', $this->adminLangId), 'brand_active', $activeInactiveArr, '', array(), '');
 
         /* $frm->addCheckBox(Labels::getLabel('LBL_Featured',$this->adminLangId), 'brand_featured', 1,array(),false,0); */
-        $fld = $frm->addHiddenField('', 'brand_logo', '', array('id' => 'brand_logo'));
-        // $frm->addSubmitButton('', 'btn_submit', $action);
+        /*$fld = $frm->addHiddenField('', 'brand_logo', '', array('id' => 'brand_logo'));   */
+        $languageArr = Language::getDropDownList();        
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, ''); 
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }      
         return $frm;
     }
 
@@ -253,7 +268,7 @@ class BrandsController extends AdminBaseController
         $this->objPrivilege->canEditBrands();
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
         if (1 > $recordId || 1 > $langId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -275,7 +290,7 @@ class BrandsController extends AdminBaseController
             $langFrm->fill($langData);
         }
 
-        $this->set('languages', Language::getAllNames());
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
@@ -315,25 +330,9 @@ class BrandsController extends AdminBaseController
         }
         /* ] */
 
-        unset($post['brand_id']);
-        unset($post['lang_id']);
-        $data = array(
-            'brandlang_lang_id' => $lang_id,
-            'brandlang_brand_id' => $recordId,
-            'brand_name' => $post['brand_name'],
-            //'brand_short_description' => $post['brand_short_description'],
-        );
         $prodBrandObj = new Brand($recordId);
-        if (!$prodBrandObj->updateLangData($lang_id, $data)) {
+        if (!$prodBrandObj->updateLangData($lang_id, ['brand_name' => $post['brand_name']])) {
             LibHelper::exitWithError($prodBrandObj->getError(), true);
-        }
-
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(Brand::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
         }
 
         $newTabLangId = 0;
@@ -358,25 +357,8 @@ class BrandsController extends AdminBaseController
     {
         $frm = new Form('frmProdBrandLang', array('id' => 'frmProdBrandLang'));
         $frm->addHiddenField('', 'brand_id', $recordId);
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			  $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-		
+		$frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');		
         $frm->addRequiredField(Labels::getLabel('LBL_Brand_Name', $this->adminLangId), 'brand_name');
-        
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
         return $frm;
     }
 
@@ -632,7 +614,8 @@ class BrandsController extends AdminBaseController
 
     private function isMediaUploaded($brandId)
     {
-        if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brandId, 0)) {
+        $attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brandId, 0);
+        if (false !== $attachment && 0 < $attachment['afile_id']) {
             return true;
         }
         return false;

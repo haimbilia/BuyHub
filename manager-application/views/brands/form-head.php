@@ -15,10 +15,12 @@ $disabled = !empty($disabled) ? ' disabled' : '';
         <nav class="nav nav-tabs">
             <a class="nav-link <?php echo $activeGentab; ?>" href="javascript:void(0)" onclick="editRecord(<?php echo $recordId ?>);">
                 <?php echo Labels::getLabel('LBL_General', $adminLangId);?>
-            </a>
-            <a class="nav-link <?php echo $activeLangtab .  $disabled; ?>" href="javascript:void(0);" <?php echo (0 < $recordId) ? "onclick='editLangData(" . $recordId . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                <?php echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
-            </a>
+            </a><i class="zmdi zmdi-account-box-phone"></i>
+            <?php if( 0 < count($languages)) { ?>
+                <a class="nav-link <?php echo $activeLangtab .  $disabled; ?>" href="javascript:void(0);" <?php echo (0 < $recordId) ? "onclick='editLangData(" . $recordId . "," . array_key_first($languages) . ");'" : ""; ?>>
+                    <?php echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
+                </a>
+            <?php } ?>
             <a class="nav-link <?php echo $activeMediatab .  $disabled; ?>" href="javascript:void(0);" <?php if (0 < $recordId) { ?> onclick="mediaForm(<?php echo $recordId ?>);" <?php } ?>>
                 <?php echo Labels::getLabel('LBL_Media', $adminLangId);?>
             </a>

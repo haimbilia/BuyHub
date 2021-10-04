@@ -78,3 +78,16 @@ getSlugUrl = function (obj, str, extra, pos) {
 
 };
 
+Slugify = function (str, str_val_id, is_slugify) {
+    var str = str.toString().toLowerCase()
+        .replace(/\s+/g, '-') /* Replace spaces with - */
+        .replace(/[^\w\-]+/g, '') /* Remove all non-word chars */
+        .replace(/\-\-+/g, '-') /* Replace multiple - with single - */
+        .replace(/^-+/, '') /*  Trim - from start of text */
+        .replace(/-+$/, '');        
+    if ($("#" + is_slugify).val() == 0){
+        $("#" + str_val_id).val(str);
+    }
+        
+};
+
