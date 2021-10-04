@@ -204,13 +204,10 @@ class LanguagesController extends AdminBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $data = Language::getAttributesById($recordId, array('language_active'));
-
-        if ($data == false) {
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
             LibHelper::exitWithError($this->str_invalid_request, true);
-        }            
-
-        $status = ($data['language_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
+        }
 
         $this->changeStatus($recordId, $status);
 

@@ -20,9 +20,20 @@ $htmlAfterField .= '<div id="image-listing"></div>';
 $imageFld->htmlAfterField = $htmlAfterField;
 /* Image Form */
 
-$activeMediatab = true;
+$otherButtons = [
+    [
+       'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'mediaForm(' . $recordId . ')',
+            'title' => Labels::getLabel('LBL_MEDIA', $adminLangId),
+        ],
+        'label' => Labels::getLabel('LBL_MEDIA', $adminLangId),
+        'isActive' => true
+    ]
+]; 
 
-require_once(CONF_THEME_PATH . 'brands/form-head.php'); ?>
+$formTitle = Labels::getLabel('LBL_BRAND_SETUP', $adminLangId);
+require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
 
     <div class="form-edit-body loaderContainerJs">
         <div class="section section--first">

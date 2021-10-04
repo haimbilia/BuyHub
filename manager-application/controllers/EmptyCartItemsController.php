@@ -2,83 +2,119 @@
 
 class EmptyCartItemsController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewEmptyCartItems($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditEmptyCartItems($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewEmptyCartItems();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewEmptyCartItems();
-        $frmSearch = $this->getSearchForm();
-        $this->set('frmSearch', $frmSearch);
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
+        $this->set("frmSearch", $frmSearch);
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_EMPTY_CART_ITEMS', $this->adminLangId));
+        $this->getListingData();
+
         $this->_template->render();
     }
 
-    public function search()
+    private function getListingData()
     {
-        $this->objPrivilege->canViewEmptyCartItems();
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
 
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $searchForm = $this->getSearchForm();
         $data = FatApp::getPostedData();
+
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        $searchForm = $this->getSearchForm($fields);
+
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
-        $srch = EmptyCartItems::getSearchObject($this->adminLangId, false);
+        $srch = EmptyCartItems::getSearchObject($this->adminLangId, false, false);
+        $srch->addMultipleFields([
+            'eci.*',
+            'eci_l.*',
+            'eci.emptycartitem_id as listSerial'
+        ]);
 
         if (!empty($post['keyword'])) {
-            $srch->addCondition('emptycartitem_identifier', 'like', '%' . $post['keyword'] . '%');
+            $condition = $srch->addCondition('emptycartitem_identifier', 'like', '%' . $post['keyword'] . '%');
+            $condition->attachCondition('eci_l.emptycartitem_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-        $srch->addOrder('emptycartitem_id', 'DESC');
+        $srch->setPageSize($pageSize);
+        $srch->addOrder($sortBy, $sortOrder);
+
         $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetchAll($rs);
 
-        $arrListing = array();
-        if ($rs) {
-            $arrListing = FatApp::getDb()->fetchAll($rs);
-        }
-
-        $this->set("arrListing", $arrListing);
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
     }
 
-    public function form($emptycartitem_id = 0)
+    public function search()
     {
-        $this->objPrivilege->canViewEmptyCartItems();
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'empty-cart-items/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        $emptycartitem_id = FatUtility::int($emptycartitem_id);
-        $emptyCartItemFrm = $this->getForm($emptycartitem_id);
+    public function form()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $frm = $this->getForm($recordId);
 
-        if (0 < $emptycartitem_id) {
-            $data = EmptyCartItems::getAttributesById($emptycartitem_id);
+        if (0 < $recordId) {
+            $data = EmptyCartItems::getAttributesById($recordId);
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
-            $emptyCartItemFrm->fill($data);
+            $frm->fill($data);
         }
 
         $this->set('languages', Language::getAllNames());
-        $this->set('emptycartitem_id', $emptycartitem_id);
-        $this->set('emptyCartItemFrm', $emptyCartItemFrm);
-        $this->_template->render(false, false);
+        $this->set('recordId', $recordId);
+        $this->set('frm', $frm);
+        $this->set('formTitle', Labels::getLabel('LBL_EMPTY_CART_ITEMS_SETUP', $this->adminLangId));
+        $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
     public function setup()
@@ -89,74 +125,70 @@ class EmptyCartItemsController extends AdminBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $emptycartitem_id = $post['emptycartitem_id'];
+        $recordId = $post['emptycartitem_id'];
         unset($post['emptycartitem_id']);
 
-        $record = new EmptyCartItems($emptycartitem_id);
+        $record = new EmptyCartItems($recordId);
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $newTabLangId = 0;
-        if ($emptycartitem_id > 0) {
+        if ($recordId > 0) {
             $languages = Language::getAllNames();
             foreach ($languages as $langId => $langName) {
-                if (!$row = EmptyCartItems::getAttributesByLangId($langId, $emptycartitem_id)) {
+                if (!$row = EmptyCartItems::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
         } else {
-            $emptycartitem_id = $record->getMainTableRecordId();
+            $recordId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
 
         $this->set('msg', $this->str_setup_successful);
-        $this->set('emptycartitemId', $emptycartitem_id);
+        $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($emptycartitem_id = 0, $lang_id = 0, $autoFillLangData = 0)
+    public function langForm($autoFillLangData = 0)
     {
-        $this->objPrivilege->canViewEmptyCartItems();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
 
-        $emptycartitem_id = FatUtility::int($emptycartitem_id);
-        $lang_id = FatUtility::int($lang_id);
-
-        if ($emptycartitem_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+        if (1 > $recordId || 1 > $langId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $emptyCartItemLangFrm = $this->getLangForm($lang_id);
+        $langFrm = $this->getLangForm($langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(EmptyCartItems::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($emptycartitem_id, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
-            $langData = EmptyCartItems::getAttributesByLangId($lang_id, $emptycartitem_id);
+            $langData = EmptyCartItems::getAttributesByLangId($langId, $recordId);
         }
 
-        $langData['emptycartitem_id'] = $emptycartitem_id;
-        $emptyCartItemLangFrm->fill($langData);
+        $langData['emptycartitem_id'] = $recordId;
+        $langFrm->fill($langData);
 
         $this->set('languages', Language::getAllNames());
-        $this->set('emptycartitem_id', $emptycartitem_id);
-        $this->set('emptycartitem_lang_id', $lang_id);
-        $this->set('emptyCartItemLangFrm', $emptyCartItemLangFrm);
-        $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('recordId', $recordId);
+        $this->set('lang_id', $langId);
+        $this->set('langFrm', $langFrm);
+        $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->set('formTitle', Labels::getLabel('LBL_STATE_SETUP', $this->adminLangId));
+        $this->_template->render(false, false, '_partial/listing/lang-form.php');
     }
 
     public function langSetup()
@@ -164,20 +196,19 @@ class EmptyCartItemsController extends AdminBaseController
         $this->objPrivilege->canEditEmptyCartItems();
         $post = FatApp::getPostedData();
 
-        $emptycartitem_id = $post['emptycartitem_id'];
+        $recordId = $post['emptycartitem_id'];
 
         $languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $lang_id = $post['lang_id'];
-		} else  {
-			$lang_id = array_key_first($languages); 
-			 $post['lang_id'] = $lang_id;
-		}
-       
+        if (count($languages) > 1) {
+            $lang_id = $post['lang_id'];
+        } else {
+            $lang_id = array_key_first($languages);
+            $post['lang_id'] = $lang_id;
+        }
 
-        if ($emptycartitem_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+
+        if ($recordId == 0 || $lang_id == 0) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $frm = $this->getLangForm($lang_id);
@@ -185,37 +216,35 @@ class EmptyCartItemsController extends AdminBaseController
         unset($post['emptycartitem_id']);
         unset($post['lang_id']);
         $data = array(
-        'emptycartitemlang_emptycartitem_id' => $emptycartitem_id,
-        'emptycartitemlang_lang_id' => $lang_id,
-        'emptycartitem_title' => $post['emptycartitem_title']
+            'emptycartitemlang_emptycartitem_id' => $recordId,
+            'emptycartitemlang_lang_id' => $lang_id,
+            'emptycartitem_title' => $post['emptycartitem_title']
         );
 
-        $emptyCartItemObj = new EmptyCartItems($emptycartitem_id);
+        $emptyCartItemObj = new EmptyCartItems($recordId);
         if (!$emptyCartItemObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($emptyCartItemObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($emptyCartItemObj->getError(), true);
         }
-        
+
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(EmptyCartItems::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($emptycartitem_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
         $newTabLangId = 0;
         $languages = Language::getAllNames();
         foreach ($languages as $langId => $langName) {
-            if (!$row = EmptyCartItems::getAttributesByLangId($langId, $emptycartitem_id)) {
+            if (!$row = EmptyCartItems::getAttributesByLangId($langId, $recordId)) {
                 $newTabLangId = $langId;
                 break;
             }
         }
 
         $this->set('msg', $this->str_setup_successful);
-        $this->set('emptycartitemId', $emptycartitem_id);
+        $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -224,76 +253,64 @@ class EmptyCartItemsController extends AdminBaseController
     {
         $this->objPrivilege->canEditEmptyCartItems();
 
-        $emptycartitem_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
-        if ($emptycartitem_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $this->markAsDeleted($emptycartitem_id);
+        $this->markAsDeleted($recordId);
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
 
     public function deleteSelected()
     {
         $this->objPrivilege->canEditEmptyCartItems();
-        $emptyCartItemIdsArr = FatUtility::int(FatApp::getPostedData('emptycartitem_ids'));
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('emptycartitem_ids'));
 
-        if (empty($emptyCartItemIdsArr)) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+        if (empty($recordIdsArr)) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
 
-        foreach ($emptyCartItemIdsArr as $emptycartitem_id) {
-            if (1 > $emptycartitem_id) {
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
                 continue;
             }
-            $this->markAsDeleted($emptycartitem_id);
+            $this->markAsDeleted($recordId);
         }
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($emptycartitem_id)
+    private function markAsDeleted($recordId)
     {
-        $emptycartitem_id = FatUtility::int($emptycartitem_id);
-        if (1 > $emptycartitem_id) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
-        $obj = new EmptyCartItems($emptycartitem_id);
-        if (!$obj->canRecordMarkDelete($emptycartitem_id)) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+        $obj = new EmptyCartItems($recordId);
+        if (!$obj->canRecordMarkDelete($recordId)) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         if (!$obj->deleteRecord(true)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
     }
 
-    public function changeStatus()
+    public function updateStatus()
     {
         $this->objPrivilege->canEditEmptyCartItems();
-        $emptycartitemId = FatApp::getPostedData('emptycartitemId', FatUtility::VAR_INT, 0);
-        if (0 >= $emptycartitemId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (0 >= $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $data = EmptyCartItems::getAttributesById($emptycartitemId, array( 'emptycartitem_id', 'emptycartitem_active' ));
-
-        if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $status = ($data['emptycartitem_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
-
-        $this->updateEmptyCartItemStatus($emptycartitemId, $status);
+        $this->changeStatus($recordId, $status);
 
         FatUtility::dieJsonSuccess($this->str_update_record);
     }
@@ -303,44 +320,38 @@ class EmptyCartItemsController extends AdminBaseController
         $this->objPrivilege->canEditEmptyCartItems();
 
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $emptyCartItemIdsArr = FatUtility::int(FatApp::getPostedData('emptycartitem_ids'));
-        if (empty($emptyCartItemIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('emptycartitem_ids'));
+        if (empty($recordIdsArr) || -1 == $status) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
 
-        foreach ($emptyCartItemIdsArr as $emptycartitemId) {
-            if (1 > $emptycartitemId) {
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
                 continue;
             }
 
-            $this->updateEmptyCartItemStatus($emptycartitemId, $status);
+            $this->changeStatus($recordId, $status);
         }
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function updateEmptyCartItemStatus($emptycartitemId, $status)
+    private function changeStatus($recordId, $status)
     {
         $status = FatUtility::int($status);
-        $emptycartitemId = FatUtility::int($emptycartitemId);
-        if (1 > $emptycartitemId || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
 
-        $emptyCartItemObj = new EmptyCartItems($emptycartitemId);
+        $emptyCartItemObj = new EmptyCartItems($recordId);
         if (!$emptyCartItemObj->changeStatus($status)) {
-            Message::addErrorMessage($emptyCartItemObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($emptyCartItemObj->getError(), true);
         }
     }
 
     private function getForm()
     {
-        $this->objPrivilege->canViewEmptyCartItems();
         $frm = new Form('frmEmptyCartItem');
         $frm->addHiddenField('', 'emptycartitem_id');
         $frm->addRequiredField(Labels::getLabel('LBL_Empty_Cart_Item_Identifier', $this->adminLangId), 'emptycartitem_identifier');
@@ -349,7 +360,6 @@ class EmptyCartItemsController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('LBL_Open_Link_in_New_Tab', $this->adminLangId), 'emptycartitem_url_is_newtab', applicationConstants::getYesNoArr($this->adminLangId), applicationConstants::NO, array(), '');
         $frm->addIntegerField(Labels::getLabel('LBL_Display_Order', $this->adminLangId), 'emptycartitem_display_order');
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'emptycartitem_active', applicationConstants::getActiveInactiveArr($this->adminLangId), applicationConstants::ACTIVE, array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 
@@ -359,33 +369,73 @@ class EmptyCartItemsController extends AdminBaseController
         $frm->addHiddenField('', 'emptycartitem_id');
 
         $languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-        
+        if (count($languages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+        } else {
+            $lang_id = array_key_first($languages);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+
         $frm->addRequiredField(Labels::getLabel('LBL_Empty_Cart_Item_Title', $this->adminLangId), 'emptycartitem_title');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
-        
+
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        
+
         return $frm;
     }
 
-    private function getSearchForm()
+    private function getSearchForm($fields = [])
     {
-        $frm = new Form('frmEmptyCartItemSearch', array('id' => 'frmEmptyCartItemSearch'));
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
-        $fld_submit->attachField($fld_cancel);
+        $frm = new Form('frmRecordSearch');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld->overrideFldType('search');
+        
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
+        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
         return $frm;
+    }
+
+    private function getFormColumns(): array
+    {
+        $emptyCartItemsTblHeadingCols = CacheHelper::get('emptyCartItemsTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($emptyCartItemsTblHeadingCols) {
+            return json_decode($emptyCartItemsTblHeadingCols);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
+            'emptycartitem_identifier' => Labels::getLabel('LBL_TITLE', $this->adminLangId),
+            'emptycartitem_url' => Labels::getLabel('LBL_URL', $this->adminLangId),
+            'emptycartitem_active' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
+        ];
+        CacheHelper::create('emptyCartItemsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return [
+            'select_all',
+            'listSerial',
+            'emptycartitem_identifier',
+            'emptycartitem_url',
+            'emptycartitem_active',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['state_active'], Common::excludeKeysForSort());
     }
 }

@@ -829,4 +829,9 @@ class AdminBaseController extends FatController
         $frm->addHiddenField('', 'pageSize', $pageSize);
         $frm->addHiddenField('', 'reportColumns', '');
     }
+
+    public function getDefaultFormLangId()
+    {
+        return FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+    }
 }

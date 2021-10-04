@@ -14,9 +14,8 @@ $activeLangtab = true;
 require_once(CONF_THEME_PATH . 'zones/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
         <?php
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) { ?> 
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');     
+        if (!empty($translatorSubscriptionKey)) { ?> 
             <div class="row justify-content-end"> 
                 <div class="col-auto mb-4">
                     <input class="btn btn-brand" 

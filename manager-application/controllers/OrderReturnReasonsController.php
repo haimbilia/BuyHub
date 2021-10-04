@@ -109,7 +109,8 @@ class OrderReturnReasonsController extends AdminBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->adminLangId));
+        $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
     public function setup()
@@ -180,7 +181,8 @@ class OrderReturnReasonsController extends AdminBaseController
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->adminLangId));
+        $this->_template->render(false, false, '_partial/listing/lang-form.php');
     }
 
     public function langSetup()
