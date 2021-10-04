@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light" dir="ltr">
-
 <head>
     <meta charset="utf-8" />
     <title>FATbit | Dashboard</title>
@@ -10,18 +9,15 @@
     <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="images/favicon.ico" />
 </head>
-
 <body class="fb-body">
     <div class="app">
         <?php
-        include 'includes/sidebar.php';
+            include 'includes/sidebar.php';
         ?>
-
         <div class="wrap">
             <?php
-            include 'includes/new-header.php';
+                include 'includes/new-header.php';
             ?>
-
             <button class="help-btn btn btn-light" data-toggle="modal" data-target="#help">
                 <span class="help_label">Help</span>
             </button>
@@ -68,7 +64,6 @@
                     </div>
                 </div>
             </div>
-
             <main class="main">
                 <div class="container">
                     <div class="row">
@@ -688,16 +683,10 @@
 
                 </div>
             </main>
-
             <?php
             include 'includes/footer.php';
             ?>
-
-
         </div>
-
     </div>
-
 </body>
-
 </html>

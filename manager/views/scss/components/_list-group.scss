@@ -1,0 +1,116 @@
+.list-switch {
+    display: flex;
+    flex-wrap: wrap;
+    // margin: 0 -.75rem;
+    li {
+        max-width: 20%;
+        flex: 0 0 20%;
+        padding: 0 .25rem;
+        padding-bottom: 1rem;
+    }
+    &--two {
+        li {
+            max-width: 50%;
+            flex: 0 0 50%;
+        }
+    }
+    &--three {
+        li {
+            max-width: 33.33%;
+            flex: 0 0 33.33%;
+            display: inline-flex;
+            @include media-breakpoint-down(lg) {
+                max-width: 50%;
+                flex: 0 0 50%;
+            }
+        }
+    }
+}
+
+.web-social-switch.list-switch {
+    &--three {
+        li {
+            span {
+                display: block;
+                display: flex;
+                align-items: center;
+                width: 100%;
+                padding: 0.5rem 0.85rem;
+                position: relative;
+                height: auto;
+                color: #1a1a1a;
+                border: 1px solid #cecdcd;
+                font-size: 0.75rem;
+                top: 0;
+                border-radius: 4px;
+                i {
+                    width: 24px;
+                }
+            }
+        }
+        .active {
+            span {
+                svg {
+                    fill: var(--light);
+                }
+                &::after {
+                    content: "";
+                    right: 12px;
+                    left: auto;
+                    position: absolute;
+                    display: block;
+                    top: 50%;
+                    margin-left: -2px;
+                    margin-top: -6px;
+                    width: 5px;
+                    height: 10px;
+                    border-width: 0 2px 2px 0 !important;
+                    transform: rotate(45deg);
+                    border: solid var(--light);
+                }
+            }
+        }
+        .active.facebook {
+            span {
+                background-color: #3b5998;
+                border-color: #3b5998;
+                color: var(--light);
+            }
+        }
+        .active.twitter {
+            span {
+                background-color: #00acee;
+                border-color: #00acee;
+                color: var(--light);
+            }
+        }
+        .active.youtube {
+            span {
+                background-color: #FF0000;
+                border-color: #FF0000;
+                color: var(--light);
+            }
+        }
+        .active.instagram {
+            span {
+                background-color: #f05161;
+                border-color: #f05161;
+                color: var(--light);
+            }
+        }
+        .active.pinterest {
+            span {
+                background-color: #E60023;
+                border-color: #E60023;
+                color: var(--light);
+            }
+        }
+        .active.googleplus {
+            span {
+                background-color: #db4a39;
+                border-color: #db4a39;
+                color: var(--light);
+            }
+        }
+    }
+}

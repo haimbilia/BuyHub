@@ -916,6 +916,9 @@
                                                             <li><a href="email-template-settings.php"
                                                                     target="_blank">Email temaplate - Settings</a>
                                                             </li>
+                                                            <li><a href="email-template-listing.php"
+                                                                    target="_blank">Email temaplate - listing</a>
+                                                            </li>
                                                             <li><a href="products.php" target="_blank">Products</a>
                                                             </li>
                                                             <li><a href="add-product.php" target="_blank">Add
