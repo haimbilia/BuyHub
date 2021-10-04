@@ -27,10 +27,11 @@ $submitBtn->developerTags['col'] = 2;
 $submitBtn->developerTags['noCaptionTag'] = true;
 
 $clearBtn = $frmSearch->getField('btn_clear');
-$clearBtn->addFieldtagAttribute('class', 'btn btn-link');
-$clearBtn->addFieldtagAttribute('onclick', 'clearSearch();');
-$clearBtn->developerTags['col'] = 2;
-$clearBtn->developerTags['noCaptionTag'] = true;
+if (null != $clearBtn) {
+    $clearBtn->addFieldtagAttribute('class', 'btn btn-outline-brand');
+    $clearBtn->addFieldtagAttribute('onclick', 'clearSearch();');
+    $clearBtn->developerTags['col'] = 2;
+}
 
 $frmFields = [
     'hidden' => [],
@@ -38,12 +39,17 @@ $frmFields = [
 ];
 
 $i = $x = 0;
+$haveExtraFlds = false;
 foreach ($frmSearch->getAllFields() as $key => $frmFld) {
-    if ('button' == $frmFld->fldType || 'submit' == $frmFld->fldType || 'keyword' == $frmFld->getName()) {
+    if ('submit' == $frmFld->fldType || 'keyword' == $frmFld->getName()) {
         continue;
     } else if ('hidden' == $frmFld->fldType) {
         $frmFields['hidden'][] = $frmFld->getName();
     } else {
+        if ('btn_clear' != $frmFld->getName() && false === $haveExtraFlds) {
+            $haveExtraFlds = true;
+        }
+
         $frmFields['advSrchFlds'][$x][] = [
             'name' => $frmFld->getName(),
             'caption' => $frmFld->getCaption()
@@ -58,8 +64,6 @@ foreach ($frmSearch->getAllFields() as $key => $frmFld) {
     }
 }
 
-$haveExtraFlds = (0 < count($frmFields['advSrchFlds']));
-
 echo $frmSearch->getFormTag(); 
     foreach ($frmFields['hidden'] as $fldName) {
         echo $frmSearch->getFieldHtml($fldName);
@@ -68,15 +72,12 @@ echo $frmSearch->getFormTag();
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-<?php echo ($haveExtraFlds) ? '6' : '8'?>">
+                <div class="col-md-8">
                     <?php echo $frmSearch->getFieldHtml('keyword'); ?>
                 </div>
                 <div class="col-md-2">
                     <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                </div>
-                <div class="col-md-2">
-                    <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
-                </div>
+                </div>                
                 <?php if ($haveExtraFlds) { ?>
                     <div class="col-md-2">
                         <a class="btn btn-link" data-toggle="collapse" href="#advanceSearch" aria-expanded="false" aria-controls="advanceSearch">

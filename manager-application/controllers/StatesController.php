@@ -24,7 +24,8 @@ class StatesController extends AdminBaseController
     private function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld->overrideFldType('search');
         
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId, true);
@@ -35,7 +36,7 @@ class StatesController extends AdminBaseController
             $this->addSortingElements($frm);
         }
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
         return $frm;
     }
 
@@ -126,7 +127,6 @@ class StatesController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-
     public function form()
     {
         $this->objPrivilege->canEditStates();
@@ -145,7 +145,8 @@ class StatesController extends AdminBaseController
         $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_STATE_SETUP', $this->adminLangId));
+        $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
     public function setup()
@@ -255,7 +256,8 @@ class StatesController extends AdminBaseController
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_STATE_SETUP', $this->adminLangId));
+        $this->_template->render(false, false, '_partial/listing/lang-form.php');
     }
 
     public function langSetup()
@@ -321,13 +323,10 @@ class StatesController extends AdminBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $data = States::getAttributesById($recordId, array('state_id', 'state_active'));
-
-        if ($data == false) {
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
-
-        $status = ($data['state_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
 
         $this->changeStatus($recordId, $status);
         Product::updateMinPrices(0, 0, 0, 0, $recordId);
@@ -384,7 +383,7 @@ class StatesController extends AdminBaseController
             'state_code' => Labels::getLabel('LBL_State_Code', $this->adminLangId),
             'country_name' => Labels::getLabel('LBL_Country_Name', $this->adminLangId),
             'state_active' => Labels::getLabel('LBL_Status', $this->adminLangId),
-            'action' => '',
+            'action' => Labels::getLabel('LBL_Action', $this->adminLangId),
         ];
         CacheHelper::create('statesTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         

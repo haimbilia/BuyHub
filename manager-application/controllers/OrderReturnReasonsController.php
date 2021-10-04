@@ -21,7 +21,6 @@ class OrderReturnReasonsController extends AdminBaseController
         $this->_template->render();
     }
 
-
     private function getListingData()
     {
         $db = FatApp::getDb();
@@ -110,7 +109,8 @@ class OrderReturnReasonsController extends AdminBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->adminLangId));
+        $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
     public function setup()
@@ -181,7 +181,8 @@ class OrderReturnReasonsController extends AdminBaseController
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->adminLangId));
+        $this->_template->render(false, false, '_partial/listing/lang-form.php');
     }
 
     public function langSetup()
@@ -284,14 +285,14 @@ class OrderReturnReasonsController extends AdminBaseController
     private function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld->overrideFldType('search');
 
         if (!empty($fields)) {
             $this->addSortingElements($frm);
         }
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         return $frm;
     }
 

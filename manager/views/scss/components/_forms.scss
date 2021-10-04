@@ -181,7 +181,7 @@ $input-color: #474747;
         }
     }
     [type="button"] {
-        @include submit;
+        //@include submit;
     }
     [type="reset"] {
         // @include submit;
@@ -552,7 +552,6 @@ form.custom-form {
     width: 1rem !important;
     flex: 0 0 1rem;
     max-width: 1rem;
-    -webkit-transition: all 0.15s ease-out 0s;
     transition: all 0.15s ease-out 0s;
     border: $border;
     background: #fff;
@@ -566,6 +565,9 @@ form.custom-form {
     z-index: 1;
     border-radius: $radius-common;
     vertical-align: middle;
+    &:hover {
+        border-color: darken($border-color, 20);
+    }
 }
 
 .checkbox input:checked,
@@ -586,7 +588,6 @@ form.custom-form {
     line-height: 1rem;
     border-right: 2px solid #fff;
     border-bottom: 2px solid #fff;
-    -webkit-transform: rotate(45deg);
     transform: rotate(45deg);
     left: 50%;
     top: 50%;
@@ -611,10 +612,9 @@ form.custom-form {
 
 .radio input {
     border-radius: 50% !important;
-}
-
-.radio input::after {
-    border-radius: 50%;
+    &:after {
+        border-radius: 50%;
+    }
 }
 
 //toggles

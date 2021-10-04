@@ -17,27 +17,17 @@ $fld->setFieldTagAttribute('id', "urlrewrite_custom");
 $fld->htmlAfterField = "<small class='text--small'>" . UrlHelper::generateFullUrl('Brands', 'View', array($recordId), CONF_WEBROOT_FRONT_URL) . '</small>';
 $fld->setFieldTagAttribute('onKeyup', "getSlugUrl(this,this.value)");
 
-$activeGentab = true;
-$disabled = (1 > $recordId) ? 'disabled' : '';
-require_once(CONF_THEME_PATH . 'brands/form-head.php'); ?>
+$otherButtons = [
+    [
+       'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'mediaForm(' . $recordId . ')',
+            'title' => Labels::getLabel('LBL_MEDIA', $adminLangId),
+        ],
+        'label' => Labels::getLabel('LBL_MEDIA', $adminLangId),
+        'isActive' => false
+    ]
+]; 
 
-    <div class="form-edit-body loaderContainerJs">
-        <?php echo $frm->getFormHtml(); ?>
-    </div>
-
-    <div class="form-edit-foot">
-        <div class="row">
-            <div class="col-auto">
-                <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
-                    <?php 
-                        if (0 < $recordId) {
-                            echo Labels::getLabel('LBL_UPDATE', $adminLangId); 
-                        } else {
-                            echo Labels::getLabel('LBL_SAVE', $adminLangId); 
-                        }
-                    ?>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+$formTitle = Labels::getLabel('LBL_BRAND_SETUP', $adminLangId);
+require_once(CONF_THEME_PATH . '_partial/listing/form.php');

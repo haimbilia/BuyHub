@@ -200,7 +200,8 @@ class CountriesController extends AdminBaseController
         $this->set('lang_id', $lang_id);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_COUNTRY_SETUP', $this->adminLangId));
+        $this->_template->render(false, false, '_partial/listing/lang-form.php');
     }
 
     public function langSetup()
@@ -358,14 +359,14 @@ class CountriesController extends AdminBaseController
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
 
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld->overrideFldType('search');
 
         if (!empty($fields)) {
             $this->addSortingElements($frm);
         }
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         return $frm;
     }
 

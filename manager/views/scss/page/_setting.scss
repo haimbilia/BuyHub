@@ -48,3 +48,34 @@
         height: 3.2rem !important;
     }
 }
+
+.settings-inner {
+    &-item {
+        list-style: none;
+        border-bottom: $border;
+        &:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+    }
+    &-link {
+        color: $txt-gray;
+        display: flex;
+        padding: 20px 25px;
+        font-size: 0.8rem;
+        &:hover,
+        .is-active {
+            color: currentColor;
+            background-color: lighten($bg-gray, 02);
+            text-decoration: none;
+        }
+    }
+    &-icn {
+        margin-#{$end-direction}: 1rem;
+    }
+    &-title {
+        font-size: 1rem;
+        color: $txt-body;
+        font-weight: 500;
+    }
+}
