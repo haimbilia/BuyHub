@@ -8,43 +8,42 @@ if (!isset($tbody)) {
 $serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
 foreach ($arrListing as $sn => $row) {
     $serialNo++;
-
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
-    $tr->setAttribute("id", $row['orderstatus_id']);
+    $tr->setAttribute("id", $row['emptycartitem_id']);
+
     foreach ($fields as $key => $val) {
-        $tdAttr = [];
-        if ('action' == $key) {
-            $tdAttr = ['class' => 'align-right'];
-        } else if ('dragdrop' == $key) {
-            $tdAttr = ['class' => 'dragHandle'];
-        }
-        
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
-            case 'dragdrop':
-                if ($row['orderstatus_is_active'] == applicationConstants::ACTIVE) {
-                    $td->appendElement('plaintext', $tdAttr, '<svg class="svg" width="18" height="18">
-                                                                <use
-                                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#drag">
-                                                                </use>
-                                                            </svg>', true);
-                }
-                break;
             case 'select_all':
-                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="orderstatus_ids[]" value=' . $row['orderstatus_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="emptycartitem_ids[]" value=' . $row['emptycartitem_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'orderstatus_is_active':
-                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['orderstatus_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
+            case 'emptycartitem_url':
+                $itemUrl = str_replace('{SITEROOT}', UrlHelper::generateFullUrl('', '', $tdAttr, CONF_WEBROOT_FRONT_URL), $row[$key]);
+                $itemUrl = str_replace('{siteroot}', UrlHelper::generateFullUrl('', '', $tdAttr, CONF_WEBROOT_FRONT_URL), $itemUrl);
+                $td->appendElement('plaintext', $tdAttr, $itemUrl);
+                break;
+            case 'emptycartitem_identifier':
+                if ($row['emptycartitem_title'] != '') {
+                    $td->appendElement('plaintext', $tdAttr, $row['emptycartitem_title'], true);
+                    $td->appendElement('br', $tdAttr);
+                    $td->appendElement('plaintext', $tdAttr, '(' . $row[$key] . ')', true);
+                } else {
+                    $td->appendElement('plaintext', $tdAttr, $row[$key], true);
+                }
+                break;
+            case 'emptycartitem_active':
+                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['emptycartitem_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
                 $statusClass = ($canEdit) ? '' : 'disabled';
                 $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
 
                 $htm = '<span class="switch switch-sm switch-icon">
                                     <label>
-                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['orderstatus_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
+                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['emptycartitem_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
                                         <span></span>
                                     </label>
                                 </span>';
@@ -53,11 +52,12 @@ foreach ($arrListing as $sn => $row) {
             case 'action':
                 $data = [
                     'adminLangId' => $adminLangId,
-                    'recordId' => $row['orderstatus_id']
+                    'recordId' => $row['emptycartitem_id']
                 ];
-
+                
                 if ($canEdit) {
                     $data['editButton'] = [];
+                    $data['deleteButton'] = [];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);

@@ -11,16 +11,17 @@ class EmptyCartItems extends MyAppModel
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
     }
 
-    public static function getSearchObject($langId = 0, $isActive = true)
+    public static function getSearchObject($langId = 0, $isActive = true, $setOrderBy = true)
     {
-        $srch = new SearchBase(static::DB_TBL);
+        $srch = new SearchBase(static::DB_TBL, 'eci');
 
         if ($langId > 0) {
             $srch->joinTable(
                 static::DB_TBL_LANG,
                 'LEFT OUTER JOIN',
                 'emptycartitemlang_emptycartitem_id = emptycartitem_id
-			AND emptycartitemlang_lang_id = ' . $langId
+			AND emptycartitemlang_lang_id = ' . $langId,
+            'eci_l'
             );
         }
 
@@ -28,8 +29,10 @@ class EmptyCartItems extends MyAppModel
             $srch->addCondition('emptycartitem_active', '=', applicationConstants::ACTIVE);
         }
 
-        $srch->addOrder(static::DB_TBL_PREFIX . 'active', 'DESC');
-        $srch->addOrder(static::DB_TBL_PREFIX . 'display_order');
+        if (true === $setOrderBy) {
+            $srch->addOrder(static::DB_TBL_PREFIX . 'active', 'DESC');
+            $srch->addOrder(static::DB_TBL_PREFIX . 'display_order');
+        }
         return $srch;
     }
 
