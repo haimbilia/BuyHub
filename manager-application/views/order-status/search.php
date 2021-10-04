@@ -13,8 +13,13 @@ foreach ($arrListing as $sn => $row) {
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
     $tr->setAttribute("id", $row['orderstatus_id']);
     foreach ($fields as $key => $val) {
-        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
-        $tdAttr = ('dragdrop' == $key) ? [...$tdAttr, 'class' => 'dragHandle'] : $tdAttr;
+        $tdAttr = [];
+        if ('action' == $key) {
+            $tdAttr = ['class' => 'align-right'];
+        } else if ('dragdrop' == $key) {
+            $tdAttr = ['class' => 'dragHandle'];
+        }
+        
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'dragdrop':
