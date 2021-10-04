@@ -246,7 +246,7 @@
                                     <div class="card-head">
                                         <h3 class="card-head-label">
                                             <span class="card-head-title">Catalog Products </span>
-                                            <span class="text-muted">Over 500 new products</span>
+
                                         </h3>
                                         <div class="card-toolbar">
 

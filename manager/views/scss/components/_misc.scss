@@ -2146,3 +2146,16 @@ strong {
         }
     }
 }
+
+.form-section {
+    &-head {
+        margin-top: 1.8rem;
+        margin-bottom: 0;
+        font-size: 1rem;
+        color: $txt-body;
+    }
+    &-body {
+        margin: 2rem 0;
+        margin-top: 1rem;
+    }
+}
