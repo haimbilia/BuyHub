@@ -2130,6 +2130,23 @@ strong {
     }
 }
 
+.maintenance-mode {
+    display: flex;
+    align-items: center;
+    &--text {
+        font-size: 0.875rem;
+        color: $txt-body;
+        margin-#{$end-direction}: .5rem;
+    }
+    &--action {
+        label {
+            margin: 0;
+            display: inline-flex;
+            align-items: center;
+        }
+    }
+}
+
 .form-section {
     &-head {
         margin-top: 1.8rem;
