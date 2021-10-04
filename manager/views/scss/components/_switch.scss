@@ -377,6 +377,75 @@
                 }
             }
         }
+        &--outline {
+            input {
+                &:empty {
+                    ~ {
+                        span {
+                            &:before {
+                                border: 2px solid $dark-color;
+                                background-color: transparent;
+                            }
+                            &:after {
+                                background-color: $dark-color;
+                                width: 14px;
+                                height: 14px;
+                                top: 3px;
+                                margin-#{$start-direction}: 4px;
+                            }
+                            &:hover {
+                                &:before {
+                                    background-color: lighten($dark-color, 20%);
+                                    border-color: lighten($dark-color, 20%);
+                                }
+                                &::after {
+                                    background-color: $bg-light;
+                                }
+                            }
+                        }
+                    }
+                }
+                &:checked {
+                    ~ {
+                        span {
+                            &:before {
+                                background-color: $brand-color;
+                                border-color: $brand-color;
+                            }
+                            &:after {
+                                background-color: $brand-color-inverse;
+                                opacity: 1;
+                                margin-#{$start-direction}: 20px;
+                            }
+                            &:hover {
+                                &:before {
+                                    background-color: $brand-color;
+                                    border-color: $brand-color;
+                                }
+                                &::after {
+                                    background-color: $brand-color-inverse;
+                                }
+                            }
+                        }
+                    }
+                }
+                &:disabled {
+                    ~ {
+                        span {
+                            &:hover {
+                                &:before {
+                                    background-color: transparent;
+                                    border-color: currentColor;
+                                }
+                                &::after {
+                                    background-color: $dark-color;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     &#{&}-outline {
         &.switch-dark {

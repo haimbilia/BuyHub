@@ -3,19 +3,18 @@
 HtmlHelper::formatFormFields($langFrm);
 
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit layout--' . $formLayout);
+$langFrm->setFormTagAttribute('dir', $formLayout);
 $langFrm->setFormTagAttribute('onsubmit', 'saveLangData(this); return(false);');
 
 $langFld = $langFrm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this.value);");
 
 $activeLangtab = true;
-
-require_once(CONF_THEME_PATH . 'order-return-reasons/form-head.php'); ?>
+require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
         <?php
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) { ?> 
+        if (!empty($translatorSubscriptionKey)) { ?> 
             <div class="row justify-content-end"> 
                 <div class="col-auto mb-4">
                     <input class="btn btn-brand" 

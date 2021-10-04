@@ -41,11 +41,16 @@
             $tr = $tbl->appendElement('tr');
             $tr->setAttribute("id", $row['nlink_id']);
             foreach ($arr_flds as $key => $val) {
-                $td = $tr->appendElement('td');
+                $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+                $tdAttr = ('dragdrop' == $key) ? [...$tdAttr, 'class' => 'dragHandle'] : $tdAttr;
+                $td = $tr->appendElement('td', $tdAttr);
                 switch ($key) {
                     case 'dragdrop':
-                        $td->appendElement('i', array('class' => 'ion-arrow-move icon'));
-                        $td->setAttribute("class", 'dragHandle');
+                        $td->appendElement('plaintext', $tdAttr, '<svg class="svg" width="18" height="18">
+                                                                <use
+                                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#drag">
+                                                                </use>
+                                                            </svg>', true);
                         break;
                     case 'listserial':
                         $td->appendElement('plaintext', array(), $sr_no);
