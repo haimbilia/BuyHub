@@ -110,13 +110,13 @@ class ZonesController extends AdminBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm();
         if (0 < $recordId) {   
-            $data = Zone::getAttributesByLangId(FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1), $recordId, null, true);
+            $data = Zone::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, null, true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
-        $this->set('languages', Language::getDropDownList(true));
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
@@ -142,14 +142,13 @@ class ZonesController extends AdminBaseController
             LibHelper::exitWithError($record->getError(), true);
         }
         $recordId = $record->getMainTableRecordId();
-
-        $defaultLang = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        if (!$record->updateLangData($defaultLang, ['zone_name' => $post['zone_name']])) {
+      
+        if (!$record->updateLangData($this->getDefaultFormLangId(), ['zone_name' => $post['zone_name']])) {
             LibHelper::exitWithError($record->getError(), true);
         }
 
         $newTabLangId = 0;
-        $languages = Language::getDropDownList(true);
+        $languages = Language::getDropDownList($this->getDefaultFormLangId());
         if (0 < count($languages)) {           
             foreach ($languages as $langId => $langName) {
                 if (!$row = Zone::getAttributesByLangId($langId, $recordId)) {
@@ -176,7 +175,7 @@ class ZonesController extends AdminBaseController
     public function langForm($autoFillLangData = 0)
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
         if (1 > $recordId || 1 > $langId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -198,7 +197,7 @@ class ZonesController extends AdminBaseController
             $langFrm->fill($langData);
         }
 
-        $this->set('languages', Language::getDropDownList(true));
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
@@ -278,7 +277,7 @@ class ZonesController extends AdminBaseController
     {
         $frm = new Form('frmZoneLang');
         $frm->addHiddenField('', 'zone_id', $recordId);  
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList(true), $lang_id, array(), '');	
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');	
         $frm->addRequiredField(Labels::getLabel('LBL_Zone_Name', $this->adminLangId), 'zone_name'); 
         return $frm;
     }
