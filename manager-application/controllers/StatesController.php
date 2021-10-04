@@ -127,7 +127,6 @@ class StatesController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-
     public function form()
     {
         $this->objPrivilege->canEditStates();
@@ -146,7 +145,8 @@ class StatesController extends AdminBaseController
         $this->set('languages', Language::getDropDownList(true));
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_STATE_SETUP', $this->adminLangId));
+        $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
     public function setup()
@@ -257,7 +257,8 @@ class StatesController extends AdminBaseController
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_STATE_SETUP', $this->adminLangId));
+        $this->_template->render(false, false, '_partial/listing/lang-form.php');
     }
 
     public function langSetup()
@@ -323,13 +324,10 @@ class StatesController extends AdminBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $data = States::getAttributesById($recordId, array('state_id', 'state_active'));
-
-        if ($data == false) {
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
-
-        $status = ($data['state_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
 
         $this->changeStatus($recordId, $status);
         Product::updateMinPrices(0, 0, 0, 0, $recordId);
@@ -386,7 +384,7 @@ class StatesController extends AdminBaseController
             'state_code' => Labels::getLabel('LBL_State_Code', $this->adminLangId),
             'country_name' => Labels::getLabel('LBL_Country_Name', $this->adminLangId),
             'state_active' => Labels::getLabel('LBL_Status', $this->adminLangId),
-            'action' => '',
+            'action' => Labels::getLabel('LBL_Action', $this->adminLangId),
         ];
         CacheHelper::create('statesTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         

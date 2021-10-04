@@ -947,13 +947,10 @@ class BrandsController extends AdminBaseController
         if (0 == $recordId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        $brandData = Brand::getAttributesById($recordId, array('brand_active'));
-
-        if (!$brandData) {
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
-
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
 
         $this->changeStatus($recordId, $status);
         Product::updateMinPrices(0, 0, $recordId);

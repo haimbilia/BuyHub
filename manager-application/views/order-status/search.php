@@ -5,20 +5,20 @@ if (!isset($tbody)) {
     $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
 }
 
-$serialNo = 0;
+$serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
 foreach ($arrListing as $sn => $row) {
     $serialNo++;
+
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
-    $tr->setAttribute("id", $row['currency_id']);
-
+    $tr->setAttribute("id", $row['orderstatus_id']);
     foreach ($fields as $key => $val) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $tdAttr = ('dragdrop' == $key) ? [...$tdAttr, 'class' => 'dragHandle'] : $tdAttr;
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'dragdrop':
-                if ($row['currency_active'] == applicationConstants::ACTIVE) {
+                if ($row['orderstatus_is_active'] == applicationConstants::ACTIVE) {
                     $td->appendElement('plaintext', $tdAttr, '<svg class="svg" width="18" height="18">
                                                                 <use
                                                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#drag">
@@ -27,44 +27,28 @@ foreach ($arrListing as $sn => $row) {
                 }
                 break;
             case 'select_all':
-                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="currency_ids[]" value=' . $row['currency_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="orderstatus_ids[]" value=' . $row['orderstatus_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'currency_symbol_left':
-                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayNotApplicable($adminLangId, $row[$key]), true);
-                break;
-            case 'currency_symbol_right':
-                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayNotApplicable($adminLangId, $row[$key]), true);
-                break;
-            case 'currency_active':
-                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['currency_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
+            case 'orderstatus_is_active':
+                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['orderstatus_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
                 $statusClass = ($canEdit) ? '' : 'disabled';
                 $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
 
                 $htm = '<span class="switch switch-sm switch-icon">
                                     <label>
-                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['currency_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
+                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['orderstatus_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
                                         <span></span>
                                     </label>
                                 </span>';
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
-            case 'currency_code':
-                if ($row['currency_name'] != '') {
-                    $default = ($row['currency_id'] == $defaultCurrencyId) ? '<span class="badge badge--unified-brand badge--inline badge--pill">' . Labels::getLabel('LBL_DEFAULT', $adminLangId) . '</span>' : '';
-                    $td->appendElement('plaintext', $tdAttr, $row['currency_name'], true);
-                    $td->appendElement('br', $tdAttr);
-                    $td->appendElement('plaintext', $tdAttr, '(' . $row[$key] . ') ' . $default, true);
-                } else {
-                    $td->appendElement('plaintext', $tdAttr, $row[$key], true);
-                }
-                break;
             case 'action':
                 $data = [
                     'adminLangId' => $adminLangId,
-                    'recordId' => $row['currency_id']
+                    'recordId' => $row['orderstatus_id']
                 ];
 
                 if ($canEdit) {
@@ -89,7 +73,6 @@ if (count($arrListing) == 0) {
         Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId)
     );
 }
-
 
 if ($printData) {
     echo $tbody->getHtml();
