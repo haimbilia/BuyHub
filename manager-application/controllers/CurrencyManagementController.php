@@ -117,25 +117,26 @@ class CurrencyManagementController extends AdminBaseController
         if (0 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-
-        $defaultCurrencyId = FatApp::getConfig("CONF_CURRENCY", FatUtility::VAR_INT, 1);
         
         $data = [];
         $defaultCurrency = 0;
         if ($recordId > 0) {
-            $data = Currency::getAttributesById($recordId, array('currency_id', 'currency_code', 'currency_active', 'currency_symbol_left', 'currency_symbol_right', 'currency_value'));
-            
+            $data = Currency::getAttributesByLangId(
+                    $this->getDefaultFormLangId(),
+                    $recordId,
+                    array('currency_id', 'currency_code', 'currency_active', 'currency_symbol_left', 'currency_symbol_right', 'currency_value','currency_name'),
+                    true
+                );
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
-            $defaultCurrency = ($data['currency_id'] == $defaultCurrencyId) ? 1 : 0;
+            $defaultCurrency = ($data['currency_id'] == FatApp::getConfig("CONF_CURRENCY", FatUtility::VAR_INT, 1)) ? 1 : 0;
         }
-        $frm = $this->getForm($recordId, $defaultCurrency);
-        $frm->fill($data);
-        
-        $this->set('languages', Language::getAllNames());
-        $this->set('recordId', $recordId);
-        $this->set('defaultCurrency', $defaultCurrency);
+        $frm = $this->getForm($defaultCurrency);
+        $frm->fill($data);        
+    
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        $this->set('recordId', $recordId);    
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_CURRENCY_SETUP', $this->adminLangId));
         $this->_template->render(false, false, '_partial/listing/form.php');
@@ -160,37 +161,23 @@ class CurrencyManagementController extends AdminBaseController
                 unset($post['currency_value']);
             }
         }
-        $record = new Currency($recordId);
-        $post['currency_date_modified'] = date('Y-m-d H:i:s');
-        $record->assignValues($post);
+        $recordObj = new Currency($recordId);
+        $post['currency_date_modified'] = date('Y-m-d H:i:s');    
+        $recordObj->assignValues($post);
 
-        if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+        if (!$recordObj->save()) {
+            LibHelper::exitWithError($recordObj->getError(), true);
         }
 
-        $newTabLangId = 0;
-        if ($recordId > 0) {
-            $languages = Language::getAllNames();
-            foreach ($languages as $langId => $langName) {
-                if (!$row = Currency::getAttributesByLangId($langId, $recordId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        } else {
-            $recordId = $record->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
-        }
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]); 
+        
         $this->_template->render(false, false, 'json-success.php');
     }
 
     public function langForm($autoFillLangData = 0)
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
+        $langId = FatApp::getPostedData('langId', 0);
 
         if (1 > $recordId || 1 > $langId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -211,7 +198,7 @@ class CurrencyManagementController extends AdminBaseController
             $langFrm->fill($langData);
         }
 
-        $this->set('languages', Language::getAllNames());
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
@@ -223,10 +210,9 @@ class CurrencyManagementController extends AdminBaseController
     public function langSetup()
     {
         $this->objPrivilege->canEditCurrencyManagement();
-        $post = FatApp::getPostedData();
 
-        $recordId = $post['currency_id'];
-        $lang_id = $post['lang_id'];
+        $recordId = FatApp::getPostedData('currency_id', FatUtility::VAR_INT, 0);
+        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
         if ($recordId == 0 || $lang_id == 0) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
@@ -234,41 +220,15 @@ class CurrencyManagementController extends AdminBaseController
 
         $frm = $this->getLangForm($recordId, $lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        unset($post['currency_id']);
-        unset($post['lang_id']);
 
-        $data = array(
-            'currencylang_lang_id' => $lang_id,
-            'currencylang_currency_id' => $recordId,
-            'currency_name' => $post['currency_name']
-        );
-
-        $currencyObj = new Currency($recordId);
-
-        if (!$currencyObj->updateLangData($lang_id, $data)) {
-            LibHelper::exitWithError($currencyObj->getError(), true);
+        if (false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(Currency::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-        }
+        $recordObj = new Currency($recordId);
+        
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]], $lang_id);      
 
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = Currency::getAttributesByLangId($langId, $recordId)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -288,12 +248,11 @@ class CurrencyManagementController extends AdminBaseController
         }
     }
 
-    private function getForm($currencyId = 0, $defaultCurrency = 0)
+    private function getForm( int $defaultCurrency = 0)
     {
-        $currencyId = FatUtility::int($currencyId);
-
         $frm = new Form('frmCurrency');
-        $frm->addHiddenField('', 'currency_id', $currencyId);
+        $frm->addHiddenField('', 'currency_id');
+        $frm->addRequiredField(Labels::getLabel('LBL_Currency_Name', $this->adminLangId), 'currency_name');
         $frm->addRequiredField(Labels::getLabel('LBL_Currency_code', $this->adminLangId), 'currency_code');
         $frm->addTextbox(Labels::getLabel('LBL_Currency_Symbol_Left', $this->adminLangId), 'currency_symbol_left');
         $frm->addTextbox(Labels::getLabel('LBL_Currency_Symbol_Right', $this->adminLangId), 'currency_symbol_right');
@@ -303,8 +262,14 @@ class CurrencyManagementController extends AdminBaseController
         }
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'currency_active', $activeInactiveArr, '', array(), '');
+
+        $languageArr = Language::getDropDownList();        
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, ''); 
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        } 
+
         return $frm;
     }
 
@@ -312,16 +277,8 @@ class CurrencyManagementController extends AdminBaseController
     {
         $frm = new Form('frmCurrencyLang');
         $frm->addHiddenField('', 'currency_id', $currencyId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Currency_Name', $this->adminLangId), 'currency_name');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 

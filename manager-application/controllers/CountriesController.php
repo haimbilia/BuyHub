@@ -132,40 +132,17 @@ class CountriesController extends AdminBaseController
         $recordId = $post['country_id'];
         unset($post['country_id']);
 
-        $record = new Countries($recordId);
-        $record->assignValues($post);
+        $recordObj = new Countries($recordId);
+        $recordObj->assignValues($post);
 
-        if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
-        }
-        $recordId = $record->getMainTableRecordId();        
-       
-        if (!$record->updateLangData($this->getDefaultFormLangId(), ['country_name' => $post['country_name']])) {
-            LibHelper::exitWithError($record->getError(), true);
+        if (!$recordObj->save()) {
+            LibHelper::exitWithError($recordObj->getError(), true);
         }
 
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataObj = new TranslateLangData(Countries::DB_TBL_LANG);
-            if (false === $updateLangDataObj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataObj->getError(), true);
-            }
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getDropDownList($this->getDefaultFormLangId());
-        if (0 < count($languages)) {           
-            foreach ($languages as $langId => $langName) {
-                if (!$row = Countries::getAttributesByLangId($langId, $recordId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        }
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
+        
         Product::updateMinPrices(0, 0, 0, $recordId);
         $this->set('msg', Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId));
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -222,23 +199,10 @@ class CountriesController extends AdminBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $countryObj = new Countries($recordId);
-        if (!$countryObj->updateLangData($lang_id, ['country_name' => $post['country_name']])) {
-            LibHelper::exitWithError($countryObj->getError(), true);
-        }
+        $recordObj = new Countries($recordId);
 
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!Countries::getAttributesByLangId($langId, $recordId)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]], $lang_id);
 
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 

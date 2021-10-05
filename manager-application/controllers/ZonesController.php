@@ -135,42 +135,18 @@ class ZonesController extends AdminBaseController
 
         $recordId = $post['zone_id'];
         unset($post['zone_id']);
-
-        $record = new Zone($recordId);
+ 
+        $recordObj = new Zone($recordId);
         $post['zone_identifier'] = $post['zone_name'];
-        $record->assignValues($post);
+        $recordObj->assignValues($post);
 
-        if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+        if (!$recordObj->save()) {
+            LibHelper::exitWithError($recordObj->getError(), true);
         }
-        $recordId = $record->getMainTableRecordId();
-      
-        if (!$record->updateLangData($this->getDefaultFormLangId(), ['zone_name' => $post['zone_name']])) {
-            LibHelper::exitWithError($record->getError(), true);
-        }
+        
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
 
-        $newTabLangId = 0;
-        $languages = Language::getDropDownList($this->getDefaultFormLangId());
-        if (0 < count($languages)) {           
-            foreach ($languages as $langId => $langName) {
-                if (!$row = Zone::getAttributesByLangId($langId, $recordId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        }
-
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(Zone::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-        }
-
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
+        $this->set('msg', $this->str_update_record);      
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -226,23 +202,9 @@ class ZonesController extends AdminBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $zoneObj = new Zone($recordId);
-        if (!$zoneObj->updateLangData($lang_id, ['zone_name' => $post['zone_name']])) {
-            LibHelper::exitWithError($zoneObj->getError(), true);
-        } 
-
-        $newTabLangId = 0;
-        $languages = Language::getDropDownList($this->getDefaultFormLangId());
-        foreach ($languages as $langId =>$langName) {
-            if (!$row = Zone::getAttributesByLangId($langId, $recordId)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
+        $recordObj = new Zone($recordId);
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]], $lang_id);
+        
         $this->_template->render(false, false, 'json-success.php');
     }
 

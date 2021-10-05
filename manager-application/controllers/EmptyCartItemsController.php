@@ -133,40 +133,13 @@ class EmptyCartItemsController extends AdminBaseController
         
         $post['emptycartitem_identifier'] = $post['emptycartitem_title'];
 
-        $record = new EmptyCartItems($recordId);
-        $record->assignValues($post);
-        if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+        $recordObj = new EmptyCartItems($recordId);
+        $recordObj->assignValues($post);
+        if (!$recordObj->save()) {
+            LibHelper::exitWithError($recordObj->getError(), true);
         }
+        $this->setLangData($recordObj, [$recordObj::tblFld('title') => $post[$recordObj::tblFld('title')]]);
 
-        $recordId = $record->getMainTableRecordId();
-
-        if (!$record->updateLangData($this->getDefaultFormLangId(), ['emptycartitem_title' => $post['emptycartitem_title']])) {
-            LibHelper::exitWithError($record->getError(), true);
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getDropDownList($this->getDefaultFormLangId());
-        if (0 < count($languages)) {           
-            foreach ($languages as $langId => $langName) {
-                if (!$row = EmptyCartItems::getAttributesByLangId($langId, $recordId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        }
-
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(EmptyCartItems::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-        }
-
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -210,37 +183,21 @@ class EmptyCartItemsController extends AdminBaseController
         $recordId = FatApp::getPostedData('emptycartitem_id', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
-        $frm = $this->getLangForm();
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        
-        if (false === $post) {
-            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
-        }
-
         if ($recordId == 0 || $lang_id == 0) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $frm = $this->getLangForm($lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());       
+        $frm = $this->getLangForm();
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
-        $emptyCartItemObj = new EmptyCartItems($recordId);
-        if (!$emptyCartItemObj->updateLangData($lang_id, ['emptycartitem_title' => $post['emptycartitem_title']])) {
-            LibHelper::exitWithError($emptyCartItemObj->getError(), true);
+        if (false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $newTabLangId = 0;
-        $languages = Language::getDropDownList($this->getDefaultFormLangId());
-        foreach ($languages as $langId => $langName) {
-            if (!EmptyCartItems::getAttributesByLangId($langId, $recordId)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
+        $recordObj = new EmptyCartItems($recordId);
 
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
+        $this->setLangData($recordObj, [$recordObj::tblFld('title') => $post[$recordObj::tblFld('title')]], $lang_id);
+
         $this->_template->render(false, false, 'json-success.php');
     }
 

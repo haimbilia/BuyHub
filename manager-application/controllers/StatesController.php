@@ -161,44 +161,18 @@ class StatesController extends AdminBaseController
         $recordId = $post['state_id'];
         unset($post['state_id']);
 
-        $record = new States($recordId);
+        $recordObj = new States($recordId);
         $post['state_identifier'] = $post['state_name'];
-        $record->assignValues($post);
+        $recordObj->assignValues($post);
 
-        if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+        if (!$recordObj->save()) {
+            LibHelper::exitWithError($recordObj->getError(), true);
         }
 
-        $recordId = $record->getMainTableRecordId();
-       
-        if (!$record->updateLangData($this->getDefaultFormLangId(), ['state_name' => $post['state_name']])) {
-            LibHelper::exitWithError($record->getError(), true);
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getDropDownList($this->getDefaultFormLangId());
-        if (0 < count($languages)) {           
-            foreach ($languages as $langId => $langName) {
-                if (!$row = States::getAttributesByLangId($langId, $recordId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        }
-
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(States::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-        }
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
 
         CacheHelper::clear(CacheHelper::TYPE_ZONE);
-        Product::updateMinPrices(0, 0, 0, 0, $recordId);
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
+        Product::updateMinPrices(0, 0, 0, 0, $recordId);       
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -276,24 +250,9 @@ class StatesController extends AdminBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $stateObj = new States($recordId);
-        if (!$stateObj->updateLangData($lang_id, ['state_name'=> $post['state_name']])) {
-            LibHelper::exitWithError($stateObj->getError(), true);
-        }
-        CacheHelper::clear(CacheHelper::TYPE_ZONE);
-
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = States::getAttributesByLangId($langId, $recordId)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
+        $recordObj = new States($recordId);
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]], $lang_id);
+        
         $this->_template->render(false, false, 'json-success.php');
     }
 
