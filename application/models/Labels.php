@@ -51,12 +51,14 @@ class Labels extends MyAppModel
             ];
     }
 
-    public static function getSearchObject($langId = 0, $attr = '')
+    public static function getSearchObject($langId = 0, $attr = '', $setOrderBy = true)
     {
         $langId = FatUtility::int($langId);
 
         $srch = new SearchBase(static::DB_TBL, 'lbl');
-        $srch->addOrder('lbl.' . static::DB_TBL_PREFIX . 'id', 'DESC');
+        if (true === $setOrderBy) {
+            $srch->addOrder('lbl.' . static::DB_TBL_PREFIX . 'id', 'DESC');
+        }
 
         $columns = array(
             'lbl.' . static::DB_TBL_PREFIX . 'id',

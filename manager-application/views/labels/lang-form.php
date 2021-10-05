@@ -5,26 +5,27 @@ HtmlHelper::formatFormFields($langFrm);
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit layout--' . $formLayout);
 $langFrm->setFormTagAttribute('dir', $formLayout);
 $langFrm->setFormTagAttribute('onsubmit', 'saveLangData(this); return(false);');
+?>
 
-$langFld = $langFrm->getField('lang_id');
-$langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this.value);");
-
-$activeLangtab = true;
-
-require_once(CONF_THEME_PATH . 'zones/form-head.php'); ?>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php echo Labels::getLabel('LBL_MANAGE_LABELS', $adminLangId); ?>
+    </h5>
+</div>
+<div class="modal-body form-edit"> 
     <div class="form-edit-body loaderContainerJs">
         <?php
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');     
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey)) { ?> 
             <div class="row justify-content-end"> 
                 <div class="col-auto mb-4">
-                    <input class="btn btn-brand" 
+                    <input class="btn btn-outline-brand btn-sm" 
                         type="button" 
                         value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" 
-                        onClick="editLangData(<?php echo $recordId; ?>, <?php echo $lang_id; ?>, 1)">
+                        onClick="labelsForm(<?php echo $recordId; ?>, <?php echo $labelType; ?>, 1)">
                 </div>
             </div>
-        <?php } ?>
+        <?php } ?> 
         <?php echo $langFrm->getFormHtml(); ?>
     </div>
 
@@ -37,4 +38,4 @@ require_once(CONF_THEME_PATH . 'zones/form-head.php'); ?>
             </div>
         </div>
     </div>
-</div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->
+</div>

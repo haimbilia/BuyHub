@@ -110,5 +110,6 @@
     
     $(document).on("click", ".submitBtnJs", function () {
         $('.' + $.ykmodal.element + ' form').submit();
+        $(this).addClass('loading');
     });
 })(jQuery);

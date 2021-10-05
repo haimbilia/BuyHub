@@ -11,7 +11,7 @@ $langFld = $langFrm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this.value);");
 
 $fld = $langFrm->getField('epage_content');
-$fld->htmlAfterField = '<a class="btn btn-brand btn-sm" onClick="resetToDefaultContent();" href="javascript:void(0)">' . Labels::getLabel('LBL_RESET_EDITOR_CONTENT_TO_DEFAULT', $adminLangId) . '</a>';
+$fld->htmlAfterField = '<a class="btn btn-outline-brand btn-sm" onClick="resetToDefaultContent();" href="javascript:void(0)">' . Labels::getLabel('LBL_RESET_EDITOR_CONTENT_TO_DEFAULT', $adminLangId) . '</a>';
 ?>
 <!-- editor's default content[ -->
 
@@ -33,7 +33,7 @@ $fld->htmlAfterField = '<a class="btn btn-brand btn-sm" onClick="resetToDefaultC
         if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) { ?> 
             <div class="row justify-content-end"> 
                 <div class="col-auto mb-4">
-                    <input class="btn btn-brand" 
+                    <input class="btn btn-outline-brand btn-sm" 
                         type="button" 
                         value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" 
                         onClick="editLangData(<?php echo $recordId; ?>, <?php echo $lang_id; ?>, 1)">

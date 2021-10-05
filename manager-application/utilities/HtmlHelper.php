@@ -42,26 +42,26 @@ class HtmlHelper
         ];
     }
 
-    public static function formatFormFields(Form &$form)
+    public static function formatFormFields(Form &$frm)
     {
-        $form->setCustomRendererClass('FormRendererBS');
+        $frm->setCustomRendererClass('FormRendererBS');
         /* For Each Row On Above Elements */
-        $form->developerTags['colWidthClassesDefault'] = [null, 'col-md-', null, null];
-        $form->developerTags['colWidthValuesDefault'] = [null, '12', null, null];
+        $frm->developerTags['colWidthClassesDefault'] = [null, 'col-md-', null, null];
+        $frm->developerTags['colWidthValuesDefault'] = [null, '12', null, null];
         /* For Each Row On Above Elements */
 
         /* For Input Fields */
-        $form->developerTags['fldWidthClassesDefault'] = ['', '', '', ''];
-        $form->developerTags['fldWidthValuesDefault'] = ['', '', '', ''];
+        $frm->developerTags['fldWidthClassesDefault'] = ['', '', '', ''];
+        $frm->developerTags['fldWidthValuesDefault'] = ['', '', '', ''];
         /* For Input Fields */
 
         /* For Labels Fields */
-        $form->developerTags['labelWidthClassesDefault'] = ['label', 'label', 'label', 'label'];
-        $form->developerTags['labelWidthValuesDefault'] = ['', '', '', ''];
+        $frm->developerTags['labelWidthClassesDefault'] = ['label', 'label', 'label', 'label'];
+        $frm->developerTags['labelWidthValuesDefault'] = ['', '', '', ''];
         /* For Labels Fields */
 
         /* Group Label and Input field. */
-        $form->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
+        $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
         /* Group Label and Input field. */
     }
 
@@ -69,23 +69,42 @@ class HtmlHelper
     {
         switch ($status) {
             case self::SUCCESS:
-                return'<span class="badge badge-success">' . $msg . '</span>';
+                return '<span class="badge badge-success">' . $msg . '</span>';
                 break;
             case self::WARNING:
-                return'<span class="badge badge-warning">' . $msg . '</span>';
+                return '<span class="badge badge-warning">' . $msg . '</span>';
                 break;
             case self::DANGER:
-                return'<span class="badge badge-danger">' . $msg . '</span>';
+                return '<span class="badge badge-danger">' . $msg . '</span>';
                 break;
             case self::PRIMARY:
-                return'<span class="badge badge-primary">' . $msg . '</span>';
+                return '<span class="badge badge-primary">' . $msg . '</span>';
                 break;
             case self::INFO:
-                return'<span class="badge badge-info">' . $msg . '</span>';
+                return '<span class="badge badge-info">' . $msg . '</span>';
                 break;
             default:
-                return'<span class="badge badge-info">' . $msg . '</span>';
+                return '<span class="badge badge-info">' . $msg . '</span>';
                 break;
         }
+    }
+
+    public static function addSearchButton(Form &$frm)
+    {
+        $btn = HtmlHelper::createButton(Labels::getLabel('LBL_SEARCH', CommonHelper::getLangId()), ['name' => 'btn_submit', 'class' => "btn btn-brand btn-wide ml-2 submitBtnJs"]);
+        $frm->addHtml('', 'btn_submit', $btn);
+    }
+    
+    public static function addClearButton(Form &$frm)
+    {
+        $btn = HtmlHelper::createButton(Labels::getLabel('LBL_CLEAR', CommonHelper::getLangId()), ['name' => 'btn_clear', 'class' => "btn link", 'onclick' => 'clearSearch();']);
+        $frm->addHtml('', 'btn_clear', $btn);
+    }
+
+    public static function createButton(string $label, array $attr = [])
+    {
+        $attr = empty($attr) ? ['type' => 'button', 'class' => 'btn btn-brand'] : $attr;
+        $button = new HtmlElement("button", $attr, $label);
+        return $button->getHtml();
     }
 }

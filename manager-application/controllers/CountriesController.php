@@ -354,22 +354,6 @@ class CountriesController extends AdminBaseController
         }
     }
 
-    private function getSearchForm($fields = [])
-    {
-        $frm = new Form('frmRecordSearch');
-        $frm->addHiddenField('', 'page');
-
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld->overrideFldType('search');
-
-        if (!empty($fields)) {
-            $this->addSortingElements($frm);
-        }
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        return $frm;
-    }
-
     private function getFormColumns(): array
     {
         $countriesTblHeadingCols = CacheHelper::get('countriesTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');

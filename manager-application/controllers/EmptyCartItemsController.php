@@ -388,20 +388,6 @@ class EmptyCartItemsController extends AdminBaseController
         return $frm;
     }
 
-    private function getSearchForm($fields = [])
-    {
-        $frm = new Form('frmRecordSearch');
-        if (!empty($fields)) {
-            $this->addSortingElements($frm);
-        }
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld->overrideFldType('search');
-        
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
-        return $frm;
-    }
-
     private function getFormColumns(): array
     {
         $emptyCartItemsTblHeadingCols = CacheHelper::get('emptyCartItemsTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
