@@ -1297,3 +1297,6 @@ INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_
 -- ---- Email Functionality update ---- --
 
 ALTER TABLE `tbl_zones_lang` CHANGE `zone_name` `zone_name` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+
+
+UPDATE `tbl_language_labels` SET `label_type`=1 WHERE `label_type`=0;

@@ -245,7 +245,7 @@ class UrlRewritingController extends AdminBaseController
         }
     }
 
-    private function getSearchForm($fields = [])
+    public function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
@@ -262,14 +262,14 @@ class UrlRewritingController extends AdminBaseController
         }
 
         if (count($langArr) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $langArr, FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), [], Labels::getLabel('LBL_Select', $this->adminLangId));
+            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $langArr, FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->adminLangId));
         } else {
             $lang_id = array_key_first($langArr);
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 

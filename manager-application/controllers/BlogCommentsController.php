@@ -227,14 +227,12 @@ class BlogCommentsController extends AdminBaseController
         $frm->addHiddenField('', 'bpcomment_id', $recordId);
         $statusArr = BlogComment::getBlogCommentStatusArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Comment_Status', $this->adminLangId), 'bpcomment_approved', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 
-    private function getSearchForm($fields = [])
+    public function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
-        $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'bpcomment_id');        
         if (!empty($fields)) {
             $this->addSortingElements($frm);
@@ -244,10 +242,10 @@ class BlogCommentsController extends AdminBaseController
         $fld->overrideFldType('search');
 
         $statusArr = BlogComment::getBlogCommentStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Comment_Status', $this->adminLangId), 'bpcomment_approved', $statusArr, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
+        $frm->addSelectBox(Labels::getLabel('LBL_Comment_Status', $this->adminLangId), 'bpcomment_approved', $statusArr, '', array(), Labels::getLabel('LBL_SELECT_COMMENT_STATUS', $this->adminLangId));
         
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 

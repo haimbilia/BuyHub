@@ -22,7 +22,7 @@ class OrderStatusController extends AdminBaseController
         $this->_template->render();
     }
 
-    private function getSearchForm($fields = [])
+    public function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
@@ -32,9 +32,10 @@ class OrderStatusController extends AdminBaseController
         $fld->overrideFldType('search');
 
         $orderStatusTypeArr = OrderStatus::getOrderStatusTypeArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Order_Status_type', $this->adminLangId), 'orderstatus_type', $orderStatusTypeArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
+        $frm->addSelectBox(Labels::getLabel('LBL_ORDER_STATUS_TYPE', $this->adminLangId), 'orderstatus_type', $orderStatusTypeArr, '', array(), '');
+        
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 

@@ -518,23 +518,7 @@ class SellerPackagesController extends AdminBaseController
             LibHelper::exitWithError($obj->getError(), true);
         }
     }
-
-    private function getSearchForm($fields = [])
-    {
-        $frm = new Form('frmRecordSearch');
-        $frm->addHiddenField('', 'page');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld->overrideFldType('search');
-
-        if (!empty($fields)) {
-            $this->addSortingElements($frm);
-        }
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
-        return $frm;
-    }
-
+    
     private function getFormColumns(): array
     {
         $subsPkgTblHeadingCols = CacheHelper::get('subsPkgTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');

@@ -65,6 +65,7 @@ $(document).ready(function () {
         removeLoader: function (cls) {
             $(document.body).css({ 'cursor': 'default' });
             $('.loaderJs').remove();
+            $('.submitBtnJs').removeClass('loading');
         },
     });
 

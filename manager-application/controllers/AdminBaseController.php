@@ -834,4 +834,18 @@ class AdminBaseController extends FatController
     {
         return FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
     }
+
+    protected function getSearchForm($fields = [])
+    {
+        $frm = new Form('frmRecordSearch');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld->overrideFldType('search');
+
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
+
+        HtmlHelper::addSearchButton($frm);
+        return $frm;
+    }
 }

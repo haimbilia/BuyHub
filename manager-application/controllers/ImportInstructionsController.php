@@ -2,7 +2,6 @@
 
 class ImportInstructionsController extends AdminBaseController
 {
-    public const IMPORT_INSTRUCTIONS = 1;
     public function __construct($action)
     {
         parent::__construct($action);
@@ -54,7 +53,7 @@ class ImportInstructionsController extends AdminBaseController
         $post = $searchForm->getFormDataFromArray($data);
 
         $srch = Extrapage::getSearchObject($this->adminLangId, false);
-        $srch->addCondition('epage_content_for', '=', self::IMPORT_INSTRUCTIONS);
+        $srch->addCondition('epage_content_for', '=', Extrapage::CONTENT_IMPORT_INSTRUCTION);
         $srch->addMultipleFields([
             'ep.*',
             'ep_l.*',
@@ -220,20 +219,6 @@ class ImportInstructionsController extends AdminBaseController
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        return $frm;
-    }
-
-    private function getSearchForm($fields = [])
-    {
-        $frm = new Form('frmRecordSearch');
-        if (!empty($fields)) {
-            $this->addSortingElements($frm);
-        }
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld->overrideFldType('search');
-        
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
         return $frm;
     }
 

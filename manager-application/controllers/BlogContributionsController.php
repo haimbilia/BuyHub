@@ -239,10 +239,9 @@ class BlogContributionsController extends AdminBaseController
         return $frm;
     }
 
-    private function getSearchForm($fields = [])
+    public function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
-        $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'bcontributions_id');
         if (!empty($fields)) {
             $this->addSortingElements($frm);
@@ -252,10 +251,10 @@ class BlogContributionsController extends AdminBaseController
         $fld->overrideFldType('search');
 
         $statusArr = BlogContribution::getBlogContributionStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Contribution_Status', $this->adminLangId), 'bcontributions_status', $statusArr, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));        
+        $frm->addSelectBox(Labels::getLabel('LBL_Contribution_Status', $this->adminLangId), 'bcontributions_status', $statusArr, '', array(), Labels::getLabel('LBL_SELECT_CONTRIBUTION_STATUS', $this->adminLangId));        
         
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
