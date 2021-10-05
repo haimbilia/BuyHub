@@ -198,6 +198,7 @@ class ZonesController extends AdminBaseController
 
         $frm = $this->getLangForm($recordId, $lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
