@@ -78,9 +78,8 @@
                                     <div class="card-body">
                                         <ul class="pages__list-wrapper">
                                             <li><a href="products.php">Products</a></li>
-                                            <li><a href="seller-packages.php">Seller Packages</a></li>
-
                                             <li><a href="listing.php">Listing</a></li>
+                                            <li><a href="seller-packages.php">Seller Packages</a></li>
                                             <li><a href="login-1.php">Login</a></li>
                                             <li><a href="password-reset.php">Password Reset</a></li>
                                             <li><a href="profile-management.php">Profile Management</a></li>
@@ -88,22 +87,26 @@
                                             <li><a href="setting.php">Settings</a></li>
                                             <li><a href="theme-setting.php">Theme Setting</a></li>
                                             <li><a href="plugins-setting.php">Plugins Setting</a></li>
+                                            <li><a href="email-template-settings.php" target="_blank">Email temaplate - Settings</a> </li>
+                                            <li><a href="email-template-listing.php" target="_blank">Email temaplate - listing</a></li>
 
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-xl-12">
                                 <!--begin::card-->
                                 <div class="card">
-                                    <div class="card-head">
+                                    <div class="card-head" data-toggle="collapse" href="#components" role="button"
+                                        aria-expanded="false" aria-controls="components">
                                         <div class="card-head-label">
                                             <h3 class="card-head-title"> UI Components </h3>
                                         </div>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body collapse" id="components">
                                         <!--begin::Section-->
                                         <div class="section">
                                             <div class="row">
@@ -971,6 +974,9 @@
                                                             </li>
                                                             <li><a href="email-template-settings.php"
                                                                     target="_blank">Email temaplate - Settings</a>
+                                                            </li>
+                                                            <li><a href="email-template-listing.php"
+                                                                    target="_blank">Email temaplate - listing</a>
                                                             </li>
                                                             <li><a href="products.php" target="_blank">Products</a>
                                                             </li>

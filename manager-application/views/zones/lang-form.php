@@ -10,10 +10,11 @@ $langFld = $langFrm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this.value);");
 
 $activeLangtab = true;
-require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
+
+require_once(CONF_THEME_PATH . 'zones/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
         <?php
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');     
         if (!empty($translatorSubscriptionKey)) { ?> 
             <div class="row justify-content-end"> 
                 <div class="col-auto mb-4">

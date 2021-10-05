@@ -243,6 +243,8 @@ $(document).on('search', "input[name='keyword']", function () {
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
+            }else if( "openMediaForm" in t){
+                mediaForm(t.recordId);
             }
         });
     };
@@ -267,7 +269,10 @@ $(document).on('search', "input[name='keyword']", function () {
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
+            }else if( "openMediaForm" in t){
+                mediaForm(t.recordId);
             }
+
         });
     };
 

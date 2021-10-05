@@ -1,0 +1,106 @@
+.list-switch {
+    display: flex;
+    flex-wrap: wrap;
+    li {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        margin-bottom: 1rem;
+        margin-#{$end-direction}: 0.5rem;
+    }
+    &--two {
+        li {
+            max-width: 50%;
+            flex: 0 0 50%;
+        }
+    }
+    &--three {
+        li {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+        }
+    }
+}
+
+.web-social-switch.list-switch {
+    &--three {
+        li {
+            span {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                color: #1a1a1a;
+                border: 1px solid #cecdcd;
+                font-size: 0.75rem;
+                top: 0;
+                border-radius: 50%;
+                opacity: 0.5;
+                i {
+                    width: 18px;
+                    height: 18px;
+                    svg {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+            }
+        }
+        .active {
+            span {
+                opacity: 1;
+                svg {
+                    fill: var(--light);
+                }
+            }
+        }
+        .active.facebook {
+            span {
+                background-color: #3b5998;
+                border-color: #3b5998;
+                color: var(--light);
+            }
+        }
+        .active.twitter {
+            span {
+                background-color: #00acee;
+                border-color: #00acee;
+                color: var(--light);
+            }
+        }
+        .active.youtube {
+            span {
+                background-color: #FF0000;
+                border-color: #FF0000;
+                color: var(--light);
+            }
+        }
+        .active.instagram {
+            span {
+                background-color: #f05161;
+                border-color: #f05161;
+                color: var(--light);
+            }
+        }
+        .active.pinterest {
+            span {
+                background-color: #E60023;
+                border-color: #E60023;
+                color: var(--light);
+            }
+        }
+        .active.googleplus {
+            span {
+                background-color: #db4a39;
+                border-color: #db4a39;
+                color: var(--light);
+            }
+        }
+    }
+}

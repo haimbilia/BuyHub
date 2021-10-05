@@ -253,6 +253,12 @@ $input-color: #474747;
     @include select;
 }
 
+.input-group-text {
+    border: $input-border;
+    border-radius: $input-border-radius;
+    background-color: $bg-gray;
+}
+
 .note-messages {
     font-size: 13px;
     color: #cea14b;
