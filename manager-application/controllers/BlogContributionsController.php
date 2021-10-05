@@ -273,7 +273,7 @@ class BlogContributionsController extends AdminBaseController
             'bcontributions_author_phone' => Labels::getLabel('LBL_Author_Phone', $this->adminLangId),
             'bcontributions_status' => Labels::getLabel('LBL_Status', $this->adminLangId),
             'bcontributions_added_on' => Labels::getLabel('LBL_Posted_On', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('blogContributionTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

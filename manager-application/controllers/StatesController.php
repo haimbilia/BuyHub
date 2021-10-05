@@ -383,7 +383,7 @@ class StatesController extends AdminBaseController
             'state_code' => Labels::getLabel('LBL_State_Code', $this->adminLangId),
             'country_name' => Labels::getLabel('LBL_Country_Name', $this->adminLangId),
             'state_active' => Labels::getLabel('LBL_Status', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_Action', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('statesTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         

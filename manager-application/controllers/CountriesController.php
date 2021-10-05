@@ -368,7 +368,7 @@ class CountriesController extends AdminBaseController
             'country_code_alpha3' => Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->adminLangId),
             'country_name' => Labels::getLabel('LBL_COUNTRY_NAME', $this->adminLangId),
             'country_active' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('countriesTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

@@ -232,7 +232,7 @@ class ImportInstructionsController extends AdminBaseController
         $arr = [
             'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
             'epage_identifier' => Labels::getLabel('LBL_TITLE', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('importInstructionsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         

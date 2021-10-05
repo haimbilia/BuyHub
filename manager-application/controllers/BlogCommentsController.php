@@ -264,7 +264,7 @@ class BlogCommentsController extends AdminBaseController
             'bpcomment_approved' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
             'post_title' => Labels::getLabel('LBL_POST_TITLE', $this->adminLangId),
             'bpcomment_added_on' => Labels::getLabel('LBL_POSTED_ON', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('blogCommentsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

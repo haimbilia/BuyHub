@@ -251,7 +251,7 @@ class AbusiveWordsController extends AdminBaseController
             'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
             'abusive_keyword' => Labels::getLabel('LBL_Keyword', $this->adminLangId),
             'language_name' => Labels::getLabel('LBL_Language', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_Action', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('abusiveWordsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

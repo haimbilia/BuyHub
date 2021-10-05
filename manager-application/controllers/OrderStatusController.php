@@ -409,7 +409,7 @@ class OrderStatusController extends AdminBaseController
             'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
             'orderstatus_name' => Labels::getLabel('LBL_ORDER_STATUS_NAME', $this->adminLangId),
             'orderstatus_is_active' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('orderStatusTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         

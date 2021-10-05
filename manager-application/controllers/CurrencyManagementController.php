@@ -384,7 +384,7 @@ class CurrencyManagementController extends AdminBaseController
             'currency_symbol_left' => Labels::getLabel('LBL_Symbol_Left', $this->adminLangId),
             'currency_symbol_right' => Labels::getLabel('LBL_Symbol_Right', $this->adminLangId),
             'currency_active' => Labels::getLabel('LBL_Status', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_Action', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('currencyTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 

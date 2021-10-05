@@ -290,7 +290,7 @@ class LabelsController extends AdminBaseController
             'label_key' => Labels::getLabel('LBL_KEY', $this->adminLangId),
             'label_caption' => Labels::getLabel('LBL_CAPTION', $this->adminLangId),
             'label_type' => Labels::getLabel('LBL_TYPE', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('labelsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         

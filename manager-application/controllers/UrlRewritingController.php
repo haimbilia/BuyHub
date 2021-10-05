@@ -312,7 +312,7 @@ class UrlRewritingController extends AdminBaseController
             'urlrewrite_original' => Labels::getLabel('LBL_Original', $this->adminLangId),
             'language_code' => Labels::getLabel('LBL_Language', $this->adminLangId),
             'urlrewrite_custom' => Labels::getLabel('LBL_Custom', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_Action', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('urlRewritingTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

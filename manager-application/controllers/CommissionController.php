@@ -363,7 +363,7 @@ class CommissionController extends AdminBaseController
             'commsetting_user_id' => Labels::getLabel('LBL_Seller', $this->adminLangId),
             'commsetting_product_id' => Labels::getLabel('LBL_Product', $this->adminLangId),
             'commsetting_fees' => Labels::getLabel('LBL_Fees_[%]', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_Action', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('commissionTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

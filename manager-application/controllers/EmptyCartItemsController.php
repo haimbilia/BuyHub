@@ -401,7 +401,7 @@ class EmptyCartItemsController extends AdminBaseController
             'emptycartitem_identifier' => Labels::getLabel('LBL_TITLE', $this->adminLangId),
             'emptycartitem_url' => Labels::getLabel('LBL_URL', $this->adminLangId),
             'emptycartitem_active' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('emptyCartItemsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         
