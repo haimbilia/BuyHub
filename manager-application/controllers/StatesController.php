@@ -261,29 +261,22 @@ class StatesController extends AdminBaseController
 
     public function langSetup()
     {
-        $this->objPrivilege->canEditStates();
-        $post = FatApp::getPostedData();
+        $this->objPrivilege->canEditStates();        
 
-        $recordId = $post['state_id'];
-
-        $languages = Language::getAllNames();
-        if (count($languages) > 1) {
-            $lang_id = $post['lang_id'];
-        } else {
-            $lang_id = array_key_first($languages);
-            $post['lang_id'] = $lang_id;
-        }
-
+        $recordId = FatApp::getPostedData('state_id', FatUtility::VAR_INT, 0);
+        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
         if ($recordId == 0 || $lang_id == 0) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
+        }        
 
         $frm = $this->getLangForm($recordId, $lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());     
+        if (false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
 
         $stateObj = new States($recordId);
-
         if (!$stateObj->updateLangData($lang_id, ['state_name'=> $post['state_name']])) {
             LibHelper::exitWithError($stateObj->getError(), true);
         }

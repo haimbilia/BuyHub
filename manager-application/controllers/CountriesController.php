@@ -207,37 +207,23 @@ class CountriesController extends AdminBaseController
     public function langSetup()
     {
         $this->objPrivilege->canEditCountries();
-        $post = FatApp::getPostedData();
 
-        $recordId = $post['country_id'];
-        $languages = Language::getAllNames();
+        $recordId = FatApp::getPostedData('country_id', FatUtility::VAR_INT, 0);
+        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
-        if (count($languages) > 1) {
-            $lang_id = $post['lang_id'];
-        } else {
-            $lang_id = array_key_first($languages);
-            $post['lang_id'] = $lang_id;
+        $frm = $this->getLangForm();
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        
+        if (false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-
 
         if ($recordId == 0 || $lang_id == 0) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $frm = $this->getLangForm($recordId, $lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        unset($post['country_id']);
-        unset($post['lang_id']);
-
-        $data = array(
-            'countrylang_lang_id' => $lang_id,
-            'countrylang_country_id' => $recordId,
-            'country_name' => $post['country_name']
-        );
-
         $countryObj = new Countries($recordId);
-
-        if (!$countryObj->updateLangData($lang_id, $data)) {
+        if (!$countryObj->updateLangData($lang_id, ['country_name' => $post['country_name']])) {
             LibHelper::exitWithError($countryObj->getError(), true);
         }
 

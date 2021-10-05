@@ -213,13 +213,8 @@ class ZonesController extends AdminBaseController
         $this->objPrivilege->canEditZones();
         $post = FatApp::getPostedData();
 
-        $recordId = $post['zone_id'];
-        $languages = Language::getAllNames();
-		if(count($languages) > 1){
-			$lang_id = $post['lang_id'];
-		} else  {
-			$lang_id = array_key_first($languages); 
-		}
+        $recordId = FatApp::getPostedData('zone_id', FatUtility::VAR_INT, 0);
+        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
        
         if ($recordId == 0 || $lang_id == 0) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
@@ -227,23 +222,17 @@ class ZonesController extends AdminBaseController
 
         $frm = $this->getLangForm($recordId, $lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        unset($post['zone_id']);
-        unset($post['lang_id']);
-
-        $data = array(
-            'zonelang_lang_id' => $lang_id,
-            'zonelang_zone_id' => $recordId,
-            'zone_name'=>$post['zone_name']
-        );
+        if (false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
 
         $zoneObj = new Zone($recordId);
-
-        if (!$zoneObj->updateLangData($lang_id, $data)) {
+        if (!$zoneObj->updateLangData($lang_id, ['zone_name' => $post['zone_name']])) {
             LibHelper::exitWithError($zoneObj->getError(), true);
         } 
 
         $newTabLangId = 0;
-        $languages = Language::getAllNames();
+        $languages = Language::getDropDownList($this->getDefaultFormLangId());
         foreach ($languages as $langId =>$langName) {
             if (!$row = Zone::getAttributesByLangId($langId, $recordId)) {
                 $newTabLangId = $langId;
