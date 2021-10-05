@@ -91,20 +91,27 @@ class HtmlHelper
 
     public static function addSearchButton(Form &$frm)
     {
-        $btn = HtmlHelper::createButton(Labels::getLabel('LBL_SEARCH', CommonHelper::getLangId()), ['name' => 'btn_submit', 'class' => "btn btn-brand btn-wide ml-2 submitBtnJs"]);
-        $frm->addHtml('', 'btn_submit', $btn);
-    }
-    
-    public static function addClearButton(Form &$frm)
-    {
-        $btn = HtmlHelper::createButton(Labels::getLabel('LBL_CLEAR', CommonHelper::getLangId()), ['name' => 'btn_clear', 'class' => "btn link", 'onclick' => 'clearSearch();']);
-        $frm->addHtml('', 'btn_clear', $btn);
+        $frm->addHtml('', 'btn_submit', '<button type="submit" name="btn_submit" class="btn btn-brand btn-wide ml-2 submitBtnJs">' . Labels::getLabel('LBL_SEARCH', CommonHelper::getLangId()) . '</button>');
     }
 
-    public static function createButton(string $label, array $attr = [])
+    public static function addClearButton(Form &$frm)
+    {
+        $frm->addHtml('', 'btn_clear', '<button type="button" name="btn_clear" class="btn link" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', CommonHelper::getLangId()) . '</button>');
+    }
+
+    /* public static function createButton(string $label, array $attr = [])
     {
         $attr = empty($attr) ? ['type' => 'button', 'class' => 'btn btn-brand'] : $attr;
         $button = new HtmlElement("button", $attr, $label);
         return $button->getHtml();
+    } */
+
+    public static function renderHiddenFields(Form $frmSearch)
+    {
+        foreach ($frmSearch->getAllFields() as $key => $frmFld) {
+            if ('hidden' == $frmFld->fldType) {
+                echo $frmSearch->getFieldHtml($frmFld->getName());
+            }
+        }
     }
 }

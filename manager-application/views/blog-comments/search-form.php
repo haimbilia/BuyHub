@@ -21,26 +21,24 @@ $fld->addFieldtagAttribute('class', 'form-control');
 /* Extra Field */
 
 echo $frmSearch->getFormTag();
-foreach ($frmSearch->getAllFields() as $key => $frmFld) {
-    if ('hidden' == $frmFld->fldType) {
-        echo $frmSearch->getFieldHtml($frmFld->getName());
-    }
-}
+HtmlHelper::renderHiddenFields($frmSearch);
 ?>
 <div class="card">
     <div class="card-body">
         <div class="row">
             <div class="col-md-4">
-                <div class="input-group">
-                    <?php echo $frmSearch->getFieldHtml('keyword'); ?>
-                </div>
+                <?php echo $frmSearch->getFieldHtml('keyword'); ?>
             </div>
             <div class="col-md-4">
                 <?php echo $frmSearch->getFieldHtml('bpcomment_approved'); ?>
             </div>
             <div class="col-md-4">
-                <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                <div class="input-group">
+                    <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                    <div class="input-group-append">
+                        <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

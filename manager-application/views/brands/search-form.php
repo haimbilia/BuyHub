@@ -23,11 +23,7 @@ if (null != $userNameFld) {
 /* Extra Field */
 
 echo $frmSearch->getFormTag();
-foreach ($frmSearch->getAllFields() as $key => $frmFld) {
-    if ('hidden' == $frmFld->fldType) {
-        echo $frmSearch->getFieldHtml($frmFld->getName());
-    }
-}
+HtmlHelper::renderHiddenFields($frmSearch);
 ?>
 <div class="card">
     <div class="card-body">
@@ -47,8 +43,12 @@ foreach ($frmSearch->getAllFields() as $key => $frmFld) {
                     <?php echo $frmSearch->getFieldHtml('user_name'); ?>
                 </div>
                 <div class="col-md-4">
-                    <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                    <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                    <div class="input-group">
+                        <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                        <div class="input-group-append">
+                            <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                        </div>
+                    </div>
                 </div>
             <?php } ?>
         </div>
