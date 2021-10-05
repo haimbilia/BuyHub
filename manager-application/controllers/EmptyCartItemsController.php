@@ -13,7 +13,7 @@ class EmptyCartItemsController extends AdminBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditEmptyCartItems($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
         $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_EMPTY_CART_ITEMS', $this->adminLangId));
         $this->getListingData();
@@ -436,6 +436,6 @@ class EmptyCartItemsController extends AdminBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['state_active'], Common::excludeKeysForSort());
+        return array_diff($fields, ['emptycartitem_active'], Common::excludeKeysForSort());
     }
 }
