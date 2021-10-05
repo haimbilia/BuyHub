@@ -237,15 +237,9 @@ class Shop extends MyAppModel
         if ($this->mainTableRecordId < 1) {
             return false;
         }
-<<<<<<< HEAD
         $originalUrl = $this->getRewriteOriginalUrl($type, $collectionId);
         $seoUrl = $this->sanitizeSeoUrl($keyword, $type);
 
-=======
-        $originalUrl = $this->getRewriteOriginalUrl($type, $collectionId);        
-        $seoUrl = $this->sanitizeSeoUrl($keyword,$type);
-        
->>>>>>> bba168687... bug-058807 - Unable to change the URL for a sellers collection
         $customUrl = UrlRewrite::getValidSeoUrl($seoUrl, $originalUrl, $this->mainTableRecordId);
         return UrlRewrite::update($originalUrl, $customUrl);
     }
