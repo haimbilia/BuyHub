@@ -51,7 +51,7 @@ foreach ($arrListing as $sn => $row) {
                         [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
-                                'onclick' => "viewHistory(" . $row['commsetting_id'] . ")",
+                                'onclick' => "viewLog(" . $row['commsetting_id'] . ")",
                                 'title' => Labels::getLabel('LBL_HISTORY', $adminLangId)
                             ],
                             'label' => '<svg class="svg" width="18" height="18">

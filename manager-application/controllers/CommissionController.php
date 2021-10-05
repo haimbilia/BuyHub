@@ -200,7 +200,7 @@ class CommissionController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function viewHistory()
+    public function viewLog()
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if (1 > $recordId) {
@@ -209,10 +209,12 @@ class CommissionController extends AdminBaseController
 
         $srch = Commission::getCommissionHistorySettingsObj($this->adminLangId);
         $srch->addCondition('tcsh.csh_commsetting_id', '=', $recordId);
-        $srch->doNotLimitRecords();
-        $srch->doNotCalculateRecords();
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
 
+        $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetchAll($rs);
+       
         $this->set("arrListing", $records);
         $this->_template->render(false, false);
     }
@@ -371,7 +373,7 @@ class CommissionController extends AdminBaseController
 
     private function getDefaultColumns(): array
     {
-        return [    
+        return [
             'select_all',
             'listSerial',
             'commsetting_prodcat_id',
