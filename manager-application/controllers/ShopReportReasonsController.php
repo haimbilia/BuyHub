@@ -2,42 +2,24 @@
 
 class ShopReportReasonsController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
-        $ajaxCallArray = array('deleteRecord', 'form', 'langForm', 'search', 'setup', 'langSetup');
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die($this->str_invalid_Action);
-        }
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewShopReportReasons($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditShopReportReasons($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewShopReportReasons();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewShopReportReasons();
         $this->_template->render();
     }
 
     public function search()
     {
-        $this->objPrivilege->canViewShopReportReasons();
-
         $srch = ShopReportReason::getSearchObject($this->adminLangId);
 
         $srch->addMultipleFields(array('reportreason.*', 'reportreason_l.reportreason_title'));
         $srch->addOrder('reportreason_id', 'DESC');
-        $rs = $srch->getResultSet();
-        $records = array();
-        if ($rs) {
-            $records = FatApp::getDb()->fetchAll($rs);
-        }
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $this->set("arrListing", $records);
         $this->set('recordCount', $srch->recordCount());
@@ -47,8 +29,6 @@ class ShopReportReasonsController extends AdminBaseController
 
     public function form($reasonId)
     {
-        $this->objPrivilege->canViewShopReportReasons();
-
         $reasonId = FatUtility::int($reasonId);
 
         $frm = $this->getForm($reasonId);
@@ -57,7 +37,7 @@ class ShopReportReasonsController extends AdminBaseController
             $data = ShopReportReason::getAttributesById($reasonId, array('reportreason_id', 'reportreason_identifier'));
 
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
@@ -75,8 +55,7 @@ class ShopReportReasonsController extends AdminBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $reasonId = $post['reportreason_id'];
@@ -85,8 +64,7 @@ class ShopReportReasonsController extends AdminBaseController
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $newTabLangId = 0;
@@ -110,12 +88,11 @@ class ShopReportReasonsController extends AdminBaseController
 
     public function langForm($reasonId = 0, $lang_id = 0, $autoFillLangData = 0)
     {
-        $this->objPrivilege->canViewShopReportReasons();
         $reasonId = FatUtility::int($reasonId);
         $lang_id = FatUtility::int($lang_id);
 
         if ($reasonId == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $langFrm = $this->getLangForm($reasonId, $lang_id);
@@ -123,8 +100,7 @@ class ShopReportReasonsController extends AdminBaseController
             $updateLangDataobj = new TranslateLangData(ShopReportReason::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($reasonId, $lang_id);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -159,8 +135,7 @@ class ShopReportReasonsController extends AdminBaseController
         }
 
         if ($reasonId == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $frm = $this->getLangForm($reasonId, $lang_id);
@@ -178,16 +153,14 @@ class ShopReportReasonsController extends AdminBaseController
         $reasonObj = new ShopReportReason($reasonId);
 
         if (!$reasonObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($reasonObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($reasonObj->getError(), true);
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(ShopReportReason::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($reasonId)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
@@ -208,7 +181,6 @@ class ShopReportReasonsController extends AdminBaseController
 
     private function getForm($reasonId = 0)
     {
-        $this->objPrivilege->canViewShopReportReasons();
         $reasonId = FatUtility::int($reasonId);
 
         $frm = new Form('frmShopReportReason');
@@ -221,7 +193,6 @@ class ShopReportReasonsController extends AdminBaseController
 
     private function getLangForm($reasonId = 0, $lang_id = 0)
     {
-        $this->objPrivilege->canViewShopReportReasons();
         $frm = new Form('frmShopReportReasonLang');
         $frm->addHiddenField('', 'reportreason_id', $reasonId);
 
@@ -254,8 +225,7 @@ class ShopReportReasonsController extends AdminBaseController
 
         $reasonId = FatApp::getPostedData('reasonId', FatUtility::VAR_INT, 0);
         if ($reasonId < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $this->markAsDeleted($reasonId);
@@ -269,9 +239,7 @@ class ShopReportReasonsController extends AdminBaseController
         $reasonIdsArr = FatUtility::int(FatApp::getPostedData('reportreason_ids'));
 
         if (empty($reasonIdsArr)) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($reasonIdsArr as $reasonId) {
@@ -288,14 +256,11 @@ class ShopReportReasonsController extends AdminBaseController
     {
         $reasonId = FatUtility::int($reasonId);
         if (1 > $reasonId) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $obj = new ShopReportReason($reasonId);
         if (!$obj->deleteRecord(true)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
     }
 }
