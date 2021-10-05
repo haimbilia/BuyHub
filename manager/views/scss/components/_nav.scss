@@ -5,7 +5,7 @@
     list-style: none;
     border: 0;
     .nav {
-        &--block {
+        &-block {
             display: block;
             padding: 1rem 0;
         }
@@ -50,22 +50,22 @@
                             display: inline-block;
                         }
                         &.nav__link-bullet {
-                            &--dot {
+                            &-dot {
                                 >span {
                                     width: 4px;
                                     height: 4px;
                                     border-radius: 100%;
                                 }
                             }
-                            &--line {
+                            &-line {
                                 >span {
                                     width: 8px;
                                     height: 2px;
                                     border-radius: 2px;
                                 }
                             }
-                            &--dot,
-                            &--line {
+                            &-dot,
+                            &-line {
                                 span {
                                     background-color: #a2a5b9;
                                 }
@@ -111,11 +111,11 @@
                     padding: .5rem 1.5rem .5rem 2.5rem;
                 }
             }
-            &.nav__item--last {
+            &.nav__item-last {
                 padding-bottom: 0px;
             }
             &.active>.nav__link,
-            &:hover:not(.nav__item--disabled):not(.nav__item--sub)>.nav__link {
+            &:hover:not(.nav__item-disabled):not(.nav__item-sub)>.nav__link {
                 background-color: #f7f8fa;
                 transition: all .3s;
             }
@@ -141,7 +141,7 @@
                     }
                 }
             }
-            &:not(.nav__item--disabled):not(.nav__item--sub) {
+            &:not(.nav__item-disabled):not(.nav__item-sub) {
                 >.nav__link {
                     .nav__link {
                         &-arrow,
@@ -157,8 +157,8 @@
                         }
                         &-bullet {
                             &.nav__link-bullet {
-                                &--dot>span,
-                                &--line>span {
+                                &-dot>span,
+                                &-line>span {
                                     background-color: $brand-color;
                                 }
                             }
@@ -167,15 +167,15 @@
                 }
             }
             &:hover {
-                &:not(.nav__item--disabled) {
-                    &:not(.nav__item--sub) {
+                &:not(.nav__item-disabled) {
+                    &:not(.nav__item-sub) {
                         >.nav__link {
                             .nav__link-icon:hover g [fill] {
                                 transition: fill .3s ease;
                             }
                         }
                     }
-                    &.nav__item--sub {
+                    &.nav__item-sub {
                         >.nav__link {
                             &.collapsed {
                                 background-color: #f7f8fa;
@@ -187,8 +187,8 @@
                                         color: $brand-color;
                                     }
                                     &-bullet.nav__link-bullet {
-                                        &--dot>span,
-                                        &--line>span {
+                                        &-dot>span,
+                                        &-line>span {
                                             background-color: $brand-color;
                                         }
                                     }
@@ -201,14 +201,14 @@
             &.active {
                 >.nav__link {
                     .nav__link-bullet.nav__link-bullet {
-                        &--dot>span,
-                        &--line>span {
+                        &-dot>span,
+                        &-line>span {
                             background-color: $brand-color;
                         }
                     }
                 }
             }
-            &.nav__item--disabled {
+            &.nav__item-disabled {
                 opacity: .6;
             }
         }
@@ -224,7 +224,7 @@
                 &-icon {
                     color: #a2a5b9;
                 }
-                &--first {
+                &-first {
                     margin-top: .5rem;
                 }
                 &-text {
@@ -240,7 +240,7 @@
             height: 0;
             display: block;
             border-bottom: $border;
-            &.nav__separator--dashed {
+            &.nav__separator-dashed {
                 border-bottom: $border;
             }
         }
@@ -264,14 +264,14 @@
         }
     }
     &.nav {
-        &--fit {
+        &-fit {
             padding: 0;
             .nav__item>.nav__link {
                 padding-left: 0;
                 padding-right: 0;
             }
         }
-        &--lg-space {
+        &-lg-space {
             .nav__item {
                 margin: .35rem 0;
                 .nav__link {
@@ -286,7 +286,7 @@
                 }
             }
         }
-        &--md-space {
+        &-md-space {
             .nav__item {
                 margin: .25rem 0;
                 .nav__link {
@@ -301,26 +301,26 @@
                 }
             }
         }
-        &--bold .nav__item .nav__link .nav__link-text {
+        &-bold .nav__item .nav__link .nav__link-text {
             font-weight: 500;
         }
-        &--thin .nav__item .nav__link .nav__link-text {
+        &-thin .nav__item .nav__link .nav__link-text {
             font-weight: 300;
         }
-        &--lg-font .nav__item .nav__link .nav__link-text {
+        &-lg-font .nav__item .nav__link .nav__link-text {
             font-size: 1.15rem;
         }
-        &--xl-font .nav__item .nav__link .nav__link-text {
+        &-xl-font .nav__item .nav__link .nav__link-text {
             font-size: 1.25rem;
         }
-        &--v2 {
+        &-v2 {
             .nav__item {
                 border-radius: 2rem;
                 overflow: hidden;
                 &>.nav__link {
                     transition: none;
                 }
-                &:hover:not(.nav__item--disabled):not(.nav__item--sub):not(.nav__item--active) {
+                &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active) {
                     >.nav__link {
                         background-color: #f4f4f9;
                         transition: none;
@@ -331,15 +331,15 @@
                                 color: $brand-color;
                             }
                             &-bullet.nav__link-bullet {
-                                &--dot>span,
-                                &--line>span {
+                                &-dot>span,
+                                &-line>span {
                                     background-color: #f4f4f9;
                                 }
                             }
                         }
                     }
                 }
-                &.nav__item--active {
+                &.nav__item-active {
                     >.nav__link {
                         background-color: $brand-color;
                         transition: none;
@@ -351,8 +351,8 @@
                             }
                             &-bullet {
                                 &.nav__link-bullet {
-                                    &--dot>span,
-                                    &--line>span {
+                                    &-dot>span,
+                                    &-line>span {
                                         background-color: $bg-white;
                                     }
                                 }
@@ -369,8 +369,8 @@
                                     color: #fff;
                                 }
                                 &-bullet.nav__link-bullet {
-                                    &--dot>span,
-                                    &--line>span {
+                                    &-dot>span,
+                                    &-line>span {
                                         background-color: $bg-white;
                                     }
                                 }
@@ -380,7 +380,7 @@
                 }
             }
         }
-        &--v3 {
+        &-v3 {
             .nav__item {
                 margin: 0;
                 .nav__link {
@@ -390,13 +390,13 @@
                     border-left: 2px solid transparent;
                 }
                 &.active .nav__link,
-                &.nav__link--active .nav__link {
+                &.nav__link-active .nav__link {
                     transition: all .3s;
                     background-color: #f7f8fa;
                     border-left: 2px solid $brand-color;
                 }
                 &.active .nav__link .nav__link-text,
-                &.nav__link--active .nav__link .nav__link .nav__link-text {
+                &.nav__link-active .nav__link .nav__link .nav__link-text {
                     color: $brand-color;
                 }
                 &:hover {
@@ -408,7 +408,7 @@
                 }
             }
         }
-        &--v4 {
+        &-v4 {
             .nav__item {
                 padding: .65rem 0;
                 .nav__link {
@@ -443,82 +443,82 @@
                     }
                 }
             }
-            &--brand {
+            &-brand {
                 .nav__item {
                     &.active .nav__link {
                         border-left: 3px solid $brand-color;
                     }
-                    &:hover:not(.nav__item--disabled):not(.nav__item--sub):not(.nav__item--active)>.nav__link .nav__link-text {
+                    &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active)>.nav__link .nav__link-text {
                         color: $brand-color;
                     }
                 }
             }
-            &--light {
+            &-light {
                 .nav__item {
                     &.active .nav__link {
                         border-left: 3px solid #fff;
                     }
-                    &:hover:not(.nav__item--disabled):not(.nav__item--sub):not(.nav__item--active)>.nav__link .nav__link-text {
+                    &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active)>.nav__link .nav__link-text {
                         color: #fff;
                     }
                 }
             }
-            &--dark {
+            &-dark {
                 .nav__item {
                     &.active .nav__link {
                         border-left: 3px solid $dark-color;
                     }
-                    &:hover:not(.nav__item--disabled):not(.nav__item--sub):not(.nav__item--active)>.nav__link .nav__link-text {
+                    &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active)>.nav__link .nav__link-text {
                         color: $dark-color;
                     }
                 }
             }
-            &--primary {
+            &-primary {
                 .nav__item {
                     &.active .nav__link {
                         border-left: 3px solid $primary-color;
                     }
-                    &:hover:not(.nav__item--disabled):not(.nav__item--sub):not(.nav__item--active)>.nav__link .nav__link-text {
+                    &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active)>.nav__link .nav__link-text {
                         color: $primary-color;
                     }
                 }
             }
-            &--success {
+            &-success {
                 .nav__item {
                     &.active .nav__link {
                         border-left: 3px solid $success-color;
                     }
-                    &:hover:not(.nav__item--disabled):not(.nav__item--sub):not(.nav__item--active)>.nav__link .nav__link-text {
+                    &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active)>.nav__link .nav__link-text {
                         color: $success-color;
                     }
                 }
             }
-            &--info {
+            &-info {
                 .nav__item {
                     &.active .nav__link {
                         border-left: 3px solid $info-color;
                     }
-                    &:hover:not(.nav__item--disabled):not(.nav__item--sub):not(.nav__item--active)>.nav__link .nav__link-text {
+                    &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active)>.nav__link .nav__link-text {
                         color: $info-color;
                     }
                 }
             }
-            &--warning {
+            &-warning {
                 .nav__item {
                     &.active .nav__link {
                         border-left: 3px solid $warning-color;
                     }
-                    &:hover:not(.nav__item--disabled):not(.nav__item--sub):not(.nav__item--active)>.nav__link .nav__link-text {
+                    &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active)>.nav__link .nav__link-text {
                         color: $warning-color;
                     }
                 }
             }
-            &--danger {
+            &-danger {
                 .nav__item {
                     &.active .nav__link {
                         border-left: 3px solid $danger-color;
                     }
-                    &:hover:not(.nav__item--disabled):not(.nav__item--sub):not(.nav__item--active)>.nav__link .nav__link-text {
+                    &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active)>.nav__link .nav__link-text {
                         color: $danger-color;
                     }
                 }

@@ -175,9 +175,6 @@ $(document).ready(function () {
     };
     tagifyElement();
 
-
-
-
     hexToRgb = function (hex) {
         hex = hex.replace(/#/g, '');
         if (hex.length === 3) {

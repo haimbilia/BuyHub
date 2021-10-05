@@ -23,7 +23,7 @@ foreach ($arrListing as $sn => $row) {
     $recordId = FatUtility::int($row['bpcategory_id']);
     $tr->setAttribute("id", $metaId);
 
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':

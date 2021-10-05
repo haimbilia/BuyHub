@@ -28,7 +28,7 @@ foreach ($arrListing as $sn => $row) {
     /* if($row['coupon_active'] != applicationConstants::ACTIVE) {
 		$tr->setAttribute ("class","fat-inactive");
 	} */
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':

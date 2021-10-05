@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php
-$addressFrm->setCustomRendererClass('FormRendererBS');
+//$addressFrm->setCustomRendererClass('FormRendererBS');
 //$addressFrm->developerTags['rowClassNameDefault'] = 'rowClassName';
 //$addressFrm->developerTags['colClassBeforeWidthDefault'] = 'colClassBeforeWidth';
 //$addressFrm->developerTags['colClassAfterWidthDefault'] = 'colClassAfterWidth';

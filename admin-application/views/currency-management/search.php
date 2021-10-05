@@ -16,7 +16,7 @@ if (!$canEdit) {
 }
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive','id' => 'currencyList'));
 $th = $tbl->appendElement('thead')->appendElement('tr');
-foreach ($arr_flds as $key => $val) {
+foreach ($fields as $key => $val) {
     if ('select_all' == $key) {
         $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
     } else {
@@ -30,7 +30,7 @@ foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr', array());
     $tr->setAttribute("id", $row['currency_id']);
 
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'dragdrop':

@@ -26,7 +26,7 @@
                     );
                     $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive'));
                     $th = $tbl->appendElement('thead')->appendElement('tr');
-                    foreach ($arr_flds as $key => $val) {
+                    foreach ($fields as $key => $val) {
                         $e = $th->appendElement('th', array(), $val, true);
                     }
                     $serialNo = 0;
@@ -34,7 +34,7 @@
                         $serialNo++;
                         $tr = $tbl->appendElement('tr');
 
-                        foreach ($arr_flds as $key => $val) {
+                        foreach ($fields as $key => $val) {
                             $td = $tr->appendElement('td');
                             switch ($key) {
                                 case 'listSerial':

@@ -47,4 +47,36 @@ class BlogComment extends MyAppModel
         }
         return false;
     }
+
+    public static function getBlogCommentStatusArr($langId)
+    {
+        $langId = FatUtility::int($langId);
+        if ($langId < 1) {
+            $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
+        }
+
+        return array(
+            self::COMMENT_STATUS_PENDING => Labels::getLabel('LBL_Pending', $langId),
+            self::COMMENT_STATUS_APPROVED => Labels::getLabel('LBL_Approved', $langId)
+        );
+    }
+
+    public static function getStatusHtml(int $langId, int $status): string
+    {
+        $arr = self::getBlogCommentStatusArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case self::COMMENT_STATUS_PENDING:
+                $status = HtmlHelper::INFO;
+                break;
+            case self::COMMENT_STATUS_APPROVED:
+                $status = HtmlHelper::SUCCESS;
+                break;
+            
+            default:
+                $status = HtmlHelper::PRIMARY;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, $msg);
+    }
 }

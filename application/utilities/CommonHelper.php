@@ -1425,7 +1425,7 @@ class CommonHelper extends FatUtility
         $string = preg_replace("/[\s-]+/", " ", $string);
         //Convert whitespaces and underscore to dash
         $string = preg_replace("/[\s_]/", "-", $string);
-
+        $string = str_replace('"', "", $string);
         $keyword = strtolower($string);
         $keyword = ucfirst(FatUtility::dashed2Camel($keyword));
 

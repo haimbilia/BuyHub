@@ -18,7 +18,7 @@ $serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCoun
 foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr', array());
 
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':

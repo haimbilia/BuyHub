@@ -24,7 +24,7 @@ foreach ($arrListing as $sn => $row) {
     if ($row['questionnaire_active'] == 0) {
         $tr->setAttribute("class", "fat-inactive");
     }
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':

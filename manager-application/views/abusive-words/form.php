@@ -1,12 +1,19 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
+$frm->setFormTagAttribute('id', 'frmAbusiveWord');
+$frm->setFormTagAttribute('class', 'modal-body form form-edit layout--' . $formLayout);
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
-
-$activeGentab = true;
-$disabled = (1 > $recordId) ? 'disabled' : '';
-require_once(CONF_THEME_PATH . 'zones/form-head.php'); ?>
+	
+$fld = $frm->getField('abusive_lang_id');
+$fld->addFieldTagAttribute( 'onChange', 'changeFormLayOut(this);' );
+?>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php echo Labels::getLabel('LBL_ABUSIVE_KEYWORD_SETUP', $adminLangId); ?>
+    </h5>
+</div>
+<div class="modal-body form-edit">
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>
     </div>
@@ -26,4 +33,4 @@ require_once(CONF_THEME_PATH . 'zones/form-head.php'); ?>
             </div>
         </div>
     </div>
-</div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->
+</div>

@@ -2,8 +2,6 @@
 
 class ContentBlockController extends AdminBaseController
 {
-    public const IMPORT_INSTRUCTIONS = 1;
-
     private $canView;
     private $canEdit;
 
@@ -20,9 +18,6 @@ class ContentBlockController extends AdminBaseController
         $nodes = array();
 
         switch ($action) {
-            case 'importInstructions':
-                $nodes[] = array('title' => Labels::getLabel('LBL_Import_instructions', $this->adminLangId));
-                break;
             case 'index':
                 $className = get_class($this);
                 $arr = explode('-', FatUtility::camel2dashed($className));
@@ -50,28 +45,14 @@ class ContentBlockController extends AdminBaseController
         $this->_template->render();
     }
 
-    public function importInstructions()
+    public function search()
     {
-        $this->objPrivilege->canViewImportInstructions();
-        $this->set('includeEditor', true);
-        $this->_template->render();
-    }
-
-    public function search($importInstructions = 0)
-    {
-        $importInstructions = FatUtility::int($importInstructions);
-        if (0 < $importInstructions) {
-            $this->objPrivilege->canViewImportInstructions();
-            $this->canView = $this->objPrivilege->canViewImportInstructions($this->admin_id, true);
-            $this->canEdit = $this->objPrivilege->canEditImportInstructions($this->admin_id, true);
-        } else {
-            $this->objPrivilege->canViewContentBlocks();
-            $this->canView = $this->objPrivilege->canViewContentBlocks($this->admin_id, true);
-            $this->canEdit = $this->objPrivilege->canEditContentBlocks($this->admin_id, true);
-        }
+        $this->objPrivilege->canViewContentBlocks();
+        $this->canView = $this->objPrivilege->canViewContentBlocks($this->admin_id, true);
+        $this->canEdit = $this->objPrivilege->canEditContentBlocks($this->admin_id, true);
 
         $srch = Extrapage::getSearchObject($this->adminLangId, false);
-        $srch->addCondition('epage_content_for', '=', $importInstructions);
+        $srch->addCondition('epage_content_for', '=', Extrapage::CONTENT_PAGES);
         $srch->addOrder('epage_active', 'DESC');
         $srch->addOrder('epage_id', 'DESC');
         $rs = $srch->getResultSet();
@@ -84,7 +65,6 @@ class ContentBlockController extends AdminBaseController
 
         $this->set("canView", $this->canView);
         $this->set("canEdit", $this->canEdit);
-        $this->set("importInstructions", $importInstructions);
 
         $this->_template->render(false, false);
     }

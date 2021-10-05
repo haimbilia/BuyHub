@@ -49,6 +49,9 @@ $card:'card';
         display: flex;
         align-items: center;
         align-content: flex-end;
+        .btn-add {
+            margin-#{$end-direction}: 1rem;
+        }
         >.actions {
             .selected {
                 background-color: $brand-color;
@@ -71,60 +74,60 @@ $card:'card';
                 border-radius: 4px;
             }
         }
-        &--hor-fit {
+        &-hor-fit {
             margin-left: -25px;
             margin-right: -25px;
         }
-        &#{$selfBody}--center {
+        &#{$selfBody}-center {
             justify-content: center;
             align-items: center;
         }
-        &#{$selfBody}--center-x {
+        &#{$selfBody}-center-x {
             justify-content: center;
         }
-        &#{$selfBody}--center-y {
+        &#{$selfBody}-center-y {
             align-items: center;
         }
-        &#{$selfBody}--stick-bottom {
+        &#{$selfBody}-stick-bottom {
             position: relative;
             bottom: 0;
         }
-        &#{$selfBody}--fluid {
+        &#{$selfBody}-fluid {
             height: 100%;
             flex-direction: row;
             flex-grow: 1;
             width: 100%;
         }
-        &#{$selfBody}--fill {
+        &#{$selfBody}-fill {
             flex-grow: 1 !important;
         }
-        &#{$selfBody}--unfill {
+        &#{$selfBody}-unfill {
             flex-grow: 0 !important;
         }
-        &#{$selfBody}--fullheight {
+        &#{$selfBody}-fullheight {
             flex-grow: auto;
         }
-        &#{$selfBody}--fit {
+        &#{$selfBody}-fit {
             padding: 0;
         }
-        &#{$selfBody}--fit {
+        &#{$selfBody}-fit {
             padding: 0;
         }
-        &#{$selfBody}--fit-top {
+        &#{$selfBody}-fit-top {
             padding-top: 0 !important;
         }
-        &#{$selfBody}--fit-bottom {
+        &#{$selfBody}-fit-bottom {
             padding-bottom: 0 !important;
         }
-        &#{$selfBody}--fit-x {
+        &#{$selfBody}-fit-x {
             padding-left: 0;
             padding-right: 0;
         }
-        &#{$selfBody}--hor-fit {
+        &#{$selfBody}-hor-fit {
             padding-left: 0;
             padding-right: 0;
         }
-        &#{$selfBody}--fit-y {
+        &#{$selfBody}-fit-y {
             padding-top: 0;
         }
     }
@@ -141,31 +144,31 @@ $card:'card';
             align-items: center;
             justify-content: space-between;
         }
-        &#{$selfFoot}--sm {
+        &#{$selfFoot}-sm {
             padding-top: 10px;
             padding-bottom: 10px;
         }
-        &#{$selfFoot}--md {
+        &#{$selfFoot}-md {
             padding-top: 1rem;
             padding-bottom: 1rem;
         }
-        &#{$selfFoot}--no-border {
+        &#{$selfFoot}-no-border {
             border-top: 0;
         }
-        &#{$selfFoot}--top {
+        &#{$selfFoot}-top {
             border-top: 0;
             border-bottom: $border;
         }
-        &#{$selfFoot}--solid {
+        &#{$selfFoot}-solid {
             background-color: #f7f8fa;
             border-top: 0;
         }
-        &#{$selfFoot}--solid {
-            &#{$selfFoot}--top {
+        &#{$selfFoot}-solid {
+            &#{$selfFoot}-top {
                 border-bottom: 0;
             }
         }
-        &#{$selfFoot}--fit {
+        &#{$selfFoot}-fit {
             padding: 0;
         }
     }
@@ -177,22 +180,22 @@ $card:'card';
         padding-top: 25px !important;
         padding-bottom: 25px !important;
     }
-    &#{&}--head-sm {
+    &#{&}-head-sm {
         #{$selfHead} {
             min-height: 50px;
         }
     }
-    &#{&}--head-lg {
+    &#{&}-head-lg {
         #{$selfHead} {
             min-height: 80px;
         }
     }
-    &#{&}--head-xl {
+    &#{&}-head-xl {
         #{$selfHead} {
             min-height: 100px;
         }
     }
-    &#{&}--sticky {
+    &#{&}-sticky {
         #{$selfHead} {
             height: 50px;
             min-height: 50px;
@@ -202,20 +205,20 @@ $card:'card';
             z-index: 101;
             background: #fff;
         }
-        #{$selfHead}#{$selfHead}--sm {
+        #{$selfHead}#{$selfHead}-sm {
             height: 40px;
             min-height: 40px;
         }
-        #{$selfHead}#{$selfHead}--lg {
+        #{$selfHead}#{$selfHead}-lg {
             height: 70px;
             min-height: 70px;
         }
-        #{$selfHead}#{$selfHead}--xl {
+        #{$selfHead}#{$selfHead}-xl {
             height: 90px;
             min-height: 90px;
         }
     }
-    &#{&}--head-overlay {
+    &#{&}-head-overlay {
         #{$selfHead} {
             position: relative;
             z-index: 1;
@@ -225,7 +228,7 @@ $card:'card';
         #{$selfBody} {
             margin-top: -60px;
         }
-        &.#{$card}--head-sm {
+        &.#{$card}-head-sm {
             #{$selfHead} {
                 height: 50px;
             }
@@ -233,7 +236,7 @@ $card:'card';
                 margin-top: -50px;
             }
         }
-        &.#{$card}--head-lg {
+        &.#{$card}-head-lg {
             #{$selfHead} {
                 height: 80px;
             }
@@ -241,7 +244,7 @@ $card:'card';
                 margin-top: -80px;
             }
         }
-        &.#{$card}--head-xl {
+        &.#{$card}-head-xl {
             #{$selfHead} {
                 height: 100px;
             }
@@ -250,14 +253,14 @@ $card:'card';
             }
         }
     }
-    &#{&}--bordered {
+    &#{&}-bordered {
         box-shadow: none;
         border: $border;
     }
-    &#{&}--unelevate {
+    &#{&}-unelevate {
         box-shadow: none;
     }
-    &#{&}--unround {
+    &#{&}-unround {
         #{$selfHead} {
             border-top-left-radius: 0;
             border-top-right-radius: 0;
@@ -271,10 +274,10 @@ $card:'card';
             border-bottom-right-radius: 0;
         }
     }
-    &#{&}--last {
+    &#{&}-last {
         margin-bottom: 0;
     }
-    &#{&}--fit {
+    &#{&}-fit {
         #{$selfHead} {
             padding: 0;
         }
@@ -284,7 +287,7 @@ $card:'card';
         #{$selfFoot} {
             padding: 0;
         }
-        &.#{$card}--height-fluid-half {
+        &.#{$card}-height-fluid-half {
             align-items: stretch;
             #{$selfBody} {
                 height: 100%;
@@ -293,10 +296,10 @@ $card:'card';
             }
         }
     }
-    &#{&}--contain {
+    &#{&}-contain {
         overflow: hidden;
     }
-    &#{&}--space {
+    &#{&}-space {
         padding-left: 25px;
         padding-right: 25px;
         #{$selfHead} {
@@ -312,7 +315,7 @@ $card:'card';
             padding-right: 0;
         }
     }
-    &#{&}--head-noborder {
+    &#{&}-head-noborder {
         #{$selfHead} {
             border-bottom: 0;
         }
@@ -320,7 +323,7 @@ $card:'card';
             padding-top: 12.5px;
         }
     }
-    &#{&}--tabs {
+    &#{&}-tabs {
         #{$selfHead} {
             #{$selfHead}-toolbar {
                 display: flex;
@@ -328,7 +331,7 @@ $card:'card';
             }
         }
     }
-    &#{&}--tabs-border-3x {
+    &#{&}-tabs-border-3x {
         #{$selfHead} {
             border-bottom: 3px solid #f7f8fa;
             .nav.nav-tabs {
@@ -376,7 +379,7 @@ $card:'card';
             }
         }
     }
-    &#{&}--solid-brand {
+    &#{&}-solid-brand {
         background: $brand-color;
         #{$selfHead} {
             color: #ffffff;
@@ -406,7 +409,7 @@ $card:'card';
             background: #1957f1;
         }
     }
-    &#{&}--solid-light {
+    &#{&}-solid-light {
         background: #ffffff;
         #{$selfHead} {
             color: $dark-color;
@@ -436,7 +439,7 @@ $card:'card';
             background: #f0f0f0;
         }
     }
-    &#{&}--solid-dark {
+    &#{&}-solid-dark {
         background: $dark-color;
         #{$selfHead} {
             color: #ffffff;
@@ -466,7 +469,7 @@ $card:'card';
             background: #1c1d2a;
         }
     }
-    &#{&}--solid-primary {
+    &#{&}-solid-primary {
         background: $primary-color;
         #{$selfHead} {
             color: #ffffff;
@@ -496,7 +499,7 @@ $card:'card';
             background: #3f50d8;
         }
     }
-    &#{&}--solid-success {
+    &#{&}-solid-success {
         background: $success-color;
         #{$selfHead} {
             color: #ffffff;
@@ -526,7 +529,7 @@ $card:'card';
             background: #19ae9f;
         }
     }
-    &#{&}--solid-info {
+    &#{&}-solid-info {
         background: $info-color;
         #{$selfHead} {
             color: #ffffff;
@@ -556,7 +559,7 @@ $card:'card';
             background: #3a62e8;
         }
     }
-    &#{&}--solid-warning {
+    &#{&}-solid-warning {
         background: $warning-color;
         #{$selfHead} {
             color: #111111;
@@ -586,7 +589,7 @@ $card:'card';
             background: #ffae03;
         }
     }
-    &#{&}--solid-danger {
+    &#{&}-solid-danger {
         background: $danger-color;
         #{$selfHead} {
             color: #ffffff;
@@ -616,7 +619,7 @@ $card:'card';
             background: #fd1b66;
         }
     }
-    &#{&}--skin-solid {
+    &#{&}-skin-solid {
         #{$selfHead} {
             #{$selfHead}-label {
                 #{$selfHead}-title {
@@ -629,7 +632,7 @@ $card:'card';
                     color: rgba(255, 255, 255, 0.8);
                 }
             }
-            &:not(.card__head--noborder) {
+            &:not(.card__head-noborder) {
                 border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             }
         }
@@ -637,7 +640,7 @@ $card:'card';
             color: #fff;
         }
     }
-    &#{&}--collapsed {
+    &#{&}-collapsed {
         >.form {
             display: none;
         }
@@ -659,7 +662,7 @@ $card:'card';
             }
         }
     }
-    &#{&}--collapse {
+    &#{&}-collapse {
         #{$selfHead} {
             #{$selfHead}-toolbar {
                 .la-angle-down {
@@ -675,7 +678,7 @@ $card:'card';
             }
         }
     }
-    &#{&}--border-bottom {
+    &#{&}-border-bottom {
         &-brand {
             border-bottom: 3px solid rgba(54, 108, 243, 0.2);
         }
@@ -701,12 +704,12 @@ $card:'card';
             border-bottom: 3px solid rgba(253, 57, 122, 0.2);
         }
     }
-    &#{&}--sortable {
+    &#{&}-sortable {
         #{$selfHead} {
             cursor: move;
         }
     }
-    &#{&}--sortable-empty {
+    &#{&}-sortable-empty {
         visibility: hidden;
         height: 45px;
         min-height: 125px;
@@ -715,13 +718,13 @@ $card:'card';
         border: $border;
     }
     @media (min-width: 1025px) {
-        &#{&}--height-fluid {
+        &#{&}-height-fluid {
             height: calc(100% - 20px);
             #{$selfBody} {
                 flex-grow: 1;
             }
         }
-        &#{&}--height-fluid-half {
+        &#{&}-height-fluid-half {
             #{$selfBody} {
                 flex-grow: 1;
             }
@@ -733,19 +736,19 @@ $card:'card';
             #{$selfHead} {
                 padding: 0 15px;
                 min-height: 50px;
-                &#{$selfHead}--sm {
+                &#{$selfHead}-sm {
                     min-height: 40px;
                 }
-                &#{$selfHead}--lg {
+                &#{$selfHead}-lg {
                     min-height: 60px;
                 }
-                &#{$selfHead}--xl {
+                &#{$selfHead}-xl {
                     min-height: 80px;
                 }
             }
             #{$selfBody} {
                 padding: 15px;
-                #{$selfBody}--hor-fit {
+                #{$selfBody}-hor-fit {
                     margin-left: -15px;
                     margin-right: -15px;
                 }
@@ -762,39 +765,39 @@ $card:'card';
                 padding-bottom: 15px !important;
             }
         }
-        &#{&}--head-sm {
+        &#{&}-head-sm {
             #{$selfHead} {
                 min-height: 40px;
             }
         }
-        &#{&}--head-lg {
+        &#{&}-head-lg {
             #{$selfHead} {
                 min-height: 60px;
             }
         }
-        &#{&}--head-xl {
+        &#{&}-head-xl {
             #{$selfHead} {
                 min-height: 80px;
             }
         }
-        &#{&}--marginless {
+        &#{&}-marginless {
             margin-bottom: 0;
         }
-        &#{&}--sticky {
+        &#{&}-sticky {
             #{$selfHead} {
                 height: 40px;
             }
-            #{$selfHead}#{$selfHead}--sm {
+            #{$selfHead}#{$selfHead}-sm {
                 height: 30px;
             }
-            #{$selfHead}#{$selfHead}--lg {
+            #{$selfHead}#{$selfHead}-lg {
                 height: 50px;
             }
-            #{$selfHead}#{$selfHead}--xl {
+            #{$selfHead}#{$selfHead}-xl {
                 height: 70px;
             }
         }
-        &#{&}--head-overlay {
+        &#{&}-head-overlay {
             #{$selfHead} {
                 height: 50px;
             }
@@ -802,7 +805,7 @@ $card:'card';
                 margin-top: -50px;
             }
         }
-        &#{&}--head-overlay.#{$card}--head-sm {
+        &#{&}-head-overlay.#{$card}-head-sm {
             #{$selfHead} {
                 height: 40px;
             }
@@ -810,7 +813,7 @@ $card:'card';
                 margin-top: -40px;
             }
         }
-        &#{&}--head-overlay.#{$card}--head-lg {
+        &#{&}-head-overlay.#{$card}-head-lg {
             #{$selfHead} {
                 height: 60px;
             }
@@ -818,7 +821,7 @@ $card:'card';
                 margin-top: -60px;
             }
         }
-        &#{&}--head-overlay.#{$card}--head-xl {
+        &#{&}-head-overlay.#{$card}-head-xl {
             #{$selfHead} {
                 height: 80px;
             }
@@ -826,14 +829,14 @@ $card:'card';
                 margin-top: -80px;
             }
         }
-        &#{&}--head--noborder {
+        &#{&}-head-noborder {
             #{$selfBody} {
                 padding-top: 7.5px;
             }
         }
     }
     @media (max-width: 768px) {
-        &#{&}--head-break-sm {
+        &#{&}-head-break-sm {
             #{$selfHead} {
                 padding-top: 15px;
                 padding-bottom: 15px;

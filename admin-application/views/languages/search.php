@@ -19,7 +19,7 @@ foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['language_id']);
 
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':

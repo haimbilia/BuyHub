@@ -24,13 +24,13 @@ class LanguagesController extends AdminBaseController
     private function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld->overrideFldType('search');
 
         if (!empty($fields)) {
             $this->addSortingElements($frm);
         }
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         return $frm;
     }
 
@@ -204,13 +204,10 @@ class LanguagesController extends AdminBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $data = Language::getAttributesById($recordId, array('language_active'));
-
-        if ($data == false) {
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
             LibHelper::exitWithError($this->str_invalid_request, true);
-        }            
-
-        $status = ($data['language_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
+        }
 
         $this->changeStatus($recordId, $status);
 

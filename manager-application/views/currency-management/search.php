@@ -12,14 +12,18 @@ foreach ($arrListing as $sn => $row) {
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
     $tr->setAttribute("id", $row['currency_id']);
 
-    foreach ($fields as $key => $val) {        
+    foreach ($fields as $key => $val) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+        $tdAttr = ('dragdrop' == $key) ? [...$tdAttr, 'class' => 'dragHandle'] : $tdAttr;
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'dragdrop':
                 if ($row['currency_active'] == applicationConstants::ACTIVE) {
-                    $td->appendElement('i', array('class' => 'ion-arrow-move icon'));
-                    $td->setAttribute("class", 'dragHandle');
+                    $td->appendElement('plaintext', $tdAttr, '<svg class="svg" width="18" height="18">
+                                                                <use
+                                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#drag">
+                                                                </use>
+                                                            </svg>', true);
                 }
                 break;
             case 'select_all':
@@ -77,8 +81,15 @@ foreach ($arrListing as $sn => $row) {
 }
 
 if (count($arrListing) == 0) {
-    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($fields)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
+    $tbody->appendElement('tr')->appendElement(
+        'td',
+        array(
+            'colspan' => count($fields)
+        ),
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId)
+    );
 }
+
 
 if ($printData) {
     echo $tbody->getHtml();

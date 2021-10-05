@@ -25,13 +25,13 @@ class CurrencyManagementController extends AdminBaseController
     private function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld->overrideFldType('search');
 
         if (!empty($fields)) {
             $this->addSortingElements($frm);
         }
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         return $frm;
     }
 
@@ -118,25 +118,27 @@ class CurrencyManagementController extends AdminBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $frm = $this->getForm($recordId);
         $defaultCurrencyId = FatApp::getConfig("CONF_CURRENCY", FatUtility::VAR_INT, 1);
-
+        
+        $data = [];
         $defaultCurrency = 0;
         if ($recordId > 0) {
             $data = Currency::getAttributesById($recordId, array('currency_id', 'currency_code', 'currency_active', 'currency_symbol_left', 'currency_symbol_right', 'currency_value'));
-
+            
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $defaultCurrency = ($data['currency_id'] == $defaultCurrencyId) ? 1 : 0;
-            $frm->fill($data);
         }
-
+        $frm = $this->getForm($recordId, $defaultCurrency);
+        $frm->fill($data);
+        
         $this->set('languages', Language::getAllNames());
         $this->set('recordId', $recordId);
         $this->set('defaultCurrency', $defaultCurrency);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_CURRENCY_SETUP', $this->adminLangId));
+        $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
     public function setup()
@@ -214,7 +216,8 @@ class CurrencyManagementController extends AdminBaseController
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_CURRENCY_SETUP', $this->adminLangId));
+        $this->_template->render(false, false, '_partial/listing/lang-form.php');
     }
 
     public function langSetup()
@@ -285,7 +288,7 @@ class CurrencyManagementController extends AdminBaseController
         }
     }
 
-    private function getForm($currencyId = 0)
+    private function getForm($currencyId = 0, $defaultCurrency = 0)
     {
         $currencyId = FatUtility::int($currencyId);
 
@@ -294,12 +297,14 @@ class CurrencyManagementController extends AdminBaseController
         $frm->addRequiredField(Labels::getLabel('LBL_Currency_code', $this->adminLangId), 'currency_code');
         $frm->addTextbox(Labels::getLabel('LBL_Currency_Symbol_Left', $this->adminLangId), 'currency_symbol_left');
         $frm->addTextbox(Labels::getLabel('LBL_Currency_Symbol_Right', $this->adminLangId), 'currency_symbol_right');
-        $frm->addFloatField(Labels::getLabel('LBL_Currency_Conversion_Value', $this->adminLangId), 'currency_value');
+        $fld = $frm->addFloatField(Labels::getLabel('LBL_Currency_Conversion_Value', $this->adminLangId), 'currency_value');
+        if ($defaultCurrency) {
+            $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_This_is_your_default_currency', $this->adminLangId) . '</small>';
+        }
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
 
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'currency_active', $activeInactiveArr, '', array(), '');
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 

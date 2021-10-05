@@ -1,6 +1,12 @@
 <?php
 class HtmlHelper
 {
+    public const SUCCESS = 1;
+    public const WARNING = 2;
+    public const DANGER = 3;
+    public const PRIMARY = 4;
+    public const INFO = 5;
+
     public static function getLoader()
     {
         return '<div class="table-processing">
@@ -39,10 +45,9 @@ class HtmlHelper
     public static function formatFormFields(Form &$form)
     {
         $form->setCustomRendererClass('FormRendererBS');
-
         /* For Each Row On Above Elements */
-        $form->developerTags['colWidthClassesDefault'] = ['col-md-', null, null];
-        $form->developerTags['colWidthValuesDefault'] = [($form->developerTags['fld_default_col'] ?? 12), null, null];
+        $form->developerTags['colWidthClassesDefault'] = [null, 'col-md-', null, null];
+        $form->developerTags['colWidthValuesDefault'] = [null, '12', null, null];
         /* For Each Row On Above Elements */
 
         /* For Input Fields */
@@ -74,6 +79,30 @@ class HtmlHelper
                 break;
             default:
                 return CommonHelper::replaceStringData(Labels::getLabel('LBL_{COUNT}_DAYS_AGO', $langId), ['{COUNT}' => $diff]);
+        }
+    }
+
+    public static function getStatusHtml(int $status, string $msg): string
+    {
+        switch ($status) {
+            case self::SUCCESS:
+                return '<span class="badge badge-success">' . $msg . '</span>';
+                break;
+            case self::WARNING:
+                return '<span class="badge badge-warning">' . $msg . '</span>';
+                break;
+            case self::DANGER:
+                return '<span class="badge badge-danger">' . $msg . '</span>';
+                break;
+            case self::PRIMARY:
+                return '<span class="badge badge-primary">' . $msg . '</span>';
+                break;
+            case self::INFO:
+                return '<span class="badge badge-info">' . $msg . '</span>';
+                break;
+            default:
+                return '<span class="badge badge-info">' . $msg . '</span>';
+                break;
         }
     }
 }

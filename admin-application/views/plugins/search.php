@@ -23,7 +23,7 @@ if (!$canEdit || 2 > count($arrListing) || in_array($pluginType, Plugin::getKing
 }
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive', 'id' => 'plugin'));
 $th = $tbl->appendElement('thead')->appendElement('tr');
-foreach ($arr_flds as $key => $val) {
+foreach ($fields as $key => $val) {
     if ('select_all' == $key) {
         $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
     } else {
@@ -36,7 +36,7 @@ $msg = '';
 foreach ($arrListing as $sn => $row) {
     $serialNo++;
     $tr = $tbl->appendElement('tr', array('id' => $row['plugin_id'], 'class' => ''));
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'dragdrop':

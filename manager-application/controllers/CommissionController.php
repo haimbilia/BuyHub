@@ -207,11 +207,6 @@ class CommissionController extends AdminBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $post = FatApp::getPostedData();
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : $post['page'];
-        $page = (empty($page) || $page <= 0) ? 1 : FatUtility::int($page);
-
         $srch = Commission::getCommissionHistorySettingsObj($this->adminLangId);
         $srch->addCondition('tcsh.csh_commsetting_id', '=', $recordId);
         $srch->setPageNumber($page);
@@ -221,11 +216,6 @@ class CommissionController extends AdminBaseController
         $records = FatApp::getDb()->fetchAll($rs);
        
         $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
-        $this->set('postedData', $post);
         $this->_template->render(false, false);
     }
 
@@ -364,14 +354,14 @@ class CommissionController extends AdminBaseController
     private function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld->overrideFldType('search');
 
         if (!empty($fields)) {
             $this->addSortingElements($frm);
         }
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         return $frm;
     }
 

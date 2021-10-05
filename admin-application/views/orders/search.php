@@ -23,7 +23,7 @@ foreach ($ordersList as $sn => $row) {
     $tr = $tbl->appendElement('tr');
     $cartData = !empty($row['order_cart_data']) ? json_decode(trim($row['order_cart_data']), true) : [];
     $checkoutType = !empty($cartData) ? $cartData['shopping_cart']['checkout_type'] : Shipping::FULFILMENT_SHIP;
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':

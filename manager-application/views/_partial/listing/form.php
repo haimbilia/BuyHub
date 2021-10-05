@@ -4,14 +4,9 @@ HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form form-edit');
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 
-if ($defaultCurrency) {
-    $fld = $frm->getField('currency_value');
-    $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_This_is_your_default_currency', $adminLangId) . '</small>';
-}
-
 $activeGentab = true;
 $disabled = (1 > $recordId) ? 'disabled' : '';
-require_once(CONF_THEME_PATH . 'states/form-head.php'); ?>
+require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>
     </div>

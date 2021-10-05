@@ -1,13 +1,27 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
+
 $frm->setFormTagAttribute('class', 'modal-body form form-edit');
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 
-$activeGentab = true;
-$disabled = (1 > $recordId) ? 'disabled' : '';
-require_once(CONF_THEME_PATH . 'countries/form-head.php'); ?>
+$fld = $frm->getField('country_code');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
+$fld = $frm->getField('country_code_alpha3');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
+$fld = $frm->getField('country_language_id');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
+$fld = $frm->getField('country_active');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
+$formTitle = Labels::getLabel('LBL_COUNTRY_SETUP', $adminLangId);
+
+$disabled = (1 > $recordId) ? 'disabled' : '';
+$activeGentab = true;
+require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>
     </div>

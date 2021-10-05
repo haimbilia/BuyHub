@@ -154,8 +154,9 @@ class BuyersReportController extends AdminBaseController
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page');
-
-        $frm->addTextBox(Labels::getLabel('LBL_Buyer_Name', $this->adminLangId), 'keyword');
+        
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld->overrideFldType('search');
 
         if (!empty($fields)) {
             $frm->addHiddenField('', 'sortBy', 'buyerName');

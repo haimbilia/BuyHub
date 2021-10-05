@@ -21,7 +21,7 @@ foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['sreport_id']);
 
-    foreach ($arr_flds as $key => $val) {
+    foreach ($fields as $key => $val) {
         $arr = array();
         if ($key == 'sreport_message') {
             $arr['width'] = '40%';

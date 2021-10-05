@@ -1,33 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light" dir="ltr">
-
-
     <head>
         <meta charset="utf-8" />
         <title>FATbit | Dashboard</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
             rel="stylesheet">
-        
-
         <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
 
         <link rel="shortcut icon" href="images/favicon.ico" />
     </head>
-
-
-
     <body class="subheader--transparent page--loading">
         <div class="wrapper">
-
-            <?php
-  include 'includes/header.php';
-?>
+            <?php include 'includes/header.php'; ?>
             <div class="body" id="body">
                 <div class="content " id="content">
-
                     <!-- begin:: Subheader -->
                     <div id="subheader" class="subheader">
                         <div class="container ">
@@ -476,6 +464,59 @@
                                                 </div>
                                             </div>
                                         </form>
+                                        <!--end::Form-->
+                                    </div>
+                                </div>
+                                <!--end::card-->
+
+                                  <!--begin::card-->
+                                  <div class="card">
+                                    <div class="card-head">
+                                        <div class="card-head-label">
+                                            <h3 class="card-head-title">
+                                                Outline Black
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <!--begin::Form-->
+                                        <form class="form">
+                                                    <div class="form-group row">
+                                                        <label class="col-6 col-form-label">Normal unselected</label>
+                                                        <div class="col-6">
+                                                            <span class="switch switch-dark--outline switch-sm">
+                                                                <label>
+                                                                    <input type="checkbox"  name="">
+                                                                    <span></span>
+                                                                </label>
+                                                            </span>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-6 col-form-label">Normal selected</label>
+                                                        <div class="col-6">
+                                                            <span class="switch switch-dark--outline switch-sm">
+                                                                <label>
+                                                                    <input type="checkbox" checked="checked" name="">
+                                                                    <span></span>
+                                                                </label>
+                                                            </span>
+                                                        </div>
+                                                       
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-6 col-form-label">Disabled</label>
+                                                        <div class="col-6">
+                                                            <span class="switch switch-dark--outline switch-sm">
+                                                                <label>
+                                                                    <input type="checkbox" disabled="" name="">
+                                                                    <span></span>
+                                                                </label>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </form>
                                         <!--end::Form-->
                                     </div>
                                 </div>

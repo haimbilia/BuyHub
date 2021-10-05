@@ -12,18 +12,22 @@ class ProductCategoriesController extends AdminBaseController
     {
         $canEdit = $this->objPrivilege->canEditProductCategories(0, true);
         $this->set("canEdit", $canEdit);
+        $srch = new ProductCategorySearch(0, false, false, false, -1);
+        $this->set("recordCount", FatApp::getDb()->totalRecords($srch->getResultSet()));
+
         $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/jquery-sortable-lists.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
-        $this->_template->addCss(['css/cropper.css', 'css/tagify.css']);
+        $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css']);
         $this->_template->render();
     }
 
     public function search()
     {
+        $canEdit = $this->objPrivilege->canEditProductCategories(0, true);
         $prodCat = new ProductCategory();
         $records = (array) $prodCat->getCategories(true, true);
-        $canEdit = $this->objPrivilege->canEditProductCategories(0, true);
 
         $this->set("arrListing", $records);
+        $this->set("recordCount", count($records));
         $this->set("canEdit", $canEdit);
         $this->_template->render(false, false);
     }
@@ -42,9 +46,9 @@ class ProductCategoriesController extends AdminBaseController
     public function getSubCategories()
     {
         $canEdit = $this->objPrivilege->canEditProductCategories(0, true);
-        $prodCatId = FatApp::getPostedData('prodCatId', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('prodCatId', FatUtility::VAR_INT, 0);
         $level = FatApp::getPostedData('level', FatUtility::VAR_INT, 0);
-        $prodCat = new ProductCategory($prodCatId);
+        $prodCat = new ProductCategory($recordId);
         $childCategories = $prodCat->getCategories(true, true);
         $this->set("childCategories", $childCategories);
         $this->set("level", $level);
@@ -55,24 +59,22 @@ class ProductCategoriesController extends AdminBaseController
     public function updateOrder()
     {
         $this->objPrivilege->canEditProductCategories();
-        $prodCatId = FatApp::getPostedData('catId', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('catId', FatUtility::VAR_INT, 0);
         $parentCatId = FatApp::getPostedData('parentCatId', FatUtility::VAR_INT, 0);
         $catOrderArr = json_decode(FatApp::getPostedData('catOrder'));
-        if ($prodCatId < 1 || count($catOrderArr) < 1) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+        if ($recordId < 1 || count($catOrderArr) < 1) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $prodCat = new ProductCategory($prodCatId);
+        $prodCat = new ProductCategory($recordId);
         $prodCat->updateCatParent($parentCatId);
         $prodCat->updateCatCode();
         if (!$prodCat->updateOrder($catOrderArr)) {
-            Message::addErrorMessage($prodCat->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($prodCat->getError(), true);
         }
         ProductCategory::updateCatOrderCode();
 
-        $changeStatus = ProductCategory::getAttributesById($prodCatId, 'prodcat_active');
+        $changeStatus = ProductCategory::getAttributesById($recordId, 'prodcat_active');
         if (applicationConstants::INACTIVE == $changeStatus) {
             $prodCat->disableChildCategories();
         } else {
@@ -83,29 +85,29 @@ class ProductCategoriesController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function form($prodCatId = 0, $productReq = 0)
+    public function form($productReq = 0)
     {
         $this->objPrivilege->canEditProductCategories();
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $prodCatId = FatUtility::int($prodCatId);
-        $prodCatFrm = $this->getCategoryForm($prodCatId, $productReq);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $prodCatFrm = $this->getCategoryForm($recordId, $productReq);
         $prodCat = new ProductCategory();
-        $categoriesArr = $prodCat->getCategoriesForSelectBox($this->adminLangId, $prodCatId, [], false);
+        $categoriesArr = $prodCat->getCategoriesForSelectBox($this->adminLangId, $recordId, [], false);
         $categories =  array(0 => Labels::getLabel('LBL_Root_Category', $this->adminLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
         $data = array('parent_category_name' => $categories[0]);
-        if (0 < $prodCatId) {
-            $data = ProductCategory::getAttributesById($prodCatId);
+        if (0 < $recordId) {
+            $data = ProductCategory::getAttributesById($recordId);
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
-            $langData = ProductCategory::getLangDataArr($prodCatId, array(ProductCategory::DB_TBL_LANG_PREFIX . 'lang_id', ProductCategory::DB_TBL_PREFIX . 'name'));
+            $langData = ProductCategory::getLangDataArr($recordId, array(ProductCategory::DB_TBL_LANG_PREFIX . 'lang_id', ProductCategory::DB_TBL_PREFIX . 'name'));
             $catNameArr = array();
             foreach ($langData as $value) {
                 $catNameArr[ProductCategory::DB_TBL_PREFIX . 'name'][$value[ProductCategory::DB_TBL_LANG_PREFIX . 'lang_id']] = $value[ProductCategory::DB_TBL_PREFIX . 'name'];
             }
             $data['parent_category_name'] = $categories[$data['prodcat_parent']] ?? '';
 
-            $prodCat = new ProductCategory($prodCatId);
+            $prodCat = new ProductCategory($recordId);
             $ratingTypes = array();
             foreach ($prodCat->getRatingTypes() as $key => $types) {
                 $ratingTypes[$key]['id'] = $types['ratingtype_id'];
@@ -128,24 +130,24 @@ class ProductCategoriesController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    private function getCategoryForm($prodCatId = 0, $productReq = 0)
+    private function getCategoryForm($recordId = 0, $productReq = 0)
     {
-        $prodCatId = FatUtility::int($prodCatId);
+        $recordId = FatUtility::int($recordId);
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $frm = new Form('frmProdCategory');
-        $frm->addHiddenField('', 'prodcat_id', $prodCatId);
+        $frm->addHiddenField('', 'prodcat_id', $recordId);
         $frm->addRequiredField(Labels::getLabel('LBL_Category_Name', $this->adminLangId), 'prodcat_name[' . $siteDefaultLangId . ']');
         $frm->addRequiredField(Labels::getLabel('LBL_Category_Identifier', $this->adminLangId), 'prodcat_identifier');
         /*
         $prodCat = new ProductCategory();
-        $categoriesArr = $prodCat->getCategoriesForSelectBox($this->adminLangId, $prodCatId);
+        $categoriesArr = $prodCat->getCategoriesForSelectBox($this->adminLangId, $recordId);
         $categories = array(0 => Labels::getLabel('LBL_Root_Category', $this->adminLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
         $frm->addSelectBox(Labels::getLabel('LBL_Parent_Category', $this->adminLangId), 'prodcat_parent', $categories, '', array(), '');
          * 
          */
 
         $frm->addRequiredField(Labels::getLabel('LBL_Parent_Category', $this->adminLangId), 'parent_category_name');
-        $frm->addHiddenField('', 'prodcat_parent', $prodCatId);
+        $frm->addHiddenField('', 'prodcat_parent', $recordId);
 
         $yesNoArr = applicationConstants::getYesNoArr($this->adminLangId);
         $frm->addRadioButtons(Labels::getLabel('LBL_Publish', $this->adminLangId), 'prodcat_active', $yesNoArr, '1', array());
@@ -155,7 +157,7 @@ class ProductCategoriesController extends AdminBaseController
         }
 
         $attr = [];
-        if (1 > $prodCatId) {
+        if (1 > $recordId) {
             $attr = ['disabled' => 'disabled'];
         }
         $frm->addTextBox(Labels::getLabel('LBL_RATING_TYPES', $this->adminLangId), 'rating_type', '', $attr);
@@ -209,8 +211,8 @@ class ProductCategoriesController extends AdminBaseController
             }
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->adminLangId));
-        $frm->addButton('', 'btn_discard', Labels::getLabel('LBL_Discard', $this->adminLangId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->adminLangId));
+        // $frm->addButton('', 'btn_discard', Labels::getLabel('LBL_Discard', $this->adminLangId));
         return $frm;
     }
 
@@ -220,18 +222,16 @@ class ProductCategoriesController extends AdminBaseController
         $frm = $this->getCategoryForm(0, $prodCatReq);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $prodCatId = FatUtility::int($post['prodcat_id']);
+        $recordId = FatUtility::int($post['prodcat_id']);
         $prodCatStatus = FatApp::getPostedData('prodcat_status', FatUtility::VAR_INT, 0);
         $post['prodcat_status'] = 0 < $prodCatReq ? $prodCatStatus : ProductCategory::REQUEST_APPROVED;
 
-        $productCategory = new ProductCategory($prodCatId);
+        $productCategory = new ProductCategory($recordId);
         if (!$productCategory->saveCategoryData($post)) {
-            Message::addErrorMessage($productCategory->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($productCategory->getError(), true);
         }
         $productCategory->updateCatCode();
         FatApp::getDb()->query('CALL updateCategoryRelations(0)');
@@ -248,8 +248,7 @@ class ProductCategoriesController extends AdminBaseController
         $productCategory = new ProductCategory();
         $translatedData = $productCategory->getTranslatedCategoryData($data, $toLangId);
         if (!$translatedData) {
-            Message::addErrorMessage($productCategory->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($productCategory->getError(), true);
         }
         $this->set('prodCatName', $translatedData[$toLangId]['prodcat_name']);
         $this->_template->render(false, false, 'json-success.php');
@@ -296,20 +295,17 @@ class ProductCategoriesController extends AdminBaseController
 		$slide_screen = FatApp::getPostedData('slide_screen', FatUtility::VAR_INT, 0);
         $afileId = FatApp::getPostedData('afile_id', FatUtility::VAR_INT, 0);
         if (!$file_type) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $allowedFileTypeArr = array(AttachedFile::FILETYPE_CATEGORY_IMAGE, AttachedFile::FILETYPE_CATEGORY_ICON, AttachedFile::FILETYPE_CATEGORY_BANNER);
 
         if (!in_array($file_type, $allowedFileTypeArr)) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_File', $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('LBL_Please_Select_A_File', $this->adminLangId), true);
         }
 
         ProductCategory::deleteImagesWithOutCategoryId($file_type);
@@ -327,8 +323,7 @@ class ProductCategoriesController extends AdminBaseController
             $_FILES['cropped_image']['type'],
             $slide_screen
         )) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
         ProductCategory::setImageUpdatedOn($prodcat_id);
         $this->set('file', $_FILES['cropped_image']['name']);
@@ -337,15 +332,14 @@ class ProductCategoriesController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function removeImage($afileId, $prodCatId, $imageType = '', $langId = 0, $slide_screen = 0)
+    public function removeImage($afileId, $recordId, $imageType = '', $langId = 0, $slide_screen = 0)
     {
         $this->objPrivilege->canEditProductCategories();
         $afileId = FatUtility::int($afileId);
-        $prodCatId = FatUtility::int($prodCatId);
+        $recordId = FatUtility::int($recordId);
         $langId = FatUtility::int($langId);
         if (!$afileId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
         if ($imageType == 'icon') {
             $fileType = AttachedFile::FILETYPE_CATEGORY_ICON;
@@ -353,11 +347,10 @@ class ProductCategoriesController extends AdminBaseController
             $fileType = AttachedFile::FILETYPE_CATEGORY_BANNER;
         }
         $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile($fileType, $prodCatId, $afileId, 0, $langId, $slide_screen)) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+        if (!$fileHandlerObj->deleteFile($fileType, $recordId, $afileId, 0, $langId, $slide_screen)) {
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
-        ProductCategory::setImageUpdatedOn($prodCatId);
+        ProductCategory::setImageUpdatedOn($recordId);
         $this->set('imageType', $imageType);
         $this->set('msg', Labels::getLabel('MSG_Image_deleted_successfully', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
@@ -366,19 +359,17 @@ class ProductCategoriesController extends AdminBaseController
     public function changeStatus()
     {
         $this->objPrivilege->canEditProductCategories();
-        $prodCatId = FatApp::getPostedData('prodCatId', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('prodCatId', FatUtility::VAR_INT, 0);
         $changeStatus = FatApp::getPostedData('prodcat_active', FatUtility::VAR_INT, 0);
-        if ($prodCatId < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        $catData = ProductCategory::getAttributesById($prodCatId, array('prodcat_active'));
+        $catData = ProductCategory::getAttributesById($recordId, array('prodcat_active'));
         if (!$catData) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $prodCatObj = new ProductCategory($prodCatId);
+        $prodCatObj = new ProductCategory($recordId);
         if (applicationConstants::INACTIVE == $changeStatus) {
             $prodCatObj->disableChildCategories();
         } else {
@@ -393,20 +384,18 @@ class ProductCategoriesController extends AdminBaseController
     public function changeRequestStatus()
     {
         $this->objPrivilege->canEditProductCategories();
-        $prodCatId = FatApp::getPostedData('prodCatId', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('prodCatId', FatUtility::VAR_INT, 0);
 
-        if ($prodCatId < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $catData = ProductCategory::getAttributesById($prodCatId, array('prodcat_status'));
+        $catData = ProductCategory::getAttributesById($recordId, array('prodcat_status'));
         if (!$catData) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $prodCat = new ProductCategory($prodCatId);
+        $prodCat = new ProductCategory($recordId);
         $prodCat->assignValues(
             array(
                 ProductCategory::tblFld('status') => ProductCategory::REQUEST_APPROVED,
@@ -416,8 +405,7 @@ class ProductCategoriesController extends AdminBaseController
             )
         );
         if (!$prodCat->save()) {
-            Message::addErrorMessage($prodCat->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($prodCat->getError(), true);
         }
 
         $this->set('msg', $this->str_update_record);
@@ -429,14 +417,12 @@ class ProductCategoriesController extends AdminBaseController
         $this->objPrivilege->canEditProductCategories();
         $prodcat_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($prodcat_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $prodCateObj = new ProductCategory($prodcat_id);
         if (!$prodCateObj->canRecordMarkDelete($prodcat_id)) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         /* Sub-Categories have products[ */
@@ -587,14 +573,14 @@ class ProductCategoriesController extends AdminBaseController
     public function updateRatingTypes()
     {
         $this->objPrivilege->canEditProductCategories();
-        $prodCatId = FatApp::getPostedData('prt_prodcat_id', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('prt_prodcat_id', FatUtility::VAR_INT, 0);
         $rtId = FatApp::getPostedData('prt_ratingtype_id', FatUtility::VAR_INT, 0);
-        if ($prodCatId < 1 || $rtId < 1) {
-            FatUtility::dieWithError($this->str_invalid_request);
+        if ($recordId < 1 || $rtId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        $prodCat = new ProductCategory($prodCatId);
+        $prodCat = new ProductCategory($recordId);
         if (!$prodCat->addUpdateRatingType($rtId)) {
-            FatUtility::dieWithError($prodCat->getError());
+            LibHelper::exitWithError($prodCat->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel('LBL_UPDATED', $this->adminLangId));
@@ -604,15 +590,15 @@ class ProductCategoriesController extends AdminBaseController
     public function removeRatingType()
     {
         $this->objPrivilege->canEditProductCategories();
-        $prodCatId = FatApp::getPostedData('prt_prodcat_id', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('prt_prodcat_id', FatUtility::VAR_INT, 0);
         $rtId = FatApp::getPostedData('prt_ratingtype_id', FatUtility::VAR_INT, 0);
-        if ($prodCatId < 1 || $rtId < 1) {
-            FatUtility::dieWithError($this->str_invalid_request);
+        if ($recordId < 1 || $rtId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $prodCat = new ProductCategory($prodCatId);
+        $prodCat = new ProductCategory($recordId);
         if (!$prodCat->removeRatingType($rtId)) {
-            FatUtility::dieWithError($prodCat->getError());
+            LibHelper::exitWithError($prodCat->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel('LBL_REMOVED', $this->adminLangId));
