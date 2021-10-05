@@ -285,20 +285,6 @@ class OrderCancelReasonsController extends AdminBaseController
         return $frm;
     }
 
-    private function getSearchForm($fields = [])
-    {
-        $frm = new Form('frmRecordSearch');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
-        $fld->overrideFldType('search');
-
-        if (!empty($fields)) {
-            $this->addSortingElements($frm);
-        }
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        return $frm;
-    }
-
     public function deleteRecord()
     {
         $this->objPrivilege->canEditOrderCancelReasons();

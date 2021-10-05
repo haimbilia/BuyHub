@@ -1,4 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_LABELS', $adminLangId);
 
 /* No sorting functionality required if no record found. */
 if (1 > count($arrListing)) {
@@ -6,23 +7,20 @@ if (1 > count($arrListing)) {
 }
 
 $tableHeadAttrArr = [
-    'dragdrop' => [
-        'width' => '5%'
-    ],
-    'select_all' => [
-        'width' => '5%'
-    ],
     'listSerial' => [
-        'width' => '10%'
+        'width' => '5%'
     ],
-    'orderstatus_name' => [
-        'width' => '40%'
+    'label_key' => [
+        'width' => '35%'
     ],
-    'orderstatus_is_active' => [
-        'width' => '20%'
+    'label_caption' => [
+        'width' => '35%'
+    ],
+    'label_type' => [
+        'width' => '15%'
     ],
     'action' => [
-        'width' => '20%'
+        'width' => '10%'
     ],
 ];
 
@@ -32,23 +30,38 @@ $controller = str_replace('Controller', '', FatApp::getController());
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . 'order-status/search-form.php'); ?>
+                <?php require_once(CONF_THEME_PATH . 'labels/search-form.php'); ?>
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
                         'adminLangId' => $adminLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_ORDER_STATUS', $adminLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_STAUESES', $adminLangId), ['{COUNT}' => $recordCount]),
-                        'newRecordBtn' => true,
-                        'statusButtons' => true
+                        'cardHeadTitle' => Labels::getLabel('LBL_LABELS', $adminLangId),
+                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_LABELS', $adminLangId), ['{COUNT}' => $recordCount]),
+                        'otherButtons' => [
+                            [
+                                'attr' => [
+                                    'href' => 'javascript:void(0)',
+                                    'onclick' => 'updateFile()',
+                                    'title' => Labels::getLabel('LBL_UPDATE_WEB_LABEL_FILE', $adminLangId)
+                                ],
+                                'label' => '<i class="fas fa-laptop-code"></i>'
+                            ],
+                            [
+                                'attr' => [
+                                    'href' => 'javascript:void(0)',
+                                    'onclick' => "updateFile(" . Labels::TYPE_APP . ")",
+                                    'title' => Labels::getLabel('LBL_UPDATE_APP_LABEL_FILE', $adminLangId)
+                                ],
+                                'label' => '<i class="fas fa-mobile-alt"></i>'
+                            ],
+                        ]
                     ];
                     $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
                     <div class="card-body">
                         <div class="table-responsive listingTableJs">
                             <?php
-                            $tableId = "orderStatuses";
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
-                            require_once(CONF_THEME_PATH . 'order-status/search.php');
+                            require_once(CONF_THEME_PATH . 'labels/search.php');
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */
@@ -67,24 +80,4 @@ $controller = str_replace('Controller', '', FatApp::getController());
 <script>
     var controllerName = '<?php echo $controller; ?>';
     getHelpCenterContent(controllerName);
-
-    $(document).ready(function() {
-        $('#orderStatuses').tableDnD({
-            onDrop: function(table, row) {
-                fcom.displayProcessing();
-                var order = $.tableDnD.serialize('id');
-                fcom.ajax(fcom.makeUrl('OrderStatus', 'setOrderStatusesOrder'), order, function(res) {
-                    fcom.removeLoader();
-                    $.ykmsg.close();
-                    var ans = $.parseJSON(res);
-                    if (ans.status == 1) {
-                        $.ykmsg.success(ans.msg);
-                        return;
-                    }
-                    $.ykmsg.error(ans.msg);
-                });
-            },
-            dragHandle: ".dragHandle",
-        });
-    });
 </script>

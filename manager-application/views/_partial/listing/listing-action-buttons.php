@@ -33,6 +33,7 @@ if (isset($otherButtons) && is_array($otherButtons)) {
         $li = $ul->appendElement('li');
         $li->appendElement('a', $attr['attr'], (string) $attr['label'], true);
     }
+    $actionItems = true;
 }
 
 if (true == $actionItems) {

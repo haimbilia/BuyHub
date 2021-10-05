@@ -81,7 +81,7 @@ $(document).on('search', "input[name='keyword']", function () {
         if (false === checkControllerName()) {
             return false;
         }
-
+       
         setColumnsData(frm);
         var data = '';
         if (frm) {
@@ -93,7 +93,7 @@ $(document).on('search', "input[name='keyword']", function () {
         fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
             var res = $.parseJSON(res);
             $(dv).replaceWith(res.listingHtml);
-            $(paginationDv).replaceWith(res.paginationHtml);
+            $(paginationDv).replaceWith(res.paginationHtml);            
             fcom.removeLoader();
             $('.selectAllJs').prop('checked', false);
         });
@@ -232,6 +232,7 @@ $(document).on('search', "input[name='keyword']", function () {
 
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (res) {
+            $('.submitBtnJs').removeClass('loading');
             fcom.removeLoader();
             var t = $.parseJSON(res);
             if (t.status == 0) {
@@ -243,7 +244,7 @@ $(document).on('search', "input[name='keyword']", function () {
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
-            }else if( "openMediaForm" in t){
+            } else if ("openMediaForm" in t) {
                 mediaForm(t.recordId);
             }
         });
@@ -269,7 +270,7 @@ $(document).on('search', "input[name='keyword']", function () {
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
-            }else if( "openMediaForm" in t){
+            } else if ("openMediaForm" in t) {
                 mediaForm(t.recordId);
             }
 

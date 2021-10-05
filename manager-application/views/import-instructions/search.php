@@ -14,49 +14,33 @@ foreach ($arrListing as $sn => $row) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
-            case 'select_all':
-                if ($row['commsetting_is_mandatory'] != 1) {
-                    $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="commsetting_ids[]" value=' . $row['commsetting_id'] . '><i class="input-helper"></i></label>', true);
-                }
-                break;
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'commsetting_prodcat_id':
-                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayText($row['prodcat_name']), true);
-                break;
-            case 'commsetting_user_id':
-                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayText($row['vendor']), true);
-                break;
-            case 'commsetting_product_id':
-                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayText($row['product_name']), true);
-                break;
-            case 'commsetting_fees':
-                $td->appendElement('plaintext', $tdAttr, CommonHelper::numberFormat($row[$key]), true);
+            case 'epage_identifier':
+                if ($row['epage_label'] != '') {
+                    $td->appendElement('plaintext', $tdAttr, $row['epage_label'], true);
+                } else {
+                    $td->appendElement('plaintext', $tdAttr, $row[$key], true);
+                }
                 break;
             case 'action':
                 $data = [
                     'adminLangId' => $adminLangId,
-                    'recordId' => $row['commsetting_id']
+                    'recordId' => $row['epage_id']
                 ];
-
+                
                 if ($canEdit) {
-                    $data['editButton'] = [];
-
-                    if ($row['commsetting_is_mandatory'] != 1) {
-                        $data['deleteButton'] = [];
-                    }
-
                     $data['otherButtons'] = [
                         [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
-                                'onclick' => "viewLog(" . $row['commsetting_id'] . ")",
-                                'title' => Labels::getLabel('LBL_HISTORY', $adminLangId)
+                                'onclick' => "editLangData(" . $row['epage_id'] . "," . $row['epagelang_lang_id'] . ");",
+                                'title' => Labels::getLabel('LBL_EDIT', $adminLangId)
                             ],
                             'label' => '<svg class="svg" width="18" height="18">
                                             <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
                                             </use>
                                         </svg>'
                         ]

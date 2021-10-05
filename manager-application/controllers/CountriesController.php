@@ -354,22 +354,6 @@ class CountriesController extends AdminBaseController
         }
     }
 
-    private function getSearchForm($fields = [])
-    {
-        $frm = new Form('frmRecordSearch');
-        $frm->addHiddenField('', 'page');
-
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld->overrideFldType('search');
-
-        if (!empty($fields)) {
-            $this->addSortingElements($frm);
-        }
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        return $frm;
-    }
-
     private function getFormColumns(): array
     {
         $countriesTblHeadingCols = CacheHelper::get('countriesTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
@@ -384,7 +368,7 @@ class CountriesController extends AdminBaseController
             'country_code_alpha3' => Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->adminLangId),
             'country_name' => Labels::getLabel('LBL_COUNTRY_NAME', $this->adminLangId),
             'country_active' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('countriesTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

@@ -13,7 +13,7 @@ class StatesController extends AdminBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
         $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_STATES', $this->adminLangId));
         $this->getListingData();
@@ -21,7 +21,7 @@ class StatesController extends AdminBaseController
         $this->_template->render();
     }
 
-    private function getSearchForm($fields = [])
+    public function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
@@ -33,9 +33,10 @@ class StatesController extends AdminBaseController
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId, true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'country', $countriesArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
+        $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'country', $countriesArr, '', [], Labels::getLabel('LBL_SELECT_COUNTRY', $this->adminLangId));
+        
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
@@ -382,7 +383,7 @@ class StatesController extends AdminBaseController
             'state_code' => Labels::getLabel('LBL_State_Code', $this->adminLangId),
             'country_name' => Labels::getLabel('LBL_Country_Name', $this->adminLangId),
             'state_active' => Labels::getLabel('LBL_Status', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_Action', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('statesTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         

@@ -1297,3 +1297,10 @@ INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_
 -- ---- Email Functionality update ---- --
 
 ALTER TABLE `tbl_zones_lang` CHANGE `zone_name` `zone_name` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+
+
+UPDATE `tbl_language_labels` SET `label_type`=1 WHERE `label_type`=0;
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_ACTION_BUTTONS', 1, 'Action', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

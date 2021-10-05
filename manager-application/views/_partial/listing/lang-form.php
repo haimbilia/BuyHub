@@ -17,7 +17,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
         if (!empty($translatorSubscriptionKey)) { ?> 
             <div class="row justify-content-end"> 
                 <div class="col-auto mb-4">
-                    <input class="btn btn-brand" 
+                    <input class="btn btn-outline-brand btn-sm" 
                         type="button" 
                         value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" 
                         onClick="editLangData(<?php echo $recordId; ?>, <?php echo $lang_id; ?>, 1)">

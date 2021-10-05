@@ -1,24 +1,39 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($langFrm);
-$langFrm->setFormTagAttribute('dir', $formLayout);
+
+$langFrm->setFormTagAttribute('id', 'editorLangFormJs');
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit layout--' . $formLayout);
-$langFrm->setFormTagAttribute('onsubmit', 'saveLangData(this); return(false);');
+$langFrm->setFormTagAttribute('dir', $formLayout);
+$langFrm->setFormTagAttribute('onsubmit', 'saveLangData($("#editorLangFormJs")); return(false);');
 
 $langFld = $langFrm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this.value);");
 
-$activeLangtab = true;
+$fld = $langFrm->getField('epage_content');
+$fld->htmlAfterField = '<a class="btn btn-outline-brand btn-sm" onClick="resetToDefaultContent();" href="javascript:void(0)">' . Labels::getLabel('LBL_RESET_EDITOR_CONTENT_TO_DEFAULT', $adminLangId) . '</a>';
+?>
+<!-- editor's default content[ -->
 
-require_once(CONF_THEME_PATH . 'countries/form-head.php'); ?>
+<div id="editor_default_content" style="display:none;">
+    <?php echo (isset($epageData)) ? html_entity_decode($epageData['epage_default_content']) : '';?>
+</div>
+<!-- ] -->
 
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php echo Labels::getLabel('LBL_SETUP_IMPORT_INSTRUCTIONS', $adminLangId); ?>
+    </h5>
+</div>
+<div class="modal-body form-edit"> 
     <div class="form-edit-body loaderContainerJs">
         <?php
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey)) { ?> 
+        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) { ?> 
             <div class="row justify-content-end"> 
                 <div class="col-auto mb-4">
-                    <input class="btn btn-brand" 
+                    <input class="btn btn-outline-brand btn-sm" 
                         type="button" 
                         value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" 
                         onClick="editLangData(<?php echo $recordId; ?>, <?php echo $lang_id; ?>, 1)">

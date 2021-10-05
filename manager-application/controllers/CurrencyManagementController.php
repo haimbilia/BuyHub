@@ -22,19 +22,6 @@ class CurrencyManagementController extends AdminBaseController
         $this->_template->render();
     }
 
-    private function getSearchForm($fields = [])
-    {
-        $frm = new Form('frmRecordSearch');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld->overrideFldType('search');
-
-        if (!empty($fields)) {
-            $this->addSortingElements($frm);
-        }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        return $frm;
-    }
-
     private function getListingData()
     {
         $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
@@ -397,7 +384,7 @@ class CurrencyManagementController extends AdminBaseController
             'currency_symbol_left' => Labels::getLabel('LBL_Symbol_Left', $this->adminLangId),
             'currency_symbol_right' => Labels::getLabel('LBL_Symbol_Right', $this->adminLangId),
             'currency_active' => Labels::getLabel('LBL_Status', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_Action', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('currencyTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
