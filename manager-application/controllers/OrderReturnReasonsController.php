@@ -135,12 +135,9 @@ class OrderReturnReasonsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function setLangTemplateData(array $constructorArgs = [], $checkEditPrivilege = false): void
-    {
-        if ($checkEditPrivilege) {
-            $this->objPrivilege->canEditOrderReturnReasons();
-        }
-        
+    public function setLangTemplateData(array $constructorArgs = []): void
+    {        
+        $this->objPrivilege->canEditOrderReturnReasons();
         $this->modelObj = (new ReflectionClass('OrderReturnReason'))->newInstanceArgs($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('title')];
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->adminLangId));

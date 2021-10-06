@@ -12,18 +12,15 @@ $tableHeadAttrArr = [
     ],
     'listSerial' => [
         'width' => '10%',
-    ],
-    'state_identifier' => [
-        'width' => '20%',
-    ],
+    ],   
     'state_name' => [
-        'width' => '20%',
+        'width' => '30%',
     ],
     'state_code' => [
         'width' => '5%',
     ],
     'country_name' => [
-        'width' => '20%',
+        'width' => '30%',
     ],
     'state_active' => [
         'width' => '10%',

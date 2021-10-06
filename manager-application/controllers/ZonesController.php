@@ -136,12 +136,9 @@ class ZonesController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function setLangTemplateData(array $constructorArgs = [], $checkEditPrivilege = false): void
+    public function setLangTemplateData(array $constructorArgs = []): void
     {
-        if ($checkEditPrivilege) {
-            $this->objPrivilege->canEditZones();
-        }
-
+        $this->objPrivilege->canEditZones();
         $this->modelObj = (new ReflectionClass('Zone'))->newInstanceArgs($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->set('formTitle', Labels::getLabel('LBL_ZONE_SETUP', $this->adminLangId));

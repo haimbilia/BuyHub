@@ -876,7 +876,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
 
     public function langSetup()
     {
-        $this->setLangTemplateData([], true);
+        $this->setLangTemplateData();
 
         $recordId = FatApp::getPostedData($this->modelObj::tblFld('id'), FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
