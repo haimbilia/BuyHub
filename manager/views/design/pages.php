@@ -87,6 +87,8 @@
                                             <li><a href="setting.php">Settings</a></li>
                                             <li><a href="theme-setting.php">Theme Setting</a></li>
                                             <li><a href="plugins-setting.php">Plugins Setting</a></li>
+                                            <li><a href="navigation-management.php">Navigation Management</a></li>
+                                            <li><a href="cms-pages.php">CMS Pages</a></li>
                                             <li><a href="email-template-settings.php" target="_blank">Email temaplate - Settings</a> </li>
                                             <li><a href="email-template-listing.php" target="_blank">Email temaplate - listing</a></li>
 
@@ -387,7 +389,7 @@
                                                                                     Editor</a></li>
                                                                             <li><a href="autosize.php">Autosize</a>
                                                                             </li>
-                                                                            <li><a href="recaptcha.php">Clipboard</a>
+                                                                            <li><a href="clipboard.php">Clipboard</a>
                                                                             </li>
                                                                             <li><a href="recaptcha.php">Google
                                                                                     reCaptcha</a></li>
