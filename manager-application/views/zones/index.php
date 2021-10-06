@@ -24,6 +24,7 @@ $tableHeadAttrArr = [
     ],
 ];
 
+
 $controller = str_replace('Controller', '', FatApp::getController());
 ?>
 <main class="main mainJs">

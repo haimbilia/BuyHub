@@ -198,7 +198,7 @@ class ProductReviewsController extends AdminBaseController
         $emailNotificationObj = new EmailHandler();
         $emailNotificationObj->sendBuyerReviewStatusUpdatedNotification($spreview_id, $data['spreview_lang_id']);
 
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
+        $this->set('msg', $this->str_update_record);
         $this->set('spreviewId', $spreview_id);
         $this->_template->render(false, false, 'json-success.php');
     }

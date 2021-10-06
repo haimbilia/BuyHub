@@ -2,7 +2,6 @@
 
 class ImportInstructionsController extends AdminBaseController
 {
-    public const IMPORT_INSTRUCTIONS = 1;
     public function __construct($action)
     {
         parent::__construct($action);
@@ -54,7 +53,7 @@ class ImportInstructionsController extends AdminBaseController
         $post = $searchForm->getFormDataFromArray($data);
 
         $srch = Extrapage::getSearchObject($this->adminLangId, false);
-        $srch->addCondition('epage_content_for', '=', self::IMPORT_INSTRUCTIONS);
+        $srch->addCondition('epage_content_for', '=', Extrapage::CONTENT_IMPORT_INSTRUCTION);
         $srch->addMultipleFields([
             'ep.*',
             'ep_l.*',
@@ -86,7 +85,7 @@ class ImportInstructionsController extends AdminBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditImportInstructions($this->admin_id, true));
     }
 
     public function search()
@@ -223,20 +222,6 @@ class ImportInstructionsController extends AdminBaseController
         return $frm;
     }
 
-    private function getSearchForm($fields = [])
-    {
-        $frm = new Form('frmRecordSearch');
-        if (!empty($fields)) {
-            $this->addSortingElements($frm);
-        }
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld->overrideFldType('search');
-        
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
-        return $frm;
-    }
-
     private function getFormColumns(): array
     {
         $importInstructionsTblHeadingCols = CacheHelper::get('importInstructionsTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
@@ -247,7 +232,7 @@ class ImportInstructionsController extends AdminBaseController
         $arr = [
             'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
             'epage_identifier' => Labels::getLabel('LBL_TITLE', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('importInstructionsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         

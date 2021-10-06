@@ -84,7 +84,7 @@ class EmptyCartItemsController extends AdminBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditEmptyCartItems($this->admin_id, true));
     }
 
     public function search()
@@ -331,20 +331,6 @@ class EmptyCartItemsController extends AdminBaseController
         return $frm;
     }
 
-    private function getSearchForm($fields = [])
-    {
-        $frm = new Form('frmRecordSearch');
-        if (!empty($fields)) {
-            $this->addSortingElements($frm);
-        }
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld->overrideFldType('search');
-        
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
-        return $frm;
-    }
-
     private function getFormColumns(): array
     {
         $emptyCartItemsTblHeadingCols = CacheHelper::get('emptyCartItemsTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
@@ -358,7 +344,7 @@ class EmptyCartItemsController extends AdminBaseController
             'emptycartitem_identifier' => Labels::getLabel('LBL_TITLE', $this->adminLangId),
             'emptycartitem_url' => Labels::getLabel('LBL_URL', $this->adminLangId),
             'emptycartitem_active' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('emptyCartItemsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         

@@ -2,7 +2,7 @@
 
 $formFields = isset($formFields) ? $formFields : [];
 
-if (isset($defaultFormWithActionBtns) && false === $defaultFormWithActionBtns) {
+if (!isset($controller)) {
     echo $tbl->getHtml();
 } else if (empty($formFields) && isset($controller)) {
     $formAction = isset($formAction) ? $formAction : 'toggleBulkStatuses';

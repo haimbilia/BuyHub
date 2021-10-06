@@ -91,7 +91,7 @@ class CommissionController extends AdminBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditCommissionSettings($this->admin_id, true));
     }
 
     public function search()
@@ -195,12 +195,12 @@ class CommissionController extends AdminBaseController
             LibHelper::exitWithError($record->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('msg', $this->str_update_record);
         $this->set('recordId', $recordId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function viewHistory()
+    public function viewLog()
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if (1 > $recordId) {
@@ -209,10 +209,12 @@ class CommissionController extends AdminBaseController
 
         $srch = Commission::getCommissionHistorySettingsObj($this->adminLangId);
         $srch->addCondition('tcsh.csh_commsetting_id', '=', $recordId);
-        $srch->doNotLimitRecords();
-        $srch->doNotCalculateRecords();
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
 
+        $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetchAll($rs);
+       
         $this->set("arrListing", $records);
         $this->_template->render(false, false);
     }
@@ -348,20 +350,6 @@ class CommissionController extends AdminBaseController
         // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
-
-    private function getSearchForm($fields = [])
-    {
-        $frm = new Form('frmRecordSearch');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld->overrideFldType('search');
-
-        if (!empty($fields)) {
-            $this->addSortingElements($frm);
-        }
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        return $frm;
-    }
     
     private function getFormColumns(): array
     {
@@ -377,7 +365,7 @@ class CommissionController extends AdminBaseController
             'commsetting_user_id' => Labels::getLabel('LBL_Seller', $this->adminLangId),
             'commsetting_product_id' => Labels::getLabel('LBL_Product', $this->adminLangId),
             'commsetting_fees' => Labels::getLabel('LBL_Fees_[%]', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_Action', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('commissionTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
@@ -385,7 +373,7 @@ class CommissionController extends AdminBaseController
 
     private function getDefaultColumns(): array
     {
-        return [    
+        return [
             'select_all',
             'listSerial',
             'commsetting_prodcat_id',

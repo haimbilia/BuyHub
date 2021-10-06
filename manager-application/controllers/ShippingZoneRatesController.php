@@ -75,7 +75,7 @@ class ShippingZoneRatesController extends AdminBaseController
         $shipProfileId = ShippingProfileZone::getAttributesById($post['shiprate_shipprozone_id'], 'shipprozone_shipprofile_id');
         ShippingProfile::setDefaultRates($post['shiprate_shipprozone_id'], $shipProfileId);
 
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
+        $this->set('msg', $this->str_update_record);
         $this->set('zoneId', $post['shiprate_shipprozone_id']);
         $this->set('rateId', $rateId);
         $this->set('langId', $newTabLangId);

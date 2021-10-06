@@ -20,20 +20,6 @@ class ZonesController extends AdminBaseController
         $this->_template->render();
     }
 
-    private function getSearchForm($fields = [])
-    {
-        $frm = new Form('frmRecordSearch');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld->overrideFldType('search');
-        
-        if (!empty($fields)) {
-            $this->addSortingElements($frm);
-        }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
-        return $frm;
-    }
-
     private function getListingData()
     {
         $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
@@ -60,16 +46,16 @@ class ZonesController extends AdminBaseController
 
         $searchForm = $this->getSearchForm($fields);
 
-        $page = (empty($data['page']) || $data['page'] <= 0)?1:$data['page'];
+        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         $srch = Zone::getSearchObject(false, $this->adminLangId);
         $srch->addFld('zone.* , z_l.zone_name, zone.zone_id as listSerial');
         if (!empty($post['keyword'])) {
-            $condition = $srch->addCondition('zone.zone_identifier', 'like', '%'.$post['keyword'].'%');
-            $condition->attachCondition('z_l.zone_name', 'like', '%'.$post['keyword'].'%', 'OR');
+            $condition = $srch->addCondition('zone.zone_identifier', 'like', '%' . $post['keyword'] . '%');
+            $condition->attachCondition('z_l.zone_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        $page = (empty($page) || $page <= 0)?1:$page;
+        $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -86,7 +72,7 @@ class ZonesController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-        
+
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -110,7 +96,7 @@ class ZonesController extends AdminBaseController
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm();
-        if (0 < $recordId) {   
+        if (0 < $recordId) {
             $data = Zone::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, null, true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
@@ -162,20 +148,20 @@ class ZonesController extends AdminBaseController
     }
 
     private function getForm()
-    {        
+    {
         $frm = new Form('frmZone');
         $frm->addHiddenField('', 'zone_id');
         //$frm->addRequiredField(Labels::getLabel('LBL_Zone_Identifier', $this->adminLangId), 'zone_identifier');
-        $frm->addRequiredField(Labels::getLabel('LBL_Zone_Name', $this->adminLangId), 'zone_name'); 
+        $frm->addRequiredField(Labels::getLabel('LBL_Zone_Name', $this->adminLangId), 'zone_name');
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'zone_active', $activeInactiveArr, '', array(), '');         
-       
-        $languageArr = Language::getDropDownList();        
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, ''); 
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'zone_active', $activeInactiveArr, '', array(), '');
+
+        $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        } 
+        }
 
         return $frm;
     }
@@ -183,9 +169,9 @@ class ZonesController extends AdminBaseController
     protected function getLangForm($recordId = 0, $lang_id = 0)
     {
         $frm = new Form('frmZoneLang');
-        $frm->addHiddenField('', 'zone_id', $recordId);  
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');	
-        $frm->addRequiredField(Labels::getLabel('LBL_Zone_Name', $this->adminLangId), 'zone_name'); 
+        $frm->addHiddenField('', 'zone_id', $recordId);
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Zone_Name', $this->adminLangId), 'zone_name');
         return $frm;
     }
 
@@ -254,7 +240,7 @@ class ZonesController extends AdminBaseController
             'action' =>  Labels::getLabel('LBL_ACTION', $this->adminLangId),
         ];
         CacheHelper::create('zoneTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
-        
+
         return $arr;
     }
 

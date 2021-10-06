@@ -84,7 +84,7 @@ class AbusiveWordsController extends AdminBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditAbusiveWords($this->admin_id, true));
     }
 
     public function search()
@@ -149,7 +149,7 @@ class AbusiveWordsController extends AdminBaseController
             LibHelper::exitWithError($record->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -205,7 +205,7 @@ class AbusiveWordsController extends AdminBaseController
         }
     }
 
-    private function getSearchForm($fields = [])
+    public function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
@@ -216,9 +216,10 @@ class AbusiveWordsController extends AdminBaseController
         $fld->overrideFldType('search');
 
         $languages = Language::getAllNames();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $languages);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
+        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->adminLangId));
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
@@ -228,14 +229,13 @@ class AbusiveWordsController extends AdminBaseController
         $frm->addHiddenField('', 'abusive_id', $recordId);
         $languages = Language::getAllNames();
 		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'abusive_lang_id', $languages);
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'abusive_lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->adminLangId));
 		} else  {
 			$lang_id = array_key_first($languages); 
 			$frm->addHiddenField('', 'abusive_lang_id', $lang_id);
 		}
         
         $frm->addTextbox('Keyword', 'abusive_keyword');
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 
@@ -251,7 +251,7 @@ class AbusiveWordsController extends AdminBaseController
             'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
             'abusive_keyword' => Labels::getLabel('LBL_Keyword', $this->adminLangId),
             'language_name' => Labels::getLabel('LBL_Language', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_Action', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('abusiveWordsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

@@ -939,4 +939,18 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         $this->set('langId', $newTabLangId);
         $this->set('msg', $this->str_setup_successful);
     }
+        
+    protected function getSearchForm($fields = [])
+    {
+        $frm = new Form('frmRecordSearch');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld->overrideFldType('search');
+
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
+
+        HtmlHelper::addSearchButton($frm);
+        return $frm;
+    }
 }

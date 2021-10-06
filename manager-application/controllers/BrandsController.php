@@ -26,13 +26,14 @@ class BrandsController extends AdminBaseController
         $this->_template->render();
     }
 
-    private function getSearchForm($request = false, $fields = [])
+    public function getSearchForm($request = false, $fields = [])
     {
         $frm = new Form('frmRecordSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld->overrideFldType('search');
 
         if ($request) {
-            $frm->addTextBox(Labels::getLabel('LBL_Seller_Name_Or_Email', $this->adminLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+            $frm->addTextBox(Labels::getLabel('LBL_SELLER_NAME_OR_EMAIL', $this->adminLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off', 'placeholder' => Labels::getLabel('LBL_SELLER_NAME_OR_EMAIL', $this->adminLangId)));
             $frm->addHiddenField('', 'user_id');
         }
 
@@ -40,10 +41,11 @@ class BrandsController extends AdminBaseController
             $this->addSortingElements($frm);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
+
     private function getListingData()
     {
         $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
@@ -108,7 +110,7 @@ class BrandsController extends AdminBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));
     }
 
     public function search()

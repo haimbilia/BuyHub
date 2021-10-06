@@ -701,3 +701,31 @@ form.custom-form {
     border: $border !important;
     background-color: #fff !important;
 }
+
+.input-clipboard {
+    position: relative;
+    input {
+        height: 40px;
+        border-radius: 1.5rem!important;
+    }
+    .btn {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%!important;
+        background-color: transparent;
+        color: $brand-color;
+        position: absolute;
+        top: 0;
+        #{$end-direction}: 0;
+        &:hover {
+            background-color: lighten($brand-color, 50%);
+            color: $brand-color;
+        }
+        i {
+            font-size: 1.5rem;
+        }
+    }
+}

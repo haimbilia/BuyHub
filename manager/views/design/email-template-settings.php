@@ -89,17 +89,18 @@
                                 </div>
                                 <div class="card-body">
                                     <form class="form">
-                                        <div class="form">
-                                            <div class="form-group">
-                                                <label class="label">Aspect ratio</label>
-                                                <div class="radio-inline">
-                                                    <label class="radio"><input type="radio" name="aspect_ratio" value="1.0"> 1:1<span></span></label>
-                                                    <label class="radio"><input type="radio" name="aspect_ratio" value="1.77777"> 16:9<span></span></label>
+                                        <div class="form-group">
+                                            <label class="label">Aspect ratio</label>
+                                            <div class="switch-tab">
+                                                <div role="group" aria-label="First group" class="btn-group">
+                                                    <button type="button" class="btn btn-brand btn-lg is-active"> 1:1 </button> <button type="button" class="btn btn-brand btn-lg">16:9</button>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="label d-block">Email Logo</label>
-                                                <div class="dropzone dropzone-default dz-clickable" id="dropzone_1">
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="label d-block">Email Logo</label>
+                                            <div class="dropzone dropzone-default dz-clickable" id="dropzone_1">
                                                 <div class="upload_cover">
                                                     <!-- <div class="img--container uploded__img">
                                                         <img src="<?php echo CONF_WEBROOT_URL; ?>images/banners/"
@@ -121,71 +122,94 @@
                                                     </div> -->
                                                     <div clas="img--container  ">
                                                         <div class="file-upload">
-                                                            <img
-                                                                src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
+                                                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                                <p class="form-text"><strong>Image Disclaimer:</strong>
-                                                    File type must be a .jpg, .gif or .png smaller than 2MB and at least 160x90 in 16:9 aspect ratio
-                                                </p>
+                                            <p class="form-text"><strong>Image Disclaimer:</strong>
+                                                File type must be a .jpg, .gif or .png smaller than 2MB and at least 160x90 in 16:9 aspect ratio
+                                            </p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="label">Footer Html</label>
+                                            <div class="iframe-container">
+                                                <iframe border="0" height="100%" width="100%" src="quill-chat.php"></iframe>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="label">Footer Html</label>
-                                                <div class="iframe-container">
-                                                    <iframe border="0" height="100%" width="100%" src="quill-chat.php"></iframe>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="label">Replacement Variables</label>
-                                                <ul class="click-to-copy">
-                                                    <li title="" data-val="{websiteName}" data-original-title="Click to copy" aria-describedby="__bv_tooltip_152__">
-                                                        <div class="text">Website Name</div>
-                                                    </li>
-                                                    <li title="Click to copy" data-val="{businessEmail}">
-                                                        <div class="text">Business Email</div>
-                                                    </li>
-                                                    <li title="Click to copy" data-val="{businessPhone}">
-                                                        <div class="text">Business Phone</div>
-                                                    </li>
-                                                    <li title="Click to copy" data-val="{privacyUrl}">
-                                                        <div class="text">Privacy Link</div>
-                                                    </li>
-                                                    <li title="" data-val="{termsUrl}" data-original-title="Click to copy" aria-describedby="__bv_tooltip_156__">
-                                                        <div class="text">Terms Link</div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="label">Social Links</label>
-                                                <ul class="list-switch list-switch--three web-social-switch">
-                                                    <li class="active facebook"><span><i class="svg--icon"><svg width="24px" height="24px" class="svg">
-                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#facebook"></use>
-                                                                </svg></i>
-                                                        </span></li>
-                                                    <li class="active twitter"><span><i class="svg--icon"><svg width="24px" height="24px" class="svg">
-                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#twitter"></use>
-                                                                </svg></i>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="label">Replacement Variables</label>
+                                            <ul class="click-to-copy">
+                                                <li title="" data-val="{websiteName}" data-original-title="Click to copy" aria-describedby="__bv_tooltip_152__">
+                                                    <div class="text">Website Name <span class="icn">
+                                                    <svg class="svg" width="20" height="20">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#copy">
+                                                    </use>
+                                                </svg>    
+                                                    </span></div>
+                                                </li>
+                                                <li title="Click to copy" data-val="{businessEmail}">
+                                                    <div class="text">Business Email
+                                                    <svg class="svg" width="20" height="20">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#copy">
+                                                    </use>
+                                                </svg>   
+                                                    </div>
+                                                </li>
+                                                <li title="Click to copy" data-val="{businessPhone}">
+                                                    <div class="text">Business Phone
+                                                    <svg class="svg" width="20" height="20">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#copy">
+                                                    </use>
+                                                </svg>   
+                                                    </div>
+                                                </li>
+                                                <li title="Click to copy" data-val="{privacyUrl}">
+                                                    <div class="text">Privacy Link 
+                                                    <svg class="svg" width="20" height="20">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#copy">
+                                                    </use>
+                                                </svg>   
+                                                    </div>
+                                                </li>
+                                                <li title="" data-val="{termsUrl}" data-original-title="Click to copy" aria-describedby="__bv_tooltip_156__">
+                                                    <div class="text">Terms Link 
+                                                    <svg class="svg" width="20" height="20">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#copy">
+                                                    </use>
+                                                </svg>   
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="label">Social Links</label>
+                                            <ul class="list-switch list-switch--three web-social-switch">
+                                                <li class="active facebook"><span><i class="svg--icon"><svg width="24px" height="24px" class="svg">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#facebook"></use>
+                                                            </svg></i>
+                                                    </span></li>
+                                                <li class="active twitter"><span><i class="svg--icon"><svg width="24px" height="24px" class="svg">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#twitter"></use>
+                                                            </svg></i>
 
-                                                        </span></li>
-                                                    <li class="youtube"><span><i class="svg--icon"><svg width="24px" height="24px" class="svg">
-                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#youtube"></use>
-                                                                </svg></i>
+                                                    </span></li>
+                                                <li class="youtube"><span><i class="svg--icon"><svg width="24px" height="24px" class="svg">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#youtube"></use>
+                                                            </svg></i>
 
-                                                        </span></li>
-                                                    <li class="instagram"><span><i class="svg--icon"><svg width="24px" height="24px" class="svg">
-                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#instagram"></use>
-                                                                </svg></i>
+                                                    </span></li>
+                                                <li class="instagram"><span><i class="svg--icon"><svg width="24px" height="24px" class="svg">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#instagram"></use>
+                                                            </svg></i>
 
-                                                        </span></li>
-                                                    <li class="pinterest"><span><i class="svg--icon"><svg width="24px" height="24px" class="svg">
-                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pinterest"></use>
-                                                                </svg></i>
+                                                    </span></li>
+                                                <li class="pinterest"><span><i class="svg--icon"><svg width="24px" height="24px" class="svg">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pinterest"></use>
+                                                            </svg></i>
 
-                                                        </span></li>
-                                                </ul>
-                                            </div>
+                                                    </span></li>
+                                            </ul>
                                         </div>
                                     </form>
                                 </div>
@@ -287,11 +311,11 @@
                 });
             </script>
             <script>
-            $(document).ready(function() {
-                $(".upload_cover").hover(function() {
-                    $('.file-upload').toggleClass("isactive");
+                $(document).ready(function() {
+                    $(".upload_cover").hover(function() {
+                        $('.file-upload').toggleClass("isactive");
+                    });
                 });
-            });
             </script>
         </div>
     </div>
