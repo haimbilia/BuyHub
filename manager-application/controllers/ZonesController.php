@@ -150,63 +150,15 @@ class ZonesController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($autoFillLangData = 0)
+    public function setLangTemplateData(array $constructorArgs = [], $checkEditPrivilege = false): void
     {
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-
-        if (1 > $recordId || 1 > $langId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
+        if ($checkEditPrivilege) {
+            $this->objPrivilege->canEditZones();
         }
 
-        $langFrm = $this->getLangForm($recordId, $langId);        
-        if (0 < $autoFillLangData) {
-            $updateLangDataobj = new TranslateLangData(Zone::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
-            if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-            $langData = current($translatedData);
-        } else {
-            $langData = Zone::getAttributesByLangId($langId, $recordId);
-        }  
-
-        if ($langData) {
-            $langFrm->fill($langData);
-        }
-
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
-        $this->set('recordId', $recordId);
-        $this->set('lang_id', $langId);
-        $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->modelObj = (new ReflectionClass('Zone'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->set('formTitle', Labels::getLabel('LBL_ZONE_SETUP', $this->adminLangId));
-        $this->_template->render(false, false, '_partial/listing/lang-form.php');
-    }
-
-    public function langSetup()
-    {
-        $this->objPrivilege->canEditZones();
-        $post = FatApp::getPostedData();
-
-        $recordId = FatApp::getPostedData('zone_id', FatUtility::VAR_INT, 0);
-        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-       
-        if ($recordId == 0 || $lang_id == 0) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $frm = $this->getLangForm($recordId, $lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        
-        if (false === $post) {
-            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
-        }
-
-        $recordObj = new Zone($recordId);
-        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]], $lang_id);
-        
-        $this->_template->render(false, false, 'json-success.php');
     }
 
     private function getForm()
@@ -228,7 +180,7 @@ class ZonesController extends AdminBaseController
         return $frm;
     }
 
-    private function getLangForm($recordId = 0, $lang_id = 0)
+    protected function getLangForm($recordId = 0, $lang_id = 0)
     {
         $frm = new Form('frmZoneLang');
         $frm->addHiddenField('', 'zone_id', $recordId);  
@@ -296,7 +248,7 @@ class ZonesController extends AdminBaseController
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->adminLangId),
             'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'zone_identifier' => Labels::getLabel('LBL_ZONE_IDENTIFIER', $this->adminLangId),
+            /*'zone_identifier' => Labels::getLabel('LBL_ZONE_IDENTIFIER', $this->adminLangId),*/
             'zone_name' => Labels::getLabel('LBL_ZONE_NAME', $this->adminLangId),
             'zone_active' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
             'action' =>  Labels::getLabel('LBL_ACTION', $this->adminLangId),

@@ -12,7 +12,9 @@ class AdminBaseController extends FatController
     protected $str_invalid_Action;
     protected $str_setup_successful;
     protected $adminLangId;
+    protected object $modelObj;
     protected $nodes = [];
+    protected array $formLangFields;
 
     public function __construct($action)
     {
@@ -837,6 +839,73 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         return FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
     }
 
+    public function langForm($autoFillLangData = 0)
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+
+        if (1 > $recordId || 1 > $langId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $this->setLangTemplateData();
+
+        $langFrm = $this->getLangForm($recordId, $langId);
+        if (0 < $autoFillLangData) {
+            $updateLangDataobj = new TranslateLangData($this->modelObj::DB_TBL_LANG);
+            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
+            if (false === $translatedData) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            }
+            $langData = current($translatedData);
+        } else {
+            $langData = $this->modelObj::getAttributesByLangId($langId, $recordId);
+        }
+
+        if ($langData) {
+            $langFrm->fill($langData);
+        }
+
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        $this->set('recordId', $recordId);
+        $this->set('lang_id', $langId);
+        $this->set('langFrm', $langFrm);
+        $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->_template->render(false, false, '_partial/listing/lang-form.php');
+    }
+
+    public function langSetup()
+    {
+        $this->setLangTemplateData([], true);
+
+        $recordId = FatApp::getPostedData($this->modelObj::tblFld('id'), FatUtility::VAR_INT, 0);
+        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+
+        if ($recordId == 0 || $lang_id == 0) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $frm = $this->getLangForm($recordId, $lang_id);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        if (false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
+
+        $this->setLangTemplateData([$recordId]);
+
+        if (1 > count($this->formLangFields)) {
+            trigger_error('formLangFields must have array lang feild', E_USER_ERROR);
+        }
+
+        $data = [];
+        foreach ($this->formLangFields as $fld) {
+            $data[$fld] = $post[$fld];
+        }
+
+        $this->setLangData($this->modelObj, $data, $lang_id);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
     protected function setLangData(object $classObj, array $langDataArr, $langId = 0)
     {
         $recordId = $classObj->getMainTableRecordId();
@@ -855,8 +924,8 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
                 }
             }
         }
-   
-        if(1 > $langId){         
+
+        if (1 > $langId) {
             $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
             if (0 < $autoUpdateOtherLangsData) {
                 $updateLangDataobj = new TranslateLangData($classObj::DB_TBL_LANG);
@@ -864,7 +933,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
                     LibHelper::exitWithError($updateLangDataobj->getError(), true);
                 }
             }
-        }        
+        }
 
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
