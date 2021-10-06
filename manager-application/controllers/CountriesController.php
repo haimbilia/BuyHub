@@ -146,64 +146,12 @@ class CountriesController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($autoFillLangData = 0)
+    public function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditCountries();
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $lang_id = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-
-        if (1 > $recordId || 1 > $lang_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $langFrm = $this->getLangForm($recordId, $lang_id);
-        if (0 < $autoFillLangData) {
-            $updateLangDataObj = new TranslateLangData(Countries::DB_TBL_LANG);
-            $translatedData = $updateLangDataObj->getTranslatedData($recordId, $lang_id);
-            if (false === $translatedData) {            
-                LibHelper::exitWithError($updateLangDataObj->getError(), true);
-            }
-            $langData = current($translatedData);
-        } else {
-            $langData = Countries::getAttributesByLangId($lang_id, $recordId);
-        }
-
-        if ($langData) {
-            $langFrm->fill($langData);
-        }
-
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
-        $this->set('recordId', $recordId);
-        $this->set('lang_id', $lang_id);
-        $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($lang_id));
+        $this->modelObj = (new ReflectionClass('Countries'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->set('formTitle', Labels::getLabel('LBL_COUNTRY_SETUP', $this->adminLangId));
-        $this->_template->render(false, false, '_partial/listing/lang-form.php');
-    }
-
-    public function langSetup()
-    {
-        $this->objPrivilege->canEditCountries();
-
-        $recordId = FatApp::getPostedData('country_id', FatUtility::VAR_INT, 0);
-        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-
-        $frm = $this->getLangForm();
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        
-        if (false === $post) {
-            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
-        }
-
-        if ($recordId == 0 || $lang_id == 0) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $recordObj = new Countries($recordId);
-
-        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]], $lang_id);
-
-        $this->_template->render(false, false, 'json-success.php');
     }
 
     private function getForm()
@@ -243,7 +191,7 @@ class CountriesController extends AdminBaseController
         return $frm;
     }
 
-    private function getLangForm($recordId = 0, $lang_id = 0)
+    protected function getLangForm($recordId = 0, $lang_id = 0)
     {
         $frm = new Form('frmCountryLang');
         $frm->addHiddenField('', 'country_id', $recordId);

@@ -141,64 +141,13 @@ class OrderCancelReasonsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($autoFillLangData = 0)
+    public function setLangTemplateData(array $constructorArgs = []): void
     {
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-
-        if (1 > $recordId || 1 > $langId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $langFrm = $this->getLangForm($recordId, $langId);
-        if (0 < $autoFillLangData) {
-            $updateLangDataobj = new TranslateLangData(OrderCancelReason::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
-            if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-            $langData = current($translatedData);
-        } else {
-            $langData = OrderCancelReason::getAttributesByLangId($langId, $recordId);
-        }
-
-        if ($langData) {
-            $langFrm->fill($langData);
-        }
-
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
-        $this->set('recordId', $recordId);
-        $this->set('lang_id', $langId);
-        $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->objPrivilege->canEditZones();
+        $this->modelObj = (new ReflectionClass('OrderCancelReason'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('title')];
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_CANCEL_REASON_SETUP', $this->adminLangId));
-        $this->_template->render(false, false, '_partial/listing/lang-form.php');
-    }
-
-    public function langSetup()
-    {
-        $this->objPrivilege->canEditOrderCancelReasons();
-
-        $recordId = FatApp::getPostedData('ocreason_id', FatUtility::VAR_INT, 0);
-        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-
-        if ($recordId == 0 || $lang_id == 0) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $frm = $this->getLangForm($recordId, $lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        
-        if (false === $post) {
-            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
-        }       
-
-        $recordObj = new OrderCancelReason($recordId);
-
-        $this->setLangData($recordObj, [$recordObj::tblFld('title') => $post[$recordObj::tblFld('title')]], $lang_id);
-
-        $this->_template->render(false, false, 'json-success.php');
-    }
+    }    
 
     private function getForm($recordId = 0)
     {
@@ -216,7 +165,7 @@ class OrderCancelReasonsController extends AdminBaseController
         return $frm;
     }
 
-    private function getLangForm($recordId = 0, $lang_id = 0)
+    protected function getLangForm($recordId = 0, $lang_id = 0)
     {
         $frm = new Form('frmOrderCancelReasonLang');
         $frm->addHiddenField('', 'ocreason_id', $recordId);
@@ -280,8 +229,7 @@ class OrderCancelReasonsController extends AdminBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->adminLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'ocreason_identifier' => Labels::getLabel('LBL_REASON_IDENTIFIER', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),         
             'ocreason_title' => Labels::getLabel('LBL_REASON_TITLE', $this->adminLangId),
             'action' =>  Labels::getLabel('LBL_ACTION', $this->adminLangId),
         ];

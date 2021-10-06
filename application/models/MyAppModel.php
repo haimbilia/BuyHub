@@ -244,7 +244,7 @@ class MyAppModel extends FatModel
         $db = FatApp::getDb();
         $srch = new SearchBase(static::DB_TBL . '_lang', 'ln');
         if (true === $includePrimaryTable) {
-            $srch->joinTable(static::DB_TBL, 'INNER JOIN', static::DB_TBL_PREFIX . 'id = ' . 'ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id');
+            $srch->joinTable(static::DB_TBL, 'LEFT JOIN', static::DB_TBL_PREFIX . 'id = ' . 'ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id');
         }
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);

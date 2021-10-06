@@ -142,63 +142,13 @@ class EmptyCartItemsController extends AdminBaseController
 
         $this->_template->render(false, false, 'json-success.php');
     }
-
-    public function langForm($autoFillLangData = 0)
-    {
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-
-        if (1 > $recordId || 1 > $langId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $langFrm = $this->getLangForm($langId);
-        if (0 < $autoFillLangData) {
-            $updateLangDataobj = new TranslateLangData(EmptyCartItems::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
-            if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-            $langData = current($translatedData);
-        } else {
-            $langData = EmptyCartItems::getAttributesByLangId($langId, $recordId);
-        }
-
-        $langData['emptycartitem_id'] = $recordId;
-        $langFrm->fill($langData);
-
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
-        $this->set('recordId', $recordId);
-        $this->set('lang_id', $langId);
-        $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->set('formTitle', Labels::getLabel('LBL_EMPTY_CART_ITEMS_SETUP', $this->adminLangId));
-        $this->_template->render(false, false, '_partial/listing/lang-form.php');
-    }
-
-    public function langSetup()
+    
+    public function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditEmptyCartItems();
-
-        $recordId = FatApp::getPostedData('emptycartitem_id', FatUtility::VAR_INT, 0);
-        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-
-        if ($recordId == 0 || $lang_id == 0) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $frm = $this->getLangForm();
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
-        if (false === $post) {
-            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
-        }
-
-        $recordObj = new EmptyCartItems($recordId);
-
-        $this->setLangData($recordObj, [$recordObj::tblFld('title') => $post[$recordObj::tblFld('title')]], $lang_id);
-
-        $this->_template->render(false, false, 'json-success.php');
+        $this->modelObj = (new ReflectionClass('EmptyCartItems'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('title')];
+        $this->set('formTitle', Labels::getLabel('LBL_EMPTY_CART_ITEMS_SETUP', $this->adminLangId));
     }
 
     public function deleteRecord()
@@ -322,10 +272,10 @@ class EmptyCartItemsController extends AdminBaseController
         return $frm;
     }
 
-    private function getLangForm($lang_id = 0)
+    protected function getLangForm($recordId, $lang_id = 0)
     {
         $frm = new Form('frmEmptyCartItemLang');
-        $frm->addHiddenField('', 'emptycartitem_id');
+        $frm->addHiddenField('', 'emptycartitem_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Empty_Cart_Item_Title', $this->adminLangId), 'emptycartitem_title');
         return $frm;
