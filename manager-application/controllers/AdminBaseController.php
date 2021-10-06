@@ -12,7 +12,9 @@ class AdminBaseController extends FatController
     protected $str_invalid_Action;
     protected $str_setup_successful;
     protected $adminLangId;
+    protected object $modelObj;
     protected $nodes = [];
+    protected array $formLangFields;
 
     public function __construct($action)
     {
@@ -37,13 +39,13 @@ class AdminBaseController extends FatController
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
 
         $this->setCommonValues();
-        $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css');        
+        $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css');
     }
 
     /*
-    # Function: setCommonValues
-    # Description: Function to set the common values.
-    */
+# Function: setCommonValues
+# Description: Function to set the common values.
+*/
     private function setCommonValues()
     {
         CommonHelper::initCommonVariables(true);
@@ -176,7 +178,9 @@ class AdminBaseController extends FatController
             );
             $languages = Language::getAllNames(false);
             foreach ($languages as $val) {
-                if (empty($val)) {continue;}
+                if (empty($val)) {
+                    continue;
+                }
                 $jsVariables['language' . $val['language_id']] = $val['language_layout_direction'];
             }
             $jsVariables['languages'] = $languages;
@@ -421,13 +425,13 @@ class AdminBaseController extends FatController
         $frm->addSelectBox(Labels::getLabel('LBL_Product_Download_attachements_at_inventory_level', $this->adminLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($this->adminLangId), '', array(), '');
 
         /* $downloadAttachementsWithInventoryTrue = new FormFieldRequirement('product_attachements_with_inventory', 'value');
-        $downloadAttachementsWithInventoryTrue->setRequired();
-        $downloadAttachementsWithInventoryFalse = new FormFieldRequirement('product_attachements_with_inventory', 'value');
-        $downloadAttachementsWithInventoryFalse->setRequired(false);
+$downloadAttachementsWithInventoryTrue->setRequired();
+$downloadAttachementsWithInventoryFalse = new FormFieldRequirement('product_attachements_with_inventory', 'value');
+$downloadAttachementsWithInventoryFalse->setRequired(false);
 
-        $prodTypeFld = $frm->getField('product_type');
-        $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'product_attachements_with_inventory', $downloadAttachementsWithInventoryTrue);
-        $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'product_attachements_with_inventory', $downloadAttachementsWithInventoryFalse); */
+$prodTypeFld = $frm->getField('product_type');
+$prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'product_attachements_with_inventory', $downloadAttachementsWithInventoryTrue);
+$prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'product_attachements_with_inventory', $downloadAttachementsWithInventoryFalse); */
 
         if ($type == 'REQUESTED_CATALOG_PRODUCT') {
             $brandFld = $frm->addTextBox(Labels::getLabel('LBL_Brand/Manfacturer', $this->adminLangId), 'brand_name');
@@ -516,7 +520,7 @@ class AdminBaseController extends FatController
         }
 
         /* $frm->addTextBox('UPC','product_upc');
-        $frm->addTextBox('ISBN Code','product_isbn'); */
+$frm->addTextBox('ISBN Code','product_isbn'); */
         if ($type == 'CUSTOM_PRODUCT') {
             $approveUnApproveArr = Product::getApproveUnApproveArr($langId);
             $frm->addSelectBox(Labels::getLabel('LBL_Approval_Status', $this->adminLangId), 'product_approved', $approveUnApproveArr, Product::APPROVED, array(), '');
@@ -685,13 +689,13 @@ class AdminBaseController extends FatController
         $fld->requirements()->setInt();
 
         /* $threshold_stock_levelUnReqObj = new FormFieldRequirement( 'selprod_threshold_stock_level', Labels::getLabel('LBL_Alert_Stock_Level', $this->adminLangId) );
-        $threshold_stock_levelUnReqObj->setRequired(false);
+$threshold_stock_levelUnReqObj->setRequired(false);
 
-        $threshold_stock_levelReqObj = new FormFieldRequirement( 'selprod_threshold_stock_level', Labels::getLabel('LBL_Alert_Stock_Level', $this->adminLangId) );
-        $threshold_stock_levelReqObj->setRequired(true);
+$threshold_stock_levelReqObj = new FormFieldRequirement( 'selprod_threshold_stock_level', Labels::getLabel('LBL_Alert_Stock_Level', $this->adminLangId) );
+$threshold_stock_levelReqObj->setRequired(true);
 
-        $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Product::INVENTORY_TRACK, 'eq', 'selprod_threshold_stock_level', $threshold_stock_levelUnReqObj);
-        $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Product::INVENTORY_NOT_TRACK, 'eq', 'selprod_threshold_stock_level', $threshold_stock_levelReqObj); */
+$selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Product::INVENTORY_TRACK, 'eq', 'selprod_threshold_stock_level', $threshold_stock_levelUnReqObj);
+$selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Product::INVENTORY_NOT_TRACK, 'eq', 'selprod_threshold_stock_level', $threshold_stock_levelReqObj); */
 
         $fld_sku = $frm->addTextBox(Labels::getLabel('LBL_Product_SKU', $this->adminLangId), 'selprod_sku');
         if (FatApp::getConfig("CONF_PRODUCT_SKU_MANDATORY", FatUtility::VAR_INT, 1)) {
@@ -835,6 +839,107 @@ class AdminBaseController extends FatController
         return FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
     }
 
+    public function langForm($autoFillLangData = 0)
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+
+        if (1 > $recordId || 1 > $langId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $this->setLangTemplateData();
+
+        $langFrm = $this->getLangForm($recordId, $langId);
+        if (0 < $autoFillLangData) {
+            $updateLangDataobj = new TranslateLangData($this->modelObj::DB_TBL_LANG);
+            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
+            if (false === $translatedData) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            }
+            $langData = current($translatedData);
+        } else {
+            $langData = $this->modelObj::getAttributesByLangId($langId, $recordId);
+        }
+
+        if ($langData) {
+            $langFrm->fill($langData);
+        }
+
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        $this->set('recordId', $recordId);
+        $this->set('lang_id', $langId);
+        $this->set('langFrm', $langFrm);
+        $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->_template->render(false, false, '_partial/listing/lang-form.php');
+    }
+
+    public function langSetup()
+    {
+        $this->setLangTemplateData([], true);
+
+        $recordId = FatApp::getPostedData($this->modelObj::tblFld('id'), FatUtility::VAR_INT, 0);
+        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+
+        if ($recordId == 0 || $lang_id == 0) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $frm = $this->getLangForm($recordId, $lang_id);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        if (false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
+
+        $this->setLangTemplateData([$recordId]);
+
+        if (1 > count($this->formLangFields)) {
+            trigger_error('formLangFields must have array lang feild', E_USER_ERROR);
+        }
+
+        $data = [];
+        foreach ($this->formLangFields as $fld) {
+            $data[$fld] = $post[$fld];
+        }
+
+        $this->setLangData($this->modelObj, $data, $lang_id);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    protected function setLangData(object $classObj, array $langDataArr, $langId = 0)
+    {
+        $recordId = $classObj->getMainTableRecordId();
+
+        if (!$classObj->updateLangData((0 < $langId  ? $langId : $this->getDefaultFormLangId()), $langDataArr)) {
+            LibHelper::exitWithError($classObj->getError(), true);
+        }
+
+        $newTabLangId = 0;
+        $languages = Language::getDropDownList($this->getDefaultFormLangId());
+        if (0 < count($languages)) {
+            foreach ($languages as $languageId => $langName) {
+                if (!$classObj::getAttributesByLangId($languageId, $recordId)) {
+                    $newTabLangId = $languageId;
+                    break;
+                }
+            }
+        }
+
+        if (1 > $langId) {
+            $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+            if (0 < $autoUpdateOtherLangsData) {
+                $updateLangDataobj = new TranslateLangData($classObj::DB_TBL_LANG);
+                if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+                    LibHelper::exitWithError($updateLangDataobj->getError(), true);
+                }
+            }
+        }
+
+        $this->set('recordId', $recordId);
+        $this->set('langId', $newTabLangId);
+        $this->set('msg', $this->str_setup_successful);
+    }
+        
     protected function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');

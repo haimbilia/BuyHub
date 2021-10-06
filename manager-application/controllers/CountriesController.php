@@ -133,40 +133,16 @@ class CountriesController extends AdminBaseController
         $recordId = $post['country_id'];
         unset($post['country_id']);
 
-        $record = new Countries($recordId);
-        $record->assignValues($post);
+        $recordObj = new Countries($recordId);
+        $recordObj->assignValues($post);
 
-        if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
-        }
-        $recordId = $record->getMainTableRecordId();        
-       
-        if (!$record->updateLangData($this->getDefaultFormLangId(), ['country_name' => $post['country_name']])) {
-            LibHelper::exitWithError($record->getError(), true);
+        if (!$recordObj->save()) {
+            LibHelper::exitWithError($recordObj->getError(), true);
         }
 
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataObj = new TranslateLangData(Countries::DB_TBL_LANG);
-            if (false === $updateLangDataObj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataObj->getError(), true);
-            }
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getDropDownList($this->getDefaultFormLangId());
-        if (0 < count($languages)) {           
-            foreach ($languages as $langId => $langName) {
-                if (!$row = Countries::getAttributesByLangId($langId, $recordId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        }
-        Product::updateMinPrices(0, 0, 0, $recordId);
-        $this->set('msg', $this->str_update_record);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
+        
+        Product::updateMinPrices(0, 0, 0, $recordId);       
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -208,52 +184,25 @@ class CountriesController extends AdminBaseController
     public function langSetup()
     {
         $this->objPrivilege->canEditCountries();
-        $post = FatApp::getPostedData();
 
-        $recordId = $post['country_id'];
-        $languages = Language::getAllNames();
+        $recordId = FatApp::getPostedData('country_id', FatUtility::VAR_INT, 0);
+        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
-        if (count($languages) > 1) {
-            $lang_id = $post['lang_id'];
-        } else {
-            $lang_id = array_key_first($languages);
-            $post['lang_id'] = $lang_id;
+        $frm = $this->getLangForm();
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        
+        if (false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-
 
         if ($recordId == 0 || $lang_id == 0) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $frm = $this->getLangForm($recordId, $lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        unset($post['country_id']);
-        unset($post['lang_id']);
+        $recordObj = new Countries($recordId);
 
-        $data = array(
-            'countrylang_lang_id' => $lang_id,
-            'countrylang_country_id' => $recordId,
-            'country_name' => $post['country_name']
-        );
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]], $lang_id);
 
-        $countryObj = new Countries($recordId);
-
-        if (!$countryObj->updateLangData($lang_id, $data)) {
-            LibHelper::exitWithError($countryObj->getError(), true);
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!Countries::getAttributesByLangId($langId, $recordId)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 

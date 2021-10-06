@@ -10,20 +10,17 @@ $tableHeadAttrArr = [
     'select_all' => [
         'width' => '5%',
     ],
-    'action' => [
-        'width' => '10%',
-    ],
     'listSerial' => [
-        'width' => '14%',
-    ],
-    'zone_identifier' => [
-        'width' => '29%',
-    ],
+        'width' => '15%',
+    ], 
     'zone_name' => [
-        'width' => '29%',
+        'width' => '50%',
     ],
     'zone_active' => [
-        'width' => '14%',
+        'width' => '20%',
+    ],
+    'action' => [
+        'width' => '10%',
     ],
 ];
 
