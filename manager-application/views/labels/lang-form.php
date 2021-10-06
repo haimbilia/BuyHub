@@ -5,6 +5,9 @@ HtmlHelper::formatFormFields($langFrm);
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit layout--' . $formLayout);
 $langFrm->setFormTagAttribute('dir', $formLayout);
 $langFrm->setFormTagAttribute('onsubmit', 'saveLangData(this); return(false);');
+
+$fld = $langFrm->getField('key');
+$fld->setFieldTagAttribute('disabled', 'disabled');
 ?>
 
 <div class="modal-header">
@@ -12,20 +15,17 @@ $langFrm->setFormTagAttribute('onsubmit', 'saveLangData(this); return(false);');
         <?php echo Labels::getLabel('LBL_MANAGE_LABELS', $adminLangId); ?>
     </h5>
 </div>
-<div class="modal-body form-edit"> 
+<div class="modal-body form-edit">
     <div class="form-edit-body loaderContainerJs">
         <?php
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey)) { ?> 
-            <div class="row justify-content-end"> 
+        if (!empty($translatorSubscriptionKey)) { ?>
+            <div class="row justify-content-end">
                 <div class="col-auto mb-4">
-                    <input class="btn btn-outline-brand btn-sm" 
-                        type="button" 
-                        value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" 
-                        onClick="labelsForm(<?php echo $recordId; ?>, <?php echo $labelType; ?>, 1)">
+                    <input class="btn btn-outline-brand btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" onClick="labelsForm(<?php echo $recordId; ?>, <?php echo $labelType; ?>, 1)">
                 </div>
             </div>
-        <?php } ?> 
+        <?php } ?>
         <?php echo $langFrm->getFormHtml(); ?>
     </div>
 

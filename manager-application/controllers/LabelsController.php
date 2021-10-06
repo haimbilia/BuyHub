@@ -75,15 +75,15 @@ class LabelsController extends AdminBaseController
         }
         $srch->addCondition('lbl.label_lang_id', '=', $this->adminLangId);
 
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
+        $page = (empty($page) || $page <= 0) ? 1 : $page;
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-
+        
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());

@@ -1304,3 +1304,21 @@ UPDATE `tbl_language_labels` SET `label_type`=1 WHERE `label_type`=0;
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('LBL_ACTION_BUTTONS', 1, 'Action', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+DELETE FROM tbl_language_labels WHERE label_key = "VLBL_must_start_with_a_letter_and_can_contain_only_alphanumeric_characters._Length_must_be_between_4_to_20_characters";
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_You_have_already_Bought_this_plan,_Please_choose_some_other_Plan";
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_Do_you_want_to_replace_current_content_to_default_content";
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_PRIMARY_LANGUAGE_DATA_NEEDS_TO_BE_FILLED_FOR_SYSTEM_TO_TRANSLATE_TO_OTHER_LANGUAGES";
+DELETE FROM tbl_language_labels WHERE label_key = 'LBL_PLEASE_ADD_"actionButtons-js"_CLASS_TO_FORM_TO_PERFORM_ACTION';
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_CHANGING_PARENT_CATEGORY_TO_INACTIVE_WILL_MAKE_ALL_OF_ITS_CHILD_CATEGORIES_INACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?";
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_CHANGING_CHILD_CATEGORY_TO_ACTIVE_WILL_MAKE_ALL_OF_ITS_PARENT_CATEGORIES_ACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?";
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_START_WITH_LETTER_ONLY_ALPHANUMERIC', 1, 'Must Start With a Letter and Can Contain Only Alphanumeric Characters. Length Must Be Between 4 to 20 Characters', 1),
+('LBL_ALREADY_HAVE_THIS_PLAN,_Please_choose_some_other_Plan', 1, 'You Have Already Bought This Plan, Please Choose Some Other Plan', 1),
+('LBL_CONFIRM_REPLACE_CURRENT_TO_DEFAULT', 1, 'Do You Want to Replace Current Content to Default Content', 1),
+('LBL_PRIMARY_LANGUAGE_FIELD_DATA_REQUIRED', 1, 'Primary Language Data Needs to Be Filled for System to Translate to Other Languages', 1),
+('LBL_ACTION_BUTTONS_CLASS_REQUIREMENT', 1, 'Please Add "actionButtons-js" Class to Form to Perform Action', 1),
+('LBL_DISABLE_CHILD_CATEGORY_VALIDATION._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', 1, 'Changing Parent Category to Inactive Will Make All of Its Child Categories Inactive. Are You Sure You Want to Proceed?', 1),
+('LBL_ENABLE_PARENT_CATEGORIES_VALIDATION._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', 1, 'Changing Child Category to Active Will Make All of Its Parent Categories Active. Are You Sure You Want to Proceed?', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
