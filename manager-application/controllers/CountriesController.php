@@ -163,7 +163,7 @@ class CountriesController extends AdminBaseController
             }
         }
         Product::updateMinPrices(0, 0, 0, $recordId);
-        $this->set('msg', Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('msg', $this->str_update_record);
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');

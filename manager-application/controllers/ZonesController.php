@@ -154,7 +154,7 @@ class ZonesController extends AdminBaseController
             }
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
+        $this->set('msg', $this->str_update_record);
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');

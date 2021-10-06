@@ -110,7 +110,7 @@ class BrandsController extends AdminBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));
     }
 
     public function search()

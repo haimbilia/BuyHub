@@ -83,7 +83,7 @@ class BlogCommentsController extends AdminBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditBlogComments($this->admin_id, true));
     }
 
     public function search()

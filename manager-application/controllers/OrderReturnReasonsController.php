@@ -78,7 +78,7 @@ class OrderReturnReasonsController extends AdminBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditOrderReturnReasons($this->admin_id, true));
     }
 
     public function search()
@@ -90,7 +90,6 @@ class OrderReturnReasonsController extends AdminBaseController
         ];
         LibHelper::exitWithSuccess($jsonData, true);
     }
-
 
     public function form()
     {
@@ -145,7 +144,7 @@ class OrderReturnReasonsController extends AdminBaseController
             $recordId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
-        $this->set('msg', Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('msg', $this->str_update_record);
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -251,8 +250,6 @@ class OrderReturnReasonsController extends AdminBaseController
         $frm = new Form('frmOrderReturnReason');
         $frm->addHiddenField('', 'orreason_id', $recordId);
         $frm->addRequiredField(Labels::getLabel('LBL_Reason_Identifier', $this->adminLangId), 'orreason_identifier');
-
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 
@@ -277,8 +274,6 @@ class OrderReturnReasonsController extends AdminBaseController
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 

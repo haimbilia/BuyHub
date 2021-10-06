@@ -88,7 +88,7 @@ class TrackingCodeRelationController extends AdminBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
         
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
+        $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
  

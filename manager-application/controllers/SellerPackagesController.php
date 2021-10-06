@@ -83,7 +83,7 @@ class SellerPackagesController extends AdminBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditSellerPackages($this->admin_id, true));
     }
 
     public function search()
@@ -184,7 +184,7 @@ class SellerPackagesController extends AdminBaseController
             $recordId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
-        $this->set('msg', Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('msg', $this->str_update_record);
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');

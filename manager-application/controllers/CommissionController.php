@@ -91,7 +91,7 @@ class CommissionController extends AdminBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditCommissionSettings($this->admin_id, true));
     }
 
     public function search()
@@ -195,7 +195,7 @@ class CommissionController extends AdminBaseController
             LibHelper::exitWithError($record->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('msg', $this->str_update_record);
         $this->set('recordId', $recordId);
         $this->_template->render(false, false, 'json-success.php');
     }
