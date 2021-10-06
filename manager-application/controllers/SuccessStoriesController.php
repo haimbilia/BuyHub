@@ -279,7 +279,7 @@ class SuccessStoriesController extends AdminBaseController
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
     
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmSearch');
         $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');

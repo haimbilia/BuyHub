@@ -65,6 +65,11 @@ $(document).ready(function () {
         removeLoader: function (cls) {
             $(document.body).css({ 'cursor': 'default' });
             $('.loaderJs').remove();
+            $('.submitBtnJs').removeClass('loading');
+        },
+
+        getRowSpinner: function () {
+            return '<div class="spinner spinner--v2 spinner--sm spinner--brand"></div>';
         },
     });
 

@@ -26,13 +26,14 @@ class BrandsController extends AdminBaseController
         $this->_template->render();
     }
 
-    private function getSearchForm($request = false, $fields = [])
+    public function getSearchForm($request = false, $fields = [])
     {
         $frm = new Form('frmRecordSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld->overrideFldType('search');
 
         if ($request) {
-            $frm->addTextBox(Labels::getLabel('LBL_Seller_Name_Or_Email', $this->adminLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+            $frm->addTextBox(Labels::getLabel('LBL_SELLER_NAME_OR_EMAIL', $this->adminLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off', 'placeholder' => Labels::getLabel('LBL_SELLER_NAME_OR_EMAIL', $this->adminLangId)));
             $frm->addHiddenField('', 'user_id');
         }
 
@@ -40,10 +41,11 @@ class BrandsController extends AdminBaseController
             $this->addSortingElements($frm);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
+
     private function getListingData()
     {
         $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
@@ -108,7 +110,7 @@ class BrandsController extends AdminBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));
     }
 
     public function search()
@@ -262,97 +264,15 @@ class BrandsController extends AdminBaseController
         return $frm;
     }
 
-    public function langForm($autoFillLangData = 0)
+    public function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditBrands();
+        $this->modelObj = (new ReflectionClass('Brand'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_BRAND_SETUP', $this->adminLangId));
+    }   
 
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-
-        if (1 > $recordId || 1 > $langId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $langFrm = $this->getLangForm($recordId, $langId);
-        if (0 < $autoFillLangData) {
-            $updateLangDataobj = new TranslateLangData(Brand::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
-            if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-            $langData = current($translatedData);
-        } else {
-            $langData = Brand::getAttributesByLangId($langId, $recordId);
-        }
-        
-        if ($langData) {
-            $langFrm->fill($langData);
-        }
-
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
-        $this->set('recordId', $recordId);
-        $this->set('lang_id', $langId);
-        $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
-    }
-
-    public function langSetup()
-    {
-        $this->objPrivilege->canEditBrands();
-        $post = FatApp::getPostedData();
-
-        $recordId = $post['brand_id'];
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $lang_id = $post['lang_id'];
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$post['lang_id'] = $lang_id;
-		}
-       
-		if ($recordId == 0 || $lang_id == 0) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $frm = $this->getLangForm($recordId, $lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
-        /* Check if same brand name already exists [ */
-        $tblRecord = new TableRecord(Brand::DB_TBL_LANG);
-        if ($tblRecord->loadFromDb(array('smt' => 'brand_name = ?', 'vals' => array($post['brand_name'])))) {
-            $brandRow = $tblRecord->getFlds();
-            if ($brandRow['brandlang_brand_id'] != $recordId) {
-                LibHelper::exitWithError(Labels::getLabel('LBL_Brand_name_already_exists', $this->adminLangId), true);
-            }
-        }
-        /* ] */
-
-        $prodBrandObj = new Brand($recordId);
-        if (!$prodBrandObj->updateLangData($lang_id, ['brand_name' => $post['brand_name']])) {
-            LibHelper::exitWithError($prodBrandObj->getError(), true);
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = Brand::getAttributesByLangId($langId, $recordId)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-
-        if ($newTabLangId == 0 && !$this->isMediaUploaded($recordId)) {
-            $this->set('openMediaForm', true);
-        }
-        $this->set('msg', Labels::getLabel('MSG_Brand_Setup_Successful', $this->adminLangId));
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    private function getLangForm($recordId = 0, $lang_id = 0)
+    protected function getLangForm($recordId = 0, $lang_id = 0)
     {
         $frm = new Form('frmProdBrandLang', array('id' => 'frmProdBrandLang'));
         $frm->addHiddenField('', 'brand_id', $recordId);

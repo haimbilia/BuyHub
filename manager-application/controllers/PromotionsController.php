@@ -919,7 +919,7 @@ class PromotionsController extends AdminBaseController
         return $frm;
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $this->objPrivilege->canViewPromotions();
         $frm = new Form('frmPromotionSearch');

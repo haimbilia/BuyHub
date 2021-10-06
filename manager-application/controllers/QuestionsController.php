@@ -291,7 +291,7 @@ class QuestionsController extends AdminBaseController
         return $frm;
     }
     
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $this->objPrivilege->canViewQuestions();
         $frm = new Form('frmQuestionSearch');

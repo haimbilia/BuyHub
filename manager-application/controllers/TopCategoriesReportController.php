@@ -125,7 +125,7 @@ class TopCategoriesReportController extends AdminBaseController
         $this->search('export');
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmTopCategoriesReportSearch');
         $frm->addHiddenField('', 'page', 1);

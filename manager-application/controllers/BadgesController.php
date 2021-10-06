@@ -236,7 +236,7 @@ class BadgesController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getSearchForm(int $badgeType)
+    public function getSearchForm(int $badgeType)
     {
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'badge_type');

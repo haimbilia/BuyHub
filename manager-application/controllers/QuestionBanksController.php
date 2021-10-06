@@ -243,7 +243,7 @@ class QuestionBanksController extends AdminBaseController
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
     
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $this->objPrivilege->canViewQuestionBanks();
         $frm = new Form('frmQuestionBankSearch');

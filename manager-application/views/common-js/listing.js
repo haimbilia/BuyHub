@@ -62,6 +62,31 @@ $(document).on('search', "input[name='keyword']", function () {
         searchRecords(frm);
     };
 
+    loadMore = function () {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
+        var frm = document.frmLoadMoreRecordsPaging;
+        var page = 1;
+        if ('undefined' != typeof frm.page.value && '' != frm.page.value && 0 < frm.page.value) {
+            page += parseInt(frm.page.value);
+        }
+
+        $(frm.page).val(page);
+        var data = fcom.frmData(frm);
+
+        $('.appendRowsJs .rowJs:last').clone().removeAttr('class').addClass('rowJs').appendTo('.appendRowsJs').html(fcom.getRowSpinner());
+        fcom.ajax(fcom.makeUrl(controllerName, 'getRows'), data, function (rows) {
+            $('.appendRowsJs .rowJs:last').remove();
+            $('.appendRowsJs').append(rows);
+
+            if (page == frm.pageCount.value) {
+                $('.loadMorePaginationJs').remove();
+            }
+        });
+    };
+
     setPageSize = function (pageSize) {
         var frm = document.frmRecordSearchPaging;
         $(frm.pageSize).val(pageSize);
@@ -232,6 +257,7 @@ $(document).on('search', "input[name='keyword']", function () {
 
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (res) {
+            $('.submitBtnJs').removeClass('loading');
             fcom.removeLoader();
             var t = $.parseJSON(res);
             if (t.status == 0) {
@@ -243,7 +269,7 @@ $(document).on('search', "input[name='keyword']", function () {
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
-            }else if( "openMediaForm" in t){
+            } else if ("openMediaForm" in t) {
                 mediaForm(t.recordId);
             }
         });
@@ -269,7 +295,7 @@ $(document).on('search', "input[name='keyword']", function () {
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
-            }else if( "openMediaForm" in t){
+            } else if ("openMediaForm" in t) {
                 mediaForm(t.recordId);
             }
 
@@ -475,6 +501,17 @@ $(document).on('search', "input[name='keyword']", function () {
             }
         });
     }
+
+    isInViewport = function (el) {
+        const rect = el.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+
+        );
+    }
 })();
 
 $(document).on("click", ".selectItemJs", function () {
@@ -492,5 +529,16 @@ $(document).on("click", ".selectItemJs", function () {
         $(faceboxActionBtns + " .toolbar-btn-js").addClass('disabled').removeClass('selected');
     } else {
         $(faceboxActionBtns + " .toolbar-btn-js").removeClass('disabled').addClass('selected');
+    }
+});
+
+$(document).ajaxComplete(function () {
+    if (0 < $('.loadMoreOnScrollBtnJs').length) {
+        $(window).scroll(function () {
+            const element = document.querySelector('.loadMoreOnScrollBtnJs');
+            if (isInViewport(element)) {
+                alert('kllkk');
+            }
+        });
     }
 });

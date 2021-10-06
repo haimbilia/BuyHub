@@ -239,7 +239,7 @@ class ProductsReportController extends AdminBaseController
         $this->search('export');
     }
 
-    private function getSearchForm($fields = [])
+    public function getSearchForm($fields = [])
     {
         $frm = new Form('frmProductsReportSearch');
         $frm->addHiddenField('', 'page', 1);

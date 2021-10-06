@@ -22,7 +22,7 @@ class OrderStatusController extends AdminBaseController
         $this->_template->render();
     }
 
-    private function getSearchForm($fields = [])
+    public function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
@@ -32,9 +32,10 @@ class OrderStatusController extends AdminBaseController
         $fld->overrideFldType('search');
 
         $orderStatusTypeArr = OrderStatus::getOrderStatusTypeArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Order_Status_type', $this->adminLangId), 'orderstatus_type', $orderStatusTypeArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $frm->addHtml('', 'btn_clear', '<button name="btn_clear" class="btn btn-outline-brand" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', $this->adminLangId) . '</button>');
+        $frm->addSelectBox(Labels::getLabel('LBL_ORDER_STATUS_TYPE', $this->adminLangId), 'orderstatus_type', $orderStatusTypeArr, '', array(), '');
+        
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
@@ -104,7 +105,7 @@ class OrderStatusController extends AdminBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditOrderStatus($this->admin_id, true));
     }
 
     public function search()
@@ -174,7 +175,7 @@ class OrderStatusController extends AdminBaseController
             $recordId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
+        $this->set('msg', $this->str_update_record);
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -408,7 +409,7 @@ class OrderStatusController extends AdminBaseController
             'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
             'orderstatus_name' => Labels::getLabel('LBL_ORDER_STATUS_NAME', $this->adminLangId),
             'orderstatus_is_active' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('orderStatusTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         

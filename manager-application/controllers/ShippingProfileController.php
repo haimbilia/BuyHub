@@ -152,7 +152,7 @@ class ShippingProfileController extends AdminBaseController
 
         $profileId = $spObj->getMainTableRecordId();
 
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
+        $this->set('msg', $this->str_update_record);
         $this->set('profileId', $profileId);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -181,7 +181,7 @@ class ShippingProfileController extends AdminBaseController
 
         $shippingProfData = ShippingProfileZone::getAttributesByProfileId($shipprofileId);
         if (false == $shippingProfData) {
-            $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
+            $this->set('msg', $this->str_update_record);
             $this->_template->render(false, false, 'json-success.php');
         }
         
@@ -218,7 +218,7 @@ class ShippingProfileController extends AdminBaseController
             FatApp::getDb()->updateFromArray(ShippingProfileProduct::DB_TBL, $data, $whr);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->adminLangId));
+        $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
     
@@ -241,7 +241,7 @@ class ShippingProfileController extends AdminBaseController
         return $zones;
     }
     
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');

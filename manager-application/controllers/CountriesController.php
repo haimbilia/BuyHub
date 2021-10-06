@@ -42,9 +42,10 @@ class CountriesController extends AdminBaseController
         }
 
         $srchFrm = $this->getSearchForm($fields);
-
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
+        
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
 
         $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
         if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
@@ -70,7 +71,7 @@ class CountriesController extends AdminBaseController
         $srch->removeFld(['select_all', 'action']);
         $rs = $srch->getResultSet();
         $arrListing = $db->fetchAll($rs);
-
+        
         $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -132,128 +133,25 @@ class CountriesController extends AdminBaseController
         $recordId = $post['country_id'];
         unset($post['country_id']);
 
-        $record = new Countries($recordId);
-        $record->assignValues($post);
+        $recordObj = new Countries($recordId);
+        $recordObj->assignValues($post);
 
-        if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
-        }
-        $recordId = $record->getMainTableRecordId();        
-       
-        if (!$record->updateLangData($this->getDefaultFormLangId(), ['country_name' => $post['country_name']])) {
-            LibHelper::exitWithError($record->getError(), true);
+        if (!$recordObj->save()) {
+            LibHelper::exitWithError($recordObj->getError(), true);
         }
 
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataObj = new TranslateLangData(Countries::DB_TBL_LANG);
-            if (false === $updateLangDataObj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataObj->getError(), true);
-            }
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getDropDownList($this->getDefaultFormLangId());
-        if (0 < count($languages)) {           
-            foreach ($languages as $langId => $langName) {
-                if (!$row = Countries::getAttributesByLangId($langId, $recordId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        }
-        Product::updateMinPrices(0, 0, 0, $recordId);
-        $this->set('msg', Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId));
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
+        
+        Product::updateMinPrices(0, 0, 0, $recordId);       
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($autoFillLangData = 0)
+    public function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditCountries();
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $lang_id = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-
-        if (1 > $recordId || 1 > $lang_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $langFrm = $this->getLangForm($recordId, $lang_id);
-        if (0 < $autoFillLangData) {
-            $updateLangDataObj = new TranslateLangData(Countries::DB_TBL_LANG);
-            $translatedData = $updateLangDataObj->getTranslatedData($recordId, $lang_id);
-            if (false === $translatedData) {            
-                LibHelper::exitWithError($updateLangDataObj->getError(), true);
-            }
-            $langData = current($translatedData);
-        } else {
-            $langData = Countries::getAttributesByLangId($lang_id, $recordId);
-        }
-
-        if ($langData) {
-            $langFrm->fill($langData);
-        }
-
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
-        $this->set('recordId', $recordId);
-        $this->set('lang_id', $lang_id);
-        $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($lang_id));
+        $this->modelObj = (new ReflectionClass('Countries'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->set('formTitle', Labels::getLabel('LBL_COUNTRY_SETUP', $this->adminLangId));
-        $this->_template->render(false, false, '_partial/listing/lang-form.php');
-    }
-
-    public function langSetup()
-    {
-        $this->objPrivilege->canEditCountries();
-        $post = FatApp::getPostedData();
-
-        $recordId = $post['country_id'];
-        $languages = Language::getAllNames();
-
-        if (count($languages) > 1) {
-            $lang_id = $post['lang_id'];
-        } else {
-            $lang_id = array_key_first($languages);
-            $post['lang_id'] = $lang_id;
-        }
-
-
-        if ($recordId == 0 || $lang_id == 0) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $frm = $this->getLangForm($recordId, $lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        unset($post['country_id']);
-        unset($post['lang_id']);
-
-        $data = array(
-            'countrylang_lang_id' => $lang_id,
-            'countrylang_country_id' => $recordId,
-            'country_name' => $post['country_name']
-        );
-
-        $countryObj = new Countries($recordId);
-
-        if (!$countryObj->updateLangData($lang_id, $data)) {
-            LibHelper::exitWithError($countryObj->getError(), true);
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!Countries::getAttributesByLangId($langId, $recordId)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
     }
 
     private function getForm()
@@ -293,7 +191,7 @@ class CountriesController extends AdminBaseController
         return $frm;
     }
 
-    private function getLangForm($recordId = 0, $lang_id = 0)
+    protected function getLangForm($recordId = 0, $lang_id = 0)
     {
         $frm = new Form('frmCountryLang');
         $frm->addHiddenField('', 'country_id', $recordId);
@@ -354,22 +252,6 @@ class CountriesController extends AdminBaseController
         }
     }
 
-    private function getSearchForm($fields = [])
-    {
-        $frm = new Form('frmRecordSearch');
-        $frm->addHiddenField('', 'page');
-
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld->overrideFldType('search');
-
-        if (!empty($fields)) {
-            $this->addSortingElements($frm);
-        }
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        return $frm;
-    }
-
     private function getFormColumns(): array
     {
         $countriesTblHeadingCols = CacheHelper::get('countriesTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
@@ -384,7 +266,7 @@ class CountriesController extends AdminBaseController
             'country_code_alpha3' => Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->adminLangId),
             'country_name' => Labels::getLabel('LBL_COUNTRY_NAME', $this->adminLangId),
             'country_active' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('countriesTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

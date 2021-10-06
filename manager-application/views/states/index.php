@@ -12,18 +12,15 @@ $tableHeadAttrArr = [
     ],
     'listSerial' => [
         'width' => '10%',
-    ],
-    'state_identifier' => [
-        'width' => '20%',
-    ],
+    ],   
     'state_name' => [
-        'width' => '20%',
+        'width' => '30%',
     ],
     'state_code' => [
         'width' => '5%',
     ],
     'country_name' => [
-        'width' => '20%',
+        'width' => '30%',
     ],
     'state_active' => [
         'width' => '10%',
@@ -39,7 +36,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
+                <?php require_once(CONF_THEME_PATH . 'states/search-form.php'); ?>
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,

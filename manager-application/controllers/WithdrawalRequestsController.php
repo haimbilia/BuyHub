@@ -234,7 +234,7 @@ class WithdrawalRequestsController extends AdminBaseController
         $this->_template->render(false, false);
     }
     
-    private function getSearchForm($langId)
+    public function getSearchForm($langId)
     {
         $frm = new Form('frmReqSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');

@@ -34,7 +34,7 @@ class SellerProductsController extends AdminBaseController
         $this->_template->render();
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->setRequiredStarWith('caption');

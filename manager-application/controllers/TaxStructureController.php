@@ -2,8 +2,6 @@
 
 class TaxStructureController extends AdminBaseController
 {
-    private $canEdit;
-
     public function __construct($action)
     {
         parent::__construct($action);
@@ -12,65 +10,128 @@ class TaxStructureController extends AdminBaseController
 
     public function index()
     {
-        $this->set("canEdit", $this->objPrivilege->canEditTax($this->admin_id, true));
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $this->set('frmSearch', $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_TAX_STRUCTURE', $this->adminLangId));
+        $this->getListingData();
+
         $this->_template->render();
+    }
+
+    private function getListingData()
+    {
+        $db = FatApp::getDb();
+        $post = FatApp::getPostedData();
+
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        $srchFrm = $this->getSearchForm($fields);
+
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
+
+        $srch = TaxStructure::getSearchObject($this->adminLangId);
+        $srch->addCondition('taxstr_parent', '=', 0);
+        $srch->addMultipleFields(array('ts.*', 'ts_l.*', 'taxstr_id as listSerial'));
+
+        if (!empty($post['keyword'])) {
+            $cond = $srch->addCondition('taxstr_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
+            $cond->attachCondition('taxstr_name', 'like', '%' . $post['keyword'] . '%', 'OR');
+        }
+
+        $srch->addOrder($sortBy, $sortOrder);
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $arrListing = $db->fetchAll($srch->getResultSet());
+
+        $this->set("arrListing", $arrListing);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('postedData', $post);
+
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditTax($this->admin_id, true));
     }
 
     public function search()
     {
-        $srch = TaxStructure::getSearchObject($this->adminLangId);
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addCondition('taxstr_parent', '=', 0);
-        $srch->addOrder('taxstr_id', 'ASC');
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("listing", $records);
-
-        $this->canEdit = $this->objPrivilege->canEditTax($this->admin_id, true);
-        $this->set("canEdit", $this->canEdit);
-        $this->_template->render(false, false);
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'tax-structure/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    public function form($taxStrId = 0)
+    public function form()
     {
         $this->objPrivilege->canEditTax();
-		$taxStrId = FatUtility::int($taxStrId);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 		
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
 		$languages = Language::getAllNames();
        
-        $frm = TaxStructure::getForm($this->adminLangId, $taxStrId);
+        $frm = TaxStructure::getForm($this->adminLangId, $recordId);
         $taxStrData = [];
         $combinedTaxes = [];
-        if (0 < $taxStrId) {
-			$taxStrData = TaxStructure::getAttributesById($taxStrId);
+        if (0 < $recordId) {
+			$taxStrData = TaxStructure::getAttributesById($recordId);
             foreach ($languages as $langId => $data) {
                 $taxStructure = new TaxStructure();
-                $taxStrLangData = $taxStructure->getAttributesByLangId($langId, $taxStrId);
+                $taxStrLangData = $taxStructure->getAttributesByLangId($langId, $recordId);
                 if (!empty($taxStrLangData)) {
                     $taxStrData['taxstr_name'][$langId] = $taxStrLangData['taxstr_name'];
                 }
                 if ($taxStrData['taxstr_is_combined']) {
-                    $combinedTaxes = $taxStructure->getCombinedTaxes($taxStrId);
+                    $combinedTaxes = $taxStructure->getCombinedTaxes($recordId);
                 }
             }
 			
             if ($taxStrData === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($taxStrData);
         }
-		/* CommonHelper::printArray($combinedTaxes); die; */
 		$langData = Language::getAllNames();
         unset($langData[$siteDefaultLangId]);
+
         $this->set('combinedTaxes', $combinedTaxes);
         $this->set('taxStrData', $taxStrData);
         $this->set('otherLangData', $langData);
         $this->set('siteDefaultLangId', $siteDefaultLangId);
         $this->set('languages', Language::getAllNames());
-        $this->set('taxStrId', $taxStrId);
+        $this->set('recordId', $recordId);
         $this->set('frm', $frm);
+        $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
         $this->_template->render(false, false);
     }
 
@@ -82,20 +143,19 @@ class TaxStructureController extends AdminBaseController
         $post = FatApp::getPostedData();
 		
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $taxStrId = $post['taxstr_id'];
+        $recordId = $post['taxstr_id'];
         unset($post['taxstr_id']);
 		
-        $record = new TaxStructure($taxStrId);
+        $record = new TaxStructure($recordId);
         if (!$record->addUpdateData($post)) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $this->set('msg', $this->str_setup_successful);
+        $this->set('recordId', $recordId);
         $this->_template->render(false, false, 'json-success.php');
     }
 	
@@ -107,11 +167,42 @@ class TaxStructureController extends AdminBaseController
         $taxStructure = new TaxStructure();
         $translatedData = $taxStructure->getTranslatedData($data, $toLangId);
         if (!$translatedData) {
-            Message::addErrorMessage($taxStructure->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($taxStructure->getError(), true);
         }
         $this->set('taxstrName', $translatedData[$toLangId]['taxstr_name']);
         $this->_template->render(false, false, 'json-success.php');
     }
 
+    private function getFormColumns(): array
+    {
+        $taxStructureTblHeadingCols = CacheHelper::get('taxStructureTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($taxStructureTblHeadingCols) {
+            return json_decode($taxStructureTblHeadingCols);
+        }
+
+        $arr = [
+            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
+            'taxstr_identifier' => Labels::getLabel('LBL_Tax_Structure_Name', $this->adminLangId),
+            'taxstr_is_combined' => Labels::getLabel('LBL_Combined_Tax', $this->adminLangId),
+            'action' =>  Labels::getLabel('LBL_ACTION', $this->adminLangId),
+        ];
+        CacheHelper::create('taxStructureTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return [
+            'listSerial',
+            'taxstr_identifier',
+            'taxstr_is_combined',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['taxstr_is_combined'],Common::excludeKeysForSort());
+    }
 }

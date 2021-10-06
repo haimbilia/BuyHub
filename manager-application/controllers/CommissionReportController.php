@@ -97,7 +97,7 @@ class CommissionReportController extends AdminBaseController
         $this->search('export');
     }
     
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmCommissionReportSearch');
         $frm->addHiddenField('', 'page', 1);

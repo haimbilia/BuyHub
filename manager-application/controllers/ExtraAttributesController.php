@@ -323,7 +323,7 @@ class ExtraAttributesController extends AdminBaseController
         return $frm;
     }
     
-    private function getSearchForm($eattrgroup_id = 0)
+    public function getSearchForm($eattrgroup_id = 0)
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->addHiddenField('', 'eattrgroup_id', $eattrgroup_id);

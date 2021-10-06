@@ -11,16 +11,13 @@ $tableHeadAttrArr = [
         'width' => '5%'
     ],
     'listSerial' => [
-        'width' => '10%'
-    ],
-    'orreason_identifier' => [
-        'width' => '40%'
-    ],
+        'width' => '5%'
+    ],    
     'orreason_title' => [
-        'width' => '35%'
+        'width' => '70%'
     ],
     'action' => [
-        'width' => '10%'
+        'width' => '20%'
     ],
 ];
 

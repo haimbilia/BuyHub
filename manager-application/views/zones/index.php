@@ -10,22 +10,20 @@ $tableHeadAttrArr = [
     'select_all' => [
         'width' => '5%',
     ],
+    'listSerial' => [
+        'width' => '15%',
+    ], 
+    'zone_name' => [
+        'width' => '50%',
+    ],
+    'zone_active' => [
+        'width' => '20%',
+    ],
     'action' => [
         'width' => '10%',
     ],
-    'listSerial' => [
-        'width' => '14%',
-    ],
-    'zone_identifier' => [
-        'width' => '29%',
-    ],
-    'zone_name' => [
-        'width' => '29%',
-    ],
-    'zone_active' => [
-        'width' => '14%',
-    ],
 ];
+
 
 $controller = str_replace('Controller', '', FatApp::getController());
 ?>

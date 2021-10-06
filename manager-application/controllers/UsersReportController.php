@@ -29,7 +29,8 @@ class UsersReportController extends AdminBaseController
         $srchFrm = $this->getSearchForm($fields, $usertype);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'name');
@@ -166,7 +167,7 @@ class UsersReportController extends AdminBaseController
         $this->search('export');
     }
 
-    private function getSearchForm($fields = [], $usertype = User::USER_TYPE_BUYER)
+    public function getSearchForm($fields = [], $usertype = User::USER_TYPE_BUYER)
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);

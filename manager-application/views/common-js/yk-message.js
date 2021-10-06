@@ -3,7 +3,7 @@
         setOptions(fn, msg, closeButton, progressBar, positionClass);
     };
 
-    setOptions = function (fn, msg, closeButton = true, progressBar = true, positionClass = 'toast-top-right') {
+    setOptions = function (fn, msg, closeButton = true, progressBar = true, positionClass = 'toast-bottom-center') {
         toastr.options = {
             "closeButton": closeButton,
             "debug": false,

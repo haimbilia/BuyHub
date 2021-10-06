@@ -519,7 +519,7 @@ class BadgeLinkConditionsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getSearchForm(int $badgeType, int $conditionType)
+    public function getSearchForm(int $badgeType, int $conditionType)
     {
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'blinkcond_badge_id');

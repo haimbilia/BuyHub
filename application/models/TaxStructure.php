@@ -133,27 +133,7 @@ class TaxStructure extends MyAppModel
                 $frm->addTextBox(Labels::getLabel('LBL_Tax_name', $languageId), 'taxstr_name[' . $languageId . ']');
             }
             $frm->addTextBox(Labels::getLabel('LBL_Tax_Component_Name', $languageId), 'taxstr_component_name[0][' . $languageId . ']');
-			/* if (0 < $taxStrId) {
-				$combinedTaxes = $taxStructure->getCombinedTaxes($taxStrId);
-				foreach($combinedTaxes as $combTaxCount => $combinedTax){
-					$frm->addTextBox(Labels::getLabel('LBL_Tax_Component_Name', $languageId), 'taxstr_component_name['.$combTaxCount.'][' . $languageId . ']');
-				}
-			} else {
-				if ($languageId == $siteDefaultLangId) {
-					$frm->addRequiredField(Labels::getLabel('LBL_Tax_Component_Name', $languageId), 'taxstr_component_name[0][' . $languageId . ']');
-				} else {
-					$frm->addTextBox(Labels::getLabel('LBL_Tax_Component_Name', $languageId), 'taxstr_component_name[0][' . $languageId . ']');
-				}
-			} */
         }
-
-        /* $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        unset($languages[$siteDefaultLangId]);
-        if (!empty($translatorSubscriptionKey) && count($languages) > 0) {
-            $frm->addCheckBox(Labels::getLabel('LBL_Translate_To_Other_Languages', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        } */
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
         return $frm;
     }
 

@@ -45,7 +45,8 @@ class SalesReportController extends AdminBaseController
         $srchFrm = $this->getSearchForm($fields, $orderDate);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
         $srch = new Report(0, array_keys($fields));
@@ -156,7 +157,7 @@ class SalesReportController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    private function getSearchForm($fields = [], $orderDate = '')
+    public function getSearchForm($fields = [], $orderDate = '')
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page');

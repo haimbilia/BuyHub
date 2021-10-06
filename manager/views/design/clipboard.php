@@ -7,12 +7,12 @@
 	<title>FATbit | Dashboard</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	
+
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-	
-	
-	<link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-	
+
+
+	<link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
+
 	<link rel="shortcut icon" href="images/favicon.ico" />
 
 </head>
@@ -22,8 +22,8 @@
 <body class="">
 	<div class="wrapper">
 		<?php
-  include 'includes/header.php';
-?>
+		include 'includes/header.php';
+		?>
 		<div class="body " id="body">
 			<div class="content " id="content">
 
@@ -189,6 +189,27 @@
 										<a href="#" class="btn btn-primary" data-clipboard="true" data-clipboard-target="#clipboard_4"><i class="la la-cut"></i> Copy to clipboard</a>
 									</div>
 								</div>
+								<div class="form-group row">
+									<label class="col-form-label col-lg-3 col-sm-12">Copy From Element</label>
+									<div class="col-lg-6 col-md-9 col-sm-12">
+										<div class="input-group">
+											<input type="text" class="form-control" id="clipboard_5" placeholder="Type some value to copy">
+											<div class="input-group-append">
+												<a href="#" class="btn btn-brand" data-clipboard="true" data-clipboard-target="#clipboard_5">Copy</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-form-label col-lg-3 col-sm-12">Copy From Element</label>
+									<div class="col-lg-6 col-md-9 col-sm-12">
+										<div class="input-group input-clipboard">
+											<input type="text" class="form-control" id="clipboard_5" placeholder="Type some value to copy">
+											<a href="#" class="btn" data-clipboard="true" data-clipboard-target="#clipboard_5"><i class="la la-clipboard"></i></a>
+										
+										</div>
+									</div>
+								</div>
 							</div>
 							<div class="card-foot">
 								<div class=" ">
@@ -210,8 +231,8 @@
 		</div>
 
 		<?php
-  include 'includes/footer.php';
-?>
+		include 'includes/footer.php';
+		?>
 	</div>
 
 </body>

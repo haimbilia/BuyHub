@@ -390,7 +390,7 @@ class ContentPagesController extends AdminBaseController
         die(json_encode($json));
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmPagesSearch');
         $f1 = $frm->addTextBox(Labels::getLabel('LBL_Page_Identifier', $this->adminLangId), 'keyword', '');
