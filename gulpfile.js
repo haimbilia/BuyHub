@@ -40,7 +40,8 @@ function manager() {
     .pipe(sass({ outputStyle: "compressed" }))
     .pipe(autoprefixer())
     .pipe(sourcemaps.write("."))
-    .pipe(dest("./manager/views/css"));
+    .pipe(dest("./manager/views/css"))
+    .pipe(dest("./manager-application/views/css"));
 }
 
 function dashboard() {

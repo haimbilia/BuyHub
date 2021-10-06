@@ -4,7 +4,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
 <main class="main mainJs">
     <div class="container">
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-12">
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
@@ -18,7 +18,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                     <div class="card-body" id="listing"></div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <!-- <div class="col-md-3">
                 <div class="card">
                     <div class="card-head">
                         <h3 class="card-head-label">
@@ -32,12 +32,12 @@ $controller = str_replace('Controller', '', FatApp::getController());
                     </div>
                     <div class="card-body" id="total-block"></div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </main>
 
 <script>
-    var controllerName = '<?php echo $controller; ?>';
-    getHelpCenterContent(controllerName);
+var controllerName = '<?php echo $controller; ?>';
+getHelpCenterContent(controllerName);
 </script>
