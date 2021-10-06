@@ -117,7 +117,7 @@ class TaxStructureController extends AdminBaseController
             }
 			
             if ($taxStrData === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($taxStrData);
         }
@@ -143,8 +143,7 @@ class TaxStructureController extends AdminBaseController
         $post = FatApp::getPostedData();
 		
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $recordId = $post['taxstr_id'];
@@ -152,8 +151,7 @@ class TaxStructureController extends AdminBaseController
 		
         $record = new TaxStructure($recordId);
         if (!$record->addUpdateData($post)) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $this->set('msg', $this->str_setup_successful);
@@ -169,8 +167,7 @@ class TaxStructureController extends AdminBaseController
         $taxStructure = new TaxStructure();
         $translatedData = $taxStructure->getTranslatedData($data, $toLangId);
         if (!$translatedData) {
-            Message::addErrorMessage($taxStructure->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($taxStructure->getError(), true);
         }
         $this->set('taxstrName', $translatedData[$toLangId]['taxstr_name']);
         $this->_template->render(false, false, 'json-success.php');

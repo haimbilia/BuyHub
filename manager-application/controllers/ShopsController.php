@@ -556,7 +556,7 @@ class ShopsController extends AdminBaseController
         die(json_encode($json));
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmShopSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');

@@ -169,7 +169,7 @@ class BadgeRequestsController extends AdminBaseController
     }
 
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmSearch');
         $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->adminLangId), 'keyword', '');

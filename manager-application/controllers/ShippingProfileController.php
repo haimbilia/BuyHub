@@ -241,7 +241,7 @@ class ShippingProfileController extends AdminBaseController
         return $zones;
     }
     
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');

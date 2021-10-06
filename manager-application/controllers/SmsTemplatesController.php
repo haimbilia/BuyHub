@@ -28,7 +28,7 @@ class SmsTemplatesController extends AdminBaseController
         $this->_template->render();
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmStplsSearch');
         $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');

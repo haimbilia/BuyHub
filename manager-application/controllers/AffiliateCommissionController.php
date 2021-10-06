@@ -5,33 +5,55 @@ class AffiliateCommissionController extends AdminBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewAffiliateCommissionSettings($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditAffiliateCommissionSettings($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewAffiliateCommissionSettings();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewAffiliateCommissionSettings();
-        $srchFrm = $this->getSearchForm();
-        $this->set("frmSearch", $srchFrm);
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $this->set('frmSearch', $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_AFFILIATE_COMMISSION', $this->adminLangId));
+        $this->getListingData();
+
         $this->_template->render();
     }
 
-    public function search()
+    private function getListingData()
     {
-        $this->objPrivilege->canViewAffiliateCommissionSettings();
-        $srchFrm = $this->getSearchForm();
+        $db = FatApp::getDb();
+        $post = FatApp::getPostedData();
+
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        $srchFrm = $this->getSearchForm($fields);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        if ($page < 2) {
-            $page = 1;
-        }
-        $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $page = ($page <= 0) ? 1 : $page;
 
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
+
+        $attr = array('afcs.*', 'affiliate_cred.credential_username', 'IFNULL(prd_cat_l.prodcat_name, prod_cat.prodcat_identifier) as prodcat_name','afcommsetting_id as listSerial');
         $srch = AffiliateCommission::getSearchObject($this->adminLangId);
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'afcs.afcommsetting_user_id = affiliate_user.user_id', 'affiliate_user');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'affiliate_cred.credential_user_id = affiliate_user.user_id', 'affiliate_cred');
@@ -39,38 +61,56 @@ class AffiliateCommissionController extends AdminBaseController
         $srch->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'prod_cat.prodcat_id = afcs.afcommsetting_prodcat_id', 'prod_cat');
         $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT OUTER JOIN', 'prod_cat.prodcat_id = prd_cat_l.prodcatlang_prodcat_id AND prd_cat_l.prodcatlang_lang_id = ' . $this->adminLangId, 'prd_cat_l');
 
-        $srch->addMultipleFields(array('afcs.*', 'affiliate_cred.credential_username', 'IFNULL(prd_cat_l.prodcat_name, prod_cat.prodcat_identifier) as prodcat_name'));
-        $srch->addOrder('afcommsetting_is_mandatory', 'DESC');
-        $srch->addOrder('afcommsetting_fees', 'DESC');
-        $srch->addOrder('afcommsetting_id', 'DESC');
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
+        $srch->addMultipleFields($attr);
 
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('affiliate_cred.credential_username', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('prodcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
 
-        $this->set("arrListing", $records);
-        $this->set('postedData', $post);
+        $srch->addOrder($sortBy, $sortOrder);
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $rs = $srch->getResultSet();
+        $arrListing = $db->fetchAll($rs);
+
+        $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->_template->render(false, false);
+        $this->set('postedData', $post);
+
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditAffiliateCommissionSettings($this->admin_id, true));
     }
 
-    public function form($afcommsetting_id)
+    public function search()
     {
-        $afcommsetting_id = FatUtility::int($afcommsetting_id);
-        $frm = $this->getForm($afcommsetting_id);
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'affiliate-commission/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        if ($afcommsetting_id > 0) {
+    public function form()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $frm = $this->getForm($recordId);
+
+        if ($recordId > 0) {
             $data = AffiliateCommission::getAttributesById(
-                $afcommsetting_id,
+                $recordId,
                 array('afcommsetting_id', 'afcommsetting_prodcat_id', 'afcommsetting_user_id', 'afcommsetting_fees')
             );
             if ($data === false) {
@@ -92,15 +132,17 @@ class AffiliateCommissionController extends AdminBaseController
             $frm->fill($data);
         }
 
+        $this->set('recordId', $recordId);
         $this->set('frm', $frm);
+        $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
         $this->_template->render(false, false);
     }
 
     public function setup()
     {
         $this->objPrivilege->canEditAffiliateCommissionSettings();
-        $afcommsetting_id = FatApp::getPostedData('afcommsetting_id', FatUtility::VAR_INT, 0);
-        $frm = $this->getForm($afcommsetting_id);
+        $recordId = FatApp::getPostedData('afcommsetting_id', FatUtility::VAR_INT, 0);
+        $frm = $this->getForm($recordId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
@@ -110,16 +152,10 @@ class AffiliateCommissionController extends AdminBaseController
 
         $post['afcommsetting_prodcat_id'] = FatApp::getPostedData('afcommsetting_prodcat_id', FatUtility::VAR_INT, 0);
 
-        /* $afcommsetting_user_id = FatApp::getPostedData( 'afcommsetting_user_id', FatUtility::VAR_INT, 0 );
-        if( $afcommsetting_user_id <= 0 ){
-        Message::addErrorMessage( Labels::getLabel("LBL_Please_select_Affiliate_from_autosuggest", $this->adminLangId) );
-        FatUtility::dieJsonError( Message::getHtml() );
-        } */
-
-        $afcommsetting_id = FatApp::getPostedData('afcommsetting_id', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('afcommsetting_id', FatUtility::VAR_INT, 0);
         $isMandatory = false;
-        if ($afcommsetting_id > 0) {
-            $data = AffiliateCommission::getAttributesById($afcommsetting_id, array('afcommsetting_is_mandatory'));
+        if ($recordId > 0) {
+            $data = AffiliateCommission::getAttributesById($recordId, array('afcommsetting_is_mandatory'));
             if ($data['afcommsetting_is_mandatory']) {
                 $isMandatory = true;
             }
@@ -142,7 +178,7 @@ class AffiliateCommissionController extends AdminBaseController
             }
         }
         unset($post['afcommsetting_id']);
-        $affCommSetObj = new AffiliateCommission($afcommsetting_id);
+        $affCommSetObj = new AffiliateCommission($recordId);
 
         $affCommSetObj->assignValues($post);
         if (!$affCommSetObj->save()) {
@@ -160,38 +196,42 @@ class AffiliateCommissionController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->adminLangId));
+        $this->set('msg', $this->str_update_record);
+        $this->set('recordId', $recordId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function viewHistory($afcommsetting_id = 0)
+    private function rowsData()
     {
-        $this->objPrivilege->canViewAffiliateCommissionSettings();
-        $afcommsetting_id = FatUtility::int($afcommsetting_id);
-        if (1 > $afcommsetting_id) {
-            FatUtility::dieWithError($this->str_invalid_request);
-        }
-
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-
-        $post = FatApp::getPostedData();
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : $post['page'];
-        $page = (empty($page) || $page <= 0) ? 1 : FatUtility::int($page);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
 
         $srch = AffiliateCommission::getAffiliateCommissionHistoryObj($this->adminLangId);
-        $srch->addCondition('tacsh.acsh_afcommsetting_id', '=', $afcommsetting_id);
+        $srch->addCondition('tacsh.acsh_afcommsetting_id', '=', $recordId);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
-        $this->set('postedData', $post);
+        $this->set('postedData', FatApp::getPostedData());
+    }
+
+    public function viewLog()
+    {
+        $this->rowsData();
+        $this->_template->render(false, false);
+    }
+
+    public function getRows()
+    {
+        $this->rowsData();
         $this->_template->render(false, false);
     }
 
@@ -199,69 +239,61 @@ class AffiliateCommissionController extends AdminBaseController
     {
         $this->objPrivilege->canEditAffiliateCommissionSettings();
 
-        $afcommsetting_id = FatApp::getPostedData('afcommsetting_id', FatUtility::VAR_INT, 0);
-        if ($afcommsetting_id < 1) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Request", $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $this->markAsDeleted($afcommsetting_id);
+        $this->markAsDeleted($recordId);
 
-        $this->set('msg', Labels::getLabel("LBL_Record_deleted_successfully", $this->adminLangId));
+        $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
     public function deleteSelected()
     {
         $this->objPrivilege->canEditAffiliateCommissionSettings();
-        $afcommsettingIdsArr = FatUtility::int(FatApp::getPostedData('afcommsetting_ids'));
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('afcommsetting_ids'));
 
-        if (empty($afcommsettingIdsArr)) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+        if (empty($recordIdsArr)) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        foreach ($afcommsettingIdsArr as $afcommsettingId) {
-            if (1 > $afcommsettingId) {
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
                 continue;
             }
-            $this->markAsDeleted($afcommsettingId);
+            $this->markAsDeleted($recordId);
         }
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($afcommsettingId)
+    private function markAsDeleted($recordId)
     {
-        $afcommsettingId = FatUtility::int($afcommsettingId);
-        if (1 > $afcommsettingId) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
-            );
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        $row = AffiliateCommission::getAttributesById($afcommsettingId, array('afcommsetting_id', 'afcommsetting_is_mandatory'));
+        $row = AffiliateCommission::getAttributesById($recordId, array('afcommsetting_id', 'afcommsetting_is_mandatory'));
         if ($row == false) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Request", $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         if ($row['afcommsetting_is_mandatory']) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Default_record_cannot_be_deleted", $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel("LBL_Default_record_cannot_be_deleted", $this->adminLangId), true);
         }
-        FatApp::getDb()->deleteRecords(AffiliateCommission::DB_TBL, array('smt' => 'afcommsetting_id = ?', 'vals' => array($afcommsettingId)));
+        FatApp::getDb()->deleteRecords(AffiliateCommission::DB_TBL, array('smt' => 'afcommsetting_id = ?', 'vals' => array($recordId)));
     }
 
-    private function getForm($afcommsetting_id = 0)
+    private function getForm($recordId = 0)
     {
-        $this->objPrivilege->canViewAffiliateCommissionSettings();
-        $afcommsetting_id = FatUtility::int($afcommsetting_id);
+        $recordId = FatUtility::int($recordId);
 
         $frm = new Form('frmAffiliateCommission');
-        $frm->addHiddenField('', 'afcommsetting_id', $afcommsetting_id);
+        $frm->addHiddenField('', 'afcommsetting_id', $recordId);
         $isMandatory = false;
-        if ($afcommsetting_id > 0) {
-            $data = AffiliateCommission::getAttributesById($afcommsetting_id, array('afcommsetting_is_mandatory'));
+        if ($recordId > 0) {
+            $data = AffiliateCommission::getAttributesById($recordId, array('afcommsetting_is_mandatory'));
             $isMandatory = $data['afcommsetting_is_mandatory'];
         }
 
@@ -274,20 +306,6 @@ class AffiliateCommissionController extends AdminBaseController
         }
 
         $frm->addFloatField(Labels::getLabel('LBL_Affiliate_Commission_fees', $this->adminLangId), 'afcommsetting_fees');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
-        return $frm;
-    }
-
-
-    private function getSearchForm()
-    {
-        $this->objPrivilege->canViewAffiliateCommissionSettings();
-        $frm = new Form('frmAffiliateCommissionSearch');
-        $frm->addHiddenField('', 'page');
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
-        $fld_submit->attachField($fld_cancel);
         return $frm;
     }
 
@@ -303,5 +321,41 @@ class AffiliateCommissionController extends AdminBaseController
                 ];
         }
         return $this->nodes;
+    }
+    
+    private function getFormColumns(): array
+    {
+        $affCommissionTblHeadingCols = CacheHelper::get('affCommissionTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($affCommissionTblHeadingCols) {
+            return json_decode($affCommissionTblHeadingCols);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
+            'afcommsetting_prodcat_id' => Labels::getLabel('LBL_Category', $this->adminLangId),
+            'afcommsetting_user_id' => Labels::getLabel('LBL_Affiliate', $this->adminLangId),
+            'afcommsetting_fees' => Labels::getLabel('LBL_Fees_[%]', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
+        ];
+        CacheHelper::create('affCommissionTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return [
+            'select_all',
+            'listSerial',
+            'afcommsetting_prodcat_id',
+            'afcommsetting_user_id',
+            'afcommsetting_fees',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }

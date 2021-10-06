@@ -201,22 +201,37 @@ class CommissionController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function viewLog()
+    private function rowsData()
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
+        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
 
         $srch = Commission::getCommissionHistorySettingsObj($this->adminLangId);
         $srch->addCondition('tcsh.csh_commsetting_id', '=', $recordId);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
        
         $this->set("arrListing", $records);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pagesize);
+        $this->set('postedData', FatApp::getPostedData());
+    }
+
+    public function viewLog()
+    {
+        $this->rowsData();
+        $this->_template->render(false, false);
+    }
+
+    public function getRows()
+    {
+        $this->rowsData();
         $this->_template->render(false, false);
     }
 
@@ -246,7 +261,7 @@ class CommissionController extends AdminBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('commsetting_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -263,7 +278,7 @@ class CommissionController extends AdminBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $obj = new Commission($recordId);
         $obj->assignValues(array('commsetting_deleted' => 1));
@@ -348,7 +363,6 @@ class CommissionController extends AdminBaseController
 
         $fld = $frm->addFloatField(Labels::getLabel('LBL_Commission_fees_(%)', $this->adminLangId), 'commsetting_fees');
         $fld->requirements()->setRange('0', '100');
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
     

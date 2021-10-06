@@ -590,7 +590,7 @@ class BlogPostsController extends AdminBaseController
         return $frm;
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
 

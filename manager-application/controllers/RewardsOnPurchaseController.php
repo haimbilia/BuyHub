@@ -181,7 +181,7 @@ class RewardsOnPurchaseController extends AdminBaseController
     }
 
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmRewardsOnPurchase');
 

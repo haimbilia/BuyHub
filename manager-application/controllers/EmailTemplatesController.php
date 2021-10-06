@@ -30,7 +30,7 @@ class EmailTemplatesController extends AdminBaseController
         $this->_template->render();
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $this->objPrivilege->canViewEmailTemplates();
         $frm = new Form('frmEtplsSearch');

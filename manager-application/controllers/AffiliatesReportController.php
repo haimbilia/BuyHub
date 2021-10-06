@@ -139,7 +139,7 @@ class AffiliatesReportController extends AdminBaseController
         $this->search('export');
     }
 
-    private function getSearchForm($fields = [])
+    public function getSearchForm($fields = [])
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);

@@ -438,7 +438,7 @@ class AttributesController extends AdminBaseController
         return $frm;
     }
     
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $f1 = $frm->addTextBox(Labels::getLabel('LBL_Attribute_Group_Name', $this->adminLangId), 'attrgrp_name', '', array('class' => 'search-input'));

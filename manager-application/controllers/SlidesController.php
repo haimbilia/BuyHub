@@ -561,7 +561,7 @@ class SlidesController extends AdminBaseController
         return $frm;
     }
 
-    /* private function getSearchForm(){
+    /* public function getSearchForm(){
     $frm = new Form('frmSlideSearch',array('id'=>'frmSlideSearch'));
     return $frm;
     } */
