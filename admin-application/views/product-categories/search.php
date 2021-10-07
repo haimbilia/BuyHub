@@ -21,11 +21,11 @@
                 <div>
                     <div class="sorting-bar">
                         <div class="sorting-title">
-                            <span>
+                            <span class="clickable">
                                 <?php echo $row['prodcat_name']; ?>
                             </span>
                             <a href="<?php echo commonHelper::generateUrl('Products', 'index', array($row['prodcat_id'])); ?>"
-                                class="badge badge-secondary badge-pill clickable"
+                                class="count badge badge-success clickable"
                                 title="<?php echo  Labels::getLabel('LBL_Category_Products', $adminLangId); ?>"><?php echo CommonHelper::displayBadgeCount($row['category_products']); ?></a>
                         </div>
                         <div class="sorting-actions">
@@ -42,27 +42,42 @@
                                     $hasParent = 0 < $row['prodcat_parent'] ? applicationConstants::YES : applicationConstants::NO;
                                     
                                     ?>
-                            <label class="statustab statustab-sm">
+                            <label class="switch switch-sm switch-icon">
                                 <input <?php echo $active; ?> type="checkbox"
                                     id="switch<?php echo $row['prodcat_id']; ?>"
                                     value="<?php echo $row['prodcat_id']; ?>" onclick="<?php echo $statusAct; ?>"
                                     data-childcount="<?php echo $row['subcategory_count']; ?>"
-                                    data-hasparent="<?php echo $hasParent; ?>" class="switch-labels" />
-                                <i class="switch-handles <?php echo $statusClass; ?> clickable"></i>
+                                    data-hasparent="<?php echo $hasParent; ?>" />
+                                <span></span>
                             </label>
                             <?php if ($canEdit) { ?>
                             <button onClick="goToProduct(<?php echo $row['prodcat_id']; ?>)"
                                 title="<?php echo  Labels::getLabel('LBL_Add_Product', $adminLangId); ?>"
-                                class="btn btn-clean btn-sm btn-icon clickable"><i
-                                    class="fas fa-plus clickable"></i></button>
+                                class="btn btn-clean btn-sm btn-icon clickable">
+                                <svg class="svg clickable" width="18" height="18">
+                                    <use
+                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
+                                    </use>
+                                </svg>
+                            </button>
                             <button onClick="categoryForm(<?php echo $row['prodcat_id']; ?>)"
                                 title="<?php echo  Labels::getLabel('LBL_Edit', $adminLangId); ?>"
-                                class="btn btn-clean btn-sm btn-icon clickable"><i
-                                    class="far fa-edit clickable"></i></button>
+                                class="btn btn-clean btn-sm btn-icon clickable">
+                                <svg class="svg clickable" width="18" height="18">
+                                    <use
+                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                    </use>
+                                </svg>
+                            </button>
                             <button title="<?php echo  Labels::getLabel('LBL_Delete', $adminLangId); ?>"
                                 onclick="deleteRecord(<?php echo $row['prodcat_id']; ?>)"
-                                class="btn btn-clean btn-sm btn-icon clickable"><i
-                                    class="fa fa-trash clickable"></i></button>
+                                class="btn btn-clean btn-sm btn-icon clickable">
+                                <svg class="svg clickable" width="18" height="18">
+                                    <use
+                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                    </use>
+                                </svg>
+                            </button>
                             <?php } ?>
                         </div>
                     </div>
@@ -125,7 +140,7 @@ $(function() {
                         'sortableListsOpen');
                     $("#" + rootCat).children('div').append(
                         '<span class="sortableListsOpener" ><i class="fa fa-minus clickable sort-icon" onClick="hideItems(this)"></i></span>'
-                        );
+                    );
                 });
                 $("#" + catId).parent('ul').addClass('append-ul');
             } else {

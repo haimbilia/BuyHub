@@ -77,6 +77,7 @@
                                     </div>
                                     <div class="card-body">
                                         <ul class="pages__list-wrapper">
+                                            <li><a href="collections-managements.php">Collections Managements</a></li>
                                             <li><a href="products.php">Products</a></li>
                                             <li><a href="listing.php">Listing</a></li>
                                             <li><a href="seller-packages.php">Seller Packages</a></li>
@@ -87,10 +88,16 @@
                                             <li><a href="setting.php">Settings</a></li>
                                             <li><a href="theme-setting.php">Theme Setting</a></li>
                                             <li><a href="plugins-setting.php">Plugins Setting</a></li>
+                                            <li><a href="email-template-settings.php" target="_blank">Email temaplate -
+                                                    Settings</a> </li>
+                                            <li><a href="email-template-listing.php" target="_blank">Email temaplate -
+                                                    listing</a></li>
                                             <li><a href="navigation-management.php">Navigation Management</a></li>
                                             <li><a href="cms-pages.php">CMS Pages</a></li>
-                                            <li><a href="email-template-settings.php" target="_blank">Email temaplate - Settings</a> </li>
-                                            <li><a href="email-template-listing.php" target="_blank">Email temaplate - listing</a></li>
+                                            <li><a href="email-template-settings.php" target="_blank">Email temaplate -
+                                                    Settings</a> </li>
+                                            <li><a href="email-template-listing.php" target="_blank">Email temaplate -
+                                                    listing</a></li>
 
                                         </ul>
                                     </div>

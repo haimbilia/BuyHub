@@ -130,8 +130,8 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="categories-accordion" id="categories-accordion">
-                                            <div class="categories-accordion-items">
-                                                <div class="categories-accordion-items-level">
+                                            <div class="categories-accordion-item">
+                                                <div class="categories-accordion-item-level">
 
                                                     <div class="categories-accordion-label">
                                                         <i class="icn icn-drag">
@@ -199,8 +199,8 @@
                                                 <div id="level1" class="collapse" aria-labelledby="level1"
                                                     data-parent="#categories-accordion">
 
-                                                    <div class="categories-accordion-items">
-                                                        <div class="categories-accordion-items-level">
+                                                    <div class="categories-accordion-item">
+                                                        <div class="categories-accordion-item-level">
                                                             <div class="categories-accordion-label">
                                                                 <i class="icn">
                                                                     <svg class="svg" width="18" height="18">
@@ -273,8 +273,8 @@
                                                         <div id="level1-1" class="collapse" aria-labelledby="level1-1"
                                                             data-parent="#categories-accordion">
 
-                                                            <div class="categories-accordion-items">
-                                                                <div class="categories-accordion-items-level">
+                                                            <div class="categories-accordion-item">
+                                                                <div class="categories-accordion-item-level">
                                                                     <div class="categories-accordion-label">
                                                                         <i class="icn">
                                                                             <svg class="svg" width="18" height="18">
@@ -351,8 +351,8 @@
                                                                     aria-labelledby="level1-1"
                                                                     data-parent="#categories-accordion">
 
-                                                                    <div class="categories-accordion-items">
-                                                                        <div class="categories-accordion-items-level">
+                                                                    <div class="categories-accordion-item">
+                                                                        <div class="categories-accordion-item-level">
                                                                             <div class="categories-accordion-label">
                                                                                 <i class="icn">
                                                                                     <svg class="svg" width="18"

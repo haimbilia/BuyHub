@@ -1,26 +1,35 @@
-.categories-accordion {
+.sorting-categories {
     margin: 0;
     padding: 0;
     list-style: none;
-    &-items {
-        &-level {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-radius: 1px;
-            border: dashed 1px $border-color;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
+    li {
+        list-style: none;
+        position: relative;
+        padding-#{$start-direction}: 40px;
+        &.sortableListsOpen {
+            .sorting-bar {
+                border-color: darken($border-color, 20);
+            }
         }
     }
-    &-title {
-        font-weight: 600;
+    .sorting-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 1px;
+        border: dashed 1px $border-color;
+        padding: 1rem;
+        margin-bottom: 1rem;
     }
-    .count {
-        margin-#{$start-direction}: 10px;
+    .sorting-title {
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        .count {
+            margin-#{$start-direction}: 10px;
+        }
     }
-    &-label {}
-    &-action {
+    .sorting-actions {
         display: flex;
         align-items: center;
         .btn {
@@ -60,18 +69,30 @@
             }
         }
     }
+    .sortableListsOpener {
+        float: left;
+        background-position: center center;
+        background-repeat: no-repeat;
+        margin-right: 0px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .sort-icon {
+            width: 40px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
     .switch {
         margin: 0;
         margin-#{$end-direction}: 10px;
-    }
-    .accordion__label {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border: solid 1px #ddd;
-        margin: 0 0 10px 0;
-        padding: 10px;
-        border-radius: 4px;
     }
     .handle {
         cursor: grab;
@@ -91,101 +112,4 @@
             text-decoration: none;
         }
     }
-    .draggable-placeholder-inner {
-        border: 1px dashed #0088F8;
-        background: rgba(0, 136, 249, 0.09);
-        padding: 0;
-        display: flex;
-        align-items: center;
-    }
-}
-
-.accordion-categories ul {
-    background: #fff;
-    margin: 0;
-    padding: 0;
-}
-
-#sorting-categories {
-    margin: 10px auto;
-    background: #fff;
-}
-
-#sorting-categories,
-#sorting-categories li {
-    list-style-type: none;
-    border: 1px solid #eee;
-    list-style: none;
-}
-
-#sorting-categories li {
-    padding-left: 30px;
-    margin: 5px;
-    border: 1px solid #eeeeee;
-    background-color: #f7f8fa;
-    position: relative;
-}
-
-#sorting-categories li div {
-    background-color: #fff;
-}
-
-#sorting-categories li,
-#sorting-categories ul,
-#sorting-categories div {
-    border-radius: 3px;
-}
-
-.sorting-bar {
-    position: relative;
-    padding: 10px;
-    height: 45px;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-}
-
-.sorting-title {}
-
-.sorting-actions {}
-
-.sortableListsOpener {
-    float: left;
-    background-position: center center;
-    background-repeat: no-repeat;
-    margin-right: 0px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    font-size: 12px;
-    cursor: pointer;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-}
-
-.sortableListsOpener .sort-icon {
-    width: 30px;
-    height: 45px;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
 }
