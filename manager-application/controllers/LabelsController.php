@@ -60,7 +60,7 @@ class LabelsController extends AdminBaseController
 
         $srch = Labels::getSearchObject(0, $attr, false);
         $srch->joinTable('tbl_languages', 'inner join', 'label_lang_id = language_id and language_active = ' . applicationConstants::ACTIVE, 'lng');
-        
+
         $srch->addGroupBy('lbl.' . Labels::DB_TBL_PREFIX . 'key');
         $srch->addGroupBy('lbl.' . Labels::DB_TBL_PREFIX . 'id', 'DESC');
 
@@ -83,7 +83,7 @@ class LabelsController extends AdminBaseController
 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        
+
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -232,22 +232,22 @@ class LabelsController extends AdminBaseController
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
     }
-        
+
     public function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
             $this->addSortingElements($frm);
         }
-        
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->adminLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->adminLangId), 'label_type', array('-1' => Labels::getLabel('LBL_SELECT_LABEL_TYPE', $this->adminLangId)) + Labels::getTypeArr($this->adminLangId), -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_TYPE', $this->adminLangId), 'label_type', array('-1' => Labels::getLabel('LBL_SELECT_PLATFORM', $this->adminLangId)) + Labels::getTypeArr($this->adminLangId), -1, array(), '');
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
-        
+
         return $frm;
     }
 
@@ -287,13 +287,13 @@ class LabelsController extends AdminBaseController
 
         $arr = [
             'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'label_key' => Labels::getLabel('LBL_KEY', $this->adminLangId),
+            'label_key' => Labels::getLabel('LBL_SYSTEM_CODE', $this->adminLangId),
             'label_caption' => Labels::getLabel('LBL_CAPTION', $this->adminLangId),
-            'label_type' => Labels::getLabel('LBL_TYPE', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
+            'label_type' => Labels::getLabel('LBL_PLATFORM', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
         ];
         CacheHelper::create('labelsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
-        
+
         return $arr;
     }
 

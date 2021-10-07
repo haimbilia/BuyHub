@@ -1320,5 +1320,8 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('LBL_PRIMARY_LANGUAGE_FIELD_DATA_REQUIRED', 1, 'Primary Language Data Needs to Be Filled for System to Translate to Other Languages', 1),
 ('LBL_ACTION_BUTTONS_CLASS_REQUIREMENT', 1, 'Please Add "actionButtons-js" Class to Form to Perform Action', 1),
 ('LBL_DISABLE_CHILD_CATEGORY_VALIDATION._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', 1, 'Changing Parent Category to Inactive Will Make All of Its Child Categories Inactive. Are You Sure You Want to Proceed?', 1),
-('LBL_ENABLE_PARENT_CATEGORIES_VALIDATION._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', 1, 'Changing Child Category to Active Will Make All of Its Parent Categories Active. Are You Sure You Want to Proceed?', 1)
+('LBL_ENABLE_PARENT_CATEGORIES_VALIDATION._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', 1, 'Changing Child Category to Active Will Make All of Its Parent Categories Active. Are You Sure You Want to Proceed?', 1),
+('LBL_SELECT_LABEL_TYPE', 1, 'Select label type', 1),
+('LBL_SEARCH_LABELS', 1, 'Search labels', 1),
+('LBL_CAPTION', 1, 'Caption', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
