@@ -264,11 +264,11 @@ $controller = str_replace('Controller', '', FatApp::getController());
 
     function searhSettings(e) {
         var value = e.val().toLowerCase();
-        if (value.length < 1) {
-            $(this).show();
-            $('.settingListJs').show();
-            return;
-        }
+        /*  if (value.length < 1) {
+             $(this).show();
+             $('.settingListJs').show();
+             return;
+         } */
         $(".settingListJs a").each(function() {
             if ($(this).find('h6').text().toLowerCase().search(value) > -1 || $(this).find('span').text().toLowerCase().search(value) > -1) {
                 $(this).show();
