@@ -24,6 +24,11 @@ $tableHeadAttrArr = [
     ],
 ];
 
+if(count(Language::getAllNames()) < 2 ){
+    $tableHeadAttrArr['abusive_keyword']['width'] = '70%';
+    unset($tableHeadAttrArr['language_name']);
+}
+
 $langLayout = [];
 foreach ($languages as $langId => $langName) {
     $layOutDir = Language::getLayoutDirection($langId);

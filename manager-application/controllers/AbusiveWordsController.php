@@ -68,7 +68,7 @@ class AbusiveWordsController extends AdminBaseController
             $srch->addCondition('aw.abusive_keyword', 'like', '%' . $post['keyword'] . '%');
         }
 
-        if ($post['lang_id'] > 0) {
+        if (isset($post['lang_id']) && $post['lang_id'] > 0) {
             $srch->addCondition('aw.abusive_lang_id', '=', $post['lang_id']);
         }
 
@@ -218,8 +218,9 @@ class AbusiveWordsController extends AdminBaseController
         $fld->overrideFldType('search');
 
         $languages = Language::getAllNames();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->adminLangId));
-
+        if(1 < count($languages)){           
+            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->adminLangId));
+        }
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -255,6 +256,11 @@ class AbusiveWordsController extends AdminBaseController
             'language_name' => Labels::getLabel('LBL_Language', $this->adminLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
+
+        if(count(Language::getAllNames()) < 2 ){
+            unset($arr['language_name']);
+        }
+
         CacheHelper::create('abusiveWordsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
