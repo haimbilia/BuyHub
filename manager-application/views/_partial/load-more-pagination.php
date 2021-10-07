@@ -4,6 +4,7 @@
 ** Every Row must have class "rowJs".
 ** Class Method Named as "getRows".
 ** Class Method Must Return HTML.
+** You Can Set 'data-reference' to each row having "rowJs" class if you want to carry any reference string with pagination form.
 ***/
 if (1 < $pageCount) { ?>
     <div class="row justify-content-between loadMorePaginationJs">

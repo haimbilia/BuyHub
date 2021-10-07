@@ -2,14 +2,16 @@
 
 $theDay = '';
 $count = 1;
+$lastDate = isset($postedData['reference']) ? date('Y-m-d', strtotime($postedData['reference'])) : '';
 foreach ($arrListing as $sn => $row) {
     $headTitle = HtmlHelper::getTheDay($row['acsh_added_on'], $adminLangId);
-    if ($theDay != $headTitle) {
+    $canAddHead = (empty($lastDate) || (!empty($lastDate) && $lastDate != date('Y-m-d', strtotime($row['acsh_added_on']))));
+    if ($theDay != $headTitle && $canAddHead) {
         $theDay = $headTitle;
         if ($count != 1) {
             echo '</ul></div>';
         } ?>
-        <div class="rowJs">
+        <div class="rowJs" data-reference="<?php echo $row['acsh_added_on']; ?>">
             <div class="timeline-v4__item-date">
                 <span class="tag">
                     <?php echo $headTitle; ?>
@@ -39,7 +41,7 @@ foreach ($arrListing as $sn => $row) {
                     </div>
                 </li>
 
-    <?php if (count($arrListing) == $count) {
+    <?php if (count($arrListing) == $count && $canAddHead) {
         echo '</ul></div>';
     }
     $count++;

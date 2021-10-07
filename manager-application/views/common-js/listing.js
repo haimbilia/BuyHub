@@ -74,6 +74,11 @@ $(document).on('search', "input[name='keyword']", function () {
         }
 
         $(frm.page).val(page);
+        var reference = $('.appendRowsJs .rowJs:last').data('reference');
+        if ('undefined' != typeof reference && 'undefined' != typeof frm.reference) {
+            $(frm.reference).val(reference);
+        }
+
         var data = fcom.frmData(frm);
 
         $('.appendRowsJs .rowJs:last').clone().removeAttr('class').addClass('rowJs').appendTo('.appendRowsJs').html(fcom.getRowSpinner());

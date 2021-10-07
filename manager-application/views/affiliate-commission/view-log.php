@@ -10,21 +10,20 @@
         $totalRecords = count($arrListing);
         if ($totalRecords == 0) {
             $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $adminLangId));
-        } else {
-            ?>
+        } else { ?>
             <div class="timeline-v4 appendRowsJs">
                 <?php require_once('get-rows.php'); ?>
             </div>
             <?php 
-            if (!empty($arrListing)) { 
-                $data = [
-                    'adminLangId' => $adminLangId,
-                    'postedData' => $postedData,
-                    'page' => $page,
-                    'pageCount' => $pageCount,
-                ];
-                $this->includeTemplate('_partial/load-more-pagination.php', $data);
-            } 
+            $lastRecord = current(array_reverse($arrListing));
+            $postedData['reference'] = $lastRecord['acsh_added_on'];
+            $data = [
+                'adminLangId' => $adminLangId,
+                'postedData' => $postedData,
+                'page' => $page,
+                'pageCount' => $pageCount,
+            ];
+            $this->includeTemplate('_partial/load-more-pagination.php', $data);
         } ?>
     </div>
 </div>
