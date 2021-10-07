@@ -871,7 +871,13 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false, '_partial/listing/lang-form.php');
+      
+        $renderPath = CONF_THEME_PATH.(str_replace("controller","",strtolower(get_called_class()))).DIRECTORY_SEPARATOR."lang-form.php";
+        if(file_exists($renderPath)){
+            $this->_template->render(false, false);
+        }else{
+            $this->_template->render(false, false, '_partial/listing/lang-form.php');
+        }        
     }
 
     public function langSetup()
