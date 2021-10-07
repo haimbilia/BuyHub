@@ -54,8 +54,8 @@ class OrderStatusController extends AdminBaseController
 
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
-        if (!array_key_exists($sortBy, $fields)) {
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'orderstatus_priority');
+        if (!array_key_exists($sortBy, $fields) && 'orderstatus_priority' != $sortBy) {
             $sortBy = current($allowedKeysForSorting);
         }
 

@@ -42,7 +42,6 @@
             $tr->setAttribute("id", $row['nlink_id']);
             foreach ($arr_flds as $key => $val) {
                 $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
-                $tdAttr = ('dragdrop' == $key) ? [...$tdAttr, 'class' => 'dragHandle'] : $tdAttr;
                 $td = $tr->appendElement('td', $tdAttr);
                 switch ($key) {
                     case 'dragdrop':
@@ -89,24 +88,51 @@
     </div>
 </div>
 
-
 <script>
     $(document).ready(function() {
-        $('#pageList').tableDnD({
-            onDrop: function(table, row) {
-                fcom.displayProcessing();
-                var order = $.tableDnD.serialize('id');
-                fcom.ajax(fcom.makeUrl('Navigations', 'updateNlinkOrder'), order, function(res) {
-                    var ans = $.parseJSON(res);
-                    if (ans.status == 1) {
-                        fcom.displaySuccessMessage(ans.msg);
-                    } else {
-                        fcom.displayErrorMessage(ans.msg);
-
-                    }
-                });
-            },
-            dragHandle: ".dragHandle",
-        });
+        bindSortable();
     });
+    $(document).ajaxComplete(function() {
+        bindSortable();
+    });
+
+    function bindSortable() {
+        $("#pageList > tbody").sortable({
+            update: function(event, ui) {
+                fcom.displayProcessing();
+                $('.listingTableJs').prepend(fcom.getLoader());
+
+                var order = $(this).sortable('toArray');
+                var data = '';
+                const bindData = new Promise((resolve, reject) => {
+                    for (let i = 0; i < order.length; i++) {
+                        data += 'pageList[]=' + order[i];
+                        if (i + 1 < order.length) {
+                            data += '&';
+                        }
+                    }
+                    resolve(data);
+                });
+                bindData.then(
+                    function(value) {
+                        fcom.ajax(fcom.makeUrl('Navigations', 'updateNlinkOrder'), value, function(res) {
+                            fcom.removeLoader();
+                            $.ykmsg.close();
+                            var ans = $.parseJSON(res);
+                            if (ans.status == 1) {
+                                $.ykmsg.success(ans.msg);
+                                return;
+                            }
+                            $.ykmsg.error(ans.msg);
+                        });
+                    },
+                    function(error) {
+                        fcom.removeLoader();
+                        $.ykmsg.close();
+                    }
+                );
+            },
+        });
+        $("#pageList > tbody").disableSelection();
+    }
 </script>

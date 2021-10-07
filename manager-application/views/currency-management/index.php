@@ -91,23 +91,49 @@ $controller = str_replace('Controller', '', FatApp::getController());
     getHelpCenterContent(controllerName);
 
     $(document).ready(function() {
-        $('#currencyIds').tableDnD({
-            onDrop: function(table, row) {
+        bindSortable();
+    });
+    $(document).ajaxComplete(function() {
+        bindSortable();
+    });
+
+    function bindSortable() {
+        $("#currencyIds > tbody").sortable({
+            update: function(event, ui) {
                 fcom.displayProcessing();
                 $('.listingTableJs').prepend(fcom.getLoader());
-                var order = $.tableDnD.serialize('id');
-                fcom.ajax(fcom.makeUrl('CurrencyManagement', 'updateOrder'), order, function(res) {
-                    fcom.removeLoader();
-                    $.ykmsg.close();
-                    var ans = $.parseJSON(res);
-                    if (ans.status == 1) {
-                        $.ykmsg.success(ans.msg);
-                        return;
+
+                var order = $(this).sortable('toArray');
+                var data = '';
+                const bindData = new Promise((resolve, reject) => {
+                    for (let i = 0; i < order.length; i++) {
+                        data += 'currencyIds[]=' + order[i];
+                        if (i + 1 < order.length) {
+                            data += '&';
+                        }
                     }
-                    $.ykmsg.error(ans.msg);
+                    resolve(data);
                 });
+                bindData.then(
+                    function(value) {
+                        fcom.ajax(fcom.makeUrl('CurrencyManagement', 'updateOrder'), value, function(res) {
+                            fcom.removeLoader();
+                            $.ykmsg.close();
+                            var ans = $.parseJSON(res);
+                            if (ans.status == 1) {
+                                $.ykmsg.success(ans.msg);
+                                return;
+                            }
+                            $.ykmsg.error(ans.msg);
+                        });
+                    },
+                    function(error) {
+                        fcom.removeLoader();
+                        $.ykmsg.close();
+                    }
+                );
             },
-            dragHandle: ".dragHandle",
         });
-    });
+        $("#currencyIds > tbody").disableSelection();
+    }
 </script>

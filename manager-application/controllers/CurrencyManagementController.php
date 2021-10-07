@@ -37,8 +37,8 @@ class CurrencyManagementController extends AdminBaseController
 
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
-        if (!array_key_exists($sortBy, $fields)) {
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'currency_display_order');
+        if (!array_key_exists($sortBy, $fields) && 'currency_display_order' != $sortBy) {
             $sortBy = current($allowedKeysForSorting);
         }
 
@@ -222,12 +222,12 @@ class CurrencyManagementController extends AdminBaseController
     public function updateStatus()
     {
         $this->objPrivilege->canEditCurrencyManagement();
-        $currencyId = FatApp::getPostedData('currencyId', FatUtility::VAR_INT, 0);
-        if (0 >= $currencyId) {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (0 >= $recordId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $data = Currency::getAttributesById($currencyId, array('currency_id', 'currency_active'));
+        $data = Currency::getAttributesById($recordId, array('currency_id', 'currency_active'));
 
         if ($data == false) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -235,7 +235,7 @@ class CurrencyManagementController extends AdminBaseController
 
         $status = ($data['currency_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
 
-        $this->changeStatus($currencyId, $status);
+        $this->changeStatus($recordId, $status);
 
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
@@ -246,31 +246,31 @@ class CurrencyManagementController extends AdminBaseController
         $this->objPrivilege->canEditCurrencyManagement();
 
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $currencyIdsArr = FatUtility::int(FatApp::getPostedData('currency_ids'));
-        if (empty($currencyIdsArr) || -1 == $status) {
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('currency_ids'));
+        if (empty($recordIdsArr) || -1 == $status) {
             LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
 
-        foreach ($currencyIdsArr as $currencyId) {
-            if (1 > $currencyId) {
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
                 continue;
             }
 
-            $this->changeStatus($currencyId, $status);
+            $this->changeStatus($recordId, $status);
         }
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function changeStatus($currencyId, $status)
+    private function changeStatus($recordId, $status)
     {
         $status = FatUtility::int($status);
-        $currencyId = FatUtility::int($currencyId);
-        if (1 > $currencyId || -1 == $status) {
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
             LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
 
-        $obj = new Currency($currencyId);
+        $obj = new Currency($recordId);
         if (!$obj->changeStatus($status)) {
             LibHelper::exitWithError($obj->getError(), true);
         }
@@ -314,7 +314,12 @@ class CurrencyManagementController extends AdminBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['dragdrop', 'currency_active', 'currency_symbol_left', 'currency_symbol_right'], Common::excludeKeysForSort());
+        return array_diff($fields, [
+            'dragdrop',
+            'currency_active',
+            'currency_symbol_left',
+            'currency_symbol_right'
+        ], Common::excludeKeysForSort());
     }
 
     public function getBreadcrumbNodes($action)
