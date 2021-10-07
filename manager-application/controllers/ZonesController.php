@@ -119,7 +119,7 @@ class ZonesController extends AdminBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $recordId = $post['zone_id'];
+        $recordId = FatUtility::int($post['zone_id']);
         unset($post['zone_id']);
  
         $recordObj = new Zone($recordId);

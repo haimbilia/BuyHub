@@ -1,10 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-HtmlHelper::formatFormFields($frm);
-
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
-$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
-
 $fld = $frm->getField('country_code');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
@@ -17,28 +12,6 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('country_active');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
-$formTitle = Labels::getLabel('LBL_COUNTRY_SETUP', $adminLangId);
+require_once(CONF_THEME_PATH . '_partial/listing/form.php'); 
 
-$disabled = (1 > $recordId) ? 'disabled' : '';
-$activeGentab = true;
-require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
-    <div class="form-edit-body loaderContainerJs">
-        <?php echo $frm->getFormHtml(); ?>
-    </div>
-
-    <div class="form-edit-foot">
-        <div class="row">
-            <div class="col-auto">
-                <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
-                    <?php 
-                        if (0 < $recordId) {
-                            echo Labels::getLabel('LBL_UPDATE', $adminLangId); 
-                        } else {
-                            echo Labels::getLabel('LBL_SAVE', $adminLangId); 
-                        }
-                    ?>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+?>
