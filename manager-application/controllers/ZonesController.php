@@ -119,7 +119,7 @@ class ZonesController extends AdminBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $recordId = $post['zone_id'];
+        $recordId = FatUtility::int($post['zone_id']);
         unset($post['zone_id']);
  
         $recordObj = new Zone($recordId);
@@ -131,8 +131,7 @@ class ZonesController extends AdminBaseController
         }
         
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
-
-        $this->set('msg', $this->str_update_record);      
+         
         $this->_template->render(false, false, 'json-success.php');
     }
 

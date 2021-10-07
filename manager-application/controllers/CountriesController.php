@@ -115,7 +115,8 @@ class CountriesController extends AdminBaseController
 
         $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
-        $this->set('frm', $frm);
+        $this->set('frm', $frm);     
+        $this->set('formTitle', Labels::getLabel('LBL_COUNTRY_SETUP', $this->adminLangId));
         $this->_template->render(false, false);
     }
 

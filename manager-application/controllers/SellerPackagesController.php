@@ -103,19 +103,52 @@ class SellerPackagesController extends AdminBaseController
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
-        if (0 < $recordId) {
-            $sPackageObj = new SellerPackages();
-            $data = $sPackageObj->getAttributesById($recordId);
+        if (0 < $recordId) {  
+            $data = SellerPackages::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, null, true);  
+
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
-        $this->set('languages', Language::getAllNames());
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES_SETUP', $this->adminLangId));
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->_template->render(false, false);
+    }
+
+    public function setup()
+    {
+        $this->objPrivilege->canEditSellerPackages();
+     
+        $recordId = FatApp::getPostedData('spackage_id', FatUtility::VAR_INT, 0);
+        
+        $frm = $this->getForm($recordId);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+
+        if (false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
+      
+        $recordObj = new SellerPackages($recordId);
+        $post['spackage_identifier'] = $post['spackage_name'];
+        $recordObj->assignValues($post);
+        if (!$recordObj->save()) {
+            LibHelper::exitWithError($recordObj->getError(), true);
+        }
+
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
+      
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditSellerPackages();
+        $this->modelObj = (new ReflectionClass('SellerPackages'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES_SETUP', $this->adminLangId));
     }
 
     private function getForm($recordId)
@@ -124,7 +157,8 @@ class SellerPackagesController extends AdminBaseController
         $arr_package_options = SellerPackages::getPackageTypes();
         $frm = new Form('frmSellerPackage');
         $frm->addHiddenField('', 'spackage_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_Package_Identifier', $this->adminLangId), SellerPackages::DB_TBL_PREFIX . 'identifier');
+        $frm->addRequiredField(Labels::getLabel('LBL_Package_Name', $this->adminLangId), SellerPackages::DB_TBL_PREFIX . 'name');
+        /*$frm->addRequiredField(Labels::getLabel('LBL_Package_Identifier', $this->adminLangId), SellerPackages::DB_TBL_PREFIX . 'identifier');*/
         $disbaleText = array();
         if ($recordId > 0) {
             $disbaleText = array('disabled' => 'disabled');
@@ -148,139 +182,17 @@ class SellerPackagesController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('LBL_Package_Status', $this->adminLangId), SellerPackages::DB_TBL_PREFIX . 'active', applicationConstants::getActiveInactiveArr($this->adminLangId), applicationConstants::ACTIVE, array(), '');
 
         $fld = $frm->addRequiredField(Labels::getLabel('LBL_Package_Display_Order', $this->adminLangId), SellerPackages::DB_TBL_PREFIX . 'display_order');
-        $fld->requirements()->setIntPositive();
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->adminLangId));
+        $fld->requirements()->setIntPositive();    
+        
+        $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
         return $frm;
-    }
-    public function setup()
-    {
-        $this->objPrivilege->canEditSellerPackages();
-        $post = FatApp::getPostedData();
-        $recordId = $post['spackage_id'];
-        $frm = $this->getForm($recordId);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+    }    
 
-        if (false === $post) {
-            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
-        }
-
-
-        unset($post['spackage_id']);
-        $record = new SellerPackages($recordId);
-        $record->assignValues($post);
-        if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
-        }
-
-        $newTabLangId = 0;
-        if ($recordId > 0) {
-            $languages = Language::getAllNames();
-            foreach ($languages as $langId => $langName) {
-                if (!$row = SellerPackages::getAttributesByLangId($langId, $recordId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        } else {
-            $recordId = $record->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
-        }
-        $this->set('msg', $this->str_update_record);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function langForm($autoFillLangData = 0)
-    {
-        $this->objPrivilege->canEditSellerPackages();
-
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $lang_id = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
-
-        if (1 > $recordId || 1 > $lang_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $langFrm = $this->getLangForm($recordId, $lang_id);
-        if (0 < $autoFillLangData) {
-            $updateLangDataobj = new TranslateLangData(SellerPackages::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $lang_id);
-            if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-            $langData = current($translatedData);
-        } else {
-            $langData = SellerPackages::getAttributesByLangId($lang_id, $recordId);
-        }
-
-        if ($langData) {
-            $langFrm->fill($langData);
-        }
-
-        $this->set('languages', Language::getAllNames());
-        $this->set('recordId', $recordId);
-        $this->set('lang_id', $lang_id);
-        $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->set('formTitle', Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES_SETUP', $this->adminLangId));
-        $this->_template->render(false, false, '_partial/listing/lang-form.php');
-    }
-
-    public function langSetup()
-    {
-        $this->objPrivilege->canEditSellerPackages();
-        $post = FatApp::getPostedData();
-
-        $recordId = $post[SellerPackages::DB_TBL_PREFIX . 'id'];
-        $lang_id = $post['lang_id'];
-
-        if ($recordId == 0 || $lang_id == 0) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $frm = $this->getLangForm($recordId, $lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        unset($post[SellerPackages::DB_TBL_PREFIX . 'id']);
-        unset($post['lang_id']);
-
-        $data = array(
-            'spackagelang_lang_id' => $lang_id,
-            'spackagelang_spackage_id' => $recordId,
-            SellerPackages::DB_TBL_PREFIX . 'name' => $post[SellerPackages::DB_TBL_PREFIX . 'name'],
-            SellerPackages::DB_TBL_PREFIX . 'text' => $post[SellerPackages::DB_TBL_PREFIX . 'text']
-        );
-
-        $obj = new SellerPackages($recordId);
-
-        if (!$obj->updateLangData($lang_id, $data)) {
-            LibHelper::exitWithError($obj->getError(), true);
-        }
-
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(SellerPackages::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = SellerPackages::getAttributesByLangId($langId, $recordId)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    private function getLangForm($recordId = 0, $lang_id = 0)
+    protected function getLangForm($recordId = 0, $lang_id = 0)
     {
         $this->objPrivilege->canEditSellerPackages();
         $frm = new Form('frmSellerPackageLang');
@@ -288,17 +200,9 @@ class SellerPackagesController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Package_Name', $this->adminLangId), SellerPackages::DB_TBL_PREFIX . 'name');
         $frm->addTextarea(Labels::getLabel('LBL_Package_Description', $this->adminLangId), SellerPackages::DB_TBL_PREFIX . 'text');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->adminLangId));
         return $frm;
     }
+
     public function searchPlans()
     {
         $spackageId = FatApp::getPostedData('spackageId');

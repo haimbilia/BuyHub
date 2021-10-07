@@ -126,7 +126,7 @@ class OrderStatusController extends AdminBaseController
         $frm = $this->getForm($recordId);
 
         if (0 < $recordId) {
-            $data = OrderStatus::getAttributesById($recordId, array('orderstatus_id', 'orderstatus_identifier', 'orderstatus_is_active', 'orderstatus_is_digital', 'orderstatus_color_class'));
+            $data = OrderStatus::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, array('orderstatus_id', 'orderstatus_name', 'orderstatus_is_active', 'orderstatus_is_digital', 'orderstatus_color_class'), true);
 
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
@@ -134,11 +134,11 @@ class OrderStatusController extends AdminBaseController
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getAllNames());
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->adminLangId));
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->_template->render(false, false);
     }
 
     public function setup()
@@ -152,136 +152,37 @@ class OrderStatusController extends AdminBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $recordId = $post['orderstatus_id'];
-        unset($post['orderstatus_id']);
+        $recordId = FatUtility::int($post['orderstatus_id']);
+      
+        $recordObj = new OrderStatus($recordId);
+        $post['orderstatus_identifier'] = $post['orderstatus_name'];
+        $recordObj->assignValues($post);
 
-        $record = new OrderStatus($recordId);
-        $record->assignValues($post);
-
-        if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+        if (!$recordObj->save()) {
+            LibHelper::exitWithError($recordObj->getError(), true);
         }
 
-        $newTabLangId = 0;
-        if ($recordId > 0) {
-            $languages = Language::getAllNames();
-            foreach ($languages as $langId => $langName) {
-                if (!$row = OrderStatus::getAttributesByLangId($langId, $recordId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        } else {
-            $recordId = $record->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
-        }
-        $this->set('msg', $this->str_update_record);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
+
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($autoFillLangData = 0)
-    {
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
-
-        if (1 > $recordId || 1 > $langId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-        
-        $langFrm = $this->getLangForm($recordId, $langId);
-        if (0 < $autoFillLangData) {
-            $updateLangDataobj = new TranslateLangData(OrderStatus::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
-            if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-            $langData = current($translatedData);
-        } else {
-            $langData = OrderStatus::getAttributesByLangId($langId, $recordId);
-        }
-
-        if ($langData) {
-            $langFrm->fill($langData);
-        }
-
-        $this->set('languages', Language::getAllNames());
-        $this->set('recordId', $recordId);
-        $this->set('lang_id', $langId);
-        $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->adminLangId));
-        $this->_template->render(false, false, '_partial/listing/lang-form.php');
-    }
-
-    public function langSetup()
+    public function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditOrderStatus();
-        $post = FatApp::getPostedData();
-
-        $recordId = $post['orderstatus_id'];
-        $languages = Language::getAllNames();
-	
-        if(count($languages) > 1){
-			 $lang_id = $post['lang_id'];
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$post['lang_id'] = $lang_id;
-		}
-
-      
-        if ($recordId == 0 || $lang_id == 0) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $frm = $this->getLangForm($recordId, $lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        unset($post['orderstatus_id']);
-        unset($post['lang_id']);
-
-        $data = array(
-            'orderstatuslang_lang_id' => $lang_id,
-            'orderstatuslang_orderstatus_id' => $recordId,
-            'orderstatus_name' => $post['orderstatus_name']
-        );
-
-        $orderstatusObj = new OrderStatus($recordId);
-
-        if (!$orderstatusObj->updateLangData($lang_id, $data)) {
-            LibHelper::exitWithError($orderstatusObj->getError(), true);
-        }
-
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(OrderStatus::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = OrderStatus::getAttributesByLangId($langId, $recordId)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
+        $this->modelObj = (new ReflectionClass('OrderStatus'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->adminLangId));
     }
-
+    
     private function getForm($recordId = 0)
     {
         $recordId = FatUtility::int($recordId);
 
         $frm = new Form('frmorderstatus');
         $frm->addHiddenField('', 'orderstatus_id', $recordId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Order_Status_Identifier', $this->adminLangId), 'orderstatus_identifier');
+        /*$frm->addRequiredField(Labels::getLabel('LBL_Order_Status_Identifier', $this->adminLangId), 'orderstatus_identifier');*/
+        $frm->addRequiredField(Labels::getLabel('LBL_orderstatus_Name', $this->adminLangId), 'orderstatus_name');
         /* $frm->addRequiredField(Labels::getLabel('LBL_ORDER_STATUS_COLOR_CLASS', $this->adminLangId), 'orderstatus_color_class'); */
 
         /* Please retain actual css class as option text. As that class used in JS to fill color of that option. */
@@ -299,30 +200,22 @@ class OrderStatusController extends AdminBaseController
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
 
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'orderstatus_is_active', $activeInactiveArr, '', array(), '');
+        
+        $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
+        
         return $frm;
     }
 
-    private function getLangForm($recordId = 0, $lang_id = 0)
+    protected function getLangForm($recordId = 0, $lang_id = 0)
     {
         $frm = new Form('frmorderstatuslang');
         $frm->addHiddenField('', 'orderstatus_id', $recordId);
-
-        $languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-        
-        $frm->addRequiredField(Labels::getLabel('LBL_orderstatus_Name', $this->adminLangId), 'orderstatus_name');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');        
+        $frm->addRequiredField(Labels::getLabel('LBL_orderstatus_Name', $this->adminLangId), 'orderstatus_name');       
         return $frm;
     }
 

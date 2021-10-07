@@ -13,6 +13,7 @@ class OrderStatus extends MyAppModel
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
+        $this->objMainTableRecord->setSensitiveFields([self::DB_TBL_PREFIX . 'id']);
         $this->db = FatApp::getDb();
     }
 
