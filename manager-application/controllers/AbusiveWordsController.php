@@ -16,7 +16,7 @@ class AbusiveWordsController extends AdminBaseController
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('languages', Language::getAllNames());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ABUSIVE_WORDS', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ABUSIVE_KEYWORDS', $this->adminLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -279,5 +279,19 @@ class AbusiveWordsController extends AdminBaseController
     private function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_ABUSIVE_KEYWORDS', $this->adminLangId)]
+                ];
+        }
+        return $this->nodes;
     }
 }

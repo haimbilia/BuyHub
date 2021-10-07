@@ -102,7 +102,7 @@ class EmptyCartItemsController extends AdminBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
 
-        if (0 < $recordId) {            
+        if (0 < $recordId) {
             $data = EmptyCartItems::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, null, true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
@@ -130,7 +130,7 @@ class EmptyCartItemsController extends AdminBaseController
 
         $recordId = $post['emptycartitem_id'];
         unset($post['emptycartitem_id']);
-        
+
         $post['emptycartitem_identifier'] = $post['emptycartitem_title'];
 
         $recordObj = new EmptyCartItems($recordId);
@@ -142,7 +142,7 @@ class EmptyCartItemsController extends AdminBaseController
 
         $this->_template->render(false, false, 'json-success.php');
     }
-    
+
     public function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditEmptyCartItems();
@@ -263,12 +263,12 @@ class EmptyCartItemsController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('LBL_Open_Link_in_New_Tab', $this->adminLangId), 'emptycartitem_url_is_newtab', applicationConstants::getYesNoArr($this->adminLangId), applicationConstants::NO, array(), '');
         $frm->addIntegerField(Labels::getLabel('LBL_Display_Order', $this->adminLangId), 'emptycartitem_display_order');
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'emptycartitem_active', applicationConstants::getActiveInactiveArr($this->adminLangId), applicationConstants::ACTIVE, array(), '');
-        $languageArr = Language::getDropDownList();        
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, ''); 
+        $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        
+
         return $frm;
     }
 
@@ -297,7 +297,7 @@ class EmptyCartItemsController extends AdminBaseController
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
         CacheHelper::create('emptyCartItemsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
-        
+
         return $arr;
     }
 
@@ -316,5 +316,19 @@ class EmptyCartItemsController extends AdminBaseController
     private function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['emptycartitem_active'], Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_EMPTY_CART_ITEMS', $this->adminLangId)]
+                ];
+        }
+        return $this->nodes;
     }
 }

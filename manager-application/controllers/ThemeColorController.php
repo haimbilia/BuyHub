@@ -211,7 +211,7 @@ class ThemeColorController extends AdminBaseController
             case 'index':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_MANAGE_THEME', $this->adminLangId)]
+                    ['title' => Labels::getLabel('LBL_THEME_SETTINGS', $this->adminLangId)]
                 ];
         }
         return $this->nodes;

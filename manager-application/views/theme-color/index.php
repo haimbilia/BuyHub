@@ -33,7 +33,7 @@ if (!empty($googleFontFamilyUrl)) {
                 <div class="card">
                     <div class="card-head">
                         <div class="card-head-label">
-                            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_MANAGE_THEME', $adminLangId); ?></h3>
+                            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_THEME_SETTINGS', $adminLangId); ?></h3>
                         </div>
                     </div>
                     <div class="card-body">

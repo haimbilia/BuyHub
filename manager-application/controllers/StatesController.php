@@ -310,4 +310,18 @@ class StatesController extends AdminBaseController
     {
         return array_diff($fields, ['state_active'], Common::excludeKeysForSort());
     }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_STATES', $this->adminLangId)]
+                ];
+        }
+        return $this->nodes;
+    }
 }

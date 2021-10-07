@@ -133,9 +133,7 @@ class CommissionController extends AdminBaseController
                 $prodObj->addMultipleFields(array('IFNULL(product_name,product_identifier) as product_name'));
                 $prodObj->doNotCalculateRecords();
                 $prodObj->setPageSize(1);
-                $rs = $prodObj->getResultSet();
-                $db = FatApp::getDb();
-                $row = $db->fetch($rs);
+                $row = FatApp::getDb()->fetch($prodObj->getResultSet());
                 $data['product'] = isset($row['product_name']) ? $row['product_name'] : '';
             }
 
@@ -352,9 +350,9 @@ class CommissionController extends AdminBaseController
         $frm->addHiddenField('', 'commsetting_id', $recordId);
 
         if (!$isMandatory) {
-            $frm->addTextBox(Labels::getLabel('LBL_Category_Name', $this->adminLangId), 'category_name');
-            $frm->addTextBox(Labels::getLabel('LBL_Seller', $this->adminLangId), 'user_name');
-            $frm->addTextBox(Labels::getLabel('LBL_Product', $this->adminLangId), 'product');
+            $frm->addSelectBox(Labels::getLabel('LBL_Category_Name', $this->adminLangId), 'category_name', []);
+            $frm->addSelectBox(Labels::getLabel('LBL_Seller', $this->adminLangId), 'user_name', []);
+            $frm->addSelectBox(Labels::getLabel('LBL_Product', $this->adminLangId), 'product', []);
 
             $frm->addHiddenField('', 'commsetting_user_id', 0);
             $frm->addHiddenField('', 'commsetting_product_id', 0);

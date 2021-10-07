@@ -1,5 +1,5 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
-$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_ABUSIVE_WORDS', $adminLangId);
+$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_ABUSIVE_KEYWORDS', $adminLangId);
 
 /* No sorting functionality required if no record found. */
 if (1 > count($arrListing)) {
@@ -46,7 +46,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                     <?php $data = [
                         'canEdit' => $canEdit,
                         'adminLangId' => $adminLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_ABUSIVE_WORDS', $adminLangId),
+                        'cardHeadTitle' => Labels::getLabel('LBL_ABUSIVE_KEYWORDS', $adminLangId),
                         'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_ABUSIVE_WORDS', $adminLangId), ['{COUNT}' => $recordCount]),
                         'newRecordBtn' => true,
                         'deleteButton' => true
