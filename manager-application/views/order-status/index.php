@@ -69,22 +69,49 @@ $controller = str_replace('Controller', '', FatApp::getController());
     getHelpCenterContent(controllerName);
 
     $(document).ready(function() {
-        $('#orderStatuses').tableDnD({
-            onDrop: function(table, row) {
-                fcom.displayProcessing();
-                var order = $.tableDnD.serialize('id');
-                fcom.ajax(fcom.makeUrl('OrderStatus', 'setOrderStatusesOrder'), order, function(res) {
-                    fcom.removeLoader();
-                    $.ykmsg.close();
-                    var ans = $.parseJSON(res);
-                    if (ans.status == 1) {
-                        $.ykmsg.success(ans.msg);
-                        return;
-                    }
-                    $.ykmsg.error(ans.msg);
-                });
-            },
-            dragHandle: ".dragHandle",
-        });
+        bindSortable();
     });
+    $(document).ajaxComplete(function() {
+        bindSortable();
+    });
+
+    function bindSortable() {
+        $("#orderStatuses > tbody").sortable({
+            update: function(event, ui) {
+                fcom.displayProcessing();
+                $('.listingTableJs').prepend(fcom.getLoader());
+
+                var order = $(this).sortable('toArray');
+                var data = '';
+                const bindData = new Promise((resolve, reject) => {
+                    for (let i = 0; i < order.length; i++) {
+                        data += 'orderStatuses[]=' + order[i];
+                        if (i + 1 < order.length) {
+                            data += '&';
+                        }
+                    }
+                    resolve(data);
+                });
+                bindData.then(
+                    function(value) {
+                        fcom.ajax(fcom.makeUrl('OrderStatus', 'setOrderStatusesOrder'), value, function(res) {
+                            fcom.removeLoader();
+                            $.ykmsg.close();
+                            var ans = $.parseJSON(res);
+                            if (ans.status == 1) {
+                                $.ykmsg.success(ans.msg);
+                                return;
+                            }
+                            $.ykmsg.error(ans.msg);
+                        });
+                    },
+                    function(error) {
+                        fcom.removeLoader();
+                        $.ykmsg.close();
+                    }
+                );
+            },
+        });
+        $("#orderStatuses > tbody").disableSelection();
+    }
 </script>

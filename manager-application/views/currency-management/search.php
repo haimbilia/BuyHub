@@ -14,17 +14,14 @@ foreach ($arrListing as $sn => $row) {
 
     foreach ($fields as $key => $val) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
-        $tdAttr = ('dragdrop' == $key) ? [...$tdAttr, 'class' => 'dragHandle'] : $tdAttr;
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'dragdrop':
-                if ($row['currency_active'] == applicationConstants::ACTIVE) {
-                    $td->appendElement('plaintext', $tdAttr, '<svg class="svg" width="18" height="18">
-                                                                <use
-                                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#drag">
-                                                                </use>
-                                                            </svg>', true);
-                }
+                $td->appendElement('plaintext', $tdAttr, '<svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#drag">
+                                                            </use>
+                                                        </svg>', true);
                 break;
             case 'select_all':
                 $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="currency_ids[]" value=' . $row['currency_id'] . '><i class="input-helper"></i></label>', true);

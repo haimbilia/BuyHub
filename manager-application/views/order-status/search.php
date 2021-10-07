@@ -13,23 +13,15 @@ foreach ($arrListing as $sn => $row) {
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
     $tr->setAttribute("id", $row['orderstatus_id']);
     foreach ($fields as $key => $val) {
-        $tdAttr = [];
-        if ('action' == $key) {
-            $tdAttr = ['class' => 'align-right'];
-        } else if ('dragdrop' == $key) {
-            $tdAttr = ['class' => 'dragHandle'];
-        }
-        
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];        
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'dragdrop':
-                if ($row['orderstatus_is_active'] == applicationConstants::ACTIVE) {
-                    $td->appendElement('plaintext', $tdAttr, '<svg class="svg" width="18" height="18">
-                                                                <use
-                                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#drag">
-                                                                </use>
-                                                            </svg>', true);
-                }
+                $td->appendElement('plaintext', $tdAttr, '<svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#drag">
+                                                            </use>
+                                                        </svg>', true);
                 break;
             case 'select_all':
                 $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="orderstatus_ids[]" value=' . $row['orderstatus_id'] . '><i class="input-helper"></i></label>', true);
