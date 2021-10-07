@@ -169,7 +169,7 @@ class OrderStatusController extends AdminBaseController
 
     public function setLangTemplateData(array $constructorArgs = []): void
     {
-        $this->objPrivilege->canEditZones();
+        $this->objPrivilege->canEditOrderStatus();
         $this->modelObj = (new ReflectionClass('OrderStatus'))->newInstanceArgs($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->adminLangId));

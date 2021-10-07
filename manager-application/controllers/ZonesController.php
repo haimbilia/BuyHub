@@ -131,8 +131,7 @@ class ZonesController extends AdminBaseController
         }
         
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
-
-        $this->set('msg', $this->str_update_record);      
+         
         $this->_template->render(false, false, 'json-success.php');
     }
 

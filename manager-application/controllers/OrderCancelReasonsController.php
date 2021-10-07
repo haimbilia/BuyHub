@@ -143,7 +143,7 @@ class OrderCancelReasonsController extends AdminBaseController
 
     public function setLangTemplateData(array $constructorArgs = []): void
     {
-        $this->objPrivilege->canEditZones();
+        $this->objPrivilege->canEditOrderCancelReasons();
         $this->modelObj = (new ReflectionClass('OrderCancelReason'))->newInstanceArgs($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('title')];
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_CANCEL_REASON_SETUP', $this->adminLangId));
