@@ -273,7 +273,7 @@ class ShippingDurationsController extends AdminBaseController
         }
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmshipDurationSearch');
         $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');

@@ -515,7 +515,7 @@ class BlogPostCategoriesController extends AdminBaseController
         return $frm;
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->addHiddenField('', 'bpcategory_parent', 0, array('id' => 'bpcategory_parent'));

@@ -62,6 +62,36 @@ $(document).on('search', "input[name='keyword']", function () {
         searchRecords(frm);
     };
 
+    loadMore = function () {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
+        var frm = document.frmLoadMoreRecordsPaging;
+        var page = 1;
+        if ('undefined' != typeof frm.page.value && '' != frm.page.value && 0 < frm.page.value) {
+            page += parseInt(frm.page.value);
+        }
+
+        $(frm.page).val(page);
+        var reference = $('.appendRowsJs .rowJs:last').data('reference');
+        if ('undefined' != typeof reference && 'undefined' != typeof frm.reference) {
+            $(frm.reference).val(reference);
+        }
+
+        var data = fcom.frmData(frm);
+
+        $('.appendRowsJs .rowJs:last').clone().removeAttr('class').addClass('rowJs').appendTo('.appendRowsJs').html(fcom.getRowSpinner());
+        fcom.ajax(fcom.makeUrl(controllerName, 'getRows'), data, function (rows) {
+            $('.appendRowsJs .rowJs:last').remove();
+            $('.appendRowsJs').append(rows);
+
+            if (page == frm.pageCount.value) {
+                $('.loadMorePaginationJs').remove();
+            }
+        });
+    };
+
     setPageSize = function (pageSize) {
         var frm = document.frmRecordSearchPaging;
         $(frm.pageSize).val(pageSize);
@@ -81,7 +111,7 @@ $(document).on('search', "input[name='keyword']", function () {
         if (false === checkControllerName()) {
             return false;
         }
-       
+
         setColumnsData(frm);
         var data = '';
         if (frm) {
@@ -93,7 +123,7 @@ $(document).on('search', "input[name='keyword']", function () {
         fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
             var res = $.parseJSON(res);
             $(dv).replaceWith(res.listingHtml);
-            $(paginationDv).replaceWith(res.paginationHtml);            
+            $(paginationDv).replaceWith(res.paginationHtml);
             fcom.removeLoader();
             $('.selectAllJs').prop('checked', false);
         });
@@ -476,6 +506,17 @@ $(document).on('search', "input[name='keyword']", function () {
             }
         });
     }
+
+    isInViewport = function (el) {
+        const rect = el.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+
+        );
+    }
 })();
 
 $(document).on("click", ".selectItemJs", function () {
@@ -493,5 +534,16 @@ $(document).on("click", ".selectItemJs", function () {
         $(faceboxActionBtns + " .toolbar-btn-js").addClass('disabled').removeClass('selected');
     } else {
         $(faceboxActionBtns + " .toolbar-btn-js").removeClass('disabled').addClass('selected');
+    }
+});
+
+$(document).ajaxComplete(function () {
+    if (0 < $('.loadMoreOnScrollBtnJs').length) {
+        $(window).scroll(function () {
+            const element = document.querySelector('.loadMoreOnScrollBtnJs');
+            if (isInViewport(element)) {
+                alert('kllkk');
+            }
+        });
     }
 });

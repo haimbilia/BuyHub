@@ -67,6 +67,10 @@ $(document).ready(function () {
             $('.loaderJs').remove();
             $('.submitBtnJs').removeClass('loading');
         },
+
+        getRowSpinner: function () {
+            return '<div class="spinner spinner--v2 spinner--sm spinner--brand"></div>';
+        },
     });
 
     clearCache = function () {

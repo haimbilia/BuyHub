@@ -29,7 +29,7 @@ class OptionsController extends AdminBaseController
         $this->_template->render();
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmOptionSearch', array('id' => 'frmOptionSearch'));
         $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');

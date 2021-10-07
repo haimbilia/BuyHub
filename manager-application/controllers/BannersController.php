@@ -659,7 +659,7 @@ class BannersController extends AdminBaseController
         return $data;
     }
 
-    /* private function getSearchForm(){
+    /* public function getSearchForm(){
     $this->objPrivilege->canViewBanners();
     $frm = new Form('frmBannerSearch');
     return $frm;

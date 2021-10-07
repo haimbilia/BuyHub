@@ -15,7 +15,7 @@ class AbandonedCartController extends AdminBaseController
         $this->_template->render();
     }
     
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmAbandonedCartSearch');
         $frm->addTextBox(Labels::getLabel('LBL_User', $this->adminLangId), 'user_name');

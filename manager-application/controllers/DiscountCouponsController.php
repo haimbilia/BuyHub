@@ -1036,7 +1036,7 @@ class DiscountCouponsController extends AdminBaseController
         FatUtility::dieJsonSuccess($this->str_update_record);
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmCouponSearch');
         $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');

@@ -203,7 +203,7 @@ class ProductReviewsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'reviewed_for_id');

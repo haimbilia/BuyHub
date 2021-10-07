@@ -31,7 +31,7 @@ class TagsController extends AdminBaseController
         $this->_template->render();
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmTagSearch', array('id' => 'frmTagSearch'));
         $f1 = $frm->addTextBox(Labels::getLabel('LBL_Product_Name', $this->adminLangId), 'keyword', '', array('class' => 'search-input'));

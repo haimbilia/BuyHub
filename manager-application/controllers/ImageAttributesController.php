@@ -334,7 +334,7 @@ class ImageAttributesController extends AdminBaseController
         }
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmSearch');
         $attachedFile = new AttachedFile();

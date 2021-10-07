@@ -412,7 +412,7 @@ class FaqCategoriesController extends AdminBaseController
         }
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmSearch');
         $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');

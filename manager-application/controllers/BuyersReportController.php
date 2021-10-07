@@ -151,7 +151,7 @@ class BuyersReportController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    private function getSearchForm($fields = [])
+    public function getSearchForm($fields = [])
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page');

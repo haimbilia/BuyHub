@@ -85,7 +85,7 @@ class DiscountCouponsReportController extends AdminBaseController
         $this->search('export');
     }
 
-    private function getSearchForm($couponDate = '')
+    public function getSearchForm($couponDate = '')
     {
         $frm = new Form('frmDiscountCouponsReportSearch');
         $frm->addHiddenField('', 'page');

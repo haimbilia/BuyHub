@@ -90,7 +90,7 @@ class SmartRecomendedWeightagesController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmSearch');
         $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');

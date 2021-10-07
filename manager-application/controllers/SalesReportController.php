@@ -157,7 +157,7 @@ class SalesReportController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    private function getSearchForm($fields = [], $orderDate = '')
+    public function getSearchForm($fields = [], $orderDate = '')
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page');

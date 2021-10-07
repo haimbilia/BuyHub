@@ -104,7 +104,7 @@ class TaxReportController extends AdminBaseController
         $this->search('export');
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmTaxReportSearch');
         $frm->addHiddenField('', 'page', 1);

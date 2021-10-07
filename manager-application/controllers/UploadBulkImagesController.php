@@ -70,7 +70,7 @@ class UploadBulkImagesController extends AdminBaseController
         FatUtility::dieJsonSuccess($json);
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->setRequiredStarWith('caption');

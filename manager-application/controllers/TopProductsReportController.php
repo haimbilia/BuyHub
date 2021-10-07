@@ -149,7 +149,7 @@ class TopProductsReportController extends AdminBaseController
         $this->search('export');
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmTopProductsReportSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));

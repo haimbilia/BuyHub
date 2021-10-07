@@ -29,7 +29,7 @@
             }
 
             var contentBody = "." + $.ykmodal.element + " .contentBody--js";
-            
+
             $(contentBody).html(data);
             var headerHtm = '<div class="modal-header">';
             var closeBtnHtm = '<button type="button" class="close ykmodalJs" data-dismiss="modal" aria-label="' + langLbl.close + '"><span aria-hidden="true">×</span></button>';
@@ -96,7 +96,7 @@
 
     function fillYKModalFromAjax(href) {
         $.ykmodal.jqxhr = $.get(href, function (data) {
-            $.ykmodal.reveal(data)
+            $.ykmodal.reveal(data);
         })
     }
 
@@ -107,9 +107,19 @@
     $(document).on("hidden.bs.modal", "." + $.ykmodal.element, function () {
         $.ykmodal.close()
     });
-    
+
     $(document).on("click", ".submitBtnJs", function () {
         $('.' + $.ykmodal.element + ' form').submit();
         $(this).addClass('loading');
+    });
+
+    $('.' + $.ykmodal.element).on("scroll", function () {
+        console.log("Scrolling");
+    });
+
+    $(document).on("shown.bs.modal", "." + $.ykmodal.element, function () {
+        $(this).on("scroll", function () {
+            // alert('l;l');
+        });
     });
 })(jQuery);

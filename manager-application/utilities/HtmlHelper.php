@@ -77,8 +77,14 @@ class HtmlHelper
             case 1:
                 return Labels::getLabel('LBL_YESTERDAY', $langId);
                 break;
-            default:
+            case 2:
+            case 3:
+            case 4:
                 return CommonHelper::replaceStringData(Labels::getLabel('LBL_{COUNT}_DAYS_AGO', $langId), ['{COUNT}' => $diff]);
+                break;    
+            default:
+                return date('d-m-Y', $theDate);
+                break; 
         }
     }
 

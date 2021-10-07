@@ -167,7 +167,7 @@ class UsersReportController extends AdminBaseController
         $this->search('export');
     }
 
-    private function getSearchForm($fields = [], $usertype = User::USER_TYPE_BUYER)
+    public function getSearchForm($fields = [], $usertype = User::USER_TYPE_BUYER)
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);

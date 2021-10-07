@@ -418,7 +418,7 @@ class ProductsController extends AdminBaseController
         die(json_encode($json));
     }
 
-    private function getSearchForm()
+    public function getSearchForm()
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->setRequiredStarWith('caption');
