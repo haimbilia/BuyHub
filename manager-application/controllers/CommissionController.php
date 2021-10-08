@@ -17,7 +17,8 @@ class CommissionController extends AdminBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_COMMISSION', $this->adminLangId));
         $this->getListingData();
-
+        $this->_template->addJs(array('js/select2.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
     }
 
@@ -110,8 +111,8 @@ class CommissionController extends AdminBaseController
         $this->objPrivilege->canEditCommissionSettings();
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $frm = $this->getForm($recordId);
 
+        $data = $userArr = $prodArr = $catArr = [];
         if (0 < $recordId) {
             $data = Commission::getAttributesById(
                 $recordId,
@@ -124,7 +125,7 @@ class CommissionController extends AdminBaseController
             if ($data['commsetting_user_id'] > 0) {
                 $userObj = new User($data['commsetting_user_id']);
                 $res = $userObj->getUserInfo();
-                $data['user_name'] = isset($res['credential_username']) ? $res['credential_username'] : '';
+                $userArr[$data['commsetting_user_id']] = isset($res['credential_username']) ? $res['credential_username'] : '';
             }
 
             if ($data['commsetting_product_id'] > 0) {
@@ -134,15 +135,19 @@ class CommissionController extends AdminBaseController
                 $prodObj->doNotCalculateRecords();
                 $prodObj->setPageSize(1);
                 $row = FatApp::getDb()->fetch($prodObj->getResultSet());
-                $data['product'] = isset($row['product_name']) ? $row['product_name'] : '';
+                $prodArr[$data['commsetting_product_id']] = isset($row['product_name']) ? $row['product_name'] : '';
             }
 
             if ($data['commsetting_prodcat_id'] > 0) {
                 $prodCat = new ProductCategory();
                 $selectedCatName = $prodCat->getParentTreeStructure($data['commsetting_prodcat_id'], 0, '', $this->adminLangId);
-                $data['category_name'] = html_entity_decode($selectedCatName);
+                $catArr[$data['commsetting_prodcat_id']] = html_entity_decode($selectedCatName);
             }
+           
+        }
 
+        $frm = $this->getForm($recordId, $userArr, $prodArr, $catArr);
+        if(!empty($data)){
             $frm->fill($data);
         }
 
@@ -162,6 +167,10 @@ class CommissionController extends AdminBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
+
+        $post['commsetting_prodcat_id'] = FatApp::getPostedData('commsetting_prodcat_id', FatUtility::VAR_INT, 0);
+        $post['commsetting_user_id'] = FatApp::getPostedData('commsetting_user_id', FatUtility::VAR_INT, 0);
+        $post['commsetting_product_id'] = FatApp::getPostedData('commsetting_product_id', FatUtility::VAR_INT, 0);
 
         $recordId = $post['commsetting_id'];
         unset($post['commsetting_id']);
@@ -212,7 +221,7 @@ class CommissionController extends AdminBaseController
         $srch->setPageSize($pagesize);
 
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-       
+
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -287,6 +296,12 @@ class CommissionController extends AdminBaseController
 
     public function userAutoComplete()
     {
+        $pagesize = 20;
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+
         $userObj = new User();
         $srch = $userObj->getUserSearchObj(array('u.user_name', 'u.user_id', 'credential_username', 'COALESCE(s_l.shop_name, shop.shop_identifier) as shop_name'));
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
@@ -301,45 +316,58 @@ class CommissionController extends AdminBaseController
             $cnd->attachCondition('s_l.shop_name', 'LIKE', '%' . $post['keyword'] . '%');
         }
 
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
+
         $rs = $srch->getResultSet();
         $users = FatApp::getDb()->fetchAll($rs, 'user_id');
 
-        $json = array();
+        $json = array(
+            'pageCount' => $srch->pages()
+        );
         foreach ($users as $key => $user) {
             $shopName = $user['shop_name'];
-            $json[] = array(
+            $json['results'][] = array(
                 'id' => $key,
-                'name' => $shopName . ' ( ' . strip_tags(html_entity_decode($user['credential_username'], ENT_QUOTES, 'UTF-8')) . ' )'
+                'text' => $shopName . ' ( ' . strip_tags(html_entity_decode($user['credential_username'], ENT_QUOTES, 'UTF-8')) . ' )'
             );
         }
-        die(json_encode($json));
+        die(FatUtility::convertToJson($json));
     }
 
     public function productAutoComplete()
     {
+        $pagesize = 20;
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+
+        if ($page < 2) {
+            $page = 1;
+        }
+
         $srch = Product::getSearchObject($this->adminLangId);
 
         $post = FatApp::getPostedData();
         if (!empty($post['keyword'])) {
             $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
         }
-
-        $srch->setPageSize(10);
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
         $srch->addMultipleFields(array('product_id', 'IFNULL(product_name,product_identifier) as product_name'));
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $products = $db->fetchAll($rs, 'product_id');
-        $json = array();
+  
+        $products = FatApp::getDb()->fetchAll($srch->getResultSet(), 'product_id');
+        $json = array(
+            'pageCount' => $srch->pages()
+        );
         foreach ($products as $key => $product) {
-            $json[] = array(
+            $json['results'][] = array(
                 'id' => $key,
-                'name' => strip_tags(html_entity_decode($product['product_name'], ENT_QUOTES, 'UTF-8'))
+                'text' => strip_tags(html_entity_decode($product['product_name'], ENT_QUOTES, 'UTF-8'))
             );
         }
-        die(json_encode($json));
+        die(FatUtility::convertToJson($json));
     }
 
-    private function getForm($recordId = 0)
+    private function getForm($recordId = 0, $userArr, $prodArr, $catArr)
     {
         $recordId = FatUtility::int($recordId);
         $isMandatory = false;
@@ -350,20 +378,16 @@ class CommissionController extends AdminBaseController
         $frm->addHiddenField('', 'commsetting_id', $recordId);
 
         if (!$isMandatory) {
-            $frm->addSelectBox(Labels::getLabel('LBL_Category_Name', $this->adminLangId), 'category_name', []);
-            $frm->addSelectBox(Labels::getLabel('LBL_Seller', $this->adminLangId), 'user_name', []);
-            $frm->addSelectBox(Labels::getLabel('LBL_Product', $this->adminLangId), 'product', []);
-
-            $frm->addHiddenField('', 'commsetting_user_id', 0);
-            $frm->addHiddenField('', 'commsetting_product_id', 0);
-            $frm->addHiddenField('', 'commsetting_prodcat_id', 0);
+            $frm->addSelectBox(Labels::getLabel('LBL_Category_Name', $this->adminLangId), 'commsetting_prodcat_id', $catArr, '', [], '');
+            $frm->addSelectBox(Labels::getLabel('LBL_Seller', $this->adminLangId), 'commsetting_user_id', $userArr, '', [], '');
+            $frm->addSelectBox(Labels::getLabel('LBL_Product', $this->adminLangId), 'commsetting_product_id', $prodArr, '', [], '');
         }
 
         $fld = $frm->addFloatField(Labels::getLabel('LBL_Commission_fees_(%)', $this->adminLangId), 'commsetting_fees');
         $fld->requirements()->setRange('0', '100');
         return $frm;
     }
-    
+
     private function getFormColumns(): array
     {
         $commissionTblHeadingCols = CacheHelper::get('commissionTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');

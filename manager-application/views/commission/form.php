@@ -3,6 +3,21 @@
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form form-edit layout--' . $formLayout);
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
+
+$fld = $frm->getField('commsetting_prodcat_id');
+if (null != $fld) {
+    $fld->setfieldTagAttribute('id', "commsetting_prodcat_id");
+}
+$fld = $frm->getField('commsetting_user_id');
+if (null != $fld) {
+    $fld->setfieldTagAttribute('id', "commsetting_user_id");
+}
+
+$fld = $frm->getField('commsetting_product_id');
+if (null != $fld) {
+    $fld->setfieldTagAttribute('id', "commsetting_product_id");
+}
+
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
@@ -18,12 +33,12 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
         <div class="row">
             <div class="col-auto">
                 <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
-                    <?php 
-                        if (0 < $recordId) {
-                            echo Labels::getLabel('LBL_UPDATE', $adminLangId); 
-                        } else {
-                            echo Labels::getLabel('LBL_SAVE', $adminLangId); 
-                        }
+                    <?php
+                    if (0 < $recordId) {
+                        echo Labels::getLabel('LBL_UPDATE', $adminLangId);
+                    } else {
+                        echo Labels::getLabel('LBL_SAVE', $adminLangId);
+                    }
                     ?>
                 </button>
             </div>
@@ -32,85 +47,15 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 </div>
 
 <script type="text/javascript">
-$("document").ready(function(){
-    $('input[name=\'user_name\']').autocomplete({
-        'classes': {
-            "ui-autocomplete": "custom-ui-autocomplete"
-        },
-        'source': function(request, response) {
-            $.ajax({
-                url: fcom.makeUrl('Commission', 'userAutoComplete'),
-                data: {keyword: request['term'],fIsAjax:1},
-                dataType: 'json',
-                type: 'post',
-                success: function(json) {
-                    response($.map(json, function(item) {
-                        return { label: item['name'], value: item['name'], id: item['id'] };
-                    }));
-                },
-            });
-        },
-        select: function(event, ui) {
-            $("input[name='commsetting_user_id']").val( ui.item.id );
+    $("document").ready(function() {
+        if ($('#commsetting_user_id').length) {
+            select2('commsetting_user_id', fcom.makeUrl('Commission', 'userAutoComplete'));
+        }
+        if ($('#commsetting_product_id').length) {
+            select2('commsetting_product_id', fcom.makeUrl('Commission', 'productAutoComplete'));
+        }
+        if ($('#commsetting_prodcat_id').length) {
+            select2('commsetting_prodcat_id', fcom.makeUrl('productCategories', 'links_autocomplete'));
         }
     });
-
-    $('input[name=\'user_name\']').keyup(function(){
-        $('input[name=\'commsetting_user_id\']').val('');
-    });
-
-    $('input[name=\'product\']').autocomplete({
-        'classes': {
-            "ui-autocomplete": "custom-ui-autocomplete"
-        },
-        'source': function(request, response) {
-            $.ajax({
-                url: fcom.makeUrl('Commission', 'productAutoComplete'),
-                data: {keyword: request['term'],fIsAjax:1},
-                dataType: 'json',
-                type: 'post',
-                success: function(json) {
-                    response($.map(json, function(item) {
-                        return { label: item['name'], value: item['name'], id: item['id'] };
-                    }));
-                },
-            });
-        },
-        select: function(event, ui) {
-			$('input[name=\'commsetting_product_id\']').val(ui.item.id);
-		}
-    });
-
-    $('input[name=\'product\']').keyup(function(){
-        $('input[name=\'commsetting_product_id\']').val('');
-    });
-
-    $('input[name=\'category_name\']').autocomplete({
-        'classes': {
-            "ui-autocomplete": "custom-ui-autocomplete"
-        },
-        source: function(request, response) {
-			$.ajax({
-				url: fcom.makeUrl('productCategories', 'links_autocomplete'),
-				data: {keyword: request['term'],fIsAjax:1},
-				dataType: 'json',
-				type: 'post',
-				success: function(json) {
-					response($.map(json, function(item) {
-						return { label: item['name'], value: item['name'], id: item['id'] };
-					}));
-				},
-			});
-		},
-		select: function(event, ui) {
-			$('input[name=\'commsetting_prodcat_id\']').val(ui.item.id);
-		}
-	});
-
-    $('input[name=\'category_name\']').change(function() {
-        if ($(this).val() == '') {
-            $("input[name='commsetting_prodcat_id']").val(0);
-        }
-    });
-});
 </script>

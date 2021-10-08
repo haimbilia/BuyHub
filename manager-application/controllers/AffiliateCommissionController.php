@@ -17,7 +17,8 @@ class AffiliateCommissionController extends AdminBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_AFFILIATE_COMMISSION', $this->adminLangId));
         $this->getListingData();
-
+        $this->_template->addJs(array('js/select2.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
     }
 
@@ -53,7 +54,7 @@ class AffiliateCommissionController extends AdminBaseController
             $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         }
 
-        $attr = array('afcs.*', 'affiliate_cred.credential_username', 'IFNULL(prd_cat_l.prodcat_name, prod_cat.prodcat_identifier) as prodcat_name','afcommsetting_id as listSerial');
+        $attr = array('afcs.*', 'affiliate_cred.credential_username', 'IFNULL(prd_cat_l.prodcat_name, prod_cat.prodcat_identifier) as prodcat_name', 'afcommsetting_id as listSerial');
         $srch = AffiliateCommission::getSearchObject($this->adminLangId);
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'afcs.afcommsetting_user_id = affiliate_user.user_id', 'affiliate_user');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'affiliate_cred.credential_user_id = affiliate_user.user_id', 'affiliate_cred');
@@ -106,8 +107,8 @@ class AffiliateCommissionController extends AdminBaseController
     public function form()
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $frm = $this->getForm($recordId);
 
+        $data = $catArr = $userArr = [];
         if ($recordId > 0) {
             $data = AffiliateCommission::getAttributesById(
                 $recordId,
@@ -120,15 +121,19 @@ class AffiliateCommissionController extends AdminBaseController
             if ($data['afcommsetting_user_id'] > 0) {
                 $userObj = new User($data['afcommsetting_user_id']);
                 $userData = $userObj->getUserInfo();
-                $data['affiliate_name'] = isset($userData['credential_username']) ? $userData['credential_username'] : $userData['user_name'];
+                $userName = isset($userData['credential_username']) ? $userData['credential_username'] : $userData['user_name'];
+                $userArr[$data['afcommsetting_user_id']] =  $userName;
             }
 
             if ($data['afcommsetting_prodcat_id'] > 0) {
                 $prodCat = new ProductCategory();
                 $selectedCatName = $prodCat->getParentTreeStructure($data['afcommsetting_prodcat_id'], 0, '', $this->adminLangId);
-                $data['category_name'] = html_entity_decode($selectedCatName);
+                $catArr[$data['afcommsetting_prodcat_id']] = html_entity_decode($selectedCatName);
             }
+        }
 
+        $frm = $this->getForm($recordId, $userArr, $catArr);
+        if (!empty($data)) {
             $frm->fill($data);
         }
 
@@ -151,6 +156,7 @@ class AffiliateCommissionController extends AdminBaseController
         }
 
         $post['afcommsetting_prodcat_id'] = FatApp::getPostedData('afcommsetting_prodcat_id', FatUtility::VAR_INT, 0);
+        $post['afcommsetting_user_id'] = FatApp::getPostedData('afcommsetting_user_id', FatUtility::VAR_INT, 0);
 
         $recordId = FatApp::getPostedData('afcommsetting_id', FatUtility::VAR_INT, 0);
         $isMandatory = false;
@@ -285,7 +291,7 @@ class AffiliateCommissionController extends AdminBaseController
         FatApp::getDb()->deleteRecords(AffiliateCommission::DB_TBL, array('smt' => 'afcommsetting_id = ?', 'vals' => array($recordId)));
     }
 
-    private function getForm($recordId = 0)
+    private function getForm($recordId = 0, $userArr = [], $catArr = [])
     {
         $recordId = FatUtility::int($recordId);
 
@@ -298,11 +304,8 @@ class AffiliateCommissionController extends AdminBaseController
         }
 
         if (!$isMandatory) {
-            $frm->addTextBox(Labels::getLabel('LBL_Category_Name', $this->adminLangId), 'category_name');
-            $frm->addTextBox(Labels::getLabel('LBL_Affiliate_Name', $this->adminLangId), 'affiliate_name');
-
-            $frm->addHiddenField('', 'afcommsetting_user_id', 0);
-            $frm->addHiddenField('', 'afcommsetting_prodcat_id', 0);
+            $frm->addSelectBox(Labels::getLabel('LBL_Category_Name', $this->adminLangId), 'afcommsetting_prodcat_id', $catArr, '', [], '');
+            $frm->addSelectBox(Labels::getLabel('LBL_Affiliate_Name', $this->adminLangId), 'afcommsetting_user_id', $userArr, '', [], '');
         }
 
         $frm->addFloatField(Labels::getLabel('LBL_Affiliate_Commission_fees', $this->adminLangId), 'afcommsetting_fees');
@@ -322,7 +325,7 @@ class AffiliateCommissionController extends AdminBaseController
         }
         return $this->nodes;
     }
-    
+
     private function getFormColumns(): array
     {
         $affCommissionTblHeadingCols = CacheHelper::get('affCommissionTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');

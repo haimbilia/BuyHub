@@ -1695,6 +1695,11 @@ class UsersController extends AdminBaseController
     public function autoCompleteJson()
     {
         $pagesize = 20;
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+
         $post = FatApp::getPostedData();
         $this->objPrivilege->canViewUsers();
 
@@ -1766,24 +1771,29 @@ class UsersController extends AdminBaseController
             $credential_verified = $post['credential_verified'];
             $srch->addCondition('uc.credential_verified', '=', $credential_verified);
         }
-
+        $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $users = $db->fetchAll($rs, 'user_id');
-        $json = array();
+        $json = array(
+            'pageCount' => $srch->pages()
+        );
         foreach ($users as $key => $user) {
             $name = (0 < $joinShop) ? $user['user_name'] . ' (' . $user['shop_name'] . ')' : $user['user_name'];
-            $json[] = array(
+            $json['results'][] = array(
                 'id' => $key,
+                'text' => strip_tags(html_entity_decode($name, ENT_QUOTES, 'UTF-8')),
+                /*
                 'name' => strip_tags(html_entity_decode($name, ENT_QUOTES, 'UTF-8')),
                 'username' => strip_tags(html_entity_decode($user['credential_username'], ENT_QUOTES, 'UTF-8')),
-                'credential_email' => strip_tags(html_entity_decode($user['credential_email'], ENT_QUOTES, 'UTF-8')),
+                'credential_email' => strip_tags(html_entity_decode($user['credential_email'], ENT_QUOTES, 'UTF-8')), 
+                */      
             );
-        }
+        }     
 
-        die(json_encode($json));
+        die(FatUtility::convertToJson($json));
     }
 
     public function verify()
