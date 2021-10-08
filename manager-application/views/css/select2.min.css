@@ -20,3 +20,7 @@
 .select2-container--default .select2-selection--single .select2-selection__rendered {
     flex: 1;
 }
+
+.select2-container{
+    display:block;
+}

@@ -479,9 +479,9 @@ class ProductCategoriesController extends AdminBaseController
         $arr_options = $prodCatObj->getAutoCompleteProdCatTreeStructure(0, $this->adminLangId, $keyword);
         $json = array();
         foreach ($arr_options as $key => $product) {
-            $json[] = array(
+            $json['results'][] = array(
                 'id' => $key,
-                'name' => strip_tags(html_entity_decode($product, ENT_QUOTES, 'UTF-8'))
+                'text' => strip_tags(html_entity_decode($product, ENT_QUOTES, 'UTF-8'))
             );
         }
         die(json_encode($json));
