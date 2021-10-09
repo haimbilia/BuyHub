@@ -6,7 +6,7 @@
                 <div class="card">
                     <div class="card-head">
                         <div class="card-head-label">
-                            <h3 class="card-head-title">                                
+                            <h3 class="card-head-title">
                                 <?php echo Labels::getLabel('LBL_IMPORT_EXPORT', $adminLangId); ?>
                             </h3>
                         </div>
@@ -20,8 +20,7 @@
                 </div>
             </div>
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body" id="tabData"> </div>
+                <div class="card" id="tabData">
                 </div>
             </div>
         </div>

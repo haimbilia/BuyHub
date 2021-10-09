@@ -828,7 +828,7 @@ class ImportExportController extends AdminBaseController
 
         $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_1_for_yes_0_for_no", $this->adminLangId), 'CONF_USE_O_OR_1', 1, array(), false, 0);
         $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_1_for_yes_0_for_no_for_status_type_data", $this->adminLangId) . '</small>';
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_Save_Changes", $this->adminLangId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_Save_Changes", $this->adminLangId));
         return $frm;
     }
 
@@ -836,6 +836,7 @@ class ImportExportController extends AdminBaseController
     {
         $frm = $this->getSettingForm($this->adminLangId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        var_dump($post);exit;
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());

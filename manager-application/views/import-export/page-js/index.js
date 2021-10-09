@@ -33,10 +33,13 @@ $(document).ready(function () {
     };
 
     updateSettings = function (frm) {
+        $('.importExportBtnJs').addClass('loading');
         var data = fcom.frmData(frm);
-        $(dv).html(fcom.getLoader());
+        console.log(data); return;
+        $(dv).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'updateSettings'), data, function (ans) {
             loadForm('settings');
+            $('.importExportBtnJs').removeClass('loading');
         });
     };
 
