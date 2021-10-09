@@ -10,7 +10,6 @@ class PayFortStartSettingsController extends PaymentMethodSettingsController
         $frm->addRequiredField(Labels::getLabel('LBL_API_Secret_Key', $langId), 'secret_key');
         $frm->addRequiredField(Labels::getLabel('LBL_API_Open_Key', $langId), 'open_key');
 
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
         return $frm;
     }
 }

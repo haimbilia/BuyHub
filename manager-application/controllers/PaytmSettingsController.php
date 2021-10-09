@@ -63,7 +63,6 @@ class PaytmSettingsController extends PaymentMethodSettingsController
         $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_PRODUCTION, 'eq', 'merchant_key', $merKeyUnReqObj);
         $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_PRODUCTION, 'eq', 'merchant_website', $merWebUnReqObj);
 
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
         return $frm;
     }
 

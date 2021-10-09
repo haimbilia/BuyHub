@@ -53,7 +53,6 @@ class PayfastSettingsController extends PaymentMethodSettingsController
         $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_PRODUCTION, 'eq', 'live_merchant_id', $reqLiveFld1);
         $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_PRODUCTION, 'eq', 'live_merchant_key', $reqLiveFld2);
 
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
         return $frm;
     }
 }

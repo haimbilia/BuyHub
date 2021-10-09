@@ -48,7 +48,6 @@ class PaynowSettingsController extends PaymentMethodSettingsController
         $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_PRODUCTION, 'eq', 'live_api_access_key', $reqLiveFld1);
         $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_PRODUCTION, 'eq', 'live_signature_calculation_key', $reqLiveFld2);
 
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
         return $frm;
     }
 }

@@ -95,6 +95,15 @@ $(document).ready(function () {
             }
         });
     };
+
+    isJson = function (str) {
+        try {
+            var json = JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return json;
+    }
 })();
 
 $(document).on("search", "#quickSearch", function (e) {

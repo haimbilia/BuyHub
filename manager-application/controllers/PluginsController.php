@@ -44,9 +44,13 @@ class PluginsController extends AdminBaseController
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
+        $type = FatApp::getPostedData('type', FatUtility::VAR_INT, PluginCommon::TYPE_CURRENCY_CONVERTER);
+
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
-        if (!array_key_exists($sortBy, $fields)) {
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'plugin_display_order');
+        if ((empty($sortBy) || 'listSerial' == $sortBy) && !in_array($type, Plugin::getKingpinTypeArr())) {
+            $sortBy = 'plugin_display_order';
+        } else if (!array_key_exists($sortBy, $fields) && 'plugin_display_order' != $sortBy) {
             $sortBy = current($allowedKeysForSorting);
         }
 
@@ -54,8 +58,6 @@ class PluginsController extends AdminBaseController
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
-
-        $type = FatApp::getPostedData('type', FatUtility::VAR_INT, PluginCommon::TYPE_CURRENCY_CONVERTER);
 
         $attr = array(
             'plg.*',
@@ -73,7 +75,6 @@ class PluginsController extends AdminBaseController
         }
 
         $srch->addOrder($sortBy, $sortOrder);
-        $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $arrListing = $db->fetchAll($srch->getResultSet());
 
@@ -132,13 +133,18 @@ class PluginsController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    public function form($pluginType)
+    public function form()
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (0 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $data = Plugin::getAttributesById($recordId, ['plugin_id', 'plugin_identifier', 'plugin_active', 'plugin_type']);
+        $pluginType = $data['plugin_type'];
         $frm = $this->getForm($pluginType, $recordId);
         $identifier = '';
         if (0 < $recordId) {
-            $data = Plugin::getAttributesById($recordId, ['plugin_id', 'plugin_identifier', 'plugin_active']);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -153,12 +159,12 @@ class PluginsController extends AdminBaseController
             $frm->fill($data);
         }
 
-        $this->set('identifier', $identifier);
         $this->set('languages', Language::getAllNames());
         $this->set('recordId', $recordId);
         $this->set('type', $pluginType);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('formTitle', CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $this->adminLangId), ['{PLUGIN-NAME}' => $identifier]));
+        $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
     public function setup()
@@ -222,106 +228,15 @@ class PluginsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($autoFillLangData = 0)
-    {
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $lang_id = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-
-        if (1 > $recordId || 1 > $lang_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $langFrm = $this->getLangForm($recordId, $lang_id);
-        if (0 < $autoFillLangData) {
-            $updateLangDataobj = new TranslateLangData(Plugin::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $lang_id);
-            if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-            $langData = current($translatedData);
-        } else {
-            $langData = Plugin::getAttributesByLangId($lang_id, $recordId);
-        }
-        if ($langData) {
-            $langFrm->fill($langData);
-        }
-
-        $pluginDetail = Plugin::getAttributesById($recordId, ['plugin_type', 'plugin_identifier']);
-
-        if (!in_array($pluginDetail['plugin_type'], Plugin::HAVING_DESCRIPTION)) {
-            $langFrm->removeField($langFrm->getField('plugin_description'));
-        }
-
-        $this->set('languages', Language::getAllNames());
-        $this->set('type', $pluginDetail['plugin_type']);
-        $this->set('identifier', $pluginDetail['plugin_identifier']);
-        $this->set('recordId', $recordId);
-        $this->set('lang_id', $lang_id);
-        $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
-    }
-
     public function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditPlugins();
         $this->modelObj = (new ReflectionClass('Plugin'))->newInstanceArgs($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name'), $this->modelObj::tblFld('description')];
-        $this->set('formTitle', Labels::getLabel('LBL_PLUGIN_SETUP', $this->adminLangId));
+        $this->isPlugin = true;
+        $identifier = Plugin::getAttributesById($this->mainTableRecordId, 'plugin_identifier');
+        $this->set('formTitle', CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $this->adminLangId), ['{PLUGIN-NAME}' => $identifier]));
     }
-
-    /* public function langSetup()
-    {
-        $this->objPrivilege->canEditPlugins();
-        $post = FatApp::getPostedData();
-
-        $recordId = $post['plugin_id'];
-        $lang_id = $post['lang_id'];
-
-        if ($recordId == 0 || $lang_id == 0) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $frm = $this->getLangForm($recordId, $lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        unset($post['plugin_id']);
-        unset($post['lang_id']);
-
-        $data = array(
-            'pluginlang_lang_id' => $lang_id,
-            'pluginlang_plugin_id' => $recordId,
-            'plugin_name' => $post['plugin_name'],
-            'plugin_description' => FatApp::getPostedData('plugin_description', FatUtility::VAR_STRING, ''),
-        );
-
-        $pluginObj = new Plugin($recordId);
-
-        if (!$pluginObj->updateLangData($lang_id, $data)) {
-            LibHelper::exitWithError($pluginObj->getError(), true);
-        }
-
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(Plugin::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = Plugin::getAttributesByLangId($langId, $recordId)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('pluginId', $recordId);
-        $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
-    } */
 
     public function uploadIcon($plugin_id)
     {
@@ -460,7 +375,7 @@ class PluginsController extends AdminBaseController
         return $frm;
     }
 
-    private function getLangForm($recordId = 0, $lang_id = 0)
+    protected function getLangForm($recordId = 0, $lang_id = 0)
     {
         $frm = new Form('frmPluginLang');
         $frm->addHiddenField('', 'plugin_id', $recordId);

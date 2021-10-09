@@ -42,44 +42,8 @@ if (!$canEdit || 2 > count($arrListing) || in_array($pluginType, Plugin::getKing
     }
 }
 
-$tableId = isset($tableId) ?  $tableId : '';
-
-$tbl = new HtmlElement(
-    'table',
-    array('width' => '100%', 'class' => 'table table-dashed', 'id' => $tableId)
-);
-$th = $tbl->appendElement('thead')->appendElement('tr');
-foreach ($fields as $key => $val) {
-    $headColumData = HtmlHelper::getListingHeaderColumnHtml($key, $sortBy, $sortOrder);
-    $cls = '';
-    $html = '';
-    if (in_array($key, $allowedKeysForSorting)) {
-        $cls .= 'headerColumnJs sorting ' . $headColumData['class'];
-        $html = $headColumData['html'];
-    }
-
-    if ('action' == strtolower($key)) {
-        $cls .= 'align-right';
-    }
-
-    $thWidth = '';
-    if (!empty($tableHeadAttrArr) && array_key_exists($key, $tableHeadAttrArr)) {
-        $thWidth = $tableHeadAttrArr[$key]['width'];
-    }
-
-    $td = $th->appendElement('th', ['class' => $cls, 'data-field' => $key, 'width' => $thWidth]);
-    $span = $td->appendElement('span');
-
-    switch ($key) {
-        case 'select_all':
-            $span->appendElement('plaintext', [], '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll(this)" class="selectAllJs"><i class="input-helper"></i></label>', true);
-            break;
-        default:
-            $span->appendElement('plaintext', [], $val . $html, true);
-            break;
-    }
-}
-$tbody = $tbl->appendElement('tbody', ['class' => 'listingRecordJs']);
+$tableId = "pluginsJs";
+require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
 
 $aspectRatioArr = AttachedFile::getRatioTypeArray($adminLangId);
 $msg = '';
@@ -165,19 +129,8 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
+                    $data['editButton'] = [];
                     $data['otherButtons'] = [
-                        [
-                            'attr' => [
-                                'href' => 'javascript:void(0)',
-                                'onclick' => "editPluginForm(" . $type . ", " . $row['plugin_id'] . ")",
-                                'title' => Labels::getLabel('LBL_EDIT', $adminLangId)
-                            ],
-                            'label' => '<svg class="svg" width="18" height="18">
-                                            <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
-                                            </use>
-                                        </svg>'
-                        ],
                         [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
