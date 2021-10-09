@@ -44,7 +44,7 @@
                 $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)
             ) { ?>
                 <li class="menu-item dropdown">
-                    <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('LBL_SITEMAP', $adminLangId); ?>">
+                    <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('LBL_ORDERS', $adminLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-buyer-orders">
@@ -120,6 +120,13 @@
                     <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
                         <h6 class=""><?php echo Labels::getLabel('LBL_SITEMAP', $adminLangId); ?></h6>
                         <ul class="nav">
+                            <?php if ($objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a href="<?php echo UrlHelper::generateUrl('UrlRewriting'); ?>" class="nav_link ">
+                                        <span class="nav_text"><?php echo Labels::getLabel('LBL_URL_REWRITING', $adminLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
                             <li class="nav_item">
                                 <a href="<?php echo UrlHelper::generateUrl('sitemap', 'generate'); ?>" class="nav_link ">
                                     <span class="nav_text"><?php echo Labels::getLabel('LBL_UPDATE_SITEMAP', $adminLangId); ?></span>
