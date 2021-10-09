@@ -367,7 +367,7 @@ class CommissionController extends AdminBaseController
         die(FatUtility::convertToJson($json));
     }
 
-    private function getForm($recordId = 0, $userArr, $prodArr, $catArr)
+    private function getForm($recordId = 0, $userArr = [], $prodArr = [], $catArr = [])
     {
         $recordId = FatUtility::int($recordId);
         $isMandatory = false;
