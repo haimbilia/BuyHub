@@ -30,8 +30,6 @@ foreach ($arrListing as $sn => $row) {
             case 'emptycartitem_identifier':
                 if ($row['emptycartitem_title'] != '') {
                     $td->appendElement('plaintext', $tdAttr, $row['emptycartitem_title'], true);
-                    $td->appendElement('br', $tdAttr);
-                    $td->appendElement('plaintext', $tdAttr, '(' . $row[$key] . ')', true);
                 } else {
                     $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 }
