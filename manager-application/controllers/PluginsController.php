@@ -56,13 +56,6 @@ class PluginsController extends AdminBaseController
         }
 
         $type = FatApp::getPostedData('type', FatUtility::VAR_INT, PluginCommon::TYPE_CURRENCY_CONVERTER);
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        $page = ($page <= 0) ? 1 : $page;
-
-        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
-        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
-            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        }
 
         $attr = array(
             'plg.*',
@@ -80,11 +73,9 @@ class PluginsController extends AdminBaseController
         }
 
         $srch->addOrder($sortBy, $sortOrder);
-
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-        $arrListing = $db->fetchAll($rs);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $arrListing = $db->fetchAll($srch->getResultSet());
 
         $activeTaxPluginFound = false;
         if (Plugin::TYPE_TAX_SERVICES == $type) {
@@ -117,10 +108,7 @@ class PluginsController extends AdminBaseController
         }
 
         $this->set("arrListing", $arrListing);
-        $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
         $this->set('postedData', FatApp::getPostedData());
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
 

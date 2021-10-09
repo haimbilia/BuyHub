@@ -119,7 +119,7 @@ class HtmlHelper
 
     public static function addClearButton(Form &$frm)
     {
-        $frm->addHtml('', 'btn_clear', '<button type="button" name="btn_clear" class="btn link" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', CommonHelper::getLangId()) . '</button>');
+        $frm->addHtml('', 'btn_clear', '<button type="button" name="btn_clear" class="btn btn-light" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', CommonHelper::getLangId()) . '</button>');
     }
 
     /* public static function createButton(string $label, array $attr = [])

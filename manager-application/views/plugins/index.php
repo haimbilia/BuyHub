@@ -12,7 +12,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <div class="card">
+                <div class="card sticky-sidebar">
                     <div class="card-head">
                         <div class="card-head-label">
                             <h3 class="card-head-title">
@@ -38,11 +38,11 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                                     </use>
                                                 </svg>
                                             </i>
-                                            <div class="">
+                                            <div>
                                                 <h6 class="settings-inner-title"><?php echo $tabName; ?></h6>
-                                                <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                <!-- <span class="settings-inner-desc">Lorem ipsum dolor sit amet
                                                     consectetur adipisicing
-                                                    elit. Suscipit est quos </span>
+                                                    elit. Suscipit est quos </span> -->
                                             </div>
                                         </a>
                                     </li>    
