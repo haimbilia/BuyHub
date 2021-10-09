@@ -15,7 +15,7 @@ class LanguagesController extends AdminBaseController
 
         $this->set('canEdit', $this->objPrivilege->canEditLanguage($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_STATES', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_LANGUAGES', $this->adminLangId));
         $this->getListingData();
 
         $this->_template->render();
