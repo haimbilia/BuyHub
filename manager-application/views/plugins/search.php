@@ -84,7 +84,7 @@ $tbody = $tbl->appendElement('tbody', ['class' => 'listingRecordJs']);
 $aspectRatioArr = AttachedFile::getRatioTypeArray($adminLangId);
 $msg = '';
 
-$serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
+$serialNo = 0;
 foreach ($arrListing as $sn => $row) {
     $serialNo++;
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
@@ -251,21 +251,4 @@ $frm->addHiddenField('', 'status'); ?>
         echo '</form>';
         ?>
     </div>
-</div>
-<div class="listingPaginationJs">
-    <?php
-    $postedData['page'] = $page;
-    $postedData['type'] = $type;
-    echo FatUtility::createHiddenFormFromData($postedData, array(
-        'name' => 'frmRecordSearchPaging'
-    )); ?>
-    
-    <?php if (1 < $pageCount) { ?>
-        <div class="card-foot">
-            <?php
-            $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'pageSize' => $pageSize, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
-            $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
-            ?>
-        </div>
-    <?php } ?>
 </div>
