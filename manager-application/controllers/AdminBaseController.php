@@ -871,13 +871,13 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-      
-        $renderPath = CONF_THEME_PATH.(str_replace("controller","",strtolower(get_called_class()))).DIRECTORY_SEPARATOR."lang-form.php";
-        if(file_exists($renderPath)){
+
+        $renderPath = CONF_THEME_PATH . (str_replace("controller", "", strtolower(get_called_class()))) . DIRECTORY_SEPARATOR . "lang-form.php";
+        if (file_exists($renderPath)) {
             $this->_template->render(false, false);
-        }else{
+        } else {
             $this->_template->render(false, false, '_partial/listing/lang-form.php');
-        }        
+        }
     }
 
     public function langSetup()
@@ -945,10 +945,11 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         $this->set('langId', $newTabLangId);
         $this->set('msg', $this->str_setup_successful);
     }
-        
+
     protected function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page');
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
         $fld->overrideFldType('search');
 

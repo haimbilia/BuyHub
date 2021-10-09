@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 /* No sorting functionality required if no record found. */
-if (1 > count($arrListing)) {
+if (2 > count($arrListing)) {
     $allowedKeysForSorting = [];
 }
 

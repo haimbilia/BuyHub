@@ -2,7 +2,7 @@
 $keywordPlaceholder = Labels::getLabel('LBL_SEARCH_EMPTY_CART_ITEMS', $adminLangId);
 
 /* No sorting functionality required if no record found. */
-if (1 > count($arrListing)) {
+if (2 > count($arrListing)) {
     $allowedKeysForSorting = [];
 }
 
