@@ -87,7 +87,66 @@ Slugify = function (str, str_val_id, is_slugify) {
         .replace(/-+$/, '');        
     if ($("#" + is_slugify).val() == 0){
         $("#" + str_val_id).val(str);
+    }        
+};
+
+/*
+expected response
+{
+  "results": [
+    {
+      "id": 1,
+      "text": "Option 1"
+    },
+    {
+      "id": 2,
+      "text": "Option 2"
     }
-        
+  ],
+  "pageCount" : 3 
+}
+
+postdata object like {record:1}
+*/
+select2 = function (elmId, url, postdata = {}, callbackOnSelect) {    
+    let ele = $("#" + elmId);
+    ele.select2({
+        closeOnSelect: true,
+        dir: layoutDirection,
+        //allowClear: true,
+        // placeholder: ele.attr('placeholder') || '',
+        ajax: {
+            url: url,
+            dataType: 'json',
+            delay: 250,
+            method: 'post',
+            data: function (params) {
+                return $.extend({
+                    keyword: params.term, // search term
+                    page: params.page, 
+                    fIsAjax:1          
+                }, postdata);                
+            },
+            processResults: function (data, params) {
+                params.page = params.page || 1;
+                data.pageCount = data.pageCount || 1;
+                return {
+                    results: data.results,
+                    pagination: {
+                        more: params.page < data.pageCount
+                    }
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 0,
+        dropdownPosition: 'below'
+    }).on('select2:selecting', function (e) {
+        if(typeof(callbackOnSelect) == 'function'){
+            callbackOnSelect(e);
+        }
+    });
+
+    $("."+$.ykmodal.element).removeAttr('tabindex');
 };
 

@@ -81,6 +81,32 @@
                 </li>
             <?php } ?>
 
+            <?php if (
+                $objPrivilege->canViewImportExport(AdminAuthentication::getLoggedAdminId(), true)
+            ) { ?>
+                <li class="menu-item dropdown">
+                    <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('LBL_IMPORT_EXPORT', $adminLangId); ?>">
+                        <span class="menu-icon">
+                            <svg class="svg" width="24" height="24">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-import-export">
+                                </use>
+                            </svg>
+                        </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
+                        <h6 class=""><?php echo Labels::getLabel('LBL_IMPORT_EXPORT', $adminLangId); ?></h6>
+                        <ul class="nav">
+                            <li class="nav_item">
+                                <a href="<?php echo UrlHelper::generateUrl('ImportExport'); ?>" class="nav_link ">
+                                    <span class="nav_text"><?php echo Labels::getLabel('LBL_IMPORT_EXPORT', $adminLangId); ?></span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+            <?php } ?>
+
             <?php if ($objPrivilege->canViewSitemap(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                 <li class="menu-item dropdown">
                     <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('LBL_SITEMAP', $adminLangId); ?>">

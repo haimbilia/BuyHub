@@ -25,7 +25,7 @@ class ImportExportController extends AdminBaseController
         $batchNumber = FatApp::getPostedData('batch_number', FatUtility::VAR_INT, 1);
         $sheetType = FatApp::getPostedData('sheet_type', FatUtility::VAR_INT, 0);
         $pluginId = FatApp::getPostedData('plugin_id', FatUtility::VAR_INT, 0);
-        
+
         if (1 > $langId) {
             $langId = CommonHelper::getLangId();
         }
@@ -75,9 +75,9 @@ class ImportExportController extends AdminBaseController
         }
 
         $obj = new Importexport();
-        if(0 < $pluginId){
+        if (0 < $pluginId) {
             $obj->setPluginId($pluginId);
-        }        
+        }
         $min = null;
         $max = null;
         switch ($exportDataRange) {
@@ -291,7 +291,7 @@ class ImportExportController extends AdminBaseController
 
         $this->set('frm', $frm);
         $this->set('actionType', $actionType);
-        $this->set('title', $title);
+        $this->set('formTitle', $title);
         $this->_template->render(false, false);
     }
 
@@ -327,7 +327,7 @@ class ImportExportController extends AdminBaseController
 
         $this->set('frm', $frm);
         $this->set('actionType', $actionType);
-        $this->set('title', $title);
+        $this->set('formTitle', $title);
         $this->_template->render(false, false);
     }
 
@@ -393,7 +393,7 @@ class ImportExportController extends AdminBaseController
         $this->set('frm', $frm);
         $this->set('actionType', $actionType);
         $this->set('displayMediaTab', $displayMediaTab);
-        $this->set('title', $title);
+        $this->set('formTitle', $title);
         $this->_template->render(false, false);
     }
 
@@ -454,7 +454,7 @@ class ImportExportController extends AdminBaseController
         }
         $title = Labels::getLabel('LBL_Import_Instructions', $langId);
         $this->set('pageData', $pageData);
-        $this->set('title', $title);
+        $this->set('formTitle', $title);
         $this->set('actionType', $actionType);
         $this->set('displayMediaTab', $displayMediaTab);
         $this->_template->render(false, false);
@@ -519,7 +519,7 @@ class ImportExportController extends AdminBaseController
         $this->set('frm', $frm);
         $this->set('actionType', $actionType);
         $this->set('displayMediaTab', $displayMediaTab);
-        $this->set('title', $title);
+        $this->set('formTitle', $title);
         $this->_template->render(false, false);
     }
 
@@ -653,7 +653,7 @@ class ImportExportController extends AdminBaseController
             $rangeTypeFld->requirements()->addOnChangerequirementUpdate(Importexport::BY_BATCHES, 'eq', 'batch_number', $batchNumberReqObj);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $langId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $langId));
         return $frm;
     }
 
@@ -690,13 +690,12 @@ class ImportExportController extends AdminBaseController
 
     public function export()
     {
-        $frm = $this->getExportForm($this->adminLangId);
-        $this->set('action', 'export');
-        $this->set('frm', $frm);
+        $options = Importexport::getImportExportTypeArr('export', $this->adminLangId, false);
+        $this->set('options', $options);
         $this->_template->render(false, false, 'import-export/export.php');
     }
 
-    private function getExportForm($langId)
+    /* private function getExportForm($langId)
     {
         $frm = new Form('frmExport', array('id' => 'frmExport'));
         $options = Importexport::getImportExportTypeArr('export', $langId, false);
@@ -709,25 +708,22 @@ class ImportExportController extends AdminBaseController
             array('onClick' => 'exportForm(this.value)')
         );
         return $frm;
-    }
+    } */
 
     public function import()
     {
-        $frm = $this->getImportForm($this->adminLangId);
+        $options = Importexport::getImportExportTypeArr('import', $this->adminLangId, false);
 
-        $this->set('action', 'import');
-        $this->set('frm', $frm);
+        $this->set('options', $options);
         $this->set('sitelangId', $this->adminLangId);
         $this->_template->render(false, false, 'import-export/import.php');
     }
 
-    private function getImportForm($langId)
+    /* private function getImportForm($langId)
     {
         $frm = new Form('frmImport', array('id' => 'frmImport'));
         $options = Importexport::getImportExportTypeArr('import', $langId, false);
-        /* if (!FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) {
-            unset($options[Importexport::TYPE_PRODUCTS]);
-        } */
+      
         $fld = $frm->addRadioButtons(
             '',
             'export_option',
@@ -738,7 +734,7 @@ class ImportExportController extends AdminBaseController
         );
 
         return $frm;
-    }
+    } */
 
     public function settings()
     {

@@ -256,4 +256,18 @@ class ZonesController extends AdminBaseController
     {
         return array_diff($fields, ['zone_active'], Common::excludeKeysForSort());
     }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_ZONES', $this->adminLangId)]
+                ];
+        }
+        return $this->nodes;
+    }
 }

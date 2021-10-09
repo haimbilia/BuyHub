@@ -15,7 +15,7 @@ $btn_clear->addFieldTagAttribute('onClick', 'clearSearch()');
                     <div class="row">
                         <div class="col--first col-lg-6">
                             <span class="page__icon"><i class="ion-android-star"></i></span>
-                            <h5><?php echo Labels::getLabel('LBL_Manage_Empty_Cart_Items', $adminLangId); ?> </h5> <?php $this->includeTemplate('_partial/header/header-breadcrumb.php'); ?>
+                            <h5><?php echo Labels::getLabel('LBL_EMPTY_CART_ITEMS', $adminLangId); ?> </h5> <?php $this->includeTemplate('_partial/header/header-breadcrumb.php'); ?>
                         </div>
                     </div>
                 </div>

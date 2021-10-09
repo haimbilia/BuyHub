@@ -19,7 +19,7 @@ $fld->setFieldTagAttribute('disabled', 'disabled');
     <div class="form-edit-body loaderContainerJs">
         <?php
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey)) { ?>
+        if (!empty($translatorSubscriptionKey) && 1 < count($languages)) { ?>
             <div class="row justify-content-end">
                 <div class="col-auto mb-4">
                     <input class="btn btn-outline-brand btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" onClick="labelsForm(<?php echo $recordId; ?>, <?php echo $labelType; ?>, 1)">

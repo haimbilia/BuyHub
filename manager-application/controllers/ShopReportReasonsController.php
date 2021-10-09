@@ -94,11 +94,11 @@ class ShopReportReasonsController extends AdminBaseController
 
     public function form()
     {
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $frm = $this->getForm($recordId);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);        
+        $frm = $this->getForm();
 
         if (0 < $recordId) {
-            $data = ShopReportReason::getAttributesById($recordId, array('reportreason_id', 'reportreason_identifier'));
+            $data = ShopReportReason::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, array('reportreason_id', 'reportreason_title'), true);
 
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
@@ -106,7 +106,7 @@ class ShopReportReasonsController extends AdminBaseController
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getAllNames());
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_SHOP_REPORT_REASON_SETUP', $this->adminLangId));
@@ -116,6 +116,7 @@ class ShopReportReasonsController extends AdminBaseController
     public function setup()
     {
         $this->objPrivilege->canEditShopReportReasons();
+
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
@@ -123,161 +124,51 @@ class ShopReportReasonsController extends AdminBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $recordId = $post['reportreason_id'];
-        unset($post['reportreason_id']);
-        $record = new ShopReportReason($recordId);
-        $record->assignValues($post);
+        $recordId = FatUtility::int($post['reportreason_id']);       
 
-        if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+        $recordObj = new ShopReportReason($recordId);
+        $post['reportreason_identifier'] = $post['reportreason_title'];
+        $recordObj->assignValues($post);
+
+        if (!$recordObj->save()) {
+            LibHelper::exitWithError($recordObj->getError(), true);
         }
 
-        $newTabLangId = 0;
-        if ($recordId > 0) {
-            $languages = Language::getAllNames();
-            foreach ($languages as $langId => $langName) {
-                if (!$row = ShopReportReason::getAttributesByLangId($langId, $recordId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        } else {
-            $recordId = $record->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
-        }
-        $this->set('msg', $this->str_update_record);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
+        $this->setLangData($recordObj, [$recordObj::tblFld('title') => $post[$recordObj::tblFld('title')]]);
+
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($autoFillLangData = 0)
-    {
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $lang_id = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
-
-        if (1 > $recordId || 1 > $lang_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $langFrm = $this->getLangForm($recordId, $lang_id);
-        if (0 < $autoFillLangData) {
-            $updateLangDataobj = new TranslateLangData(ShopReportReason::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $lang_id);
-            if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-            $langData = current($translatedData);
-        } else {
-            $langData = ShopReportReason::getAttributesByLangId($lang_id, $recordId);
-        }
-
-        if ($langData) {
-            $langFrm->fill($langData);
-        }
-
-        $this->set('languages', Language::getAllNames());
-        $this->set('recordId', $recordId);
-        $this->set('lang_id', $lang_id);
-        $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->set('formTitle', Labels::getLabel('LBL_SHOP_REPORT_REASON_SETUP', $this->adminLangId));
-        $this->_template->render(false, false, '_partial/listing/lang-form.php');
-    }
-
-    public function langSetup()
+    public function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditShopReportReasons();
-        $post = FatApp::getPostedData();
-
-        $recordId = $post['reportreason_id'];
-        $languages = Language::getAllNames();
-        
-        if (count($languages) > 1) {
-            $lang_id = $post['lang_id'];
-        } else {
-            $lang_id = array_key_first($languages);
-            $post['lang_id'] = $lang_id;
-        }
-
-        if ($recordId == 0 || $lang_id == 0) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $frm = $this->getLangForm($recordId, $lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        unset($post['reportreason_id']);
-        unset($post['lang_id']);
-
-        $data = array(
-            'reportreasonlang_lang_id' => $lang_id,
-            'reportreasonlang_reportreason_id' => $recordId,
-            'reportreason_title' => $post['reportreason_title'],
-            // 'reportreason_description'=>$post['reportreason_description']
-        );
-
-        $reasonObj = new ShopReportReason($recordId);
-
-        if (!$reasonObj->updateLangData($lang_id, $data)) {
-            LibHelper::exitWithError($reasonObj->getError(), true);
-        }
-
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(ShopReportReason::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = ShopReportReason::getAttributesByLangId($langId, $recordId)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
+        $this->modelObj = (new ReflectionClass('ShopReportReason'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('title')];
+        $this->set('formTitle', Labels::getLabel('LBL_SHOP_REPORT_REASON_SETUP', $this->adminLangId));
     }
 
-    private function getForm($recordId = 0)
+    private function getForm()
     {
-        $recordId = FatUtility::int($recordId);
-
         $frm = new Form('frmShopReportReason');
-        $frm->addHiddenField('', 'reportreason_id', $recordId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Reason_Identifier', $this->adminLangId), 'reportreason_identifier');
-        return $frm;
-    }
-
-    private function getLangForm($recordId = 0, $lang_id = 0)
-    {
-        $frm = new Form('frmShopReportReasonLang');
-        $frm->addHiddenField('', 'reportreason_id', $recordId);
-
-        $languages = Language::getAllNames();
-        if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
-        } else {
-            $lang_id = array_key_first($languages);
-            $frm->addHiddenField('', 'lang_id', $lang_id);
-        }
-
-
+        $frm->addHiddenField('', 'reportreason_id');
+        /*$frm->addRequiredField(Labels::getLabel('LBL_Reason_Identifier', $this->adminLangId), 'reportreason_identifier');*/
         $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->adminLangId), 'reportreason_title');
+        $languageArr = Language::getDropDownList();
 
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
+        return $frm;
+    }
+
+    protected function getLangForm($recordId = 0, $lang_id = 0)
+    {
+        $frm = new Form('frmShopReportReasonLang');
+        $frm->addHiddenField('', 'reportreason_id', $recordId);
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->adminLangId), 'reportreason_title');
         return $frm;
     }
 
@@ -335,8 +226,7 @@ class ShopReportReasonsController extends AdminBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'reportreason_identifier' => Labels::getLabel('LBL_Reason_Identifier', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId), 
             'reportreason_title' => Labels::getLabel('LBL_Reason_Title', $this->adminLangId),
             'action' =>  Labels::getLabel('LBL_ACTION', $this->adminLangId),
         ];

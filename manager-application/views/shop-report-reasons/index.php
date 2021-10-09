@@ -13,11 +13,8 @@ $tableHeadAttrArr = [
     'listSerial' => [
         'width' => '10%'
     ],
-    'reportreason_identifier' => [
-        'width' => '40%'
-    ],
     'reportreason_title' => [
-        'width' => '35%'
+        'width' => '75%'
     ],
     'action' => [
         'width' => '10%'

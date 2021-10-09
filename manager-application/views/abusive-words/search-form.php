@@ -17,7 +17,12 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder');
 
 /* Extra Field */
 $fld = $frmSearch->getField('lang_id');
-$fld->addFieldtagAttribute('class', 'form-control');
+$col = 6;
+if(null != $fld){
+    $col = 4;
+    $fld->addFieldtagAttribute('class', 'form-control');
+}
+
 /* Extra Field */
 
 echo $frmSearch->getFormTag();
@@ -26,13 +31,15 @@ HtmlHelper::renderHiddenFields($frmSearch);
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-<?php echo $col;?>">
                 <?php echo $frmSearch->getFieldHtml('keyword'); ?>
             </div>
-            <div class="col-md-4">
-                <?php echo $frmSearch->getFieldHtml('lang_id'); ?>
-            </div>
-            <div class="col-md-4">
+            <?php if(null != $fld){ ?>
+                <div class="col-md-<?php echo $col;?>">
+                    <?php echo $frmSearch->getFieldHtml('lang_id'); ?>
+                </div>
+            <?php } ?>
+            <div class="col-md-<?php echo $col;?>">
                 <div class="input-group">
                     <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
                     <div class="input-group-append">

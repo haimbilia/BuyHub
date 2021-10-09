@@ -5,10 +5,8 @@ if (!isset($tbody)) {
     $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
 }
 
-$serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
+$serialNo = ($page - 1) * $pageSize + 1;
 foreach ($arrListing as $sn => $row) {
-    $serialNo++;
-
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
     $tr->setAttribute("id", $row['orderstatus_id']);
@@ -59,6 +57,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
+    $serialNo++;
 }
 
 if (count($arrListing) == 0) {

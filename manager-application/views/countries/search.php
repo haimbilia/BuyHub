@@ -4,7 +4,8 @@ if (!isset($tbody)) {
     $printData = true;
     $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
 }
-$serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
+
+$serialNo = ($page - 1) * $pageSize + 1;
 
 foreach ($arrListing as $sn => $row) {
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
@@ -55,7 +56,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
-    $serialNo--;
+    $serialNo++;
 }
 
 if (count($arrListing) == 0) {

@@ -19,7 +19,7 @@ foreach ($fields as $key => $val) {
     $e = $th->appendElement('th', array(), $val);
 }
 
-$serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
+$serialNo = ($page - 1) * $pageSize + 1;
 foreach ($arrListing as $sn => $row) {
     $tr = $tbl->appendElement('tr');
     $tr->setAttribute("id", $row['prodcat_id']);
@@ -61,7 +61,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
-    $serialNo--;
+    $serialNo++;
 }
 echo $tbl->getHtml();
 
