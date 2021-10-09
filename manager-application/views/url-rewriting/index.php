@@ -38,7 +38,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                     <?php $data = [
                         'canEdit' => $canEdit,
                         'adminLangId' => $adminLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_SYSTEM_URLS', $adminLangId),
+                        'cardHeadTitle' => Labels::getLabel('LBL_SEO_URLS', $adminLangId),
                         'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_URL', $adminLangId), ['{COUNT}' => $recordCount]),
                         'newRecordBtn' => true,
                         'deleteButton' => true,
