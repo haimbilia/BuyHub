@@ -109,7 +109,9 @@
     });
 
     $(document).on("click", ".submitBtnJs", function () {
-        $('.' + $.ykmodal.element + ' form').submit();
+        if ($('.' + $.ykmodal.element).hasClass("show")) {
+            $('.' + $.ykmodal.element + ' form').submit();
+        }
         $(this).addClass('loading');
     });
 

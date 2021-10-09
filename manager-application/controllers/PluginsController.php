@@ -5,31 +5,86 @@ class PluginsController extends AdminBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->objPrivilege->canViewPlugins($this->admin_id);
+        $this->objPrivilege->canViewPlugins();
+    }
+
+    public function getSearchForm($fields = [])
+    {
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'type');
+        $frm->addHiddenField('', 'page', 1);
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
+        return $frm;
     }
 
     public function index()
     {
-        $this->canEdit = $this->objPrivilege->canEditPlugins($this->admin_id, true);
-        $this->set("canEdit", $this->canEdit);
-        $this->set("plugins", Plugin::getTypeArr($this->adminLangId));
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+        $frmSearch->fill(['type' => Plugin::TYPE_CURRENCY_CONVERTER]);
+
+        $this->set('frmSearch', $frmSearch);
         $this->set('activeTab', Plugin::TYPE_CURRENCY_CONVERTER);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_PLUGINS', $this->adminLangId));
         $this->set('includeEditor', true);
+        $this->getListingData();
+
         $this->_template->render();
     }
 
-    public function search($type)
+    private function getListingData()
     {
+        $db = FatApp::getDb();
+
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        $type = FatApp::getPostedData('type', FatUtility::VAR_INT, PluginCommon::TYPE_CURRENCY_CONVERTER);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
+
+        $attr = array(
+            'plg.*',
+            'plg_l.*',
+            'conf.*',
+            'plugin_id as listSerial'
+        );
         $srch = Plugin::getSearchObject($this->adminLangId, false);
-        $srch->joinTable(Configurations::DB_TBL, 'LEFT JOIN', "conf_val = plugin_id AND conf_name = 'CONF_DEFAULT_PLUGIN_" . $type . "'");
+        $srch->joinTable(Configurations::DB_TBL, 'LEFT JOIN', "conf_val = plugin_id AND conf_name = 'CONF_DEFAULT_PLUGIN_" . $type . "'", 'conf');
         $srch->addCondition('plugin_type', '=', $type);
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addOrder(Plugin::DB_TBL_PREFIX . 'active', 'DESC');
-        $srch->addOrder(Plugin::DB_TBL_PREFIX . 'display_order', 'ASC');
+        $srch->addMultipleFields($attr);
+
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        $srch->addOrder($sortBy, $sortOrder);
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $arrListing = $db->fetchAll($rs);
 
         $activeTaxPluginFound = false;
         if (Plugin::TYPE_TAX_SERVICES == $type) {
@@ -41,9 +96,7 @@ class PluginsController extends AdminBaseController
             });
         }
 
-        $this->canEdit = $this->objPrivilege->canEditPlugins($this->admin_id, true);
         $pluginTypes = Plugin::getTypeArr($this->adminLangId);
-
         $groupType = Plugin::getGroupType($type);
         $otherPluginTypes = '';
         if (!empty($groupType)) {
@@ -51,37 +104,55 @@ class PluginsController extends AdminBaseController
                 if ($type == $pluginType) {
                     continue;
                 }
-                $srch = Plugin::getSearchObject(0, true);
-                $srch->addCondition(Plugin::DB_TBL_PREFIX . 'type', '=', $pluginType);
-                $srch->addCondition(Plugin::DB_TBL_PREFIX . 'active', '=', Plugin::ACTIVE);
-                $srch->setPageSize(1);
-                $srch->getResultSet();
-                if (0 < $srch->recordCount()) {
+                $gptSrch = Plugin::getSearchObject(0, true);
+                $gptSrch->addCondition(Plugin::DB_TBL_PREFIX . 'type', '=', $pluginType);
+                $gptSrch->addCondition(Plugin::DB_TBL_PREFIX . 'active', '=', Plugin::ACTIVE);
+                $gptSrch->setPageSize(1);
+                $gptSrch->getResultSet();
+                if (0 < $gptSrch->recordCount()) {
                     $otherPluginTypes .= $pluginTypes[$pluginType] . ', ';
                 }
             }
             $otherPluginTypes = rtrim($otherPluginTypes, ', ');
         }
 
-        $this->set("canEdit", $this->canEdit);
+        $this->set("arrListing", $arrListing);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('postedData', FatApp::getPostedData());
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
+
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set("activeTaxPluginFound", $activeTaxPluginFound);
         $this->set("type", $type);
         $this->set("pluginTypes", $pluginTypes);
         $this->set("otherPluginTypes", $otherPluginTypes);
-        $this->set("arrListing", $records);
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
-        $this->_template->render(false, false);
+        $this->set('canEdit', $this->objPrivilege->canEditCommissionSettings($this->admin_id, true));
     }
 
-    public function form($pluginType, $pluginId)
+    public function search()
     {
-        $pluginId = FatUtility::int($pluginId);
-        $frm = $this->getForm($pluginType, $pluginId);
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'plugins/search.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    public function form($pluginType)
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $frm = $this->getForm($pluginType, $recordId);
         $identifier = '';
-        if (0 < $pluginId) {
-            $data = Plugin::getAttributesById($pluginId, ['plugin_id', 'plugin_identifier', 'plugin_active']);
+        if (0 < $recordId) {
+            $data = Plugin::getAttributesById($recordId, ['plugin_id', 'plugin_identifier', 'plugin_active']);
             if ($data === false) {
-                FatUtility::dieJsonError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
 
             if (in_array($pluginType, Plugin::getKingpinTypeArr())) {
@@ -96,7 +167,7 @@ class PluginsController extends AdminBaseController
 
         $this->set('identifier', $identifier);
         $this->set('languages', Language::getAllNames());
-        $this->set('pluginId', $pluginId);
+        $this->set('recordId', $recordId);
         $this->set('type', $pluginType);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
@@ -106,92 +177,88 @@ class PluginsController extends AdminBaseController
     {
         $this->objPrivilege->canEditPlugins();
         $post = FatApp::getPostedData();
-        $pluginId = $post['plugin_id'];
+        $recordId = $post['plugin_id'];
         $pluginType = $post['plugin_type'];
-        $frm = $this->getForm($pluginType, $pluginId);
+        $frm = $this->getForm($pluginType, $recordId);
         $post = $frm->getFormDataFromArray($post);
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         unset($post['plugin_id'], $post['plugin_type']);
 
-        if (1 > $pluginId) {
-            FatUtility::dieWithError($this->str_invalid_request);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        if (0 < $pluginId) {
-            $pluginId = Plugin::getAttributesById($pluginId, 'plugin_id');
-            if ($pluginId === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+        if (0 < $recordId) {
+            $recordId = Plugin::getAttributesById($recordId, 'plugin_id');
+            if ($recordId === false) {
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
         }
 
-        $record = new Plugin($pluginId);
+        $record = new Plugin($recordId);
         $record->assignValues($post);
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $newTabLangId = 0;
-        if ($pluginId > 0) {
+        if ($recordId > 0) {
             $languages = Language::getAllNames();
             foreach ($languages as $langId => $langName) {
-                if (!$row = Plugin::getAttributesByLangId($langId, $pluginId)) {
+                if (!$row = Plugin::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
         } else {
-            $pluginId = $record->getMainTableRecordId();
+            $recordId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
 
         if (in_array($pluginType, Plugin::getKingpinTypeArr())) {
             $defaultCurrConvAPI = FatApp::getConfig('CONF_DEFAULT_PLUGIN_' . $pluginType, FatUtility::VAR_INT, 0);
             if (!empty($post['CONF_DEFAULT_PLUGIN_' . $pluginType]) || empty($defaultCurrConvAPI)) {
-                $confVal = empty($defaultCurrConvAPI) ? $pluginId : $post['CONF_DEFAULT_PLUGIN_' . $pluginType];
+                $confVal = empty($defaultCurrConvAPI) ? $recordId : $post['CONF_DEFAULT_PLUGIN_' . $pluginType];
                 $confRecord = new Configurations();
                 if (!$confRecord->update(['CONF_DEFAULT_PLUGIN_' . $pluginType => $confVal])) {
-                    Message::addErrorMessage($confRecord->getError());
-                    FatUtility::dieJsonError(Message::getHtml());
+                    LibHelper::exitWithError($confRecord->getError(), true);
                 }
             }
         }
 
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('pluginId', $pluginId);
+        $this->set('msg', $this->str_update_record);
+        $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($pluginId = 0, $lang_id = 0, $autoFillLangData = 0)
+    public function langForm($autoFillLangData = 0)
     {
-        $pluginId = FatUtility::int($pluginId);
-        $lang_id = FatUtility::int($lang_id);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $lang_id = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
-        if ($pluginId == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+        if (1 > $recordId || 1 > $lang_id) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $langFrm = $this->getLangForm($pluginId, $lang_id);
+        $langFrm = $this->getLangForm($recordId, $lang_id);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(Plugin::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($pluginId, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $lang_id);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
-            $langData = Plugin::getAttributesByLangId($lang_id, $pluginId);
+            $langData = Plugin::getAttributesByLangId($lang_id, $recordId);
         }
         if ($langData) {
             $langFrm->fill($langData);
         }
 
-        $pluginDetail = Plugin::getAttributesById($pluginId, ['plugin_type', 'plugin_identifier']);
+        $pluginDetail = Plugin::getAttributesById($recordId, ['plugin_type', 'plugin_identifier']);
 
         if (!in_array($pluginDetail['plugin_type'], Plugin::HAVING_DESCRIPTION)) {
             $langFrm->removeField($langFrm->getField('plugin_description'));
@@ -200,68 +267,73 @@ class PluginsController extends AdminBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('type', $pluginDetail['plugin_type']);
         $this->set('identifier', $pluginDetail['plugin_identifier']);
-        $this->set('pluginId', $pluginId);
+        $this->set('recordId', $recordId);
         $this->set('lang_id', $lang_id);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
         $this->_template->render(false, false);
     }
 
-    public function langSetup()
+    public function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditPlugins();
+        $this->modelObj = (new ReflectionClass('Plugin'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name'), $this->modelObj::tblFld('description')];
+        $this->set('formTitle', Labels::getLabel('LBL_PLUGIN_SETUP', $this->adminLangId));
+    }
+
+    /* public function langSetup()
     {
         $this->objPrivilege->canEditPlugins();
         $post = FatApp::getPostedData();
 
-        $pluginId = $post['plugin_id'];
+        $recordId = $post['plugin_id'];
         $lang_id = $post['lang_id'];
 
-        if ($pluginId == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+        if ($recordId == 0 || $lang_id == 0) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $frm = $this->getLangForm($pluginId, $lang_id);
+        $frm = $this->getLangForm($recordId, $lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         unset($post['plugin_id']);
         unset($post['lang_id']);
 
         $data = array(
             'pluginlang_lang_id' => $lang_id,
-            'pluginlang_plugin_id' => $pluginId,
+            'pluginlang_plugin_id' => $recordId,
             'plugin_name' => $post['plugin_name'],
             'plugin_description' => FatApp::getPostedData('plugin_description', FatUtility::VAR_STRING, ''),
         );
 
-        $pluginObj = new Plugin($pluginId);
+        $pluginObj = new Plugin($recordId);
 
         if (!$pluginObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($pluginObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($pluginObj->getError(), true);
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Plugin::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($pluginId)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
         $newTabLangId = 0;
         $languages = Language::getAllNames();
         foreach ($languages as $langId => $langName) {
-            if (!$row = Plugin::getAttributesByLangId($langId, $pluginId)) {
+            if (!$row = Plugin::getAttributesByLangId($langId, $recordId)) {
                 $newTabLangId = $langId;
                 break;
             }
         }
 
         $this->set('msg', $this->str_setup_successful);
-        $this->set('pluginId', $pluginId);
+        $this->set('pluginId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
-    }
+    } */
 
     public function uploadIcon($plugin_id)
     {
@@ -270,22 +342,19 @@ class PluginsController extends AdminBaseController
         $plugin_id = FatUtility::int($plugin_id);
 
         if (1 > $plugin_id) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $post = FatApp::getPostedData();
 
         if (!is_uploaded_file($_FILES['file']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
         $res = $fileHandlerObj->saveAttachment($_FILES['file']['tmp_name'], AttachedFile::FILETYPE_PLUGIN_LOGO, $plugin_id, 0, $_FILES['file']['name'], -1, $unique_record = true);
         if (!$res) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
         $this->set('pluginId', $plugin_id);
@@ -303,8 +372,7 @@ class PluginsController extends AdminBaseController
         if (!empty($post)) {
             $pluginObj = new Plugin();
             if (!$pluginObj->updateOrder($post['plugin'])) {
-                Message::addErrorMessage($pluginObj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
+                LibHelper::exitWithError($pluginObj->getError(), true);
             }
 
             $this->set('msg', Labels::getLabel('LBL_Order_Updated_Successfully', $this->adminLangId));
@@ -312,23 +380,23 @@ class PluginsController extends AdminBaseController
         }
     }
 
-    public function changeStatus()
+    public function updateStatus()
     {
         $this->objPrivilege->canEditPlugins();
-        $pluginId = FatApp::getPostedData('pluginId', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
-        if (0 >= $pluginId) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
+        if (0 >= $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $data = Plugin::getAttributesById($pluginId, array('plugin_id', 'plugin_active', 'plugin_type'));
+        $data = Plugin::getAttributesById($recordId, array('plugin_id', 'plugin_active', 'plugin_type'));
 
         if ($data == false) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        if (false == Plugin::updateStatus($data['plugin_type'], $status, $pluginId, $error)) {
-            FatUtility::dieJsonError($error);
+        if (false == Plugin::updateStatus($data['plugin_type'], $status, $recordId, $error)) {
+            LibHelper::exitWithError($error, true);
         }
 
         $this->set('msg', $this->str_update_record);
@@ -338,20 +406,20 @@ class PluginsController extends AdminBaseController
     public function changeStatusByType()
     {
         $this->objPrivilege->canEditPlugins();
-        $pluginId = FatApp::getPostedData('pluginId', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('pluginId', FatUtility::VAR_INT, 0);
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
-        if (0 >= $pluginId) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
+        if (0 >= $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $data = Plugin::getAttributesById($pluginId, array('plugin_id', 'plugin_active', 'plugin_type'));
+        $data = Plugin::getAttributesById($recordId, array('plugin_id', 'plugin_active', 'plugin_type'));
 
         if ($data == false) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        if (false == Plugin::updateStatus($data['plugin_type'], $status, $pluginId, $error)) {
-            FatUtility::dieJsonError($error);
+        if (false == Plugin::updateStatus($data['plugin_type'], $status, $recordId, $error)) {
+            LibHelper::exitWithError($error, true);
         }
 
         if (Plugin::ACTIVE == $status) {
@@ -360,7 +428,7 @@ class PluginsController extends AdminBaseController
 
             foreach ($eiherPluginTypes as $pluginType) {
                 if (false == Plugin::updateStatus($pluginType, Plugin::INACTIVE, null, $error)) {
-                    FatUtility::dieJsonError($error);
+                    LibHelper::exitWithError($error, true);
                 }
             }
         }
@@ -369,12 +437,12 @@ class PluginsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getForm($pluginType, $pluginId = 0)
+    private function getForm($pluginType, $recordId = 0)
     {
-        $pluginId = FatUtility::int($pluginId);
+        $recordId = FatUtility::int($recordId);
 
         $frm = new Form('frmPlugin');
-        $frm->addHiddenField('', 'plugin_id', $pluginId);
+        $frm->addHiddenField('', 'plugin_id', $recordId);
         $frm->addHiddenField('', 'plugin_type', $pluginType);
         $frm->addRequiredField(Labels::getLabel('LBL_Plugin_Identifier', $this->adminLangId), 'plugin_identifier');
 
@@ -382,7 +450,7 @@ class PluginsController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'plugin_active', $activeInactiveArr, '', array(), '');
 
         if (in_array($pluginType, Plugin::getKingpinTypeArr())) {
-            $frm->addCheckBox(Labels::getLabel('LBL_MARK_AS_DEFAULT', $this->adminLangId), 'CONF_DEFAULT_PLUGIN_' . $pluginType, $pluginId, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_MARK_AS_DEFAULT', $this->adminLangId), 'CONF_DEFAULT_PLUGIN_' . $pluginType, $recordId, array(), false, 0);
         }
 
         if (in_array($pluginType, Plugin::getSeparateIconTypeArr())) {
@@ -390,25 +458,24 @@ class PluginsController extends AdminBaseController
                 'Icon',
                 'plugin_icon',
                 Labels::getLabel('LBL_Upload_File', $this->adminLangId),
-                array('class' => 'uploadFile-Js', 'id' => 'plugin_icon', 'data-plugin_id' => $pluginId)
+                array('class' => 'uploadFile-Js', 'id' => 'plugin_icon', 'data-plugin_id' => $recordId)
             );
             $fld->htmlAfterField = '<span id="plugin_icon"></span>';
-            if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $pluginId)) {
+            if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId)) {
                 $uploadedTime = AttachedFile::setTimeParam($attachment['afile_updated_at']);
                 $fld->htmlAfterField .= '<div class="uploaded--image">
-                <img src="'.UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($pluginId,'LARGE'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg').'"></div>';
+                <img src="'.UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($recordId,'LARGE'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg').'"></div>';
 
             }
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 
-    private function getLangForm($pluginId = 0, $lang_id = 0)
+    private function getLangForm($recordId = 0, $lang_id = 0)
     {
         $frm = new Form('frmPluginLang');
-        $frm->addHiddenField('', 'plugin_id', $pluginId);
+        $frm->addHiddenField('', 'plugin_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Plugin_Name', $this->adminLangId), 'plugin_name');
         $frm->addHtmlEditor(Labels::getLabel('LBL_EXTRA_INFO', $this->adminLangId), 'plugin_description');
@@ -420,7 +487,6 @@ class PluginsController extends AdminBaseController
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
     }
 
@@ -430,16 +496,16 @@ class PluginsController extends AdminBaseController
 
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $pluginType = FatApp::getPostedData('plugin_type', FatUtility::VAR_INT, 0);
-        $pluginIdsArr = FatUtility::int(FatApp::getPostedData('plugin_ids'));
-        if (empty($pluginIdsArr) || -1 == $status || 1 > $pluginType) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('plugin_ids'));
+        if (empty($recordIdsArr) || -1 == $status || 1 > $pluginType) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
         $error = '';
-        foreach ($pluginIdsArr as $pluginId) {
-            if (1 > $pluginId) {
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
                 continue;
             }
-            Plugin::updateStatus($pluginType, $status, $pluginId, $error);
+            Plugin::updateStatus($pluginType, $status, $recordId, $error);
         }
         $msg = !empty($error) ? $error : $this->str_update_record;
         $this->set('msg', $msg);
@@ -452,16 +518,16 @@ class PluginsController extends AdminBaseController
         $pluginGroupType = FatApp::getPostedData('plugin_type', FatUtility::VAR_INT, 0);
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
 
-        $pluginIdsArr = FatUtility::int(FatApp::getPostedData('plugin_ids'));
-        if (empty($pluginIdsArr) || -1 == $status || 1 > $pluginGroupType) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('plugin_ids'));
+        if (empty($recordIdsArr) || -1 == $status || 1 > $pluginGroupType) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
         }
 
-        foreach ($pluginIdsArr as $pluginId) {
-            if (1 > $pluginId) {
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
                 continue;
             }
-            Plugin::updateStatus($pluginGroupType, $status, $pluginId);
+            Plugin::updateStatus($pluginGroupType, $status, $recordId);
         }
 
         if (Plugin::ACTIVE == $status) {
@@ -470,12 +536,50 @@ class PluginsController extends AdminBaseController
 
             foreach ($eiherPluginTypes as $pluginType) {
                 if (false == Plugin::updateStatus($pluginType, Plugin::INACTIVE, null, $error)) {
-                    FatUtility::dieJsonError($error);
+                    LibHelper::exitWithError($error, true);
                 }
             }
         }
 
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
+    }
+
+    private function getFormColumns(): array
+    {
+        $pluginsTblHeadingCols = CacheHelper::get('pluginsTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($pluginsTblHeadingCols) {
+            return json_decode($pluginsTblHeadingCols);
+        }
+
+        $arr = [
+            'dragdrop' => '',
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
+            'plugin_icon' => Labels::getLabel('LBL_PLUGIN_ICON', $this->adminLangId),
+            'plugin_identifier' => Labels::getLabel('LBL_PLUGIN', $this->adminLangId),
+            'plugin_active' => Labels::getLabel('LBL_Status', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
+        ];
+        CacheHelper::create('pluginsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return [
+            'dragdrop',
+            'select_all',
+            'listSerial',
+            'plugin_icon',
+            'plugin_identifier',
+            'plugin_active',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['dragdrop', 'plugin_icon', 'plugin_active'], Common::excludeKeysForSort());
     }
 }
