@@ -48,7 +48,6 @@ class DpoSettingsController extends PaymentMethodSettingsController
         $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_PRODUCTION, 'eq', 'live_company_token', $reqLiveFld1);
         $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_PRODUCTION, 'eq', 'live_service_type', $reqLiveFld2);
 
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
         return $frm;
     }
 }

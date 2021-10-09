@@ -32,7 +32,6 @@ class ShipStationApiSettingsController extends ShippingSettingsController
         $fld = $frm->addTextBox(Labels::getLabel("LBL_Shipstation_Api_Secret_key", $this->adminLangId), 'shipstation_api_secret_key');
         $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Please_enter_your_shipstation_api_Secret_Key_here.", $this->adminLangId) . "</small>";
         
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
         return $frm;
         
         

@@ -26,6 +26,7 @@
         frm.type.value = type;
         if (pluginsType != type) {
             frm.page.value = 1;
+            frm.sortBy.value ='';
         }
         data = fcom.frmData(frm);
 
@@ -38,49 +39,6 @@
         });
     };
 
-    editPluginForm = function (pluginType, pluginId) {
-        fcom.ajax(fcom.makeUrl(controllerName, 'form', [pluginType, pluginId]), '', function (t) {
-            $.ykmodal(t);
-        });
-    };
-
-
-    setupPlugin = function (frm) {
-        if (!$(frm).validate()) return;
-        var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
-            fcom.removeLoader();
-            reloadList();
-            if (t.langId > 0) {
-                editPluginLangForm(t.pluginId, t.langId);
-                return;
-            }
-        });
-    }
-
-    editPluginLangForm = function (pluginId, langId, autoFillLangData = 0) {
-        fcom.displayProcessing();
-        fcom.resetEditorInstance();
-        fcom.ajax(fcom.makeUrl(controllerName, 'langForm', [pluginId, langId, autoFillLangData]), '', function (t) {
-            fcom.removeLoader();
-            $.ykmodal(t);
-            fcom.setEditorLayout(langId);
-        });
-    };
-
-    setupLangPlugin = function (frm) {
-        if (!$(frm).validate()) return;
-        var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langSetup'), data, function (t) {
-            fcom.removeLoader();
-            reloadList();
-            if (t.langId > 0) {
-                editPluginLangForm(t.pluginId, t.langId);
-                return;
-            }
-        });
-    };
-
     editSettingForm = function (keyName) {
         fcom.displayProcessing();
         var data = 'keyName=' + keyName;
@@ -90,9 +48,7 @@
             if (res && res.status == 0) {
                 $.ykmsg.error(res.msg);
             } else {
-                $.facebox(function () {
-                    $.ykmodal(t);
-                });
+                $.ykmodal(t);
             }
         });
     };

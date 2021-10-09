@@ -74,7 +74,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
     });
 
     function bindSortable() {
-        $("#plugin > tbody").sortable({
+        $("#pluginsJs > tbody").sortable({
             update: function(event, ui) {
                 fcom.displayProcessing();
                 $('.listingTableJs').prepend(fcom.getLoader());

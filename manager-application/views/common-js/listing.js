@@ -7,18 +7,25 @@ $(document).on("click", ".headerColumnJs", function (e) {
     var sortcls = "";
 
     document.getElementById("sortBy").value = fld;
-    $(frm.sortBy).val(fld);
-    $(frm.page).val(1);
+    if ('undefined' != typeof frm) {
+        $(frm.sortBy).val(fld);
+        $(frm.page).val(1);
+    }
+
     $('.sortingIconJs').remove();
     $('.headerColumnJs').removeClass('sorting_asc sorting_desc');
 
     if (document.getElementById("sortOrder").value == 'ASC') {
-        $(frm.sortOrder).val('DESC');
+        if ('undefined' != typeof frm) {
+            $(frm.sortOrder).val('DESC');
+        }
         document.getElementById("sortOrder").value = 'DESC';
         sortIcn = sortingUp;
         sortcls = 'sorting_asc';
     } else {
-        $(frm.sortOrder).val('ASC');
+        if ('undefined' != typeof frm) {
+            $(frm.sortOrder).val('ASC');
+        }
         document.getElementById("sortOrder").value = 'ASC';
         sortIcn = sortingDown;
         sortcls = 'sorting_desc';

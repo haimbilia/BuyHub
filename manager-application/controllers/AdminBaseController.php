@@ -12,9 +12,11 @@ class AdminBaseController extends FatController
     protected $str_invalid_Action;
     protected $str_setup_successful;
     protected $adminLangId;
-    protected object $modelObj;
     protected $nodes = [];
+    protected object $modelObj;
     protected array $formLangFields;
+    protected bool $isPlugin = false;
+    protected int $mainTableRecordId = 0;
 
     public function __construct($action)
     {
@@ -841,33 +843,40 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
 
     public function langForm($autoFillLangData = 0)
     {
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $this->mainTableRecordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
-        if (1 > $recordId || 1 > $langId) {
+        if (1 > $this->mainTableRecordId || 1 > $langId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $this->setLangTemplateData();
 
-        $langFrm = $this->getLangForm($recordId, $langId);
+        $langFrm = $this->getLangForm($this->mainTableRecordId, $langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData($this->modelObj::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
+            $translatedData = $updateLangDataobj->getTranslatedData($this->mainTableRecordId, $langId);
             if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
-            $langData = $this->modelObj::getAttributesByLangId($langId, $recordId);
+            $langData = $this->modelObj::getAttributesByLangId($langId, $this->mainTableRecordId);
         }
 
         if ($langData) {
             $langFrm->fill($langData);
         }
 
+        if (true === $this->isPlugin) {
+            $pluginDetail = Plugin::getAttributesById($this->mainTableRecordId, ['plugin_type', 'plugin_identifier']);
+            if (!in_array($pluginDetail['plugin_type'], Plugin::HAVING_DESCRIPTION)) {
+                $langFrm->removeField($langFrm->getField('plugin_description'));
+            }
+        }
+
         $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
-        $this->set('recordId', $recordId);
+        $this->set('recordId', $this->mainTableRecordId);
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));

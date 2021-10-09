@@ -36,7 +36,6 @@ class TwocheckoutSettingsController extends PaymentMethodSettingsController
             </div>'
         );
 
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
         return $frm;
     }
 }
