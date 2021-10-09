@@ -109,7 +109,7 @@
 
             <?php if ($objPrivilege->canViewSitemap(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                 <li class="menu-item dropdown">
-                    <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('LBL_SITEMAP', $adminLangId); ?>">
+                    <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('LBL_SEO', $adminLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-sitemap">
@@ -118,7 +118,7 @@
                         </span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
-                        <h6 class=""><?php echo Labels::getLabel('LBL_SITEMAP', $adminLangId); ?></h6>
+                        <h6 class=""><?php echo Labels::getLabel('LBL_SEO', $adminLangId); ?></h6>
                         <ul class="nav">
                             <?php if ($objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
@@ -129,7 +129,7 @@
                             <?php } ?>
                             <li class="nav_item">
                                 <a href="<?php echo UrlHelper::generateUrl('sitemap', 'generate'); ?>" class="nav_link ">
-                                    <span class="nav_text"><?php echo Labels::getLabel('LBL_UPDATE_SITEMAP', $adminLangId); ?></span>
+                                    <span class="nav_text"><?php echo Labels::getLabel('LBL_GENERATE_SITEMAP', $adminLangId); ?></span>
                                 </a>
                             </li>
                             <li class="nav_item">
