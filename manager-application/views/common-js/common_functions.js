@@ -1,5 +1,4 @@
 function setSiteDefaultLang(langId) {
-    fcom.displayProcessing();
     fcom.updateWithAjax(fcom.makeUrl('Home', 'setLanguage', [langId]), '', function (res) {
         document.location.reload();
     });

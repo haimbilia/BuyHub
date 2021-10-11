@@ -86,8 +86,8 @@ $(document).ready(function(){
 		fcom.displayProcessing();
 		var frm = document.frmBrandSearchPaging;
 		fcom.ajax(fcom.makeUrl('ProductCategories', 'form', [id, 1]), '', function(t) {
-			
-			fcom.updateFaceboxContent(t);
+			$.ykmsg.close();
+			$.ykmodal(t);
 			if (id > 0) {
 				categoryImages(id, 'icon');
 				categoryImages(id, 'banner', 1);
@@ -104,7 +104,6 @@ $(document).ready(function(){
 				$('.fbminwidth').animate({
 					scrollTop: $("#cropperBox-js").offset().top
 				}, 2000);
-				/* $.facebox(t, 'faceboxWidth'); */
 				var file = inputBtn.files[0];
 				var minWidth = document.frmProdCategory.banner_min_width.value;
 				var minHeight = document.frmProdCategory.banner_min_height.value;

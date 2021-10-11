@@ -26,12 +26,9 @@ $(document).ready(function(){
 	}
 	addForm = function(id) {
 		fcom.displayProcessing();
-		//$.facebox(function() {
-			fcom.ajax(fcom.makeUrl('Navigations', 'form', [id]), '', function(t) {
-				//$.facebox(t,'faceboxWidth');
-				fcom.updateFaceboxContent(t);
-			});
-		//});
+        fcom.ajax(fcom.makeUrl('Navigations', 'form', [id]), '', function(t) {
+            $.ykmodal(t);
+        });
 	};
 
 	setup = function(frm) {
@@ -49,13 +46,10 @@ $(document).ready(function(){
 
 	addLangForm = function(navId, langId, autoFillLangData = 0){
 		fcom.displayProcessing();
-		//$.facebox(function() {
 			fcom.ajax(fcom.makeUrl('Navigations', 'langForm', [navId, langId, autoFillLangData]), '', function(t) {
-			//	$.facebox(t);
-				fcom.updateFaceboxContent(t);
+				$.ykmodal(t);
 
 			});
-		//});
 	};
 
 	setupLang = function(frm){
@@ -89,7 +83,7 @@ $(document).ready(function(){
 		fcom.displayProcessing();
 		var data = 'nav_id=' + nav_id + '&nlink_id=' + nlink_id;
 			fcom.ajax(fcom.makeUrl('Navigations', 'navigationLinkForm'), data, function(t) {
-				fcom.updateFaceboxContent(t)
+				$.ykmodal(t)
 			});
 	}
 
@@ -110,8 +104,7 @@ $(document).ready(function(){
 		fcom.displayProcessing();
 		var data = 'nav_id=' + nav_id + '&nlink_id=' + nlink_id + '&lang_id=' + lang_id;
 			fcom.ajax(fcom.makeUrl('Navigations', 'navigationLinkLangForm', [autoFillLangData]), data, function(t) {
-				//$.facebox(t);
-				fcom.updateFaceboxContent(t);
+				$.ykmodal(t);
 			});
 	}
 

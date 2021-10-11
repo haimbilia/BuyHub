@@ -97,6 +97,10 @@
     });
 
     function bindSortable() {
+        if (1 > $('[data-field="dragdrop"]').length) {
+            return;
+        }
+        
         $("#pageList > tbody").sortable({
             update: function(event, ui) {
                 fcom.displayProcessing();

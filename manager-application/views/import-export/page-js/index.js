@@ -46,7 +46,7 @@ $(document).ready(function () {
     uploadZip = function () {
         var data = new FormData();
         $.each($('#bulk_images')[0].files, function (i, file) {
-            fcom.displayProcessing(langLbl.processing, ' ', true);
+            fcom.displayProcessing();
             data.append('bulk_images', file);
             $.ajax({
                 url: fcom.makeUrl('ImportExport', 'upload'),
@@ -55,20 +55,20 @@ $(document).ready(function () {
                 processData: false,
                 contentType: false,
                 success: function (t) {
+                    $.ykmsg.close();
                     try {
                         var ans = $.parseJSON(t);
                         if (ans.status == 1) {
-                            $(document).trigger('close.facebox');
-                            fcom.displaySuccessMessage(ans.msg, 'alert--success', false);
+                            $.ykmsg.success(ans.msg, 'alert--success', false);
                             loadForm('bulk_media');
                             location.href = fcom.makeUrl('UploadBulkImages', 'downloadPathsFile', [ans.path]);
                         } else {
                             $(document).trigger('close.mbsmessage');
-                            fcom.displayErrorMessage(ans.msg);
+                            $.ykmsg.error(ans.msg);
                         }
                     } catch (exc) {
                         $(document).trigger('close.mbsmessage');
-                        fcom.displayErrorMessage(t);
+                        $.ykmsg.error(t);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -86,14 +86,15 @@ $(document).ready(function () {
         if (true == confirm(langLbl.confirmDelete)) {
             fcom.displayProcessing();
             fcom.ajax(fcom.makeUrl('ImportExport', 'removeDir', [dir]), '', function (t) {
+                $.ykmsg.close();
                 var ans = $.parseJSON(t);
                 if (ans.status == 1) {
                     $(document).trigger('close.facebox');
-                    fcom.displaySuccessMessage(ans.msg, 'alert--success', false);
+                    $.ykmsg.success(ans.msg);
                     loadForm('bulk_media');
                 } else {
                     $(document).trigger('close.mbsmessage');
-                    fcom.displayErrorMessage(ans.msg);
+                    $.ykmsg.error(ans.msg);
                 }
             });
         }

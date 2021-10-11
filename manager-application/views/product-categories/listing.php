@@ -79,11 +79,12 @@ echo isset($pagination) ? html_entity_decode($pagination) : '';
                 var order = $.tableDnD.serialize('id');
                 order += '&pcat_id=' + pcat_id;
                 fcom.ajax(fcom.makeUrl('productCategories', 'update_order'), order, function(res) {
+                    $.ykmsg.close();
                     var ans = $.parseJSON(res);
                     if (ans.status == 1) {
-                        fcom.displaySuccessMessage(ans.msg);
+                        $.ykmsg.success(ans.msg);
                     } else {
-                        fcom.displayErrorMessage(ans.msg);
+                        $.ykmsg.error(ans.msg);
                     }
                 });
             }

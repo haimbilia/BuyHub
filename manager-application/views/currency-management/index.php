@@ -98,6 +98,10 @@ $controller = str_replace('Controller', '', FatApp::getController());
     });
 
     function bindSortable() {
+        if (1 > $('[data-field="dragdrop"]').length) {
+            return;
+        }
+        
         $("#currencyIds > tbody").sortable({
             update: function(event, ui) {
                 fcom.displayProcessing();
@@ -117,8 +121,8 @@ $controller = str_replace('Controller', '', FatApp::getController());
                 bindData.then(
                     function(value) {
                         fcom.ajax(fcom.makeUrl('CurrencyManagement', 'updateOrder'), value, function(res) {
-                            fcom.removeLoader();
                             $.ykmsg.close();
+                            fcom.removeLoader();
                             var ans = $.parseJSON(res);
                             if (ans.status == 1) {
                                 $.ykmsg.success(ans.msg);

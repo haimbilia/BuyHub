@@ -17,15 +17,14 @@
         if (user == '') {
             return false;
         }
-        fcom.displayProcessing();
+        
         fcom.updateWithAjax(fcom.makeUrl("adminGuest", "sendResetPasswordLink", [user]), '', function (t) {
-            if (t.status) {
-                $.ykmsg.success(t.msg);
-            } else {
+            if (0 == t.status) {
                 $.ykmsg.error(t.errorMsg);
+                return false;
             }
+            $.ykmsg.success(t.msg);
         });
-        return false;
     }
 
 })();

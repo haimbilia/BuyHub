@@ -351,8 +351,10 @@ $(document).on('search', "input[name='keyword']", function () {
 
         data = fcom.frmData(frm);
 
+        fcom.displayProcessing();
         fcom.ajax(frm.action, data, function (res) {
             fcom.removeLoader();
+            $.ykmsg.close();
             $(".selectAllJs").prop("checked", false);
             callback();
             showActionsBtns();

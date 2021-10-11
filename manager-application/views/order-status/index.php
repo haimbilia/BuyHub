@@ -76,6 +76,10 @@ $controller = str_replace('Controller', '', FatApp::getController());
     });
 
     function bindSortable() {
+        if (1 > $('[data-field="dragdrop"]').length) {
+            return;
+        }
+        
         $("#orderStatuses > tbody").sortable({
             update: function(event, ui) {
                 fcom.displayProcessing();

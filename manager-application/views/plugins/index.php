@@ -16,7 +16,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                     <div class="card-head">
                         <div class="card-head-label">
                             <h3 class="card-head-title">
-                                <a class="back" href="">
+                                <a class="back" href="<?php echo UrlHelper::generateUrl('Settings'); ?>">
                                     <svg class="svg" width="24" height="24">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back"></use>
                                     </svg>
@@ -34,15 +34,15 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                         <a class="settings-inner-link" href="javascript:void(0)" onClick="searchRecords(<?php echo $formType; ?>);">
                                             <i class="settings-inner-icn">
                                                 <svg class="svg" width="20" height="20">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-system-setting">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-extension">
                                                     </use>
                                                 </svg>
                                             </i>
                                             <div>
                                                 <h6 class="settings-inner-title"><?php echo $tabName; ?></h6>
-                                                <!-- <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                <span class="settings-inner-desc">Lorem ipsum dolor sit amet
                                                     consectetur adipisicing
-                                                    elit. Suscipit est quos </span> -->
+                                                    elit. Suscipit est quos </span>
                                             </div>
                                         </a>
                                     </li>    
@@ -74,6 +74,10 @@ $controller = str_replace('Controller', '', FatApp::getController());
     });
 
     function bindSortable() {
+        if (1 > $('[data-field="dragdrop"]').length) {
+            return;
+        }
+
         $("#pluginsJs > tbody").sortable({
             update: function(event, ui) {
                 fcom.displayProcessing();

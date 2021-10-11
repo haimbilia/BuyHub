@@ -548,7 +548,7 @@
 			var elementObj = $(el[0].form.elements[arr[i].fldname]);
 			elementObj.attr('data-fatreq', JSON.stringify(arr[i].requirement));
 			if (true === fieldsVisibility) {
-				var elementRow = elementObj.closest('.field-set').parent();
+				var elementRow = elementObj.closest('.form-group').parent();
 				if (false == arr[i].requirement.required) {
 					elementRow.hide();
 				} else {

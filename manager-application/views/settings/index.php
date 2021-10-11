@@ -47,7 +47,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     <span>Display, Sound, notifications, power</span>
                                 </div>
                             </a>
-                        <?php } ?>
+                        <?php } */ ?>
 
                         <?php if ($objPrivilege->canViewPlugins(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <a class="setting" href="<?php echo UrlHelper::generateUrl('Plugins'); ?>">
@@ -64,7 +64,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     <span>Addons, Third party services</span>
                                 </div>
                             </a>
-                        <?php } */ ?>
+                        <?php } ?>
 
                         <?php if ($objPrivilege->canViewLanguageLabels(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <a class="setting" href="<?php echo UrlHelper::generateUrl('Labels'); ?>">

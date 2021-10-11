@@ -58,11 +58,11 @@ $(document).ready(function () {
 		fcom.ajax(fcom.makeUrl('productCategories', 'deleteRecord'), data, function (res) {
 			var ans = $.parseJSON(res);
 			if (ans.status == 1) {
-				fcom.displaySuccessMessage(ans.msg);
+				$.ykmsg.success(ans.msg);
 				searchProductCategories();
 				getTotalBlock();
 			} else {
-				fcom.displayErrorMessage(ans.msg);
+				$.ykmsg.error(ans.msg);
 			}
 		});
 	};
@@ -87,23 +87,24 @@ $(document).ready(function () {
 
 		var prodCatId = parseInt(obj.value);
 		if (prodCatId < 1) {
-			fcom.displayErrorMessage(langLbl.invalidRequest);
+			$.ykmsg.error(langLbl.invalidRequest);
 			return false;
 		}
 		data = 'prodCatId=' + prodCatId + '&prodcat_active=' + status;
 		fcom.displayProcessing();
 		fcom.ajax(fcom.makeUrl('productCategories', 'changeStatus'), data, function (res) {
+            $.ykmsg.close();
 			var ans = $.parseJSON(res);
 			if (ans.status == 1) {
 				$(obj).toggleClass("active");
-				fcom.displaySuccessMessage(ans.msg);
+				$.ykmsg.success(ans.msg);
 				searchProductCategories();
 				getTotalBlock();
 				setTimeout(function(){
 					goToCategory(prodCatId);
 				}, 1000);
 			} else {
-				fcom.displayErrorMessage(ans.msg);
+				$.ykmsg.error(ans.msg);
 			}
 		});
 	};
@@ -322,10 +323,10 @@ $(document).ready(function () {
 			},
 			success: function (ans) {
 				if (ans.status == 1) {
-					fcom.displaySuccessMessage(ans.msg);
+					$.ykmsg.success(ans.msg);
 					categoryImages(prodcatId, imageType, slideScreen, langId);
 				} else {
-					fcom.displayErrorMessage(ans.msg);
+					$.ykmsg.error(ans.msg);
 				}
 				$(document).trigger('close.facebox');
 			},
@@ -422,11 +423,11 @@ $(document).on('click','.catFile-Js',function(){
 				},
 				success: function(ans) {
 						if(ans.status == 1){
-							fcom.displaySuccessMessage(ans.msg);
+							$.ykmsg.success(ans.msg);
 							$('#form-upload').remove();
 							categoryImages(prodcat_id,imageType,slide_screen,lang_id);
 						}else{
-							fcom.displayErrorMessage(ans.msg);
+							$.ykmsg.error(ans.msg);
 						}
 					},
 					error: function(xhr, ajaxOptions, thrownError) {

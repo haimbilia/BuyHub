@@ -74,13 +74,13 @@ class PluginsController extends AdminBaseController
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
+        $srch->addOrder('plugin_active', 'DESC');
         $srch->addOrder($sortBy, $sortOrder);
         $srch->doNotLimitRecords();
         $arrListing = $db->fetchAll($srch->getResultSet());
-
         $activeTaxPluginFound = false;
         if (Plugin::TYPE_TAX_SERVICES == $type) {
-            array_walk($records, function ($val) use (&$activeTaxPluginFound) {
+            array_walk($arrListing, function ($val) use (&$activeTaxPluginFound) {
                 if (Plugin::ACTIVE == $val[Plugin::DB_TBL_PREFIX . 'active']) {
                     $activeTaxPluginFound = true;
                     return;
@@ -97,8 +97,7 @@ class PluginsController extends AdminBaseController
                     continue;
                 }
                 $gptSrch = Plugin::getSearchObject(0, true);
-                $gptSrch->addCondition(Plugin::DB_TBL_PREFIX . 'type', '=', $pluginType);
-                $gptSrch->addCondition(Plugin::DB_TBL_PREFIX . 'active', '=', Plugin::ACTIVE);
+                $gptSrch->addCondition('plg.'. Plugin::DB_TBL_PREFIX . 'type', '=', $pluginType);
                 $gptSrch->setPageSize(1);
                 $gptSrch->getResultSet();
                 if (0 < $gptSrch->recordCount()) {
@@ -327,9 +326,9 @@ class PluginsController extends AdminBaseController
 
         if (Plugin::ACTIVE == $status) {
             $groupType = Plugin::getGroupType($data['plugin_type']);
-            $eiherPluginTypes = array_values(array_diff($groupType, [$data['plugin_type']]));
+            $eitherPluginTypes = array_values(array_diff($groupType, [$data['plugin_type']]));
 
-            foreach ($eiherPluginTypes as $pluginType) {
+            foreach ($eitherPluginTypes as $pluginType) {
                 if (false == Plugin::updateStatus($pluginType, Plugin::INACTIVE, null, $error)) {
                     LibHelper::exitWithError($error, true);
                 }
@@ -361,9 +360,8 @@ class PluginsController extends AdminBaseController
                 'Icon',
                 'plugin_icon',
                 Labels::getLabel('LBL_Upload_File', $this->adminLangId),
-                array('class' => 'uploadFile-Js', 'id' => 'plugin_icon', 'data-plugin_id' => $recordId)
+                array('class' => 'btn btn-outline-brand btn-sm uploadFile-Js', 'id' => 'plugin_icon', 'data-plugin_id' => $recordId)
             );
-            $fld->htmlAfterField = '<span id="plugin_icon"></span>';
             if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId)) {
                 $uploadedTime = AttachedFile::setTimeParam($attachment['afile_updated_at']);
                 $fld->htmlAfterField .= '<div class="uploaded--image">
@@ -484,5 +482,19 @@ class PluginsController extends AdminBaseController
     private function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['dragdrop', 'plugin_icon', 'plugin_active'], Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_PLUGINS', $this->adminLangId)]
+                ];
+        }
+        return $this->nodes;
     }
 }

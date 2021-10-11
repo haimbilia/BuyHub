@@ -27,6 +27,7 @@
         if (pluginsType != type) {
             frm.page.value = 1;
             frm.sortBy.value ='';
+            frm.sortOrder.value ='';
         }
         data = fcom.frmData(frm);
 
@@ -44,6 +45,7 @@
         var data = 'keyName=' + keyName;
         fcom.ajax(fcom.makeUrl(keyName + 'Settings'), data, function (t) {
             fcom.removeLoader();
+            $.ykmsg.close();
             var res = isJson(t);
             if (res && res.status == 0) {
                 $.ykmsg.error(res.msg);
@@ -73,9 +75,11 @@
             fcom.removeLoader();
             return false;
         }
+        fcom.displayProcessing();
         data = 'pluginId=' + pluginId + "&status=" + status;
         fcom.ajax(fcom.makeUrl(controllerName, 'changeStatusByType'), data, function (res) {
             fcom.removeLoader();
+            $.ykmsg.close();
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
                 $.ykmsg.success(ans.msg);
@@ -116,6 +120,8 @@ $(document).on('click', '.uploadFile-Js', function () {
         if ($('#form-upload input[name=\'file\']').val() != '') {
             clearInterval(timer);
             $val = $(node).val();
+            fcom.displayProcessing();
+            $.ykmodal(fcom.getLoader());
             $.ajax({
                 url: fcom.makeUrl(controllerName, 'uploadIcon', [$('#form-upload input[name=\'pluginId\']').val()]),
                 type: 'post',
@@ -131,18 +137,22 @@ $(document).on('click', '.uploadFile-Js', function () {
                     $(node).val($val);
                 },
                 success: function (ans) {
+                    fcom.removeLoader();
+                    $.ykmsg.close();
                     $('.text-danger').remove();
-                    $('#Plugin_icon').html(ans.msg);
+                    $('#plugin_icon').html(ans.msg);
                     if (ans.status == true) {
-                        $(".tabs_nav a.active").click();
+                        $(".nav-tabs .nav-link.active").click();
                     } else {
-                        $('#Plugin_icon').removeClass('text-success');
-                        $('#Plugin_icon').addClass('text-danger');
+                        $('#plugin_icon').removeClass('text-success');
+                        $('#plugin_icon').addClass('text-danger');
                         $.ykmsg.error(ans.msg);
                     }
+                    reloadList();
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    $.ykmsg.error(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    fcom.removeLoader();
                 }
             });
         }

@@ -35,11 +35,10 @@ if (!in_array($pluginType, Plugin::getSeparateIconTypeArr())) {
     unset($fields['plugin_icon']);
 }
 
-if (!$canEdit || 2 > count($arrListing) || in_array($pluginType, Plugin::getKingpinTypeArr())) {
-    unset($fields['dragdrop']);
-    if (!$canEdit || in_array($pluginType, Plugin::getKingpinTypeArr()) || 1 > count($arrListing)) {
-        unset($fields['select_all']);
-    }
+$isKingPinType = in_array($pluginType, Plugin::getKingpinTypeArr());
+
+if (!$canEdit || 2 > count($arrListing) || $isKingPinType) {
+    unset($fields['dragdrop'], $fields['select_all']);
 }
 
 $tableId = "pluginsJs";
@@ -87,11 +86,11 @@ foreach ($arrListing as $sn => $row) {
                 $defaultCurrConvAPI = FatApp::getConfig('CONF_DEFAULT_PLUGIN_' . $row['plugin_type'], FatUtility::VAR_INT, 0);
                 $htm = '';
                 if (!empty($defaultCurrConvAPI) && $row['plugin_id'] == $defaultCurrConvAPI) {
-                    $htm = ' <span class="badge badge--unified-brand badge--inline badge--pill">'  . Labels::getLabel('LBL_DEFAULT', $adminLangId) . '</span>';
+                    $htm = ' <span class="badge badge-success">'  . Labels::getLabel('LBL_DEFAULT', $adminLangId) . '</span>';
                 }
 
                 if (in_array($row['plugin_code'], Plugin::PAY_LATER)) {
-                    $htm .= ' <span class="badge badge--unified-warning badge--inline badge--pill">'  . Labels::getLabel('LBL_PAY_LATER', $adminLangId) . '</span>';
+                    $htm .= ' <span class="badge badge-warning">'  . Labels::getLabel('LBL_PAY_LATER', $adminLangId) . '</span>';
                 }
                 if ($row['plugin_name'] != '') {
                     $td->appendElement('plaintext', $tdAttr, $row['plugin_name'] . $htm, true);
@@ -188,7 +187,7 @@ $frm->addHiddenField('', 'status'); ?>
         $data = [
             'canEdit' => $canEdit,
             'adminLangId' => $adminLangId,
-            'statusButtons' => true,
+            'statusButtons' => (1 < count($arrListing) && $canEdit && !$isKingPinType),
         ];
         $this->includeTemplate('_partial/listing/action-buttons.php', $data, false);
         ?>

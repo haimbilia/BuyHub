@@ -90,7 +90,7 @@
             data.append(this.name, $(this).val());
         });
         $.each($('#import_file')[0].files, function (i, file) {
-            fcom.displayProcessing(langLbl.processing, ' ', false);
+            fcom.displayProcessing();
             $('#fileupload_div').html(fcom.getLoader());
             data.append('import_file', file);
             $.ajax({
@@ -100,17 +100,18 @@
                 processData: false,
                 contentType: false,
                 success: function (t) {
+                    $.ykmsg.close();
                     try {
                         var ans = $.parseJSON(t);
                         if (ans.status == 1) {
                             //reloadList();
                             $(document).trigger('close.facebox');
                             $(document).trigger('close.mbsmessage');
-                            fcom.displaySuccessMessage(ans.msg);
+                            $.ykmsg.success(ans.msg);
                         } else {
                             $('#fileupload_div').html('');
                             $(document).trigger('close.mbsmessage');
-                            fcom.displayErrorMessage(ans.msg);
+                            $.ykmsg.error(ans.msg);
                         }
 
                         if (typeof ans.CSVfileUrl !== 'undefined') {
@@ -122,7 +123,7 @@
                         } */
                     } catch (exc) {
                         $(document).trigger('close.mbsmessage');
-                        fcom.displayErrorMessage(t);
+                        $.ykmsg.error(t);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
