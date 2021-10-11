@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <div class="card">
+                <div class="card sticky-sidebar">
                     <div class="card-head">
                         <div class="card-head-label">
                             <h3 class="card-head-title">

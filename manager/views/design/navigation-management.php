@@ -182,8 +182,256 @@
                         </div>
                         <div class="col-md-8">
                             <div class="card">
+                                <div class="card-head">
+                                    <h3 class="card-head-label">
+                                        <span class="card-head-title">Seller Left Navigation</span>
+
+                                    </h3>
+                                    <div class="card-toolbar">
+                                        <ul class="actions">
+                                            <li>
+                                                <a class="" href="#" title="">
+                                                    <svg class="svg" width="18" height="18">
+                                                        <use xlink:href="/admin/images/retina/sprite-actions.svg#edit">
+                                                        </use>
+                                                    </svg>
+                                                </a>
+                                            </li>
+                                            <li> <a href="#" class="btn btn-icon btn-light btn-add">
+                                                    <i class="icn">
+                                                        <svg class="svg">
+                                                            <use xlink:href="/admin/images/retina/sprite-actions.svg#add">
+                                                            </use>
+                                                        </svg></i>
+                                                    <span>New</span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+
+                                    </div>
+                                </div>
                                 <div class="card-body">
-                                
+                                    <div class="table-responsive">
+                                        <table width="100%" class="table table-dashed">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th class="sorting">#</th>
+                                                    <th class="sorting">
+                                                        <span>Caption
+                                                            <i class="icn">
+                                                                <svg class="svg" width="18" height="18">
+                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-up"></use>
+                                                                </svg>
+                                                            </i>
+                                                        </span>
+                                                    </th>
+                                                    <th class="align-right"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="dragHandle">
+                                                        <i class="icn">
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use xlink:href="/admin/images/retina/sprite-actions.svg#drag">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                    </td>
+                                                    <td>1</td>
+                                                    <td>Baby & Kids</td>
+                                                    <td class="align-right">
+                                                        <ul class="actions">
+                                                            <li>
+                                                                <a href="#" data-toggle="modal" data-target="#edit" title="Edit">
+
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                        </use>
+                                                                    </svg>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="javascript:void(0)" class="">
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                        </use>
+                                                                    </svg>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="dragHandle">
+                                                        <i class="icn">
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use xlink:href="/admin/images/retina/sprite-actions.svg#drag">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                    </td>
+                                                    <td>2</td>
+                                                    <td>Electronics</td>
+                                                    <td class="align-right">
+                                                        <ul class="actions">
+                                                            <li>
+                                                                <a href="#" data-toggle="modal" data-target="#edit" title="Edit">
+
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                        </use>
+                                                                    </svg>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="javascript:void(0)" class="">
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                        </use>
+                                                                    </svg>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="dragHandle">
+                                                        <i class="icn">
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use xlink:href="/admin/images/retina/sprite-actions.svg#drag">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                    </td>
+                                                    <td>3</td>
+                                                    <td>Men</td>
+                                                    <td class="align-right">
+                                                        <ul class="actions">
+                                                            <li>
+                                                                <a href="#" data-toggle="modal" data-target="#edit" title="Edit">
+
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                        </use>
+                                                                    </svg>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="javascript:void(0)" class="">
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                        </use>
+                                                                    </svg>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="dragHandle">
+                                                        <i class="icn">
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use xlink:href="/admin/images/retina/sprite-actions.svg#drag">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                    </td>
+                                                    <td>4</td>
+                                                    <td>Women</td>
+                                                    <td class="align-right">
+                                                        <ul class="actions">
+                                                            <li>
+                                                                <a href="#" data-toggle="modal" data-target="#edit" title="Edit">
+
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                        </use>
+                                                                    </svg>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="javascript:void(0)" class="">
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                        </use>
+                                                                    </svg>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="dragHandle">
+                                                        <i class="icn">
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use xlink:href="/admin/images/retina/sprite-actions.svg#drag">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                    </td>
+                                                    <td>5</td>
+                                                    <td>About Us</td>
+                                                    <td class="align-right">
+                                                        <ul class="actions">
+                                                            <li>
+                                                                <a href="#" data-toggle="modal" data-target="#edit" title="Edit">
+
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                        </use>
+                                                                    </svg>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="javascript:void(0)" class="">
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                        </use>
+                                                                    </svg>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="dragHandle">
+                                                        <i class="icn">
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use xlink:href="/admin/images/retina/sprite-actions.svg#drag">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                    </td>
+                                                    <td>6</td>
+                                                    <td>Contact Us</td>
+                                                    <td class="align-right">
+                                                        <ul class="actions">
+                                                            <li>
+                                                                <a href="#" data-toggle="modal" data-target="#edit" title="Edit">
+
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                        </use>
+                                                                    </svg>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="javascript:void(0)" class="">
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                        </use>
+                                                                    </svg>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
 
@@ -191,7 +439,95 @@
                     </div>
 
 
+                    <div class="modal fixed-right fade " id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-vertical" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="">Card title goes here</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form class="modal-body form form-edit">
+                                    <div class="form-edit-head">
+                                        <nav class="nav nav-tabs">
+                                            <a class="nav-link active" href="#">Active</a>
+                                            <a class="nav-link" href="#">Longer nav link</a>
+                                            <a class="nav-link" href="#">Link</a>
+                                            <a class="nav-link disabled" href="#">Disabled</a>
+                                        </nav>
 
+                                    </div>
+                                    <div class="form-edit-body">
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="label required">Language </label>
+                                                    <select onchange="addShopLangForm(5, this.value);" data-field-caption="Language" data-fatreq="{&quot;required&quot;:false}" name="lang_id">
+                                                        <option value="1" selected="selected">English
+                                                        </option>
+                                                        <option value="2">Arabic</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="label">
+                                                        <span class="required">Shop Name</span>
+                                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-toggle="tooltip" title="" data-original-title="Specify a target priorty" aria-label="Specify a target priorty" aria-describedby="tooltip849482"></i>
+                                                    </label>
+                                                    <input data-field-caption="Shop Name" data-fatreq="{&quot;required&quot;:true}" type="text" name="shop_name" value="Jason's Store">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="label">Shop City</label>
+
+                                                    <input data-field-caption="Shop City" data-fatreq="{&quot;required&quot;:false}" type="text" name="shop_city" value="phoenix">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="label">Contact Person</label>
+                                                    <input data-field-caption="Contact Person" data-fatreq="{&quot;required&quot;:false}" type="text" name="shop_contact_person" value="Jason">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="label">Description</label>
+
+                                                    <textarea data-field-caption="Description" data-fatreq="{&quot;required&quot;:false}" name="shop_description">Best range of products in the United States</textarea>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-edit-foot">
+                                        <div class="row">
+                                            <div class="col"><button type="reset" class="btn btn-outline-brand">Cancel</button>
+                                            </div>
+                                            <div class="col-auto">
+                                                <button type="submit" class="btn btn-brand gb-btn gb-btn-primary ">Update</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </form>
+
+
+                            </div>
+                        </div>
+                    </div>
 
 
                 </div>

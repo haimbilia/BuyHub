@@ -7,11 +7,13 @@
     </div>
 </div>
 <div class="card-body">
-    <?php
-    if (!empty($pageData['epage_content'])) {
-        echo FatUtility::decodeHtmlEntities($pageData['epage_content']);
-    } else {
-        echo Labels::getLabel('LBL_Sorry!_No_Instructions', $adminLangId);
-    }
-    ?>
+    <div class="cms">
+        <?php
+        if (!empty($pageData['epage_content'])) {
+            echo FatUtility::decodeHtmlEntities($pageData['epage_content']);
+        } else {
+            echo Labels::getLabel('LBL_Sorry!_No_Instructions', $adminLangId);
+        }
+        ?>
+    </div>
 </div>
