@@ -25,11 +25,11 @@ class TaxJarTaxSettingsController extends TaxSettingsController
         $exportLabel = Labels::getLabel('LBL_{EXPORT}_OLD_TRANSACTIONS_TO_CSV', $langId);
         $exportLabel = CommonHelper::replaceStringData($exportLabel, ['{EXPORT}' => $exportLink]);
 
-        $htmlAfterField = '<ul>
-            <li>' . $signupLabel . '</li>
-            <li>' . $tokenLabel . '</li>
-            <li>' . $exportLabel . '</li>                
-        </ul>';
+        $htmlAfterField = '<ul class="list-bullet mt-5">
+                                <li>' . $signupLabel . '</li>
+                                <li>' . $tokenLabel . '</li>
+                                <li>' . $exportLabel . '</li>                
+                            </ul>';
 
         $fld = $frm->addTextBox(Labels::getLabel('LBL_API_TOKEN', $langId), 'sandbox_key');
         $fld->htmlAfterField = $htmlAfterField;
