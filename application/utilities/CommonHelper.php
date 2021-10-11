@@ -1347,15 +1347,10 @@ class CommonHelper extends FatUtility
         return $urlString;
     }
 
-    public static function currencyDisclaimer($langId, $amount = 0)
+    public static function currencyDisclaimer($langId, $amount)
     {
-        $str = Labels::getLabel('LBL_Note_charged_in_currency_disclaimer_{default-currency-symbol}', $langId);
-        if ($amount) {
-            $str = str_replace("{default-currency-symbol}", static::displayMoneyFormat($amount, true, true), $str);
-        } else {
-            $str = str_replace("{default-currency-symbol}", ' $ ', $str);
-        }
-        return $str;
+        $str = Labels::getLabel('LBL_NOTE_CHARGED_IN_CURRENCY_DISCLAIMER_{DEFAULT-CURRENCY-SYMBOL}', $langId);
+        return CommonHelper::replaceStringData($str, ["{DEFAULT-CURRENCY-SYMBOL}" => static::displayMoneyFormat($amount, true, true)]);
     }
 
     public static function showProductDiscountedText(array $product, int $langId)
