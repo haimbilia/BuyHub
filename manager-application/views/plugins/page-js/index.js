@@ -35,7 +35,7 @@
             fcom.removeLoader();
             setTabActive(type);
 
-            var res = $.parseJSON(res);
+            var res = JSON.parse(res);
             $(dv).html(res.listingHtml);
         });
     };
@@ -80,7 +80,7 @@
         fcom.ajax(fcom.makeUrl(controllerName, 'changeStatusByType'), data, function (res) {
             fcom.removeLoader();
             $.ykmsg.close();
-            var ans = $.parseJSON(res);
+            var ans = JSON.parse(res);
             if (ans.status == 1) {
                 $.ykmsg.success(ans.msg);
             } else {

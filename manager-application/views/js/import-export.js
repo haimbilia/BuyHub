@@ -1,23 +1,43 @@
 (function () {
     addExportForm = function (actionType) {
         $.facebox(function () {
-            //getExportForm(actionType);
             exportForm(actionType);
 
         });
     };
     exportForm = function (actionType) {
-        if (actionType == 13) {
-            document.frmExport.action = fcom.makeUrl('ImportExport', 'exportLabels');
-            document.frmExport.submit();
-        } else {
-            $.ykmodal(fcom.getLoader());
-            fcom.ajax(fcom.makeUrl('ImportExport', 'exportForm', [actionType]), '', function (t) {
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl('ImportExport', 'exportForm', [actionType]), '', function (t) {
+            $.ykmsg.close();
+            try {
+                res = jQuery.parseJSON(t);
+                if (0 == res.status) {
+                    $.ykmsg.error(res.msg);
+                    return;
+                }
+            } catch (e) {
                 $.ykmodal(t);
-                fcom.removeLoader();
-            });
-        }
+            }
+        });
     }
+
+    exportMediaForm = function (actionType) {
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl('ImportExport', 'exportMediaForm', [actionType]), '', function (t) {
+            $.ykmsg.close();
+            try {
+                res = jQuery.parseJSON(t);
+                if (0 == res.status) {
+                    $.ykmsg.error(res.msg);
+                    return;
+                }
+            } catch (e) {
+                $.ykmodal(t);
+            }
+        });
+    };
+
+
     exportData = function (frm, actionType) {
         if (!$(frm).validate()) {
             fcom.removeLoader();
@@ -26,14 +46,6 @@
         document.frmImportExport.action = fcom.makeUrl('ImportExport', 'exportData', [actionType]);
         document.frmImportExport.submit();
         fcom.removeLoader();
-    };
-
-    exportMediaForm = function (actionType) {
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('ImportExport', 'exportMediaForm', [actionType]), '', function (t) {
-            $.ykmodal(t);
-            fcom.removeLoader();
-        });
     };
 
     exportMedia = function (frm, actionType) {
@@ -46,40 +58,66 @@
         fcom.removeLoader();
     };
 
-    addImportForm = function (actionType) {
-        $.facebox(function () {
-            // importForm(actionType);
-            getInstructions(actionType);
-        });
-    };
     importForm = function (actionType) {
-        $.ykmodal(fcom.getLoader());
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('ImportExport', 'importForm', [actionType]), '', function (t) {
-            $.ykmodal(t);
-            fcom.removeLoader();
+            $.ykmsg.close();
+            try {
+                res = jQuery.parseJSON(t);
+                if (0 == res.status) {
+                    $.ykmsg.error(res.msg);
+                    return;
+                }
+            } catch (e) {
+                $.ykmodal(t);
+            }
         });
     }
 
-    getInstructions = function (actionType) {
-        $.ykmodal(fcom.getLoader());
+    getImportInstructions = function (actionType) {
+        fcom.displayProcessing();
         if (actionType == 13) {
             fcom.ajax(fcom.makeUrl('ImportExport', 'importLabelsForm'), '', function (t) {
-                $.ykmodal(t);
+                $.ykmsg.close();
+                try {
+                    res = jQuery.parseJSON(t);
+                    if (0 == res.status) {
+                        $.ykmsg.error(res.msg);
+                        return;
+                    }
+                } catch (e) {
+                    $.ykmodal(t);
+                }
             });
         } else {
             fcom.ajax(fcom.makeUrl('ImportExport', 'importInstructions', [actionType]), '', function (t) {
-                $.ykmodal(t);
-                fcom.removeLoader();
+                $.ykmsg.close();
+                try {
+                    res = jQuery.parseJSON(t);
+                    if (0 == res.status) {
+                        $.ykmsg.error(res.msg);
+                        return;
+                    }
+                } catch (e) {
+                    $.ykmodal(t);
+                }
             });
         }
     }
 
-
     importMediaForm = function (actionType) {
-        $.ykmodal(fcom.getLoader());
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('ImportExport', 'importMediaForm', [actionType]), '', function (t) {
-            $.ykmodal(t);
-            fcom.removeLoader();
+            $.ykmsg.close();
+            try {
+                res = jQuery.parseJSON(t);
+                if (0 == res.status) {
+                    $.ykmsg.error(res.msg);
+                    return;
+                }
+            } catch (e) {
+                $.ykmodal(t);
+            }
         });
     };
 
@@ -102,7 +140,7 @@
                 success: function (t) {
                     $.ykmsg.close();
                     try {
-                        var ans = $.parseJSON(t);
+                        var ans = JSON.parse(t);
                         if (ans.status == 1) {
                             //reloadList();
                             $(document).trigger('close.facebox');

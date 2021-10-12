@@ -1,7 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="card-body">
     <?php
-    $frm->setFormTagAttribute('onsubmit', 'updateSettings(this); return(false);');
     $frm->setFormTagAttribute('class', 'form form--settings');
 
     $frm->developerTags['colWidthClassesDefault'] = [null, 'col-md-', null, null];
@@ -18,16 +17,18 @@
     ?>
 </div>
 <div class="card-foot">
-    <button type="button" class="btn btn-brand gb-btn gb-btn-primary importExportBtnJs" onclick="updateSettings('frmImportExportSetting')">
-        <?php
-        echo Labels::getLabel('LBL_UPDATE', $adminLangId);
-        ?>
-    </button>
+    <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_UPDATE', $adminLangId), 'button', '', '', "updateSettings('frmImportExportSetting')"); ?>
 </div>
 <script>
     $(document).ready(function() {
         $('#frmImportExportSetting').find('.checkbox').addClass('switch switch-sm switch-icon').removeClass('checkbox');
         $('#frmImportExportSetting i').replaceWith('<span></span>');
         $('#frmImportExportSetting').find('.caption-wraper').remove();
+    });
+    $(document).on('keyup', '#frmImportExportSetting', function(e) {
+        e.stopImmediatePropagation();
+        if (e.keyCode === 13) {
+            $('.submitBtnJs').click();
+        }
     });
 </script>

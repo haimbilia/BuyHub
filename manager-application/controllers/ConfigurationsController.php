@@ -88,26 +88,6 @@ class ConfigurationsController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    public function generalInstructions($frmType)
-    {
-        $frmType = FatUtility::int($frmType);
-        $langId = $this->adminLangId;
-        $obj = new Extrapage();
-        $pageData = $obj->getContentByPageType(Extrapage::GENERAL_SETTINGS_INSTRUCTIONS, $langId);
-
-        $dispLangTab = false;
-        if (in_array($frmType, Configurations::getLangTypeFormArr())) {
-            $dispLangTab = true;
-            $this->set('languages', Language::getAllNames());
-        }
-
-        $this->set('lang_id', 0);
-        $this->set('frmType', 0);
-        $this->set('frmType', $frmType);
-        $this->set('pageData', $pageData);
-        $this->set('dispLangTab', $dispLangTab);
-        $this->_template->render(false, false);
-    }
     public function langForm($frmType, $langId, $tabId = null)
     {
         $this->objPrivilege->canViewGeneralSettings();

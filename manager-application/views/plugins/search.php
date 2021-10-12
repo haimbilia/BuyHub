@@ -82,7 +82,7 @@ foreach ($arrListing as $sn => $row) {
                 $imgHtm = '<img src="' . $imageUrl . '" data-ratio="' . $aspectRatio . '">';
                 $td->appendElement('plaintext', $tdAttr, $imgHtm, true);
                 break;
-            case 'plugin_identifier':
+            case 'plugin_name':
                 $defaultCurrConvAPI = FatApp::getConfig('CONF_DEFAULT_PLUGIN_' . $row['plugin_type'], FatUtility::VAR_INT, 0);
                 $htm = '';
                 if (!empty($defaultCurrConvAPI) && $row['plugin_id'] == $defaultCurrConvAPI) {
@@ -92,13 +92,7 @@ foreach ($arrListing as $sn => $row) {
                 if (in_array($row['plugin_code'], Plugin::PAY_LATER)) {
                     $htm .= ' <span class="badge badge-warning">'  . Labels::getLabel('LBL_PAY_LATER', $adminLangId) . '</span>';
                 }
-                if ($row['plugin_name'] != '') {
-                    $td->appendElement('plaintext', $tdAttr, $row['plugin_name'] . $htm, true);
-                    $td->appendElement('br', $tdAttr);
-                    $td->appendElement('plaintext', $tdAttr, '(' . $row[$key] . ')', true);
-                } else {
-                    $td->appendElement('plaintext', $tdAttr, $row[$key] . $htm, true);
-                }
+                $td->appendElement('plaintext', $tdAttr, $row[$key] . $htm, true);
                 break;
             case 'plugin_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['plugin_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';

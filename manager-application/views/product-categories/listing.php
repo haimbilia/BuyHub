@@ -80,7 +80,7 @@ echo isset($pagination) ? html_entity_decode($pagination) : '';
                 order += '&pcat_id=' + pcat_id;
                 fcom.ajax(fcom.makeUrl('productCategories', 'update_order'), order, function(res) {
                     $.ykmsg.close();
-                    var ans = $.parseJSON(res);
+                    var ans = JSON.parse(res);
                     if (ans.status == 1) {
                         $.ykmsg.success(ans.msg);
                     } else {

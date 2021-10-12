@@ -10,8 +10,9 @@ class ImportExportController extends AdminBaseController
 
     public function index()
     {
-        $this->_template->addJs('js/import-export.js');
-        $this->set('action', 'generalInstructions');
+        $this->_template->addJs(['js/import-export.js']);
+        $this->set('action', 'export'); /* To load initial Tab. */
+        $this->set('includeDropZone', true);
         $this->_template->render();
     }
 
@@ -113,14 +114,12 @@ class ImportExportController extends AdminBaseController
     public function importData($actionType)
     {
         if (!is_uploaded_file($_FILES['import_file']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_CSV_File', $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('LBL_Please_Select_A_CSV_File', $this->adminLangId), true);
         }
 
         $obj = new Importexport();
         if (!$obj->isUploadedFileValidMimes($_FILES['import_file'])) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Not_a_Valid_CSV_File", $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel("LBL_Not_a_Valid_CSV_File", $this->adminLangId), true);
         }
 
         $sheetType = FatApp::getPostedData('sheet_type', FatUtility::VAR_INT, 0);
@@ -234,14 +233,12 @@ class ImportExportController extends AdminBaseController
         $post = FatApp::getPostedData();
 
         if (!is_uploaded_file($_FILES['import_file']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_CSV_File', $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('LBL_Please_Select_A_CSV_File', $this->adminLangId), true);
         }
 
         $obj = new Importexport();
         if (!$obj->isUploadedFileValidMimes($_FILES['import_file'])) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Not_a_Valid_CSV_File", $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel("LBL_Not_a_Valid_CSV_File", $this->adminLangId), true);
         }
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
@@ -263,6 +260,80 @@ class ImportExportController extends AdminBaseController
 
         $obj->importMedia($actionType, $post, $langId);
     }
+    
+    public function importForm($actionType)
+    {
+        $langId = $this->adminLangId;
+        $displayMediaTab = true;
+        switch ($actionType) {
+            case Importexport::TYPE_CATEGORIES:
+                $this->objPrivilege->canEditProductCategories();
+                $formTitle = Labels::getLabel('LBL_IMPORT_CATEGORIES', $langId);
+                break;
+            case Importexport::TYPE_BRANDS:
+                $this->objPrivilege->canEditBrands();
+                $formTitle = Labels::getLabel('LBL_IMPORT_BRANDS', $langId);
+                break;
+            case Importexport::TYPE_PRODUCTS:
+                $this->objPrivilege->canViewProducts();
+                $formTitle = Labels::getLabel('LBL_IMPORT_CATALOGS', $langId);
+                break;
+            case Importexport::TYPE_SELLER_PRODUCTS:
+                $this->objPrivilege->canViewProducts();
+                $formTitle = Labels::getLabel('LBL_IMPORT_SELLER_PRODUCTS', $langId);
+                break;
+            case Importexport::TYPE_INVENTORIES:
+                $this->objPrivilege->canViewSellerProducts();
+                $displayMediaTab = false;
+                $formTitle = Labels::getLabel('LBL_IMPORT_INVENTORIES', $langId);
+                break;
+            case Importexport::TYPE_OPTIONS:
+                $this->objPrivilege->canViewOptions();
+                $displayMediaTab = false;
+                $formTitle = Labels::getLabel('LBL_IMPORT_OPTIONS', $langId);
+                break;
+            case Importexport::TYPE_OPTION_VALUES:
+                $this->objPrivilege->canViewOptions();
+                $displayMediaTab = false;
+                $formTitle = Labels::getLabel('LBL_IMPORT_OPTION_VALUES', $langId);
+                break;
+            case Importexport::TYPE_TAG:
+                $this->objPrivilege->canViewTags();
+                $displayMediaTab = false;
+                $formTitle = Labels::getLabel('LBL_IMPORT_TAGS', $langId);
+                break;
+            case Importexport::TYPE_ZONES:
+                $this->objPrivilege->canViewZones();
+                $displayMediaTab = false;
+                $formTitle = Labels::getLabel('LBL_IMPORT_ZONES', $langId);
+                break;
+            case Importexport::TYPE_COUNTRY:
+                $this->objPrivilege->canViewCountries();
+                $displayMediaTab = false;
+                $formTitle = Labels::getLabel('LBL_IMPORT_COUNTRIES', $langId);
+                break;
+            case Importexport::TYPE_STATE:
+                $this->objPrivilege->canViewStates();
+                $displayMediaTab = false;
+                $formTitle = Labels::getLabel('LBL_IMPORT_STATES', $langId);
+                break;
+            case Importexport::TYPE_POLICY_POINTS:
+                $this->objPrivilege->canViewPolicyPoints();
+                $displayMediaTab = false;
+                $formTitle = Labels::getLabel('LBL_IMPORT_POLICY_POINTS', $langId);
+                break;
+            default:
+                LibHelper::exitWithError($this->str_invalid_request, true);
+                break;
+        }
+
+        $frm = $this->getImportExportForm($langId, 'IMPORT', $actionType);
+        $this->set('frm', $frm);
+        $this->set('actionType', $actionType);
+        $this->set('displayMediaTab', $displayMediaTab);
+        $this->set('formTitle', $formTitle);
+        $this->_template->render(false, false);
+    }
 
     public function importMediaForm($actionType)
     {
@@ -270,7 +341,7 @@ class ImportExportController extends AdminBaseController
         switch ($actionType) {
             case Importexport::TYPE_CATEGORIES:
                 $this->objPrivilege->canEditProductCategories();
-                $title = Labels::getLabel('LBL_Import_Categories_Media', $langId);
+                $title = Labels::getLabel('LBL_IMPORT_CATEGORIES_MEDIA', $langId);
                 $frm = $this->getImportExportForm($langId, 'IMPORT_MEDIA', $actionType);
                 break;
             case Importexport::TYPE_BRANDS:
@@ -279,120 +350,23 @@ class ImportExportController extends AdminBaseController
                 $frm = $this->getImportExportForm($langId, 'IMPORT_MEDIA', $actionType);
                 break;
             case Importexport::TYPE_PRODUCTS:
+                $this->objPrivilege->canEditProducts();
+                $title = Labels::getLabel('LBL_IMPORT_CATALOG_MEDIA', $langId);
+                $frm = $this->getImportExportForm($langId, 'IMPORT_MEDIA', $actionType);
+                break;
             case Importexport::TYPE_SELLER_PRODUCTS:
                 $this->objPrivilege->canEditProducts();
-                $title = Labels::getLabel('LBL_Import_Catalog_Media', $langId);
+                $title = Labels::getLabel('LBL_IMPORT_SELLER_PRODUCTS_MEDIA', $langId);
                 $frm = $this->getImportExportForm($langId, 'IMPORT_MEDIA', $actionType);
                 break;
             default:
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
                 break;
         }
 
         $this->set('frm', $frm);
+        $this->set('displayMediaTab', true);
         $this->set('actionType', $actionType);
-        $this->set('formTitle', $title);
-        $this->_template->render(false, false);
-    }
-
-    public function exportMediaForm($actionType)
-    {
-        $langId = $this->adminLangId;
-        switch ($actionType) {
-            case Importexport::TYPE_CATEGORIES:
-                $this->objPrivilege->canViewProductCategories();
-                $title = Labels::getLabel('LBL_Export_Categories_Media', $langId);
-                $frm = $this->getImportExportForm($langId, 'EXPORT_MEDIA', $actionType);
-                break;
-            case Importexport::TYPE_BRANDS:
-                $this->objPrivilege->canViewBrands();
-                $title = Labels::getLabel('LBL_Export_Brands_Media', $langId);
-                $frm = $this->getImportExportForm($langId, 'EXPORT_MEDIA', $actionType);
-                break;
-            case Importexport::TYPE_PRODUCTS:
-            case Importexport::TYPE_SELLER_PRODUCTS:
-                $this->objPrivilege->canViewProducts();
-                $title = Labels::getLabel('LBL_Export_Catalogs_Media', $langId);
-                $frm = $this->getImportExportForm($langId, 'EXPORT_MEDIA', $actionType);
-                break;
-            case Importexport::TYPE_INVENTORIES:
-                $this->objPrivilege->canViewSellerProducts();
-                $title = Labels::getLabel('LBL_Export_Digital_Files', $langId);
-                $frm = $this->getImportExportForm($langId, 'EXPORT_MEDIA', $actionType);
-                break;
-            default:
-                FatUtility::dieWithError($this->str_invalid_request);
-                break;
-        }
-
-        $this->set('frm', $frm);
-        $this->set('actionType', $actionType);
-        $this->set('formTitle', $title);
-        $this->_template->render(false, false);
-    }
-
-    public function importForm($actionType)
-    {
-        $langId = $this->adminLangId;
-        $displayMediaTab = true;
-        switch ($actionType) {
-            case Importexport::TYPE_CATEGORIES:
-                $this->objPrivilege->canEditProductCategories();
-                $title = Labels::getLabel('LBL_Import_Categories', $langId);
-                break;
-            case Importexport::TYPE_BRANDS:
-                $this->objPrivilege->canEditBrands();
-                $title = Labels::getLabel('LBL_Import_Brands', $langId);
-                break;
-            case Importexport::TYPE_PRODUCTS:
-            case Importexport::TYPE_SELLER_PRODUCTS:
-                $this->objPrivilege->canViewProducts();
-                $title = Labels::getLabel('LBL_Import_Catalogs', $langId);
-                break;
-            case Importexport::TYPE_INVENTORIES:
-                $this->objPrivilege->canViewSellerProducts();
-                $displayMediaTab = false;
-                $title = Labels::getLabel('LBL_IMPORT_SELLER_INVENTORIES', $langId);
-                break;
-            case Importexport::TYPE_OPTIONS:
-                $this->objPrivilege->canViewOptions();
-                $displayMediaTab = false;
-                $title = Labels::getLabel('LBL_Import_Options', $langId);
-                break;
-            case Importexport::TYPE_OPTION_VALUES:
-                $this->objPrivilege->canViewOptions();
-                $displayMediaTab = false;
-                $title = Labels::getLabel('LBL_Import_Option_Values', $langId);
-                break;
-            case Importexport::TYPE_TAG:
-                $this->objPrivilege->canViewTags();
-                $displayMediaTab = false;
-                $title = Labels::getLabel('LBL_Import_Tags', $langId);
-                break;
-            case Importexport::TYPE_COUNTRY:
-                $this->objPrivilege->canViewCountries();
-                $displayMediaTab = false;
-                $title = Labels::getLabel('LBL_Import_Countries', $langId);
-                break;
-            case Importexport::TYPE_STATE:
-                $this->objPrivilege->canViewStates();
-                $displayMediaTab = false;
-                $title = Labels::getLabel('LBL_Import_States', $langId);
-                break;
-            case Importexport::TYPE_POLICY_POINTS:
-                $this->objPrivilege->canViewPolicyPoints();
-                $displayMediaTab = false;
-                $title = Labels::getLabel('LBL_Import_Policy_Points', $langId);
-                break;
-            default:
-                FatUtility::dieWithError($this->str_invalid_request);
-                break;
-        }
-
-        $frm = $this->getImportExportForm($langId, 'IMPORT', $actionType);
-        $this->set('frm', $frm);
-        $this->set('actionType', $actionType);
-        $this->set('displayMediaTab', $displayMediaTab);
         $this->set('formTitle', $title);
         $this->_template->render(false, false);
     }
@@ -436,6 +410,10 @@ class ImportExportController extends AdminBaseController
                 $this->objPrivilege->canViewTags();
                 $pageData = $obj->getContentByPageType(Extrapage::ADMIN_TAGS_INSTRUCTIONS, $langId);
                 break;
+            case Importexport::TYPE_ZONES:
+                $this->objPrivilege->canViewZones();
+                $pageData = $obj->getContentByPageType(Extrapage::ADMIN_ZONE_MANAGEMENT_INSTRUCTIONS, $langId);
+                break;
             case Importexport::TYPE_COUNTRY:
                 $this->objPrivilege->canViewCountries();
                 $pageData = $obj->getContentByPageType(Extrapage::ADMIN_COUNTRIES_MANAGEMENT_INSTRUCTIONS, $langId);
@@ -449,12 +427,11 @@ class ImportExportController extends AdminBaseController
                 $pageData = $obj->getContentByPageType(Extrapage::ADMIN_TYPE_POLICY_POINTS, $langId);
                 break;
             default:
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
                 break;
         }
-        $title = Labels::getLabel('LBL_Import_Instructions', $langId);
         $this->set('pageData', $pageData);
-        $this->set('formTitle', $title);
+        $this->set('formTitle', Labels::getLabel('LBL_Import_Instructions', $langId));
         $this->set('actionType', $actionType);
         $this->set('displayMediaTab', $displayMediaTab);
         $this->_template->render(false, false);
@@ -465,53 +442,71 @@ class ImportExportController extends AdminBaseController
         $langId = $this->adminLangId;
         $displayMediaTab = false;
 
-        $options = Importexport::getImportExportTypeArr('export', $this->adminLangId, false);
-        $title = $options[$actionType];
-
+        $formTitle = Labels::getLabel('LBL_EXPORT', $this->adminLangId);
         switch ($actionType) {
             case Importexport::TYPE_CATEGORIES:
+                $formTitle = Labels::getLabel('LBL_EXPORT_CATEGORIES', $this->adminLangId);
                 $this->objPrivilege->canViewProductCategories();
                 $displayMediaTab = true;
                 break;
             case Importexport::TYPE_BRANDS:
+                $formTitle = Labels::getLabel('LBL_EXPORT_BRANDS', $this->adminLangId);
                 $this->objPrivilege->canViewBrands();
                 $displayMediaTab = true;
                 break;
             case Importexport::TYPE_PRODUCTS:
+                $formTitle = Labels::getLabel('LBL_EXPORT_PRODUCTS', $this->adminLangId);
+                $this->objPrivilege->canViewProducts();
+                $displayMediaTab = true;
+                break;
             case Importexport::TYPE_SELLER_PRODUCTS:
+                $formTitle = Labels::getLabel('LBL_EXPORT_SELLER_PRODUCTS', $this->adminLangId);
                 $this->objPrivilege->canViewProducts();
                 $displayMediaTab = true;
                 break;
             case Importexport::TYPE_INVENTORIES:
+                $formTitle = Labels::getLabel('LBL_EXPORT_INVENTORIES', $this->adminLangId);
                 $this->objPrivilege->canViewSellerProducts();
                 $displayMediaTab = true;
                 break;
             case Importexport::TYPE_OPTIONS:
+                $formTitle = Labels::getLabel('LBL_EXPORT_OPTIONS', $this->adminLangId);
                 $this->objPrivilege->canViewOptions();
                 break;
             case Importexport::TYPE_OPTION_VALUES:
+                $formTitle = Labels::getLabel('LBL_EXPORT_OPTION_VALUES', $this->adminLangId);
                 $this->objPrivilege->canViewOptions();
                 break;
             case Importexport::TYPE_TAG:
+                $formTitle = Labels::getLabel('LBL_EXPORT_TAG', $this->adminLangId);
                 $this->objPrivilege->canViewTags();
                 break;
+            case Importexport::TYPE_ZONES:
+                $formTitle = Labels::getLabel('LBL_EXPORT_ZONES', $this->adminLangId);
+                $this->objPrivilege->canViewZones();
+                break;
             case Importexport::TYPE_COUNTRY:
+                $formTitle = Labels::getLabel('LBL_EXPORT_COUNTRY', $this->adminLangId);
                 $this->objPrivilege->canViewCountries();
                 break;
             case Importexport::TYPE_STATE:
+                $formTitle = Labels::getLabel('LBL_EXPORT_STATE', $this->adminLangId);
                 $this->objPrivilege->canViewStates();
                 break;
             case Importexport::TYPE_POLICY_POINTS:
+                $formTitle = Labels::getLabel('LBL_EXPORT_POLICY_POINTS', $this->adminLangId);
                 $this->objPrivilege->canViewPolicyPoints();
                 break;
             case Importexport::TYPE_USERS:
+                $formTitle = Labels::getLabel('LBL_EXPORT_USERS', $this->adminLangId);
                 $this->objPrivilege->canViewUsers();
                 break;
             case Importexport::TYPE_TAX_CATEGORY:
+                $formTitle = Labels::getLabel('LBL_EXPORT_TAX_CATEGORY', $this->adminLangId);
                 $this->objPrivilege->canViewTax();
                 break;
             default:
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
                 break;
         }
 
@@ -519,10 +514,51 @@ class ImportExportController extends AdminBaseController
         $this->set('frm', $frm);
         $this->set('actionType', $actionType);
         $this->set('displayMediaTab', $displayMediaTab);
-        $this->set('formTitle', $title);
+        $this->set('formTitle', $formTitle);
         $this->_template->render(false, false);
     }
 
+    public function exportMediaForm($actionType)
+    {
+        $langId = $this->adminLangId;
+        $formTitle = Labels::getLabel('LBL_EXPORT_MEDIA', $this->adminLangId);
+        switch ($actionType) {
+            case Importexport::TYPE_CATEGORIES:
+                $this->objPrivilege->canViewProductCategories();
+                $formTitle = Labels::getLabel('LBL_EXPORT_CATEGORIES_MEDIA', $this->adminLangId);
+                $frm = $this->getImportExportForm($langId, 'EXPORT_MEDIA', $actionType);
+                break;
+            case Importexport::TYPE_BRANDS:
+                $this->objPrivilege->canViewBrands();
+                $formTitle = Labels::getLabel('LBL_EXPORT_BRANDS_MEDIA', $this->adminLangId);
+                $frm = $this->getImportExportForm($langId, 'EXPORT_MEDIA', $actionType);
+                break;
+            case Importexport::TYPE_PRODUCTS:
+                $this->objPrivilege->canViewProducts();
+                $formTitle = Labels::getLabel('LBL_EXPORT_PRODUCTS_MEDIA', $this->adminLangId);
+                $frm = $this->getImportExportForm($langId, 'EXPORT_MEDIA', $actionType);
+                break;
+            case Importexport::TYPE_SELLER_PRODUCTS:
+                $this->objPrivilege->canViewProducts();
+                $formTitle = Labels::getLabel('LBL_EXPORT_SELLER_PRODUCTS_MEDIA', $this->adminLangId);
+                $frm = $this->getImportExportForm($langId, 'EXPORT_MEDIA', $actionType);
+                break;
+            case Importexport::TYPE_INVENTORIES:
+                $this->objPrivilege->canViewSellerProducts();
+                $formTitle = Labels::getLabel('LBL_EXPORT_INVENTORIES_MEDIA', $this->adminLangId);
+                $frm = $this->getImportExportForm($langId, 'EXPORT_MEDIA', $actionType);
+                break;
+            default:
+                LibHelper::exitWithError($this->str_invalid_request, true);
+                break;
+        }
+
+        $this->set('frm', $frm);
+        $this->set('displayMediaTab', true);
+        $this->set('actionType', $actionType);
+        $this->set('formTitle', $formTitle);
+        $this->_template->render(false, false);
+    }
 
     public function getImportExportForm($langId, $type = 'EXPORT', $actionType)
     {
@@ -661,9 +697,6 @@ class ImportExportController extends AdminBaseController
     public function loadForm($formType)
     {
         switch (strtoupper($formType)) {
-            case 'GENERAL_INSTRUCTIONS':
-                $this->generalInstructions();
-                break;
             case 'IMPORT':
                 $this->import();
                 break;
@@ -679,15 +712,6 @@ class ImportExportController extends AdminBaseController
         }
     }
 
-    public function generalInstructions()
-    {
-        $obj = new Extrapage();
-        $pageData = $obj->getContentByPageType(Extrapage::GENERAL_SETTINGS_INSTRUCTIONS, $this->adminLangId);
-        $this->set('pageData', $pageData);
-        $this->set('action', 'generalInstructions');
-        $this->_template->render(false, false, 'import-export/general-instructions.php');
-    }
-
     public function export()
     {
         $options = Importexport::getImportExportTypeArr('export', $this->adminLangId, false);
@@ -695,46 +719,12 @@ class ImportExportController extends AdminBaseController
         $this->_template->render(false, false, 'import-export/export.php');
     }
 
-    /* private function getExportForm($langId)
-    {
-        $frm = new Form('frmExport', array('id' => 'frmExport'));
-        $options = Importexport::getImportExportTypeArr('export', $langId, false);
-        $fld = $frm->addRadioButtons(
-            '',
-            'export_option',
-            $options,
-            '',
-            array('class' => 'list-inline list-col-2'),
-            array('onClick' => 'exportForm(this.value)')
-        );
-        return $frm;
-    } */
-
     public function import()
     {
         $options = Importexport::getImportExportTypeArr('import', $this->adminLangId, false);
-
         $this->set('options', $options);
-        $this->set('sitelangId', $this->adminLangId);
         $this->_template->render(false, false, 'import-export/import.php');
     }
-
-    /* private function getImportForm($langId)
-    {
-        $frm = new Form('frmImport', array('id' => 'frmImport'));
-        $options = Importexport::getImportExportTypeArr('import', $langId, false);
-      
-        $fld = $frm->addRadioButtons(
-            '',
-            'export_option',
-            $options,
-            '',
-            array('class' => 'list-inline list-col-2'),
-            array('onClick' => 'getInstructions(this.value)')
-        );
-
-        return $frm;
-    } */
 
     public function settings()
     {
@@ -751,85 +741,30 @@ class ImportExportController extends AdminBaseController
     {
         $frm = new Form('frmImportExportSetting', array('id' => 'frmImportExportSetting'));
 
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_brand_id_instead_of_brand_identifier", $this->adminLangId), 'CONF_USE_BRAND_ID', 1, array(), false, 0);
-       
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_brand_id_instead_of_brand_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_category_id_instead_of_category_identifier", $this->adminLangId), 'CONF_USE_CATEGORY_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_category_id_instead_of_category_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_catalog_product_id_instead_of_catalog_product_identifier", $this->adminLangId), 'CONF_USE_PRODUCT_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_catalog_product_id_instead_of_catalog_product_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_user_id_instead_of_username", $this->adminLangId), 'CONF_USE_USER_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_user_id_instead_of_username_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_option_id_instead_of_option_identifier", $this->adminLangId), 'CONF_USE_OPTION_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_option_id_instead_of_option_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_option_value_id_instead_of_option_identifier", $this->adminLangId), 'CONF_OPTION_VALUE_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_option_value_id_instead_of_option_value_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        /* $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_option_type_id_instead_of_option_type_identifier",$this->adminLangId),'CONF_USE_OPTION_TYPE_ID',1,array(),false,0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_option_type_id_instead_of_option_type_identifier_in_worksheets",$this->adminLangId) . '</small>';*/ 
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_tag_id_instead_of_tag_identifier", $this->adminLangId), 'CONF_USE_TAG_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_tag_id_instead_of_tag_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_tax_id_instead_of_tax_identifier", $this->adminLangId), 'CONF_USE_TAX_CATEOGRY_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_tax_category_id_instead_of_tax_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_product_type_id_instead_of_product_type_identifier", $this->adminLangId), 'CONF_USE_PRODUCT_TYPE_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_product_type_id_instead_of_product_type_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_dimension_unit_id_instead_of_dimension_unit_identifier", $this->adminLangId), 'CONF_USE_DIMENSION_UNIT_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_dimension_unit_id_instead_of_dimension_unit_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_weight_unit_id_instead_of_weight_unit_identifier", $this->adminLangId), 'CONF_USE_WEIGHT_UNIT_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_weight_unit_id_instead_of_weight_unit_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_lang_id_instead_of_lang_code", $this->adminLangId), 'CONF_USE_LANG_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_language_id_instead_of_language_code_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_currency_id_instead_of_currency_code", $this->adminLangId), 'CONF_USE_CURRENCY_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_currency_id_instead_of_currency_code_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_Product_condition_id_instead_of_condition_identifier", $this->adminLangId), 'CONF_USE_PROD_CONDITION_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_Product_condition_id_instead_of_condition_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_persent_or_flat_condition_id_instead_of_identifier", $this->adminLangId), 'CONF_USE_PERSENT_OR_FLAT_CONDITION_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_persent_or_flat_condition_id_instead_of_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_country_id_instead_of_country_code", $this->adminLangId), 'CONF_USE_COUNTRY_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_country_id_instead_of_country_code_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_state_id_instead_of_state_identifier", $this->adminLangId), 'CONF_USE_STATE_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_state_id_instead_of_state_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_policy_point_id_instead_of_policy_point_identifier", $this->adminLangId), 'CONF_USE_POLICY_POINT_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_policy_point_id_instead_of_policy_point_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_company_id_instead_of_shipping_company_identifier", $this->adminLangId), 'CONF_USE_SHIPPING_COMPANY_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_company_id_instead_of_shipping_company_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_policy_point_type_id_instead_of_policy_point_type_identifier", $this->adminLangId), 'CONF_USE_POLICY_POINT_TYPE_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_policy_point_type_id_instead_of_policy_point_type_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        /* $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_method_id_instead_of_shipping_method_identifier",$this->adminLangId),'CONF_USE_SHIPPING_METHOD_ID',1,array(),false,0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_method_id_instead_of_shipping_method_identifier_in_worksheets",$this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_duration_id_instead_of_shipping_duration_identifier", $this->adminLangId), 'CONF_USE_SHIPPING_DURATION_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_duration_id_instead_of_shipping_duration_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_profile_id_instead_of_shipping_profile_identifier", $this->adminLangId), 'CONF_USE_SHIPPING_PROFILE_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_profile_id_instead_of_shipping_profile_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_package_id_instead_of_shipping_package_identifier", $this->adminLangId), 'CONF_USE_SHIPPING_PACKAGE_ID', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_package_id_instead_of_shipping_package_identifier_in_worksheets", $this->adminLangId) . '</small>';*/
-
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_1_for_yes_0_for_no", $this->adminLangId), 'CONF_USE_O_OR_1', 1, array(), false, 0);
-        /*$fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_1_for_yes_0_for_no_for_status_type_data", $this->adminLangId) . '</small>';*/
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_Save_Changes", $this->adminLangId));
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_brand_id_instead_of_brand_identifier", $this->adminLangId), 'CONF_USE_BRAND_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_category_id_instead_of_category_identifier", $this->adminLangId), 'CONF_USE_CATEGORY_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_catalog_product_id_instead_of_catalog_product_identifier", $this->adminLangId), 'CONF_USE_PRODUCT_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_user_id_instead_of_username", $this->adminLangId), 'CONF_USE_USER_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_option_id_instead_of_option_identifier", $this->adminLangId), 'CONF_USE_OPTION_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_option_value_id_instead_of_option_identifier", $this->adminLangId), 'CONF_OPTION_VALUE_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_tag_id_instead_of_tag_identifier", $this->adminLangId), 'CONF_USE_TAG_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_tax_id_instead_of_tax_identifier", $this->adminLangId), 'CONF_USE_TAX_CATEOGRY_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_product_type_id_instead_of_product_type_identifier", $this->adminLangId), 'CONF_USE_PRODUCT_TYPE_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_dimension_unit_id_instead_of_dimension_unit_identifier", $this->adminLangId), 'CONF_USE_DIMENSION_UNIT_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_weight_unit_id_instead_of_weight_unit_identifier", $this->adminLangId), 'CONF_USE_WEIGHT_UNIT_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_lang_id_instead_of_lang_code", $this->adminLangId), 'CONF_USE_LANG_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_currency_id_instead_of_currency_code", $this->adminLangId), 'CONF_USE_CURRENCY_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_Product_condition_id_instead_of_condition_identifier", $this->adminLangId), 'CONF_USE_PROD_CONDITION_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_persent_or_flat_condition_id_instead_of_identifier", $this->adminLangId), 'CONF_USE_PERSENT_OR_FLAT_CONDITION_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_country_id_instead_of_country_code", $this->adminLangId), 'CONF_USE_COUNTRY_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_state_id_instead_of_state_identifier", $this->adminLangId), 'CONF_USE_STATE_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_policy_point_id_instead_of_policy_point_identifier", $this->adminLangId), 'CONF_USE_POLICY_POINT_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_company_id_instead_of_shipping_company_identifier", $this->adminLangId), 'CONF_USE_SHIPPING_COMPANY_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_policy_point_type_id_instead_of_policy_point_type_identifier", $this->adminLangId), 'CONF_USE_POLICY_POINT_TYPE_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_duration_id_instead_of_shipping_duration_identifier", $this->adminLangId), 'CONF_USE_SHIPPING_DURATION_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_profile_id_instead_of_shipping_profile_identifier", $this->adminLangId), 'CONF_USE_SHIPPING_PROFILE_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_package_id_instead_of_shipping_package_identifier", $this->adminLangId), 'CONF_USE_SHIPPING_PACKAGE_ID', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel("LBL_Use_1_for_yes_0_for_no", $this->adminLangId), 'CONF_USE_O_OR_1', 1, array(), false, 0);
         return $frm;
     }
 
@@ -837,79 +772,132 @@ class ImportExportController extends AdminBaseController
     {
         $frm = $this->getSettingForm($this->adminLangId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        var_dump($post);exit;
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $record = new Configurations();
         if (!$record->update($post)) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Settings_Updated_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_SETTINGS_UPDATED_SUCCESSFUL', $this->adminLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
     public function bulkMedia()
-    {
-        $frm = $this->getbulkMediaForm($this->adminLangId);
+    {        
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+        $this->set("frmSearch", $frmSearch);
+        $this->getListingData();
         $this->set('action', 'bulkMedia');
-        $this->set('frm', $frm);
         $this->_template->render(false, false, 'import-export/bulk-media.php');
     }
 
-    private function getbulkMediaForm()
+    public function getSearchForm($fields = [])
     {
-        $frm = new Form('uploadBulkImages', array('id' => 'uploadBulkImages'));
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page');
 
-        $fldImg = $frm->addFileUpload('', 'bulk_images', array('id' => 'bulk_images', 'accept' => '.zip'));
-        $fldImg->requirement->setRequired(true);
-        $fldImg->setFieldTagAttribute('onChange', '$("#uploadFileName").html(this.value)');
-        $fldImg->htmlBeforeField = '<div class="filefield"><span class="filename" id="uploadFileName">' . Labels::getLabel('LBL_Select_File_To_Upload', $this->adminLangId) . '</span>';
-        $fldImg->htmlAfterField = '<label class="filelabel">' . Labels::getLabel('LBL_Browse_File', $this->adminLangId) . '</label></div>';
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->adminLangId));
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
         return $frm;
     }
 
-    public function bulkMediaList()
+    private function getListingData()
     {
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
+
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        if ('user' == $sortBy) {
+            $sortBy = 'credential_username';
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+
         $bulkImage = new UploadBulkImages();
-        $srch = $bulkImage->bulkMediaFileObject();
+        $srch = $bulkImage->bulkMediaFileObject(0, false);
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $srch->addOrder($sortBy, $sortOrder);
+
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("records", $records);
-        $this->set("canEdit", $this->objPrivilege->canEditImportExport(0, true));
-        $this->_template->render(false, false);
+
+        $searchForm = $this->getSearchForm($fields);
+        $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
+
+        $this->set("arrListing", $records);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('postedData', $post);
+
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditEmptyCartItems($this->admin_id, true));
+    }
+    
+    /**
+     * search : Search Bulk Media
+     *
+     * @return void
+     */
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'import-export/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     public function upload()
     {
-        $frm = $this->getbulkMediaForm();
-        $post = $frm->getFormDataFromArray($_FILES);
-
-        if (false === $post) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Data', $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+        if (empty($_FILES)) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
-
-        $fileName = $_FILES['bulk_images']['name'];
-        $tmpName = $_FILES['bulk_images']['tmp_name'];
+        
+        $fileName = $_FILES['file']['name'];
+        $tmpName = $_FILES['file']['tmp_name'];
 
         $uploadBulkImgobj = new UploadBulkImages();
         $savedFile = $uploadBulkImgobj->upload($fileName, $tmpName);
         if (false === $savedFile) {
-            Message::addErrorMessage($uploadBulkImgobj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($uploadBulkImgobj->getError(), true);
         }
 
         $path = CONF_UPLOADS_PATH . AttachedFile::FILETYPE_BULK_IMAGES_PATH;
         $filePath = AttachedFile::FILETYPE_BULK_IMAGES_PATH . $savedFile;
 
-        $msg = '<br>' . str_replace('{path}', '<br><b>' . $filePath . '</b>', Labels::getLabel('MSG_Your_uploaded_files_path_will_be:_{path}', $this->adminLangId));
+        $msg = Labels::getLabel('MSG_YOUR_UPLOADED_FILES_PATH_WILL_BE:_{PATH}', $this->adminLangId);
+        $msg = CommonHelper::replaceStringData($msg, ['{PATH}' => '<br><b>' . $filePath . '</b>']);
+
         $msg = Labels::getLabel('MSG_Uploaded_Successfully.', $this->adminLangId) . ' ' . $msg;
         $json = [
             "msg" => $msg,
@@ -1029,20 +1017,16 @@ class ImportExportController extends AdminBaseController
         $fldImg->htmlBeforeField = '<div class="filefield"><span class="filename" id="importFileName"></span>';
         $fldImg->htmlAfterField = '<label class="filelabel">' . Labels::getLabel('LBL_Browse_File', $this->adminLangId) . '</label></div>';
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Import', $this->adminLangId));
-
         return $frm;
     }
 
     public function uploadLabelsImportedFile()
     {
         if (!is_uploaded_file($_FILES['import_file']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_CSV_File', $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('LBL_Please_Select_A_CSV_File', $this->adminLangId), true);
         }
         if (!in_array($_FILES['import_file']['type'], CommonHelper::isCsvValidMimes())) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Not_a_Valid_CSV_File", $this->adminLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel("LBL_Not_a_Valid_CSV_File", $this->adminLangId), true);
         }
 
         $db = FatApp::getDb();
@@ -1063,8 +1047,7 @@ class ImportExportController extends AdminBaseController
         $langIndexLangIds = array();
         foreach ($firstLineLangArr as $key => $langCode) {
             if (!array_key_exists($langCode, $languages)) {
-                Message::addErrorMessage(Labels::getLabel("MSG_Invalid_Coloum_CSV_File", $this->adminLangId));
-                FatUtility::dieJsonError(Message::getHtml());
+                LibHelper::exitWithError(Labels::getLabel("MSG_Invalid_Coloum_CSV_File", $this->adminLangId), true);
             }
             $langIndexLangIds[$key] = $languages[$langCode]['language_id'];
         }
@@ -1085,25 +1068,47 @@ class ImportExportController extends AdminBaseController
                         'label_type' => $type,
                     );
                     $db->insertFromArray(Labels::DB_TBL, $dataToSaveArr, false, array(), array('label_caption' => $caption));
-                    /* $sql = "SELECT label_key FROM ". Labels::DB_TBL ." WHERE label_key = " . $db->quoteVariable($labelKey). " AND label_lang_id = " .  $langIndexLangIds[$key];
-                    $rs = $db->query($sql);
-                    if ($row = $db->fetch($rs)) {
-                        $db->updateFromArray(Labels::DB_TBL, array( 'label_caption' => $caption ), array('smt' => 'label_key = ? AND label_lang_id = ?', 'vals' => array( $labelKey, $langIndexLangIds[$key] ) ));
-                    } else {
-                        $dataToSaveArr = array(
-                        'label_key'        =>    $labelKey,
-                        'label_lang_id'    =>    $langIndexLangIds[$key],
-                        'label_caption'    =>    $caption,
-                        );
-                        $db->insertFromArray(Labels::DB_TBL, $dataToSaveArr);
-                    } */
                 }
             }
         }
 
         $labelsUpdatedAt = array('conf_name' => 'CONF_LANG_LABELS_UPDATED_AT', 'conf_val' => time());
         $db->insertFromArray('tbl_configurations', $labelsUpdatedAt, false, array(), $labelsUpdatedAt);
-        Message::addMessage(Labels::getLabel('LBL_Labels_data_imported/updated_Successfully', $this->adminLangId));
-        FatUtility::dieJsonSuccess(Message::getHtml());
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_LABELS_DATA_IMPORTED_SUCCESSFULLY', $this->adminLangId), true);
+    }
+
+    private function getFormColumns(): array
+    {
+        $bulkMediaTblHeadingCols = CacheHelper::get('bulkMediaTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($bulkMediaTblHeadingCols) {
+            return json_decode($bulkMediaTblHeadingCols);
+        }
+
+        $arr = [
+            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
+            'user' => Labels::getLabel('LBL_USER', $this->adminLangId),
+            'afile_physical_path' => Labels::getLabel('LBL_FILE_LOCATION', $this->adminLangId),
+            'files'    => Labels::getLabel('LBL_FILES', $this->adminLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
+        ];
+        CacheHelper::create('bulkMediaTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return [
+            'listSerial',
+            'user',
+            'afile_physical_path',
+            'files'   ,
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['files'], Common::excludeKeysForSort());
     }
 }

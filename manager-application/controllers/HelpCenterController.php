@@ -39,6 +39,9 @@ class HelpCenterController extends AdminBaseController
 
         if (!empty($action)) {
             $srch->addCondition(HelpCenter::tblFld('action'), '=', $action);
+        } else {
+            $cnd = $srch->addCondition(HelpCenter::tblFld('action'), '=', 'index');
+            $cnd->attachCondition(HelpCenter::tblFld('action'), '=', '');
         }
 
         $srch->addMultipleFields([
@@ -47,6 +50,7 @@ class HelpCenterController extends AdminBaseController
         ]);
         $srch->setPageSize(1);
         $srch->doNotCalculateRecords();
+        
         $record = (array) $db->fetch($srch->getResultSet());
         if (empty($record)) {
             $msg = empty($db->getError()) ? Labels::getLabel('MSG_NO_RECORD_FOUND', $this->adminLangId) : $db->getError();

@@ -1,12 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form form-edit');
-$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
+$frm->developerTags['colClassPrefix'] = 'col-md-';
+$frm->developerTags['fld_default_col'] = 12;
 
-$activeGentab = true;
-$disabled = (isset($recordId) && 1 > $recordId) ? 'disabled' : '';
-require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
+require_once(CONF_THEME_PATH . 'import-export/_partial/import-form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>
     </div>
@@ -16,14 +14,10 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
             <div class="col-auto">
                 <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
                     <?php
-                    if (0 < $recordId) {
-                        echo Labels::getLabel('LBL_UPDATE', $adminLangId);
-                    } else {
-                        echo Labels::getLabel('LBL_SAVE', $adminLangId);
-                    }
+                    echo Labels::getLabel('LBL_IMPORT', $adminLangId);
                     ?>
                 </button>
             </div>
         </div>
     </div>
-</div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->
+</div> <!-- Close </div> This must be placed. Opening tag is inside import-form-head.php file. -->

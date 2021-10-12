@@ -139,7 +139,7 @@ class PluginsController extends AdminBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $data = Plugin::getAttributesById($recordId, ['plugin_id', 'plugin_identifier', 'plugin_active', 'plugin_type']);
+        $data = Plugin::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, null, true);
         $pluginType = $data['plugin_type'];
         $frm = $this->getForm($pluginType, $recordId);
         $identifier = '';
@@ -158,7 +158,7 @@ class PluginsController extends AdminBaseController
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getAllNames());
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('type', $pluginType);
         $this->set('frm', $frm);
@@ -191,10 +191,12 @@ class PluginsController extends AdminBaseController
         }
 
         $record = new Plugin($recordId);
+        $post['plugin_identifier'] = $post['plugin_name'];
         $record->assignValues($post);
         if (!$record->save()) {
             LibHelper::exitWithError($record->getError(), true);
         }
+        $this->setLangData($record, [$record::tblFld('name') => $post[$record::tblFld('name')]]);
 
         $newTabLangId = 0;
         if ($recordId > 0) {
@@ -346,7 +348,7 @@ class PluginsController extends AdminBaseController
         $frm = new Form('frmPlugin');
         $frm->addHiddenField('', 'plugin_id', $recordId);
         $frm->addHiddenField('', 'plugin_type', $pluginType);
-        $frm->addRequiredField(Labels::getLabel('LBL_Plugin_Identifier', $this->adminLangId), 'plugin_identifier');
+        $frm->addRequiredField(Labels::getLabel('LBL_Plugin_Name', $this->adminLangId), 'plugin_name');
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'plugin_active', $activeInactiveArr, '', array(), '');
@@ -377,7 +379,8 @@ class PluginsController extends AdminBaseController
     {
         $frm = new Form('frmPluginLang');
         $frm->addHiddenField('', 'plugin_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Plugin_Name', $this->adminLangId), 'plugin_name');
         $frm->addHtmlEditor(Labels::getLabel('LBL_EXTRA_INFO', $this->adminLangId), 'plugin_description');
 
@@ -458,7 +461,7 @@ class PluginsController extends AdminBaseController
             'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
             'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
             'plugin_icon' => Labels::getLabel('LBL_PLUGIN_ICON', $this->adminLangId),
-            'plugin_identifier' => Labels::getLabel('LBL_PLUGIN', $this->adminLangId),
+            'plugin_name' => Labels::getLabel('LBL_PLUGIN', $this->adminLangId),
             'plugin_active' => Labels::getLabel('LBL_Status', $this->adminLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
         ];
@@ -473,7 +476,7 @@ class PluginsController extends AdminBaseController
             'select_all',
             'listSerial',
             'plugin_icon',
-            'plugin_identifier',
+            'plugin_name',
             'plugin_active',
             'action',
         ];

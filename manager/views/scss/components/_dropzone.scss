@@ -10,6 +10,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
         &:after {
             content: "";
             display: table;
@@ -101,7 +102,6 @@
         }
         .upload_cover {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             width: 100%;
