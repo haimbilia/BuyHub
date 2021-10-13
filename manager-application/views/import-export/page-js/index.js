@@ -17,9 +17,6 @@ $(document).ready(function () {
         fcom.ajax(fcom.makeUrl('ImportExport', 'loadForm', [formType]), '', function (t) {
             fcom.removeLoader();
             $(dv).html(t);
-            /* if ('bulk_media' == formType) {
-                searchFiles();
-            } */
         });
     };
 

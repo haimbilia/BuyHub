@@ -58,8 +58,7 @@ $(document).ready(function () {
         getLoader: function () {
             $(document.body).css({ 'cursor': 'wait' });
             $('.loaderJs').remove();
-            var html = '<div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
-            return html;
+            return '<div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
 
         removeLoader: function (cls) {

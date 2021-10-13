@@ -99,7 +99,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         fcom.ajax(fcom.makeUrl('plugins', 'updateOrder'), value, function(res) {
                             fcom.removeLoader();
                             $.ykmsg.close();
-                            var ans = JSON.parse(res);
+                            var ans = $.parseJSON(res);
                             if (ans.status == 1) {
                                 $.ykmsg.success(ans.msg);
                                 return;

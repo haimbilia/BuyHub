@@ -44,7 +44,6 @@
         fcom.displayProcessing();
         var data = 'keyName=' + keyName;
         fcom.ajax(fcom.makeUrl(keyName + 'Settings'), data, function (t) {
-            fcom.removeLoader();
             $.ykmsg.close();
             var res = isJson(t);
             if (res && res.status == 0) {
