@@ -1,4 +1,4 @@
-$(document).on('hover', '.upload_cover', function () {
+$(document).on('mouseover', '.upload_cover', function () {
     $('.file-upload').toggleClass("isactive");
 });
 
