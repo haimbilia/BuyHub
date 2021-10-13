@@ -566,10 +566,6 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
     geocoder = new google.maps.Geocoder;
     infowindow = new google.maps.InfoWindow;
 
-    // address = document.getElementById('geo_postal_code').value;
-    /*address = {lat: parseFloat(lat), lng: parseFloat(lat)};
-    geocodeAddress(geocoder, map, infowindow, { 'location': latlng });*/
-
     var sel = document.getElementById('geo_country_code');
     var country = sel.options[sel.selectedIndex].text;
     if (country != null || country != '') {

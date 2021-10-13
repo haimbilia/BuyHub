@@ -30,8 +30,7 @@ class AdminBaseController extends FatController
             CommonHelper::initCommonVariables(true);
             if (FatUtility::isAjaxCall()) {
                 if (FatUtility::isAjaxCall()) {
-                    Message::addErrorMessage(Labels::getLabel('LBL_YOUR_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId()));
-                    FatUtility::dieWithError(Message::getHtml());
+                    LibHelper::exitWithError(Labels::getLabel('LBL_YOUR_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId()), false, false, true);
                 }
             }
             FatApp::redirectUser(UrlHelper::generateUrl('AdminGuest', 'loginForm'));
@@ -177,6 +176,8 @@ class AdminBaseController extends FatController
                 'invalidSeller' => Labels::getLabel('MSG_PLEASE_SELECT_THE_SELLER_FIRST', $this->adminLangId),
                 'controllerNameRequired' => Labels::getLabel('MSG_CONTROLLER_NAME_MUST_BE_DECLARED', $this->adminLangId),
                 'selectFont' => Labels::getLabel('MSG_PLEASE_SELECT_FONT_FAMILY', $this->adminLangId),
+                'dropFilesToUpload' => Labels::getLabel('MSG_DROP_FILES_HERE_TO_UPLOAD', $this->adminLangId),
+                'invalidUploadFileType' => Labels::getLabel('MSG_INVALID_FILE_TYPE._ONLY_{FILE-TYPE}_FILE_CAN_BE_UPLOADED', $this->adminLangId),
             );
             $languages = Language::getAllNames(false);
             foreach ($languages as $val) {
@@ -830,8 +831,8 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         $sortOrder = ($sortOrder != applicationConstants::SORT_ASC) ? applicationConstants::SORT_DESC : $sortOrder;
         $pageSize = empty($pageSize) ? FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10) : $pageSize;
 
-        $frm->addHiddenField('', 'sortBy', $sortBy);
-        $frm->addHiddenField('', 'sortOrder', $sortOrder);
+        $frm->addHiddenField('', 'sortBy', $sortBy, ['id' => 'sortBy']);
+        $frm->addHiddenField('', 'sortOrder', $sortOrder, ['id' => 'sortOrder']);
         $frm->addHiddenField('', 'pageSize', $pageSize);
         $frm->addHiddenField('', 'reportColumns', '');
     }

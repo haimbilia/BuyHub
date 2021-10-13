@@ -116,7 +116,7 @@ $(document).ready(function () {
         var subsetArr = e.detail.data.subset;
         var selectedWeights = $("input[name='CONF_THEME_FONT_WEIGHT']").val();
         if ('' != selectedWeights) {
-            var weightsArr = $.parseJSON(selectedWeights);
+            var weightsArr = JSON.parse(selectedWeights);
             for (let i = 0; i < weightsArr.length; i++) {
                 weight += "," + weightsArr[i]['id'];
             }
@@ -146,7 +146,7 @@ $(document).ready(function () {
         var data = 'fontName=' + fontName + '&keyword=' + keyword;
         tagify.loading(true);
         fcom.ajax(fcom.makeUrl('ThemeColor', 'getVariants'), data, function (t) {
-            var ans = $.parseJSON(t);
+            var ans = JSON.parse(t);
             if (0 == ans.status) {
                 return;
             }

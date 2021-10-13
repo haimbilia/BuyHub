@@ -82,7 +82,7 @@ $(document).ready(function() {
         }
         data = 'adminId=' + adminId;
         fcom.ajax(fcom.makeUrl('AdminUsers', 'changeStatus'), data, function(res) {
-            var ans = $.parseJSON(res);
+            var ans = JSON.parse(res);
             if (ans.status == 1) {
                 fcom.displaySuccessMessage(ans.msg);
                 $(obj).toggleClass("active");

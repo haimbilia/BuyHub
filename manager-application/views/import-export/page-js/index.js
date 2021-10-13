@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    loadForm('general_instructions');
+    loadForm('export');
 });
 
 (function () {
@@ -15,31 +15,32 @@ $(document).ready(function () {
 
         $(dv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('ImportExport', 'loadForm', [formType]), '', function (t) {
-            $(dv).html(t);
             fcom.removeLoader();
-            if ('bulk_media' == formType) {
-                searchFiles();
-            }
+            $(dv).html(t);
         });
     };
+
+    uploadSuccessCallback = function (resp) {
+        searchRecords();    
+    }
 
     searchFiles = function () {
         var data = '';
         var dv = $('#listing');
-        $(dv).html(fcom.getLoader());
+        $("#listing").html(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('ImportExport', 'bulkMediaList'), data, function (res) {
+            fcom.removeLoader();
             $("#listing").html(res);
         });
     };
 
-    updateSettings = function (frm) {
-        $('.importExportBtnJs').addClass('loading');
+    updateSettings = function (formName) {
+        let frm = document.forms[formName];
         var data = fcom.frmData(frm);
-        console.log(data); return;
         $(dv).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'updateSettings'), data, function (ans) {
+            fcom.removeLoader();
             loadForm('settings');
-            $('.importExportBtnJs').removeClass('loading');
         });
     };
 
@@ -57,7 +58,7 @@ $(document).ready(function () {
                 success: function (t) {
                     $.ykmsg.close();
                     try {
-                        var ans = $.parseJSON(t);
+                        var ans = JSON.parse(t);
                         if (ans.status == 1) {
                             $.ykmsg.success(ans.msg, 'alert--success', false);
                             loadForm('bulk_media');
@@ -87,7 +88,7 @@ $(document).ready(function () {
             fcom.displayProcessing();
             fcom.ajax(fcom.makeUrl('ImportExport', 'removeDir', [dir]), '', function (t) {
                 $.ykmsg.close();
-                var ans = $.parseJSON(t);
+                var ans = JSON.parse(t);
                 if (ans.status == 1) {
                     $(document).trigger('close.facebox');
                     $.ykmsg.success(ans.msg);
@@ -100,7 +101,7 @@ $(document).ready(function () {
         }
     };
 
-    submitImportLaeblsUploadForm = function () {
+    uploadLabelsImportFile = function (frm) {
         var data = new FormData();
         $inputs = $('#frmImportLabels input[type=text],#frmImportLabels select,#frmImportLabels input[type=hidden]');
         $inputs.each(function () { data.append(this.name, $(this).val()); });
@@ -116,22 +117,24 @@ $(document).ready(function () {
                 contentType: false,
                 success: function (t) {
                     try {
-                        var ans = $.parseJSON(t);
+                        var ans = JSON.parse(t);
                         if (ans.status == 1) {
+                            frm.reset();
+                            $("#importFileName").html("");
                             $(document).trigger('close.facebox');
-                            fcom.displaySuccessMessage(ans.msg);
+                            $.ykmsg.success(ans.msg);
                             loadForm('import');
                         } else {
-                            fcom.displayErrorMessage(ans.msg);
+                            $.ykmsg.error(ans.msg);
                             $('#fileupload_div').html('');
                         }
                     }
                     catch (exc) {
-                        fcom.displayErrorMessage(t);
+                        $.ykmsg.error(t);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Error Occured.");
+                    $.ykmsg.error("Error Occured.");
                 }
             });
         });

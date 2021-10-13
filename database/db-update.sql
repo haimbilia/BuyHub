@@ -1325,3 +1325,12 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('LBL_SEARCH_LABELS', 1, 'Search labels', 1),
 ('LBL_CAPTION', 1, 'Caption', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO tbl_help_center (`hc_controller`, `hc_action`, `hc_default_title`, `hc_default_description`)
+  SELECT 'ImportExport', '', epage_identifier, epage_default_content FROM tbl_extra_pages WHERE `epage_type` = 29
+ON DUPLICATE KEY UPDATE hc_default_description = VALUES(hc_default_description);
+DELETE FROM `tbl_extra_pages` WHERE `epage_type` = 29;
+
+INSERT IGNORE INTO tbl_plugins_lang (`pluginlang_plugin_id`, `pluginlang_lang_id`, `plugin_name`)
+  SELECT plugin_id, 1, plugin_identifier FROM tbl_plugins
+ON DUPLICATE KEY UPDATE plugin_name = VALUES(plugin_name);

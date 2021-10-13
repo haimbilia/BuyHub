@@ -433,7 +433,7 @@ class BrandsController extends AdminBaseController
         $imageFrm = $this->getBrandImageForm($recordId);
         $imageFrm->fill($data);
 
-        $this->set('languages', Language::getAllNames());
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);

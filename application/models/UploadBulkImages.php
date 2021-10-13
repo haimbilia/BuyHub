@@ -17,7 +17,7 @@ class UploadBulkImages extends FatModel
         $this->bulkRoot = CONF_UPLOADS_PATH . AttachedFile::FILETYPE_BULK_IMAGES_PATH;
     }
 
-    public function bulkMediaFileObject($loggedUserId = 0)
+    public function bulkMediaFileObject($loggedUserId = 0, $addOrder = true)
     {
         $srch = AttachedFile::getSearchObject();
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'credential_user_id = afile_record_id');
@@ -28,10 +28,12 @@ class UploadBulkImages extends FatModel
         }
 
         $srch->addMultipleFields(
-            array('afile_physical_path', 'afile_name', 'afile_record_id', 'credential_username', 'credential_email')
+            array('afile_physical_path', 'afile_name', 'afile_record_id', 'credential_username', 'credential_email', 'afile_id as listSerial')
         );
 
-        $srch->addOrder('afile_id', 'DESC');
+        if (true === $addOrder) {
+            $srch->addOrder('afile_id', 'DESC');
+        }
 
         return $srch;
     }
