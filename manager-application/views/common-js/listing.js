@@ -159,10 +159,15 @@ $(document).on('search', "input[name='keyword']", function () {
     };
 
     setColumnsData = function (frm) {
+        if ('undefined' == typeof frm) {
+            return;
+        }
+
         listingColumns = [];
         $("input:checkbox[name=listingColumns]:checked").each(function () {
             listingColumns.push($(this).val());
         });
+
         $(frm.listingColumns).val(JSON.stringify(listingColumns));
     };
 
