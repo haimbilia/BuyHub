@@ -404,11 +404,11 @@ foreach ($categories as $catId => $catName) {
             }
             var data = 'ratingtype_active=1&ratingtype_id=0&ratingtype_identifier=' + ratingtype_name
             fcom.ajax(fcom.makeUrl('RatingTypes', 'setup'), data, function(t) {
-                var ans = $.parseJSON(t);
+                var ans = JSON.parse(t);
                 var newRtId = ans.rtId;
                 var dataLang = 'ratingtypelang_ratingtype_id=' + newRtId + '&ratingtype_name=' + ratingtype_name + '&ratingtypelang_lang_id=<?php echo $adminLangId; ?>';
                 fcom.ajax(fcom.makeUrl('RatingTypes', 'langSetup'), dataLang, function(t2) {
-                    var ans = $.parseJSON(t2);
+                    var ans = JSON.parse(t2);
                     fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + newRtId, function(t3) {
                         $('tag[value="' + e.detail.data.value + '"]').attr('id', newRtId);
                     });
@@ -436,7 +436,7 @@ foreach ($categories as $catId => $catName) {
         fcom.ajax(fcom.makeUrl('ProductCategories', 'ratingTypeAutoComplete'), {
             keyword: keyword
         }, function(t) {
-            var ans = $.parseJSON(t);
+            var ans = JSON.parse(t);
             for (i = 0; i < ans.length; i++) {
                 list.push({
                     "id": ans[i].id,

@@ -112,22 +112,23 @@ class HtmlHelper
         }
     }
 
-    public static function addSearchButton(Form &$frm)
+    public static function addButtonHtml(string $lbl, string $type = 'button', $name = '', $class = '', $onclick = ''): string
     {
-        $frm->addHtml('', 'btn_submit', '<button type="submit" name="btn_submit" class="btn btn-brand btn-wide ml-2 submitBtnJs">' . Labels::getLabel('LBL_SEARCH', CommonHelper::getLangId()) . '</button>');
+        $name = (!empty($name) ? 'name="' . $name . '"' : '');
+        $onclick = (!empty($onclick) ? 'onclick="' . $onclick . ';"' : '');
+        $class = !empty($class) ? $class : 'btn btn-brand btn-wide ml-2 submitBtnJs';
+        return '<button type="' . $type . '" ' . $name . ' class="' . $class . '" ' . $onclick . '>' . $lbl . '</button>';
+    }
+
+    public static function addSearchButton(Form &$frm, string $lbl = '')
+    {
+        $frm->addHtml('', 'btn_submit', self::addButtonHtml(Labels::getLabel('LBL_SEARCH', CommonHelper::getLangId()), 'submit', 'btn_submit'));
     }
 
     public static function addClearButton(Form &$frm)
     {
-        $frm->addHtml('', 'btn_clear', '<button type="button" name="btn_clear" class="btn btn-light" onclick="clearSearch();">' . Labels::getLabel('LBL_CLEAR', CommonHelper::getLangId()) . '</button>');
+        $frm->addHtml('', 'btn_clear', self::addButtonHtml(Labels::getLabel('LBL_CLEAR', CommonHelper::getLangId()), 'button', 'btn_clear', 'btn btn-light', 'clearSearch()'));
     }
-
-    /* public static function createButton(string $label, array $attr = [])
-    {
-        $attr = empty($attr) ? ['type' => 'button', 'class' => 'btn btn-brand'] : $attr;
-        $button = new HtmlElement("button", $attr, $label);
-        return $button->getHtml();
-    } */
 
     public static function renderHiddenFields(Form $frmSearch)
     {
@@ -136,5 +137,59 @@ class HtmlHelper
                 echo $frmSearch->getFieldHtml($frmFld->getName());
             }
         }
+    }
+
+    public static function getSuccessMessageHtml(string $message): string
+    {
+        return '<div class="alert alert-success" role="alert">
+                    <div class="alert-icon"><i class="flaticon-warning"></i></div>
+                    <div class="alert-text">' . $message . '</div>
+                </div>';
+    }
+   
+    public static function getErrorMessageHtml(string $message): string
+    {
+        return '<div class="alert alert-danger" role="alert">
+                    <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
+                    <div class="alert-text">' . $message . '</div>
+                </div>';
+    }
+    
+    public static function getCssStyleHtml(array $files = [], string $location = 'css'): string
+    {
+        $htm = '';
+        foreach ($files as $fl) {
+            $file = $location . '/' . $fl;
+            $time = filemtime(CONF_THEME_PATH . $file);
+            $cssFileLink = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('JsCss', $location, array(), '', false) . '&f=' . rawurlencode($file) . '&min=0&sid=' . $time, CONF_DEF_CACHE_TIME, '.css');
+            $htm .= '<link rel="stylesheet" href="' . $cssFileLink . '"/>' . "\n";
+        }
+        return $htm;
+    }
+    
+    public static function getJsScriptHtml(array $files = [], string $location = 'js'): string
+    {
+        $htm = '';
+        foreach ($files as $fl) {
+            $file = $location . '/' . $fl;
+            $time = filemtime(CONF_THEME_PATH . $file);
+            $jsFileLink = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('JsCss', $location, array(), '', false) . '&f=' . rawurlencode($file) . '&min=0&sid=' . $time, CONF_DEF_CACHE_TIME, '.js');
+            $htm .= '<script language="javascript" type="text/javascript" src="' . $jsFileLink . '"></script>' . "\n";
+        }
+        return $htm;
+    }
+
+    public static function getDropZoneHtml()
+    {
+        return '<form action="' . FatUtility::generateUrl('ImportExport', 'upload') . '" enctype="multipart/form-data" class="dropzone dropzone-default">
+                    <div class="upload_cover">
+                        <div clas="img--container  ">
+                            <div class="file-upload">
+                                <img src="' . CONF_WEBROOT_URL . 'images/upload/upload_img.png">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <script>$.initDropZone();</script>';
     }
 }

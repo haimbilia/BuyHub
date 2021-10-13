@@ -13,8 +13,8 @@ function getNotifications() {
 }
 
 function getHelpCenterContent(controller, action = "") {
-    /* fcom.ajax(fcom.makeUrl('HelpCenter', 'getContent', [controller, action]), '', function (t) {
-        var res = $.parseJSON(t);
+    fcom.ajax(fcom.makeUrl('HelpCenter', 'getContent', [controller, action]), '', function (t) {
+        var res = JSON.parse(t);
         if (0 == res.status) {
             return;
         }
@@ -26,7 +26,7 @@ function getHelpCenterContent(controller, action = "") {
         if ('undefined' != typeof res.html) {
             $("#helpCenterJs").html(res.html);
         }
-    }); */
+    });
 }
 
 var gCaptcha = false;

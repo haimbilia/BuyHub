@@ -131,7 +131,7 @@ $(document).on('search', "input[name='keyword']", function () {
         $(listingTableJs).prepend(fcom.getLoader());
 
         fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
-            var res = $.parseJSON(res);
+            var res = JSON.parse(res);
             $(dv).replaceWith(res.listingHtml);
             $(paginationDv).replaceWith(res.paginationHtml);
             fcom.removeLoader();
@@ -159,6 +159,10 @@ $(document).on('search', "input[name='keyword']", function () {
     };
 
     setColumnsData = function (frm) {
+        if ('undefined' == typeof frm) {
+            return;
+        }
+
         listingColumns = [];
         $("input:checkbox[name=listingColumns]:checked").each(function () {
             listingColumns.push($(this).val());
@@ -250,7 +254,7 @@ $(document).on('search', "input[name='keyword']", function () {
         data = 'recordId=' + recordId + '&status=' + status;
         fcom.ajax(fcom.makeUrl(controllerName, 'updateStatus'), data, function (res) {
             $(obj).prop('checked', (1 == status));
-            var ans = $.parseJSON(res);
+            var ans = JSON.parse(res);
             if (ans.status == 1) {
                 $.ykmsg.success(ans.msg);
                 $(obj).attr({ 'onclick': 'updateStatus(event, this, ' + recordId + ', ' + oldStatus + ')', 'data-old-status': status });
@@ -274,7 +278,7 @@ $(document).on('search', "input[name='keyword']", function () {
         fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (res) {
             $('.submitBtnJs').removeClass('loading');
             fcom.removeLoader();
-            var t = $.parseJSON(res);
+            var t = JSON.parse(res);
             if (t.status == 0) {
                 $.ykmsg.error(t.msg);
                 return false;
@@ -301,7 +305,7 @@ $(document).on('search', "input[name='keyword']", function () {
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl(controllerName, 'langSetup'), data, function (res) {
             fcom.removeLoader();
-            var t = $.parseJSON(res);
+            var t = JSON.parse(res);
             if (t.status == 0) {
                 $.ykmsg.error(t.msg);
                 return false;
@@ -359,7 +363,7 @@ $(document).on('search', "input[name='keyword']", function () {
             callback();
             showActionsBtns();
 
-            var t = $.parseJSON(res);
+            var t = JSON.parse(res);
             if (t.status == 0) {
                 $.ykmsg.error(t.msg);
             } else {

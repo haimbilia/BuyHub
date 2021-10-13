@@ -12,12 +12,6 @@ $keyWordFld = $frmSearch->getField('keyword');
 $keyWordFld->addFieldtagAttribute('class', 'form-control');
 $keyWordFld->setFieldtagAttribute('placeholder', $keywordPlaceholder);
 
-$sortByFld = $frmSearch->getField('sortBy');
-$sortByFld->setFieldTagAttribute('id', 'sortBy');
-
-$sortOrderFld = $frmSearch->getField('sortOrder');
-$sortOrderFld->setFieldTagAttribute('id', 'sortOrder');
-
 $frmFields = [
     'hidden' => [],
     'advSrchFlds' => [],

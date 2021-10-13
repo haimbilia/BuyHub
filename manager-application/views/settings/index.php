@@ -32,7 +32,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         </form>
                     </div>
                     <div class="settings settingListJs">
-                        <?php /* if ($objPrivilege->canViewGeneralSettings(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <?php if ($objPrivilege->canViewGeneralSettings(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <a class="setting" href="<?php echo UrlHelper::generateUrl('configurations'); ?>">
                                 <div class="setting__icon">
                                     <span class="icon">
@@ -47,7 +47,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     <span>Display, Sound, notifications, power</span>
                                 </div>
                             </a>
-                        <?php } */ ?>
+                        <?php } ?>
 
                         <?php if ($objPrivilege->canViewPlugins(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <a class="setting" href="<?php echo UrlHelper::generateUrl('Plugins'); ?>">

@@ -56,7 +56,7 @@ $(document).ready(function () {
 		if (!confirm(langLbl.confirmDelete)) { return; }
 		data = 'id=' + id;
 		fcom.ajax(fcom.makeUrl('productCategories', 'deleteRecord'), data, function (res) {
-			var ans = $.parseJSON(res);
+			var ans = JSON.parse(res);
 			if (ans.status == 1) {
 				$.ykmsg.success(ans.msg);
 				searchProductCategories();
@@ -94,7 +94,7 @@ $(document).ready(function () {
 		fcom.displayProcessing();
 		fcom.ajax(fcom.makeUrl('productCategories', 'changeStatus'), data, function (res) {
             $.ykmsg.close();
-			var ans = $.parseJSON(res);
+			var ans = JSON.parse(res);
 			if (ans.status == 1) {
 				$(obj).toggleClass("active");
 				$.ykmsg.success(ans.msg);
@@ -351,7 +351,7 @@ $(document).ready(function () {
 		} else {
 			i = 0;
 			fcom.ajax(fcom.makeUrl('ProductCategories', 'getParentIds', [catId]), '', function (t) {
-				var ans = $.parseJSON(t);	
+				var ans = JSON.parse(t);	
 				if (0 < ans.status) {					
 					parentIds = ans.data;					
 					if (i < parentIds.length) {						

@@ -1,5 +1,8 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<main class="main">
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
+$controller = str_replace('Controller', '', FatApp::getController()); ?>
+
+<main class="main mainJs">
     <div class="container">
         <div class="row">
             <div class="col-md-4">
@@ -20,9 +23,12 @@
                 </div>
             </div>
             <div class="col-md-8">
-                <div class="card" id="tabData">
-                </div>
+                <div class="card" id="tabData"></div>
             </div>
         </div>
     </div>
 </main>
+<script>
+    var controllerName = '<?php echo $controller; ?>';
+    getHelpCenterContent(controllerName);
+</script>

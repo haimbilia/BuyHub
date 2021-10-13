@@ -126,7 +126,7 @@ class AdminAuthentication extends FatModel
                 return null;
             }
             if (FatUtility::isAjaxCall()) {
-                FatUtility::dieWithError(Labels::getLabel('MSG_Your_session_seems_to_be_expired.', CommonHelper::getLangId()));
+                LibHelper::exitWithError(Labels::getLabel('LBL_YOUR_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId()), false, false, true);
             }
             FatApp::redirectUser(UrlHelper::generateUrl());
         }

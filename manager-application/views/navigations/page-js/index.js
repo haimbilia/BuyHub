@@ -167,7 +167,7 @@ $(document).ready(function(){
 		}
 		data='navId='+navId;
 		fcom.ajax(fcom.makeUrl('Navigations','changeStatus'),data,function(res){
-		var ans = $.parseJSON(res);
+		var ans = JSON.parse(res);
 			if( ans.status == 1 ){
 				fcom.displaySuccessMessage(ans.msg);
 
