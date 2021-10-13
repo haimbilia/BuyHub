@@ -1,7 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit layout--' . $formLayout);
+$frm->setFormTagAttribute('class', 'form form--settings layout--' . $formLayout);
+$frm->setFormTagAttribute('id', 'frmConfSetting');
 
 $tbid = isset($tabId) ? $tabId : 'tabs_' . $frmType;
 
@@ -180,5 +181,11 @@ switch ($frmType) {
         if (e.keyCode === 13) {
             $('.formBodyJs form').submit();
         }
+    });
+
+    $(document).ready(function() {
+        $('#frmConfSetting').find('.checkbox').addClass('switch switch-sm switch-icon').removeClass('checkbox');
+        $('#frmConfSetting i').replaceWith('<span></span>');
+        $('#frmConfSetting').find('.caption-wraper').remove();
     });
 </script>

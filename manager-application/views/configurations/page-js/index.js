@@ -405,15 +405,6 @@ submitForm = function(form, v) {
     return false;
 }
 
-getCountryStates = function(countryId, stateId, dv) {
-    fcom.displayProcessing();
-    fcom.ajax(fcom.makeUrl('Configurations', 'getStates', [countryId, stateId]), '', function(res) {
-        $.ykmsg.close();
-        $(dv).empty();
-        $(dv).append(res);
-    });
-};
-
 updateVerificationFile = function(inputBtn, fileType){
 	var formData = new FormData();
 	formData.append('fileType', fileType);

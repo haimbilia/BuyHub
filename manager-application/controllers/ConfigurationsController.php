@@ -536,7 +536,7 @@ class ConfigurationsController extends AdminBaseController
 
                 $frm->addSelectBox(Labels::getLabel('LBL_Cookies_Policies_Page', $this->adminLangId), 'CONF_COOKIES_BUTTON_LINK', $cpagesArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
                 $fld1 = $frm->addCheckBox(Labels::getLabel('LBL_Cookies_Policies', $this->adminLangId), 'CONF_ENABLE_COOKIES', 1, array(), false, 0);
-                $fld1->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_cookies_policies_section_will_be_shown_on_frontend", $this->adminLangId) . "</small>";
+                $fld1->htmlAfterField = "<small>" . Labels::getLabel("LBL_cookies_policies_section_will_be_shown_on_frontend", $this->adminLangId) . "</small>";
 
                 $frm->addCheckBox(Labels::getLabel("LBL_Header_Mega_Menu", $this->adminLangId), 'CONF_LAYOUT_MEGA_MENU', 1, array(), false, 0);
                 $frm->addCheckBox(Labels::getLabel("LBL_Home_page_loader", $this->adminLangId), 'CONF_LOADER', 1, array(), false, 0);
@@ -544,7 +544,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld3 = $frm->addTextBox(Labels::getLabel("LBL_Admin_Default_Items_Per_Page", $this->adminLangId), "CONF_ADMIN_PAGESIZE");
                 $fld3->requirements()->setInt();
                 $fld3->requirements()->setRange('1', '2000');
-                $fld3->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Determines_how_many_items_are_shown_per_page_(user_listing,_categories,_etc)", $this->adminLangId) . ".</small>";
+                $fld3->htmlAfterField = "<small>" . Labels::getLabel("LBL_Determines_how_many_items_are_shown_per_page_(user_listing,_categories,_etc)", $this->adminLangId) . ".</small>";
 
                 $iframeFld = $frm->addTextarea(Labels::getLabel('LBL_Google_Map_Iframe', $this->adminLangId), 'CONF_MAP_IFRAME_CODE');
                 $iframeFld->htmlAfterField = '<small>' . Labels::getLabel("LBL_This_is_the_Gogle_Map_Iframe_Script,_used_to_display_google_map_on_contact_us_page", $this->adminLangId) . '</small>';
@@ -669,20 +669,20 @@ class ConfigurationsController extends AdminBaseController
                 $frm->addCheckBox(Labels::getLabel("LBL_Adding_SKU_for_products_will_be_mandatory", $this->adminLangId), 'CONF_PRODUCT_SKU_MANDATORY', 1, array(), false, 0);
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Enable_linking_shipping_packages_to_products", $this->adminLangId), 'CONF_PRODUCT_DIMENSIONS_ENABLE', 1, array(), false, 0);
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Shipping_packages_are_required_in_case_Shipping_API_is_enabled", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Shipping_packages_are_required_in_case_Shipping_API_is_enabled", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Brands_requested_by_sellers_will_require_approval", $this->adminLangId), 'CONF_BRAND_REQUEST_APPROVAL', 1, array(), false, 0);
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_On_Enabling_This_Feature,_Admin_Need_To_Approve_the_brand_requests_(User_Cannot_link_the_requested_brand_with_any_product_until_it_gets_approved_by_Admin)", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_On_Enabling_This_Feature,_Admin_Need_To_Approve_the_brand_requests_(User_Cannot_link_the_requested_brand_with_any_product_until_it_gets_approved_by_Admin)", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Categories_requested_by_sellers_will_require_approval", $this->adminLangId), 'CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', 1, array(), false, 0);
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_On_Enabling_This_Feature,_Admin_Need_To_Approve_the_Product_category_requests_(User_Cannot_link_the_requested_category_with_any_product_until_it_gets_approved_by_Admin)", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_On_Enabling_This_Feature,_Admin_Need_To_Approve_the_Product_category_requests_(User_Cannot_link_the_requested_category_with_any_product_until_it_gets_approved_by_Admin)", $this->adminLangId) . "</small>";
 
                 $brandFld = $frm->addCheckBox(Labels::getLabel("LBL_Brand_will_be_mandatory_for_products", $this->adminLangId), 'CONF_PRODUCT_BRAND_MANDATORY', 1, array(), false, 0);
 
                 $fld1 = $frm->addCheckBox(Labels::getLabel("LBL_Product_prices_will_be_inclusive_of_tax", $this->adminLangId), 'CONF_PRODUCT_INCLUSIVE_TAX', 1, array(), false, 0);
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Enable_tax_code_for_categories", $this->adminLangId), 'CONF_TAX_CATEGORIES_CODE', 1, array(), false, 0);
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_This_will_enable_tax_categories_code", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_will_enable_tax_categories_code", $this->adminLangId) . "</small>";
 
                 $fulFillmentArr = Shipping::getFulFillmentArr($this->adminLangId);
                 $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->adminLangId), 'CONF_FULFILLMENT_TYPE', $fulFillmentArr, applicationConstants::NO, array(), '');
@@ -690,7 +690,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld3 = $frm->addTextBox(Labels::getLabel("LBL_Default_Items_Per_Page_(Catalog)", $this->adminLangId), "CONF_ITEMS_PER_PAGE_CATALOG");
                 $fld3->requirements()->setInt();
                 $fld3->requirements()->setRange('1', '2000');
-                $fld3->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Determines_how_many_catalog_items_are_shown_per_page_(products,_categories,_etc)", $this->adminLangId) . ".</small>";
+                $fld3->htmlAfterField = "<small>" . Labels::getLabel("LBL_Determines_how_many_catalog_items_are_shown_per_page_(products,_categories,_etc)", $this->adminLangId) . ".</small>";
 
                 $frm->addHtml('', 'geolocation', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Location', $this->adminLangId) . '</h3>');
                 $fld = $frm->addRadioButtons(
@@ -758,7 +758,7 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld5->htmlAfterField = '<br><small>' . Labels::getLabel("LBL_On_enabling_this_feature,_admin_need_to_approve_each_user_after_registration_(User_cannot_login_until_admin_approves)", $this->adminLangId) . '</small>';
+                $fld5->htmlAfterField = '<small>' . Labels::getLabel("LBL_On_enabling_this_feature,_admin_need_to_approve_each_user_after_registration_(User_cannot_login_until_admin_approves)", $this->adminLangId) . '</small>';
 
                 $fld7 = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_Email_Verification_After_Registration", $this->adminLangId),
@@ -768,7 +768,7 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld7->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_user_need_to_verify_their_email_address_provided_during_registration", $this->adminLangId) . " </small>";
+                $fld7->htmlAfterField = "<small>" . Labels::getLabel("LBL_user_need_to_verify_their_email_address_provided_during_registration", $this->adminLangId) . " </small>";
 
                 $fld8 = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_Notify_Administrator_on_Each_Registration", $this->adminLangId),
@@ -778,7 +778,7 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld8->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_On_enabling_this_feature,_notification_mail_will_be_sent_to_administrator_on_each_registration.", $this->adminLangId) . "</small>";
+                $fld8->htmlAfterField = "<small>" . Labels::getLabel("LBL_On_enabling_this_feature,_notification_mail_will_be_sent_to_administrator_on_each_registration.", $this->adminLangId) . "</small>";
 
                 $fld9 = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_Auto_Login_After_Registration", $this->adminLangId),
@@ -788,7 +788,7 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld9->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_On_enabling_this_feature,_users_will_be_automatically_logged-in_after_registration", $this->adminLangId) . "</small>";
+                $fld9->htmlAfterField = "<small>" . Labels::getLabel("LBL_On_enabling_this_feature,_users_will_be_automatically_logged-in_after_registration", $this->adminLangId) . "</small>";
 
                 $fld10 = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_Sending_Welcome_Mail_After_Registration", $this->adminLangId),
@@ -798,7 +798,7 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld10->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_On_enabling_this_feature,_users_will_receive_a_welcome_mail_after_registration.", $this->adminLangId) . "</small>";
+                $fld10->htmlAfterField = "<small>" . Labels::getLabel("LBL_On_enabling_this_feature,_users_will_receive_a_welcome_mail_after_registration.", $this->adminLangId) . "</small>";
 
                 $fld11 = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_Separate_Seller_Sign_Up_Form", $this->adminLangId),
@@ -808,7 +808,7 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld11->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_On_enabling_this_feature,_buyers_and_seller_will_have_a_separate_sign_up_form.", $this->adminLangId) . "</small>";
+                $fld11->htmlAfterField = "<small>" . Labels::getLabel("LBL_On_enabling_this_feature,_buyers_and_seller_will_have_a_separate_sign_up_form.", $this->adminLangId) . "</small>";
 
                 $fld6 = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_Administrator_Approval_On_Seller_Request", $this->adminLangId),
@@ -818,7 +818,7 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld6->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_On_enabling_this_feature,_admin_need_to_approve_Seller's_request_after_registration", $this->adminLangId) . "</small>";
+                $fld6->htmlAfterField = "<small>" . Labels::getLabel("LBL_On_enabling_this_feature,_admin_need_to_approve_Seller's_request_after_registration", $this->adminLangId) . "</small>";
 
                 $fld11 = $frm->addCheckBox(
                     Labels::getLabel("LBL_Buyers_can_see_Seller_Tab", $this->adminLangId),
@@ -828,10 +828,10 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld11->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_On_enabling_this_feature,_buyers_will_be_able_to_see_Seller_tab", $this->adminLangId) . "</small>";
+                $fld11->htmlAfterField = "<small>" . Labels::getLabel("LBL_On_enabling_this_feature,_buyers_will_be_able_to_see_Seller_tab", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Max_Seller_Request_Attempts", $this->adminLangId), 'CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', '');
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Maximum_seller_request_attempts_allowed", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Maximum_seller_request_attempts_allowed", $this->adminLangId) . "</small>";
 
                 $frm->addHtml('', 'Withdrawal', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Withdrawal", $this->adminLangId) . '</h3>');
 
@@ -848,22 +848,22 @@ class ConfigurationsController extends AdminBaseController
             case Configurations::FORM_CHECKOUT_PROCESS:
                 $frm->addHtml('', 'Checkout', '<h3 class="form-section-head">' . Labels::getLabel('LBL_COD_Payments', $this->adminLangId) . '</h3>');
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Minimum_COD_Order_Total', $this->adminLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_MIN_COD_ORDER_LIMIT');
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_This_is_the_minimum_cash_on_delivery_order_total,_eligible_for_COD_payments.", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_minimum_cash_on_delivery_order_total,_eligible_for_COD_payments.", $this->adminLangId) . "</small>";
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Maximum_COD_Order_Total', $this->adminLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_MAX_COD_ORDER_LIMIT');
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_This_is_the_maximum_cash_on_delivery_order_total,_eligible_for_COD_payments._Default_is_0", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_maximum_cash_on_delivery_order_total,_eligible_for_COD_payments._Default_is_0", $this->adminLangId) . "</small>";
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Minimum_Wallet_Balance', $this->adminLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_COD_MIN_WALLET_BALANCE');
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_seller_needs_to_maintain_to_accept_COD_orders._Default_is_-1", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_seller_needs_to_maintain_to_accept_COD_orders._Default_is_-1", $this->adminLangId) . "</small>";
 
                 $frm->addHtml('', 'Checkout', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Pickup', $this->adminLangId) . '</h3>');
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Display_Time_Slots_After_Order', $this->adminLangId) . ' [' . Labels::getLabel('LBL_Hours', $this->adminLangId) . ']', 'CONF_TIME_SLOT_ADDITION', 2);
                 $fld->requirements()->setInt();
                 $fld->requirements()->setRange('2', '9999999999');
                 $fld->requirements()->setRequired(true);
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_SHOP_PICKUP_INTERVAL_INFO", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_SHOP_PICKUP_INTERVAL_INFO", $this->adminLangId) . "</small>";
 
                 $frm->addHtml('', 'Checkout', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Checkout_Process', $this->adminLangId) . '</h3>');
                 $fld1 = $frm->addCheckBox(Labels::getLabel('LBL_Activate_Live_Payment_Transaction_Mode', $this->adminLangId), 'CONF_TRANSACTION_MODE', 1, array(), false, 0);
-                $fld1->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Set_Transaction_Mode_to_live_environment", $this->adminLangId) . "</small>";
+                $fld1->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_Transaction_Mode_to_live_environment", $this->adminLangId) . "</small>";
                 $obj = new Plugin();
                 if ($obj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'plugin_active')) {
                     $fld1 = $frm->addCheckBox(
@@ -883,16 +883,16 @@ class ConfigurationsController extends AdminBaseController
                 $orderStatusArr = Orders::getOrderProductStatusArr($this->adminLangId);
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Tax_Collected_By_Seller", $this->adminLangId), 'CONF_TAX_COLLECTED_BY_SELLER', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("LBL_On_enabling_this_feature,_seller_will_be_able_to_collect_tax", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("LBL_On_enabling_this_feature,_seller_will_be_able_to_collect_tax", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_TAX_AFTER_DISCOUNTS", $this->adminLangId), 'CONF_TAX_AFTER_DISOCUNT', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("LBL_On_enabling_this_feature,_tax_will_be_applicable_after_discounts", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("LBL_On_enabling_this_feature,_tax_will_be_applicable_after_discounts", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Return_Shipping_Charges_to_Customer", $this->adminLangId), 'CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("LBL_On_enabling_return_shipping_charges_to_customer,", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("LBL_On_enabling_return_shipping_charges_to_customer,", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_SHIPPED_BY_ADMIN_ONLY", $this->adminLangId), 'CONF_SHIPPED_BY_ADMIN_ONLY', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("LBL_On_enabling_shipping_charges_manged_by_admin_only,", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("LBL_On_enabling_shipping_charges_manged_by_admin_only,", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addSelectBox(
                     Labels::getLabel("LBL_Default_Child_Order_Status", $this->adminLangId),
@@ -1060,10 +1060,10 @@ class ConfigurationsController extends AdminBaseController
                 $frm->addHtml('', 'Cart', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Cart", $this->adminLangId) . '</h3>');
 
                 $fld = $frm->addRadioButtons(Labels::getLabel("LBL_On_Payment_Cancel_Maintain_Cart", $this->adminLangId), 'CONF_MAINTAIN_CART_ON_PAYMENT_CANCEL', applicationConstants::getYesNoArr($this->adminLangId), applicationConstants::NO, array('class' => 'list-inline'));
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Cart_Items_Will_be_retained_on_Cancelling_the_payment", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Cart_Items_Will_be_retained_on_Cancelling_the_payment", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addRadioButtons(Labels::getLabel("LBL_On_Payment_Failure_Maintain_Cart", $this->adminLangId), 'CONF_MAINTAIN_CART_ON_PAYMENT_FAILURE', applicationConstants::getYesNoArr($this->adminLangId), applicationConstants::NO, array('class' => 'list-inline'));
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Cart_Items_Will_be_retained_on_payment_failure", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Cart_Items_Will_be_retained_on_payment_failure", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Reminder_Interval_For_Products_In_Cart_[Days]", $this->adminLangId), 'CONF_REMINDER_INTERVAL_PRODUCTS_IN_CART', '');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_interval_in_days_to_send_auto_notification_alert_to_buyer_for_products_in_cart.", $this->adminLangId) . "</small>";
@@ -1087,10 +1087,10 @@ class ConfigurationsController extends AdminBaseController
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_maximum_commission/Fees_that_will_be_charged_on_a_particular_product.", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Commission_charged_including_shipping", $this->adminLangId), 'CONF_COMMISSION_INCLUDING_SHIPPING', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("LBL_Commission_charged_including_shipping_charges", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("LBL_Commission_charged_including_shipping_charges", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Commission_charged_including_tax", $this->adminLangId), 'CONF_COMMISSION_INCLUDING_TAX', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("LBL_Commission_charged_including_tax_charges", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("LBL_Commission_charged_including_tax_charges", $this->adminLangId) . '</small>';
                 break;
 
             case Configurations::FORM_AFFILIATE:
@@ -1134,7 +1134,7 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_affiliate_user_need_to_verify_their_email_address", $this->adminLangId) . " </small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_affiliate_user_need_to_verify_their_email_address", $this->adminLangId) . " </small>";
 
                 $fld = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_Sending_Welcome_Mail_After_Registration", $this->adminLangId),
@@ -1144,7 +1144,7 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_On_enabling_this_feature,_affiliate_will_receive_a_welcome_e-mail_after_registration.", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_On_enabling_this_feature,_affiliate_will_receive_a_welcome_e-mail_after_registration.", $this->adminLangId) . "</small>";
 
                 break;
 
@@ -1166,7 +1166,7 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld11->htmlAfterField = "<br><small>" . Labels::getLabel("MSG_Buyer_will_reward_point_on_every_purchase_as_defined_settings", $this->adminLangId) . "</small>";
+                $fld11->htmlAfterField = "<small>" . Labels::getLabel("MSG_Buyer_will_reward_point_on_every_purchase_as_defined_settings", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Reward_Point_Validity", $this->adminLangId), 'CONF_REWARDS_VALIDITY_ON_PURCHASE');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Reward_Point_Validity_in_days_from_date_of_credit", $this->adminLangId) . "</small>";
@@ -1226,7 +1226,7 @@ class ConfigurationsController extends AdminBaseController
                     array(),
                     ''
                 );
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Set_the_default_review_order_status_when_a_new_review_is_placed", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_the_default_review_order_status_when_a_new_review_is_placed", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Allow_Reviews", $this->adminLangId), 'CONF_ALLOW_REVIEWS', applicationConstants::getYesNoArr($this->adminLangId), '', array('class' => 'list-inline'));
                 $fld = $frm->addRadioButtons(Labels::getLabel("LBL_New_Review_Alert_Email", $this->adminLangId), 'CONF_REVIEW_ALERT_EMAIL', applicationConstants::getYesNoArr($this->adminLangId), '', array('class' => 'list-inline'));
@@ -1235,15 +1235,15 @@ class ConfigurationsController extends AdminBaseController
 
             case Configurations::FORM_EMAIL:
                 $fld = $frm->addEmailField(Labels::getLabel("LBL_From_Email", $this->adminLangId), 'CONF_FROM_EMAIL');
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Required_for_sending_emails", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Required_for_sending_emails", $this->adminLangId) . "</small>";
                 $fld = $frm->addEmailField(Labels::getLabel("LBL_Reply_to_Email_Address", $this->adminLangId), 'CONF_REPLY_TO_EMAIL');
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Required_for_email_headers_-_user_can_reply_to_this_email", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Required_for_email_headers_-_user_can_reply_to_this_email", $this->adminLangId) . "</small>";
                 $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Send_Email", $this->adminLangId), 'CONF_SEND_EMAIL', applicationConstants::getYesNoArr($this->adminLangId), '', array('class' => 'list-inline'));
                 if (FatApp::getConfig('CONF_SEND_EMAIL', FatUtility::VAR_INT, 1)) {
                     $fld->htmlAfterField = '<a href="javascript:void(0)" id="testMail-js">' . Labels::getLabel("LBL_Click_Here", $this->adminLangId) . '</a> to test email. ' . Labels::getLabel("LBL_This_will_send_Test_Email_to_Site_Owner_Email", $this->adminLangId) . ' - ' . FatApp::getConfig("CONF_SITE_OWNER_EMAIL");
                 }
                 $fld = $frm->addEmailField(Labels::getLabel("LBL_Contact_Email_Address", $this->adminLangId), 'CONF_CONTACT_EMAIL');
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Email_id_to_contact_site_owner", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Email_id_to_contact_site_owner", $this->adminLangId) . "</small>";
                 $frm->addRadioButtons(Labels::getLabel("LBL_Send_SMTP_Email", $this->adminLangId), 'CONF_SEND_SMTP_EMAIL', applicationConstants::getYesNoArr($this->adminLangId), '', array('class' => 'list-inline'));
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_SMTP_Host", $this->adminLangId), 'CONF_SMTP_HOST');
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_SMTP_Port", $this->adminLangId), 'CONF_SMTP_PORT');
@@ -1251,7 +1251,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addPasswordField(Labels::getLabel("LBL_SMTP_Password", $this->adminLangId), 'CONF_SMTP_PASSWORD');
                 $frm->addRadioButtons(Labels::getLabel("LBL_SMTP_Secure", $this->adminLangId), 'CONF_SMTP_SECURE', applicationConstants::getSmtpSecureArr($this->adminLangId), '', array('class' => 'list-inline'));
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Additional_Alert_E-Mails", $this->adminLangId), 'CONF_ADDITIONAL_ALERT_EMAILS');
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Any_additional_emails_you_want_to_receive_the_alert_email", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Any_additional_emails_you_want_to_receive_the_alert_email", $this->adminLangId) . "</small>";
 
                 break;
 
@@ -1263,7 +1263,7 @@ class ConfigurationsController extends AdminBaseController
                     '',
                     array('class' => 'list-inline')
                 );
-                $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Activate_3rd_Party_Live_Chat.", $this->adminLangId) . "</small>";
+                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Activate_3rd_Party_Live_Chat.", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Live_Chat_Code", $this->adminLangId), 'CONF_LIVE_CHAT_CODE');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_live_chat_script/code_provided_by_the_3rd_party_API_for_integration.", $this->adminLangId) . "</small>";
@@ -1532,70 +1532,70 @@ class ConfigurationsController extends AdminBaseController
                 break;
             case Configurations::FORM_IMPORT_EXPORT:
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_brand_id_instead_of_brand_identifier", $this->adminLangId), 'CONF_USE_BRAND_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_brand_id_instead_of_brand_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_brand_id_instead_of_brand_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_category_id_instead_of_category_identifier", $this->adminLangId), 'CONF_USE_CATEGORY_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_category_id_instead_of_category_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_category_id_instead_of_category_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_catalog_product_id_instead_of_catalog_product_identifier", $this->adminLangId), 'CONF_USE_PRODUCT_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_catalog_product_id_instead_of_catalog_product_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_catalog_product_id_instead_of_catalog_product_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_user_id_instead_of_username", $this->adminLangId), 'CONF_USE_USER_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_user_id_instead_of_username_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_user_id_instead_of_username_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_option_id_instead_of_option_identifier", $this->adminLangId), 'CONF_USE_OPTION_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_option_id_instead_of_option_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_option_id_instead_of_option_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_option_value_id_instead_of_option_identifier", $this->adminLangId), 'CONF_OPTION_VALUE_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_option_value_id_instead_of_option_value_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_option_value_id_instead_of_option_value_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_tag_id_instead_of_tag_identifier", $this->adminLangId), 'CONF_USE_TAG_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_tag_id_instead_of_tag_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_tag_id_instead_of_tag_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_tax_id_instead_of_tax_identifier", $this->adminLangId), 'CONF_USE_TAX_CATEOGRY_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_tax_category_id_instead_of_tax_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_tax_category_id_instead_of_tax_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_product_type_id_instead_of_product_type_identifier", $this->adminLangId), 'CONF_USE_PRODUCT_TYPE_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_product_type_id_instead_of_product_type_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_product_type_id_instead_of_product_type_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_dimension_unit_id_instead_of_dimension_unit_identifier", $this->adminLangId), 'CONF_USE_DIMENSION_UNIT_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_dimension_unit_id_instead_of_dimension_unit_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_dimension_unit_id_instead_of_dimension_unit_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_weight_unit_id_instead_of_weight_unit_identifier", $this->adminLangId), 'CONF_USE_WEIGHT_UNIT_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_weight_unit_id_instead_of_weight_unit_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_weight_unit_id_instead_of_weight_unit_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_lang_id_instead_of_lang_code", $this->adminLangId), 'CONF_USE_LANG_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_language_id_instead_of_language_code_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_language_id_instead_of_language_code_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_currency_id_instead_of_currency_code", $this->adminLangId), 'CONF_USE_CURRENCY_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_currency_id_instead_of_currency_code_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_currency_id_instead_of_currency_code_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_Product_condition_id_instead_of_condition_identifier", $this->adminLangId), 'CONF_USE_PROD_CONDITION_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_Product_condition_id_instead_of_condition_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_Product_condition_id_instead_of_condition_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_persent_or_flat_condition_id_instead_of_identifier", $this->adminLangId), 'CONF_USE_PERSENT_OR_FLAT_CONDITION_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_persent_or_flat_condition_id_instead_of_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_persent_or_flat_condition_id_instead_of_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_country_id_instead_of_country_code", $this->adminLangId), 'CONF_USE_COUNTRY_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_country_id_instead_of_country_code_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_country_id_instead_of_country_code_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_state_id_instead_of_state_identifier", $this->adminLangId), 'CONF_USE_STATE_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_state_id_instead_of_state_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_state_id_instead_of_state_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_policy_point_id_instead_of_policy_point_identifier", $this->adminLangId), 'CONF_USE_POLICY_POINT_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_policy_point_id_instead_of_policy_point_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_policy_point_id_instead_of_policy_point_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_company_id_instead_of_shipping_company_identifier", $this->adminLangId), 'CONF_USE_SHIPPING_COMPANY_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_company_id_instead_of_shipping_company_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_shipping_company_id_instead_of_shipping_company_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_policy_point_type_id_instead_of_policy_point_type_identifier", $this->adminLangId), 'CONF_USE_POLICY_POINT_TYPE_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_policy_point_type_id_instead_of_policy_point_type_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_policy_point_type_id_instead_of_policy_point_type_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_duration_id_instead_of_shipping_duration_identifier", $this->adminLangId), 'CONF_USE_SHIPPING_DURATION_ID', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_shipping_duration_id_instead_of_shipping_duration_identifier_in_worksheets", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_shipping_duration_id_instead_of_shipping_duration_identifier_in_worksheets", $this->adminLangId) . '</small>';
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_1_for_yes_0_for_no", $this->adminLangId), 'CONF_USE_O_OR_1', 1, array(), false, 0);
-                $fld->htmlAfterField = '<br><small>' . Labels::getLabel("MSG_Use_1_for_yes_0_for_no_for_status_type_data", $this->adminLangId) . '</small>';
+                $fld->htmlAfterField = '<small>' . Labels::getLabel("MSG_Use_1_for_yes_0_for_no_for_status_type_data", $this->adminLangId) . '</small>';
                 break;
         }
         $frm->addHiddenField('', 'form_type', $type);
