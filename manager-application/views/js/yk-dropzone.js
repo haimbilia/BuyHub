@@ -1,6 +1,11 @@
-$(document).on('mouseover', '.upload_cover', function () {
-    $('.file-upload').toggleClass("isactive");
-});
+$(document).on({
+    mouseenter: function () {
+        $('.file-upload').addClass("isactive");
+    },
+    mouseleave: function () {
+        $('.file-upload').removeClass("isactive");
+    }
+}, ".upload_cover");
 
 (function ($) {
     $.initDropZone = function (className = "dropzone", maxFiles = 1, acceptedFiles = ".zip") {
