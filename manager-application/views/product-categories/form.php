@@ -1,337 +1,343 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-$prodCatFrm->setFormTagAttribute('class', 'web_form');
-$prodCatFrm->setFormTagAttribute('id', 'frmProdCategory');
-$prodCatFrm->setFormTagAttribute('onsubmit', 'setupCategory(); return(false);');
 
-$activeFld = $prodCatFrm->getField('prodcat_active');
+HtmlHelper::formatFormFields($frm);
+
+$frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ')');
+$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
+$frm->setFormTagAttribute('id', 'frmProdCategory');
+$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
+// $frm->setFormTagAttribute('onsubmit', 'setupCategory(); return(false);');
+
+$siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+
+$activeFld = $frm->getField('prodcat_active');
 
 $activeFld->setOptionListTagAttribute('class', 'list-inline-checkboxes');
 $activeFld->developerTags['rdLabelAttributes'] = array('class' => 'radio');
 $activeFld->developerTags['rdHtmlAfterRadio'] = '<i class="input-helper"></i>';
 
-$statusFld = $prodCatFrm->getField('prodcat_status');
+$statusFld = $frm->getField('prodcat_status');
 if (null != $statusFld) {
     $statusFld->setOptionListTagAttribute('class', 'list-inline-checkboxes');
     $statusFld->developerTags['rdLabelAttributes'] = array('class' => 'radio');
     $statusFld->developerTags['rdHtmlAfterRadio'] = '<i class="input-helper"></i>';
 }
 
-$iconLangFld = $prodCatFrm->getField('icon_lang_id');
+$iconLangFld = $frm->getField('icon_lang_id');
 $iconLangFld->addFieldTagAttribute('class', 'icon-language-js');
 
-$iconFld = $prodCatFrm->getField('cat_icon');
+$iconFld = $frm->getField('cat_icon');
 $iconFld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
 $iconFld->addFieldTagAttribute('onChange', 'iconPopupImage(this)');
 $iconFld->htmlAfterField = '<small class="text--small">' . sprintf(Labels::getLabel('LBL_This_will_be_displayed_in_%s_on_your_store', $siteLangId), '60*60') . '</small>';
 
-$bannerFld = $prodCatFrm->getField('cat_banner');
+$bannerFld = $frm->getField('cat_banner');
 $bannerFld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
 $bannerFld->addFieldTagAttribute('onChange', 'bannerPopupImage(this)');
 $bannerFld->htmlAfterField = '<small class="text--small" class="preferredDimensions-js">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500') . '</small>';
 
-$bannerLangFld = $prodCatFrm->getField('banner_lang_id');
+$bannerLangFld = $frm->getField('banner_lang_id');
 $bannerLangFld->addFieldTagAttribute('class', 'banner-language-js');
 
-$screenFld = $prodCatFrm->getField('slide_screen');
+$screenFld = $frm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('class', 'prefDimensions-js');
 
-/* $btn = $prodCatFrm->getField('btn_submit');
-$btn->setFieldTagAttribute('class', "btn-clean btn-sm btn-icon btn-secondary");
-
-$btn = $prodCatFrm->getField('btn_discard');
-$btn->addFieldTagAttribute('onClick', "discardForm()");
-$btn->setFieldTagAttribute('class', "btn-clean btn-sm btn-icon btn-secondary"); */
-
-$fld = $prodCatFrm->getField('auto_update_other_langs_data');
+$fld = $frm->getField('auto_update_other_langs_data');
 if (null != $fld) {
     $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
     $fld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
 }
 ?>
-<?php echo $prodCatFrm->getFormTag(); ?>
-<div class="sectionbody space">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <h3 class="form__heading"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></h3>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="field-set">
-                        <div class="caption-wraper">
-                            <label class="field_label">
-                                <?php
-                                $fld = $prodCatFrm->getField('prodcat_identifier');
-                                echo $fld->getCaption();
-                                ?>
-                                <span class="spn_must_field">*</span></label>
-                        </div>
-                        <div class="field-wraper">
-                            <div class="field_cover">
-                                <?php echo $prodCatFrm->getFieldHtml('prodcat_identifier'); ?>
-                                <?php echo $prodCatFrm->getFieldHtml('prodcat_id'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="field-set">
-                        <div class="caption-wraper">
-                            <label class="field_label">
-                                <?php
-                                $fld = $prodCatFrm->getField('prodcat_name[' . $siteDefaultLangId . ']');
-                                echo $fld->getCaption();
-                                ?>
-                                <span class="spn_must_field">*</span></label>
-                        </div>
-                        <div class="field-wraper">
-                            <div class="field_cover">
-                                <?php echo $prodCatFrm->getFieldHtml('prodcat_name[' . $siteDefaultLangId . ']'); ?>
-                                <?php echo $prodCatFrm->getFieldHtml('prodcat_id'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="field-set">
-                        <div class="caption-wraper">
-                            <label class="field_label">
-                                <?php $fld = $prodCatFrm->getField('parent_category_name');
-                                echo $fld->getCaption();
-                                ?></label>
-                        </div>
-                        <div class="field-wraper">
-                            <div class="field_cover">
-                                <?php echo $prodCatFrm->getFieldHtml('parent_category_name'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="field-set">
-                        <div class="caption-wraper">
-                            <label class="field_label">
-                                <?php $fld = $prodCatFrm->getField('prodcat_active');
-                                echo $fld->getCaption();
-                                ?></label>
-                        </div>
-                        <div class="field-wraper">
-                            <div class="field_cover">
-                                <?php echo $prodCatFrm->getFieldHtml('prodcat_active'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="field-set">
-                        <div class="caption-wraper">
-                            <label class="field_label">
-                                <?php echo $prodCatFrm->getField('rating_type')->getCaption(); ?>
-                            </label>
-                        </div>
-                        <div class="field-wraper">
-                            <div class="field_cover">
-                                <?php echo $prodCatFrm->getFieldHtml('rating_type'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <?php if (null != $statusFld) { ?>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="field-set d-flex align-items-center">
-                            <div class="caption-wraper w-auto pr-4">
-                                <label class="field_label">
-                                    <?php echo $statusFld->getCaption(); ?>
-                                </label>
-                            </div>
-                            <div class="field-wraper w-auto">
-                                <div class="field_cover">
-                                    <?php echo $prodCatFrm->getFieldHtml('prodcat_status'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php } ?>
-            <div id="cropperBox-js"></div>
-            <?php $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-            if (!empty($translatorSubscriptionKey) && count($otherLangData) > 0) { ?>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="field-set">
-                            <?php echo $prodCatFrm->getFieldHtml('auto_update_other_langs_data'); ?>
-                        </div>
-                    </div>
-                </div>
-            <?php } ?>
-            <div class="p-4 mb-4 border rounded">
-                <h3 class="mb-4"><?php echo Labels::getLabel('LBL_Icon', $siteLangId); ?></h3>
-                <div class="row">
-                    <?php
-
-                    $fld = $prodCatFrm->getField('icon_lang_id');
-                     $iconLang = $fld->fldType;
-                    if ($iconLang != 'hidden') {
-                    ?>
-
-                        <div class="col-md-6">
-                            <div class="field-set">
-                                <div class="caption-wraper"><label class="field_label">
-                                        <?php
-                                        echo $fld->getCaption();
-                                        ?>
-                                    </label></div>
-                                <div class="field-wraper">
-                                    <div class="field_cover">
-                                        <?php echo $prodCatFrm->getFieldHtml('icon_lang_id'); ?>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php echo Labels::getLabel('LBL_PRODUCT_CATEGORY_SETUP', $siteLangId); ?>
+    </h5>
+</div>
+<div class="modal-body form-edit">
+    <div class="form-edit-body loaderContainerJs">
+        <?php echo $frm->getFormTag(); ?>
+            <?php 
+                echo $frm->getFieldHtml('banner_min_width');
+                echo $frm->getFieldHtml('banner_min_height');
+                echo $frm->getFieldHtml('logo_min_width');
+                echo $frm->getFieldHtml('logo_min_height');
+                echo $frm->getFieldHtml('prodcat_parent');
+            ?>
+            <div class="sectionbody space">
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="field-set">
+                                    <div class="caption-wraper">
+                                        <label class="field_label">
+                                            <?php
+                                            $fld = $frm->getField('prodcat_identifier');
+                                            echo $fld->getCaption();
+                                            ?>
+                                            <span class="spn_must_field">*</span></label>
+                                    </div>
+                                    <div class="field-wraper">
+                                        <div class="field_cover">
+                                            <?php echo $frm->getFieldHtml('prodcat_identifier'); ?>
+                                            <?php echo $frm->getFieldHtml('prodcat_id'); ?>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    <?php
-                    } else {
-                        echo $prodCatFrm->getFieldHtml('icon_lang_id');
-                    }
-                    ?>
-
-                    <div class="col-md-6">
-                        <div class="field-set">
-                            <div class="caption-wraper">
-                                <label class="field_label"></label>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $prodCatFrm->getFieldHtml('icon_file_type');
-                                    echo $prodCatFrm->getFieldHtml('cat_icon'); ?>
-                                    <?php
-                                    foreach ($mediaLanguages as $key => $data) {
-                                        echo $prodCatFrm->getFieldHtml('cat_icon_image_id[' . $key . ']');
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4" id="icon-image-listing"></div>
-                </div>
-                <div class="divider"></div>
-                <h3 class="mb-4"><?php echo Labels::getLabel('LBL_Banner', $siteLangId); ?></h3>
-                <div class="row">
-                <?php
-
-                    $fld = $prodCatFrm->getField('banner_lang_id');
-                    $bannerLang = $fld->fldType;
-                    if ($bannerLang != 'hidden') {
-                    ?>
-                    <div class="col-md-3">
-                        <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label">
-                                    <?php 
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label></div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $prodCatFrm->getFieldHtml('banner_lang_id'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <?php } else {
-                        echo $prodCatFrm->getFieldHtml('banner_lang_id');
-                    }
-                    ?>
-                    <div class="col-md-3">
-                        <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label">
-                                    <?php $fld = $prodCatFrm->getField('slide_screen');
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label></div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $prodCatFrm->getFieldHtml('slide_screen'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label">
-                                </label></div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $prodCatFrm->getFieldHtml('banner_file_type');
-                                    echo $prodCatFrm->getFieldHtml('cat_banner'); ?>
-                                    <?php
-                                    foreach ($mediaLanguages as $key => $data) {
-                                        foreach ($screenArr as $key1 => $screen) {
-                                            echo $prodCatFrm->getFieldHtml('cat_banner_image_id[' . $key . '_' . $key1 . ']');
-                                        }
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4" id="banner-image-listing"></div>
-                </div>
-            </div>
-            <?php if (!empty($otherLangData)) {
-                foreach ($otherLangData as $langId => $data) { ?>
-                    <div class="accordians_container accordians_container-categories" defaultLang="<?php echo $siteDefaultLangId; ?>" language="<?php echo $langId; ?>" id="accordion-language_<?php echo $langId; ?>" onClick="translateData(this)">
-                        <div class="accordian_panel">
-                            <span class="accordian_title accordianhead accordian_title" id="collapse_<?php echo $langId; ?>">
-                                <?php echo $data . " ";
-                                echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
-                            </span>
-                            <div class="accordian_body accordiancontent" style="display: none;">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="field-set">
-                                            <div class="caption-wraper">
-                                                <label class="field_label">
-                                                    <?php $fld = $prodCatFrm->getField('prodcat_name[' . $langId . ']');
-                                                    echo $fld->getCaption(); ?>
-                                                </label>
-                                            </div>
-                                            <div class="field-wraper">
-                                                <div class="field_cover">
-                                                    <?php echo $prodCatFrm->getFieldHtml('prodcat_name[' . $langId . ']'); ?>
-                                                </div>
-                                            </div>
+                            <div class="col-md-6">
+                                <div class="field-set">
+                                    <div class="caption-wraper">
+                                        <label class="field_label">
+                                            <?php
+                                            $fld = $frm->getField('prodcat_name[' . $siteDefaultLangId . ']');
+                                            echo $fld->getCaption();
+                                            ?>
+                                            <span class="spn_must_field">*</span></label>
+                                    </div>
+                                    <div class="field-wraper">
+                                        <div class="field_cover">
+                                            <?php echo $frm->getFieldHtml('prodcat_name[' . $siteDefaultLangId . ']'); ?>
+                                            <?php echo $frm->getFieldHtml('prodcat_id'); ?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-            <?php }
-            } ?>
-            <?php if (0 < $productReq) { ?>
-                <div class="row">
-                    <div class="col-md-12">
-                        <?php echo $prodCatFrm->getFieldHtml('btn_submit'); ?>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="field-set">
+                                    <div class="caption-wraper">
+                                        <label class="field_label">
+                                            <?php $fld = $frm->getField('parent_category_name');
+                                            echo $fld->getCaption();
+                                            ?></label>
+                                    </div>
+                                    <div class="field-wraper">
+                                        <div class="field_cover">
+                                            <?php echo $frm->getFieldHtml('parent_category_name'); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="field-set">
+                                    <div class="caption-wraper">
+                                        <label class="field_label">
+                                            <?php $fld = $frm->getField('prodcat_active');
+                                            echo $fld->getCaption();
+                                            ?></label>
+                                    </div>
+                                    <div class="field-wraper">
+                                        <div class="field_cover">
+                                            <?php echo $frm->getFieldHtml('prodcat_active'); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="field-set">
+                                    <div class="caption-wraper">
+                                        <label class="field_label">
+                                            <?php echo $frm->getField('rating_type')->getCaption(); ?>
+                                        </label>
+                                    </div>
+                                    <div class="field-wraper">
+                                        <div class="field_cover">
+                                            <?php echo $frm->getFieldHtml('rating_type'); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php if (null != $statusFld) { ?>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="field-set d-flex align-items-center">
+                                        <div class="caption-wraper w-auto pr-4">
+                                            <label class="field_label">
+                                                <?php echo $statusFld->getCaption(); ?>
+                                            </label>
+                                        </div>
+                                        <div class="field-wraper w-auto">
+                                            <div class="field_cover">
+                                                <?php echo $frm->getFieldHtml('prodcat_status'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                        <div id="cropperBox-js"></div>
+                        <?php $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+                        if (!empty($translatorSubscriptionKey) && count($otherLangData) > 0) { ?>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="field-set">
+                                        <?php echo $frm->getFieldHtml('auto_update_other_langs_data'); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                        <div class="p-4 mb-4 border rounded">
+                            <h3 class="mb-4"><?php echo Labels::getLabel('LBL_Icon', $siteLangId); ?></h3>
+                            <div class="row">
+                                <?php
+
+                                $fld = $frm->getField('icon_lang_id');
+                                $iconLang = $fld->fldType;
+                                if ($iconLang != 'hidden') {
+                                ?>
+
+                                    <div class="col-md-6">
+                                        <div class="field-set">
+                                            <div class="caption-wraper"><label class="field_label">
+                                                    <?php
+                                                    echo $fld->getCaption();
+                                                    ?>
+                                                </label></div>
+                                            <div class="field-wraper">
+                                                <div class="field_cover">
+                                                    <?php echo $frm->getFieldHtml('icon_lang_id'); ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php
+                                } else {
+                                    echo $frm->getFieldHtml('icon_lang_id');
+                                }
+                                ?>
+
+                                <div class="col-md-6">
+                                    <div class="field-set">
+                                        <div class="caption-wraper">
+                                            <label class="field_label"></label>
+                                        </div>
+                                        <div class="field-wraper">
+                                            <div class="field_cover">
+                                                <?php echo $frm->getFieldHtml('icon_file_type');
+                                                echo $frm->getFieldHtml('cat_icon'); ?>
+                                                <?php
+                                                foreach ($mediaLanguages as $key => $data) {
+                                                    echo $frm->getFieldHtml('cat_icon_image_id[' . $key . ']');
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" id="icon-image-listing"></div>
+                            </div>
+                            <div class="divider"></div>
+                            <h3 class="mb-4"><?php echo Labels::getLabel('LBL_Banner', $siteLangId); ?></h3>
+                            <div class="row">
+                                <?php
+
+                                $fld = $frm->getField('banner_lang_id');
+                                $bannerLang = $fld->fldType;
+                                if ($bannerLang != 'hidden') {
+                                ?>
+                                    <div class="col-md-3">
+                                        <div class="field-set">
+                                            <div class="caption-wraper"><label class="field_label">
+                                                    <?php
+                                                    echo $fld->getCaption();
+                                                    ?>
+                                                </label></div>
+                                            <div class="field-wraper">
+                                                <div class="field_cover">
+                                                    <?php echo $frm->getFieldHtml('banner_lang_id'); ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php } else {
+                                    echo $frm->getFieldHtml('banner_lang_id');
+                                }
+                                ?>
+                                <div class="col-md-3">
+                                    <div class="field-set">
+                                        <div class="caption-wraper"><label class="field_label">
+                                                <?php $fld = $frm->getField('slide_screen');
+                                                echo $fld->getCaption();
+                                                ?>
+                                            </label></div>
+                                        <div class="field-wraper">
+                                            <div class="field_cover">
+                                                <?php echo $frm->getFieldHtml('slide_screen'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="field-set">
+                                        <div class="caption-wraper"><label class="field_label">
+                                            </label></div>
+                                        <div class="field-wraper">
+                                            <div class="field_cover">
+                                                <?php echo $frm->getFieldHtml('banner_file_type');
+                                                echo $frm->getFieldHtml('cat_banner'); ?>
+                                                <?php
+                                                foreach ($mediaLanguages as $key => $data) {
+                                                    foreach ($screenArr as $key1 => $screen) {
+                                                        echo $frm->getFieldHtml('cat_banner_image_id[' . $key . '_' . $key1 . ']');
+                                                    }
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" id="banner-image-listing"></div>
+                            </div>
+                        </div>
+                        <?php if (!empty($otherLangData)) {
+                            foreach ($otherLangData as $langId => $data) { ?>
+                                <div class="accordians_container accordians_container-categories" defaultLang="<?php echo $siteDefaultLangId; ?>" language="<?php echo $langId; ?>" id="accordion-language_<?php echo $langId; ?>" onClick="translateData(this)">
+                                    <div class="accordian_panel">
+                                        <span class="accordian_title accordianhead accordian_title" id="collapse_<?php echo $langId; ?>">
+                                            <?php echo $data . " ";
+                                            echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
+                                        </span>
+                                        <div class="accordian_body accordiancontent" style="display: none;">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="field-set">
+                                                        <div class="caption-wraper">
+                                                            <label class="field_label">
+                                                                <?php $fld = $frm->getField('prodcat_name[' . $langId . ']');
+                                                                echo $fld->getCaption(); ?>
+                                                            </label>
+                                                        </div>
+                                                        <div class="field-wraper">
+                                                            <div class="field_cover">
+                                                                <?php echo $frm->getFieldHtml('prodcat_name[' . $langId . ']'); ?>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        <?php }
+                        } ?>
                     </div>
                 </div>
-            <?php } ?>
-        </div>
+            </div>
+        </form>
+        <?php echo $frm->getExternalJS(); ?>
     </div>
-</div>
-<?php echo $prodCatFrm->getFieldHtml('banner_min_width');
-echo $prodCatFrm->getFieldHtml('banner_min_height');
-echo $prodCatFrm->getFieldHtml('logo_min_width');
-echo $prodCatFrm->getFieldHtml('logo_min_height');
-echo $prodCatFrm->getFieldHtml('prodcat_parent');
-?>
-</form>
-<?php echo $prodCatFrm->getExternalJS();
 
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
+</div>
+
+
+
+<?php
 $catAutocompleteArr = [];
 foreach ($categories as $catId => $catName) {
     $catAutocompleteArr[] = array(
