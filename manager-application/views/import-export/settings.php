@@ -17,7 +17,15 @@
     ?>
 </div>
 <div class="card-foot">
+<<<<<<< HEAD
+    <button type="button" class="btn btn-brand  importExportBtnJs" onclick="updateSettings('frmImportExportSetting')">
+        <?php
+        echo Labels::getLabel('LBL_UPDATE', $adminLangId);
+        ?>
+    </button>
+=======
     <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_UPDATE', $siteLangId), 'button', '', '', "updateSettings('frmImportExportSetting')"); ?>
+>>>>>>> dcb74d5c219c2cc219cb2515001a6e3cc7e94a8f
 </div>
 <script>
     $(document).ready(function() {

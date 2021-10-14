@@ -30,7 +30,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         'canEdit' => $canEdit,
                         'siteLangId' => $siteLangId,
                         'cardHeadTitle' => Labels::getLabel('LBL_IMPORT_INSTRUCTIONS', $siteLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_INSTRUCTIONS', $siteLangId), ['{COUNT}' => $recordCount]),
                     ];
                     $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
                     <div class="card-body">

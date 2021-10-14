@@ -172,9 +172,6 @@ $frm->addHiddenField('', 'status'); ?>
         <span class="card-head-title">
             <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGINS', $siteLangId), ['{PLUGIN-NAME}' =>  $pluginTypes[$type]]); ?>
         </span>
-        <span class="text-muted">
-            <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_PLUGINS', $siteLangId), ['{PLUGIN-NAME}' =>  $pluginTypes[$type], '{COUNT}' => $recordCount]); ?>
-        </span>
     </h3>
     <div class="card-toolbar">
         <?php

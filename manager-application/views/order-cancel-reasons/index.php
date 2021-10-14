@@ -33,7 +33,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         'canEdit' => $canEdit,
                         'siteLangId' => $siteLangId,
                         'cardHeadTitle' => Labels::getLabel('LBL_ORDER_CANCEL_REASONS', $siteLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_REASONS', $siteLangId), ['{COUNT}' => $recordCount]),
                         'newRecordBtn' => true,
                         'deleteButton' => true
                     ];

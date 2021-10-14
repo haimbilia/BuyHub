@@ -42,7 +42,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         'canEdit' => $canEdit,
                         'siteLangId' => $siteLangId,
                         'cardHeadTitle' => Labels::getLabel('LBL_SYSTEM_LOG', $siteLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_LOGS', $siteLangId), ['{COUNT}' => $recordCount]),
                     ];
 
                     $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>

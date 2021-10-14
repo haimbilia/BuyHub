@@ -73,7 +73,11 @@ $imageFld->addFieldTagAttribute('accept','image/*');
     <div class="card-foot">
         <div class="row">                                    
             <div class="col-auto">
+<<<<<<< HEAD
+                <button type="submit" class="btn btn-brand "><?php echo Labels::getLabel('LBL_UPDATE', $adminLangId); ?></button>
+=======
                 <button type="submit" class="btn btn-brand gb-btn gb-btn-primary"><?php echo Labels::getLabel('LBL_UPDATE', $siteLangId); ?></button>
+>>>>>>> dcb74d5c219c2cc219cb2515001a6e3cc7e94a8f
             </div>
         </div>
     </div> 

@@ -47,7 +47,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         'canEdit' => $canEdit,
                         'siteLangId' => $siteLangId,
                         'cardHeadTitle' => Labels::getLabel('LBL_ABUSIVE_KEYWORDS', $siteLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_ABUSIVE_WORDS', $siteLangId), ['{COUNT}' => $recordCount]),
                         'newRecordBtn' => true,
                         'deleteButton' => true
                     ];

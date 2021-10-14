@@ -1,9 +1,11 @@
 .switch {
-    display: inline-block;
-    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    cursor: pointer;
     input {
         &:empty {
-            margin-left: -999px;
+            margin-#{$start-direction}: -999px;
             height: 0;
             width: 0;
             overflow: hidden;
@@ -64,7 +66,7 @@
             ~ {
                 span {
                     &:after {
-                        margin-left: 26px;
+                        margin-#{$start-direction}: 26px;
                         background-color: $brand-color;
                         color: #ffffff;
                     }

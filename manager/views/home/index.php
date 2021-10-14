@@ -1856,7 +1856,7 @@
                                             </div>
                                             <div class="col-auto">
                                                 <button type="submit"
-                                                    class="btn btn-brand gb-btn gb-btn-primary ">Update</button>
+                                                    class="btn btn-brand  ">Update</button>
                                             </div>
                                         </div>
                                     </div>

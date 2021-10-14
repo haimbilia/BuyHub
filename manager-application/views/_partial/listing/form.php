@@ -11,6 +11,20 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
         <?php echo $frm->getFormHtml(); ?>
     </div>
 
+<<<<<<< HEAD
+<div class="form-edit-foot">
+    <div class="row">
+        <div class="col-auto">
+            <button type="button" class="btn btn-brand  submitBtnJs">
+                <?php
+                if (0 < $recordId) {
+                    echo Labels::getLabel('LBL_UPDATE', $adminLangId);
+                } else {
+                    echo Labels::getLabel('LBL_SAVE', $adminLangId);
+                }
+                ?>
+            </button>
+=======
     <div class="form-edit-foot">
         <div class="row">
             <div class="col-auto">
@@ -24,6 +38,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
                     ?>
                 </button>
             </div>
+>>>>>>> dcb74d5c219c2cc219cb2515001a6e3cc7e94a8f
         </div>
     </div>
 </div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->

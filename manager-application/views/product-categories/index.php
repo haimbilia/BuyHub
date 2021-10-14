@@ -6,11 +6,10 @@ $controller = str_replace('Controller', '', FatApp::getController());
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <?php $data = [
+                    <?php $data = [ 
                         'canEdit' => $canEdit,
                         'siteLangId' => $siteLangId,
                         'cardHeadTitle' => Labels::getLabel('LBL_CATEGORIES', $siteLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_CATEGORIES', $siteLangId), ['{COUNT}' => $recordCount]),
                         'newRecordBtn' => true
                     ];
 
