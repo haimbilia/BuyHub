@@ -10,7 +10,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         'canEdit' => $canEdit,
                         'adminLangId' => $adminLangId,
                         'cardHeadTitle' => Labels::getLabel('LBL_CATEGORIES', $adminLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_CATEGORIES', $adminLangId), ['{COUNT}' => $recordCount]),
                         'newRecordBtn' => true
                     ];
 

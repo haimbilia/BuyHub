@@ -33,7 +33,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         'canEdit' => $canEdit,
                         'adminLangId' => $adminLangId,
                         'cardHeadTitle' => Labels::getLabel('LBL_TAX_STRUCTURE', $adminLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_TAX_STRUCTURE', $adminLangId), ['{COUNT}' => $recordCount]),
                         'newRecordBtn' => true,
                         'editButton' => true
                     ];

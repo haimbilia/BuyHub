@@ -37,7 +37,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         'canEdit' => $canEdit,
                         'adminLangId' => $adminLangId,
                         'cardHeadTitle' => Labels::getLabel('LBL_ZONES', $adminLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_ZONES', $adminLangId), ['{COUNT}' => $recordCount]),
                         'newRecordBtn' => true,
                         'statusButtons' => true
                     ];

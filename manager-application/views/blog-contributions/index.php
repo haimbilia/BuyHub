@@ -45,7 +45,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         'canEdit' => $canEdit,
                         'adminLangId' => $adminLangId,
                         'cardHeadTitle' => Labels::getLabel('LBL_BLOG_CONTRIBUTIONS', $adminLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_CONTRIBUTIONS', $adminLangId), ['{COUNT}' => $recordCount]),
                         'deleteButton' => true,
                     ];
 

@@ -39,7 +39,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         'canEdit' => $canEdit,
                         'adminLangId' => $adminLangId,
                         'cardHeadTitle' => Labels::getLabel('LBL_AFFILIATE_COMMISSION_SETTINGS', $adminLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_COMMISSION', $adminLangId), ['{COUNT}' => $recordCount]),
                         'newRecordBtn' => true,
                         'deleteButton' => true
                     ];
