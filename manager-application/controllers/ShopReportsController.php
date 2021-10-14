@@ -35,16 +35,16 @@ class ShopReportsController extends AdminBaseController
 
         $shopId = FatApp::getPostedData('shopId', FatUtility::VAR_INT, 0);
 
-        $reportReasonObj = ShopReportReason::getSearchObject($this->adminLangId);
+        $reportReasonObj = ShopReportReason::getSearchObject($this->siteLangId);
         $reportReasonObj->addMultipleFields(array('reportreason.*', 'reportreason_l.reportreason_title'));
         $reportReasonObj->doNotCalculateRecords();
         $reportReasonObj->doNotLimitRecords();
         $result_report_reasons = $reportReasonObj->getQuery();
 
-        $srch = ShopReport::getSearchObject($this->adminLangId);
+        $srch = ShopReport::getSearchObject($this->siteLangId);
         $srch->joinTable('tbl_users', 'INNER JOIN', 'u.user_id = sreport.sreport_user_id', 'u');
         $srch->joinTable('tbl_shops', 'INNER JOIN', 's.shop_id = sreport.sreport_shop_id', 's');
-        $srch->joinTable('tbl_shops_lang', 'INNER JOIN', 'sl.shoplang_shop_id = s.shop_id AND sl.shoplang_lang_id = ' . $this->adminLangId, 'sl');
+        $srch->joinTable('tbl_shops_lang', 'INNER JOIN', 'sl.shoplang_shop_id = s.shop_id AND sl.shoplang_lang_id = ' . $this->siteLangId, 'sl');
         $srch->joinTable('(' . $result_report_reasons . ')', 'LEFT OUTER JOIN', 'reportreason.reportreason_id = sreport.sreport_reportreason_id', 'reportreason');
 
         if ($shopId > 0) {

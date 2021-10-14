@@ -32,9 +32,9 @@ class TaxController extends AdminBaseController
     public function getSearchForm()
     {
         $frm = new Form('frmTaxSearch');
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -49,7 +49,7 @@ class TaxController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
-        $srch = Tax::getSearchObject($this->adminLangId, false);
+        $srch = Tax::getSearchObject($this->siteLangId, false);
         $srch->addCondition('taxcat_deleted', '=', 0);
 
         $activatedTaxServiceId = Tax::getActivatedServiceId();
@@ -82,8 +82,8 @@ class TaxController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->adminLangId));
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
+        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set('activatedTaxServiceId', $activatedTaxServiceId);
         $this->_template->render(false, false);
     }
@@ -102,8 +102,8 @@ class TaxController extends AdminBaseController
 
         $activatedTaxServiceId = Tax::getActivatedServiceId();
         /* if (!$activatedTaxServiceId) {
-          if (Tax::validatePostOptions($this->adminLangId) == false) {
-          Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Tax_Option_Rate', $this->adminLangId));
+          if (Tax::validatePostOptions($this->siteLangId) == false) {
+          Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Tax_Option_Rate', $this->siteLangId));
           FatUtility::dieJsonError(Message::getHtml());
           }
           } */
@@ -124,7 +124,7 @@ class TaxController extends AdminBaseController
         /* if (!$activatedTaxServiceId) {
           $taxvalOptions = array();
           $taxStructure = new TaxStructure(FatApp::getConfig('CONF_TAX_STRUCTURE', FatUtility::VAR_FLOAT, 0));
-          $options = $taxStructure->getOptions($this->adminLangId);
+          $options = $taxStructure->getOptions($this->siteLangId);
           foreach ($options as $optionVal) {
           $taxvalOptions[$optionVal['taxstro_id']] = $post[$optionVal['taxstro_id']];
           }
@@ -213,7 +213,7 @@ class TaxController extends AdminBaseController
 
         if (0 < $taxcat_id) {
             $taxObj = new Tax($taxcat_id);
-            $srch = $taxObj->getSearchObject($this->adminLangId, false);
+            $srch = $taxObj->getSearchObject($this->siteLangId, false);
 
             $srch->addCondition('taxcat_id', '=', $taxcat_id);
             $srch->addMultipleFields(array('t.*', 't_l.taxcat_name'));
@@ -291,7 +291,7 @@ class TaxController extends AdminBaseController
 
         if (empty($taxcatIdsArr)) {
             FatUtility::dieWithError(
-                    Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                    Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -310,12 +310,12 @@ class TaxController extends AdminBaseController
         $taxcat_id = FatUtility::int($taxcat_id);
         if (1 > $taxcat_id) {
             FatUtility::dieWithError(
-                    Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                    Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
         $taxtObj = new Tax($taxcat_id);
         if (!$taxtObj->canRecordMarkDelete($taxcat_id)) {
-            $msg = Labels::getLabel('MSG_PLEASE_UNLINK_ALL_THE_PRODUCTS_FIRST', $this->adminLangId);
+            $msg = Labels::getLabel('MSG_PLEASE_UNLINK_ALL_THE_PRODUCTS_FIRST', $this->siteLangId);
             Message::addErrorMessage($msg);
             FatUtility::dieJsonError(Message::getHtml());
         }
@@ -327,7 +327,7 @@ class TaxController extends AdminBaseController
         }
 
         if (!$this->deleteGroupData($taxcat_id)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Unable_to_delete_group_old_data', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Unable_to_delete_group_old_data', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
     }
@@ -364,7 +364,7 @@ class TaxController extends AdminBaseController
         $taxcatIdsArr = FatUtility::int(FatApp::getPostedData('taxcat_ids'));
         if (empty($taxcatIdsArr) || -1 == $status) {
             FatUtility::dieWithError(
-                    Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                    Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -385,7 +385,7 @@ class TaxController extends AdminBaseController
         $taxcatId = FatUtility::int($taxcatId);
         if (1 > $taxcatId || -1 == $status) {
             FatUtility::dieWithError(
-                    Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                    Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -400,17 +400,17 @@ class TaxController extends AdminBaseController
     {
         $frm = new Form('frmTaxLang');
         $frm->addHiddenField('', 'taxcat_id', $taxcat_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Tax_Category_Name', $this->adminLangId), 'taxcat_name');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Tax_Category_Name', $this->siteLangId), 'taxcat_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
 
@@ -421,7 +421,7 @@ class TaxController extends AdminBaseController
 
         $frm = new Form('frmTax');
         $frm->addHiddenField('', 'taxcat_id', $taxcat_id);
-        $frm->addRequiredField(Labels::getLabel('LBL_Tax_Category_Identifier', $this->adminLangId), 'taxcat_identifier');
+        $frm->addRequiredField(Labels::getLabel('LBL_Tax_Category_Identifier', $this->siteLangId), 'taxcat_identifier');
 
         $activatedTaxServiceId = Tax::getActivatedServiceId();
 
@@ -430,12 +430,12 @@ class TaxController extends AdminBaseController
         }
 
         if ($activatedTaxServiceId || FatApp::getConfig('CONF_TAX_CATEGORIES_CODE', FatUtility::VAR_INT, 1)) {
-            $frm->addRequiredField(Labels::getLabel('LBL_Tax_Code', $this->adminLangId), 'taxcat_code');
+            $frm->addRequiredField(Labels::getLabel('LBL_Tax_Code', $this->siteLangId), 'taxcat_code');
         }
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'taxcat_active', $activeInactiveArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'taxcat_active', $activeInactiveArr, '', array(), '');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -444,7 +444,7 @@ class TaxController extends AdminBaseController
         $pagesize = 10;
         $post = FatApp::getPostedData();
         $this->objPrivilege->canViewTax();
-        $srch = Tax::getSearchObject($this->adminLangId, true);
+        $srch = Tax::getSearchObject($this->siteLangId, true);
         $srch->addCondition('taxcat_deleted', '=', 0);
         $activatedTaxServiceId = Tax::getActivatedServiceId();
 
@@ -512,7 +512,7 @@ class TaxController extends AdminBaseController
         $srch = TaxRule::getSearchObject();
         $srch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = 0');
         $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxstr_id = taxrule_taxstr_id');
-        $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $this->adminLangId);
+        $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $this->siteLangId);
         $srch->addCondition('taxrule_taxcat_id', '=', $post['taxrule_taxcat_id']);
         $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'trr_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxrule_taxcat_id'));
 
@@ -539,11 +539,11 @@ class TaxController extends AdminBaseController
     private function getRuleListSearchForm($taxCatId = 0)
     {
         $frm = new Form('frmRuleListSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'taxrule_taxcat_id', $taxCatId);
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -558,7 +558,7 @@ class TaxController extends AdminBaseController
 
         $taxObj = new TaxRule($taxRuleId);
         $ruleLocations = [];
-        $ruleData = $taxObj->getRule($this->adminLangId);
+        $ruleData = $taxObj->getRule($this->siteLangId);
         if (!empty($ruleData)) {
             $frm->fill($ruleData);
             $ruleLocations = $taxObj->getLocations($taxCatId);
@@ -588,7 +588,7 @@ class TaxController extends AdminBaseController
                 $totalCombinedTax += $value['taxruledet_rate'];
             });
             if ($totalCombinedTax != $post['trr_rate']) {
-                Message::addErrorMessage(Labels::getLabel('LBL_INVALID_COMBINED_TAX_COMBINATION', $this->adminLangId));
+                Message::addErrorMessage(Labels::getLabel('LBL_INVALID_COMBINED_TAX_COMBINATION', $this->siteLangId));
                 FatUtility::dieJsonError(Message::getHtml());
             }
         }
@@ -610,13 +610,13 @@ class TaxController extends AdminBaseController
 
         /* [ update location data */
         if (!$this->addUpdateLocationData($ruleId, $post)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Unable_to_Update_Location_Data', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Unable_to_Update_Location_Data', $this->siteLangId));
         }
         /* ] */
 
         /* [ UPDATE COMBINED TAX DETAILS */
         if (!$this->addUpdateCombinedData($combinedTaxDetails, $ruleId)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Unable_to_Update_Combined_Tax_Data', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Unable_to_Update_Combined_Tax_Data', $this->siteLangId));
         }
         /* ] */
 
@@ -650,7 +650,7 @@ class TaxController extends AdminBaseController
                 }
                 $key = $post['taxruleloc_from_country_id'] . "-" . $fromState . "-" . $post['taxruleloc_to_country_id'] . "-" . $toState . "-" . $post['taxruleloc_type'] . "-" . $isUnique;
                 if (in_array($key, $combination)) {
-                    Message::addErrorMessage(Labels::getLabel('LBL_COMBINATION_OF_COUNTRY_STATE_AND_STATE_TYPE_ALREADY_EXIST_IN_CATEGORY', $this->adminLangId));
+                    Message::addErrorMessage(Labels::getLabel('LBL_COMBINATION_OF_COUNTRY_STATE_AND_STATE_TYPE_ALREADY_EXIST_IN_CATEGORY', $this->siteLangId));
                     FatUtility::dieJsonError(Message::getHtml());
                 }
             }
@@ -680,35 +680,35 @@ class TaxController extends AdminBaseController
 
         /* [ TAX CATEGORY RULE FORM */
         $frm->addHiddenField('', 'taxrule_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_Rule_Name', $this->adminLangId), 'taxrule_name');
-        $fld = $frm->addFloatField(Labels::getLabel('LBL_Tax_Rate(%)', $this->adminLangId), 'trr_rate', '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Rule_Name', $this->siteLangId), 'taxrule_name');
+        $fld = $frm->addFloatField(Labels::getLabel('LBL_Tax_Rate(%)', $this->siteLangId), 'trr_rate', '');
         $fld->requirements()->setPositive();
 
 
-        $taxStructures = TaxStructure::getAllAssoc($this->adminLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Select_Tax', $this->adminLangId), 'taxrule_taxstr_id', $taxStructures, '', array(), Labels::getLabel('LBL_Select_Tax', $this->adminLangId));
+        $taxStructures = TaxStructure::getAllAssoc($this->siteLangId);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Select_Tax', $this->siteLangId), 'taxrule_taxstr_id', $taxStructures, '', array(), Labels::getLabel('LBL_Select_Tax', $this->siteLangId));
         $fld->requirements()->setRequired();
         /* ] */
 
         /* [ TAX CATEGORY RULE LOCATIONS FORM */
         $countryObj = new Countries();
-        $countriesOptions = $countryObj->getCountriesAssocArr($this->adminLangId, true);
-        $countriesOptions = array(-1 => Labels::getLabel('LBL_Rest_of_the_world', $this->adminLangId)) + $countriesOptions;
+        $countriesOptions = $countryObj->getCountriesAssocArr($this->siteLangId, true);
+        $countriesOptions = array(-1 => Labels::getLabel('LBL_Rest_of_the_world', $this->siteLangId)) + $countriesOptions;
         array_walk($countriesOptions, function (&$v) {
             $v = str_replace("'", "\'", trim($v));
         });
 
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_FROM_COUNTRY', $this->adminLangId), 'taxruleloc_from_country_id', $countriesOptions, '', array(), Labels::getLabel('LBL_Select_Country', $this->adminLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_FROM_COUNTRY', $this->siteLangId), 'taxruleloc_from_country_id', $countriesOptions, '', array(), Labels::getLabel('LBL_Select_Country', $this->siteLangId));
         $fld->requirements()->setRequired();
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_FROM_STATE', $this->adminLangId), 'taxruleloc_from_state_id[]', array(), '', array(), '');
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_FROM_STATE', $this->siteLangId), 'taxruleloc_from_state_id[]', array(), '', array(), '');
         $fld->requirements()->setRequired();
 
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_TO_COUNTRY', $this->adminLangId), 'taxruleloc_to_country_id', $countriesOptions, '', array(), Labels::getLabel('LBL_Select_Country', $this->adminLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_TO_COUNTRY', $this->siteLangId), 'taxruleloc_to_country_id', $countriesOptions, '', array(), Labels::getLabel('LBL_Select_Country', $this->siteLangId));
         $fld->requirements()->setRequired();
-        $locattionTypeOtions = TaxRule::getTypeOptions($this->adminLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_TO_STATE_TYPE', $this->adminLangId), 'taxruleloc_type', $locattionTypeOtions, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
+        $locattionTypeOtions = TaxRule::getTypeOptions($this->siteLangId);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_TO_STATE_TYPE', $this->siteLangId), 'taxruleloc_type', $locattionTypeOtions, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
         $fld->requirements()->setRequired();
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_TO_STATES', $this->adminLangId), 'taxruleloc_to_state_id[]', array(), '', array(), '');
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_TO_STATES', $this->siteLangId), 'taxruleloc_to_state_id[]', array(), '', array(), '');
         $fld->requirements()->setRequired();
         /* ] */
 
@@ -716,8 +716,8 @@ class TaxController extends AdminBaseController
         $frm->addHiddenField('', 'combinedTaxDetails');
         /* ] */
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->adminLangId));
-        $frm->addButton("", "btn_discard", Labels::getLabel('LBL_Discard', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->siteLangId));
+        $frm->addButton("", "btn_discard", Labels::getLabel('LBL_Discard', $this->siteLangId));
 
         return $frm;
     }
@@ -788,7 +788,7 @@ class TaxController extends AdminBaseController
         $ruleId = FatUtility::int($ruleId);
 
         $taxStructure = new TaxStructure($taxStrId);
-        $combTaxes = $taxStructure->getCombinedTaxesByParent($this->adminLangId, $ruleId);
+        $combTaxes = $taxStructure->getCombinedTaxesByParent($this->siteLangId, $ruleId);
 
         $this->set('taxStrId', $taxStrId);
         $this->set('combTaxes', $combTaxes);

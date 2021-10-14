@@ -30,7 +30,7 @@ class ShippingProfileController extends AdminBaseController
         $prodCountSrch->addMultipleFields(array("COUNT(*) as totalProducts, shippro_shipprofile_id"));
         $prodCountQuery = $prodCountSrch->getQuery();
         
-        $srch = ShippingProfile::getSearchObject($this->adminLangId);
+        $srch = ShippingProfile::getSearchObject($this->siteLangId);
         $srch->addCondition('sprofile.shipprofile_user_id', '=', 0); /* only admin added profiles */
         $srch->joinTable('('. $prodCountQuery .')', 'LEFT OUTER JOIN', 'sproduct.shippro_shipprofile_id = sprofile.shipprofile_id', 'sproduct');
         
@@ -79,7 +79,7 @@ class ShippingProfileController extends AdminBaseController
                 FatUtility::dieWithError($this->str_invalid_request);
             }            
             if ($data['shipprofile_user_id'] != 0) {
-                Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->adminLangId));
+                Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('shippingProfile'));
             }
             
@@ -117,7 +117,7 @@ class ShippingProfileController extends AdminBaseController
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (empty($post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -244,9 +244,9 @@ class ShippingProfileController extends AdminBaseController
     public function getSearchForm()
     {
         $frm = new Form('frmSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fldCancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fldSubmit->attachField($fldCancel);
         return $frm;
     }
@@ -262,13 +262,13 @@ class ShippingProfileController extends AdminBaseController
         
         foreach ($languages as $langId => $langName) {
             if ($langId == $siteDefaultLangId) {
-                $frm->addRequiredField(Labels::getLabel('LBL_Profile_Name', $this->adminLangId), 'shipprofile_name[' . $langId . ']');
+                $frm->addRequiredField(Labels::getLabel('LBL_Profile_Name', $this->siteLangId), 'shipprofile_name[' . $langId . ']');
             } else {
-                $frm->addTextBox(Labels::getLabel('LBL_Profile_Name', $this->adminLangId) . ' ' . $langName, 'shipprofile_name[' . $langId . ']');
+                $frm->addTextBox(Labels::getLabel('LBL_Profile_Name', $this->siteLangId) . ' ' . $langName, 'shipprofile_name[' . $langId . ']');
             }
         }   
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 }

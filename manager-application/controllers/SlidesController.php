@@ -32,7 +32,7 @@ class SlidesController extends AdminBaseController
         /* $searchForm = $this->getSearchForm();
         $post = $searchForm->getFormDataFromArray($post); */
 
-        $srch = Slides::getSearchObject($this->adminLangId, false);
+        $srch = Slides::getSearchObject($this->siteLangId, false);
         $srch->addCondition('slide_type', '=', Slides::TYPE_SLIDE);
         $srch->addOrder(Slides::DB_TBL_PREFIX . 'active', 'DESC');
         $srch->addOrder('slide_display_order', 'ASC');
@@ -89,7 +89,7 @@ class SlidesController extends AdminBaseController
         $slide_id = $post['slide_id'];
         $recordId = Slides::getAttributesByIdentifier($post['slide_identifier'], 'slide_id');
         if (!empty($recordId) && $recordId != $slide_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Slide_identifier_must_be_unique', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Slide_identifier_must_be_unique', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -229,7 +229,7 @@ class SlidesController extends AdminBaseController
         $slide_id = FatUtility::int($slide_id);
         $slideDetail = Slides::getAttributesById($slide_id);
         $slideMediaFrm = $this->getMediaForm($slide_id);
-        $screenTypeArr = applicationConstants::getDisplaysArr($this->adminLangId);
+        $screenTypeArr = applicationConstants::getDisplaysArr($this->siteLangId);
         /* CommonHelper::printArray(key($screenTypeArr)); die; */
         $this->set('slide_id', $slide_id);
         $this->set('slideMediaFrm', $slideMediaFrm);
@@ -286,7 +286,7 @@ class SlidesController extends AdminBaseController
 
         if (empty($slideIdsArr)) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -305,7 +305,7 @@ class SlidesController extends AdminBaseController
         $slide_id = FatUtility::int($slide_id);
         if (1 > $slide_id) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
         $obj = new Slides($slide_id);
@@ -330,7 +330,7 @@ class SlidesController extends AdminBaseController
         $lang_id = FatUtility::int($post['lang_id']);
         $slide_screen = FatUtility::int($post['slide_screen']);
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_Select_A_File', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -356,7 +356,7 @@ class SlidesController extends AdminBaseController
         $this->set('file', $fileName);
         $ext = pathinfo($fileName, PATHINFO_EXTENSION);
         $fileName = strlen($fileName) > 10 ? substr($fileName, 0, 10) . '.' . $ext : $fileName;
-        $this->set('msg', $fileName . ' ' . Labels::getLabel('MSG_File_uploaded_successfully', $this->adminLangId));
+        $this->set('msg', $fileName . ' ' . Labels::getLabel('MSG_File_uploaded_successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -371,7 +371,7 @@ class SlidesController extends AdminBaseController
     $post = FatApp::getPostedData();
 
     if ( !is_uploaded_file($_FILES['file']['tmp_name']) ) {
-    Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_File',$this->adminLangId));
+    Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_File',$this->siteLangId));
     FatUtility::dieJsonError(Message::getHtml());
     }
 
@@ -386,7 +386,7 @@ class SlidesController extends AdminBaseController
 
     $this->set( 'file', $_FILES['file']['name'] );
     $this->set( 'slide_id', $slide_id );
-    $this->set('msg', $_FILES['file']['name'].' '.Labels::getLabel('LBL_Uploaded_Successfully',$this->adminLangId));
+    $this->set('msg', $_FILES['file']['name'].' '.Labels::getLabel('LBL_Uploaded_Successfully',$this->siteLangId));
     $this->_template->render(false, false, 'json-success.php');
     } */
 
@@ -405,7 +405,7 @@ class SlidesController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Deleted_successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Deleted_successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -420,7 +420,7 @@ class SlidesController extends AdminBaseController
                 Message::addErrorMessage($slideObj->getError());
                 FatUtility::dieJsonError(Message::getHtml());
             }
-            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Order_Updated_Successfully', $this->adminLangId));
+            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
         }
     }
 
@@ -455,7 +455,7 @@ class SlidesController extends AdminBaseController
         $slideIdsArr = FatUtility::int(FatApp::getPostedData('slide_ids'));
         if (empty($slideIdsArr) || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -476,7 +476,7 @@ class SlidesController extends AdminBaseController
         $slideId = FatUtility::int($slideId);
         if (1 > $slideId || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -501,15 +501,15 @@ class SlidesController extends AdminBaseController
         $frm = new Form('frmSlide');
         $frm->addHiddenField('', 'slide_id');
         $frm->addHiddenField('', 'slide_type', Slides::TYPE_SLIDE);
-        $frm->addRequiredField(Labels::getLabel('LBL_Slide_Identifier', $this->adminLangId), 'slide_identifier');
+        $frm->addRequiredField(Labels::getLabel('LBL_Slide_Identifier', $this->siteLangId), 'slide_identifier');
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Slide_URL', $this->adminLangId), 'slide_url');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Slide_URL', $this->siteLangId), 'slide_url');
         $fld->setFieldTagAttribute('placeholder', 'http://');
 
-        $linkTargetsArr = applicationConstants::getLinkTargetsArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Open_In', $this->adminLangId), 'slide_target', $linkTargetsArr, '', array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'slide_active', applicationConstants::getActiveInactiveArr($this->adminLangId), applicationConstants::ACTIVE, array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $linkTargetsArr = applicationConstants::getLinkTargetsArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Open_In', $this->siteLangId), 'slide_target', $linkTargetsArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'slide_active', applicationConstants::getActiveInactiveArr($this->siteLangId), applicationConstants::ACTIVE, array(), '');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -519,24 +519,24 @@ class SlidesController extends AdminBaseController
         $frm->addHiddenField('', 'slide_id');
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
         } else {
             $lang_id = array_key_first($languages);
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
 
-        $frm->addRequiredField(Labels::getLabel('LBL_Slide_Title', $this->adminLangId), 'slide_title');
-        // $fld =  $frm->addButton(Labels::getLabel('LBL_Slide_slide_Image',$this->adminLangId),'slide_image',Labels::getLabel('LBL_Upload_File',$this->adminLangId),array('class'=>'slideFile-Js','id'=>'slide_image','data-slide_id'=>''));
+        $frm->addRequiredField(Labels::getLabel('LBL_Slide_Title', $this->siteLangId), 'slide_title');
+        // $fld =  $frm->addButton(Labels::getLabel('LBL_Slide_slide_Image',$this->siteLangId),'slide_image',Labels::getLabel('LBL_Upload_File',$this->siteLangId),array('class'=>'slideFile-Js','id'=>'slide_image','data-slide_id'=>''));
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
 
@@ -547,17 +547,17 @@ class SlidesController extends AdminBaseController
         $bannerTypeArr = $this->bannerTypeArr();
       
 		if(count($bannerTypeArr) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $bannerTypeArr, '', array(), '');
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
 		} else  {
 			$lang_id = array_key_first($bannerTypeArr); 
 			$frm->addHiddenField('', 'lang_id', $lang_id);
 		}
         
-        $screenArr = applicationConstants::getDisplaysArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->adminLangId), 'slide_screen', $screenArr, '', array(), '');
+        $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->siteLangId), 'slide_screen', $screenArr, '', array(), '');
         $frm->addHiddenField('', 'banner_min_width');
         $frm->addHiddenField('', 'banner_min_height');
-        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->adminLangId), 'slide_image', array('accept' => 'image/*', 'data-frm' => 'frmSlideMedia'));
+        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->siteLangId), 'slide_image', array('accept' => 'image/*', 'data-frm' => 'frmSlideMedia'));
         return $frm;
     }
 
@@ -573,7 +573,7 @@ class SlidesController extends AdminBaseController
 
     private function getDisplayScreenName()
     {
-        $screenTypesArr = applicationConstants::getDisplaysArr($this->adminLangId);
+        $screenTypesArr = applicationConstants::getDisplaysArr($this->siteLangId);
         return array(0 => '') + $screenTypesArr;
     }
 }

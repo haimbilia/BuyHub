@@ -31,7 +31,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'files':
                 $fullPath = CONF_UPLOADS_PATH . AttachedFile::FILETYPE_BULK_IMAGES_PATH . $row['afile_physical_path'];
-                $count = Labels::getLabel('LBL_N/A', $adminLangId);
+                $count = Labels::getLabel('LBL_N/A', $siteLangId);
                 if (file_exists($fullPath)) {
                     $allFiles = scandir($fullPath);
                     $files_count = array_diff($allFiles, array('..', '.'));
@@ -41,7 +41,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 $data = [
-                    'adminLangId' => $adminLangId
+                    'siteLangId' => $siteLangId
                 ];
 
                 if ($canEdit) {
@@ -50,7 +50,7 @@ foreach ($arrListing as $sn => $row) {
                             'attr' => [
                                 'href' => 'javascript:void(0)',
                                 'onclick' => "downloadPathsFile('" . base64_encode($fullPath) . "')",
-                                'title' => Labels::getLabel('LBL_DOWNLOAD', $adminLangId)
+                                'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId)
                             ],
                             'label' => '<svg class="svg" width="18" height="18">
                                                 <use
@@ -62,7 +62,7 @@ foreach ($arrListing as $sn => $row) {
                             'attr' => [
                                 'href' => 'javascript:void(0)',
                                 'onclick' => "removeDir('" . base64_encode(AttachedFile::FILETYPE_BULK_IMAGES_PATH . $row['afile_physical_path']) . "')",
-                                'title' => Labels::getLabel('LBL_DELETE', $adminLangId)
+                                'title' => Labels::getLabel('LBL_DELETE', $siteLangId)
                             ],
                             'label' => '<svg class="svg" width="18" height="18">
                                                 <use
@@ -88,7 +88,7 @@ if (count($arrListing) == 0) {
         array(
             'colspan' => count($fields)
         ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId)
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );
 }
 

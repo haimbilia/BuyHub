@@ -39,7 +39,7 @@ class QuestionsController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         
-        $srch = Questions::getSearchObject($this->adminLangId, false);
+        $srch = Questions::getSearchObject($this->siteLangId, false);
         
         $srch->addOrder('q_l.' . QuestionBanks::DB_TBL_PREFIX . 'title', 'ASC');
         $srch->setPageNumber($page);

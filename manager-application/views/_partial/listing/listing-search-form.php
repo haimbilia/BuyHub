@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
-$keywordPlaceholder = isset($keywordPlaceholder) ? $keywordPlaceholder : Labels::getLabel('LBL_SEARCH', $adminLangId);
+$keywordPlaceholder = isset($keywordPlaceholder) ? $keywordPlaceholder : Labels::getLabel('LBL_SEARCH', $siteLangId);
 
 $frmSearch->setFormTagAttribute('name', 'frmRecordSearch');
 $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this, false); return(false);');
@@ -62,7 +62,7 @@ foreach ($frmFields['hidden'] as $fldName) {
             <?php if ($haveExtraFlds) { ?>
                 <div class="col-md-2">
                     <a class="btn btn-link" data-toggle="collapse" href="#advanceSearch" aria-expanded="false" aria-controls="advanceSearch">
-                        <?php echo Labels::getLabel('LBL_ADVANCE_SEARCH', $adminLangId); ?>
+                        <?php echo Labels::getLabel('LBL_ADVANCE_SEARCH', $siteLangId); ?>
                     </a>
                 </div>
             <?php } ?>

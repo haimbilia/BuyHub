@@ -33,7 +33,7 @@ class TaxReportController extends AdminBaseController
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
-        $srch = new OrderProductSearch($this->adminLangId, true);
+        $srch = new OrderProductSearch($this->siteLangId, true);
         $srch->joinPaymentMethod();
         $srch->joinSellerUser();
         $srch->joinTable(OrderProduct::DB_TBL_CHARGES, 'LEFT OUTER JOIN', 'op.op_id = opcharge.opcharge_op_id', 'opcharge');
@@ -76,13 +76,13 @@ class TaxReportController extends AdminBaseController
             $srch->doNotLimitRecords();
             $rs = $srch->getResultSet();
             $sheetData = array();
-            $arr = array(Labels::getLabel('LBL_Name', $this->adminLangId), Labels::getLabel('LBL_Owner', $this->adminLangId), Labels::getLabel('LBL_Orders', $this->adminLangId), Labels::getLabel('LBL_Tax', $this->adminLangId));
+            $arr = array(Labels::getLabel('LBL_Name', $this->siteLangId), Labels::getLabel('LBL_Owner', $this->siteLangId), Labels::getLabel('LBL_Orders', $this->siteLangId), Labels::getLabel('LBL_Tax', $this->siteLangId));
             array_push($sheetData, $arr);
             while ($row = $db->fetch($rs)) {
                 $arr = array($row['op_shop_name'], $row['owner_name'] . "\n(" . $row['owner_email'] . ")", $row['totChildOrders'], CommonHelper::displayMoneyFormat($row['totTax'], true, true));
                 array_push($sheetData, $arr);
             }            
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Tax_Report', $this->adminLangId) . ' ' . date("d-M-Y") . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Tax_Report', $this->siteLangId) . ' ' . date("d-M-Y") . '.csv', ',');
             exit;
         } else {
             $srch->setPageNumber($page);
@@ -109,14 +109,14 @@ class TaxReportController extends AdminBaseController
         $frm = new Form('frmTaxReportSearch');
         $frm->addHiddenField('', 'page', 1);
 
-        $frm->addTextBox(Labels::getLabel('LBL_Shop', $this->adminLangId), 'shop_name');
+        $frm->addTextBox(Labels::getLabel('LBL_Shop', $this->siteLangId), 'shop_name');
         $frm->addHiddenField('', 'op_shop_id', 0);
 
-        $frm->addTextBox(Labels::getLabel('LBL_Shop_Owner', $this->adminLangId), 'user_name');
+        $frm->addTextBox(Labels::getLabel('LBL_Shop_Owner', $this->siteLangId), 'user_name');
         $frm->addHiddenField('', 'op_selprod_user_id', 0);
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

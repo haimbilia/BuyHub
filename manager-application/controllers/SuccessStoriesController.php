@@ -38,7 +38,7 @@ class SuccessStoriesController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         
-        $srch = SuccessStories::getSearchObject($this->adminLangId);
+        $srch = SuccessStories::getSearchObject($this->siteLangId);
         $srch->addCondition('sstory_deleted', '=', 0);
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('ss.sstory_identifier', 'like', '%' . $post['keyword'] . '%');
@@ -78,7 +78,7 @@ class SuccessStoriesController extends AdminBaseController
         $frm->fill(array( 'sstory_id' => $sstory_id ));
 
         if (0 < $sstory_id) {
-            $srch = SuccessStories::getSearchObject($this->adminLangId, false);
+            $srch = SuccessStories::getSearchObject($this->siteLangId, false);
             $srch->addCondition('sstory_id', '=', $sstory_id);
             $rs = $srch->getResultSet();
             $data = FatApp::getDb()->fetch($rs);
@@ -136,10 +136,10 @@ class SuccessStoriesController extends AdminBaseController
             }
         } else {
             $sstory_id = $record->getMainTableRecordId();
-            $newTabLangId = $this->adminLangId;
+            $newTabLangId = $this->siteLangId;
         }
         
-        $this->set('msg', Labels::getLabel('LBL_Category_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Category_Setup_Successful', $this->siteLangId));
         $this->set('sstoryId', $sstory_id);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -250,7 +250,7 @@ class SuccessStoriesController extends AdminBaseController
                 Message::addErrorMessage($obj->getError());
                 FatUtility::dieJsonError(Message::getHtml());
             }
-            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Order_Updated_Successfully', $this->adminLangId));
+            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
         }
     }
     
@@ -282,9 +282,9 @@ class SuccessStoriesController extends AdminBaseController
     public function getSearchForm()
     {
         $frm = new Form('frmSearch');
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -293,13 +293,13 @@ class SuccessStoriesController extends AdminBaseController
     {
         $frm = new Form('frmStories');
         $frm->addHiddenField('', 'sstory_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->adminLangId), 'sstory_identifier');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Site_Domain', $this->adminLangId), 'sstory_site_domain');
-        $fld->htmlAfterField = Labels::getLabel('LBL_Example_:_sitename.com', $this->adminLangId);
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'sstory_active', $activeInactiveArr, '', array(), '');
-        $frm->addCheckBox(Labels::getLabel('LBL_Featured', $this->adminLangId), 'sstory_featured', 1, array(), false, 0);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->siteLangId), 'sstory_identifier');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Site_Domain', $this->siteLangId), 'sstory_site_domain');
+        $fld->htmlAfterField = Labels::getLabel('LBL_Example_:_sitename.com', $this->siteLangId);
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'sstory_active', $activeInactiveArr, '', array(), '');
+        $frm->addCheckBox(Labels::getLabel('LBL_Featured', $this->siteLangId), 'sstory_featured', 1, array(), false, 0);
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
     
@@ -307,19 +307,19 @@ class SuccessStoriesController extends AdminBaseController
     {
         $frm = new Form('frmStories');
         $frm->addHiddenField('', 'sstory_id');
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Title', $this->adminLangId), 'sstory_title');
-        $frm->addTextBox(Labels::getLabel('LBL_Name', $this->adminLangId), 'sstory_name');
-        $frm->addTextArea(Labels::getLabel('LBL_Content', $this->adminLangId), 'sstory_content');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Title', $this->siteLangId), 'sstory_title');
+        $frm->addTextBox(Labels::getLabel('LBL_Name', $this->siteLangId), 'sstory_name');
+        $frm->addTextArea(Labels::getLabel('LBL_Content', $this->siteLangId), 'sstory_content');
         
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
 }

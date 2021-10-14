@@ -73,7 +73,7 @@ class ExtraAttributesController extends AdminBaseController
         $srch->joinTable(
             ExtraAttribute::DB_TBL . '_lang',
             'LEFT OUTER JOIN',
-            'eattributelang_eattribute_id = eattribute_id AND eattributelang_lang_id = ' . $this->adminLangId
+            'eattributelang_eattribute_id = eattribute_id AND eattributelang_lang_id = ' . $this->siteLangId
         );
         $srch->addMultipleFields(array("eattribute_name"));
         
@@ -168,7 +168,7 @@ class ExtraAttributesController extends AdminBaseController
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
         
-        $this->set('msg', Labels::getLabel('LBL_Attribute_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Attribute_Setup_Successful', $this->siteLangId));
         $this->set('eattrgroup_id', $eattrgroup_id);
         $this->set('eattribute_id', $eattribute_id);
         $this->set('lang_id', $newTabLangId);
@@ -184,8 +184,8 @@ class ExtraAttributesController extends AdminBaseController
         $frm = new Form('frmExtraAttribute', array('id' => 'frmExtraAttribute'));
         $frm->addHiddenField('', 'eattribute_id', $eattribute_id);
         $frm->addHiddenField('', 'eattribute_eattrgroup_id', $eattrgroup_id);
-        $frm->addRequiredField(Labels::getLabel('LBL_Attribute_Identifier', $this->adminLangId), 'eattribute_identifier');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addRequiredField(Labels::getLabel('LBL_Attribute_Identifier', $this->siteLangId), 'eattribute_identifier');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
     
@@ -276,7 +276,7 @@ class ExtraAttributesController extends AdminBaseController
             }
         }
     
-        $this->set('msg', Labels::getLabel('LBL_Attribute_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Attribute_Setup_Successful', $this->siteLangId));
         $this->set('eattribute_id', $eattribute_id);
         $this->set('lang_id', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -309,17 +309,17 @@ class ExtraAttributesController extends AdminBaseController
         $frm = new Form('frmExtraAttributeLang', array('id' => 'frmExtraAttributeLang'));
         $frm->addHiddenField('', 'eattribute_id', $eattribute_id);
         $frm->addHiddenField('', 'eattribute_eattrgroup_id', 0);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Attribute_Name', $this->adminLangId), 'eattribute_name');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Attribute_Name', $this->siteLangId), 'eattribute_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
                 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
     
@@ -327,9 +327,9 @@ class ExtraAttributesController extends AdminBaseController
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->addHiddenField('', 'eattrgroup_id', $eattrgroup_id);
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

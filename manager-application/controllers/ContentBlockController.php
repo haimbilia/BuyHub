@@ -51,14 +51,14 @@ class ContentBlockController extends AdminBaseController
         $this->canView = $this->objPrivilege->canViewContentBlocks($this->admin_id, true);
         $this->canEdit = $this->objPrivilege->canEditContentBlocks($this->admin_id, true);
 
-        $srch = Extrapage::getSearchObject($this->adminLangId, false);
+        $srch = Extrapage::getSearchObject($this->siteLangId, false);
         $srch->addCondition('epage_content_for', '=', Extrapage::CONTENT_PAGES);
         $srch->addOrder('epage_active', 'DESC');
         $srch->addOrder('epage_id', 'DESC');
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $this->set("activeInactiveArr", $activeInactiveArr);
         $this->set("arrListing", $records);
 
@@ -74,7 +74,7 @@ class ContentBlockController extends AdminBaseController
         $this->objPrivilege->canViewContentBlocks();
 
         $epage_id = FatUtility::int($epage_id);
-        $blockFrm = $this->getForm($epage_id, $this->adminLangId);
+        $blockFrm = $this->getForm($epage_id, $this->siteLangId);
 
         if (0 < $epage_id) {
             $data = Extrapage::getAttributesById($epage_id, array('epage_id', 'epage_identifier', 'epage_active'));
@@ -101,7 +101,7 @@ class ContentBlockController extends AdminBaseController
     {
         $this->objPrivilege->canEditContentBlocks();
 
-        $frm = $this->getForm(0, $this->adminLangId);
+        $frm = $this->getForm(0, $this->siteLangId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
@@ -147,7 +147,7 @@ class ContentBlockController extends AdminBaseController
             }
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->siteLangId));
         $this->set('epageId', $epage_id);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -198,7 +198,7 @@ class ContentBlockController extends AdminBaseController
         $this->set('blockLangFrm', $blockLangFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
         $this->set('epageData', $epageData);
-        $this->set('contentBlockArrWithBg', Extrapage::getContentBlockArrWithBg($this->adminLangId));
+        $this->set('contentBlockArrWithBg', Extrapage::getContentBlockArrWithBg($this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -259,7 +259,7 @@ class ContentBlockController extends AdminBaseController
             }
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->siteLangId));
         $this->set('epageId', $epage_id);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -280,7 +280,7 @@ class ContentBlockController extends AdminBaseController
     FatUtility::dieWithError($this->str_invalid_request);
     }
 
-    $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
+    $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
 
     $frm->fill($data);
     $this->set('frm',$frm);
@@ -322,7 +322,7 @@ class ContentBlockController extends AdminBaseController
     FatUtility::dieJsonError( Message::getHtml() );
     }
 
-    $this->set('msg', Labels::getLabel('LBL_Setup_Successful',$this->adminLangId));
+    $this->set('msg', Labels::getLabel('LBL_Setup_Successful',$this->siteLangId));
     $this->set('epageId', $epage_id);
     $this->_template->render(false, false, 'json-success.php');
     } */
@@ -357,7 +357,7 @@ class ContentBlockController extends AdminBaseController
         $epageIdsArr = FatUtility::int(FatApp::getPostedData('epage_ids'));
         if (empty($epageIdsArr) || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -378,7 +378,7 @@ class ContentBlockController extends AdminBaseController
         $epageId = FatUtility::int($epageId);
         if (1 > $epageId || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -394,9 +394,9 @@ class ContentBlockController extends AdminBaseController
     $frm = new Form('frmContentBlock');
     $frm->addHiddenField('', 'epage_id');
 
-    $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-    $frm->addSelectBox(Labels::getLabel('LBL_Status',$this->adminLangId), 'epage_active', $activeInactiveArr, '',array(),'');
-    $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes',$this->adminLangId));
+    $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+    $frm->addSelectBox(Labels::getLabel('LBL_Status',$this->siteLangId), 'epage_active', $activeInactiveArr, '',array(),'');
+    $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes',$this->siteLangId));
     return $frm;
     } */
 
@@ -407,12 +407,12 @@ class ContentBlockController extends AdminBaseController
 
         $frm = new Form('frmBlock');
         $frm->addHiddenField('', 'epage_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_Page_Identifier', $this->adminLangId), 'epage_identifier');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_SEO_Friendly_URL', $this->adminLangId), 'urlrewrite_custom');
+        $frm->addRequiredField(Labels::getLabel('LBL_Page_Identifier', $this->siteLangId), 'epage_identifier');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_SEO_Friendly_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($langId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'epage_active', $activeInactiveArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'epage_active', $activeInactiveArr, '', array(), '');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -422,15 +422,15 @@ class ContentBlockController extends AdminBaseController
         $frm->addHiddenField('', 'epage_id', $epage_id);
         $languages = Language::getAllNames();
 		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
 		} else  {
 			$lang_id = array_key_first($languages); 
 			$frm->addHiddenField('', 'lang_id', $lang_id);
 		}
 
-        $frm->addRequiredField(Labels::getLabel('LBL_Page_Title', $this->adminLangId), 'epage_label');
+        $frm->addRequiredField(Labels::getLabel('LBL_Page_Title', $this->siteLangId), 'epage_label');
 
-        if (array_key_exists($epage_id, Extrapage::getContentBlockArrWithBg($this->adminLangId))) {
+        if (array_key_exists($epage_id, Extrapage::getContentBlockArrWithBg($this->siteLangId))) {
             if ($epage_id == Extrapage::SELLER_BANNER_SLOGAN) {
                 $fileType = AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE;
             } elseif ($epage_id == Extrapage::ADVERTISER_BANNER_SLOGAN) {
@@ -439,23 +439,23 @@ class ContentBlockController extends AdminBaseController
                 $fileType = AttachedFile::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE;
             }
             $fld = $frm->addButton(
-                Labels::getLabel('LBL_Backgroud_Image', $this->adminLangId),
+                Labels::getLabel('LBL_Backgroud_Image', $this->siteLangId),
                 'cblock_bg_image',
-                Labels::getLabel('LBL_Upload_Image', $this->adminLangId),
+                Labels::getLabel('LBL_Upload_Image', $this->siteLangId),
                 array('class' => 'bgImageFile-Js', 'id' => 'cblock_bg_image', 'data-file_type' => $fileType, 'data-frm' => 'frmBlock')
             );
         }
 
-        $frm->addHtmlEditor(Labels::getLabel('LBL_Page_Content', $this->adminLangId), 'epage_content');
+        $frm->addHtmlEditor(Labels::getLabel('LBL_Page_Content', $this->siteLangId), 'epage_content');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
 
@@ -478,7 +478,7 @@ class ContentBlockController extends AdminBaseController
         }
 
         if (!is_uploaded_file($_FILES['file']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_File', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_File', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -504,7 +504,7 @@ class ContentBlockController extends AdminBaseController
         $this->set('epage_id', $epage_id);
         $this->set('file_type', $file_type);
         $this->set('lang_id', $lang_id);
-        $this->set('msg', $_FILES['file']['name'] . ' ' . Labels::getLabel('LBL_Uploaded_Successfully', $this->adminLangId));
+        $this->set('msg', $_FILES['file']['name'] . ' ' . Labels::getLabel('LBL_Uploaded_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -523,7 +523,7 @@ class ContentBlockController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Deleted_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Deleted_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 }

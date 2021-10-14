@@ -56,14 +56,14 @@ class DiscountCouponsReportController extends AdminBaseController
             $srch->doNotLimitRecords();
             $rs = $srch->getResultSet();
             $sheetData = array();
-            $arr = array(Labels::getLabel('LBL_Coupon_Code', $this->adminLangId), Labels::getLabel('LBL_Order_Id', $this->adminLangId), Labels::getLabel('LBL_Customer', $this->adminLangId), Labels::getLabel('LBL_Amount', $this->adminLangId), Labels::getLabel('LBL_Date', $this->adminLangId));
+            $arr = array(Labels::getLabel('LBL_Coupon_Code', $this->siteLangId), Labels::getLabel('LBL_Order_Id', $this->siteLangId), Labels::getLabel('LBL_Customer', $this->siteLangId), Labels::getLabel('LBL_Amount', $this->siteLangId), Labels::getLabel('LBL_Date', $this->siteLangId));
             array_push($sheetData, $arr);
             while ($row = FatApp::getDb()->fetch($rs)) {
                 $arr = array($row['coupon_code'], $row['couponhistory_order_id'], $row['credential_username'], FatApp::getConfig('conf_currency_symbol') . $row['couponhistory_amount'],  FatDate::format($row['couponhistory_added_on']));
                 array_push($sheetData, $arr);
             }
 
-            CommonHelper::convertToCsv($sheetData, str_replace("{reportgenerationdate}", date("d-M-Y"), Labels::getLabel("LBL_Discount_Coupons_Report_{reportgenerationdate}", $this->adminLangId)) . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, str_replace("{reportgenerationdate}", date("d-M-Y"), Labels::getLabel("LBL_Discount_Coupons_Report_{reportgenerationdate}", $this->siteLangId)) . '.csv', ',');
             exit;
         } else {
             $srch->setPageNumber($page);
@@ -91,12 +91,12 @@ class DiscountCouponsReportController extends AdminBaseController
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'couponDate', $couponDate);
         $frm->addHiddenField('', 'coupon_id');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
         if (empty($couponDate)) {
-            $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender' ));
-            $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-            $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-            $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+            $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender' ));
+            $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+            $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+            $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
             $fld_submit->attachField($fld_cancel);
         }
         return $frm;
@@ -106,7 +106,7 @@ class DiscountCouponsReportController extends AdminBaseController
     {
         $this->objPrivilege->canViewDiscountCoupons();
         $coupon = new DiscountCoupons();
-        $srch = $coupon->getSearchObject($this->adminLangId, false, false);
+        $srch = $coupon->getSearchObject($this->siteLangId, false, false);
 
         $post = FatApp::getPostedData();
         if (!empty($post['keyword'])) {

@@ -8,7 +8,7 @@ class AdminAuthentication extends FatModel
 
     public function __construct()
     {
-        $this->adminLangId = CommonHelper::getLangId();
+        $this->siteLangId = CommonHelper::getLangId();
     }
 
     public static function getInstance()
@@ -36,7 +36,7 @@ class AdminAuthentication extends FatModel
     {
         $objUserAuthentication = new UserAuthentication();
         if ($objUserAuthentication->isBruteForceAttempt($ip, $username)) {
-            $this->error = Labels::getLabel('MSG_Login_attempt_limit_exceeded._Please_try_after_some_time.', $this->adminLangId);
+            $this->error = Labels::getLabel('MSG_Login_attempt_limit_exceeded._Please_try_after_some_time.', $this->siteLangId);
             return false;
         }
         $db = FatApp::getDb();
@@ -46,13 +46,13 @@ class AdminAuthentication extends FatModel
 
         if (!$row = $db->fetch($rs)) {
             $objUserAuthentication->logFailedAttempt($ip, $username);           
-            $this->error = Labels::getLabel('MSG_Invalid_Username', $this->adminLangId);
+            $this->error = Labels::getLabel('MSG_Invalid_Username', $this->siteLangId);
             return false;
         }
         
         /* [To Do - need to remove admin_password_old in next release */
         if (empty($row['admin_password'])) {    
-            $emailErrorMsg = str_replace("{clickhere}", '<a href="javascript:void(0)" onclick="sendResetPasswordLink(' . "'" . $username . "'" . ')">' . Labels::getLabel('LBL_Click_Here', $this->adminLangId) . '</a>', Labels::getLabel('MSG_For_Security_Reason_{clickhere}_to_reset_your_password.', $this->adminLangId));
+            $emailErrorMsg = str_replace("{clickhere}", '<a href="javascript:void(0)" onclick="sendResetPasswordLink(' . "'" . $username . "'" . ')">' . Labels::getLabel('LBL_Click_Here', $this->siteLangId) . '</a>', Labels::getLabel('MSG_For_Security_Reason_{clickhere}_to_reset_your_password.', $this->siteLangId));
             $this->error = $emailErrorMsg;
             if (FatUtility::isAjaxCall()) {
                 $json['status'] = 0;
@@ -64,20 +64,20 @@ class AdminAuthentication extends FatModel
         }
         if (false == password_verify($password, $row['admin_password'])) {
             $objUserAuthentication->logFailedAttempt($ip, $username);
-            $this->error = Labels::getLabel('MSG_Invalid_Password', $this->adminLangId);
+            $this->error = Labels::getLabel('MSG_Invalid_Password', $this->siteLangId);
             return false;
         }
         // if (!empty($row['admin_password'])) {            
         //     if (false == password_verify($password, $row['admin_password'])) {
         //         $objUserAuthentication->logFailedAttempt($ip, $username);
-        //         $this->error = Labels::getLabel('MSG_Invalid_Password', $this->adminLangId);
+        //         $this->error = Labels::getLabel('MSG_Invalid_Password', $this->siteLangId);
         //         return false;
         //     }
         // } else {
         //     $oldPassword = UserAuthentication::encryptPassword($password, true);
         //     if ($oldPassword !== $row['admin_password_old']) {
         //         $objUserAuthentication->logFailedAttempt($ip, $username);
-        //         $this->error = Labels::getLabel('MSG_Invalid_Password', $this->adminLangId);
+        //         $this->error = Labels::getLabel('MSG_Invalid_Password', $this->siteLangId);
         //         return false;
         //     }
         //     $this->changeAdminPwd($row['admin_id'], UserAuthentication::encryptPassword($password));
@@ -90,12 +90,12 @@ class AdminAuthentication extends FatModel
 
         /*if (strtolower($row['admin_username']) != strtolower($username) || $row['admin_password'] != $password) {
             $objUserAuthentication->logFailedAttempt($ip, $username);
-            $this->error = Labels::getLabel('MSG_Invalid_Username_or_Password', $this->adminLangId);
+            $this->error = Labels::getLabel('MSG_Invalid_Username_or_Password', $this->siteLangId);
             return false;
         }*/
         if ($row['admin_active'] !== applicationConstants::ACTIVE) {
             $objUserAuthentication->logFailedAttempt($ip, $username);
-            $this->error = Labels::getLabel('MSG_Your_account_is_inactive.', $this->adminLangId);
+            $this->error = Labels::getLabel('MSG_Your_account_is_inactive.', $this->siteLangId);
             return false;
         }
         $row['admin_ip'] = $ip;
@@ -150,7 +150,7 @@ class AdminAuthentication extends FatModel
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
         if (!$row = $db->fetch($rs)) {
-            $this->error = Labels::getLabel('MSG_Invalid_email_address_or_username!', $this->adminLangId);
+            $this->error = Labels::getLabel('MSG_Invalid_email_address_or_username!', $this->siteLangId);
             return false;
         }      
         return $row;
@@ -158,7 +158,7 @@ class AdminAuthentication extends FatModel
     public function checkAdminEmail($email)
     {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->error = Labels::getLabel('MSG_Invalid_email_address!', $this->adminLangId);
+            $this->error = Labels::getLabel('MSG_Invalid_email_address!', $this->siteLangId);
             return false;
         }
         $db = FatApp::getDb();
@@ -169,11 +169,11 @@ class AdminAuthentication extends FatModel
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
         if (!$row = $db->fetch($rs)) {
-            $this->error = Labels::getLabel('MSG_Invalid_email_address!', $this->adminLangId);
+            $this->error = Labels::getLabel('MSG_Invalid_email_address!', $this->siteLangId);
             return false;
         }
         if ($row['admin_email'] !== $email) {
-            $this->error = Labels::getLabel('MSG_Invalid_email_address!', $this->adminLangId);
+            $this->error = Labels::getLabel('MSG_Invalid_email_address!', $this->siteLangId);
             return false;
         }
         return $row;
@@ -192,7 +192,7 @@ class AdminAuthentication extends FatModel
         if (!$row = $db->fetch($rs)) {
             return false;
         }
-        $this->error = Labels::getLabel('MSG_Your_request_to_reset_password_has_already_been_placed_within_last_24_hours._Please_check_your_emails_or_retry_after_24_hours_of_your_previous_request', $this->adminLangId);
+        $this->error = Labels::getLabel('MSG_Your_request_to_reset_password_has_already_been_placed_within_last_24_hours._Please_check_your_emails_or_retry_after_24_hours_of_your_previous_request', $this->siteLangId);
         return true;
     }
 
@@ -242,7 +242,7 @@ class AdminAuthentication extends FatModel
         $aId = FatUtility::convertToType($aId, FatUtility::VAR_INT);
         $token = FatUtility::convertToType($token, FatUtility::VAR_STRING);
         if (intval($aId) < 1 || strlen($token) < 20) {
-            $this->error = Labels::getLabel('MSG_Link_is_invalid_or_expired!', $this->adminLangId);
+            $this->error = Labels::getLabel('MSG_Link_is_invalid_or_expired!', $this->siteLangId);
             return false;
         }
         $db = FatApp::getDb();
@@ -255,14 +255,14 @@ class AdminAuthentication extends FatModel
         $rs = $srch->getResultSet();
 
         if (!$row = $db->fetch($rs)) {
-            $this->error = Labels::getLabel('MSG_Link_is_invalid_or_expired!', $this->adminLangId);
+            $this->error = Labels::getLabel('MSG_Link_is_invalid_or_expired!', $this->siteLangId);
             return false;
         }
 
         if ($row['aprr_admin_id'] == $aId && $row['aprr_token'] === $token) {
             return true;
         }
-        $this->error = Labels::getLabel('MSG_Link_is_invalid_or_expired!', $this->adminLangId);
+        $this->error = Labels::getLabel('MSG_Link_is_invalid_or_expired!', $this->siteLangId);
         return false;
     }
 
@@ -270,7 +270,7 @@ class AdminAuthentication extends FatModel
     {
         $aId = FatUtility::convertToType($aId, FatUtility::VAR_INT);
         if ($aId < 1) {
-            $this->error = Labels::getLabel('MSG_Invalid_Request', $this->adminLangId);
+            $this->error = Labels::getLabel('MSG_Invalid_Request', $this->siteLangId);
             return false;
         }
         $db = FatApp::getDb();
@@ -291,7 +291,7 @@ class AdminAuthentication extends FatModel
     {
         $aId = FatUtility::convertToType($aId, FatUtility::VAR_INT);
         if ($aId < 1) {
-            $this->error = Labels::getLabel('MSG_Invalid_Request', $this->adminLangId);
+            $this->error = Labels::getLabel('MSG_Invalid_Request', $this->siteLangId);
             return false;
         }
 

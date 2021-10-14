@@ -65,7 +65,7 @@ class ProfileController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Setup_successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Setup_successful', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -73,25 +73,25 @@ class ProfileController extends AdminBaseController
     {
         $frm = new Form('frmProfileInfo');        
         $frm->addHiddenField('', 'admin_id', $this->admin_id);
-        $frm->addFileUpload(Labels::getLabel('LBL_Profile_Picture', $this->adminLangId), 'user_profile_image');
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Username', $this->adminLangId), 'admin_username');
+        $frm->addFileUpload(Labels::getLabel('LBL_Profile_Picture', $this->siteLangId), 'user_profile_image');
+        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Username', $this->siteLangId), 'admin_username');
         $fld->setUnique('tbl_admin', 'admin_username', 'admin_id', 'admin_id', 'admin_id');
 
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Email', $this->adminLangId), 'admin_email');
+        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Email', $this->siteLangId), 'admin_email');
         $fld->setUnique('tbl_admin', 'admin_email', 'admin_id', 'admin_id', 'admin_id');
 
-        $frm->addRequiredField(Labels::getLabel('LBL_Full_Name', $this->adminLangId), 'admin_name');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->adminLangId));
+        $frm->addRequiredField(Labels::getLabel('LBL_Full_Name', $this->siteLangId), 'admin_name');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
     private function getImageForm()
     {
         $frm = new Form('frmProfile', array('id' => 'frmProfile'));
-        $frm->addFileUpload(Labels::getLabel('LBL_Profile_Picture', $this->adminLangId), 'user_profile_image', array('onChange' => 'popupImage(this)', 'accept' => 'image/*'));
-        $frm->addHiddenField('', 'update_profile_img', Labels::getLabel('LBL_Update_Profile_Picture', $this->adminLangId), array('id' => 'update_profile_img'));
-        $frm->addHiddenField('', 'rotate_left', Labels::getLabel('LBL_Rotate_Left', $this->adminLangId), array('id' => 'rotate_left'));
-        $frm->addHiddenField('', 'rotate_right', Labels::getLabel('LBL_Rotate_Right', $this->adminLangId), array('id' => 'rotate_right'));
+        $frm->addFileUpload(Labels::getLabel('LBL_Profile_Picture', $this->siteLangId), 'user_profile_image', array('onChange' => 'popupImage(this)', 'accept' => 'image/*'));
+        $frm->addHiddenField('', 'update_profile_img', Labels::getLabel('LBL_Update_Profile_Picture', $this->siteLangId), array('id' => 'update_profile_img'));
+        $frm->addHiddenField('', 'rotate_left', Labels::getLabel('LBL_Rotate_Left', $this->siteLangId), array('id' => 'rotate_left'));
+        $frm->addHiddenField('', 'rotate_right', Labels::getLabel('LBL_Rotate_Right', $this->siteLangId), array('id' => 'rotate_right'));
         $frm->addHiddenField('', 'remove_profile_img', 0, array('id' => 'remove_profile_img'));
         $frm->addHiddenField('', 'action', 'avatar', array('id' => 'avatar-action'));
         $frm->addHiddenField('', 'img_data', '', array('id' => 'img_data'));
@@ -102,12 +102,12 @@ class ProfileController extends AdminBaseController
     {
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         if (isset($_FILES['org_image']['tmp_name'])) {
             if (!is_uploaded_file($_FILES['org_image']['tmp_name'])) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId));
+                Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
                 FatUtility::dieJsonError(Message::getHtml());
             }
 
@@ -123,7 +123,7 @@ class ProfileController extends AdminBaseController
 
         if (isset($_FILES['cropped_image']['tmp_name'])) {
             if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId));
+                Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
                 FatUtility::dieJsonError(Message::getHtml());
             }
 
@@ -136,12 +136,12 @@ class ProfileController extends AdminBaseController
             }
 
             /*$data = json_decode(stripslashes($post['img_data']));
-            CommonHelper::crop($data, CONF_UPLOADS_PATH .$res, $this->adminLangId);*/
+            CommonHelper::crop($data, CONF_UPLOADS_PATH .$res, $this->siteLangId);*/
             $this->set('file', UrlHelper::generateFullUrl('Account', 'userProfileImage', array($this->_adminId, 'croped', true)));
         }
 
 
-        $this->set('msg', Labels::getLabel('MSG_File_uploaded_successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_File_uploaded_successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -158,7 +158,7 @@ class ProfileController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('MSG_File_deleted_successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_File_deleted_successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -196,7 +196,7 @@ class ProfileController extends AdminBaseController
 
         /* Restrict to change password for admin on demo URL. */
         if (CommonHelper::demoUrl() && 1 == $this->_adminId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));
         }
 
@@ -207,13 +207,13 @@ class ProfileController extends AdminBaseController
         
         if (!empty($adminCredentials['admin_password'])) {
             if (false == password_verify(FatApp::getPostedData('current_password'), $adminCredentials['admin_password'])) {
-                Message::addErrorMessage(Labels::getLabel('LBL_Your_current_Password_mis-matched!', $this->adminLangId));
+                Message::addErrorMessage(Labels::getLabel('LBL_Your_current_Password_mis-matched!', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));
             }
         } else {
             $currentEncPassword = UserAuthentication::encryptPassword(FatApp::getPostedData('current_password'), true);            
             if ($currentEncPassword !== $adminCredentials['admin_password_old']) {
-                Message::addErrorMessage(Labels::getLabel('LBL_Your_current_Password_mis-matched!', $this->adminLangId));
+                Message::addErrorMessage(Labels::getLabel('LBL_Your_current_Password_mis-matched!', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));               
             }            
         }
@@ -227,7 +227,7 @@ class ProfileController extends AdminBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));
         }
 
-        Message::addMessage(Labels::getLabel('LBL_Password_Updated_Successfully', $this->adminLangId));
+        Message::addMessage(Labels::getLabel('LBL_Password_Updated_Successfully', $this->siteLangId));
         FatApp::redirectUser(UrlHelper::generateUrl('profile', 'changePassword'));
     }
 
@@ -235,7 +235,7 @@ class ProfileController extends AdminBaseController
     {
         AdminAuthentication::clearLoggedAdminLoginCookie();
         session_destroy();
-        Message::addMessage(Labels::getLabel('LBL_You_Are_Logged_Out_Successfully', $this->adminLangId));
+        Message::addMessage(Labels::getLabel('LBL_You_Are_Logged_Out_Successfully', $this->siteLangId));
         FatApplication::redirectUser(UrlHelper::generateUrl('adminGuest', 'loginForm'));
     }
 
@@ -245,7 +245,7 @@ class ProfileController extends AdminBaseController
         $session_element_name = AdminAuthentication::SESSION_ELEMENT_NAME;
         $cookie_name = $session_element_name . 'layout';
         if (setcookie($cookie_name, $post['layout'], time() + 86400 * 30, CONF_WEBROOT_FRONT_URL)) {
-            Message::addMessage(Labels::getLabel('LBL_Setting_Updated_Successfully', $this->adminLangId));
+            Message::addMessage(Labels::getLabel('LBL_Setting_Updated_Successfully', $this->siteLangId));
         } else {
             Message::addErrorMessage($this->str_invalid_request);
         }
@@ -260,7 +260,7 @@ class ProfileController extends AdminBaseController
         $frm->setFormTagAttribute('id', 'getPwdFrm');
 
         $curPwd = $frm->addPasswordField(
-            Labels::getLabel('LBL_Current_Password', $this->adminLangId),
+            Labels::getLabel('LBL_Current_Password', $this->siteLangId),
             'current_password',
             '',
             array('id' => 'current_password')
@@ -268,7 +268,7 @@ class ProfileController extends AdminBaseController
         $curPwd->requirements()->setRequired();
 
         $newPwd = $frm->addPasswordField(
-            Labels::getLabel('LBL_New_Password', $this->adminLangId),
+            Labels::getLabel('LBL_New_Password', $this->siteLangId),
             'new_password',
             '',
             array('id' => 'new_password')
@@ -276,7 +276,7 @@ class ProfileController extends AdminBaseController
         $newPwd->requirements()->setRequired();
 
         $conNewPwd = $frm->addPasswordField(
-            Labels::getLabel('LBL_Confirm_New_Password', $this->adminLangId),
+            Labels::getLabel('LBL_Confirm_New_Password', $this->siteLangId),
             'conf_new_password',
             '',
             array('id' => 'conf_new_password')
@@ -284,9 +284,9 @@ class ProfileController extends AdminBaseController
         $conNewPwdReq = $conNewPwd->requirements();
         $conNewPwdReq->setRequired();
         $conNewPwdReq->setCompareWith('new_password', 'eq');
-        $conNewPwdReq->setCustomErrorMessage(Labels::getLabel('LBL_Confirm_Password_Not_Matched!', $this->adminLangId));
+        $conNewPwdReq->setCustomErrorMessage(Labels::getLabel('LBL_Confirm_Password_Not_Matched!', $this->siteLangId));
 
-        $frm->addSubmitButton(Labels::getLabel('LBL_Change', $this->adminLangId), 'btn_submit', Labels::getLabel('LBL_Change', $this->adminLangId), array('id' => 'btn_submit'));
+        $frm->addSubmitButton(Labels::getLabel('LBL_Change', $this->siteLangId), 'btn_submit', Labels::getLabel('LBL_Change', $this->siteLangId), array('id' => 'btn_submit'));
         return $frm;
     }
 }

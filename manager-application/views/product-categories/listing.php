@@ -1,11 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php
 $arr_flds = array(
-    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
-    'prodcat_identifier' => Labels::getLabel('LBL_Identifier_Name', $adminLangId),
-    'prodcat_active' => Labels::getLabel('LBL_Active', $adminLangId),
-    'child_count' => Labels::getLabel('LBL_Subcategories', $adminLangId),
-    'action' => Labels::getLabel('LBL_Action', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $siteLangId),
+    'prodcat_identifier' => Labels::getLabel('LBL_Identifier_Name', $siteLangId),
+    'prodcat_active' => Labels::getLabel('LBL_Active', $siteLangId),
+    'child_count' => Labels::getLabel('LBL_Subcategories', $siteLangId),
+    'action' => Labels::getLabel('LBL_Action', $siteLangId),
 );
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive', 'id' => 'prodcat'));
 $th = $tbl->appendElement('thead')->appendElement('tr');
@@ -40,7 +40,7 @@ foreach ($arrListing as $sn => $row) {
                 if ($row[$key] == 0) {
                     $td->appendElement('plaintext', array(), $row[$key], true);
                 } else {
-                    $td->appendElement('a', array('href' => UrlHelper::generateUrl('ProductCategories', 'index', array($row['prodcat_id'])), 'title' => Labels::getLabel('LBL_View_Categories', $adminLangId)), $row[$key]);
+                    $td->appendElement('a', array('href' => UrlHelper::generateUrl('ProductCategories', 'index', array($row['prodcat_id'])), 'title' => Labels::getLabel('LBL_View_Categories', $siteLangId)), $row[$key]);
                 }
                 break;
 
@@ -48,10 +48,10 @@ foreach ($arrListing as $sn => $row) {
                 $ul = $td->appendElement("ul", array("class" => "actions"));
                 if ($canEdit) {
                     $li = $ul->appendElement("li");
-                    $li->appendElement('a', array('href' => UrlHelper::generateUrl('ProductCategories', 'form', array('general', $row['prodcat_id'])), 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $adminLangId), "onclick" => "editRecord(" . $row['prodcat_id'] . ")"), '<i class="far fa-edit icon"></i>', true);
+                    $li->appendElement('a', array('href' => UrlHelper::generateUrl('ProductCategories', 'form', array('general', $row['prodcat_id'])), 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "editRecord(" . $row['prodcat_id'] . ")"), '<i class="far fa-edit icon"></i>', true);
 
                     $li = $ul->appendElement("li");
-                    $li->appendElement('a', array('href' => "javascript:;", 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Delete', $adminLangId), "onclick" => "deleteRecord(" . $row['prodcat_id'] . ")"), '<i class="fa fa-trash  icon"></i>', true);
+                    $li->appendElement('a', array('href' => "javascript:;", 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteRecord(" . $row['prodcat_id'] . ")"), '<i class="fa fa-trash  icon"></i>', true);
                 }
                 break;
             default:
@@ -62,7 +62,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 if (count($arrListing) == 0) {
-    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
+    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
 }
 echo $tbl->getHtml();
 /* echo FatUtility::createHiddenFormFromData ( $postedData, array (

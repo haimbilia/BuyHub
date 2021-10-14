@@ -32,7 +32,7 @@ class TestimonialsController extends AdminBaseController
     {
         $this->objPrivilege->canViewTestimonial();
 
-        $srch = Testimonial::getSearchObject($this->adminLangId, false);
+        $srch = Testimonial::getSearchObject($this->siteLangId, false);
 
         $srch->addMultipleFields(array('t.*', 't_l.testimonial_title', 't_l.testimonial_text'));
         $srch->addOrder('testimonial_active', 'desc');
@@ -250,7 +250,7 @@ class TestimonialsController extends AdminBaseController
         $testimonialIdsArr = FatUtility::int(FatApp::getPostedData('testimonial_ids'));
         if (empty($testimonialIdsArr) || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -271,7 +271,7 @@ class TestimonialsController extends AdminBaseController
         $testimonialId = FatUtility::int($testimonialId);
         if (1 > $testimonialId || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -303,7 +303,7 @@ class TestimonialsController extends AdminBaseController
 
         if (empty($testimonialIdsArr)) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -322,7 +322,7 @@ class TestimonialsController extends AdminBaseController
         $testimonial_id = FatUtility::int($testimonial_id);
         if (1 > $testimonial_id) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
         $testimonialObj = new Testimonial($testimonial_id);
@@ -360,7 +360,7 @@ class TestimonialsController extends AdminBaseController
         $frm = new Form('frmTestimonialMedia');
         $frm->addHiddenField('', 'testimonial_id', $testimonialId);
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_TESTIMONIAL_IMAGE);
-        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->adminLangId), 'testimonial_image', array('accept' => 'image/*', 'data-frm' => 'frmTestimonialMedia'));
+        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->siteLangId), 'testimonial_image', array('accept' => 'image/*', 'data-frm' => 'frmTestimonialMedia'));
         $frm->addHtml('', 'testimonial_image_display_div', '');
 
         return $frm;
@@ -371,7 +371,7 @@ class TestimonialsController extends AdminBaseController
         $this->objPrivilege->canEditTestimonial();
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
         }
         $testimonialId = FatApp::getPostedData('testimonial_id', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
@@ -380,7 +380,7 @@ class TestimonialsController extends AdminBaseController
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Please_Select_A_File', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId));
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -401,7 +401,7 @@ class TestimonialsController extends AdminBaseController
 
         $this->set('testimonialId', $testimonialId);
         $this->set('file', $_FILES['cropped_image']['name']);
-        $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_File_Uploaded_Successfully', $this->adminLangId));
+        $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_File_Uploaded_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -420,7 +420,7 @@ class TestimonialsController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -431,12 +431,12 @@ class TestimonialsController extends AdminBaseController
 
         $frm = new Form('frmTestimonial');
         $frm->addHiddenField('', 'testimonial_id', $testimonialId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Testimonial_Identifier', $this->adminLangId), 'testimonial_identifier');
-        $frm->addRequiredField(Labels::getLabel('LBL_Testimonial_User_Name', $this->adminLangId), 'testimonial_user_name');
+        $frm->addRequiredField(Labels::getLabel('LBL_Testimonial_Identifier', $this->siteLangId), 'testimonial_identifier');
+        $frm->addRequiredField(Labels::getLabel('LBL_Testimonial_User_Name', $this->siteLangId), 'testimonial_user_name');
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'testimonial_active', $activeInactiveArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'testimonial_active', $activeInactiveArr, '', array(), '');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -448,24 +448,24 @@ class TestimonialsController extends AdminBaseController
 
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
         } else {
             $lang_id = array_key_first($languages);
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
-        $frm->addRequiredField(Labels::getLabel('LBL_Testimonial_Title', $this->adminLangId), 'testimonial_title');
-        $fld = $frm->addTextarea(Labels::getLabel('LBL_Testimonial_Text', $this->adminLangId), 'testimonial_text');
+        $frm->addRequiredField(Labels::getLabel('LBL_Testimonial_Title', $this->siteLangId), 'testimonial_title');
+        $fld = $frm->addTextarea(Labels::getLabel('LBL_Testimonial_Text', $this->siteLangId), 'testimonial_text');
         $fld->requirements()->setRequired();
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -482,7 +482,7 @@ class TestimonialsController extends AdminBaseController
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE');
         $post = FatApp::getPostedData();
 
-        $srch = Testimonial::getSearchObject($this->adminLangId, false);
+        $srch = Testimonial::getSearchObject($this->siteLangId, false);
         $srch->addMultipleFields(array('testimonial_id', 'IFNULL(testimonial_title, testimonial_identifier) as testimonial_title'));
 
         if (!empty($post['keyword'])) {

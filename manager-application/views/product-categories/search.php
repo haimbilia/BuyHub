@@ -16,7 +16,7 @@
                         </span>
                         <a href="<?php echo commonHelper::generateUrl('Products', 'index', array($row['prodcat_id'])); ?>"
                             class="count badge badge-success clickable"
-                            title="<?php echo  Labels::getLabel('LBL_Category_Products', $adminLangId); ?>"><?php echo CommonHelper::displayBadgeCount($row['category_products']); ?></a>
+                            title="<?php echo  Labels::getLabel('LBL_Category_Products', $siteLangId); ?>"><?php echo CommonHelper::displayBadgeCount($row['category_products']); ?></a>
                     </div>
                     <div class="sorting-actions">
                         <?php
@@ -41,7 +41,7 @@
                         </label>
                         <?php if ($canEdit) { ?>
                         <button onClick="goToProduct(<?php echo $row['prodcat_id']; ?>)"
-                            title="<?php echo  Labels::getLabel('LBL_Add_Product', $adminLangId); ?>"
+                            title="<?php echo  Labels::getLabel('LBL_Add_Product', $siteLangId); ?>"
                             class="btn btn-clean btn-sm btn-icon clickable">
                             <svg class="svg clickable" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
@@ -49,14 +49,14 @@
                             </svg>
                         </button>
                         <button onClick="editRecord(<?php echo $row['prodcat_id']; ?>)"
-                            title="<?php echo  Labels::getLabel('LBL_Edit', $adminLangId); ?>"
+                            title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>"
                             class="btn btn-clean btn-sm btn-icon clickable">
                             <svg class="svg clickable" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
                                 </use>
                             </svg>
                         </button>
-                        <button title="<?php echo  Labels::getLabel('LBL_Delete', $adminLangId); ?>"
+                        <button title="<?php echo  Labels::getLabel('LBL_Delete', $siteLangId); ?>"
                             onclick="deleteRecord(<?php echo $row['prodcat_id']; ?>)"
                             class="btn btn-clean btn-sm btn-icon clickable">
                             <svg class="svg clickable" width="18" height="18">
@@ -77,7 +77,7 @@
         <?php } ?>
     </ul>
     <?php } else {
-            $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $adminLangId));
+            $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
         }
         ?>
 </div>

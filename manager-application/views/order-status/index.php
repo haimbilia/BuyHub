@@ -36,8 +36,8 @@ $controller = str_replace('Controller', '', FatApp::getController());
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
-                        'adminLangId' => $adminLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_ORDER_STATUS', $adminLangId),
+                        'siteLangId' => $siteLangId,
+                        'cardHeadTitle' => Labels::getLabel('LBL_ORDER_STATUS', $siteLangId),
                         'newRecordBtn' => true,
                         'statusButtons' => true
                     ];

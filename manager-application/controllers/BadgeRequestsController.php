@@ -35,7 +35,7 @@ class BadgeRequestsController extends AdminBaseController
         $srch = $this->getRequestedBadgeObj();
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = breq_user_id', 'u');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
-        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->adminLangId, 's_l');
+        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
         $srch->addCondition(BadgeRequest::DB_TBL_PREFIX . 'status', '=', BadgeRequest::REQUEST_PENDING);
         
         $srch->addMultipleFields(array_merge(
@@ -79,7 +79,7 @@ class BadgeRequestsController extends AdminBaseController
         $srch = new SearchBase(BadgeRequest::DB_TBL, 'breq');
         $srch->joinTable(BadgeLinkCondition::DB_TBL, 'INNER JOIN', 'blinkcond_id = breq_blinkcond_id', 'blc');
         $srch->joinTable(Badge::DB_TBL, 'INNER JOIN', 'badge_id = blinkcond_badge_id', 'bdg');
-        $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $this->adminLangId, 'bdg_l');
+        $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'badgelang_badge_id = badge_id AND badgelang_lang_id = ' . $this->siteLangId, 'bdg_l');
         $srch->addOrder(BadgeRequest::DB_TBL_PREFIX . 'requested_on', 'DESC');
         return $srch;
     }
@@ -96,7 +96,7 @@ class BadgeRequestsController extends AdminBaseController
             $srch->addCondition('breq_id', '=', $badgeReqId);
             $requestedBadge = FatApp::getDb()->fetch($srch->getResultSet());
             if ($requestedBadge === false) {
-                FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+                FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             }
             $requestedBadge['record_ids'] = json_encode($this->records($badgeReqId, true));
             $blinkCondId = $requestedBadge['breq_blinkcond_id'];
@@ -123,12 +123,12 @@ class BadgeRequestsController extends AdminBaseController
 
         $badgeLinkCondId = FatApp::getPostedData('breq_blinkcond_id', FatUtility::VAR_INT, 0);
         if (1 > $badgeLinkCondId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_BADGE', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_BADGE', $this->siteLangId));
         }
 
         $recordIds = isset($post['record_ids']) ? json_decode($post['record_ids'], true) : [];
         if (null === $recordIds || false === $recordIds || empty($recordIds)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_PLEASE_SELECT_ATLEAST_ONE_RECORD', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('MSG_PLEASE_SELECT_ATLEAST_ONE_RECORD', $this->siteLangId));
         }
 
         $badgeReqId = FatApp::getPostedData('breq_id', FatUtility::VAR_INT, 0);
@@ -137,7 +137,7 @@ class BadgeRequestsController extends AdminBaseController
 
         $status = BadgeRequest::getRequestStatus($post['breq_blinkcond_id'], UserAuthentication::getLoggedUserId());
         if (BadgeRequest::REQUEST_APPROVED == $status || BadgeRequest::REQUEST_REJECTED == $status) {
-            $msg = Labels::getLabel('MSG_YOUR_REQUEST_TO_THIS_BADGE_ID_ALREADY_APPROVED/REJECTED', $this->adminLangId);
+            $msg = Labels::getLabel('MSG_YOUR_REQUEST_TO_THIS_BADGE_ID_ALREADY_APPROVED/REJECTED', $this->siteLangId);
             FatUtility::dieJsonError($msg);
         }
 
@@ -162,7 +162,7 @@ class BadgeRequestsController extends AdminBaseController
         }
 
 
-        $msg = Labels::getLabel("MSG_REQUEST_UPDATED_SUCCESSFULLY", $this->adminLangId);
+        $msg = Labels::getLabel("MSG_REQUEST_UPDATED_SUCCESSFULLY", $this->siteLangId);
         $this->set('msg', $msg);
         $this->set('badgeReqId', $badgeReqId);
         $this->_template->render(false, false, 'json-success.php');
@@ -172,13 +172,13 @@ class BadgeRequestsController extends AdminBaseController
     public function getSearchForm()
     {
         $frm = new Form('frmSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->adminLangId), 'keyword', '');
+        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'keyword', '');
 
-        $frm->addTextBox(Labels::getLabel('LBL_SELLER_NAME_OR_EMAIL', $this->adminLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+        $frm->addTextBox(Labels::getLabel('LBL_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off'));
         $frm->addHiddenField('', 'user_id');
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -192,12 +192,12 @@ class BadgeRequestsController extends AdminBaseController
         $frm->addHiddenField('', 'breq_user_id');
         $frm->addHiddenField('', 'breq_blinkcond_id');
 
-        $frm->addTextArea(Labels::getLabel('LBL_MESSAGE', $this->adminLangId), 'breq_message');
-        $frm->addSelectBox(Labels::getLabel('LBL_LINK_TO', $this->adminLangId), 'badgelink_record_id', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->adminLangId), 'class' => 'recordIds--js'], '');
+        $frm->addTextArea(Labels::getLabel('LBL_MESSAGE', $this->siteLangId), 'breq_message');
+        $frm->addSelectBox(Labels::getLabel('LBL_LINK_TO', $this->siteLangId), 'badgelink_record_id', [], '', ['placeholder' => Labels::getLabel('LBL_SEARCH_RECORD', $this->siteLangId), 'class' => 'recordIds--js'], '');
         
-        $statusArr = BadgeRequest::getStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->adminLangId), 'breq_status', $statusArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_UPDATE", $this->adminLangId));
+        $statusArr = BadgeRequest::getStatusArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->siteLangId), 'breq_status', $statusArr, '', array(), '');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_UPDATE", $this->siteLangId));
         return $frm;
     }
 
@@ -207,11 +207,11 @@ class BadgeRequestsController extends AdminBaseController
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 0);
         $page = ($page <= 0) ? 1 : $page;
 
-        $srch = BadgeLinkCondition::getBadgeLinksSearchObj($this->adminLangId, true);
+        $srch = BadgeLinkCondition::getBadgeLinksSearchObj($this->siteLangId, true);
         /* Bind Records */
-        $srch->joinProduct($this->adminLangId);
-        $srch->joinSellerProduct($this->adminLangId);
-        $srch->joinShop($this->adminLangId);
+        $srch->joinProduct($this->siteLangId);
+        $srch->joinSellerProduct($this->siteLangId);
+        $srch->joinShop($this->siteLangId);
         /* Bind Records */
         $srch->joinTable(BadgeRequest::DB_TBL, 'INNER JOIN', 'blc.badgelink_breq_id = breq.breq_id', 'breq');
 
@@ -275,7 +275,7 @@ class BadgeRequestsController extends AdminBaseController
     public function unlinkRecord(int $badgeReqId, int $record_id = 0)
     {
         if (1 > $badgeReqId || 1 > $record_id) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
         $smt = 'badgelink_breq_id = ?';
         $vals = [$badgeReqId];
@@ -294,19 +294,19 @@ class BadgeRequestsController extends AdminBaseController
         )) {
             FatUtility::dieJsonError($db->getError());
         }
-        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->adminLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->siteLangId));
     }
 
     public function downloadFile(int $badgeReqId)
     {
         $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $badgeReqId);
         if ($res == false || 1 > $res['afile_id']) {
-            Message::addErrorMessage(Labels::getLabel("MSG_NOT_AVAILABLE_TO_DOWNLOAD", $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel("MSG_NOT_AVAILABLE_TO_DOWNLOAD", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('BadgeRequests'));
         }
         
         if (!file_exists(CONF_UPLOADS_PATH . AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH . $res['afile_physical_path'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_FILE_NOT_FOUND', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_FILE_NOT_FOUND', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('BadgeRequests'));
         }
 

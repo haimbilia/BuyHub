@@ -8,7 +8,7 @@ require_once(CONF_THEME_PATH . 'import-export/_partial/import-form-head.php'); ?
             echo '<h2>' . $pageData["epage_label"] . '</h2>';
             echo FatUtility::decodeHtmlEntities($pageData['epage_content']);
         } else {
-            echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('LBL_SORRY!!_NO_INSTRUCTION_FOUND', $adminLangId));
+            echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('LBL_SORRY!!_NO_INSTRUCTION_FOUND', $siteLangId));
         }
         ?>
     </div>

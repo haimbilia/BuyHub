@@ -9,7 +9,7 @@ $confPassFld = $frm->getField('conf_new_password');
 <div class="card">
     <div class="card-head">
         <div class="card-head-label">
-            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_CHANGE_PASSWORD', $adminLangId); ?></h3>
+            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_CHANGE_PASSWORD', $siteLangId); ?></h3>
         </div>
     </div>
     <?php echo $frm->getFormTag(); ?>
@@ -40,7 +40,7 @@ $confPassFld = $frm->getField('conf_new_password');
     <div class="card-foot">
         <div class="row">                                    
             <div class="col-auto">
-                <button type="submit" class="btn btn-brand gb-btn gb-btn-primary"><?php echo Labels::getLabel('LBL_UPDATE', $adminLangId); ?></button>
+                <button type="submit" class="btn btn-brand gb-btn gb-btn-primary"><?php echo Labels::getLabel('LBL_UPDATE', $siteLangId); ?></button>
             </div>
         </div>
     </div> 

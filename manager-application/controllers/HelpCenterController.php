@@ -24,7 +24,7 @@ class HelpCenterController extends AdminBaseController
     {        
         $controller = strtolower($controller);
         $action = strtolower($action);
-        $cacheKey = $controller .  $action . $this->adminLangId;
+        $cacheKey = $controller .  $action . $this->siteLangId;
 
         $content = CacheHelper::get($cacheKey, CONF_DEF_CACHE_TIME, '.txt');
         if ($content) {
@@ -33,7 +33,7 @@ class HelpCenterController extends AdminBaseController
             
         $db = FatApp::getDb();
 
-        $srch = new HelpCenterSearch($this->adminLangId);
+        $srch = new HelpCenterSearch($this->siteLangId);
         $srch->addCondition(HelpCenter::tblFld('user_type'), '=', HelpCenter::USER_TYPE_ADMIN);
         $srch->addCondition(HelpCenter::tblFld('controller'), '=', $controller);
 
@@ -53,14 +53,14 @@ class HelpCenterController extends AdminBaseController
         
         $record = (array) $db->fetch($srch->getResultSet());
         if (empty($record)) {
-            $msg = empty($db->getError()) ? Labels::getLabel('MSG_NO_RECORD_FOUND', $this->adminLangId) : $db->getError();
+            $msg = empty($db->getError()) ? Labels::getLabel('MSG_NO_RECORD_FOUND', $this->siteLangId) : $db->getError();
             LibHelper::exitWithError($msg, true);
         }
 
         $this->set('record', $record);
         $json['html'] = $this->_template->render(false, false, 'help-center/get-content.php', true, false);
         $json['status'] = applicationConstants::SUCCESS;
-        $json['msg'] = Labels::getLabel('MSG_SUCCESS', $this->adminLangId);
+        $json['msg'] = Labels::getLabel('MSG_SUCCESS', $this->siteLangId);
 
         CacheHelper::create($cacheKey, json_encode($json), CacheHelper::TYPE_HELP_CENTER);
         LibHelper::dieJsonSuccess($json);

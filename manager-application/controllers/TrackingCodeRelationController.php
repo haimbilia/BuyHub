@@ -6,7 +6,7 @@ class TrackingCodeRelationController extends AdminBaseController
     {
         parent::__construct($action);  
         if(!$this->objPrivilege->canViewTrackingRelationCode()){
-            Message::addErrorMessage(Labels::getLabel('LBL_Please_activate_ship_station_and_tracking_plugins', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Please_activate_ship_station_and_tracking_plugins', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Plugins'));
         }
     }
@@ -19,7 +19,7 @@ class TrackingCodeRelationController extends AdminBaseController
     public function search()
     {
         $shipmentTracking = new ShipmentTracking(); 
-		if (false === $shipmentTracking->init($this->adminLangId)) {
+		if (false === $shipmentTracking->init($this->siteLangId)) {
 			Message::addErrorMessage($shipmentTracking->getError());
             FatUtility::dieWithError(Message::getHtml());
 		}
@@ -37,7 +37,7 @@ class TrackingCodeRelationController extends AdminBaseController
         
         $plugin = new Plugin();
         $shipApiPluginData = $plugin->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, ['plugin_code', 'plugin_id']);
-        $shipApi = PluginHelper::callPlugin($shipApiPluginData['plugin_code'], [$this->adminLangId], $error, $this->adminLangId);
+        $shipApi = PluginHelper::callPlugin($shipApiPluginData['plugin_code'], [$this->siteLangId], $error, $this->siteLangId);
         if($shipApi->init() === false){              
             Message::addErrorMessage($shipApi->getError());
             FatUtility::dieWithError(Message::getHtml());
@@ -64,7 +64,7 @@ class TrackingCodeRelationController extends AdminBaseController
         $trackingApiCode = FatApp::getPostedData('trackingApiCode', FatUtility::VAR_STRING, '');
         $shipApiCode = FatApp::getPostedData('shipApiCode', FatUtility::VAR_STRING, '');
         if(empty($trackingApiCode) || empty($shipApiCode)){
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         
@@ -72,7 +72,7 @@ class TrackingCodeRelationController extends AdminBaseController
         $trackingApiPluginId = $plugin->getDefaultPluginData(Plugin::TYPE_SHIPMENT_TRACKING, 'plugin_id');
         $shipApiPluginId = $plugin->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'plugin_id');
         if($trackingApiPluginId < 1 || $shipApiPluginId < 1){
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         

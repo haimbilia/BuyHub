@@ -46,7 +46,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 $data = [
-                    'adminLangId' => $adminLangId,
+                    'siteLangId' => $siteLangId,
                     'recordId' => $row[SellerPackages::DB_TBL_PREFIX . 'id']
                 ];
 
@@ -57,7 +57,7 @@ foreach ($arrListing as $sn => $row) {
                             'attr' => [
                                 'href' => 'javascript:void(0)',
                                 'onclick' => "searchPlans(" . $row[SellerPackages::DB_TBL_PREFIX . 'id'] . ")",
-                                'title' => Labels::getLabel('LBL_Settings', $adminLangId)
+                                'title' => Labels::getLabel('LBL_Settings', $siteLangId)
                             ],
                             'label' => '<svg class="svg" width="18" height="18">
                                             <use
@@ -84,7 +84,7 @@ if (count($arrListing) == 0) {
         array(
             'colspan' => count($fields)
         ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId)
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );
 }
 

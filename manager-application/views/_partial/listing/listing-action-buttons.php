@@ -7,7 +7,7 @@ if (isset($editButton) && is_array($editButton)) {
 
     $cls = isset($editButton['class']) ? $editButton['class'] : '';
     $li = $ul->appendElement('li');
-    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, 'title' => Labels::getLabel('LBL_EDIT', $adminLangId), "onclick" => $onClick), '<svg class="svg" width="18" height="18">
+    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, 'title' => Labels::getLabel('LBL_EDIT', $siteLangId), "onclick" => $onClick), '<svg class="svg" width="18" height="18">
     <use
         xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
     </use>
@@ -20,7 +20,7 @@ if (isset($deleteButton) && is_array($deleteButton)) {
 
     $cls = isset($editButton['class']) ? $editButton['class'] : '';
     $li = $ul->appendElement('li');
-    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, 'title' => Labels::getLabel('LBL_DELETE', $adminLangId), "onclick" => $onClick), '<svg class="svg" width="18" height="18">
+    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, 'title' => Labels::getLabel('LBL_DELETE', $siteLangId), "onclick" => $onClick), '<svg class="svg" width="18" height="18">
     <use
         xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
     </use>

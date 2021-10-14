@@ -26,7 +26,7 @@ class ShippedProductsController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : intval($data['page']);
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
-        $srch = new ShippedProducts($this->adminLangId);
+        $srch = new ShippedProducts($this->siteLangId);
         $srch->joinShipProfileProd();
         $srch->joinShippingProfile();
         $srch->addProductByAdminCondition();
@@ -113,7 +113,7 @@ class ShippedProductsController extends AdminBaseController
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);       
         /* Get all Products */
-        $srch = new ShippedProducts($this->adminLangId);
+        $srch = new ShippedProducts($this->siteLangId);
         $srch->joinShipProfileProd();
         $srch->joinShippingProfile();
         $srch->joinSelProdTable();
@@ -142,7 +142,7 @@ class ShippedProductsController extends AdminBaseController
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('adminShip', $adminShip);
-        $this->set('adminLangId', $this->adminLangId);
+        $this->set('siteLangId', $this->siteLangId);
         $this->set('postedData', $post);
         $this->_template->render(false, false);
     }
@@ -193,19 +193,19 @@ class ShippedProductsController extends AdminBaseController
                 FatUtility::dieWithError(Message::getHtml());
             }
         }
-        $this->set('msg', Labels::getLabel('LBL_Shipping_Updated_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Shipping_Updated_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
     private function getShippedProducts()
     {
         $frm = new Form('frmShippedProductsSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-        $frm->addTextBox(Labels::getLabel('LBL_Seller_Name_Or_Email', $this->adminLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-        $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, 0, true, true);
-        $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+        $frm->addTextBox(Labels::getLabel('LBL_Seller_Name_Or_Email', $this->siteLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+        $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, 0, true, true);
+        $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->siteLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         $frm->addHiddenField('', 'page');
         return $frm;
@@ -214,10 +214,10 @@ class ShippedProductsController extends AdminBaseController
     private function productsShippingForm()
     {
         $frm = new Form('productsShippingForm');
-        $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, 0,  true, true);
-        $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
+        $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, 0,  true, true);
+        $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->siteLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
         $frm->addHiddenField('', 'productId', 0);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
 }

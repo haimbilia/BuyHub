@@ -47,11 +47,11 @@ class MessagesController extends AdminBaseController
 
         $srch = new MessageSearch();
         $srch->joinThreadLastMessage();
-        $srch->joinMessagePostedFromUser(true, $this->adminLangId);
-        $srch->joinMessagePostedToUser(true, $this->adminLangId);
+        $srch->joinMessagePostedFromUser(true, $this->siteLangId);
+        $srch->joinMessagePostedToUser(true, $this->siteLangId);
         $srch->joinThreadStartedByUser();
-        /*$srch->joinShops($this->adminLangId);
-        $srch->joinOrderProducts($this->adminLangId);*/
+        /*$srch->joinShops($this->siteLangId);
+        $srch->joinOrderProducts($this->siteLangId);*/
         $srch->addMultipleFields(array('tth.*', 'ttm.*', 'tfr.user_id as message_sent_by',
          'tfr.user_name as message_sent_by_username', 'tfto.user_id as message_sent_to', 
          'tfto.user_name as message_sent_to_name', 'tfto_c.credential_email as message_sent_to_email',
@@ -94,7 +94,7 @@ class MessagesController extends AdminBaseController
             $records = FatApp::getDb()->fetchAll($rs);
         }
         /* CommonHelper::printArray($records); die; */
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -116,10 +116,10 @@ class MessagesController extends AdminBaseController
         }
         $srch = new MessageSearch();
         $srch->joinThreadMessage();
-        $srch->joinMessagePostedFromUser(true, $this->adminLangId);
+        $srch->joinMessagePostedFromUser(true, $this->siteLangId);
         $srch->joinMessagePostedToUser();
-        $srch->joinShops($this->adminLangId);
-        $srch->joinOrderProducts($this->adminLangId);
+        $srch->joinShops($this->siteLangId);
+        $srch->joinOrderProducts($this->siteLangId);
         $srch->addMultipleFields(array('tth.*', 'ttm.*', 
         'tfr.user_id as message_sent_by', 'tfr.user_name as message_sent_by_username', 'tfto.user_id as message_sent_to',
          'tfto.user_name as message_sent_to_name', 'tfto_c.credential_email as message_sent_to_email', 
@@ -142,14 +142,14 @@ class MessagesController extends AdminBaseController
     public function getSearchForm()
     {
         $frm = new Form('frmSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $frm->addTextBox(Labels::getLabel('LBL_Message_By', $this->adminLangId), 'message_by', '', array('id' => 'message_by', 'autocomplete' => 'off'));
-        $frm->addTextBox(Labels::getLabel('LBL_Message_To', $this->adminLangId), 'message_to', '', array('id' => 'message_to', 'autocomplete' => 'off'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender' ));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel('LBL_Message_By', $this->siteLangId), 'message_by', '', array('id' => 'message_by', 'autocomplete' => 'off'));
+        $frm->addTextBox(Labels::getLabel('LBL_Message_To', $this->siteLangId), 'message_to', '', array('id' => 'message_to', 'autocomplete' => 'off'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender' ));
+        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $frm->addHiddenField('', 'thread_id');
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -188,9 +188,9 @@ class MessagesController extends AdminBaseController
 
         $frm = new Form('frmShippingDuration');
         $frm->addHiddenField('', 'message_id');
-        $fld = $frm->addTextArea(Labels::getLabel('LBL_Message_Text', $this->adminLangId), 'message_text');
+        $fld = $frm->addTextArea(Labels::getLabel('LBL_Message_Text', $this->siteLangId), 'message_text');
         $fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -213,7 +213,7 @@ class MessagesController extends AdminBaseController
         $rs = $srch->getResultSet();
         $requestRow = FatApp::getDb()->fetch($rs);
         if (!$requestRow) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -225,12 +225,12 @@ class MessagesController extends AdminBaseController
         $tObj = new Thread();
 
         if (!$insertId = $tObj->updateThreadMessages($data, $message_id)) {
-            Message::addErrorMessage(Labels::getLabel($tObj->getError(), $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel($tObj->getError(), $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         /* ] */
 
-        $this->set('msg', Labels::getLabel('MSG_Message_Submitted_Successfully!', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Message_Submitted_Successfully!', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -246,7 +246,7 @@ class MessagesController extends AdminBaseController
         $obj = new Thread($message_id);
         if (!$obj->deleteThreadMessage($message_id)) {
             Message::addErrorMessage(
-                Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId)
             );
             FatUtility::dieJsonError(Message::getHtml());
         }

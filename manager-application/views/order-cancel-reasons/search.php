@@ -23,7 +23,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 $data = [
-                    'adminLangId' => $adminLangId,
+                    'siteLangId' => $siteLangId,
                     'recordId' => $row['ocreason_id']
                 ];
 
@@ -48,7 +48,7 @@ if (count($arrListing) == 0) {
         array(
             'colspan' => count($fields)
         ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId)
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );
 }
 

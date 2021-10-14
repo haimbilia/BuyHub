@@ -2,9 +2,9 @@
 <form class="form">
     <?php
     $arr_flds = array(
-        'listserial' => Labels::getLabel('LBL_#', $adminLangId),
-        'module' => Labels::getLabel('LBL_Module', $adminLangId),
-        'permission' => Labels::getLabel('LBL_Permissions', $adminLangId),
+        'listserial' => Labels::getLabel('LBL_#', $siteLangId),
+        'module' => Labels::getLabel('LBL_Module', $siteLangId),
+        'permission' => Labels::getLabel('LBL_Permissions', $siteLangId),
     );
     $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive'));
     $th = $tbl->appendElement('thead')->appendElement('tr');
@@ -52,7 +52,7 @@
         }
     }
     if (count($arrListing) == 0) {
-        $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
+        $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
     }
     echo $tbl->getHtml();
     ?></form>

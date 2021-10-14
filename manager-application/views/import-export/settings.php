@@ -2,14 +2,14 @@
 <div class="card-body">
     <?php
     $frm->setFormTagAttribute('class', 'form form--settings');
-
+    /* $frm->setCustomRendererClass('FormRendererBS');
     $frm->developerTags['colWidthClassesDefault'] = [null, 'col-md-', null, null];
     $frm->developerTags['colWidthValuesDefault'] = [null, '12', null, null];
     $frm->developerTags['fldWidthClassesDefault'] = ['field_', 'field_', 'field_', 'field_'];
     $frm->developerTags['fldWidthValuesDefault'] = ['cover', 'cover', 'cover', 'cover'];
     $frm->developerTags['labelWidthClassesDefault'] = ['field_', 'field_', 'field_', 'field_'];
     $frm->developerTags['labelWidthValuesDefault'] = ['label', 'label', 'label', 'label'];
-    $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
+    $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group'; */
 
     $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-';
     $frm->developerTags['fld_default_col'] = 12;
@@ -17,11 +17,11 @@
     ?>
 </div>
 <div class="card-foot">
-    <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_UPDATE', $adminLangId), 'button', '', '', "updateSettings('frmImportExportSetting')"); ?>
+    <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_UPDATE', $siteLangId), 'button', '', '', "updateSettings('frmImportExportSetting')"); ?>
 </div>
 <script>
     $(document).ready(function() {
-        $('#frmImportExportSetting').find('.checkbox').addClass('switch switch-sm switch-icon').removeClass('checkbox');
+        $('#frmImportExportSetting').find('label').addClass('switch switch-sm switch-icon').removeClass('checkbox');
         $('#frmImportExportSetting i').replaceWith('<span></span>');
         $('#frmImportExportSetting').find('.caption-wraper').remove();
     });

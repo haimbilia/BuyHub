@@ -8,7 +8,7 @@ class SitemapController extends AdminBaseController
         $this->startSitemapXml();
 
 
-        $prodSrchObj = new ProductSearch($this->adminLangId);
+        $prodSrchObj = new ProductSearch($this->siteLangId);
         $prodSrchObj->setDefinedCriteria(1);
         $prodSrchObj->joinProductToCategory();
         $prodSrchObj->joinSellerSubscription();
@@ -18,11 +18,11 @@ class SitemapController extends AdminBaseController
 
 
         /* Category Pages [ */
-        $categoriesArr = ProductCategory::getArray($this->adminLangId, 0, false, true, false, CONF_USE_FAT_CACHE, false);
+        $categoriesArr = ProductCategory::getArray($this->siteLangId, 0, false, true, false, CONF_USE_FAT_CACHE, false);
 
         /* $catSrch = clone $prodSrchObj;
         $catSrch->addGroupBy('prodcat_id');
-        $categoriesArr = productCategory::getProdCatParentChildWiseArr($this->adminLangId, 0, true, false, true, $catSrch); */
+        $categoriesArr = productCategory::getProdCatParentChildWiseArr($this->siteLangId, 0, true, false, true, $catSrch); */
         foreach ($categoriesArr as $key => $val) {
             $this->writeSitemapUrl(UrlHelper::generateFullUrl('category', 'view', array($val['prodcat_id']), CONF_WEBROOT_FRONT_URL), 'daily');
         }
@@ -65,8 +65,8 @@ class SitemapController extends AdminBaseController
 
         /* Shop Pages [ */
 
-        $shopSrch = new ShopSearch($this->adminLangId);
-        $shopSrch->setDefinedCriteria($this->adminLangId);
+        $shopSrch = new ShopSearch($this->siteLangId);
+        $shopSrch->setDefinedCriteria($this->siteLangId);
         $shopSrch->joinShopCountry();
         $shopSrch->joinShopState();
         $shopSrch->joinSellerSubscription();
@@ -84,7 +84,7 @@ class SitemapController extends AdminBaseController
         /* ]*/
 
         /* CMS Pages [ */
-        $cmsSrch = new NavigationLinkSearch($this->adminLangId);
+        $cmsSrch = new NavigationLinkSearch($this->siteLangId);
         $cmsSrch->joinNavigation();
         $cmsSrch->joinProductCategory();
         $cmsSrch->joinContentPages();
@@ -112,7 +112,7 @@ class SitemapController extends AdminBaseController
 
         $this->endSitemapXml();
         $this->writeSitemapIndex();
-        Message::addMessage(Labels::getLabel('MSG_Sitemap_has_been_updated_successfully', $this->adminLangId));
+        Message::addMessage(Labels::getLabel('MSG_Sitemap_has_been_updated_successfully', $this->siteLangId));
         CommonHelper::redirectUserReferer();
     }
 

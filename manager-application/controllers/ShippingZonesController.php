@@ -80,10 +80,10 @@ class ShippingZonesController extends AdminBaseController
             $zoneLocations = $this->getLocations($zoneId);
         }
 
-        $zones = FatCache::get('zonesWithStateCountry' . $this->adminLangId, 108000, '.txt');       
+        $zones = FatCache::get('zonesWithStateCountry' . $this->siteLangId, 108000, '.txt');       
         if (!$zones) {
-            $zones = Zone::getZoneWithCountriesStates($this->adminLangId);
-            FatCache::set('zonesWithStateCountry' . $this->adminLangId, serialize($zones), '.txt');
+            $zones = Zone::getZoneWithCountriesStates($this->siteLangId);
+            FatCache::set('zonesWithStateCountry' . $this->siteLangId, serialize($zones), '.txt');
         }else{
             $zones =  unserialize($zones); 
         }
@@ -101,7 +101,7 @@ class ShippingZonesController extends AdminBaseController
     public function searchStates($countryId, $zoneId, $shipZoneId, $profileId, $selected = 0)
     {
         $stateObj = new States();
-        $states = $stateObj->getStatesByCountryId($countryId, $this->adminLangId, true);
+        $states = $stateObj->getStatesByCountryId($countryId, $this->siteLangId, true);
         $zoneLocations = $this->getLocations($shipZoneId);
         $excludeLocations = Zone::getExcludeLocations($profileId, $shipZoneId);
 
@@ -120,19 +120,19 @@ class ShippingZonesController extends AdminBaseController
         $this->objPrivilege->canEditShippingManagement();
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
         if (isset($post['shipzone_name']) && empty(trim($post['shipzone_name']))) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
         $shipZoneId = (isset($post['shipzone_id'])) ? $post['shipzone_id'] : 0;
-        $msg = 0 < $shipZoneId ? Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId) : Labels::getLabel('LBL_ADDED_SUCCESSFULLY', $this->adminLangId);
+        $msg = 0 < $shipZoneId ? Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->siteLangId) : Labels::getLabel('LBL_ADDED_SUCCESSFULLY', $this->siteLangId);
         if (!$this->checkForLocations($post['shipzone_profile_id'], $shipZoneId, $post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Locations_already_added_in_other_zone_of_same_profile', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Locations_already_added_in_other_zone_of_same_profile', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -165,11 +165,11 @@ class ShippingZonesController extends AdminBaseController
         if ($shipZoneId > 0) {
             if (!$this->eligibleForUpdateLocations($shipZoneId, $post)) {
                 $db->rollbackTransaction();
-                Message::addErrorMessage(Labels::getLabel('LBL_This_zone_is_also_used_with_another_profile._Please_change_the_zone_name_to_update_it.', $this->adminLangId));
+                Message::addErrorMessage(Labels::getLabel('LBL_This_zone_is_also_used_with_another_profile._Please_change_the_zone_name_to_update_it.', $this->siteLangId));
                 FatUtility::dieJsonError(Message::getHtml());
             }
             if (!$this->setupLocations($post, $shipZoneId)) {
-                Message::addErrorMessage(Labels::getLabel('LBL_Unable_to_update_locations', $this->adminLangId));
+                Message::addErrorMessage(Labels::getLabel('LBL_Unable_to_update_locations', $this->siteLangId));
                 FatUtility::dieJsonError(Message::getHtml());
             }
         }
@@ -194,7 +194,7 @@ class ShippingZonesController extends AdminBaseController
         $shippingProfileId = $shippingProfData['shipprozone_shipprofile_id'];
         $allZones = ShippingProfileZone::getAttributesByProfileId($shippingProfileId, null, true);
         if (is_array($allZones) && 1 == count($allZones)) {
-            $msg = Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEASE_ONE_SHIPPING_ZONE', $this->adminLangId);
+            $msg = Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEASE_ONE_SHIPPING_ZONE', $this->siteLangId);
             Message::addErrorMessage($msg);
             FatUtility::dieJsonError(Message::getHtml());
         }
@@ -217,7 +217,7 @@ class ShippingZonesController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Zone_Deleted_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Zone_Deleted_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -226,7 +226,7 @@ class ShippingZonesController extends AdminBaseController
         if (empty($zoneIds)) {
             return [];
         }
-        $locSrch = ShippingZone::getZoneLocationSearchObject($this->adminLangId);
+        $locSrch = ShippingZone::getZoneLocationSearchObject($this->siteLangId);
         if (is_array($zoneIds)) {
             $locSrch->addCondition('shiploc_shipzone_id', 'IN', $zoneIds);
         } else {
@@ -386,7 +386,7 @@ class ShippingZonesController extends AdminBaseController
         if (empty($zoneIds)) {
             return array();
         }
-        $rateSrch = ShippingRate::getSearchObject($this->adminLangId);
+        $rateSrch = ShippingRate::getSearchObject($this->siteLangId);
         $rateSrch->addCondition('shiprate_shipprozone_id', 'IN', $zoneIds);
         $rateSrch->addMultipleFields(array('srate.*', 'if(ratelang.shiprate_name is null, shiprate_identifier, ratelang.shiprate_name) as shiprate_rate_name'));
         $rateSrch->doNotCalculateRecords();

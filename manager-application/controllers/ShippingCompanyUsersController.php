@@ -105,7 +105,7 @@ class ShippingCompanyUsersController extends AdminBaseController
         }
         $this->_template->addJs('seller-orders/page-js/index.js');
 
-        $frmSearch = $this->getSellerOrderSearchForm($this->adminLangId);
+        $frmSearch = $this->getSellerOrderSearchForm($this->siteLangId);
 
         $FldShippingCompanyUserId = $frmSearch->getField('shipping_company_user_id');
         $FldShippingCompanyUserId->value = $shipping_company_user_id;
@@ -198,7 +198,7 @@ class ShippingCompanyUsersController extends AdminBaseController
         if ($post['user_id'] <= 0) {
             $post['user_password'] = CommonHelper::getRandomPassword(10);
             if (!$userObj->setLoginCredentials($post['credential_username'], $post['credential_email'], $post['user_password'], 1, 1)) {
-                Message::addErrorMessage(Labels::getLabel("MSG_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->adminLangId) . $userObj->getError());
+                Message::addErrorMessage(Labels::getLabel("MSG_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
                 FatUtility::dieWithError(Message::getHtml());
             }
         }
@@ -233,7 +233,7 @@ class ShippingCompanyUsersController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-        $this->set('statusArr', Transactions::getStatusArr($this->adminLangId));
+        $this->set('statusArr', Transactions::getStatusArr($this->siteLangId));
         $this->_template->render(false, false);
     }
 }

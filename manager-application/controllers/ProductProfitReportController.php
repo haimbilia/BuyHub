@@ -32,7 +32,7 @@ class ProductProfitReportController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -65,8 +65,8 @@ class ProductProfitReportController extends AdminBaseController
         $opSrch->setDateCondition($fromDate, $toDate);
         $opSrch->removeFld(['product_name', 'category_name', 'sellingPrice']);
 
-        $srch = new ProductSearch($this->adminLangId, '', '', false, false, false);
-        $srch->joinBrands($this->adminLangId, false, true);
+        $srch = new ProductSearch($this->siteLangId, '', '', false, false, false);
+        $srch->joinBrands($this->siteLangId, false, true);
         $srch->joinProductToCategory();
         $srch->joinTable('(' . $opSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'p.product_id = opq.product_id', 'opq');
         $srch->addMultipleFields(['COALESCE(tp_l.product_name, p.product_identifier) as product_name', 'COALESCE(c_l.prodcat_name,c.prodcat_identifier) as category_name', 'opq.*']);
@@ -111,7 +111,7 @@ class ProductProfitReportController extends AdminBaseController
                 array_push($sheetData, $arr);
                 $count++;
             }
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Product_Profit_Report', $this->adminLangId) . '_' . date("d-M-Y") . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Product_Profit_Report', $this->siteLangId) . '_' . date("d-M-Y") . '.csv', ',');
             exit;
         }
 
@@ -141,18 +141,18 @@ class ProductProfitReportController extends AdminBaseController
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         if (!empty($fields)) {
             $frm->addHiddenField('', 'sortBy', 'product_name');
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
-            /*  $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  ''); */
+            /*  $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  ''); */
         }
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
 
         return $frm;
@@ -160,17 +160,17 @@ class ProductProfitReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $productProfitReportsCacheVar = FatCache::get('productProfitReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $productProfitReportsCacheVar = FatCache::get('productProfitReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$productProfitReportsCacheVar) {
             $arr = [
-                'product_name'    =>    Labels::getLabel('LBL_Product_name', $this->adminLangId),
-                'category_name' => Labels::getLabel('LBL_Category', $this->adminLangId),
-                'netSoldQty' => Labels::getLabel('LBL_Sold_Qty', $this->adminLangId),
-                /*  'inventoryCost' => Labels::getLabel('LBL_Inventory_Cost', $this->adminLangId),     */
-                'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->adminLangId),
-                'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $this->adminLangId)
+                'product_name'    =>    Labels::getLabel('LBL_Product_name', $this->siteLangId),
+                'category_name' => Labels::getLabel('LBL_Category', $this->siteLangId),
+                'netSoldQty' => Labels::getLabel('LBL_Sold_Qty', $this->siteLangId),
+                /*  'inventoryCost' => Labels::getLabel('LBL_Inventory_Cost', $this->siteLangId),     */
+                'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->siteLangId),
+                'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $this->siteLangId)
             ];
-            FatCache::set('productProfitReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            FatCache::set('productProfitReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {
             $arr =  unserialize($productProfitReportsCacheVar);
         }

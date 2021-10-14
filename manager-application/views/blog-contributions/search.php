@@ -30,12 +30,12 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $phone, true);
                 break;
             case 'bcontributions_status':
-                $statusHtm = BlogContribution::getStatusHtml($adminLangId, $row[$key]);
+                $statusHtm = BlogContribution::getStatusHtml($siteLangId, $row[$key]);
                 $td->appendElement('plaintext', $tdAttr, $statusHtm, true);
                 break;
             case 'action':
                 $data = [
-                    'adminLangId' => $adminLangId,
+                    'siteLangId' => $siteLangId,
                     'recordId' => $row['bcontributions_id']
                 ];
 
@@ -60,7 +60,7 @@ if (count($arrListing) == 0) {
         array(
             'colspan' => count($fields)
         ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId)
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );
 }
 

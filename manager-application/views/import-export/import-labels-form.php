@@ -8,7 +8,7 @@ $frm->setFormTagAttribute( 'onSubmit', 'uploadLabelsImportFile(this); return fal
 
 <div class="modal-header">
     <h5 class="modal-title">
-        <?php echo Labels::getLabel('LBL_Import_Labels',$adminLangId); ?>
+        <?php echo Labels::getLabel('LBL_Import_Labels',$siteLangId); ?>
     </h5>
 </div>
 <div class="modal-body form-edit">
@@ -23,7 +23,7 @@ $frm->setFormTagAttribute( 'onSubmit', 'uploadLabelsImportFile(this); return fal
             <div class="col-auto">
                 <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
                     <?php
-                    echo Labels::getLabel('LBL_IMPORT', $adminLangId);
+                    echo Labels::getLabel('LBL_IMPORT', $siteLangId);
                     ?>
                 </button>
             </div>

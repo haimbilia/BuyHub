@@ -15,7 +15,7 @@ class TaxStructureController extends AdminBaseController
 
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_TAX_STRUCTURE', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_TAX_STRUCTURE', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -38,7 +38,7 @@ class TaxStructureController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -53,7 +53,7 @@ class TaxStructureController extends AdminBaseController
             $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         }
 
-        $srch = TaxStructure::getSearchObject($this->adminLangId);
+        $srch = TaxStructure::getSearchObject($this->siteLangId);
         $srch->addCondition('taxstr_parent', '=', 0);
         $srch->addMultipleFields(array('ts.*', 'ts_l.*', 'taxstr_id as listSerial'));
 
@@ -100,7 +100,7 @@ class TaxStructureController extends AdminBaseController
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
 		$languages = Language::getAllNames();
        
-        $frm = TaxStructure::getForm($this->adminLangId, $recordId);
+        $frm = TaxStructure::getForm($this->siteLangId, $recordId);
         $taxStrData = [];
         $combinedTaxes = [];
         if (0 < $recordId) {
@@ -131,7 +131,7 @@ class TaxStructureController extends AdminBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
+        $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -139,7 +139,7 @@ class TaxStructureController extends AdminBaseController
     {
         $this->objPrivilege->canEditTax();
 
-        $frm = TaxStructure::getForm($this->adminLangId);
+        $frm = TaxStructure::getForm($this->siteLangId);
         $post = FatApp::getPostedData();
 		
         if (false === $post) {
@@ -175,18 +175,18 @@ class TaxStructureController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $taxStructureTblHeadingCols = CacheHelper::get('taxStructureTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $taxStructureTblHeadingCols = CacheHelper::get('taxStructureTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($taxStructureTblHeadingCols) {
             return json_decode($taxStructureTblHeadingCols);
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'taxstr_identifier' => Labels::getLabel('LBL_Tax_Structure_Name', $this->adminLangId),
-            'taxstr_is_combined' => Labels::getLabel('LBL_Combined_Tax', $this->adminLangId),
-            'action' =>  Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'taxstr_identifier' => Labels::getLabel('LBL_Tax_Structure_Name', $this->siteLangId),
+            'taxstr_is_combined' => Labels::getLabel('LBL_Combined_Tax', $this->siteLangId),
+            'action' =>  Labels::getLabel('LBL_ACTION', $this->siteLangId),
         ];
-        CacheHelper::create('taxStructureTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('taxStructureTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         
         return $arr;
     }

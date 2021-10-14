@@ -132,7 +132,7 @@ class Navigation
         $template->set('blogCommentsCount', $blogCommentsCount);
         $template->set('threshSelProdCount', $threshSelProdCount);
         $template->set('gdprReqCount', $gdprReqCount);
-        $template->set('adminLangId', CommonHelper::getLangId());
+        $template->set('siteLangId', CommonHelper::getLangId());
         /* ] */
         
         $template->set('objPrivilege', AdminPrivilege::getInstance());

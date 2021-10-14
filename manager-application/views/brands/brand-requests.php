@@ -10,14 +10,14 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
                         <div class="col--first col-lg-6">
                             <span class="page__icon">
                                 <i class="ion-android-star"></i></span>
-                            <h5><?php echo Labels::getLabel('LBL_Manage_Product_Brand_Requests', $adminLangId); ?><?php echo (isset($prodBrandData['brand_identifier']))?$prodBrandData['brand_identifier']:'';?> </h5>
+                            <h5><?php echo Labels::getLabel('LBL_Manage_Product_Brand_Requests', $siteLangId); ?><?php echo (isset($prodBrandData['brand_identifier']))?$prodBrandData['brand_identifier']:'';?> </h5>
                             <?php $this->includeTemplate('_partial/header/header-breadcrumb.php'); ?>
                         </div>
                     </div>
                 </div>
                 <section class="section searchform_filter">
                     <div class="sectionhead">
-                        <h4> <?php echo Labels::getLabel('LBL_Search...', $adminLangId); ?> </h4>
+                        <h4> <?php echo Labels::getLabel('LBL_Search...', $siteLangId); ?> </h4>
                     </div>
                     <div class="sectionbody space togglewrap" style="display:none;">
                         <?php
@@ -31,11 +31,11 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
                 </section>
                 <section class="section">
                     <div class="sectionhead">
-                        <h4><?php echo Labels::getLabel('LBL_Requested_Brands_List', $adminLangId); ?> </h4>
+                        <h4><?php echo Labels::getLabel('LBL_Requested_Brands_List', $siteLangId); ?> </h4>
                     </div>
                     <div class="sectionbody">
                         <div class="tablewrap">
-                            <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $adminLangId); ?></div>
+                            <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
                         </div>
                     </div>
                 </section>

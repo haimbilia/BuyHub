@@ -15,7 +15,7 @@ class BlogCommentsController extends AdminBaseController
 
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_BLOG_COMMENTS', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_BLOG_COMMENTS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -38,7 +38,7 @@ class BlogCommentsController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -53,7 +53,7 @@ class BlogCommentsController extends AdminBaseController
             $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         }
 
-        $srch = BlogComment::getSearchObject(true, $this->adminLangId);
+        $srch = BlogComment::getSearchObject(true, $this->siteLangId);
 
         if (!empty($post['keyword'])) {
             $keywordCond = $srch->addCondition('bpcomment_author_name', 'like', '%' . $post['keyword'] . '%');
@@ -104,22 +104,22 @@ class BlogCommentsController extends AdminBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $frm = $this->getForm($recordId);
-        $srch = BlogComment::getSearchObject(true, $this->adminLangId);
+        $srch = BlogComment::getSearchObject(true, $this->siteLangId);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $srch->addCondition('bpcomment_id', '=', $recordId);
         $data = FatApp::getDb()->fetch($srch->getResultSet());
         if ($data === false) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
         }
         $frm->fill($data);
-        $statusArr = BlogComment::getBlogCommentStatusArr($this->adminLangId);
+        $statusArr = BlogComment::getBlogCommentStatusArr($this->siteLangId);
 
         $this->set('statusArr', $statusArr);
         $this->set('data', $data);
         $this->set('frm', $frm);
         $this->set('recordId', $recordId);
-        $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
+        $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -149,7 +149,7 @@ class BlogCommentsController extends AdminBaseController
         }
 
         if ($oldData['bpcomment_approved'] != $post['bpcomment_approved']) {
-            $srch = BlogComment::getSearchObject(true, $this->adminLangId);
+            $srch = BlogComment::getSearchObject(true, $this->siteLangId);
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $srch->addCondition('bpcomment_id', '=', $recordId);
@@ -179,7 +179,7 @@ class BlogCommentsController extends AdminBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('bpcomment_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -196,11 +196,11 @@ class BlogCommentsController extends AdminBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
         $obj = new BlogComment($recordId);
         if (!$obj->canMarkRecordDelete($recordId)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Unauthorized_Access', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_Unauthorized_Access', $this->siteLangId), true);
         }
 
         $obj->assignValues(array(BlogComment::tblFld('deleted') => 1));
@@ -217,7 +217,7 @@ class BlogCommentsController extends AdminBaseController
             return false;
         }
         $emailObj = new EmailHandler();
-        $emailObj->sendBlogCommentStatusChangeEmail($this->adminLangId, $data);
+        $emailObj->sendBlogCommentStatusChangeEmail($this->siteLangId, $data);
     }
 
     private function getForm($recordId = 0)
@@ -226,8 +226,8 @@ class BlogCommentsController extends AdminBaseController
 
         $frm = new Form('frmBlogComment', array('id' => 'frmBlogComment'));
         $frm->addHiddenField('', 'bpcomment_id', $recordId);
-        $statusArr = BlogComment::getBlogCommentStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Comment_Status', $this->adminLangId), 'bpcomment_approved', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
+        $statusArr = BlogComment::getBlogCommentStatusArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Comment_Status', $this->siteLangId), 'bpcomment_approved', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
         return $frm;
     }
 
@@ -239,11 +239,11 @@ class BlogCommentsController extends AdminBaseController
             $this->addSortingElements($frm);
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $statusArr = BlogComment::getBlogCommentStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Comment_Status', $this->adminLangId), 'bpcomment_approved', $statusArr, '', array(), Labels::getLabel('LBL_SELECT_COMMENT_STATUS', $this->adminLangId));
+        $statusArr = BlogComment::getBlogCommentStatusArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Comment_Status', $this->siteLangId), 'bpcomment_approved', $statusArr, '', array(), Labels::getLabel('LBL_SELECT_COMMENT_STATUS', $this->siteLangId));
         
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -252,22 +252,22 @@ class BlogCommentsController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $blogCommentsTblHeadingCols = CacheHelper::get('blogCommentsTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $blogCommentsTblHeadingCols = CacheHelper::get('blogCommentsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($blogCommentsTblHeadingCols) {
             return json_decode($blogCommentsTblHeadingCols);
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->adminLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'bpcomment_author_name' => Labels::getLabel('LBL_AUTHOR_NAME', $this->adminLangId),
-            'bpcomment_author_email' => Labels::getLabel('LBL_AUTHOR_EMAIL', $this->adminLangId),
-            'bpcomment_approved' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
-            'post_title' => Labels::getLabel('LBL_POST_TITLE', $this->adminLangId),
-            'bpcomment_added_on' => Labels::getLabel('LBL_POSTED_ON', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'bpcomment_author_name' => Labels::getLabel('LBL_AUTHOR_NAME', $this->siteLangId),
+            'bpcomment_author_email' => Labels::getLabel('LBL_AUTHOR_EMAIL', $this->siteLangId),
+            'bpcomment_approved' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'post_title' => Labels::getLabel('LBL_POST_TITLE', $this->siteLangId),
+            'bpcomment_added_on' => Labels::getLabel('LBL_POSTED_ON', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('blogCommentsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('blogCommentsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 

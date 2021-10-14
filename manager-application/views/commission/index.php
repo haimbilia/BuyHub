@@ -1,5 +1,5 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
-$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_COMMISSION', $adminLangId);
+$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_COMMISSION', $siteLangId);
 
 /* No sorting functionality required if no record found. */
 if (2 > count($arrListing)) {
@@ -40,8 +40,8 @@ $controller = str_replace('Controller', '', FatApp::getController());
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
-                        'adminLangId' => $adminLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_COMMISSION_SETTINGS', $adminLangId),
+                        'siteLangId' => $siteLangId,
+                        'cardHeadTitle' => Labels::getLabel('LBL_COMMISSION_SETTINGS', $siteLangId),
                         'newRecordBtn' => true,
                         'deleteButton' => true
                     ];

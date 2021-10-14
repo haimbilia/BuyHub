@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_LABELS', $adminLangId);
+$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_LABELS', $siteLangId);
 
 /* No sorting functionality required if no record found. */
 if (2 > count($arrListing)) {
@@ -34,14 +34,14 @@ $controller = str_replace('Controller', '', FatApp::getController());
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
-                        'adminLangId' => $adminLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_LABELS', $adminLangId),
+                        'siteLangId' => $siteLangId,
+                        'cardHeadTitle' => Labels::getLabel('LBL_LABELS', $siteLangId),
                         'otherButtons' => [
                             [
                                 'attr' => [
                                     'href' => 'javascript:void(0)',
                                     'onclick' => 'updateFile()',
-                                    'title' => Labels::getLabel('LBL_UPDATE_WEB_LABEL_FILE', $adminLangId)
+                                    'title' => Labels::getLabel('LBL_UPDATE_WEB_LABEL_FILE', $siteLangId)
                                 ],
                                 'label' => '<i class="fas fa-laptop-code"></i>'
                             ],
@@ -49,7 +49,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                 'attr' => [
                                     'href' => 'javascript:void(0)',
                                     'onclick' => "updateFile(" . Labels::TYPE_APP . ")",
-                                    'title' => Labels::getLabel('LBL_UPDATE_APP_LABEL_FILE', $adminLangId)
+                                    'title' => Labels::getLabel('LBL_UPDATE_APP_LABEL_FILE', $siteLangId)
                                 ],
                                 'label' => '<i class="fas fa-mobile-alt"></i>'
                             ],

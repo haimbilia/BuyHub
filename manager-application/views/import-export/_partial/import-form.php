@@ -14,7 +14,7 @@ require_once(CONF_THEME_PATH . 'import-export/_partial/import-form-head.php'); ?
             <div class="col-auto">
                 <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
                     <?php
-                    echo Labels::getLabel('LBL_IMPORT', $adminLangId);
+                    echo Labels::getLabel('LBL_IMPORT', $siteLangId);
                     ?>
                 </button>
             </div>

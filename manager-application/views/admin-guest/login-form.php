@@ -29,18 +29,18 @@ $submitBtn->addFieldTagAttribute('class', 'btn btn-brand btn-lg btn-block');
                         <div class="logo">
                             <a href="<?php echo UrlHelper::generateUrl(); ?>">
                                 <?php
-                                $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $adminLangId, false);
-                                $aspectRatioArr = AttachedFile::getRatioTypeArray($adminLangId);
+                                $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $siteLangId, false);
+                                $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
                                 $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                                 ?>
-                                <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $adminLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($adminLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $adminLangId); ?>">
+                                <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
                             </a>
                         </div>
 
                     </div>
                     <div class="card-body">
                         <div class="title">
-                            <h2><?php echo Labels::getlabel('LBL_SIGN_IN', $adminLangId); ?></h2>
+                            <h2><?php echo Labels::getlabel('LBL_SIGN_IN', $siteLangId); ?></h2>
                         </div>
                         <?php echo $frm->getFormTag(); ?>
                         <div class="form-group">
@@ -60,7 +60,7 @@ $submitBtn->addFieldTagAttribute('class', 'btn btn-brand btn-lg btn-block');
                                     $remeberfld = str_replace("</label>", "", $remeberfld);
                                     echo $remeberfld;
                                     ?>
-                                    <span></span><?php echo Labels::getlabel('LBL_Remember_me', $adminLangId); ?> 
+                                    <span></span><?php echo Labels::getlabel('LBL_Remember_me', $siteLangId); ?> 
                                 </label>
                             </div>
 
@@ -75,7 +75,7 @@ $submitBtn->addFieldTagAttribute('class', 'btn btn-brand btn-lg btn-block');
                     </div>
                     <div class="card-foot">
                         <ul class="other-links">
-                            <li><a href="<?php echo UrlHelper::generateUrl('adminGuest', 'forgotPasswordForm'); ?>" class="link"><?php echo Labels::getLabel('LBL_Forgot_Password?', $adminLangId); ?></a></li>
+                            <li><a href="<?php echo UrlHelper::generateUrl('adminGuest', 'forgotPasswordForm'); ?>" class="link"><?php echo Labels::getLabel('LBL_Forgot_Password?', $siteLangId); ?></a></li>
 
                         </ul>
                     </div>

@@ -138,18 +138,18 @@ class ToolTipsController extends AdminBaseController
         $this->objPrivilege->canEditTooltip();
         $tooltipId = FatUtility::int($tooltipId);
 
-        $actionValue = Labels::getLabel('LBL_Add_New', $this->adminLangId);
+        $actionValue = Labels::getLabel('LBL_Add_New', $this->siteLangId);
         
         if ($tooltipId > 0) {
-            $actionValue = Labels::getLabel('LBL_Update', $this->adminLangId);
+            $actionValue = Labels::getLabel('LBL_Update', $this->siteLangId);
         }
             
         $frm = new Form('frmTooltip', array('id' => 'frmTooltip'));
         $frm->addHiddenField('', 'tooltip_id', 0);
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Tooltip_Key', $this->adminLangId), 'tooltip_key');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Tooltip_Key', $this->siteLangId), 'tooltip_key');
         $fld->requirements()->setRequired();
         
-        $fld1 = $frm->addTextarea(Labels::getLabel('LBL_Tooltip_Default_Value', $this->adminLangId), 'tooltip_default_value');
+        $fld1 = $frm->addTextarea(Labels::getLabel('LBL_Tooltip_Default_Value', $this->siteLangId), 'tooltip_default_value');
                 
         $fld1->requirements()->setRequired();
                     
@@ -201,7 +201,7 @@ class ToolTipsController extends AdminBaseController
         }
         
 
-        $this->set('msg', Labels::getLabel('MSG_Tooltip_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Tooltip_Setup_Successful', $this->siteLangId));
         $this->set('tooltipId', $tooltipId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -211,22 +211,22 @@ class ToolTipsController extends AdminBaseController
     {
         $frm = new Form('frmTooltipLang', array('id' => 'frmTooltipLang'));
         $frm->addHiddenField('', 'tooltip_id', $tooltipId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
         
         if ($default_val) {
-            $frm->addTextBox(Labels::getLabel('LBL_Tooltip_Default', $this->adminLangId), 'tooltip_default_value_new', $default_val);
+            $frm->addTextBox(Labels::getLabel('LBL_Tooltip_Default', $this->siteLangId), 'tooltip_default_value_new', $default_val);
         }
 
-        $fld = $frm->addTextarea(Labels::getLabel('LBL_Tooltip_Text', $this->adminLangId), 'tooltip_text');
+        $fld = $frm->addTextarea(Labels::getLabel('LBL_Tooltip_Text', $this->siteLangId), 'tooltip_text');
         
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
 
@@ -277,7 +277,7 @@ class ToolTipsController extends AdminBaseController
             }
         }
         
-        $this->set('msg', Labels::getLabel('MSG_Tooltip_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Tooltip_Setup_Successful', $this->siteLangId));
         $this->set('tooltipId', $tooltip_id);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -286,9 +286,9 @@ class ToolTipsController extends AdminBaseController
     public function getSearchForm()
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('class' => 'search-input'));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

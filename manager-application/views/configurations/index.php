@@ -15,7 +15,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back"></use>
                                     </svg>
                                 </a>
-                                <?php echo Labels::getLabel('LBL_CONFIGURATION_SETTINGS', $adminLangId); ?>
+                                <?php echo Labels::getLabel('LBL_CONFIGURATION_SETTINGS', $siteLangId); ?>
                             </h3>
                         </div>
                     </div>
@@ -26,7 +26,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                         $tabsId = 'tabJs-' . $formType;
                                         $onclick = 'return false';
                                         if ($formType == Configurations::FORM_MEDIA || $formType == Configurations::FORM_SHARING) { 
-                                            $onclick = "getLangForm(" . $formType . ", " . $adminLangId . ")";
+                                            $onclick = "getLangForm(" . $formType . ", " . $siteLangId . ")";
                                         } elseif ($formType == Configurations::FORM_IMPORT_EXPORT) { 
                                             $onclick = "generalInstructions(" . $formType . ")";
                                         } else { 

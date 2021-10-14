@@ -33,7 +33,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 $data = [
-                    'adminLangId' => $adminLangId,
+                    'siteLangId' => $siteLangId,
                     'recordId' => $row['afcommsetting_id']
                 ];
 
@@ -49,7 +49,7 @@ foreach ($arrListing as $sn => $row) {
                             'attr' => [
                                 'href' => 'javascript:void(0)',
                                 'onclick' => "viewLog(" . $row['afcommsetting_id'] . ")",
-                                'title' => Labels::getLabel('LBL_VIEW_LOG', $adminLangId)
+                                'title' => Labels::getLabel('LBL_VIEW_LOG', $siteLangId)
                             ],
                             'label' => '<svg class="svg" width="18" height="18">
                                             <use
@@ -76,7 +76,7 @@ if (count($arrListing) == 0) {
         array(
             'colspan' => count($fields)
         ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId)
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );
 }
 

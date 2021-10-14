@@ -32,7 +32,7 @@ class CatalogReportController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_DESC;
         }
 
@@ -62,9 +62,9 @@ class CatalogReportController extends AdminBaseController
         /* ] */
 
         $selectedFlds = ['p.product_id', 'IFNULL(tp_l.product_name,p.product_identifier) as product_name', 'p.product_type', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'IFNULL(c_l.prodcat_name,c.prodcat_identifier) as prodcat_name', 'opq.*'];
-        $srch = new ProductSearch($this->adminLangId, '', '', false, false, false);
-        $srch->joinBrands($this->adminLangId, false, true);
-        $srch->joinProductToCategory($this->adminLangId);
+        $srch = new ProductSearch($this->siteLangId, '', '', false, false, false);
+        $srch->joinBrands($this->siteLangId, false, true);
+        $srch->joinProductToCategory($this->siteLangId);
         $srch->joinTable('(' . $opSrch->getQuery() . ')', 'INNER JOIN', 'p.product_id = opq.product_id', 'opq');
         $srch->addMultipleFields($selectedFlds);
         $srch->addGroupBy('p.product_id');
@@ -74,7 +74,7 @@ class CatalogReportController extends AdminBaseController
             $srch->addCondition('product_name', 'LIKE', '%' . $keyword . '%');
         }
 
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -84,7 +84,7 @@ class CatalogReportController extends AdminBaseController
                 break;
         }
 
-        $productTypeArr = Product::getProductTypes($this->adminLangId);
+        $productTypeArr = Product::getProductTypes($this->siteLangId);
 
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
@@ -135,7 +135,7 @@ class CatalogReportController extends AdminBaseController
                 array_push($sheetData, $arr);
             }
 
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Catalog_Report', $this->adminLangId) . ' ' . date("d-M-Y") . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Catalog_Report', $this->siteLangId) . ' ' . date("d-M-Y") . '.csv', ',');
 
             exit;
         }
@@ -173,54 +173,54 @@ class CatalogReportController extends AdminBaseController
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
         }
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
 
     private function getFormColumns()
     {
-        $catalogReportCacheVar = FatCache::get('catalogReportCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $catalogReportCacheVar = FatCache::get('catalogReportCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$catalogReportCacheVar) {
             $arr = [
-                'product_name'    =>    Labels::getLabel('LBL_Product', $this->adminLangId),
-                'product_type'    =>    Labels::getLabel('LBL_Product_Type', $this->adminLangId),
-                'prodcat_name'    =>    Labels::getLabel('LBL_Category', $this->adminLangId),
-                'totOrders' => Labels::getLabel('LBL_No._of_Orders', $this->adminLangId),
-                'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $this->adminLangId),
-                'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $this->adminLangId),
-                'netSoldQty' => Labels::getLabel('LBL_Sold_Qty', $this->adminLangId),
-                'grossSales' => Labels::getLabel('LBL_Gross_Sale', $this->adminLangId),
-                'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->adminLangId),
-                'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $this->adminLangId),
+                'product_name'    =>    Labels::getLabel('LBL_Product', $this->siteLangId),
+                'product_type'    =>    Labels::getLabel('LBL_Product_Type', $this->siteLangId),
+                'prodcat_name'    =>    Labels::getLabel('LBL_Category', $this->siteLangId),
+                'totOrders' => Labels::getLabel('LBL_No._of_Orders', $this->siteLangId),
+                'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $this->siteLangId),
+                'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $this->siteLangId),
+                'netSoldQty' => Labels::getLabel('LBL_Sold_Qty', $this->siteLangId),
+                'grossSales' => Labels::getLabel('LBL_Gross_Sale', $this->siteLangId),
+                'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->siteLangId),
+                'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $this->siteLangId),
 
-                'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->adminLangId),
-                'sellerTaxTotal' => Labels::getLabel('LBL_Tax_Charged_By_Seller', $this->adminLangId),
-                'adminTaxTotal' => Labels::getLabel('LBL_Tax_Charged_by_Admin', $this->adminLangId),
+                'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->siteLangId),
+                'sellerTaxTotal' => Labels::getLabel('LBL_Tax_Charged_By_Seller', $this->siteLangId),
+                'adminTaxTotal' => Labels::getLabel('LBL_Tax_Charged_by_Admin', $this->siteLangId),
 
-                'shippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->adminLangId),
-                'sellerShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_By_Seller', $this->adminLangId),
-                'adminShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_by_Admin', $this->adminLangId),
+                'shippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->siteLangId),
+                'sellerShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_By_Seller', $this->siteLangId),
+                'adminShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_by_Admin', $this->siteLangId),
 
-                'couponDiscount' => Labels::getLabel('LBL_Coupon_Discount', $this->adminLangId),
-                'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $this->adminLangId),
-                'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $this->adminLangId),
+                'couponDiscount' => Labels::getLabel('LBL_Coupon_Discount', $this->siteLangId),
+                'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $this->siteLangId),
+                'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $this->siteLangId),
 
-                'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->adminLangId),
-                'refundedShipping' => Labels::getLabel('LBL_Refunded_Shipping', $this->adminLangId),
-                'refundedTax' => Labels::getLabel('LBL_Refunded_Tax', $this->adminLangId),
+                'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->siteLangId),
+                'refundedShipping' => Labels::getLabel('LBL_Refunded_Shipping', $this->siteLangId),
+                'refundedTax' => Labels::getLabel('LBL_Refunded_Tax', $this->siteLangId),
 
-                'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->adminLangId),
+                'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->siteLangId),
 
-                'commissionCharged' => Labels::getLabel('LBL_Commision_Charged', $this->adminLangId),
-                'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $this->adminLangId),
-                'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $this->adminLangId)
+                'commissionCharged' => Labels::getLabel('LBL_Commision_Charged', $this->siteLangId),
+                'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $this->siteLangId),
+                'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $this->siteLangId)
             ];
-            FatCache::set('catalogReportCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            FatCache::set('catalogReportCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {
             $arr =  unserialize($catalogReportCacheVar);
         }

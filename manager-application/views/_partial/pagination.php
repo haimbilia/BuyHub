@@ -67,13 +67,13 @@ $pagination .=     FatUtility::getPageString(
             <div class="data-length-info"></div>
             <?php if (1 < $pageCount) {               
                 $startIdx = (($pageNumber - 1) * $pageSize) + 1;
-                $str = Labels::getLabel('LBL_SHOWING', $adminLangId) . ' ';
+                $str = Labels::getLabel('LBL_SHOWING', $siteLangId) . ' ';
                 $str .= $startIdx;
-                $str .= ' ' . Labels::getLabel('LBL_TO', $adminLangId) . ' ';
+                $str .= ' ' . Labels::getLabel('LBL_TO', $siteLangId) . ' ';
                 $str .= ($recordCount < $startIdx + $pageSize - 1) ? $recordCount : $startIdx + $pageSize - 1;
-                $str .= ' ' . Labels::getLabel('LBL_OF', $adminLangId);
+                $str .= ' ' . Labels::getLabel('LBL_OF', $siteLangId);
                 $str .= ' ' . $recordCount;
-                $str .= ' ' . Labels::getLabel('LBL_RECORDS', $adminLangId);
+                $str .= ' ' . Labels::getLabel('LBL_RECORDS', $siteLangId);
                 echo $str;
             } ?>
         </div>

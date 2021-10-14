@@ -36,7 +36,7 @@ class BannersController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         // $post = $searchForm->getFormDataFromArray($data);
 
-        $srch = BannerLocation::getSearchObject($this->adminLangId, false);
+        $srch = BannerLocation::getSearchObject($this->siteLangId, false);
         $srch->addMultipleFields(array('blocation_banner_count', 'blocation_collection_id', 'blocation_banner_width', 'blocation_banner_height', 'blocation_id', 'blocation_promotion_cost', 'blocation_active', "IFNULL(blocation_name,blocation_identifier) as blocation_name"));
 
         $srch->addOrder(Banner::DB_TBL_LOCATIONS_PREFIX . 'active', 'DESC');
@@ -56,7 +56,7 @@ class BannersController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -76,7 +76,7 @@ class BannersController extends AdminBaseController
             FatUtility::dieWithError($this->str_invalid_request);
         }
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $frm->fill($data);
         $this->set('languages', Language::getAllNames());
         $this->set('frm', $frm);
@@ -109,7 +109,7 @@ class BannersController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->siteLangId));
         $this->set('bLocationId', $bLocationId);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -151,9 +151,9 @@ class BannersController extends AdminBaseController
             FatUtility::dieWithError($this->str_invalid_request);
         }
 
-        $srch = new BannerSearch($this->adminLangId, false);
+        $srch = new BannerSearch($this->siteLangId, false);
         $srch->joinLocations();
-        $srch->joinPromotions($this->adminLangId, true);
+        $srch->joinPromotions($this->siteLangId, true);
         $srch->addPromotionTypeCondition();
         $srch->addMultipleFields(array('IFNULL(promotion_name,promotion_identifier) as promotion_name', 'banner_id', 'banner_type', 'banner_url', 'banner_target', 'banner_active', 'banner_blocation_id', 'banner_title', 'banner_updated_on'));
         $srch->addCondition('b.banner_blocation_id', '=', $blocation_id);
@@ -175,9 +175,9 @@ class BannersController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->set('bannerTypeArr', Banner::getBannerTypesArr($this->adminLangId));
-        $this->set('linkTargetsArr', applicationConstants::getLinkTargetsArr($this->adminLangId));
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
+        $this->set('bannerTypeArr', Banner::getBannerTypesArr($this->siteLangId));
+        $this->set('linkTargetsArr', applicationConstants::getLinkTargetsArr($this->siteLangId));
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -193,7 +193,7 @@ class BannersController extends AdminBaseController
 
         $banner_id = FatUtility::int($banner_id);
         if ($banner_id > 0) {
-            $srch = Banner::getSearchObject($this->adminLangId, false);
+            $srch = Banner::getSearchObject($this->siteLangId, false);
             $srch->addCondition('banner_blocation_id', '=', $blocation_id);
             $srch->addCondition('banner_id', '=', $banner_id);
             $srch->doNotCalculateRecords();
@@ -256,7 +256,7 @@ class BannersController extends AdminBaseController
         if ($newTabLangId == 0 && !$this->isMediaUploaded($banner_id)) {
             $this->set('openMediaForm', true);
         }
-        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->siteLangId));
         $this->set('banner_id', $banner_id);
         $this->set('langId', $newTabLangId);
         $this->set('blocation_id', $post['banner_blocation_id']);
@@ -399,7 +399,7 @@ class BannersController extends AdminBaseController
         if ($newTabLangId == 0 && !$this->isMediaUploaded($banner_id)) {
             $this->set('openMediaForm', true);
         }
-        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->siteLangId));
         $this->set('blocationId', $blocation_id);
         $this->set('bannerId', $banner_id);
         $this->set('langId', $newTabLangId);
@@ -454,7 +454,7 @@ class BannersController extends AdminBaseController
             }
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->siteLangId));
         $this->set('blocationId', $blocation_id);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -471,7 +471,7 @@ class BannersController extends AdminBaseController
 
         $bannerDetail = Banner::getAttributesById($banner_id);
         if (!false == $bannerDetail && ($bannerDetail['banner_active'] != applicationConstants::ACTIVE)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request_Or_Inactive_Record', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request_Or_Inactive_Record', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -508,7 +508,7 @@ class BannersController extends AdminBaseController
 
         $bannerDetail = Banner::getAttributesById($banner_id);
         if (!false == $bannerDetail && ($bannerDetail['banner_active'] != applicationConstants::ACTIVE)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request_Or_Inactive_Record', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request_Or_Inactive_Record', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -536,7 +536,7 @@ class BannersController extends AdminBaseController
 
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
         }
         $blocation_id = FatUtility::int($post['blocation_id']);
         $lang_id = FatUtility::int($post['lang_id']);
@@ -560,7 +560,7 @@ class BannersController extends AdminBaseController
         } */
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Please_Select_A_File', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId));
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -588,7 +588,7 @@ class BannersController extends AdminBaseController
         $this->set('file', $fileName);
         $ext = pathinfo($fileName, PATHINFO_EXTENSION);
         $fileName = strlen($fileName) > 10 ? substr($fileName, 0, 10) . '.' . $ext : $fileName;
-        $this->set('msg', $fileName . ' ' . Labels::getLabel('MSG_File_uploaded_successfully', $this->adminLangId));
+        $this->set('msg', $fileName . ' ' . Labels::getLabel('MSG_File_uploaded_successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -607,7 +607,7 @@ class BannersController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Deleted_successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Deleted_successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -670,19 +670,19 @@ class BannersController extends AdminBaseController
         $this->objPrivilege->canViewBanners();
         $frm = new Form('frmBannerLocation');
         $frm->addHiddenField('', 'blocation_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_Banner_Location_Identifier', $this->adminLangId), 'blocation_identifier');
+        $frm->addRequiredField(Labels::getLabel('LBL_Banner_Location_Identifier', $this->siteLangId), 'blocation_identifier');
         /* $frm->addFloatField('Preferred Width (in pixels)', 'blocation_banner_width')->requirements()->setRequired(true);
         $frm->addFloatField('Preferred Height (in pixels)', 'blocation_banner_height')->requirements()->setRequired(true); */
 
-        $frm->addTextBox(Labels::getLabel('LBL_Promotion_Cost', $this->adminLangId), 'blocation_promotion_cost');
+        $frm->addTextBox(Labels::getLabel('LBL_Promotion_Cost', $this->siteLangId), 'blocation_promotion_cost');
         /* $languages = Language::getAllNames();
         foreach($languages as $langId => $langName){
         $frm->addTextBox(Labels::getLabel('LBL_Location_Name',$langId).'('.$langName.')', 'blocation_name_'.$langId);
         } */
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'blocation_active', $activeInactiveArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'blocation_active', $activeInactiveArr, '', array(), '');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -692,7 +692,7 @@ class BannersController extends AdminBaseController
         $frm = new Form('frmListingSearch');
         $frm->addTextBox('', 'keyword');
         $frm->addTextBox('', 'blocation_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
         return $frm;
     }
 
@@ -705,14 +705,14 @@ class BannersController extends AdminBaseController
         $frm->addHiddenField('', 'banner_id');
         $frm->addHiddenField('', 'banner_type');
 
-        $frm->addTextBox(Labels::getLabel('LBL_Url', $this->adminLangId), 'banner_url')->requirements()->setRequired(true);
+        $frm->addTextBox(Labels::getLabel('LBL_Url', $this->siteLangId), 'banner_url')->requirements()->setRequired(true);
 
-        $linkTargetsArr = applicationConstants::getLinkTargetsArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Open_In', $this->adminLangId), 'banner_target', $linkTargetsArr, '', array(), '');
+        $linkTargetsArr = applicationConstants::getLinkTargetsArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Open_In', $this->siteLangId), 'banner_target', $linkTargetsArr, '', array(), '');
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'banner_active', $activeInactiveArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'banner_active', $activeInactiveArr, '', array(), '');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -722,16 +722,16 @@ class BannersController extends AdminBaseController
         $frm = new Form('frmBannerLang');
         $frm->addHiddenField('', 'banner_id', $banner_id);
         $frm->addHiddenField('', 'blocation_id', $blocation_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Banner_Title', $this->adminLangId), 'banner_title');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Banner_Title', $this->siteLangId), 'banner_title');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
 
@@ -741,16 +741,16 @@ class BannersController extends AdminBaseController
         $frm = new Form('frmBannerLocLang');
 
         $frm->addHiddenField('', 'blocation_id', $blocation_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Banner_Location_Title', $this->adminLangId), 'blocation_name');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Banner_Location_Title', $this->siteLangId), 'blocation_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
 
@@ -785,7 +785,7 @@ class BannersController extends AdminBaseController
         $blocationIdsArr = FatUtility::int(FatApp::getPostedData('blocation_ids'));
         if (empty($blocationIdsArr) || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -805,7 +805,7 @@ class BannersController extends AdminBaseController
         $blocationId = FatUtility::int($blocationId);
         if (1 > $blocationId || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -849,13 +849,13 @@ class BannersController extends AdminBaseController
         $frm->addHiddenField('', 'banner_id', $banner_id);
         $frm->addHiddenField('', 'blocation_id', $blocation_id);
         $bannerTypeArr = $this->bannerTypeArr();
-        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $bannerTypeArr, '', array(), '');
-        $screenArr = applicationConstants::getDisplaysArr($this->adminLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
+        $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
         $displayFor = ($blocation_id == BannerLocation::HOME_PAGE_MOBILE_BANNER) ? applicationConstants::SCREEN_MOBILE : '';
-        $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->adminLangId), 'banner_screen', $screenArr, $displayFor, array(), '');
+        $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->siteLangId), 'banner_screen', $screenArr, $displayFor, array(), '');
         $frm->addHiddenField('', 'banner_min_width');
         $frm->addHiddenField('', 'banner_min_height');
-        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->adminLangId), 'banner_image', array('accept' => 'image/*', 'data-frm' => 'frmBannerMedia'));
+        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->siteLangId), 'banner_image', array('accept' => 'image/*', 'data-frm' => 'frmBannerMedia'));
         return $frm;
     }
 
@@ -866,7 +866,7 @@ class BannersController extends AdminBaseController
 
     private function getDisplayScreenName()
     {
-        $screenTypesArr = applicationConstants::getDisplaysArr($this->adminLangId);
+        $screenTypesArr = applicationConstants::getDisplaysArr($this->siteLangId);
         return array(0 => '') + $screenTypesArr;
     }
 

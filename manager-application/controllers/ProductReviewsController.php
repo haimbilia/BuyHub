@@ -50,12 +50,12 @@ class ProductReviewsController extends AdminBaseController
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
 
-        $srch = new SelProdReviewSearch($this->adminLangId);
+        $srch = new SelProdReviewSearch($this->siteLangId);
         $srch->joinUser();
         $srch->joinSeller();
-        $srch->joinShops($this->adminLangId);
+        $srch->joinShops($this->siteLangId);
         $srch->joinProducts();
-        $srch->joinSellerProducts($this->adminLangId);
+        $srch->joinSellerProducts($this->siteLangId);
         $srch->joinSelProdRatingByType(RatingType::RATING_PRODUCT);
         $srch->addMultipleFields(array('IFNULL(product_name,product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'selprod_id', 'usc.credential_username as seller_username', 'uc.credential_username as reviewed_by', 'uc.credential_user_id', 'spreview_id', 'spreview_posted_on', 'spreview_status', 'sprating_rating', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name'));
         $srch->addOrder('spreview_posted_on', 'DESC');
@@ -104,7 +104,7 @@ class ProductReviewsController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->set('reviewStatus', SelProdReview::getReviewStatusArr($this->adminLangId));
+        $this->set('reviewStatus', SelProdReview::getReviewStatusArr($this->siteLangId));
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
         $this->_template->render(false, false);
     }
@@ -116,7 +116,7 @@ class ProductReviewsController extends AdminBaseController
             FatUtility::dieWithError($this->str_invalid_request);
         }
 
-        $srch = new SelProdReviewSearch($this->adminLangId);
+        $srch = new SelProdReviewSearch($this->siteLangId);
         $srch->joinUser();
         $srch->joinProducts();
         //$srch->joinSelProdRatingByType(RatingType::RATING_PRODUCT);
@@ -146,7 +146,7 @@ class ProductReviewsController extends AdminBaseController
         $ratingSrch->joinTable(
             RatingType::DB_TBL_LANG,
             'LEFT OUTER JOIN',
-            'rt_l.ratingtypelang_ratingtype_id = rt.ratingtype_id AND rt_l.ratingtypelang_lang_id = ' . $this->adminLangId,
+            'rt_l.ratingtypelang_ratingtype_id = rt.ratingtype_id AND rt_l.ratingtypelang_lang_id = ' . $this->siteLangId,
             'rt_l'
         );
         $ratingSrch->addCondition('sprating_spreview_id', '=', $spreview_id);
@@ -209,15 +209,15 @@ class ProductReviewsController extends AdminBaseController
         $frm->addHiddenField('', 'reviewed_for_id');
         $frm->addHiddenField('', 'seller_id', 0);
         $frm->addHiddenField('', 'spreview_id', 0);
-        $frm->addTextBox(Labels::getLabel('LBL_Product', $this->adminLangId), 'product');
-        $frm->addTextBox(Labels::getLabel('LBL_Review_For', $this->adminLangId), 'reviewed_for');
-        $statusArr = SelProdReview::getReviewStatusArr($this->adminLangId);
+        $frm->addTextBox(Labels::getLabel('LBL_Product', $this->siteLangId), 'product');
+        $frm->addTextBox(Labels::getLabel('LBL_Review_For', $this->siteLangId), 'reviewed_for');
+        $statusArr = SelProdReview::getReviewStatusArr($this->siteLangId);
         unset($statusArr[SelProdReview::STATUS_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'spreview_status', array( -1 => 'Does not Matter' ) + $statusArr, '', array(), '');
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender' ));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'spreview_status', array( -1 => 'Does not Matter' ) + $statusArr, '', array(), '');
+        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender' ));
+        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -226,11 +226,11 @@ class ProductReviewsController extends AdminBaseController
     {
         $frm = new Form('reviewRequestForm');
 
-        $statusArr = SelProdReview::getReviewStatusArr($this->adminLangId);
+        $statusArr = SelProdReview::getReviewStatusArr($this->siteLangId);
         //unset($statusArr[SelProdReview::STATUS_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'spreview_status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'spreview_status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
         $frm->addHiddenField('', 'spreview_id', 0);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
 }

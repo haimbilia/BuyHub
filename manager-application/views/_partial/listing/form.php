@@ -17,9 +17,9 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
                 <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
                     <?php
                     if (0 < $recordId) {
-                        echo Labels::getLabel('LBL_UPDATE', $adminLangId);
+                        echo Labels::getLabel('LBL_UPDATE', $siteLangId);
                     } else {
-                        echo Labels::getLabel('LBL_SAVE', $adminLangId);
+                        echo Labels::getLabel('LBL_SAVE', $siteLangId);
                     }
                     ?>
                 </button>

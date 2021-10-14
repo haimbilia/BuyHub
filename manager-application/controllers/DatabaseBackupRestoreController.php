@@ -5,7 +5,7 @@ class DatabaseBackupRestoreController extends AdminBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->adminLangId = CommonHelper::getLangId();
+        $this->siteLangId = CommonHelper::getLangId();
     }
     public function index()
     {
@@ -19,7 +19,7 @@ class DatabaseBackupRestoreController extends AdminBaseController
             $this->objPrivilege->canEditDatabaseBackupView();
             $settingsObj = new Settings();
             $settingsObj->backupDatabase(trim($post["name"]));
-            Message::addMessage(Labels::getLabel('LBL_Database_backup_on_Server_created_Successfully', $this->adminLangId));
+            Message::addMessage(Labels::getLabel('LBL_Database_backup_on_Server_created_Successfully', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('DatabaseBackupRestore'));
         }
 
@@ -27,14 +27,14 @@ class DatabaseBackupRestoreController extends AdminBaseController
             $this->objPrivilege->canEditDatabaseBackupView();
             $ext = strrchr($_FILES['file']['name'], '.');
             if (strtolower($ext) != '.sql') {
-                Message::addErrorMessage(Labels::getLabel('LBL_File_type_unsupporte._Please_upload_Sql_file', $this->adminLangId));
+                Message::addErrorMessage(Labels::getLabel('LBL_File_type_unsupporte._Please_upload_Sql_file', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('DatabaseBackupRestore'));
             }
             if (!self::saveFile($_FILES['file']['tmp_name'], $_FILES['file']['name'], CONF_DB_BACKUP_DIRECTORY . '/')) {
-                Message::addErrorMessage(Labels::getLabel('LBL_File_could_not_be_saved', $this->adminLangId));
+                Message::addErrorMessage(Labels::getLabel('LBL_File_could_not_be_saved', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('DatabaseBackupRestore'));
             }
-            Message::addMessage(Labels::getLabel('LBL_Database_Uploaded_Successfully', $this->adminLangId));
+            Message::addMessage(Labels::getLabel('LBL_Database_Uploaded_Successfully', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('DatabaseBackupRestore'));
         }
 
@@ -59,7 +59,7 @@ class DatabaseBackupRestoreController extends AdminBaseController
         if (isset($file) and trim($file) != "") {
             $settingsObj = new Settings();
             if (!$settingsObj->download_file($file)) {
-                Message::addErrorMessage(Labels::getLabel('LBL_The_file_is_not_available_for_download.', $this->adminLangId));
+                Message::addErrorMessage(Labels::getLabel('LBL_The_file_is_not_available_for_download.', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('DatabaseBackupRestore'));
             }
         }
@@ -73,9 +73,9 @@ class DatabaseBackupRestoreController extends AdminBaseController
         if (isset($file) and trim($file) != "") {
             $settingsObj = new Settings();
             $settingsObj->restoreDatabase($file);
-            Message::addMessage(Labels::getLabel('LBL_Database_restored_successfully', $this->adminLangId));
+            Message::addMessage(Labels::getLabel('LBL_Database_restored_successfully', $this->siteLangId));
         }
-        $this->set('msg', Labels::getLabel('LBL_Database_restored_successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Database_restored_successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -87,26 +87,26 @@ class DatabaseBackupRestoreController extends AdminBaseController
         if (isset($file) and trim($file) != "") {
             unlink(CONF_DB_BACKUP_DIRECTORY_FULL_PATH . $file);
         }
-        $this->set('msg', Labels::getLabel('LBL_Database_deleted_successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Database_deleted_successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
     protected function getBackupForm()
     {
         $frm = new Form('frmdatabaseBackup', array('id' => 'frmdatabaseBackup'));
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_File_Name', $this->adminLangId), 'name');
-        $fld = $frm->addSubmitButton('', 'submit_backup', Labels::getLabel('LBL_Backup_on_Server', $this->adminLangId));
+        $fld = $frm->addRequiredField(Labels::getLabel('LBL_File_Name', $this->siteLangId), 'name');
+        $fld = $frm->addSubmitButton('', 'submit_backup', Labels::getLabel('LBL_Backup_on_Server', $this->siteLangId));
         return $frm;
     }
 
     protected function getUploadForm()
     {
         $frm = new Form('frmdatabaseUpload', array('id' => 'frmdatabaseUpload'));
-        $fld = $frm->addFileUpload(Labels::getLabel('LBL_DB_upload', $this->adminLangId), 'file', array('autocomplete' => 'off'));
+        $fld = $frm->addFileUpload(Labels::getLabel('LBL_DB_upload', $this->siteLangId), 'file', array('autocomplete' => 'off'));
         $fld->html_before_field = '<div class="filefield"><span class="filename"></span>';
-        $fld->html_after_field = '<label class="filelabel">' . Labels::getLabel('LBL_Download_File', $this->adminLangId) . '</label></div>';
+        $fld->html_after_field = '<label class="filelabel">' . Labels::getLabel('LBL_Download_File', $this->siteLangId) . '</label></div>';
         $fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'submit_upload', Labels::getLabel('LBL_Upload_on_server', $this->adminLangId));
+        $frm->addSubmitButton('', 'submit_upload', Labels::getLabel('LBL_Upload_on_server', $this->siteLangId));
         return $frm;
     }
 

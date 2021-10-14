@@ -28,7 +28,7 @@ class PluginsController extends AdminBaseController
         $this->set('frmSearch', $frmSearch);
         $this->set('activeTab', Plugin::TYPE_CURRENCY_CONVERTER);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_PLUGINS', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_PLUGINS', $this->siteLangId));
         $this->set('includeEditor', true);
         $this->getListingData();
 
@@ -55,7 +55,7 @@ class PluginsController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -65,12 +65,12 @@ class PluginsController extends AdminBaseController
             'conf.*',
             'plugin_id as listSerial'
         );
-        $srch = Plugin::getSearchObject($this->adminLangId, false);
+        $srch = Plugin::getSearchObject($this->siteLangId, false);
         $srch->joinTable(Configurations::DB_TBL, 'LEFT JOIN', "conf_val = plugin_id AND conf_name = 'CONF_DEFAULT_PLUGIN_" . $type . "'", 'conf');
         $srch->addCondition('plugin_type', '=', $type);
         $srch->addMultipleFields($attr);
 
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -88,7 +88,7 @@ class PluginsController extends AdminBaseController
             });
         }
 
-        $pluginTypes = Plugin::getTypeArr($this->adminLangId);
+        $pluginTypes = Plugin::getTypeArr($this->siteLangId);
         $groupType = Plugin::getGroupType($type);
         $otherPluginTypes = '';
         if (!empty($groupType)) {
@@ -110,7 +110,7 @@ class PluginsController extends AdminBaseController
         $this->set("arrListing", $arrListing);
         $this->set('recordCount', $srch->recordCount());
         $this->set('postedData', FatApp::getPostedData());
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -162,7 +162,7 @@ class PluginsController extends AdminBaseController
         $this->set('recordId', $recordId);
         $this->set('type', $pluginType);
         $this->set('frm', $frm);
-        $this->set('formTitle', CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $this->adminLangId), ['{PLUGIN-NAME}' => $identifier]));
+        $this->set('formTitle', CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $this->siteLangId), ['{PLUGIN-NAME}' => $identifier]));
         $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
@@ -236,7 +236,7 @@ class PluginsController extends AdminBaseController
         $this->formLangFields = [$this->modelObj::tblFld('name'), $this->modelObj::tblFld('description')];
         $this->isPlugin = true;
         $identifier = Plugin::getAttributesById($this->mainTableRecordId, 'plugin_identifier');
-        $this->set('formTitle', CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $this->adminLangId), ['{PLUGIN-NAME}' => $identifier]));
+        $this->set('formTitle', CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $this->siteLangId), ['{PLUGIN-NAME}' => $identifier]));
     }
 
     public function uploadIcon($plugin_id)
@@ -252,7 +252,7 @@ class PluginsController extends AdminBaseController
         $post = FatApp::getPostedData();
 
         if (!is_uploaded_file($_FILES['file']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -263,7 +263,7 @@ class PluginsController extends AdminBaseController
 
         $this->set('pluginId', $plugin_id);
         $this->set('file', $_FILES['file']['name']);
-        $this->set('msg', $_FILES['file']['name'] . ' ' . Labels::getLabel('LBL_File_Uploaded_Successfully', $this->adminLangId));
+        $this->set('msg', $_FILES['file']['name'] . ' ' . Labels::getLabel('LBL_File_Uploaded_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -279,7 +279,7 @@ class PluginsController extends AdminBaseController
                 LibHelper::exitWithError($pluginObj->getError(), true);
             }
 
-            $this->set('msg', Labels::getLabel('LBL_Order_Updated_Successfully', $this->adminLangId));
+            $this->set('msg', Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
     }
@@ -348,20 +348,20 @@ class PluginsController extends AdminBaseController
         $frm = new Form('frmPlugin');
         $frm->addHiddenField('', 'plugin_id', $recordId);
         $frm->addHiddenField('', 'plugin_type', $pluginType);
-        $frm->addRequiredField(Labels::getLabel('LBL_Plugin_Name', $this->adminLangId), 'plugin_name');
+        $frm->addRequiredField(Labels::getLabel('LBL_Plugin_Name', $this->siteLangId), 'plugin_name');
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'plugin_active', $activeInactiveArr, '', array(), '');
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'plugin_active', $activeInactiveArr, '', array(), '');
 
         if (in_array($pluginType, Plugin::getKingpinTypeArr())) {
-            $frm->addCheckBox(Labels::getLabel('LBL_MARK_AS_DEFAULT', $this->adminLangId), 'CONF_DEFAULT_PLUGIN_' . $pluginType, $recordId, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_MARK_AS_DEFAULT', $this->siteLangId), 'CONF_DEFAULT_PLUGIN_' . $pluginType, $recordId, array(), false, 0);
         }
 
         if (in_array($pluginType, Plugin::getSeparateIconTypeArr())) {
             $fld = $frm->addButton(
                 'Icon',
                 'plugin_icon',
-                Labels::getLabel('LBL_Upload_File', $this->adminLangId),
+                Labels::getLabel('LBL_Upload_File', $this->siteLangId),
                 array('class' => 'btn btn-outline-brand btn-sm uploadFile-Js', 'id' => 'plugin_icon', 'data-plugin_id' => $recordId)
             );
             if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId)) {
@@ -380,15 +380,15 @@ class PluginsController extends AdminBaseController
         $frm = new Form('frmPluginLang');
         $frm->addHiddenField('', 'plugin_id', $recordId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Plugin_Name', $this->adminLangId), 'plugin_name');
-        $frm->addHtmlEditor(Labels::getLabel('LBL_EXTRA_INFO', $this->adminLangId), 'plugin_description');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Plugin_Name', $this->siteLangId), 'plugin_name');
+        $frm->addHtmlEditor(Labels::getLabel('LBL_EXTRA_INFO', $this->siteLangId), 'plugin_description');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;
@@ -402,7 +402,7 @@ class PluginsController extends AdminBaseController
         $pluginType = FatApp::getPostedData('plugin_type', FatUtility::VAR_INT, 0);
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('plugin_ids'));
         if (empty($recordIdsArr) || -1 == $status || 1 > $pluginType) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
         $error = '';
         foreach ($recordIdsArr as $recordId) {
@@ -424,7 +424,7 @@ class PluginsController extends AdminBaseController
 
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('plugin_ids'));
         if (empty($recordIdsArr) || -1 == $status || 1 > $pluginGroupType) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -451,21 +451,21 @@ class PluginsController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $pluginsTblHeadingCols = CacheHelper::get('pluginsTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $pluginsTblHeadingCols = CacheHelper::get('pluginsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($pluginsTblHeadingCols) {
             return json_decode($pluginsTblHeadingCols);
         }
 
         $arr = [
             'dragdrop' => '',
-            'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'plugin_icon' => Labels::getLabel('LBL_PLUGIN_ICON', $this->adminLangId),
-            'plugin_name' => Labels::getLabel('LBL_PLUGIN', $this->adminLangId),
-            'plugin_active' => Labels::getLabel('LBL_Status', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'plugin_icon' => Labels::getLabel('LBL_PLUGIN_ICON', $this->siteLangId),
+            'plugin_name' => Labels::getLabel('LBL_PLUGIN', $this->siteLangId),
+            'plugin_active' => Labels::getLabel('LBL_Status', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('pluginsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('pluginsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
@@ -494,8 +494,8 @@ class PluginsController extends AdminBaseController
         switch ($action) {
             case 'index':
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_PLUGINS', $this->adminLangId)]
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_PLUGINS', $this->siteLangId)]
                 ];
         }
         return $this->nodes;

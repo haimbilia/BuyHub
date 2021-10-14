@@ -15,7 +15,7 @@ class OrderStatusController extends AdminBaseController
 
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ORDER_STATUS', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ORDER_STATUS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->addJs('js/jquery.tablednd.js');
@@ -28,11 +28,11 @@ class OrderStatusController extends AdminBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm);
         }
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $orderStatusTypeArr = OrderStatus::getOrderStatusTypeArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_ORDER_STATUS_TYPE', $this->adminLangId), 'orderstatus_type', $orderStatusTypeArr, '', array(), '');
+        $orderStatusTypeArr = OrderStatus::getOrderStatusTypeArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_ORDER_STATUS_TYPE', $this->siteLangId), 'orderstatus_type', $orderStatusTypeArr, '', array(), '');
         
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -60,7 +60,7 @@ class OrderStatusController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -69,7 +69,7 @@ class OrderStatusController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
-        $srch = OrderStatus::getSearchObject(false, $this->adminLangId);
+        $srch = OrderStatus::getSearchObject(false, $this->siteLangId);
 
         $srch->addFld(array('ostatus.*', 'IFNULL(ostatus_l.orderstatus_name,ostatus.orderstatus_identifier) as orderstatus_name', 'ostatus.orderstatus_id as listSerial'));
 
@@ -93,7 +93,7 @@ class OrderStatusController extends AdminBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -137,7 +137,7 @@ class OrderStatusController extends AdminBaseController
         $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->adminLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -172,7 +172,7 @@ class OrderStatusController extends AdminBaseController
         $this->objPrivilege->canEditOrderStatus();
         $this->modelObj = (new ReflectionClass('OrderStatus'))->newInstanceArgs($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->adminLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->siteLangId));
     }
     
     private function getForm($recordId = 0)
@@ -181,30 +181,30 @@ class OrderStatusController extends AdminBaseController
 
         $frm = new Form('frmorderstatus');
         $frm->addHiddenField('', 'orderstatus_id', $recordId);
-        /*$frm->addRequiredField(Labels::getLabel('LBL_Order_Status_Identifier', $this->adminLangId), 'orderstatus_identifier');*/
-        $frm->addRequiredField(Labels::getLabel('LBL_orderstatus_Name', $this->adminLangId), 'orderstatus_name');
-        /* $frm->addRequiredField(Labels::getLabel('LBL_ORDER_STATUS_COLOR_CLASS', $this->adminLangId), 'orderstatus_color_class'); */
+        /*$frm->addRequiredField(Labels::getLabel('LBL_Order_Status_Identifier', $this->siteLangId), 'orderstatus_identifier');*/
+        $frm->addRequiredField(Labels::getLabel('LBL_orderstatus_Name', $this->siteLangId), 'orderstatus_name');
+        /* $frm->addRequiredField(Labels::getLabel('LBL_ORDER_STATUS_COLOR_CLASS', $this->siteLangId), 'orderstatus_color_class'); */
 
         /* Please retain actual css class as option text. As that class used in JS to fill color of that option. */
         $classArr = applicationConstants::getClassArr();
-        $frm->addSelectBox(Labels::getLabel('LBL_ORDER_STATUS_COLOR_CLASS', $this->adminLangId), 'orderstatus_color_class', $classArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_ORDER_STATUS_COLOR_CLASS', $this->siteLangId), 'orderstatus_color_class', $classArr, '', array(), '');
 
-        $orderStatusTypeArr = OrderStatus::getOrderStatusTypeArr($this->adminLangId);
+        $orderStatusTypeArr = OrderStatus::getOrderStatusTypeArr($this->siteLangId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Order_Status_type', $this->adminLangId), 'orderstatus_type', $orderStatusTypeArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Order_Status_type', $this->siteLangId), 'orderstatus_type', $orderStatusTypeArr, '', array(), '');
 
-        $yesNoArr = applicationConstants::getYesNoArr($this->adminLangId);
+        $yesNoArr = applicationConstants::getYesNoArr($this->siteLangId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Order_Status_is_Digital', $this->adminLangId), 'orderstatus_is_digital', $yesNoArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Order_Status_is_Digital', $this->siteLangId), 'orderstatus_is_digital', $yesNoArr, '', array(), '');
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'orderstatus_is_active', $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'orderstatus_is_active', $activeInactiveArr, '', array(), '');
         
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         
         return $frm;
@@ -214,8 +214,8 @@ class OrderStatusController extends AdminBaseController
     {
         $frm = new Form('frmorderstatuslang');
         $frm->addHiddenField('', 'orderstatus_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');        
-        $frm->addRequiredField(Labels::getLabel('LBL_orderstatus_Name', $this->adminLangId), 'orderstatus_name');       
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');        
+        $frm->addRequiredField(Labels::getLabel('LBL_orderstatus_Name', $this->siteLangId), 'orderstatus_name');       
         return $frm;
     }
 
@@ -244,7 +244,7 @@ class OrderStatusController extends AdminBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('orderstatus_ids'));
         if (empty($recordIdsArr) || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -263,7 +263,7 @@ class OrderStatusController extends AdminBaseController
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $orderstatusObj = new OrderStatus($recordId);
@@ -284,27 +284,27 @@ class OrderStatusController extends AdminBaseController
                 LibHelper::exitWithError($obj->getError(), true);
             }
 
-            $this->set('msg', Labels::getLabel('LBL_Order_Updated_Successfully', $this->adminLangId));
+            $this->set('msg', Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
     }
 
     private function getFormColumns(): array
     {
-        $orderStatusTblHeadingCols = CacheHelper::get('orderStatusTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $orderStatusTblHeadingCols = CacheHelper::get('orderStatusTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($orderStatusTblHeadingCols) {
             return json_decode($orderStatusTblHeadingCols);
         }
 
         $arr = [
             'dragdrop' => '',
-            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->adminLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'orderstatus_name' => Labels::getLabel('LBL_ORDER_STATUS_NAME', $this->adminLangId),
-            'orderstatus_is_active' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'orderstatus_name' => Labels::getLabel('LBL_ORDER_STATUS_NAME', $this->siteLangId),
+            'orderstatus_is_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('orderStatusTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('orderStatusTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         
         return $arr;
     }

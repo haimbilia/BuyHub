@@ -8,7 +8,7 @@ class BlogPostsController extends AdminBaseController
     {
         $ajaxCallArray = array('deleteRecord', 'form', 'langForm', 'search', 'setup', 'langSetup');
         if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die(Labels::getLabel('MSG_Invalid_Action', $this->adminLangId));
+            die(Labels::getLabel('MSG_Invalid_Action', $this->siteLangId));
         }
         parent::__construct($action);
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
@@ -39,7 +39,7 @@ class BlogPostsController extends AdminBaseController
         $post = $searchForm->getFormDataFromArray($data);
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $srch = BlogPost::getSearchObject($this->adminLangId);
+        $srch = BlogPost::getSearchObject($this->siteLangId);
 
         if (!empty($post['keyword'])) {
             $keywordCond = $srch->addCondition('bp.post_identifier', 'like', '%' . $post['keyword'] . '%');
@@ -77,7 +77,7 @@ class BlogPostsController extends AdminBaseController
         if (0 < $post_id) {
             $data = BlogPost::getAttributesById($post_id);
             if ($data === false) {
-                FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->adminLangId));
+                FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
             }
             /* url data[ */
             $urlSrch = UrlRewrite::getSearchObject();
@@ -103,7 +103,7 @@ class BlogPostsController extends AdminBaseController
     public function linksForm($post_id)
     {
         $this->objPrivilege->canViewBlogPosts();
-        $lang_id = $this->adminLangId;
+        $lang_id = $this->siteLangId;
         $frm = $this->getLinksForm($post_id);
         $this->set('frmLinks', $frm);
         $this->set('post_id', $post_id);
@@ -118,7 +118,7 @@ class BlogPostsController extends AdminBaseController
         $postId = FatUtility::int($postId);
         $lang_id = FatUtility::int($lang_id);
         if ($postId == 0 || $lang_id == 0) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->adminLangId));
+            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
         }
 
         $langFrm = $this->getLangForm($postId, $lang_id);
@@ -208,7 +208,7 @@ class BlogPostsController extends AdminBaseController
         if (empty($post_categories)) {
             $this->set('openLinksForm', true);
         }
-        $this->set('msg', Labels::getLabel('MSG_Blog_Post_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Blog_Post_Setup_Successful', $this->siteLangId));
         $this->set('postId', $postId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -273,7 +273,7 @@ class BlogPostsController extends AdminBaseController
                 $this->set('openImagesTab', true);
             }
         }
-        $this->set('msg', Labels::getLabel('MSG_Blog_Post_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Blog_Post_Setup_Successful', $this->siteLangId));
         $this->set('postId', $post_id);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -293,7 +293,7 @@ class BlogPostsController extends AdminBaseController
         unset($post['post_id']);
 
         if ($post_id <= 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $categories = $post['categories'];
@@ -322,7 +322,7 @@ class BlogPostsController extends AdminBaseController
 
         $this->set('postId', $post_id);
         $this->set('langId', $newTabLangId);
-        $this->set('msg', Labels::getLabel('MSG_Record_Updated_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Record_Updated_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -347,7 +347,7 @@ class BlogPostsController extends AdminBaseController
 
         if (empty($postIdsArr)) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -366,12 +366,12 @@ class BlogPostsController extends AdminBaseController
         $postId = FatUtility::int($postId);
         if (1 > $postId) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
         $obj = new BlogPost($postId);
         if (!$obj->canMarkRecordDelete()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Unauthorized_Access', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Unauthorized_Access', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         $obj->assignValues(array(BlogPost::tblFld('deleted') => 1));
@@ -388,11 +388,11 @@ class BlogPostsController extends AdminBaseController
         $this->objPrivilege->canViewBlogPosts();
         $post_id = FatUtility::int($post_id);
         if (!$post_id) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->adminLangId));
+            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
         }
 
         if (!$row = BlogPost::getAttributesById($post_id)) {
-            FatUtility::dieWithError(Labels::getLabel('LBL_No_Record_Found', $this->adminLangId));
+            FatUtility::dieWithError(Labels::getLabel('LBL_No_Record_Found', $this->siteLangId));
         }
         $imagesFrm = $this->getImagesFrm($post_id);
         $this->set('languages', Language::getAllNames());
@@ -412,11 +412,11 @@ class BlogPostsController extends AdminBaseController
         }
         $post_id = FatUtility::int($post_id);
         if (!$post_id) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->adminLangId));
+            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
         }
 
         if (!$row = BlogPost::getAttributesById($post_id)) {
-            FatUtility::dieWithError(Labels::getLabel('LBL_No_Record_Found', $this->adminLangId));
+            FatUtility::dieWithError(Labels::getLabel('LBL_No_Record_Found', $this->siteLangId));
         }
         $post_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $post_id, 0, $lang_id, (count($languages) > 1) ? false : true);
         $this->set('languages', Language::getAllNames());
@@ -441,7 +441,7 @@ class BlogPostsController extends AdminBaseController
             Message::addErrorMessage($postObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
-        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Ordered_Successfully', $this->adminLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Ordered_Successfully', $this->siteLangId));
     }
 
     public function uploadBlogPostImages($post_id, $lang_id = 0)
@@ -460,7 +460,7 @@ class BlogPostsController extends AdminBaseController
         }
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -473,7 +473,7 @@ class BlogPostsController extends AdminBaseController
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_File', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_File', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -492,7 +492,7 @@ class BlogPostsController extends AdminBaseController
             Message::addErrorMessage($fileHandlerObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
-        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Image_Uploaded_Successfully', $this->adminLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Image_Uploaded_Successfully', $this->siteLangId));
     }
 
     public function deleteImage($post_id = 0, $afile_id = 0, $lang_id = 0)
@@ -509,7 +509,7 @@ class BlogPostsController extends AdminBaseController
             Message::addErrorMessage($fileHandlerObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
-        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -522,7 +522,7 @@ class BlogPostsController extends AdminBaseController
         $frm->addHiddenField('', 'post_id', $post_id);
 
 		if(count($bannerTypeArr) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $bannerTypeArr, '', array(), '');
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
 		} else  {
 			$lang_id = array_key_first($bannerTypeArr); 
 			$frm->addHiddenField('', 'lang_id', $lang_id);
@@ -530,7 +530,7 @@ class BlogPostsController extends AdminBaseController
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BLOG_POST_IMAGE);
         $frm->addHiddenField('', 'min_width');
         $frm->addHiddenField('', 'min_height');
-        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->adminLangId), 'post_image', array('accept' => 'image/*', 'data-frm' => 'frmBlogPostImage'));
+        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->siteLangId), 'post_image', array('accept' => 'image/*', 'data-frm' => 'frmBlogPostImage'));
         return $frm;
     }
 
@@ -539,14 +539,14 @@ class BlogPostsController extends AdminBaseController
         $post_id = FatUtility::int($post_id);
         $frm = new Form('frmBlogPost', array('id' => 'frmBlogPost'));
         $frm->addHiddenField('', 'post_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_Post_Identifier', $this->adminLangId), 'post_identifier');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_SEO_Friendly_URL', $this->adminLangId), 'urlrewrite_custom');
+        $frm->addRequiredField(Labels::getLabel('LBL_Post_Identifier', $this->siteLangId), 'post_identifier');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_SEO_Friendly_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
-        $postStatusArr = applicationConstants::getBlogPostStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Post_Status', $this->adminLangId), 'post_published', $postStatusArr, '', array(), '');
-        $frm->addCheckBox(Labels::getLabel('LBL_Comment_Open', $this->adminLangId), 'post_comment_opened', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel('LBL_Featured', $this->adminLangId), 'post_featured', 1, array(), false, 0);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $postStatusArr = applicationConstants::getBlogPostStatusArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Post_Status', $this->siteLangId), 'post_published', $postStatusArr, '', array(), '');
+        $frm->addCheckBox(Labels::getLabel('LBL_Comment_Open', $this->siteLangId), 'post_comment_opened', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel('LBL_Featured', $this->siteLangId), 'post_featured', 1, array(), false, 0);
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -566,27 +566,27 @@ class BlogPostsController extends AdminBaseController
 
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
         } else {
             $lang_id = array_key_first($languages);
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
-        $frm->addRequiredField(Labels::getLabel('LBL_Title', $this->adminLangId), 'post_title');
-        $frm->addRequiredField(Labels::getLabel('LBL_Post_Author_Name', $this->adminLangId), 'post_author_name');
-        /* $fld = $frm->addTextarea(Labels::getLabel('LBL_Short_Description', $this->adminLangId), 'post_short_description');
+        $frm->addRequiredField(Labels::getLabel('LBL_Title', $this->siteLangId), 'post_title');
+        $frm->addRequiredField(Labels::getLabel('LBL_Post_Author_Name', $this->siteLangId), 'post_author_name');
+        /* $fld = $frm->addTextarea(Labels::getLabel('LBL_Short_Description', $this->siteLangId), 'post_short_description');
         $fld->requirements()->setRequired(true);
-        $fld->htmlAfterField = '<small>' . Labels::getLabel("LBL_only_250_characters_will_be_shown_on_frontend", $this->adminLangId) . '</small>'; */
-        $frm->addHtmlEditor(Labels::getLabel('LBL_Description', $this->adminLangId), 'post_description')->requirements()->setRequired(true);
+        $fld->htmlAfterField = '<small>' . Labels::getLabel("LBL_only_250_characters_will_be_shown_on_frontend", $this->siteLangId) . '</small>'; */
+        $frm->addHtmlEditor(Labels::getLabel('LBL_Description', $this->siteLangId), 'post_description')->requirements()->setRequired(true);
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
 
@@ -594,12 +594,12 @@ class BlogPostsController extends AdminBaseController
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
 
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('class' => 'search-input'));
-        $postStatusArr = applicationConstants::getBlogPostStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Post_Status', $this->adminLangId), 'post_published', $postStatusArr, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
+        $postStatusArr = applicationConstants::getBlogPostStatusArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Post_Status', $this->siteLangId), 'post_published', $postStatusArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
         $frm->addHiddenField('', 'page');
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -619,10 +619,10 @@ class BlogPostsController extends AdminBaseController
 
         $prodCatObj = new BlogPostCategory();
         $arr_options = $prodCatObj->getBlogPostCatTreeStructure();
-        $frm->addCheckBoxes(Labels::getLabel('LBL_Category', $this->adminLangId), 'categories', $arr_options, $selectedCats);
+        $frm->addCheckBoxes(Labels::getLabel('LBL_Category', $this->siteLangId), 'categories', $arr_options, $selectedCats);
 
         $frm->addHiddenField('', 'post_id', $post_id);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -632,7 +632,7 @@ class BlogPostsController extends AdminBaseController
         $post = FatApp::getPostedData();
 
         $postObj = new BlogPost();
-        $srch = $postObj->getSearchObject($this->adminLangId, false, true);
+        $srch = $postObj->getSearchObject($this->siteLangId, false, true);
 
         $srch->addMultipleFields(array('post_id, IFNULL(post_title, post_identifier) as post_title'));
 

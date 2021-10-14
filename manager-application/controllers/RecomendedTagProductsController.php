@@ -36,9 +36,9 @@ class RecomendedTagProductsController extends AdminBaseController
         
         $srch = new SearchBase('tbl_tag_product_recommendation', 'tpr');
         $srch->joinTable(Tag::DB_TBL, 'INNER JOIN', 't.tag_id = tpr.tpr_tag_id', 't');
-        $srch->joinTable(Tag::DB_TBL_LANG, 'LEFT OUTER JOIN', 't_l.taglang_tag_id = t.tag_id and t_l.taglang_lang_id = ' . $this->adminLangId, 't_l');
+        $srch->joinTable(Tag::DB_TBL_LANG, 'LEFT OUTER JOIN', 't_l.taglang_tag_id = t.tag_id and t_l.taglang_lang_id = ' . $this->siteLangId, 't_l');
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = tpr.tpr_product_id', 'p');
-        $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p_l.productlang_product_id = p.product_id and p_l.productlang_lang_id = ' . $this->adminLangId, 'p_l');
+        $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p_l.productlang_product_id = p.product_id and p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
         $srch->addMultipleFields(array('tpr.*', 'IFNULL(t_l.tag_name,t.tag_identifier) as tag_name', 'IFNULL(p_l.product_name,p.product_identifier) as product_name'));
         //$src->addCondition('p.product_active','=', applicationConstants::ACTIVE);
         
@@ -92,9 +92,9 @@ class RecomendedTagProductsController extends AdminBaseController
     public function getSearchForm()
     {
         $frm = new Form('frmSearch');
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

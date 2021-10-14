@@ -2,11 +2,11 @@
 <table class="table table--hovered table--striped">
 	 <thead>
 			<tr>
-			  <th><?php echo Labels::getLabel('LBL_Date',$adminLangId); ?></th>
-			  <th><?php echo Labels::getLabel('LBL_Order_ID',$adminLangId); ?></th>
-			  <th><?php echo Labels::getLabel('LBL_Customer',$adminLangId); ?></th>
-			  <th><?php echo Labels::getLabel('LBL_Order_Total',$adminLangId); ?></th>
-			  <th><?php echo Labels::getLabel('LBL_Status',$adminLangId); ?></th>
+			  <th><?php echo Labels::getLabel('LBL_Date',$siteLangId); ?></th>
+			  <th><?php echo Labels::getLabel('LBL_Order_ID',$siteLangId); ?></th>
+			  <th><?php echo Labels::getLabel('LBL_Customer',$siteLangId); ?></th>
+			  <th><?php echo Labels::getLabel('LBL_Order_Total',$siteLangId); ?></th>
+			  <th><?php echo Labels::getLabel('LBL_Status',$siteLangId); ?></th>
 			</tr>
 		</thead>  
 		<tbody>

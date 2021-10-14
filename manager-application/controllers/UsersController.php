@@ -49,7 +49,7 @@ class UsersController extends AdminBaseController
         $srch = $userObj->getUserSearchObj(null, true);
         $srch->addFld(User::DB_TBL_CRED_PREFIX . 'password');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'user_id = shop.shop_user_id OR user_parent = shop.shop_user_id', 'shop');
-        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->adminLangId, 's_l');
+        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
         $srch->addOrder('u.user_id', 'DESC');
         $srch->addOrder('credential_active', 'DESC');
 
@@ -233,7 +233,7 @@ class UsersController extends AdminBaseController
                 'user_name' => $post['user_name'],
                 'user_email' => $post['credential_email'],
                 'user_id' => $userObj->getMainTableRecordId(),
-                'account_type' => User::getUserTypesArr($this->adminLangId)[$post['user_type']]
+                'account_type' => User::getUserTypesArr($this->siteLangId)[$post['user_type']]
             ];
 
             if (!$userObj->sendAdminNewUserCreationEmail($userData, $this->admin_id)) {
@@ -334,7 +334,7 @@ class UsersController extends AdminBaseController
             FatUtility::dieWithError($this->str_invalid_request_id);
         }
 
-        $frm = $this->addUserRewardPointsForm($this->adminLangId);
+        $frm = $this->addUserRewardPointsForm($this->siteLangId);
         $frm->fill(array('urp_user_id' => $userId));
 
         $this->set('userId', $userId);
@@ -345,7 +345,7 @@ class UsersController extends AdminBaseController
     public function setupUserRewardPoints()
     {
         $this->objPrivilege->canEditUsers();
-        $frm = $this->addUserRewardPointsForm($this->adminLangId);
+        $frm = $this->addUserRewardPointsForm($this->siteLangId);
 
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
@@ -381,7 +381,7 @@ class UsersController extends AdminBaseController
         /* send email to user[ */
         $urpId = $obj->getMainTableRecordId();
         $emailObj = new EmailHandler();
-        $emailObj->sendRewardPointsNotification($this->adminLangId, $urpId);
+        $emailObj->sendRewardPointsNotification($this->siteLangId, $urpId);
         /* ] */
 
         $this->set('userId', $userId);
@@ -437,7 +437,7 @@ class UsersController extends AdminBaseController
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
         $this->set('userId', $userId);
-        $this->set('statusArr', Transactions::getStatusArr($this->adminLangId));
+        $this->set('statusArr', Transactions::getStatusArr($this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -450,7 +450,7 @@ class UsersController extends AdminBaseController
             FatUtility::dieWithError($this->str_invalid_request_id);
         }
 
-        $frm = $this->addUserTransactionForm($this->adminLangId);
+        $frm = $this->addUserTransactionForm($this->siteLangId);
         $frm->fill(array('user_id' => $userId));
 
         $this->set('userId', $userId);
@@ -461,7 +461,7 @@ class UsersController extends AdminBaseController
     public function setupUserTransaction()
     {
         $this->objPrivilege->canEditUsers();
-        $frm = $this->addUserTransactionForm($this->adminLangId);
+        $frm = $this->addUserTransactionForm($this->siteLangId);
 
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
@@ -506,7 +506,7 @@ class UsersController extends AdminBaseController
 
         /* send email to user[ */
         $emailNotificationObj = new EmailHandler();
-        $emailNotificationObj->sendTxnNotification($tObj->getMainTableRecordId(), $this->adminLangId);
+        $emailNotificationObj->sendTxnNotification($tObj->getMainTableRecordId(), $this->siteLangId);
         /* ] */
 
         $this->set('userId', $userId);
@@ -589,7 +589,7 @@ class UsersController extends AdminBaseController
 
         $this->set('userParent', User::getAttributesById($userId, 'user_parent'));
         $this->set('user_id', $userId);
-        $address =  new Address(0, $this->adminLangId);
+        $address =  new Address(0, $this->siteLangId);
         $addresses = $address->getData(Address::TYPE_USER, $userId);
         $this->set('addresses', $addresses);
         $this->_template->render(false, false);
@@ -605,11 +605,11 @@ class UsersController extends AdminBaseController
             FatUtility::dieWithError($this->str_invalid_request);
         }
 
-        $addressFrm = $this->getUserAddressForm($this->adminLangId);
+        $addressFrm = $this->getUserAddressForm($this->siteLangId);
 
         $stateId = 0;
         if ($addr_id > 0) {
-            $address =  new Address($addr_id, $this->adminLangId);
+            $address =  new Address($addr_id, $this->siteLangId);
             $data = $address->getData(Address::TYPE_USER, $userId);
             if (empty($data)) {
                 FatUtility::dieWithError($this->str_invalid_request);
@@ -629,7 +629,7 @@ class UsersController extends AdminBaseController
 
     public function setupAddress()
     {
-        $frm = $this->getUserAddressForm($this->adminLangId);
+        $frm = $this->getUserAddressForm($this->siteLangId);
         $post = FatApp::getPostedData();
 
         if ($post == false) {
@@ -670,7 +670,7 @@ class UsersController extends AdminBaseController
         $data_to_be_save = $post;
         $data_to_be_save['addr_record_id'] = $user_id;
         $data_to_be_save['addr_type'] = Address::TYPE_USER;
-        $data_to_be_save['addr_lang_id'] = $this->adminLangId;
+        $data_to_be_save['addr_lang_id'] = $this->siteLangId;
         $addressObj->assignValues($data_to_be_save, true);
         if (!$addressObj->save()) {
             Message::addErrorMessage($addressObj->getError());
@@ -697,7 +697,7 @@ class UsersController extends AdminBaseController
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieJsonError(Message::getHtml());
         }
-        $address = new Address($addrId, $this->adminLangId);
+        $address = new Address($addrId, $this->siteLangId);
         $data = $address->getData(Address::TYPE_USER, $user_id);
         if (empty($data)) {
             Message::addErrorMessage($this->str_invalid_request);
@@ -710,7 +710,7 @@ class UsersController extends AdminBaseController
         }
 
         $this->set('userId', $user_id);
-        $this->set('msg', Labels::getLabel('LBL_Deleted_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Deleted_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -745,7 +745,7 @@ class UsersController extends AdminBaseController
 
         if (empty($userIdsArr)) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -765,7 +765,7 @@ class UsersController extends AdminBaseController
         $user_id = FatUtility::int($user_id);
         if (1 > $user_id) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
         $userObj = new User($user_id);
@@ -797,13 +797,13 @@ class UsersController extends AdminBaseController
         }
 
         if ($post['new_password'] != $post['conf_new_password']) {
-            Message::addErrorMessage(Labels::getLabel('LBL_New_Password_and_Confirm_new_password_does_not_match', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_New_Password_and_Confirm_new_password_does_not_match', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
         if (!ValidateElement::password($post['new_password'])) {
             Message::addErrorMessage(
-                Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->adminLangId)
+                Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId)
             );
             FatUtility::dieJsonError(Message::getHtml());
         }
@@ -816,7 +816,7 @@ class UsersController extends AdminBaseController
 
         /* Restrict to change password for demo user on demo URL. */
         if (CommonHelper::demoUrl() && 4 == $user_id) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->siteLangId));
         }
 
         $userObj = new User($user_id);
@@ -836,7 +836,7 @@ class UsersController extends AdminBaseController
         }
 
         if (!$userObj->setLoginPassword($post['new_password'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Password_could_not_be_set ', $this->adminLangId) . ' ' . $userObj->getError());
+            Message::addErrorMessage(Labels::getLabel('LBL_Password_could_not_be_set ', $this->siteLangId) . ' ' . $userObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -909,7 +909,7 @@ class UsersController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->set('reqStatusArr', User::getSupplierReqStatusArr($this->adminLangId));
+        $this->set('reqStatusArr', User::getSupplierReqStatusArr($this->siteLangId));
         $this->set('canViewSellerApprovalRequests', $this->objPrivilege->canViewSellerApprovalRequests($this->admin_id, true));
         $this->set('canEditSellerApprovalRequests', $this->objPrivilege->canEditSellerApprovalRequests($this->admin_id, true));
         $this->_template->render(false, false);
@@ -942,9 +942,9 @@ class UsersController extends AdminBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $supplierRequest["field_values"] = $userObj->getSupplierRequestFieldsValueArr($requestId, $this->adminLangId);
+        $supplierRequest["field_values"] = $userObj->getSupplierRequestFieldsValueArr($requestId, $this->siteLangId);
 
-        $this->set('reqStatusArr', User::getSupplierReqStatusArr($this->adminLangId));
+        $this->set('reqStatusArr', User::getSupplierReqStatusArr($this->siteLangId));
         $this->set('supplierRequest', $supplierRequest);
         $this->_template->render(false, false);
     }
@@ -997,12 +997,12 @@ class UsersController extends AdminBaseController
         $statusArr = array(User::SUPPLIER_REQUEST_APPROVED, User::SUPPLIER_REQUEST_CANCELLED);
 
         if (!in_array($post['status'], $statusArr)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Status_Request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Status_Request', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         if (in_array($post['status'], $statusArr) && in_array($supplierRequest['usuprequest_status'], $statusArr)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Status_Request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Status_Request', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -1031,14 +1031,14 @@ class UsersController extends AdminBaseController
         $supplierRequest['usuprequest_status'] = $post['status'];
         $supplierRequest['usuprequest_comments'] = $post['comments'];
 
-        if (!$email->sendSupplierRequestStatusChangeNotification($this->adminLangId, $supplierRequest)) {
+        if (!$email->sendSupplierRequestStatusChangeNotification($this->siteLangId, $supplierRequest)) {
             $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         $db->commitTransaction();
-        $this->set('msg', Labels::getLabel('LBL_Status_Updated_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Status_Updated_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1112,7 +1112,7 @@ class UsersController extends AdminBaseController
         $requestId = FatUtility::int($requestId);
         $admin_id = AdminAuthentication::getLoggedAdminId();
 
-        $srch = new CatalogRequestSearch($this->adminLangId);
+        $srch = new CatalogRequestSearch($this->siteLangId);
         $srch->addCondition('scatrequest_id', '=', $requestId);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -1121,7 +1121,7 @@ class UsersController extends AdminBaseController
         $rs = $srch->getResultSet();
         $requestRow = FatApp::getDb()->fetch($rs);
         if (!$requestRow) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -1141,21 +1141,21 @@ class UsersController extends AdminBaseController
         }
         $scatrequestmsg_id = $catRequestMsgObj->getMainTableRecordId();
         if (!$scatrequestmsg_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Something_went_wrong,_please_contact_Technical_team', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Something_went_wrong,_please_contact_Technical_team', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         /* ] */
 
         /* sending of email notification[ */
         $emailNotificationObj = new EmailHandler();
-        if (!$emailNotificationObj->sendCatalogRequestMessageNotification($scatrequestmsg_id, $this->adminLangId)) {
+        if (!$emailNotificationObj->sendCatalogRequestMessageNotification($scatrequestmsg_id, $this->siteLangId)) {
             Message::addErrorMessage($emailNotificationObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
         /* ] */
 
         $this->set('scatrequestmsg_scatrequest_id', $requestId);
-        $this->set('msg', Labels::getLabel('MSG_Message_Submitted_Successfully!', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Message_Submitted_Successfully!', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1220,11 +1220,11 @@ class UsersController extends AdminBaseController
         $this->objPrivilege->canViewSellerApprovalForm();
 
         $obj = new User();
-        $records = $obj->getSupplierFormFields($this->adminLangId);
+        $records = $obj->getSupplierFormFields($this->siteLangId);
 
         $this->set("arrListing", $records);
-        $this->set("yesNoArr", applicationConstants::getYesNoArr($this->adminLangId));
-        $this->set("fieldTypeArr", User::getFieldTypes($this->adminLangId));
+        $this->set("yesNoArr", applicationConstants::getYesNoArr($this->siteLangId));
+        $this->set("fieldTypeArr", User::getFieldTypes($this->siteLangId));
         $this->set("canEdit", $this->objPrivilege->canEditSellerApprovalForm($this->admin_id, true));
         $this->_template->render(false, false);
     }
@@ -1249,7 +1249,7 @@ class UsersController extends AdminBaseController
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_choose_unique_identifier', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Please_choose_unique_identifier', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         $sformfield_id = $post['sformfield_id'];
@@ -1477,7 +1477,7 @@ class UsersController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->set('reqStatusArr', User::getCatalogReqStatusArr($this->adminLangId));
+        $this->set('reqStatusArr', User::getCatalogReqStatusArr($this->siteLangId));
         $this->set('reqStatusClassArr', User::getCatalogRequestClassArr());
         $this->set('canViewSellerCatalogRequests', $this->objPrivilege->canViewSellerCatalogRequests($this->admin_id, true));
         $this->set('canEditSellerCatalogRequests', $this->objPrivilege->canEditSellerCatalogRequests($this->admin_id, true));
@@ -1535,7 +1535,7 @@ class UsersController extends AdminBaseController
             $this->set('attachedFile', $attachedFile['afile_name']);
         }
 
-        $this->set('reqStatusArr', User::getCatalogReqStatusArr($this->adminLangId));
+        $this->set('reqStatusArr', User::getCatalogReqStatusArr($this->siteLangId));
         $this->set('catalogRequest', $catalogRequest);
         $this->_template->render(false, false);
     }
@@ -1574,7 +1574,7 @@ class UsersController extends AdminBaseController
         $userObj = new User();
         $srch = $userObj->getUserCatalogRequestsObj($scatrequest_id);
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', Shop::DB_TBL_PREFIX . 'user_id = tucr.' . User::DB_TBL_USR_CATALOG_REQ_PREFIX . 'user_id', 'shop');
-        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->adminLangId, 's_l');
+        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
         $srch->addFld('tucr.*');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -1595,12 +1595,12 @@ class UsersController extends AdminBaseController
         $statusArr = array(User::CATALOG_REQUEST_APPROVED, User::CATALOG_REQUEST_CANCELLED);
 
         if (!in_array($post['status'], $statusArr)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Status_Request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Status_Request', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         if (in_array($post['status'], $statusArr) && in_array($catalogRequest['scatrequest_status'], $statusArr)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Status_Request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Status_Request', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -1620,14 +1620,14 @@ class UsersController extends AdminBaseController
         $catalogRequest['scatrequest_status'] = $post['status'];
         $catalogRequest['scatrequest_comments'] = $post['comments'];
 
-        if (!$email->sendCatalogRequestStatusChangeNotification($this->adminLangId, $catalogRequest)) {
+        if (!$email->sendCatalogRequestStatusChangeNotification($this->siteLangId, $catalogRequest)) {
             $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         $db->commitTransaction();
-        $this->set('msg', Labels::getLabel('LBL_Status_Updated_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Status_Updated_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1668,7 +1668,7 @@ class UsersController extends AdminBaseController
                 FatUtility::dieJsonError(Message::getHtml());
             }
 
-            $this->set('msg', Labels::getLabel('LBL_Order_Updated_Successfully', $this->adminLangId));
+            $this->set('msg', Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
     }
@@ -1726,7 +1726,7 @@ class UsersController extends AdminBaseController
 
         if (0 < $joinShop) {
             $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'shp.shop_user_id = u.user_id', 'shp');
-            $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shp.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->adminLangId, 's_l');
+            $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shp.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
             $srch->addCondition('shp.shop_supplier_display_status', '=', applicationConstants::YES);
             $srch->addCondition('shp.shop_active', '=', applicationConstants::YES);
         }
@@ -1809,7 +1809,7 @@ class UsersController extends AdminBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $this->set('msg', ((1 == $v) ? Labels::getLabel('MSG_Account_Unverified', $this->adminLangId) : Labels::getLabel('MSG_Account_Verified', $this->adminLangId)));
+        $this->set('msg', ((1 == $v) ? Labels::getLabel('MSG_Account_Unverified', $this->siteLangId) : Labels::getLabel('MSG_Account_Verified', $this->siteLangId)));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1845,7 +1845,7 @@ class UsersController extends AdminBaseController
         $userIdsArr = FatUtility::int(FatApp::getPostedData('user_ids'));
         if (empty($userIdsArr) || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -1866,7 +1866,7 @@ class UsersController extends AdminBaseController
         $userId = FatUtility::int($userId);
         if (1 > $userId || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -1892,7 +1892,7 @@ class UsersController extends AdminBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $this->set('msg', ((1 == $v) ? Labels::getLabel('MSG_Account_Deactivated', $this->adminLangId) : Labels::getLabel('MSG_Account_Activated', $this->adminLangId)));
+        $this->set('msg', ((1 == $v) ? Labels::getLabel('MSG_Account_Deactivated', $this->siteLangId) : Labels::getLabel('MSG_Account_Activated', $this->siteLangId)));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1940,12 +1940,12 @@ class UsersController extends AdminBaseController
         );
 
         $email = new EmailHandler();
-        if (!$email->sendEmailToUser($this->adminLangId, $data)) {
+        if (!$email->sendEmailToUser($this->siteLangId, $data)) {
             Message::addErrorMessage($email->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Your_Message_Sent_To', $this->adminLangId) . ' - ' . $user["credential_email"]);
+        $this->set('msg', Labels::getLabel('LBL_Your_Message_Sent_To', $this->siteLangId) . ' - ' . $user["credential_email"]);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2000,7 +2000,7 @@ class UsersController extends AdminBaseController
             'user_name' => $user['user_name'],
             'user_email' => $user['credential_email'],
             'user_id' => $userId,
-            'account_type' => User::getUserTypesArr($this->adminLangId)[$userType]
+            'account_type' => User::getUserTypesArr($this->siteLangId)[$userType]
         ];
 
         if (!$userObj->sendAdminNewUserCreationEmail($userData, $this->admin_id)) {
@@ -2050,12 +2050,12 @@ class UsersController extends AdminBaseController
     {
         $frm = new Form('supplierRequestForm');
 
-        $statusArr = User::getSupplierReqStatusArr($this->adminLangId);
+        $statusArr = User::getSupplierReqStatusArr($this->siteLangId);
         unset($statusArr[User::SUPPLIER_REQUEST_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
         $frm->addHiddenField('', 'requestId', 0);
         $frm->addTextArea('', 'comments', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
 
@@ -2064,22 +2064,22 @@ class UsersController extends AdminBaseController
         $frm = new Form('catalogRequestMsgForm');
 
         $frm->addHiddenField('', 'requestId', $requestId);
-        $frm->addTextArea(Labels::getLabel('LBL_Message', $this->adminLangId), 'message')->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send', $this->adminLangId));
+        $frm->addTextArea(Labels::getLabel('LBL_Message', $this->siteLangId), 'message')->requirements()->setRequired();
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send', $this->siteLangId));
         return $frm;
     }
 
     private function supplierRequestSearchForm()
     {
         $frm = new Form('frmSupplierReqSrch', array('id' => 'frmSupplierReqSrch'));
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
 
-        $statusArr = array('-1' => Labels::getLabel('LBL_All', $this->adminLangId)) + User::getSupplierReqStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'status', $statusArr, '', array(), '');
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $statusArr = array('-1' => Labels::getLabel('LBL_All', $this->siteLangId)) + User::getSupplierReqStatusArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', $statusArr, '', array(), '');
+        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -2088,10 +2088,10 @@ class UsersController extends AdminBaseController
     {
         $frm = new Form('frmSuppiler');
         $frm->addHiddenField('', 'sformfield_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->adminLangId), 'sformfield_identifier');
-        $frm->addSelectBox(Labels::getLabel('LBL_Required', $this->adminLangId), 'sformfield_required', applicationConstants::getYesNoArr($this->adminLangId), -1, array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_Field_Type', $this->adminLangId), 'sformfield_type', User::getFieldTypes($this->adminLangId), -1, array(), '');
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->siteLangId), 'sformfield_identifier');
+        $frm->addSelectBox(Labels::getLabel('LBL_Required', $this->siteLangId), 'sformfield_required', applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Field_Type', $this->siteLangId), 'sformfield_type', User::getFieldTypes($this->siteLangId), -1, array(), '');
+        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -2106,7 +2106,7 @@ class UsersController extends AdminBaseController
         $frm->addHiddenField('', 'sformfield_id', $sformfield_id);
         $languages = Language::getAllNames();
 		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'sformfieldlang_lang_id', $languages, $lang_id, array(), '');
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'sformfieldlang_lang_id', $languages, $lang_id, array(), '');
 		} else  {
 			$lang_id = array_key_first($languages); 
 			$frm->addHiddenField('', 'sformfieldlang_lang_id', $lang_id);
@@ -2115,38 +2115,38 @@ class UsersController extends AdminBaseController
         
         $frm->addRequiredField('Caption', 'sformfield_caption');
 
-        $frm->addTextarea(Labels::getLabel('LBL_Comments', $this->adminLangId), 'sformfield_comment');
+        $frm->addTextarea(Labels::getLabel('LBL_Comments', $this->siteLangId), 'sformfield_comment');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
     /* private function getUserSearchForm() {
     $frm = new Form('frmUserSearch');
-    $keyword = $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email',$this->adminLangId), 'keyword','',array('id'=>'keyword','autocomplete'=>'off'));
+    $keyword = $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email',$this->siteLangId), 'keyword','',array('id'=>'keyword','autocomplete'=>'off'));
     $keyword->setFieldTagAttribute('onKeyUp','usersAutocomplete(this)');
 
-    $arr_options = array('-1'=>Labels::getLabel('LBL_Does_Not_Matter',$this->adminLangId))+applicationConstants::getActiveInactiveArr($this->adminLangId);
-    $arr_options1 = array('-1'=>Labels::getLabel('LBL_Does_Not_Matter',$this->adminLangId))+applicationConstants::getYesNoArr($this->adminLangId);
-    $arr_options2 = array('-1'=>Labels::getLabel('LBL_Does_Not_Matter',$this->adminLangId))+User::getUserTypesArr($this->adminLangId);
+    $arr_options = array('-1'=>Labels::getLabel('LBL_Does_Not_Matter',$this->siteLangId))+applicationConstants::getActiveInactiveArr($this->siteLangId);
+    $arr_options1 = array('-1'=>Labels::getLabel('LBL_Does_Not_Matter',$this->siteLangId))+applicationConstants::getYesNoArr($this->siteLangId);
+    $arr_options2 = array('-1'=>Labels::getLabel('LBL_Does_Not_Matter',$this->siteLangId))+User::getUserTypesArr($this->siteLangId);
 
-    $frm->addSelectBox(Labels::getLabel('LBL_Active_Users',$this->adminLangId), 'user_active', $arr_options, -1, array(),'');
-    $frm->addSelectBox(Labels::getLabel('LBL_Email_Verified',$this->adminLangId), 'user_verified', $arr_options1, -1, array(), '');
-    $frm->addSelectBox(Labels::getLabel('LBL_User_Type',$this->adminLangId), 'type', $arr_options2, -1, array(),'');
+    $frm->addSelectBox(Labels::getLabel('LBL_Active_Users',$this->siteLangId), 'user_active', $arr_options, -1, array(),'');
+    $frm->addSelectBox(Labels::getLabel('LBL_Email_Verified',$this->siteLangId), 'user_verified', $arr_options1, -1, array(), '');
+    $frm->addSelectBox(Labels::getLabel('LBL_User_Type',$this->siteLangId), 'type', $arr_options2, -1, array(),'');
 
-    $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From',$this->adminLangId), 'user_regdate_from');
-    $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To',$this->adminLangId), 'user_regdate_to');
+    $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From',$this->siteLangId), 'user_regdate_from');
+    $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To',$this->siteLangId), 'user_regdate_to');
 
     $frm->addHiddenField('','page',1);
-    $fld_submit=$frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search',$this->adminLangId));
-    $fld_cancel = $frm->addButton("","btn_clear",Labels::getLabel('LBL_CLEAR',$this->adminLangId));
+    $fld_submit=$frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search',$this->siteLangId));
+    $fld_cancel = $frm->addButton("","btn_clear",Labels::getLabel('LBL_CLEAR',$this->siteLangId));
     $fld_submit->attachField($fld_cancel);
     return $frm;
     } */
@@ -2157,38 +2157,38 @@ class UsersController extends AdminBaseController
         $frm = new Form('frmUser', array('id' => 'frmUser'));
         $frm->addHiddenField('', 'user_id', $user_id);
         if (1 > $user_id) {
-            $userTypesArr = User::getUserTypesArr($this->adminLangId);
-            $fld = $frm->addSelectBox(Labels::getLabel('LBL_User_Type', $this->adminLangId), 'user_type', $userTypesArr, [], [], Labels::getLabel('LBL_Select', $this->adminLangId));
+            $userTypesArr = User::getUserTypesArr($this->siteLangId);
+            $fld = $frm->addSelectBox(Labels::getLabel('LBL_User_Type', $this->siteLangId), 'user_type', $userTypesArr, [], [], Labels::getLabel('LBL_Select', $this->siteLangId));
             $fld->requirement->setRequired(true);
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Username', $this->adminLangId), 'credential_username', '');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'credential_username', '');
         if (1 > $user_id) {
             $fld->setUnique('tbl_user_credentials', 'credential_username', 'credential_user_id', 'user_id', 'user_id');
             $fld->requirements()->setRequired();
             $fld->requirements()->setUsername();
         }
-        $frm->addRequiredField(Labels::getLabel('LBL_Customer_Name', $this->adminLangId), 'user_name');
-        $frm->addDateField(Labels::getLabel('LBL_Date_Of_Birth', $this->adminLangId), 'user_dob', '', array('readonly' => 'readonly'));
+        $frm->addRequiredField(Labels::getLabel('LBL_Customer_Name', $this->siteLangId), 'user_name');
+        $frm->addDateField(Labels::getLabel('LBL_Date_Of_Birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly'));
         $frm->addHiddenField('', 'user_phone_dcode');
-        $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->adminLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+        $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Email', $this->adminLangId), 'credential_email', '');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Email', $this->siteLangId), 'credential_email', '');
         if (1 > $user_id) {
             $fld->setUnique('tbl_user_credentials', 'credential_email', 'credential_user_id', 'user_id', 'user_id');
             $fld->requirements()->setRequired();
         }
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), [], Labels::getLabel('LBL_Select', $this->adminLangId));
+        $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), [], Labels::getLabel('LBL_Select', $this->siteLangId));
         //$fld->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
-        $frm->addTextBox(Labels::getLabel('LBL_City', $this->adminLangId), 'user_city');
+        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+        $frm->addTextBox(Labels::getLabel('LBL_City', $this->siteLangId), 'user_city');
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -2199,7 +2199,7 @@ class UsersController extends AdminBaseController
         $frm->addHiddenField('', 'user_id', $user_id);
 
         $newPwd = $frm->addPasswordField(
-            Labels::getLabel('LBL_New_Password', $this->adminLangId),
+            Labels::getLabel('LBL_New_Password', $this->siteLangId),
             'new_password',
             '',
             array('id' => 'new_password')
@@ -2207,7 +2207,7 @@ class UsersController extends AdminBaseController
         $newPwd->requirements()->setRequired();
 
         $conNewPwd = $frm->addPasswordField(
-            Labels::getLabel('LBL_Confirm_New_Password', $this->adminLangId),
+            Labels::getLabel('LBL_Confirm_New_Password', $this->siteLangId),
             'conf_new_password',
             '',
             array('id' => 'conf_new_password')
@@ -2215,8 +2215,8 @@ class UsersController extends AdminBaseController
         $conNewPwdReq = $conNewPwd->requirements();
         $conNewPwdReq->setRequired();
         $conNewPwdReq->setCompareWith('new_password', 'eq');
-        $conNewPwdReq->setCustomErrorMessage(Labels::getLabel('LBL_Confirm_Password_Not_Matched!', $this->adminLangId));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId), array('id' => 'btn_submit'));
+        $conNewPwdReq->setCustomErrorMessage(Labels::getLabel('LBL_Confirm_Password_Not_Matched!', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId), array('id' => 'btn_submit'));
         return $frm;
     }
 
@@ -2226,24 +2226,24 @@ class UsersController extends AdminBaseController
         $frm = new Form('sendMailFrm');
         $frm->addHiddenField('', 'user_id', $user_id);
 
-        $frm->addTextBox(Labels::getLabel('LBL_Subject', $this->adminLangId), 'mail_subject')->requirements()->setRequired(true);
-        $frm->addTextArea(Labels::getLabel('LBL_Message', $this->adminLangId), 'mail_message')->requirements()->setRequired(true);
+        $frm->addTextBox(Labels::getLabel('LBL_Subject', $this->siteLangId), 'mail_subject')->requirements()->setRequired(true);
+        $frm->addTextArea(Labels::getLabel('LBL_Message', $this->siteLangId), 'mail_message')->requirements()->setRequired(true);
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send', $this->adminLangId), array('id' => 'btn_submit'));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send', $this->siteLangId), array('id' => 'btn_submit'));
         return $frm;
     }
 
     private function catalogRequestSearchForm()
     {
         $frm = new Form('frmCatalogReqSrch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
 
-        $statusArr = array('-1' => Labels::getLabel('LBL_All', $this->adminLangId)) + User::getCatalogReqStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'status', $statusArr, '', array(), '');
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $statusArr = array('-1' => Labels::getLabel('LBL_All', $this->siteLangId)) + User::getCatalogReqStatusArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', $statusArr, '', array(), '');
+        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -2252,25 +2252,25 @@ class UsersController extends AdminBaseController
     {
         $frm = new Form('catalogRequestForm');
 
-        $statusArr = User::getCatalogReqStatusArr($this->adminLangId);
+        $statusArr = User::getCatalogReqStatusArr($this->siteLangId);
         unset($statusArr[User::CATALOG_REQUEST_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
         $frm->addHiddenField('', 'requestId', 0);
         $frm->addTextArea('', 'comments', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
 
     private function getBankInfoForm()
     {
         $frm = new Form('frmBankInfo');
-        $frm->addRequiredField(Labels::getLabel('LBL_Bank_Name', $this->adminLangId), 'ub_bank_name', '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Account_Holder_Name', $this->adminLangId), 'ub_account_holder_name', '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Account_Number', $this->adminLangId), 'ub_account_number', '');
-        $frm->addRequiredField(Labels::getLabel('LBL_IFSC_Swift_Code', $this->adminLangId), 'ub_ifsc_swift_code', '');
-        $frm->addTextArea(Labels::getLabel('LBL_Bank_Address', $this->adminLangId), 'ub_bank_address', '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Bank_Name', $this->siteLangId), 'ub_bank_name', '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Account_Holder_Name', $this->siteLangId), 'ub_account_holder_name', '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Account_Number', $this->siteLangId), 'ub_account_number', '');
+        $frm->addRequiredField(Labels::getLabel('LBL_IFSC_Swift_Code', $this->siteLangId), 'ub_ifsc_swift_code', '');
+        $frm->addTextArea(Labels::getLabel('LBL_Bank_Address', $this->siteLangId), 'ub_bank_address', '');
         $frm->addHiddenField('', 'user_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -2279,10 +2279,10 @@ class UsersController extends AdminBaseController
         $frm = new Form('frmUserTransaction');
         $frm->addHiddenField('', 'user_id');
         $typeArr = Transactions::getCreditDebitTypeArr($langId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->adminLangId), 'type', $typeArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired(true);
-        $frm->addRequiredField(Labels::getLabel('LBL_Amount', $this->adminLangId), 'amount')->requirements()->setFloatPositive();
-        $frm->addTextArea(Labels::getLabel('LBL_Description', $this->adminLangId), 'description')->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->siteLangId), 'type', $typeArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired(true);
+        $frm->addRequiredField(Labels::getLabel('LBL_Amount', $this->siteLangId), 'amount')->requirements()->setFloatPositive();
+        $frm->addTextArea(Labels::getLabel('LBL_Description', $this->siteLangId), 'description')->requirements()->setRequired();
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -2290,12 +2290,12 @@ class UsersController extends AdminBaseController
     {
         $frm = new Form('frmUserRewardPoints');
         $frm->addHiddenField('', 'urp_user_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_Points', $this->adminLangId), 'urp_points')->requirements()->setIntPositive();
-        $frm->addTextArea(Labels::getLabel('LBL_Comments', $this->adminLangId), 'urp_comments')->requirements()->setRequired();
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Validity', $this->adminLangId), 'validity');
+        $frm->addRequiredField(Labels::getLabel('LBL_Points', $this->siteLangId), 'urp_points')->requirements()->setIntPositive();
+        $frm->addTextArea(Labels::getLabel('LBL_Comments', $this->siteLangId), 'urp_comments')->requirements()->setRequired();
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Validity', $this->siteLangId), 'validity');
         $fld->requirements()->setIntPositive();
-        $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_Leave_this_field_empty_ever_valid_reward_points.', $this->adminLangId) . '</small>';
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_Leave_this_field_empty_ever_valid_reward_points.', $this->siteLangId) . '</small>';
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -2303,26 +2303,26 @@ class UsersController extends AdminBaseController
     {
         $langId = FatUtility::int($langId);
         $frm = new Form('frmAddress');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Address_Label', $this->adminLangId), 'addr_title');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Address_Label', $this->siteLangId), 'addr_title');
         $fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_E.g:_My_Office_Address', $langId));
-        $frm->addRequiredField(Labels::getLabel('LBL_Name', $this->adminLangId), 'addr_name');
-        $frm->addRequiredField(Labels::getLabel('LBL_Address_Line1', $this->adminLangId), 'addr_address1');
-        $frm->addTextBox(Labels::getLabel('LBL_Address_Line2', $this->adminLangId), 'addr_address2');
-        $frm->addRequiredField(Labels::getLabel('LBL_City', $this->adminLangId), 'addr_city');
+        $frm->addRequiredField(Labels::getLabel('LBL_Name', $this->siteLangId), 'addr_name');
+        $frm->addRequiredField(Labels::getLabel('LBL_Address_Line1', $this->siteLangId), 'addr_address1');
+        $frm->addTextBox(Labels::getLabel('LBL_Address_Line2', $this->siteLangId), 'addr_address2');
+        $frm->addRequiredField(Labels::getLabel('LBL_City', $this->siteLangId), 'addr_city');
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($langId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'addr_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'), [], Labels::getLabel('LBL_Select', $this->adminLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'addr_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'), [], Labels::getLabel('LBL_Select', $this->siteLangId));
         $fld->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'addr_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirement->setRequired(true);
-        $frm->addTextBox(Labels::getLabel('LBL_Postal_Code', $this->adminLangId), 'addr_zip');
+        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'addr_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
+        $frm->addTextBox(Labels::getLabel('LBL_Postal_Code', $this->siteLangId), 'addr_zip');
         $frm->addHiddenField('', 'addr_phone_dcode');
-        $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->adminLangId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+        $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $frm->addHiddenField('', 'addr_record_id');
         $frm->addHiddenField('', 'addr_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -2350,12 +2350,12 @@ class UsersController extends AdminBaseController
     private function getCookiesPreferencesForm()
     {
         $frm = new Form('frmCookiesPreferences');
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Functional", $this->adminLangId), 'ucp_functional', 1, array(), true, 0);
-        $fld->htmlAfterField = '<div>' . Labels::getLabel('LBL_Functional_Cookies_Information', $this->adminLangId) . '</div>';
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Statistical_Analysis", $this->adminLangId), 'ucp_statistical', 1, array(), false, 0);
-        $fld->htmlAfterField = '<div>' . Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $this->adminLangId) . '</div>';
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Personalise_Experience", $this->adminLangId), 'ucp_personalized', 1, array(), false, 0);
-        $fld->htmlAfterField = '<div>' . Labels::getLabel('LBL_Personalise_Cookies_Information', $this->adminLangId) . '</div>';
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Functional", $this->siteLangId), 'ucp_functional', 1, array(), true, 0);
+        $fld->htmlAfterField = '<div>' . Labels::getLabel('LBL_Functional_Cookies_Information', $this->siteLangId) . '</div>';
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Statistical_Analysis", $this->siteLangId), 'ucp_statistical', 1, array(), false, 0);
+        $fld->htmlAfterField = '<div>' . Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $this->siteLangId) . '</div>';
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Personalise_Experience", $this->siteLangId), 'ucp_personalized', 1, array(), false, 0);
+        $fld->htmlAfterField = '<div>' . Labels::getLabel('LBL_Personalise_Cookies_Information', $this->siteLangId) . '</div>';
         return $frm;
     }
 }

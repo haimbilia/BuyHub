@@ -36,12 +36,12 @@ $activeMediaTab = !empty($activeMediaTab) ? 'active' : '';
     <?php if ($displayMediaTab) { ?>
         <div class="form-edit-head">
             <nav class="nav nav-tabs">
-                <a class="nav-link <?php echo $activeContentTab; ?>" href="javascript:void(0)" onclick="exportForm('<?php echo $actionType; ?>');" title="<?php echo Labels::getLabel('LBL_CONTENT', $adminLangId); ?>">
-                    <?php echo Labels::getLabel('LBL_CONTENT', $adminLangId); ?>
+                <a class="nav-link <?php echo $activeContentTab; ?>" href="javascript:void(0)" onclick="exportForm('<?php echo $actionType; ?>');" title="<?php echo Labels::getLabel('LBL_CONTENT', $siteLangId); ?>">
+                    <?php echo Labels::getLabel('LBL_CONTENT', $siteLangId); ?>
                 </a>
 
-                <a class="nav-link <?php echo $activeMediaTab; ?>" href="javascript:void(0)" onclick="exportMediaForm('<?php echo $actionType; ?>');" title="<?php echo Labels::getLabel('LBL_MEDIA', $adminLangId); ?>">
-                    <?php echo Labels::getLabel('LBL_MEDIA', $adminLangId); ?>
+                <a class="nav-link <?php echo $activeMediaTab; ?>" href="javascript:void(0)" onclick="exportMediaForm('<?php echo $actionType; ?>');" title="<?php echo Labels::getLabel('LBL_MEDIA', $siteLangId); ?>">
+                    <?php echo Labels::getLabel('LBL_MEDIA', $siteLangId); ?>
                 </a>
             </nav>
         </div>
@@ -55,7 +55,7 @@ $activeMediaTab = !empty($activeMediaTab) ? 'active' : '';
 			<div class="col-auto">
 				<button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
 					<?php
-					echo Labels::getLabel('LBL_EXPORT', $adminLangId);
+					echo Labels::getLabel('LBL_EXPORT', $siteLangId);
 					?>
 				</button>
 			</div>

@@ -21,7 +21,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'brand_identifier':
                 $uploadedTime = AttachedFile::setTimeParam($row['brand_updated_on']);
-                $brandImage = '<figure class="user-profile_photo"><img width="40" height="40" title="' . $row['brand_name'] . '" alt="' . $row['brand_name'] . '" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $adminLangId, 'MINITHUMB'), CONF_WEBROOT_FRONT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '"></figure>';
+                $brandImage = '<figure class="user-profile_photo"><img width="40" height="40" title="' . $row['brand_name'] . '" alt="' . $row['brand_name'] . '" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, 'MINITHUMB'), CONF_WEBROOT_FRONT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '"></figure>';
 
                 if ($row['brand_name'] != '') {
                     $brandName = '<div class="user-profile_data">
@@ -50,7 +50,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 $data = [
-                    'adminLangId' => $adminLangId,
+                    'siteLangId' => $siteLangId,
                     'recordId' => $row['brand_id']
                 ];
 
@@ -75,7 +75,7 @@ if (count($arrListing) == 0) {
         array(
             'colspan' => count($fields)
         ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId)
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );
 }
 

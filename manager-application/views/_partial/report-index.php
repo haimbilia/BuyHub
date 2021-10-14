@@ -46,7 +46,7 @@ if (!empty($fields)) {
                 </div>
                 <section class="section searchform_filter">
                     <div class="sectionhead">
-                        <h4> <?php echo Labels::getLabel('LBL_Search...', $adminLangId); ?>
+                        <h4> <?php echo Labels::getLabel('LBL_Search...', $siteLangId); ?>
                         </h4>
                     </div>
                     <div class="sectionbody space togglewrap" style="display:none;">
@@ -60,14 +60,14 @@ if (!empty($fields)) {
                         <?php
                         $otherButton = isset($actionButtons['otherButtons']) ? $actionButtons['otherButtons'] : [];
                         $actionButtons = [
-                            'adminLangId' => $adminLangId,
+                            'siteLangId' => $siteLangId,
                             'htmlContent' => $htmlContent,
                             'otherButtons' => [
                                 [
                                     'attr' => [
                                         'href' => 'javascript:void(0)',
                                         'onclick' => 'exportReport()',
-                                        'title' => Labels::getLabel('LBL_Export', $adminLangId)
+                                        'title' => Labels::getLabel('LBL_Export', $siteLangId)
                                     ],
                                     'label' => '<i class="fas fa-file-export"></i>'
                                 ]
@@ -80,7 +80,7 @@ if (!empty($fields)) {
                     <div class="sectionbody">
                         <div class="tablewrap">
                             <div id="listing">
-                                <?php echo Labels::getLabel('LBL_Processing...', $adminLangId); ?> </div>
+                                <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?> </div>
                         </div>
                     </div>
                 </section>

@@ -50,7 +50,7 @@ class ImageAttributesController extends AdminBaseController
         switch ($post['select_module']) {
             case AttachedFile::FILETYPE_PRODUCT_IMAGE:
                 $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'product_id = afile_record_id', 'p');
-                $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->adminLangId, 'p_l');
+                $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
                 $srch->addMultipleFields(
                         array('product_id as record_id', 'IFNULL(product_name, product_identifier) as record_name', 'afile_type')
                 );
@@ -61,7 +61,7 @@ class ImageAttributesController extends AdminBaseController
                 break;
             case AttachedFile::FILETYPE_CATEGORY_BANNER:
                 $srch->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'prodcat_id = afile_record_id', 'pc');
-                $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT OUTER JOIN', 'pc.prodcat_id = pc_l.prodcatlang_prodcat_id AND pc_l.prodcatlang_lang_id = ' . $this->adminLangId, 'pc_l');
+                $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT OUTER JOIN', 'pc.prodcat_id = pc_l.prodcatlang_prodcat_id AND pc_l.prodcatlang_lang_id = ' . $this->siteLangId, 'pc_l');
                 $srch->addMultipleFields(
                         array('prodcat_id as record_id', 'IFNULL(prodcat_name, prodcat_identifier) as record_name', 'afile_type')
                 );
@@ -72,7 +72,7 @@ class ImageAttributesController extends AdminBaseController
                 break;
             case AttachedFile::FILETYPE_BLOG_POST_IMAGE:
                 $srch->joinTable(BlogPost::DB_TBL, 'LEFT OUTER JOIN', 'post_id = afile_record_id', 'bp');
-                $srch->joinTable(BlogPost::DB_TBL_LANG, 'LEFT OUTER JOIN', 'bp.post_id = bp_l.postlang_post_id AND bp_l.postlang_lang_id = ' . $this->adminLangId, 'bp_l');
+                $srch->joinTable(BlogPost::DB_TBL_LANG, 'LEFT OUTER JOIN', 'bp.post_id = bp_l.postlang_post_id AND bp_l.postlang_lang_id = ' . $this->siteLangId, 'bp_l');
                 $srch->addMultipleFields(
                         array('post_id as record_id', 'IFNULL(post_title, post_identifier) as record_name', 'afile_type')
                 );
@@ -83,7 +83,7 @@ class ImageAttributesController extends AdminBaseController
                 break;
             default:
                 $srch->joinTable(Brand::DB_TBL, 'LEFT OUTER JOIN', 'brand_id = afile_record_id', 'b');
-                $srch->joinTable(Brand::DB_TBL_LANG, 'LEFT OUTER JOIN', 'b.brand_id = b_l.brandlang_brand_id AND b_l.brandlang_lang_id = ' . $this->adminLangId, 'b_l');
+                $srch->joinTable(Brand::DB_TBL_LANG, 'LEFT OUTER JOIN', 'b.brand_id = b_l.brandlang_brand_id AND b_l.brandlang_lang_id = ' . $this->siteLangId, 'b_l');
                 $srch->addMultipleFields(
                         array('brand_id as record_id', 'IFNULL(brand_name, brand_identifier) as record_name', 'afile_type')
                 );
@@ -130,11 +130,11 @@ class ImageAttributesController extends AdminBaseController
 
         switch ($moduleType) {
             case AttachedFile::FILETYPE_PRODUCT_IMAGE:
-                $data = Product::getProductDataById($this->adminLangId, $recordId, 'IFNULL(product_name, product_identifier) as title');
+                $data = Product::getProductDataById($this->siteLangId, $recordId, 'IFNULL(product_name, product_identifier) as title');
                 $title = $data['title'];
                 break;
             case AttachedFile::FILETYPE_CATEGORY_BANNER:
-                $srch = ProductCategory::getSearchObject(false, $this->adminLangId);
+                $srch = ProductCategory::getSearchObject(false, $this->siteLangId);
                 $srch->addOrder('m.prodcat_active', 'DESC');
                 $srch->addCondition(ProductCategory::DB_TBL_PREFIX . 'deleted', '=', 0);
                 $srch->addFld('IFNULL(prodcat_name, prodcat_identifier) AS prodcat_name');
@@ -147,7 +147,7 @@ class ImageAttributesController extends AdminBaseController
                 $title = $records['prodcat_name'];
                 break;
             case AttachedFile::FILETYPE_BLOG_POST_IMAGE:
-                $srch = BlogPost::getSearchObject($this->adminLangId);
+                $srch = BlogPost::getSearchObject($this->siteLangId);
                 $srch->addFld('IFNULL(post_title, post_identifier) as post_title');
                 $srch->addCondition('post_id', '=', $recordId);
                 $srch->addOrder('post_id', 'DESC');
@@ -159,7 +159,7 @@ class ImageAttributesController extends AdminBaseController
                 $title = $records['post_title'];
                 break;
             default:
-                $srch = Brand::getListingObj($this->adminLangId, null, true);
+                $srch = Brand::getListingObj($this->siteLangId, null, true);
                 $srch->addCondition('brand_id', '=', $recordId);
                 $srch->addOrder('brand_id', 'DESC');
                 $srch->doNotCalculateRecords();
@@ -196,24 +196,24 @@ class ImageAttributesController extends AdminBaseController
         $frm->addHiddenField('', 'record_id', $recordId);
 
         if ($moduleType == AttachedFile::FILETYPE_PRODUCT_IMAGE) {
-            $imgTypesArr = Product::getSeparateImageOptions($recordId, $this->adminLangId);
-            $frm->addSelectBox(Labels::getLabel('LBL_Image_File_Type', $this->adminLangId), 'option_id', $imgTypesArr, $optionId, array(), '');
+            $imgTypesArr = Product::getSeparateImageOptions($recordId, $this->siteLangId);
+            $frm->addSelectBox(Labels::getLabel('LBL_Image_File_Type', $this->siteLangId), 'option_id', $imgTypesArr, $optionId, array(), '');
         }
         
         $languages = Language::getAllNames();
 		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
 		} else  {
 			$lang_id = array_key_first($languages); 
 			$frm->addHiddenField('', 'lang_id', $lang_id);
 		}
 
         foreach ($images as $afileId => $afileData) {
-            $frm->addTextBox(Labels::getLabel('LBL_Image_Title', $this->adminLangId), 'image_title' . $afileId);
-            $frm->addTextBox(Labels::getLabel('LBL_Image_Alt', $this->adminLangId), 'image_alt' . $afileId);
+            $frm->addTextBox(Labels::getLabel('LBL_Image_Title', $this->siteLangId), 'image_title' . $afileId);
+            $frm->addTextBox(Labels::getLabel('LBL_Image_Alt', $this->siteLangId), 'image_alt' . $afileId);
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->adminLangId));
-        $frm->addButton('', 'btn_discard', Labels::getLabel('LBL_Discard', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->siteLangId));
+        $frm->addButton('', 'btn_discard', Labels::getLabel('LBL_Discard', $this->siteLangId));
         return $frm;
     }
 
@@ -270,7 +270,7 @@ class ImageAttributesController extends AdminBaseController
             // $recordSaved = true;
         }
         /* if (!$recordSaved) {
-          Message::addErrorMessage(Labels::getLabel('MSG_Please_fill_any_one', $this->adminLangId));
+          Message::addErrorMessage(Labels::getLabel('MSG_Please_fill_any_one', $this->siteLangId));
           FatUtility::dieWithError(Message::getHtml());
           } */
         $this->set('msg', $this->str_setup_successful);
@@ -305,7 +305,7 @@ class ImageAttributesController extends AdminBaseController
 
         if (empty($urlrewriteIdsArr)) {
             FatUtility::dieWithError(
-                    Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                    Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -324,7 +324,7 @@ class ImageAttributesController extends AdminBaseController
         $urlrewriteId = FatUtility::int($urlrewriteId);
         if (1 > $urlrewriteId) {
             FatUtility::dieWithError(
-                    Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                    Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
         $obj = new UrlRewrite($urlrewriteId);
@@ -338,11 +338,11 @@ class ImageAttributesController extends AdminBaseController
     {
         $frm = new Form('frmSearch');
         $attachedFile = new AttachedFile();
-        $attachementArr = $attachedFile->getImgAttrTypeArray($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Select_Type', $this->adminLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE, $attachementArr, Labels::getLabel('LBL_Select', $this->adminLangId));
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $attachementArr = $attachedFile->getImgAttrTypeArray($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Select_Type', $this->siteLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE, $attachementArr, Labels::getLabel('LBL_Select', $this->siteLangId));
+        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -354,10 +354,10 @@ class ImageAttributesController extends AdminBaseController
 
         $frm = new Form('frmUrlRewrite');
         $frm->addHiddenField('', 'urlrewrite_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_Original_URL', $this->adminLangId), 'urlrewrite_original');
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Custom_URL', $this->adminLangId), 'urlrewrite_custom');
-        $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_Example:_Custom_URL_Example', $this->adminLangId) . '</small>';
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addRequiredField(Labels::getLabel('LBL_Original_URL', $this->siteLangId), 'urlrewrite_original');
+        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Custom_URL', $this->siteLangId), 'urlrewrite_custom');
+        $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_Example:_Custom_URL_Example', $this->siteLangId) . '</small>';
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 }

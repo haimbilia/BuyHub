@@ -9,7 +9,7 @@ if (isset($includeEditor) && $includeEditor == true) {
 }
 
 $commonHeadData = array(
-    'adminLangId' => $adminLangId,
+    'siteLangId' => $siteLangId,
     'jsVariables' => $jsVariables,
     'extendEditorJs' => $extendEditorJs,
     'includeEditor' => $includeEditor,

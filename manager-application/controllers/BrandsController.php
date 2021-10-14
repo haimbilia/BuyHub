@@ -17,7 +17,7 @@ class BrandsController extends AdminBaseController
 
         $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_BRANDS', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_BRANDS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->addCss('css/cropper.css');
@@ -29,11 +29,11 @@ class BrandsController extends AdminBaseController
     public function getSearchForm($request = false, $fields = [])
     {
         $frm = new Form('frmRecordSearch');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
 
         if ($request) {
-            $frm->addTextBox(Labels::getLabel('LBL_SELLER_NAME_OR_EMAIL', $this->adminLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off', 'placeholder' => Labels::getLabel('LBL_SELLER_NAME_OR_EMAIL', $this->adminLangId)));
+            $frm->addTextBox(Labels::getLabel('LBL_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off', 'placeholder' => Labels::getLabel('LBL_SELLER_NAME_OR_EMAIL', $this->siteLangId)));
             $frm->addHiddenField('', 'user_id');
         }
 
@@ -67,7 +67,7 @@ class BrandsController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -77,7 +77,7 @@ class BrandsController extends AdminBaseController
         $post = $searchForm->getFormDataFromArray($data);
 
         $prodBrandObj = new Brand();
-        $srch = $prodBrandObj->getSearchObject($this->adminLangId, true, false, false);
+        $srch = $prodBrandObj->getSearchObject($this->siteLangId, true, false, false);
         $srch->addFld('b.*, brand_id as listSerial');
 
         if (!empty($post['keyword'])) {
@@ -239,27 +239,27 @@ class BrandsController extends AdminBaseController
         $this->objPrivilege->canEditBrands();
         $recordId = FatUtility::int($recordId);
 
-        $action = Labels::getLabel('LBL_Add_New', $this->adminLangId);
+        $action = Labels::getLabel('LBL_Add_New', $this->siteLangId);
         if ($recordId > 0) {
-            $action = Labels::getLabel('LBL_Update', $this->adminLangId);
+            $action = Labels::getLabel('LBL_Update', $this->siteLangId);
         }
 
         $frm = new Form('frmProdBrand', array('id' => 'frmProdBrand'));
         $frm->addHiddenField('', 'brand_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_Brand_Name', $this->adminLangId), 'brand_name');
-        //$frm->addRequiredField(Labels::getLabel('LBL_Brand_Identifier', $this->adminLangId), 'brand_identifier');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Brand_SEO_Friendly_URL', $this->adminLangId), 'urlrewrite_custom');
+        $frm->addRequiredField(Labels::getLabel('LBL_Brand_Name', $this->siteLangId), 'brand_name');
+        //$frm->addRequiredField(Labels::getLabel('LBL_Brand_Identifier', $this->siteLangId), 'brand_identifier');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Brand_SEO_Friendly_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Brand_Status', $this->adminLangId), 'brand_active', $activeInactiveArr, '', array(), '');
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Brand_Status', $this->siteLangId), 'brand_active', $activeInactiveArr, '', array(), '');
 
-        /* $frm->addCheckBox(Labels::getLabel('LBL_Featured',$this->adminLangId), 'brand_featured', 1,array(),false,0); */
+        /* $frm->addCheckBox(Labels::getLabel('LBL_Featured',$this->siteLangId), 'brand_featured', 1,array(),false,0); */
         /*$fld = $frm->addHiddenField('', 'brand_logo', '', array('id' => 'brand_logo'));   */
         $languageArr = Language::getDropDownList();        
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, ''); 
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }      
         return $frm;
     }
@@ -269,15 +269,15 @@ class BrandsController extends AdminBaseController
         $this->objPrivilege->canEditBrands();
         $this->modelObj = (new ReflectionClass('Brand'))->newInstanceArgs($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_BRAND_SETUP', $this->adminLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_BRAND_SETUP', $this->siteLangId));
     }   
 
     protected function getLangForm($recordId = 0, $lang_id = 0)
     {
         $frm = new Form('frmProdBrandLang', array('id' => 'frmProdBrandLang'));
         $frm->addHiddenField('', 'brand_id', $recordId);
-		$frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');		
-        $frm->addRequiredField(Labels::getLabel('LBL_Brand_Name', $this->adminLangId), 'brand_name');
+		$frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');		
+        $frm->addRequiredField(Labels::getLabel('LBL_Brand_Name', $this->siteLangId), 'brand_name');
         return $frm;
     }
 
@@ -367,24 +367,24 @@ class BrandsController extends AdminBaseController
             if ($urlRow) {
                 $recordObj->assignValues(array('urlrewrite_custom' => $shopCustomUrl));
                 if (!$recordObj->update(array('smt' => 'urlrewrite_original = ?', 'vals' => array($shopOriginalUrl)))) {
-                    LibHelper::exitWithError(Labels::getLabel("Please_try_different_url,_URL_already_used_for_another_record.", $this->adminLangId), true);
+                    LibHelper::exitWithError(Labels::getLabel("Please_try_different_url,_URL_already_used_for_another_record.", $this->siteLangId), true);
                 }
                 //$shopDetails['urlrewrite_custom'] = $urlRow['urlrewrite_custom'];
             } else {
                 $recordObj->assignValues(array('urlrewrite_original' => $shopOriginalUrl, 'urlrewrite_custom' => $shopCustomUrl));
                 if (!$recordObj->addNew()) {
-                    LibHelper::exitWithError(Labels::getLabel("Please_try_different_url,_URL_already_used_for_another_record.", $this->adminLangId), true);
+                    LibHelper::exitWithError(Labels::getLabel("Please_try_different_url,_URL_already_used_for_another_record.", $this->siteLangId), true);
                 }
             }
         }
         $brandData = Brand::getAttributesById($brand_id);
-        $brandLangData = Brand::getAttributesByLangId($this->adminLangId, $brand_id);
+        $brandLangData = Brand::getAttributesByLangId($this->siteLangId, $brand_id);
         $brandData['brand_name'] = $brandLangData['brand_name'];
         /* ] */
         $email = new EmailHandler();
         if ($post['brand_status'] != Brand::BRAND_REQUEST_PENDING) {
-            if (!$email->sendBrandRequestStatusChangeNotification($this->adminLangId, $brandData)) {
-                LibHelper::exitWithError(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->adminLangId), true);
+            if (!$email->sendBrandRequestStatusChangeNotification($this->siteLangId, $brandData)) {
+                LibHelper::exitWithError(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->siteLangId), true);
             }
         }
 
@@ -408,7 +408,7 @@ class BrandsController extends AdminBaseController
         }
 
         Product::updateMinPrices(0, 0, $brandId);
-        $this->set('msg', Labels::getLabel('MSG_Brand_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Brand_Setup_Successful', $this->siteLangId));
         $this->set('brandId', $brandId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -486,7 +486,7 @@ class BrandsController extends AdminBaseController
         $this->objPrivilege->canEditBrands();
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId), true);
         }
         $brand_id = FatApp::getPostedData('brand_id', FatUtility::VAR_INT, 0);
 		$languages = Language::getAllNames();
@@ -504,7 +504,7 @@ class BrandsController extends AdminBaseController
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Please_Select_A_File', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -527,7 +527,7 @@ class BrandsController extends AdminBaseController
 
         $this->set('brandId', $brand_id);
         $this->set('file', $_FILES['cropped_image']['name']);
-        $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_File_Uploaded_Successfully', $this->adminLangId));
+        $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_File_Uploaded_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -548,19 +548,19 @@ class BrandsController extends AdminBaseController
         $frm->addHiddenField('', 'recordId', $recordId);
 		
 		if(count($languagesAssocArr) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', array(0 => Labels::getLabel('LBL_Universal', $this->adminLangId)) + $languagesAssocArr, '', array(), '');
+			 $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('LBL_Universal', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
 		} else  {
 			$lang_id = array_key_first($languagesAssocArr); 
 			$frm->addHiddenField('', 'lang_id', $lang_id);
 		}
         
         
-		$ratioArr = AttachedFile::getRatioTypeArray($this->adminLangId);
-        $frm->addRadioButtons(Labels::getLabel('LBL_Ratio', $this->adminLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
+		$ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
+        $frm->addRadioButtons(Labels::getLabel('LBL_Ratio', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BRAND_LOGO);
         $frm->addHiddenField('', 'logo_min_width');
         $frm->addHiddenField('', 'logo_min_height');
-        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->adminLangId), 'logo', array('accept' => 'image/*', 'data-frm' => 'frmBrandLogo'));
+        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->siteLangId), 'logo', array('accept' => 'image/*', 'data-frm' => 'frmBrandLogo'));
         $frm->addHtml('', 'brand_logo_display_div', '');
 
         return $frm;
@@ -572,17 +572,17 @@ class BrandsController extends AdminBaseController
         $languagesAssocArr = Language::getAllNames();
         $frm->addHiddenField('', 'recordId', $recordId);
 		if(count($languagesAssocArr) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', array(0 => Labels::getLabel('LBL_Universal', $this->adminLangId)) + $languagesAssocArr, '', array(), '');
+			 $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('LBL_Universal', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
 		} else  {
 			$lang_id = array_key_first($languagesAssocArr); 
 			$frm->addHiddenField('', 'lang_id', $lang_id);
 		}
-		$screenArr = applicationConstants::getDisplaysArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->adminLangId), 'slide_screen', $screenArr, '', array(), '');
+		$screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->siteLangId), 'slide_screen', $screenArr, '', array(), '');
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BRAND_IMAGE);
         $frm->addHiddenField('', 'banner_min_width');
         $frm->addHiddenField('', 'banner_min_height');
-        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->adminLangId), 'image', array('accept' => 'image/*', 'data-frm' => 'frmBrandImage'));
+        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->siteLangId), 'image', array('accept' => 'image/*', 'data-frm' => 'frmBrandImage'));
         $frm->addHtml('', 'brand_image_display_div', '');
 
         return $frm;
@@ -593,22 +593,22 @@ class BrandsController extends AdminBaseController
         $this->objPrivilege->canEditBrands();
         $brand_id = FatUtility::int($brand_id);
 
-        $action = Labels::getLabel('LBL_Add_New', $this->adminLangId);
+        $action = Labels::getLabel('LBL_Add_New', $this->siteLangId);
         if ($brand_id > 0) {
-            $action = Labels::getLabel('LBL_Update', $this->adminLangId);
+            $action = Labels::getLabel('LBL_Update', $this->siteLangId);
         }
 
         $frm = new Form('frmProdBrand', array('id' => 'frmProdBrand'));
         $frm->addHiddenField('', 'brand_id', 0);
         $frm->addHiddenField('', 'brand_seller_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_Brand_Identifier', $this->adminLangId), 'brand_identifier');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Brand_SEO_Friendly_URL', $this->adminLangId), 'urlrewrite_custom');
+        $frm->addRequiredField(Labels::getLabel('LBL_Brand_Identifier', $this->siteLangId), 'brand_identifier');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Brand_SEO_Friendly_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
-        $reqStatusArr = Brand::getBrandReqStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_brand_status', $this->adminLangId), 'brand_status', $reqStatusArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
+        $reqStatusArr = Brand::getBrandReqStatusArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_brand_status', $this->siteLangId), 'brand_status', $reqStatusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $frm->addTextArea('', 'brand_comments', '');
-        /* $frm->addCheckBox(Labels::getLabel('LBL_Featured',$this->adminLangId), 'brand_featured', 1,array(),false,0); */
+        /* $frm->addCheckBox(Labels::getLabel('LBL_Featured',$this->siteLangId), 'brand_featured', 1,array(),false,0); */
         $fld = $frm->addHiddenField('', 'brand_logo', '', array('id' => 'brand_logo'));
         $frm->addSubmitButton('', 'btn_submit', $action);
         return $frm;
@@ -666,7 +666,7 @@ class BrandsController extends AdminBaseController
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -732,7 +732,7 @@ class BrandsController extends AdminBaseController
         $srch->joinTable(
             Brand::DB_TBL . '_lang',
             'LEFT OUTER JOIN',
-            'brandlang_brand_id = brand_id AND brandlang_lang_id = ' . $this->adminLangId
+            'brandlang_brand_id = brand_id AND brandlang_lang_id = ' . $this->siteLangId
         );
         $srch->addMultipleFields(array('brand_id, IFNULL(brand_name, brand_identifier) as brand_name'));
 
@@ -803,7 +803,7 @@ class BrandsController extends AdminBaseController
         $srch = $prodBrandObj->getSearchObject();
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = brand_seller_id', 'u');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
-        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->adminLangId, 's_l');
+        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
         $srch->addMultipleFields(array('b.*', 'u.user_name', 'ifnull(shop_name, shop_identifier) as shop_name'));
         $srch->addCondition('brand_status', '=', applicationConstants::NO);
         $srch->addCondition('brand_seller_id', '>', 0);
@@ -827,7 +827,7 @@ class BrandsController extends AdminBaseController
         $srch->joinTable(
             Brand::DB_TBL . '_lang',
             'LEFT OUTER JOIN',
-            'brandlang_brand_id = b.brand_id AND brandlang_lang_id = ' . $this->adminLangId,
+            'brandlang_brand_id = b.brand_id AND brandlang_lang_id = ' . $this->siteLangId,
             'bl'
         );
         $srch->addMultipleFields(array("bl.brand_name"));
@@ -888,7 +888,7 @@ class BrandsController extends AdminBaseController
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $brandObj = new Brand($recordId);
@@ -899,19 +899,19 @@ class BrandsController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $brandsTblHeadingCols = CacheHelper::get('brandsTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $brandsTblHeadingCols = CacheHelper::get('brandsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($brandsTblHeadingCols) {
             return json_decode($brandsTblHeadingCols);
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->adminLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'brand_identifier' => Labels::getLabel('LBL_BRAND_NAME', $this->adminLangId),
-            'brand_active' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'brand_identifier' => Labels::getLabel('LBL_BRAND_NAME', $this->siteLangId),
+            'brand_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => '',
         ];
-        CacheHelper::create('brandsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('brandsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
