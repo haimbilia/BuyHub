@@ -20,9 +20,7 @@ class ConfigurationsController extends AdminBaseController
         $this->_template->addCss('css/cropper.css');
         $this->_template->addJs('js/cropper.js');
         $this->_template->addJs('js/cropper-main.js');
-        $tabs = Configurations::getTabsArr();
         $this->set('activeTab', Configurations::FORM_GENERAL);
-        $this->set('tabs', $tabs);
         $this->_template->addJs('js/jscolor.js');
         $this->_template->render();
     }
@@ -66,6 +64,8 @@ class ConfigurationsController extends AdminBaseController
             $this->set('languages', Language::getAllNames());
         }
 
+        $tabs = Configurations::getTabsArr();
+        $this->set('tabs', $tabs);
         $this->set('dispLangTab', $dispLangTab);
         $this->set('lang_id', 0);
         $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
@@ -599,14 +599,14 @@ class ConfigurationsController extends AdminBaseController
                 $robotsFld = $frm->addTextarea(Labels::getLabel('LBL_Robots_Txt', $this->adminLangId), 'CONF_SITE_ROBOTS_TXT');
                 $robotsFld->htmlAfterField = '<small>' . Labels::getLabel("LBL_This_will_update_your_Robots.txt_file._This_is_to_help_search_engines_index_your_site_more_appropriately.", $this->adminLangId) . '</small>';
 
-                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Tag_Manager", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Tag_Manager", $this->adminLangId) . '</h3>');
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Head_Script", $this->adminLangId), 'CONF_GOOGLE_TAG_MANAGER_HEAD_SCRIPT');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_code_provided_by_google_tag_manager_for_integration.", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Body_Script", $this->adminLangId), 'CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_code_provided_by_google_tag_manager_for_integration.", $this->adminLangId) . "</small>";
 
-                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Webmaster", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Webmaster", $this->adminLangId) . '</h3>');
                 $fld = $frm->addFileUpload(Labels::getLabel('LBL_HTML_file_Verification', $this->adminLangId), 'google_file_verification', array('accept' => '.html', 'onChange' => 'updateVerificationFile(this, "google")'));
                 $htmlAfterField = '';
                 if (file_exists(CONF_UPLOADS_PATH . '/google-site-verification.html')) {
@@ -615,7 +615,7 @@ class ConfigurationsController extends AdminBaseController
                 $htmlAfterField .= "<small>" . Labels::getLabel("LBL_Upload_HTML_file_provided_by_Google_webmaster_tool.", $this->adminLangId) . "</small>";
                 $fld->htmlAfterField = $htmlAfterField;
 
-                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Bing_Webmaster", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Bing_Webmaster", $this->adminLangId) . '</h3>');
                 $fld = $frm->addFileUpload(Labels::getLabel('LBL_XML_file_Authentication', $this->adminLangId), 'bing_file_verification', array('accept' => '.xml', 'onChange' => 'updateVerificationFile(this, "bing")'));
                 $htmlAfterField = '';
                 if (file_exists(CONF_UPLOADS_PATH . '/BingSiteAuth.xml')) {
@@ -624,11 +624,11 @@ class ConfigurationsController extends AdminBaseController
                 $htmlAfterField .= "<small>" . Labels::getLabel("LBL_Upload_BindSiteAuthXML_file_provided_by_Bing_webmaster_tool.", $this->adminLangId) . "</small>";
                 $fld->htmlAfterField = $htmlAfterField;
 
-                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Hotjar", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Hotjar", $this->adminLangId) . '</h3>');
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Head_Script", $this->adminLangId), 'CONF_HOTJAR_HEAD_SCRIPT');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_code_provided_by_hotjar_for_integration.", $this->adminLangId) . "</small>";
 
-                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Schema_COdes", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Schema_COdes", $this->adminLangId) . '</h3>');
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Default_Schema", $this->adminLangId), 'CONF_DEFAULT_SCHEMA_CODES_SCRIPT');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Update_Schema_code_related_information.", $this->adminLangId) . "</small>";
 
@@ -692,7 +692,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld3->requirements()->setRange('1', '2000');
                 $fld3->htmlAfterField = "<small>" . Labels::getLabel("LBL_Determines_how_many_catalog_items_are_shown_per_page_(products,_categories,_etc)", $this->adminLangId) . ".</small>";
 
-                $frm->addHtml('', 'geolocation', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Location', $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'geolocation', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Location', $this->adminLangId) . '</h3>');
                 $fld = $frm->addRadioButtons(
                     Labels::getLabel("LBL_ACTIVATE_GEO_LOCATION", $this->adminLangId),
                     'CONF_ENABLE_GEO_LOCATION',
@@ -833,7 +833,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Max_Seller_Request_Attempts", $this->adminLangId), 'CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', '');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Maximum_seller_request_attempts_allowed", $this->adminLangId) . "</small>";
 
-                $frm->addHtml('', 'Withdrawal', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Withdrawal", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Withdrawal', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Withdrawal", $this->adminLangId) . '</h3>');
 
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Minimum_Withdrawal_Amount", $this->adminLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_MIN_WITHDRAW_LIMIT', '');
                 $fld->htmlAfterField = "<small> " . Labels::getLabel("LBL_This_is_the_minimum_withdrawable_amount.", $this->adminLangId) . "</small>";
@@ -854,14 +854,14 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Minimum_Wallet_Balance', $this->adminLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_COD_MIN_WALLET_BALANCE');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_seller_needs_to_maintain_to_accept_COD_orders._Default_is_-1", $this->adminLangId) . "</small>";
 
-                $frm->addHtml('', 'Checkout', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Pickup', $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Checkout', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Pickup', $this->adminLangId) . '</h3>');
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Display_Time_Slots_After_Order', $this->adminLangId) . ' [' . Labels::getLabel('LBL_Hours', $this->adminLangId) . ']', 'CONF_TIME_SLOT_ADDITION', 2);
                 $fld->requirements()->setInt();
                 $fld->requirements()->setRange('2', '9999999999');
                 $fld->requirements()->setRequired(true);
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_SHOP_PICKUP_INTERVAL_INFO", $this->adminLangId) . "</small>";
 
-                $frm->addHtml('', 'Checkout', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Checkout_Process', $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Checkout', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Checkout_Process', $this->adminLangId) . '</h3>');
                 $fld1 = $frm->addCheckBox(Labels::getLabel('LBL_Activate_Live_Payment_Transaction_Mode', $this->adminLangId), 'CONF_TRANSACTION_MODE', 1, array(), false, 0);
                 $fld1->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_Transaction_Mode_to_live_environment", $this->adminLangId) . "</small>";
                 $obj = new Plugin();
@@ -1057,7 +1057,7 @@ class ConfigurationsController extends AdminBaseController
             case Configurations::FORM_CART_WISHLIST:
                 $fld = $frm->addRadioButtons(Labels::getLabel("LBL_ADD_PRODUCTS_TO_WISHLIST_OR_FAVORITE?", $this->adminLangId), 'CONF_ADD_FAVORITES_TO_WISHLIST', UserWishList::wishlistOrFavtArr($this->adminLangId), applicationConstants::YES, array('class' => 'list-inline'));
 
-                $frm->addHtml('', 'Cart', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Cart", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Cart', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Cart", $this->adminLangId) . '</h3>');
 
                 $fld = $frm->addRadioButtons(Labels::getLabel("LBL_On_Payment_Cancel_Maintain_Cart", $this->adminLangId), 'CONF_MAINTAIN_CART_ON_PAYMENT_CANCEL', applicationConstants::getYesNoArr($this->adminLangId), applicationConstants::NO, array('class' => 'list-inline'));
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Cart_Items_Will_be_retained_on_Cancelling_the_payment", $this->adminLangId) . "</small>";
@@ -1071,7 +1071,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Set_Notification_Count_to_be_Sent", $this->adminLangId), 'CONF_SENT_CART_REMINDER_COUNT', '');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_how_many_notifications_will_be_sent_to_buyer.", $this->adminLangId) . "</small>";
 
-                $frm->addHtml('', 'Wishlist', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Wishlist", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Wishlist', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Wishlist", $this->adminLangId) . '</h3>');
 
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Reminder_Interval_For_Products_In_Wishlist_[Days]", $this->adminLangId), 'CONF_REMINDER_INTERVAL_PRODUCTS_IN_WISHLIST', '');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_interval_in_days_to_send_auto_notification_alert_to_buyer_for_products_in_Wishlist.", $this->adminLangId) . "</small>";
@@ -1171,7 +1171,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Reward_Point_Validity", $this->adminLangId), 'CONF_REWARDS_VALIDITY_ON_PURCHASE');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Reward_Point_Validity_in_days_from_date_of_credit", $this->adminLangId) . "</small>";
 
-                $frm->addHtml('', 'Birthday_Rewards', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Birthday_Reward_Points", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Birthday_Rewards', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Birthday_Reward_Points", $this->adminLangId) . '</h3>');
 
                 $frm->addRadioButtons(
                     Labels::getLabel("LBL_Enable_birthday_discount", $this->adminLangId),
@@ -1187,7 +1187,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_reward_Points_Validity", $this->adminLangId), 'CONF_BIRTHDAY_REWARD_POINTS_VALIDITY');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Reward_Points_validity_in_days_from_the_date_of_credit._Please_leave_it_blank_if_you_don't_want_reward_points_to_expire.", $this->adminLangId) . "</small>";
 
-                $frm->addHtml('', 'Buying Year Rewards', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Buying_in_an_Year_Reward_Points", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Buying Year Rewards', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Buying_in_an_Year_Reward_Points", $this->adminLangId) . '</h3>');
 
                 $fld = $frm->addRadioButtons(
                     Labels::getLabel("LBL_Enable_Module", $this->adminLangId),
@@ -1275,12 +1275,12 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Google_Push_Notification_API_KEY", $this->adminLangId), 'CONF_GOOGLE_PUSH_NOTIFICATION_API_KEY');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_api_key_used_in_push_notifications.", $this->adminLangId) . "</small>";
 
-                $frm->addHtml('', 'FaceBookPixel', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_FACEBOOK_PIXEL", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'FaceBookPixel', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_FACEBOOK_PIXEL", $this->adminLangId) . '</h3>');
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_FACEBOOK_PIXEL_ID", $this->adminLangId), 'CONF_FACEBOOK_PIXEL_ID');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_THIS_IS_THE_FACEBOOK_PIXEL_ID_USED_IN_TRACK_EVENTS.", $this->adminLangId) . "</small>";
 
-                $frm->addHtml('', 'Engagespot', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Engagespot_Push_Notifications_(WEB)", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Engagespot', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Engagespot_Push_Notifications_(WEB)", $this->adminLangId) . '</h3>');
 
                 $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Enable_Engagespot", $this->adminLangId), 'CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION', applicationConstants::getYesNoArr($this->adminLangId), '', array('class' => 'list-inline'));
 
@@ -1292,11 +1292,11 @@ class ConfigurationsController extends AdminBaseController
 
 
 
-                $frm->addHtml('', 'GoogleMap', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Map_API", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'GoogleMap', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Map_API", $this->adminLangId) . '</h3>');
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Google_Map_API_Key", $this->adminLangId), 'CONF_GOOGLEMAP_API_KEY');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_Google_map_api_key_used_to_get_user_current_location.", $this->adminLangId) . "</small>";
 
-                $frm->addHtml('', 'Newsletter', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Newsletter_Subscription", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Newsletter', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Newsletter_Subscription", $this->adminLangId) . '</h3>');
 
                 $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Activate_Newsletter_Subscription", $this->adminLangId), 'CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', applicationConstants::getYesNoArr($this->adminLangId), '', array('class' => 'list-inline'));
 
@@ -1312,7 +1312,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Aweber_Signup_Form_Code", $this->adminLangId), 'CONF_AWEBER_SIGNUP_CODE');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Enter_the_newsletter_signup_code_received_from_Aweber", $this->adminLangId) . "</small>";
 
-                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Analytics", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Analytics", $this->adminLangId) . '</h3>');
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Client_Id", $this->adminLangId), 'CONF_ANALYTICS_CLIENT_ID');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_application_Client_Id_used_in_Analytics_dashboard.", $this->adminLangId) . "</small>";
 
@@ -1346,22 +1346,22 @@ class ConfigurationsController extends AdminBaseController
                     $fld = $frm->addHTML('', 'accessToken', 'Please configure your settings and then authenticate them', '', 'class="medium"');
                 }
 
-                $frm->addHtml('', 'GoogleReCaptcha', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_GOOGLE_RECAPTCHA_V3", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'GoogleReCaptcha', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_GOOGLE_RECAPTCHA_V3", $this->adminLangId) . '</h3>');
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Site_Key", $this->adminLangId), 'CONF_RECAPTCHA_SITEKEY');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_application_Site_key_used_for_Google_Recaptcha.", $this->adminLangId) . "</small>";
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Secret_Key", $this->adminLangId), 'CONF_RECAPTCHA_SECRETKEY');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_application_Secret_key_used_for_Google_Recaptcha.", $this->adminLangId) . "</small>";
 
-                $frm->addHtml('', 'Microsoft Translator Text API', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Microsoft_Translator_Text_API", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Microsoft Translator Text API', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Microsoft_Translator_Text_API", $this->adminLangId) . '</h3>');
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_SUBSCRIPTION_KEY", $this->adminLangId), 'CONF_TRANSLATOR_SUBSCRIPTION_KEY');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_MICROSOFT_TRANSLATOR_TEXT_API_3.0_SUBSCRIPTION_KEY.", $this->adminLangId) . "</small>";
 
-                $frm->addHtml('', 'GoogleFontsAPI', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_GOOGLE_FONTS_API", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'GoogleFontsAPI', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_GOOGLE_FONTS_API", $this->adminLangId) . '</h3>');
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_API_KEY", $this->adminLangId), 'CONF_GOOGLE_FONTS_API_KEY');
 
                 /* JW player Settings */
-                $frm->addHtml('', 'JWPlayerSettings', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_JW_Player_Settings", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'JWPlayerSettings', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_JW_Player_Settings", $this->adminLangId) . '</h3>');
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_JW_Player_Key", $this->adminLangId), 'CONF_JW_PLAYER_KEY');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_key_provided_by_JW_PLAYER", $this->adminLangId) . "</small>";
@@ -1381,7 +1381,7 @@ class ConfigurationsController extends AdminBaseController
                 $string = Labels::getLabel("LBL_Days,_after_which_Referrer_Url_is_Expired.", $this->adminLangId);
                 $fld->htmlAfterField = "<small>" . $string . "</small>";
 
-                $frm->addHtml('', 'Rewards', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Reward_Benefits_on_Registration", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Rewards', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Reward_Benefits_on_Registration", $this->adminLangId) . '</h3>');
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Referrer_Reward_Points", $this->adminLangId), 'CONF_REGISTRATION_REFERRER_REWARD_POINTS');
                 $fld->requirements()->setIntPositive();
@@ -1399,7 +1399,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld->requirements()->setIntPositive();
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Rewards_points_validity_in_days_from_the_date_of_credit", $this->adminLangId) . "</small>";
 
-                $frm->addHtml('', 'Rewards', '<div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Reward_Benefits_on_First_Purchase", $this->adminLangId) . '</h3>');
+                $frm->addHtml('', 'Rewards', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Reward_Benefits_on_First_Purchase", $this->adminLangId) . '</h3>');
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Referrer_Reward_Points", $this->adminLangId), 'CONF_SALE_REFERRER_REWARD_POINTS');
                 $fld->requirements()->setIntPositive();
@@ -1673,7 +1673,7 @@ class ConfigurationsController extends AdminBaseController
 
                 $ul->htmlAfterField .= '<input type="file" onChange="popupImage(this)" name="admin_logo" id="admin_logo" data-min_width = "150" data-min_height = "150" data-file_type=' . AttachedFile::FILETYPE_ADMIN_LOGO . ' value="Upload file"></div>';
 
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5">  <div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Desktop_Logo', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
+                $ul->htmlAfterField .= '<div class="col-md-4 mb-5">  <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Desktop_Logo', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
 
 
                 if ($fileData = attachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $langId)) {
@@ -1695,7 +1695,7 @@ class ConfigurationsController extends AdminBaseController
                 $ul->htmlAfterField .= '<input onchange="popupImage(this)" data-frm="frmShopLogo" data-min_height="150" data-min_width="150" data-file_type=' . AttachedFile::FILETYPE_FRONT_LOGO . ' title="Upload" type="file" name="front_logo" value=""></div>';
 
 
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Website_Favicon', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
+                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Website_Favicon', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
 
 
                 if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FAVICON, 0, 0, $langId)) {
@@ -1708,7 +1708,7 @@ class ConfigurationsController extends AdminBaseController
                 $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="favicon" id="favicon" data-min_width = "16" data-min_height = "16" data-file_type=' . AttachedFile::FILETYPE_FAVICON . ' value="Upload file"></div>';
 
 
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Social_Feed_Image', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
+                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Social_Feed_Image', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
 
 
                 if ($fileData =  AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE, 0, 0, $langId)) {
@@ -1721,7 +1721,7 @@ class ConfigurationsController extends AdminBaseController
 
 
 
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Payment_Page_Logo', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
+                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Payment_Page_Logo', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
 
 
                 if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO, 0, 0, $langId)) {
@@ -1742,7 +1742,7 @@ class ConfigurationsController extends AdminBaseController
 
                 $ul->htmlAfterField .= '<input type="file" onChange="popupImage(this)" name="payment_page_logo" id="payment_page_logo" data-min_width = "150" data-min_height = "150" data-file_type=' . AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO . ' value="Upload file"><small>' . Labels::getLabel('MSG_PLEASE_UPLOAD_WHITE_PNG_IMAGE', $this->adminLangId) . '</small></div>';
 
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Watermark_Image', $this->adminLangId) . '</h3><div class="logoWrap"><div class="uploaded--image">';
+                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Watermark_Image', $this->adminLangId) . '</h3><div class="logoWrap"><div class="uploaded--image">';
 
 
                 if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_WATERMARK_IMAGE, 0, 0, $langId)) {
@@ -1754,7 +1754,7 @@ class ConfigurationsController extends AdminBaseController
                 $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="watermark_image" id="watermark_image" data-min_width = "168" data-min_height = "37" data-file_type=' . AttachedFile::FILETYPE_WATERMARK_IMAGE . ' value="Upload file"><small>' . Labels::getLabel('LBL_Dimensions', $this->adminLangId) . ' 168*37</small></div>';
 
 
-                $ul->htmlAfterField .= '<div class="col-md-4  mb-5"> <div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Apple_Touch_Icon', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
+                $ul->htmlAfterField .= '<div class="col-md-4  mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Apple_Touch_Icon', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
 
 
                 if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_APPLE_TOUCH_ICON, 0, 0, $langId)) {
@@ -1766,7 +1766,7 @@ class ConfigurationsController extends AdminBaseController
                 $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="apple_touch_icon" id="apple_touch_icon" data-min_width = "152" data-min_height = "152" data-file_type=' . AttachedFile::FILETYPE_APPLE_TOUCH_ICON . ' value="Upload file"></div>';
 
 
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Mobile_Logo', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
+                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Mobile_Logo', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
 
 
                 if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_MOBILE_LOGO, 0, 0, $langId)) {
@@ -1777,7 +1777,7 @@ class ConfigurationsController extends AdminBaseController
 
                 $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="mobile_logo" id="mobile_logo" data-min_width = "168" data-min_height = "37" data-file_type=' . AttachedFile::FILETYPE_MOBILE_LOGO . ' value="Upload file"><small>' . Labels::getLabel('LBL_Dimensions', $this->adminLangId) . ' 168*37</small></div>';
                 
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Invoice_Logo', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
+                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Invoice_Logo', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
 
 
                 if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_INVOICE_LOGO, 0, 0, $langId)) {
@@ -1798,7 +1798,7 @@ class ConfigurationsController extends AdminBaseController
 
                 $ul->htmlAfterField .= '<input type="file" onChange="popupImage(this)" name="invoice_logo" id="invoice_logo" data-min_width = "150" data-min_height = "150" data-file_type=' . AttachedFile::FILETYPE_INVOICE_LOGO . ' value="Upload file"></div>';
 
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_First_Purchase_Discount_Image', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
+                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_First_Purchase_Discount_Image', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
 
 
                 if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE, 0, 0, $langId)) {
@@ -1810,7 +1810,7 @@ class ConfigurationsController extends AdminBaseController
 
                 $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="purchase_discount" id="purchase_discount" data-min_width = "120" data-min_height = "120" data-file_type=' . AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE . ' value="Upload file"><small>' . Labels::getLabel('LBL_Dimensions', $this->adminLangId) . ' 120*120</small></div>';
 
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-5"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_SELECT_META_IMAGE', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
+                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_SELECT_META_IMAGE', $this->adminLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
 
                 if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_META_IMAGE, 0, 0, $langId)) {
                     $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
@@ -1916,7 +1916,7 @@ class ConfigurationsController extends AdminBaseController
             case 'index':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_GENERAL_SETTINGS', $this->adminLangId)]
+                    ['title' => Labels::getLabel('LBL_CONFIGURATION_SETTINGS', $this->adminLangId)]
                 ];
         }
         return $this->nodes;
