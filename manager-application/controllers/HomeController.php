@@ -24,7 +24,7 @@ class HomeController extends AdminBaseController
 
 
         // simple Caching with:        
-        $dashboardInfoCache = FatCache::get('dashboardInfoCache' . $this->adminLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        $dashboardInfoCache = FatCache::get('dashboardInfoCache' . $this->siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
         //$dashboardInfo = array();
         if (!$dashboardInfoCache) {
             include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';
@@ -36,12 +36,12 @@ class HomeController extends AdminBaseController
 
                 $accountId = $analytics->setAccountId(FatApp::getConfig("CONF_ANALYTICS_ID"));
                 if (!$accountId) {
-                    Message::addErrorMessage(Labels::getLabel('LBL_Analytic_Id_does_not_exist_with_Configured_Account', $this->adminLangId));
+                    Message::addErrorMessage(Labels::getLabel('LBL_Analytic_Id_does_not_exist_with_Configured_Account', $this->siteLangId));
                 } else {
                     $this->set('configuredAnalytics', true);
                 }
             } catch (exception $e) {
-                /* Message::addErrorMessage(Labels::getLabel('LBL_Analytic_Id_does_not_exist_with_Configured_Account',$this->adminLangId)); */
+                /* Message::addErrorMessage(Labels::getLabel('LBL_Analytic_Id_does_not_exist_with_Configured_Account',$this->siteLangId)); */
                 //Message::addErrorMessage($e->getMessage());
             }
 
@@ -52,7 +52,7 @@ class HomeController extends AdminBaseController
 
                 $chatStats = array();
                 if (!empty($statsInfo['stats'])) {
-                    $chatStats = "[['" . Labels::getLabel('LBL_Year', $this->adminLangId) . "', '" . Labels::getLabel('LBL_Today', $this->adminLangId) . "','" . Labels::getLabel('LBL_Weekly', $this->adminLangId) . "','" . Labels::getLabel('LBL_Last_Month', $this->adminLangId) . "','" . Labels::getLabel('LBL_Last_3_Month', $this->adminLangId) . "'],";
+                    $chatStats = "[['" . Labels::getLabel('LBL_Year', $this->siteLangId) . "', '" . Labels::getLabel('LBL_Today', $this->siteLangId) . "','" . Labels::getLabel('LBL_Weekly', $this->siteLangId) . "','" . Labels::getLabel('LBL_Last_Month', $this->siteLangId) . "','" . Labels::getLabel('LBL_Last_3_Month', $this->siteLangId) . "'],";
                     foreach ($statsInfo['stats'] as $key => $val) {
                         if ($key == '') {
                             continue;
@@ -81,37 +81,37 @@ class HomeController extends AdminBaseController
             $conversionStats = $statsObj->getConversionStats();
             $conversionChatData = "['Type','user',{ role: 'style' }],";
             foreach ($conversionStats as $key => $val) {
-                $key = Labels::getLabel('LBL_' . ucwords($key), $this->adminLangId);
+                $key = Labels::getLabel('LBL_' . ucwords($key), $this->siteLangId);
                 $conversionChatData .= "['" . $key . "', " . $val["count"] . ",'#AEC785'],";
             }
 
             $conversionChatData = rtrim($conversionChatData, ',');
 
-            $salesData = $statsObj->getDashboardLast12MonthsSummary($this->adminLangId, 'sales', array(), 6);
+            $salesData = $statsObj->getDashboardLast12MonthsSummary($this->siteLangId, 'sales', array(), 6);
             $salesChartData = array();
             foreach ($salesData as $key => $val) {
                 $salesChartData[$val["duration"]] = $val["value"];
             }
 
 
-            $salesEarningsData = $statsObj->getDashboardLast12MonthsSummary($this->adminLangId, 'earnings', array(), 6);
+            $salesEarningsData = $statsObj->getDashboardLast12MonthsSummary($this->siteLangId, 'earnings', array(), 6);
             $salesEarningsChartData = [];
             foreach ($salesEarningsData as $key => $val) {
                 $salesEarningsChartData[$val["duration"]] = $val["value"];
             }
 
-            $signupsData = $statsObj->getDashboardLast12MonthsSummary($this->adminLangId, 'signups', array('user_is_buyer' => 1, 'user_is_supplier' => 1), 6);
+            $signupsData = $statsObj->getDashboardLast12MonthsSummary($this->siteLangId, 'signups', array('user_is_buyer' => 1, 'user_is_supplier' => 1), 6);
             $signupsChartData = [];
             foreach ($signupsData as $key => $val) {
                 $signupsChartData[$val["duration"]] = $val["value"];
             }
 
-            $affiliateSignupsData = $statsObj->getDashboardLast12MonthsSummary($this->adminLangId, 'signups', array('user_is_affiliate' => 1), 6);
+            $affiliateSignupsData = $statsObj->getDashboardLast12MonthsSummary($this->siteLangId, 'signups', array('user_is_affiliate' => 1), 6);
             $affiliateSignupsChartData = array();
             foreach ($affiliateSignupsData as $key => $val) {
                 $affiliateSignupsChartData[$val["duration"]] = $val["value"];
             }
-            $productsData = $statsObj->getDashboardLast12MonthsSummary($this->adminLangId, 'products', array(), 6);
+            $productsData = $statsObj->getDashboardLast12MonthsSummary($this->siteLangId, 'products', array(), 6);
             $productsChartData = [];
             foreach ($productsData as $key => $val) {
                 $productsChartData[$val["duration"]] = $val["value"];
@@ -144,14 +144,14 @@ class HomeController extends AdminBaseController
                 $dashboardInfo['affiliateSignupsChartData'] = $affiliateSignupsChartData;
             }
 
-            $dashboardInfo['topProducts'] = $statsObj->getTopProducts('YEARLY', $this->adminLangId, 10);
+            $dashboardInfo['topProducts'] = $statsObj->getTopProducts('YEARLY', $this->siteLangId, 10);
             $dashboardInfo['visits_chart_data'] = isset($visits_chart_data) ? rtrim($visits_chart_data, ',') : '';
             $dashboardInfo['visitsCount'] = (isset($visitCount)) ? $visitCount : '';
             $dashboardInfo['socialVisits'] = isset($socialVisits) ? $socialVisits : '';
             $dashboardInfo['conversionChatData'] = $conversionChatData;
             $dashboardInfo['conversionStats'] = $conversionStats;
-            FatCache::set('dashboardInfoCache' . $this->adminLangId, serialize($dashboardInfo), '.txt');
-            //$cache->set("dashboardInfo" . $this->adminLangId, $dashboardInfo, 24 * 60 * 60);
+            FatCache::set('dashboardInfoCache' . $this->siteLangId, serialize($dashboardInfo), '.txt');
+            //$cache->set("dashboardInfo" . $this->siteLangId, $dashboardInfo, 24 * 60 * 60);
         } else {
             $dashboardInfo =  unserialize($dashboardInfoCache);
         }
@@ -190,7 +190,7 @@ class HomeController extends AdminBaseController
                 $dashboardInfo["stats"]["productReviews"] = $statsObj->getStats('total_product_reviews');
                 break;
             case 'sellerproducts':
-                $srch = new ProductSearch($this->adminLangId);
+                $srch = new ProductSearch($this->siteLangId);
                 $srch->doNotCalculateRecords();
                 $srch->setPageNumber(1);
                 $srch->setPageSize(10);
@@ -206,8 +206,8 @@ class HomeController extends AdminBaseController
                 $dashboardInfo['sellerProductsList'] = $sellerProductsList;
                 break;
             case 'shops':
-                $srch = new ShopSearch($this->adminLangId);
-                $srch->setDefinedCriteria($this->adminLangId, 0);
+                $srch = new ShopSearch($this->siteLangId);
+                $srch->setDefinedCriteria($this->siteLangId, 0);
                 $srch->doNotCalculateRecords();
                 $srch->setPageNumber(1);
                 $srch->setPageSize(10);
@@ -287,7 +287,7 @@ class HomeController extends AdminBaseController
         $rs = $srch->getResultSet();
         $ordersList = FatApp::getDb()->fetchAll($rs);
         $dashboardInfo['recentOrders'] = $ordersList;
-        $dashboardInfo['orderPaymentStatusArr'] = Orders::getOrderPaymentStatusArr($this->adminLangId);
+        $dashboardInfo['orderPaymentStatusArr'] = Orders::getOrderPaymentStatusArr($this->siteLangId);
         $this->set('dashboardInfo', $dashboardInfo);
         $this->_template->render(false, false);
     }
@@ -308,13 +308,13 @@ class HomeController extends AdminBaseController
             'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID")
         );
 
-        $dashboardInfoCache = FatCache::get("dashboardInfo_" . $type . '_' . $interval . '_' . $this->adminLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-        //$result = $cache->get("dashboardInfo_" . $type . '_' . $interval . '_' . $this->adminLangId);
+        $dashboardInfoCache = FatCache::get("dashboardInfo_" . $type . '_' . $interval . '_' . $this->siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        //$result = $cache->get("dashboardInfo_" . $type . '_' . $interval . '_' . $this->siteLangId);
         if (!$dashboardInfoCache) {
             $result = [];
             if (strtoupper($type) == 'TOP_PRODUCTS') {
                 $statsObj = new Statistics();
-                $result = $statsObj->getTopProducts($interval, $this->adminLangId, 10);
+                $result = $statsObj->getTopProducts($interval, $this->siteLangId, 10);
             } else {
                 try {
                     $analytics = new Ykart_analytics($analyticArr);
@@ -344,7 +344,7 @@ class HomeController extends AdminBaseController
                             break;
                         case 'TOP_PRODUCTS':
                             $statsObj = new Statistics();
-                            $result = $statsObj->getTopProducts($interval, $this->adminLangId, 10);
+                            $result = $statsObj->getTopProducts($interval, $this->siteLangId, 10);
                             break;
                     }
                 } catch (exception $e) {
@@ -352,9 +352,9 @@ class HomeController extends AdminBaseController
                 }
             }
             if (!empty($result)) {
-                FatCache::set("dashboardInfo_" . $type . '_' . $interval . '_' . $this->adminLangId, serialize($result), '.txt');
+                FatCache::set("dashboardInfo_" . $type . '_' . $interval . '_' . $this->siteLangId, serialize($result), '.txt');
             }
-            // $cache->set("dashboardInfo_" . $type . '_' . $interval . '_' . $this->adminLangId, $result, 6 * 60 * 60);
+            // $cache->set("dashboardInfo_" . $type . '_' . $interval . '_' . $this->siteLangId, $result, 6 * 60 * 60);
         } else {
             $result = unserialize($dashboardInfoCache);
         }
@@ -367,7 +367,7 @@ class HomeController extends AdminBaseController
     {
         CommonHelper::recursiveDelete(CONF_UPLOADS_PATH . "caching");
         FatCache::clearAll();
-        // Message::addMessage(Labels::getLabel('LBL_Cache_has_been_cleared', $this->adminLangId));
+        // Message::addMessage(Labels::getLabel('LBL_Cache_has_been_cleared', $this->siteLangId));
         if (Labels::isAPCUcacheAvailable()) {
             apcu_clear_cache();
         }
@@ -380,7 +380,7 @@ class HomeController extends AdminBaseController
             }
         }
         Product::updateMinPrices();
-        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Cache_has_been_cleared', $this->adminLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Cache_has_been_cleared', $this->siteLangId));
         //FatApp::redirectUser(UrlHelper::generateUrl("home"));
     }
     public function setLanguage($langId = 0)
@@ -391,10 +391,10 @@ class HomeController extends AdminBaseController
             if (array_key_exists($langId, $languages)) {
                 setcookie('defaultAdminSiteLang', $langId, time() + 3600 * 24 * 10, CONF_WEBROOT_FRONT_URL);
             }
-            $this->set('msg', Labels::getLabel('Msg_Please_Wait_We_are_redirecting_you...', $this->adminLangId));
+            $this->set('msg', Labels::getLabel('Msg_Please_Wait_We_are_redirecting_you...', $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
-        Message::addErrorMessage(Labels::getLabel('MSG_Please_select_any_language', $this->adminLangId));
+        Message::addErrorMessage(Labels::getLabel('MSG_Please_select_any_language', $this->siteLangId));
         FatUtility::dieWithError(Message::getHtml());
     }
 }

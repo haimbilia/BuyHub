@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="modal-header">
     <h5 class="modal-title">
-        <?php echo Labels::getLabel('LBL_COMMISSION_HISTORY', $adminLangId); ?>
+        <?php echo Labels::getLabel('LBL_COMMISSION_HISTORY', $siteLangId); ?>
     </h5>
 </div>
 <div class="modal-body form-edit">
@@ -9,7 +9,7 @@
         <?php 
         $totalRecords = count($arrListing);
         if ($totalRecords == 0) {
-            $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $adminLangId));
+            $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
         } else { ?>
             <div class="timeline-v4 appendRowsJs">
                 <?php require_once('get-rows.php'); ?>
@@ -18,7 +18,7 @@
             $lastRecord = current(array_reverse($arrListing));
             $postedData['reference'] = $lastRecord['csh_added_on'];
             $data = [
-                'adminLangId' => $adminLangId,
+                'siteLangId' => $siteLangId,
                 'postedData' => $postedData,
                 'page' => $page,
                 'pageCount' => $pageCount,

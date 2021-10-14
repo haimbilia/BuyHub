@@ -144,16 +144,16 @@ class DeletedUsersController extends AdminBaseController
     private function getDeletedUserSearchForm()
     {
         $frm = new Form('frmDeletedUserSearch');
-        $keyword = $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email', $this->adminLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+        $keyword = $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
         $keyword->setFieldTagAttribute('onKeyUp', 'usersAutocomplete(this)');
 
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->adminLangId), 'user_regdate_from', '', array( 'readonly' => 'readonly'));
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->adminLangId), 'user_regdate_to', '', array( 'readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->siteLangId), 'user_regdate_from', '', array( 'readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->siteLangId), 'user_regdate_to', '', array( 'readonly' => 'readonly'));
 
         $frm->addHiddenField('', 'page', 1);
         $frm->addHiddenField('', 'user_id');
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

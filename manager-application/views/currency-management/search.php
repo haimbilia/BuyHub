@@ -29,10 +29,10 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'currency_symbol_left':
-                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayNotApplicable($adminLangId, $row[$key]), true);
+                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayNotApplicable($siteLangId, $row[$key]), true);
                 break;
             case 'currency_symbol_right':
-                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayNotApplicable($adminLangId, $row[$key]), true);
+                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayNotApplicable($siteLangId, $row[$key]), true);
                 break;
             case 'currency_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['currency_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
@@ -49,7 +49,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'currency_code':
                 if ($row['currency_name'] != '') {
-                    $default = ($row['currency_id'] == $defaultCurrencyId) ? '<span class="badge badge--unified-brand badge--inline badge--pill">' . Labels::getLabel('LBL_DEFAULT', $adminLangId) . '</span>' : '';
+                    $default = ($row['currency_id'] == $defaultCurrencyId) ? '<span class="badge badge--unified-brand badge--inline badge--pill">' . Labels::getLabel('LBL_DEFAULT', $siteLangId) . '</span>' : '';
                     $td->appendElement('plaintext', $tdAttr, $row['currency_name'], true);
                     $td->appendElement('br', $tdAttr);
                     $td->appendElement('plaintext', $tdAttr, '(' . $row[$key] . ') ' . $default, true);
@@ -59,7 +59,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 $data = [
-                    'adminLangId' => $adminLangId,
+                    'siteLangId' => $siteLangId,
                     'recordId' => $row['currency_id']
                 ];
 
@@ -83,7 +83,7 @@ if (count($arrListing) == 0) {
         array(
             'colspan' => count($fields)
         ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId)
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );
 }
 

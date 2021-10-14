@@ -21,7 +21,7 @@ $listingLabel = isset($listingLabel) ? $listingLabel : "";
                     <?php if (!empty($frmSearch)) { ?>
                         <section class="section searchform_filter">
                             <div class="sectionhead searchHead--js">
-                                <h4> <?php echo Labels::getLabel('LBL_Search...', $adminLangId); ?></h4>
+                                <h4> <?php echo Labels::getLabel('LBL_Search...', $siteLangId); ?></h4>
                             </div>
                             <div class="sectionbody space togglewrap" style="display:none;">
                                 <?php echo  $frmSearch->getFormHtml(); ?>
@@ -39,7 +39,7 @@ $listingLabel = isset($listingLabel) ? $listingLabel : "";
                                 } else { ?>
                                     <ul class="actions actions--centered">
                                         <li class="droplink">
-                                            <a href="javascript:void(0)" class="button small green" title="<?php echo Labels::getLabel('LBL_EDIT', $adminLangId); ?>">
+                                            <a href="javascript:void(0)" class="button small green" title="<?php echo Labels::getLabel('LBL_EDIT', $siteLangId); ?>">
                                                 <i class="ion-android-more-horizontal icon"></i>
                                             </a>
                                             <div class="dropwrap">
@@ -52,7 +52,7 @@ $listingLabel = isset($listingLabel) ? $listingLabel : "";
                         </div>
                         <div class="sectionbody">
                             <div class="tablewrap">
-                                <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $adminLangId); ?> </div>
+                                <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?> </div>
                             </div>
                         </div>
                     </section>

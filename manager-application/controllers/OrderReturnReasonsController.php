@@ -15,7 +15,7 @@ class OrderReturnReasonsController extends AdminBaseController
 
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ORDER_RETURN_REASONS', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ORDER_RETURN_REASONS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -38,7 +38,7 @@ class OrderReturnReasonsController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -53,7 +53,7 @@ class OrderReturnReasonsController extends AdminBaseController
             $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         }
 
-        $srch = OrderReturnReason::getSearchObject($this->adminLangId);
+        $srch = OrderReturnReason::getSearchObject($this->siteLangId);
         $srch->addMultipleFields(array('orreason.*', 'orreason_l.orreason_title', 'orreason_id as listSerial'));
 
         if (!empty($post['keyword'])) {
@@ -108,7 +108,7 @@ class OrderReturnReasonsController extends AdminBaseController
         $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->adminLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->siteLangId));
         $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
@@ -141,20 +141,20 @@ class OrderReturnReasonsController extends AdminBaseController
         $this->objPrivilege->canEditOrderReturnReasons();
         $this->modelObj = (new ReflectionClass('OrderReturnReason'))->newInstanceArgs($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('title')];
-        $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->adminLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->siteLangId));
     }
 
     private function getForm()
     {
         $frm = new Form('frmOrderReturnReason');
         $frm->addHiddenField('', 'orreason_id');
-        //$frm->addRequiredField(Labels::getLabel('LBL_Reason_Identifier', $this->adminLangId), 'orreason_identifier');
-        $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->adminLangId), 'orreason_title');
+        //$frm->addRequiredField(Labels::getLabel('LBL_Reason_Identifier', $this->siteLangId), 'orreason_identifier');
+        $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->siteLangId), 'orreason_title');
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         return $frm;
     }
@@ -163,8 +163,8 @@ class OrderReturnReasonsController extends AdminBaseController
     {
         $frm = new Form('frmOrderReturnReasonLang');
         $frm->addHiddenField('', 'orreason_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->adminLangId), 'orreason_title');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->siteLangId), 'orreason_title');
         return $frm;
     }   
 
@@ -188,7 +188,7 @@ class OrderReturnReasonsController extends AdminBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('orreason_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -205,7 +205,7 @@ class OrderReturnReasonsController extends AdminBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
         $obj = new OrderReturnReason($recordId);
         if (!$obj->deleteRecord(true)) {
@@ -215,19 +215,19 @@ class OrderReturnReasonsController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $orderRetReasonTblHeadingCols = CacheHelper::get('orderRetReasonTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $orderRetReasonTblHeadingCols = CacheHelper::get('orderRetReasonTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($orderRetReasonTblHeadingCols) {
             return json_decode($orderRetReasonTblHeadingCols);
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->adminLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            /*'orreason_identifier' => Labels::getLabel('LBL_REASON_IDENTIFIER', $this->adminLangId),*/
-            'orreason_title' => Labels::getLabel('LBL_REASON_TITLE', $this->adminLangId),
-            'action' =>  Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            /*'orreason_identifier' => Labels::getLabel('LBL_REASON_IDENTIFIER', $this->siteLangId),*/
+            'orreason_title' => Labels::getLabel('LBL_REASON_TITLE', $this->siteLangId),
+            'action' =>  Labels::getLabel('LBL_ACTION', $this->siteLangId),
         ];
-        CacheHelper::create('orderRetReasonTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('orderRetReasonTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
     }

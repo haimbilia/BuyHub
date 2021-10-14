@@ -8,7 +8,7 @@ $fld->addFieldTagAttribute('onChange', 'iconPopupImage(this)');
 $langFld = $prodCatIconFrm->getField('lang_id');
 $langFld->addFieldTagAttribute('class', 'icon-language-js');
 
-$preferredDimensionsStr = '<small class="text--small">'.sprintf(Labels::getLabel('LBL_This_will_be_displayed_in_%s_on_your_store', $adminLangId), '60*60').'</small>';
+$preferredDimensionsStr = '<small class="text--small">'.sprintf(Labels::getLabel('LBL_This_will_be_displayed_in_%s_on_your_store', $siteLangId), '60*60').'</small>';
 
 $htmlAfterField = $preferredDimensionsStr;
 $htmlAfterField .= '<div id="icon-image-listing"></div>';
@@ -25,11 +25,11 @@ $langFld->addFieldTagAttribute('class', 'banner-language-js');
 $screenFld = $prodCatBannerFrm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('class', 'prefDimensions-js');
 
-$htmlAfterField = '<div style="margin-top:15px;" class="preferredDimensions-js">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s',$adminLangId),'2000 x 500').'</div>';
+$htmlAfterField = '<div style="margin-top:15px;" class="preferredDimensions-js">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s',$siteLangId),'2000 x 500').'</div>';
 $htmlAfterField .= '<div id="banner-image-listing"></div>';
 $fld2->htmlAfterField = $htmlAfterField;
 
-/*$preferredDimensionsStr = '<small class="text--small">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $adminLangId), '2000*500').'</small>';
+/*$preferredDimensionsStr = '<small class="text--small">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), '2000*500').'</small>';
 $htmlAfterField = $preferredDimensionsStr;
 $catBannerImages ='';
 $htmlAfterField .= '<div id="banner-image-listing"></div>';
@@ -37,23 +37,23 @@ $fld2->htmlAfterField = $htmlAfterField;*/ ?>
 <div id="cropperBox-js"></div>
 <section class="section" id="mediaForm-js">
     <div class="sectionhead">
-        <h4><?php echo Labels::getLabel('LBL_Product_Category_Media_Setup', $adminLangId); ?></h4>
+        <h4><?php echo Labels::getLabel('LBL_Product_Category_Media_Setup', $siteLangId); ?></h4>
     </div>
     <div class="sectionbody space">
         <div class="row">
             <div class="col-sm-12">
                 <div class="tabs_nav_container responsive flat">
                     <ul class="tabs_nav">
-                        <li><a href="javascript:void(0);" onclick="categoryForm(<?php echo $prodcat_id ?>);"><?php echo Labels::getLabel('LBL_General', $adminLangId); ?></a></li>
+                        <li><a href="javascript:void(0);" onclick="categoryForm(<?php echo $prodcat_id ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
                         <li class="<?php echo (0 == $prodcat_id) ? 'fat-inactive' : ''; ?>">
                             <a href="javascript:void(0);" <?php echo (0 < $prodcat_id) ? "onclick='categoryLangForm(" . $prodcat_id . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                                <?php echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
+                                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
                             </a>
                         </li>
                         <li><a class="active" href="javascript:void(0);"
                             <?php if ($prodcat_id>0) { ?>
                                 onclick="categoryMediaForm(<?php echo $prodcat_id ?>);"
-                            <?php }?>><?php echo Labels::getLabel('LBL_Media', $adminLangId); ?></a></li>
+                            <?php }?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
                     </ul>
                     <div class="tabs_panel_wrap">
                         <div class="tabs_panel">

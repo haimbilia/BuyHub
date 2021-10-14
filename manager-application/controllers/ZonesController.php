@@ -14,7 +14,7 @@ class ZonesController extends AdminBaseController
 
         $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ZONES', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ZONES', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -40,7 +40,7 @@ class ZonesController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -48,7 +48,7 @@ class ZonesController extends AdminBaseController
 
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
-        $srch = Zone::getSearchObject(false, $this->adminLangId);
+        $srch = Zone::getSearchObject(false, $this->siteLangId);
         $srch->addFld('zone.* , z_l.zone_name, zone.zone_id as listSerial');
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('zone.zone_identifier', 'like', '%' . $post['keyword'] . '%');
@@ -65,7 +65,7 @@ class ZonesController extends AdminBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -106,7 +106,7 @@ class ZonesController extends AdminBaseController
         $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->set('formTitle', Labels::getLabel('LBL_ZONE_SETUP', $this->adminLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_ZONE_SETUP', $this->siteLangId));
         $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
@@ -140,23 +140,23 @@ class ZonesController extends AdminBaseController
         $this->objPrivilege->canEditZones();
         $this->modelObj = (new ReflectionClass('Zone'))->newInstanceArgs($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_ZONE_SETUP', $this->adminLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_ZONE_SETUP', $this->siteLangId));
     }
 
     private function getForm()
     {
         $frm = new Form('frmZone');
         $frm->addHiddenField('', 'zone_id');
-        //$frm->addRequiredField(Labels::getLabel('LBL_Zone_Identifier', $this->adminLangId), 'zone_identifier');
-        $frm->addRequiredField(Labels::getLabel('LBL_Zone_Name', $this->adminLangId), 'zone_name');
+        //$frm->addRequiredField(Labels::getLabel('LBL_Zone_Identifier', $this->siteLangId), 'zone_identifier');
+        $frm->addRequiredField(Labels::getLabel('LBL_Zone_Name', $this->siteLangId), 'zone_name');
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'zone_active', $activeInactiveArr, '', array(), '');
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'zone_active', $activeInactiveArr, '', array(), '');
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;
@@ -166,8 +166,8 @@ class ZonesController extends AdminBaseController
     {
         $frm = new Form('frmZoneLang');
         $frm->addHiddenField('', 'zone_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Zone_Name', $this->adminLangId), 'zone_name');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Zone_Name', $this->siteLangId), 'zone_name');
         return $frm;
     }
 
@@ -194,7 +194,7 @@ class ZonesController extends AdminBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('zone_ids'));
         if (empty($recordIdsArr) || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
         foreach ($recordIdsArr as $recordId) {
             if (1 > $recordId) {
@@ -211,7 +211,7 @@ class ZonesController extends AdminBaseController
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $zoneObj = new Zone($recordId);
@@ -222,20 +222,20 @@ class ZonesController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $zoneTblHeadingCols = CacheHelper::get('zoneTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $zoneTblHeadingCols = CacheHelper::get('zoneTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($zoneTblHeadingCols) {
             return json_decode($zoneTblHeadingCols);
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->adminLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            /*'zone_identifier' => Labels::getLabel('LBL_ZONE_IDENTIFIER', $this->adminLangId),*/
-            'zone_name' => Labels::getLabel('LBL_ZONE_NAME', $this->adminLangId),
-            'zone_active' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
-            'action' =>  Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            /*'zone_identifier' => Labels::getLabel('LBL_ZONE_IDENTIFIER', $this->siteLangId),*/
+            'zone_name' => Labels::getLabel('LBL_ZONE_NAME', $this->siteLangId),
+            'zone_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'action' =>  Labels::getLabel('LBL_ACTION', $this->siteLangId),
         ];
-        CacheHelper::create('zoneTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('zoneTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
     }
@@ -264,8 +264,8 @@ class ZonesController extends AdminBaseController
         switch ($action) {
             case 'index':
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_ZONES', $this->adminLangId)]
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_ZONES', $this->siteLangId)]
                 ];
         }
         return $this->nodes;

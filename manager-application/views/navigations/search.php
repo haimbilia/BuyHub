@@ -1,10 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="sectionhead">
-    <h4><?php echo Labels::getLabel('LBL_Navigations', $adminLangId); ?> </h4>
+    <h4><?php echo Labels::getLabel('LBL_Navigations', $siteLangId); ?> </h4>
     <?php
     if ($canEdit) {
         $data = [
-            'adminLangId' => $adminLangId,
+            'siteLangId' => $siteLangId,
             'statusButtons' => true,
         ];
 
@@ -16,10 +16,10 @@
     <div class="tablewrap">
         <?php 
         $arr_flds = array(
-            'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
-            'listserial' => Labels::getLabel('LBL_#', $adminLangId),
-            'nav_identifier' => Labels::getLabel('LBL_Title', $adminLangId),
-            'nav_active'    =>    Labels::getLabel('LBL_Status', $adminLangId),
+            'select_all' => Labels::getLabel('LBL_Select_all', $siteLangId),
+            'listserial' => Labels::getLabel('LBL_#', $siteLangId),
+            'nav_identifier' => Labels::getLabel('LBL_Title', $siteLangId),
+            'nav_active'    =>    Labels::getLabel('LBL_Status', $siteLangId),
             'action' => '',
         );
         if (!$canEdit) {
@@ -71,9 +71,9 @@
                         break;
                     case 'action':
                         if ($canEdit) {
-                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $adminLangId), "onclick" => "addFormNew(" . $row['nav_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
+                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "addFormNew(" . $row['nav_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
                         }
-                        $td->appendElement('a', array('href' => "javascript:void(0)", 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Pages', $adminLangId), "onclick" => "pages(" . $row['nav_id'] . ")"), "<i class='ion-ios-paper icon'></i>", true);
+                        $td->appendElement('a', array('href' => "javascript:void(0)", 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Pages', $siteLangId), "onclick" => "pages(" . $row['nav_id'] . ")"), "<i class='ion-ios-paper icon'></i>", true);
                         break;
                     default:
                         $td->appendElement('plaintext', array(), $row[$key], true);
@@ -82,7 +82,7 @@
             }
         }
         if (count($arrListing) == 0) {
-            $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
+            $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
         }
         $frm = new Form('frmNavListing', array('id' => 'frmNavListing'));
         $frm->setFormTagAttribute('class', 'web_form last_td_nowrap actionButtons-js');

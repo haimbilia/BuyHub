@@ -1,20 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
-$frm->setFormTagAttribute('onSubmit', 'exportMedia(this,' . $actionType . '); return false;');
-$frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 12;
 
-if ($actionType == Importexport::TYPE_PRODUCTS || $actionType == Importexport::TYPE_SELLER_PRODUCTS || $actionType == Importexport::TYPE_INVENTORIES) {
-	$startIdFld = $frm->getField('start_id');
-	$startIdFld->setWrapperAttribute('class', 'range_fld');
-
-	$endIdFld = $frm->getField('end_id');
-	$endIdFld->setWrapperAttribute('class', 'range_fld');
-
-	$batchCountFld = $frm->getField('batch_count');
-	$batchCountFld->setWrapperAttribute('class', 'batch_fld');
-
+<<<<<<< HEAD
 	$batchNumberFld = $frm->getField('batch_number');
 	$batchNumberFld->setWrapperAttribute('class', 'batch_fld');
 
@@ -55,3 +41,13 @@ if ($actionType == Importexport::TYPE_PRODUCTS || $actionType == Importexport::T
 		</div>
 	</div>
 </div>
+=======
+$frm->setFormTagAttribute('onSubmit', 'exportMedia(this,' . $actionType . '); return false;');
+$actionTypeArr = [
+    Importexport::TYPE_PRODUCTS,
+    Importexport::TYPE_SELLER_PRODUCTS,
+    Importexport::TYPE_INVENTORIES
+];
+$activeMediaTab = true;
+require_once(CONF_THEME_PATH . 'import-export/_partial/export-form-head.php');
+>>>>>>> dcb74d5c219c2cc219cb2515001a6e3cc7e94a8f

@@ -37,7 +37,7 @@ class QuestionnairesController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         
-        $srch = new QuestionnairesSearch($this->adminLangId, false);
+        $srch = new QuestionnairesSearch($this->siteLangId, false);
         $srch->countQuestions();
         $srch->countResponse();
         $srch->setPageNumber($page);
@@ -246,10 +246,10 @@ class QuestionnairesController extends AdminBaseController
         if ($questionnaireId <= 0) {
             FatUtility::dieJsonError($this->str_invalid_request);
         }
-        $srch = new QuestionnairesSearch($this->adminLangId, false);
+        $srch = new QuestionnairesSearch($this->siteLangId, false);
         $srch->joinQuestionnarieToQuestions();
-        $srch->joinQuestions($this->adminLangId);
-        $srch->joinQuestionBanks($this->adminLangId);
+        $srch->joinQuestions($this->siteLangId);
+        $srch->joinQuestionBanks($this->siteLangId);
         $srch->addCondition('questionnaire_id', '=', $questionnaireId);
         
         $srch->setPageNumber($page);
@@ -278,7 +278,7 @@ class QuestionnairesController extends AdminBaseController
         }
         $this->objPrivilege->canViewQuestionnaires();
         
-        $srch = new QuestionnairesSearch($this->adminLangId, false);
+        $srch = new QuestionnairesSearch($this->siteLangId, false);
         $srch->addCondition('questionnaire_id', '=', $questionnaireId);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -300,7 +300,7 @@ class QuestionnairesController extends AdminBaseController
         }
         $this->objPrivilege->canViewQuestionnaires();
         
-        $srch = new QuestionnairesSearch($this->adminLangId, false);
+        $srch = new QuestionnairesSearch($this->siteLangId, false);
         $srch->addCondition('questionnaire_id', '=', $questionnaireId);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -327,7 +327,7 @@ class QuestionnairesController extends AdminBaseController
         if ($questionnaireId <= 0) {
             FatUtility::dieJsonError($this->str_invalid_request);
         }
-        $srch = new QuestionnairesSearch($this->adminLangId, false);
+        $srch = new QuestionnairesSearch($this->siteLangId, false);
         $srch->joinFeedbacks();
         $srch->addCondition('questionnaire_id', '=', $questionnaireId);
         $srch->addCondition('qfeedback_id', 'is not', 'mysql_func_null', 'and', true);
@@ -361,10 +361,10 @@ class QuestionnairesController extends AdminBaseController
         $pagesize = 5;
         $page = ($page < 1) ? 1 : $page;
         
-        $srch = new QuestionnairesSearch($this->adminLangId, false);
+        $srch = new QuestionnairesSearch($this->siteLangId, false);
         $srch->joinFeedbacks();
         $srch->joinFeedbackToQuestions();
-        $srch->joinFeedbackQuestionsToQuestions($this->adminLangId);
+        $srch->joinFeedbackQuestionsToQuestions($this->siteLangId);
         $srch->addCondition('qta.qta_qfeedback_id', '=', $feedbackId);
         $srch->addMultipleFields(array('fq.question_type', 'fq_l.question_title', 'qta.qta_answers'));
         $srch->setPageNumber($page);
@@ -389,7 +389,7 @@ class QuestionnairesController extends AdminBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
         
-        $srch = new QuestionnairesSearch($this->adminLangId, false);
+        $srch = new QuestionnairesSearch($this->siteLangId, false);
         $srch->addCondition('questionnaire_id', '=', $questionnaireId);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -412,7 +412,7 @@ class QuestionnairesController extends AdminBaseController
         $pagesize = 5;
         $post = $searchForm->getFormDataFromArray($data);
         $qbank_id = FatUtility::int($post['qbank']);
-        $srch = Questions::getSearchObject($this->adminLangId, false);
+        $srch = Questions::getSearchObject($this->siteLangId, false);
         $srch->joinTable('tbl_questionnaires_to_question', 'left outer join', 'qtq.qtq_question_id= q.question_id and qtq.qtq_questionnaire_id=' . $questionnaire_id, 'qtq');
         $srch->addOrder('q_l.' . Questions::DB_TBL_PREFIX . 'title', 'ASC');
         $srch->addCondition('question_qbank_id', '=', $qbank_id);
@@ -458,7 +458,7 @@ class QuestionnairesController extends AdminBaseController
             Message::addErrorMessage($questionnaireObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
-        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Question_Added_Successfully', $this->adminLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Question_Added_Successfully', $this->siteLangId));
     }
     
     public function removeQuestion()
@@ -476,7 +476,7 @@ class QuestionnairesController extends AdminBaseController
             Message::addErrorMessage($db->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
-        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Question_Removed_Successfully', $this->adminLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Question_Removed_Successfully', $this->siteLangId));
     }
     
     public function updateQuestionsOrder()
@@ -504,7 +504,7 @@ class QuestionnairesController extends AdminBaseController
                     )
                 );
             }
-            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Order_Updated_Successfully', $this->adminLangId));
+            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
         }
     }
 
@@ -512,11 +512,11 @@ class QuestionnairesController extends AdminBaseController
     {
         $this->objPrivilege->canViewQuestionnaires();
         $frm = new Form('frmQuestionnaireSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
-        $frm->addDateField(Labels::getLabel('LBL_From_Date', $this->adminLangId), 'from_date', '', array('readonly' => 'readonly'));
-        $frm->addDateField(Labels::getLabel('LBL_To_Date', $this->adminLangId), 'to_date', '', array('readonly' => 'readonly'));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
+        $frm->addDateField(Labels::getLabel('LBL_From_Date', $this->siteLangId), 'from_date', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('LBL_To_Date', $this->siteLangId), 'to_date', '', array('readonly' => 'readonly'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -536,8 +536,8 @@ class QuestionnairesController extends AdminBaseController
         $frm = new Form('frmLinkQuestions');
         $frm->addHiddenField('', 'questionnaire_id', $questionnaire_id);
         $frm->addHiddenField('', 'page');
-        $questionBanksArr = QuestionBanks::getQuestionBankForSelectBox($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->adminLangId), 'qbank', $questionBanksArr, '', array(), '');
+        $questionBanksArr = QuestionBanks::getQuestionBankForSelectBox($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->siteLangId), 'qbank', $questionBanksArr, '', array(), '');
         return $frm;
     }
     
@@ -547,9 +547,9 @@ class QuestionnairesController extends AdminBaseController
         $frm = new Form('frmFeedbackSearch');
         $frm->addHiddenField('', 'questionnaire_id', $questionnaire_id);
         $frm->addHiddenField('', 'page');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -561,12 +561,12 @@ class QuestionnairesController extends AdminBaseController
         
         $frm = new Form('frmQuestionnaire');
         $frm->addHiddenField('', 'questionnaire_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->adminLangId), 'questionnaire_identifier');
-        $frm->addDateField(Labels::getLabel('LBL_Start_Date', $this->adminLangId), 'questionnaire_start_date', '', array('readonly' => 'readonly'));
-        $frm->addDateField(Labels::getLabel('LBL_End_Date', $this->adminLangId), 'questionnaire_end_date', '', array('readonly' => 'readonly'));
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'questionnaire_active', $activeInactiveArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->siteLangId), 'questionnaire_identifier');
+        $frm->addDateField(Labels::getLabel('LBL_Start_Date', $this->siteLangId), 'questionnaire_start_date', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('LBL_End_Date', $this->siteLangId), 'questionnaire_end_date', '', array('readonly' => 'readonly'));
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'questionnaire_active', $activeInactiveArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
     
@@ -575,9 +575,9 @@ class QuestionnairesController extends AdminBaseController
         $frm = new Form('frmQuestionnaireLang');
         $frm->addHiddenField('', 'questionnaire_id', $questionnaire_id);
         $frm->addHiddenField('', 'lang_id', $lang_id);
-        $frm->addRequiredField(Labels::getLabel('LBL_Questionnaire_Name', $this->adminLangId), 'questionnaire_name');
-        $frm->addTextarea(Labels::getLabel('LBL_Questionnaire_Description', $this->adminLangId), 'questionnaire_description')->requirements()->setRequired(true);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addRequiredField(Labels::getLabel('LBL_Questionnaire_Name', $this->siteLangId), 'questionnaire_name');
+        $frm->addTextarea(Labels::getLabel('LBL_Questionnaire_Description', $this->siteLangId), 'questionnaire_description')->requirements()->setRequired(true);
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
     
@@ -585,8 +585,8 @@ class QuestionnairesController extends AdminBaseController
     {
         $frm = new Form('frmQuestionnaireQuestions');
         $frm->addHiddenField('', 'questionnaire_id', $questionnaire_id);
-        $frm->addRequiredField(Labels::getLabel('LBL_Questionnaire_Name', $this->adminLangId), 'questionnaire_name');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addRequiredField(Labels::getLabel('LBL_Questionnaire_Name', $this->siteLangId), 'questionnaire_name');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
 }

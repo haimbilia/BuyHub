@@ -47,7 +47,7 @@ class TopProductsReportController extends AdminBaseController
 
 
         /* Sub Query to get, how many users added current product in his/her wishlist[ */
-        $uWsrch = new UserWishListProductSearch($this->adminLangId);
+        $uWsrch = new UserWishListProductSearch($this->siteLangId);
         $uWsrch->doNotCalculateRecords();
         $uWsrch->doNotLimitRecords();
         $uWsrch->joinWishLists();
@@ -55,7 +55,7 @@ class TopProductsReportController extends AdminBaseController
         $uWsrch->addMultipleFields(array('uwlp_selprod_id', 'uwlist_user_id', 'count(uwlist_user_id) as wishlist_user_counts'));
         /* ] */
 
-        $srch = new OrderProductSearch($this->adminLangId, true);
+        $srch = new OrderProductSearch($this->siteLangId, true);
         $srch->joinPaymentMethod();
         $srch->joinTable('(' . $uWsrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tquwl.uwlp_selprod_id = op.op_selprod_id', 'tquwl');
         $srch->doNotCalculateRecords();
@@ -106,11 +106,11 @@ class TopProductsReportController extends AdminBaseController
         if ($export == 'export') {
             $rs = $srch->getResultSet();
             $sheetData = array();
-            $arr = array(Labels::getLabel('LBL_Product', $this->adminLangId), Labels::getLabel('LBL_Custom_Title', $this->adminLangId), Labels::getLabel('LBL_Options', $this->adminLangId), Labels::getLabel('LBL_Brand', $this->adminLangId), Labels::getLabel('LBL_Shop', $this->adminLangId), Labels::getLabel('LBL_WishList_User_Counts', $this->adminLangId));
+            $arr = array(Labels::getLabel('LBL_Product', $this->siteLangId), Labels::getLabel('LBL_Custom_Title', $this->siteLangId), Labels::getLabel('LBL_Options', $this->siteLangId), Labels::getLabel('LBL_Brand', $this->siteLangId), Labels::getLabel('LBL_Shop', $this->siteLangId), Labels::getLabel('LBL_WishList_User_Counts', $this->siteLangId));
             if ($topPerformed) {
-                array_push($arr, Labels::getLabel('LBL_Sold_Quantity', $this->adminLangId));
+                array_push($arr, Labels::getLabel('LBL_Sold_Quantity', $this->siteLangId));
             } else {
-                array_push($arr, Labels::getLabel('LBL_Refund_Quantity', $this->adminLangId));
+                array_push($arr, Labels::getLabel('LBL_Refund_Quantity', $this->siteLangId));
             }
             array_push($sheetData, $arr);
 
@@ -124,10 +124,10 @@ class TopProductsReportController extends AdminBaseController
                 array_push($sheetData, $arr);
             }
             if ($topPerformed) {
-                CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Top_Products_Report', $this->adminLangId) . ' ' . date("d-M-Y") . '.csv', ',');
+                CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Top_Products_Report', $this->siteLangId) . ' ' . date("d-M-Y") . '.csv', ',');
                 exit;
             } else {
-                CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Most_Refunded_Products_Report', $this->adminLangId) . ' ' . date("d-M-Y") . '.csv', ',');
+                CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Most_Refunded_Products_Report', $this->siteLangId) . ' ' . date("d-M-Y") . '.csv', ',');
                 exit;
             }
         } else {
@@ -152,13 +152,13 @@ class TopProductsReportController extends AdminBaseController
     public function getSearchForm()
     {
         $frm = new Form('frmTopProductsReportSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->adminLangId), 'report_type', $this->getReportTypeArr(), '', array(), Labels::getLabel('LBL_OverAll', $this->adminLangId));
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->siteLangId), 'report_type', $this->getReportTypeArr(), '', array(), Labels::getLabel('LBL_OverAll', $this->siteLangId));
         $frm->addHiddenField('', 'page', 1);
-        $frm->addSelectBox(Labels::getLabel('LBL_Record_Per_Page', $this->adminLangId), 'pagesize', array(10 => '10', 20 => '20', 30 => '30', 50 => '50'), '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Record_Per_Page', $this->siteLangId), 'pagesize', array(10 => '10', 20 => '20', 30 => '30', 50 => '50'), '', array(), '');
         $frm->addHiddenField('', 'top_perfomed', 1);
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

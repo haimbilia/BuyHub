@@ -1,11 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php
 $arr_flds = array(
-    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
-    'prodcat_identifier' => Labels::getLabel('LBL_Category_Name', $adminLangId),
-    'prodcat_parent' => Labels::getLabel('LBL_Parent_category', $adminLangId),
-    'shop_name' => Labels::getLabel('LBL_Requested_BY', $adminLangId),
-    'prodcat_requested_on' => Labels::getLabel('LBL_Requested_On', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $siteLangId),
+    'prodcat_identifier' => Labels::getLabel('LBL_Category_Name', $siteLangId),
+    'prodcat_parent' => Labels::getLabel('LBL_Parent_category', $siteLangId),
+    'shop_name' => Labels::getLabel('LBL_Requested_BY', $siteLangId),
+    'prodcat_requested_on' => Labels::getLabel('LBL_Requested_On', $siteLangId),
     'action' => '',
 );
 
@@ -31,12 +31,12 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $serialNo);
                 break;
             case 'shop_name':
-                $name = (0 < $row['prodcat_seller_id'] ? $row['shop_name'] . '(' . $row['user_name'] . ')' : Labels::getLabel('LBL_ADMIN', $adminLangId));
+                $name = (0 < $row['prodcat_seller_id'] ? $row['shop_name'] . '(' . $row['user_name'] . ')' : Labels::getLabel('LBL_ADMIN', $siteLangId));
                 $td->appendElement('plaintext', array(), $name);
                 break;
             case 'prodcat_parent':
                 $prodCat = new productCategory();
-                $name = $prodCat->getParentTreeStructure($row['prodcat_id'], 0, '', $adminLangId, false, -1);
+                $name = $prodCat->getParentTreeStructure($row['prodcat_id'], 0, '', $siteLangId, false, -1);
                 $td->appendElement('plaintext', array(), $name, true);
                 break;
             case 'prodcat_identifier':
@@ -53,7 +53,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 if ($canEdit) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $adminLangId), "onclick" => "editProdCatRequestForm(" . $row['prodcat_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "editProdCatRequestForm(" . $row['prodcat_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
                 }
                 break;
             default:
@@ -66,13 +66,13 @@ foreach ($arrListing as $sn => $row) {
 echo $tbl->getHtml();
 
 if (count($arrListing) == 0) {
-    $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $adminLangId));
+    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
 }
 
 $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array(
     'name' => 'frmCategorySearchPaging'
 ));
-$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
+$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'siteLangId' => $siteLangId);
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
 ?>

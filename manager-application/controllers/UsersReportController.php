@@ -139,7 +139,7 @@ class UsersReportController extends AdminBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Buyers/Seller_Sales_Report', $this->adminLangId) . '_' . date("d-M-Y") . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Buyers/Seller_Sales_Report', $this->siteLangId) . '_' . date("d-M-Y") . '.csv', ',');
             exit;
         }
 
@@ -172,18 +172,18 @@ class UsersReportController extends AdminBaseController
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
         $frm->addHiddenField('', 'user_type', $usertype);
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email', $this->adminLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
 
         if (!empty($fields)) {
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
 
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  '');
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  '');
         }
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
 
         return $frm;
@@ -191,43 +191,43 @@ class UsersReportController extends AdminBaseController
 
     private function getFormColumns($userType = User::USER_TYPE_BUYER)
     {
-        $buyerUserReportsCacheVar = FatCache::get('buyerUserReportsCacheVar' . $userType . '-' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $buyerUserReportsCacheVar = FatCache::get('buyerUserReportsCacheVar' . $userType . '-' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$buyerUserReportsCacheVar) {
             $arr = [
-                'name' => Labels::getLabel('LBL_Name', $this->adminLangId),
-                /* 'email' => Labels::getLabel('LBL_Email', $this->adminLangId), */
-                /*  'user_address' => Labels::getLabel('LBL_Address', $this->adminLangId), */
-                'user_regdate' => Labels::getLabel('LBL_Registration_Date', $this->adminLangId)
+                'name' => Labels::getLabel('LBL_Name', $this->siteLangId),
+                /* 'email' => Labels::getLabel('LBL_Email', $this->siteLangId), */
+                /*  'user_address' => Labels::getLabel('LBL_Address', $this->siteLangId), */
+                'user_regdate' => Labels::getLabel('LBL_Registration_Date', $this->siteLangId)
             ];
 
             switch ($userType) {
                 case User::USER_TYPE_SELLER:
                     $arr = $arr + [
-                        'credential_verified' => Labels::getLabel('LBL_Verified', $this->adminLangId),
-                        'totOrders' => Labels::getLabel('LBL_Order_Placed', $this->adminLangId),
-                        'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $this->adminLangId),
-                        'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $this->adminLangId),
-                        'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->adminLangId),
-                        'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->adminLangId),
-                        'availableBalance' => Labels::getLabel('LBL_Available_Balance', $this->adminLangId),
-                        'promotionCharged'        =>    Labels::getLabel('LBL_Promotion_Charged', $this->adminLangId),
-                        'totRating'        =>    Labels::getLabel('LBL_Rating', $this->adminLangId),
+                        'credential_verified' => Labels::getLabel('LBL_Verified', $this->siteLangId),
+                        'totOrders' => Labels::getLabel('LBL_Order_Placed', $this->siteLangId),
+                        'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $this->siteLangId),
+                        'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $this->siteLangId),
+                        'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->siteLangId),
+                        'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->siteLangId),
+                        'availableBalance' => Labels::getLabel('LBL_Available_Balance', $this->siteLangId),
+                        'promotionCharged'        =>    Labels::getLabel('LBL_Promotion_Charged', $this->siteLangId),
+                        'totRating'        =>    Labels::getLabel('LBL_Rating', $this->siteLangId),
                     ];
                     break;
                 default:
                     $arr = $arr + [
-                        'referrerName' => Labels::getLabel('LBL_Referrer', $this->adminLangId),
-                        'user_referral_code' => Labels::getLabel('LBL_Referral_Code', $this->adminLangId),
-                        'rewardsPoints' => Labels::getLabel('LBL_Rewards_Balance', $this->adminLangId),
-                        'rewardsPointsEarned' => Labels::getLabel('LBL_Rewards_Earned', $this->adminLangId),
-                        'rewardsPointsRedeemed' => Labels::getLabel('LBL_Rewards_Redeemed', $this->adminLangId),
-                        'netSoldQty' => Labels::getLabel('LBL_Item_Purchased', $this->adminLangId),
-                        'orderNetAmount' => Labels::getLabel('LBL_Total_Purchase', $this->adminLangId),
-                        'availableBalance' => Labels::getLabel('LBL_Available_Balance', $this->adminLangId)
+                        'referrerName' => Labels::getLabel('LBL_Referrer', $this->siteLangId),
+                        'user_referral_code' => Labels::getLabel('LBL_Referral_Code', $this->siteLangId),
+                        'rewardsPoints' => Labels::getLabel('LBL_Rewards_Balance', $this->siteLangId),
+                        'rewardsPointsEarned' => Labels::getLabel('LBL_Rewards_Earned', $this->siteLangId),
+                        'rewardsPointsRedeemed' => Labels::getLabel('LBL_Rewards_Redeemed', $this->siteLangId),
+                        'netSoldQty' => Labels::getLabel('LBL_Item_Purchased', $this->siteLangId),
+                        'orderNetAmount' => Labels::getLabel('LBL_Total_Purchase', $this->siteLangId),
+                        'availableBalance' => Labels::getLabel('LBL_Available_Balance', $this->siteLangId)
                     ];
                     break;
             }
-            FatCache::set('buyerUserReportsCacheVar' . $userType . '-' . $this->adminLangId, serialize($arr), '.txt');
+            FatCache::set('buyerUserReportsCacheVar' . $userType . '-' . $this->siteLangId, serialize($arr), '.txt');
         } else {
             $arr =  unserialize($buyerUserReportsCacheVar);
         }

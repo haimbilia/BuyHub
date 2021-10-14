@@ -2,7 +2,7 @@
 switch (strtoupper($stats_type)) {
     case 'TOP_COUNTRIES':
         if ($stats_info == null || !array_key_exists('totalsForAllResults', $stats_info) || $stats_info['totalsForAllResults']==0) {
-            echo "<li>".Labels::getLabel('LBL_No_Record_Found', $adminLangId)."</li>";
+            echo "<li>".Labels::getLabel('LBL_No_Record_Found', $siteLangId)."</li>";
             exit;
         }
 
@@ -12,7 +12,7 @@ switch (strtoupper($stats_type)) {
     break;
     case 'TOP_REFERRERS':
         if ($stats_info == null || !array_key_exists('totalsForAllResults', $stats_info) || $stats_info['totalsForAllResults']==0) {
-            echo "<li>".Labels::getLabel('LBL_No_Record_Found', $adminLangId)."</li>";
+            echo "<li>".Labels::getLabel('LBL_No_Record_Found', $siteLangId)."</li>";
             exit;
         }
         foreach ($stats_info['rows'] as $key=>$val) {
@@ -55,7 +55,7 @@ switch (strtoupper($stats_type)) {
     break;
     case 'TOP_PRODUCTS':
         if ($stats_info == null || count($stats_info)==0) {
-            echo "<li>".Labels::getLabel('LBL_No_Record_Found', $adminLangId)."</li>";
+            echo "<li>".Labels::getLabel('LBL_No_Record_Found', $siteLangId)."</li>";
             exit;
         }
         $count=1;
@@ -69,7 +69,7 @@ switch (strtoupper($stats_type)) {
     break;
     case 'TOP_SEARCH_KEYWORD':
         if ($stats_info == null || count($stats_info)==0) {
-            echo "<li>".Labels::getLabel('LBL_No_Record_Found', $adminLangId)."</li>";
+            echo "<li>".Labels::getLabel('LBL_No_Record_Found', $siteLangId)."</li>";
             exit;
         }
             $count=1;

@@ -22,7 +22,7 @@ class ShippingMethodsController extends AdminBaseController
     {
         $this->objPrivilege->canViewShippingMethods();
 
-        $srch = ShippingMethods::getSearchObject(false, $this->adminLangId);
+        $srch = ShippingMethods::getSearchObject(false, $this->siteLangId);
 
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -34,7 +34,7 @@ class ShippingMethodsController extends AdminBaseController
             $records = FatApp::getDb()->fetchAll($rs);
         }
 
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set("arrListing", $records);
         $this->_template->render(false, false);
     }
@@ -214,7 +214,7 @@ class ShippingMethodsController extends AdminBaseController
                 Message::addErrorMessage($sMethodObj->getError());
                 FatUtility::dieJsonError(Message::getHtml());
             }
-            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Order_Updated_Successfully', $this->adminLangId));
+            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
         }
     }
 
@@ -250,7 +250,7 @@ class ShippingMethodsController extends AdminBaseController
         $shippingapiIdsArr = FatUtility::int(FatApp::getPostedData('shippingapi_ids'));
         if (empty($shippingapiIdsArr) || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -271,7 +271,7 @@ class ShippingMethodsController extends AdminBaseController
         $shippingapiId = FatUtility::int($shippingapiId);
         if (1 > $shippingapiId || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -288,13 +288,13 @@ class ShippingMethodsController extends AdminBaseController
 
         $frm = new Form('frmShippingMethod');
         $frm->addHiddenField('', 'shippingapi_id', $shippingapi_id);
-        $frm->addRequiredField(Labels::getLabel('LBL_Shipping_Identifier', $this->adminLangId), 'shippingapi_identifier');
+        $frm->addRequiredField(Labels::getLabel('LBL_Shipping_Identifier', $this->siteLangId), 'shippingapi_identifier');
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'shippingapi_active', $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'shippingapi_active', $activeInactiveArr, '', array(), '');
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -302,17 +302,17 @@ class ShippingMethodsController extends AdminBaseController
     {
         $frm = new Form('frmShippingMethodLang');
         $frm->addHiddenField('', 'shippingapi_id', $shippingapi_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Shipping_Api_Name', $this->adminLangId), 'shippingapi_name');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Shipping_Api_Name', $this->siteLangId), 'shippingapi_name');
         
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 }

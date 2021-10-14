@@ -31,7 +31,7 @@ class ThemeColorController extends AdminBaseController
         $frm = $this->getFontsForm();
         $frm->fill($record);
         $this->set('frm', $frm);
-        $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
+        $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
         $this->_template->addJs(array('js/tagify.min.js', 'js/tagify.polyfills.min.js'));
         $this->_template->addCss(array('css/tagify.min.css'));
         $this->_template->render();
@@ -47,17 +47,17 @@ class ThemeColorController extends AdminBaseController
 
         if (!empty($this->apiKey)) {
             $frm->addHiddenField("", 'CONF_THEME_FONT_FAMILY_URL');
-            $fld = $frm->addRequiredField(Labels::getLabel('LBL_FONT_FAMILY:', $this->adminLangId), 'CONF_THEME_FONT_FAMILY');
+            $fld = $frm->addRequiredField(Labels::getLabel('LBL_FONT_FAMILY:', $this->siteLangId), 'CONF_THEME_FONT_FAMILY');
             $link = "<a href='https://fonts.google.com' target='_blank'>https://fonts.google.com</a>";
-            $url = CommonHelper::replaceStringData(Labels::getLabel('LBL_REFERENCE_:_{URL}', $this->adminLangId), ['{URL}' => $link]);
+            $url = CommonHelper::replaceStringData(Labels::getLabel('LBL_REFERENCE_:_{URL}', $this->siteLangId), ['{URL}' => $link]);
             $fld->htmlAfterField = '<small>' . $url . ' </small>';
-            $frm->addRequiredField(Labels::getLabel('LBL_FONT_WEIGHT:', $this->adminLangId), 'CONF_THEME_FONT_WEIGHT');
+            $frm->addRequiredField(Labels::getLabel('LBL_FONT_WEIGHT:', $this->siteLangId), 'CONF_THEME_FONT_WEIGHT');
         }
 
-        $frm->addRequiredField(Labels::getLabel('LBL_THEME_COLOR', $this->adminLangId), 'CONF_THEME_COLOR');
-        $frm->addRequiredField(Labels::getLabel('LBL_THEME_COLOR_INVERSE', $this->adminLangId), 'CONF_THEME_COLOR_INVERSE');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->adminLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_RESET', $this->adminLangId), ['title' => Labels::getLabel('LBL_RESET_TO_DEFAULT_VALUES', $this->adminLangId)]);
+        $frm->addRequiredField(Labels::getLabel('LBL_THEME_COLOR', $this->siteLangId), 'CONF_THEME_COLOR');
+        $frm->addRequiredField(Labels::getLabel('LBL_THEME_COLOR_INVERSE', $this->siteLangId), 'CONF_THEME_COLOR_INVERSE');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_RESET', $this->siteLangId), ['title' => Labels::getLabel('LBL_RESET_TO_DEFAULT_VALUES', $this->siteLangId)]);
         return $frm;
     }
 
@@ -66,10 +66,10 @@ class ThemeColorController extends AdminBaseController
         $this->objPrivilege->canEditThemeColor();
 
         if (empty($this->apiKey)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_API_KEY_FOR_GOOGLE_FONTS_NOT_CONFIGURED', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_API_KEY_FOR_GOOGLE_FONTS_NOT_CONFIGURED', $this->siteLangId), true);
         }
 
-        $googleFonts = CacheHelper::get('googleFonts' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $googleFonts = CacheHelper::get('googleFonts' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($googleFonts) {
             $fontsArr = json_decode($googleFonts, true);
         } else {
@@ -80,11 +80,11 @@ class ThemeColorController extends AdminBaseController
             }
 
             if (!isset($curl->response->items)) {
-                LibHelper::exitWithError(Labels::getLabel('MSG_UNABLE_TO_LOAD_FONTS', $this->adminLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('MSG_UNABLE_TO_LOAD_FONTS', $this->siteLangId), true);
             }
 
             $fontsArr = json_decode(json_encode($curl->response), true);
-            CacheHelper::create('googleFonts' . $this->adminLangId, json_encode($fontsArr));
+            CacheHelper::create('googleFonts' . $this->siteLangId, json_encode($fontsArr));
         }
         return $fontsArr;
     }
@@ -174,7 +174,7 @@ class ThemeColorController extends AdminBaseController
             LibHelper::exitWithError($record->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFULLY', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -199,7 +199,7 @@ class ThemeColorController extends AdminBaseController
             LibHelper::exitWithError($record->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('MSG_COMPLETED', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_COMPLETED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -210,8 +210,8 @@ class ThemeColorController extends AdminBaseController
         switch ($action) {
             case 'index':
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_THEME_SETTINGS', $this->adminLangId)]
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_THEME_SETTINGS', $this->siteLangId)]
                 ];
         }
         return $this->nodes;

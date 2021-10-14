@@ -1,11 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
-        'select_all' => Labels::getLabel('LBL_Select_all', $adminLangId),
-        'listserial' => Labels::getLabel('LBL_#', $adminLangId),
-        'admin_name' => Labels::getLabel('LBL_Full_Name', $adminLangId),
-        'admin_username' => Labels::getLabel('LBL_Username', $adminLangId),
-        'admin_email' => Labels::getLabel('LBL_Email', $adminLangId),
-        'admin_active' => Labels::getLabel('LBL_Status', $adminLangId),
+        'select_all' => Labels::getLabel('LBL_Select_all', $siteLangId),
+        'listserial' => Labels::getLabel('LBL_#', $siteLangId),
+        'admin_name' => Labels::getLabel('LBL_Full_Name', $siteLangId),
+        'admin_username' => Labels::getLabel('LBL_Username', $siteLangId),
+        'admin_email' => Labels::getLabel('LBL_Email', $siteLangId),
+        'admin_active' => Labels::getLabel('LBL_Status', $siteLangId),
         'action' => '',
     );
 
@@ -38,12 +38,12 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 if ($canEdit) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $adminLangId), "onclick" => "editAdminUserForm(" . $row['admin_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "editAdminUserForm(" . $row['admin_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
 
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Change_Password', $adminLangId), "onclick" => "changePasswordForm(" . $row['admin_id'] . ")"), "<i class='ion-locked icon'></i>", true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Change_Password', $siteLangId), "onclick" => "changePasswordForm(" . $row['admin_id'] . ")"), "<i class='ion-locked icon'></i>", true);
 
                     if ($row['admin_id'] > 1 && $row['admin_id'] != $adminLoggedInId) {
-                        $td->appendElement('a', array('href' => UrlHelper::generateUrl('AdminUsers', 'permissions', array($row['admin_id'])), 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Permissions', $adminLangId)), '<i class="fas fa-gavel"></i>', true);
+                        $td->appendElement('a', array('href' => UrlHelper::generateUrl('AdminUsers', 'permissions', array($row['admin_id'])), 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Permissions', $siteLangId)), '<i class="fas fa-gavel"></i>', true);
                     }
                 }
                 break;
@@ -55,7 +55,7 @@ foreach ($arrListing as $sn => $row) {
                     }
                     $statucAct = ($canEdit === true) ? 'toggleStatus(this)' : '';
                     $str = '<label id="' . $row['admin_id'] . '" class="statustab ' . $active . '" onclick="' . $statucAct . '">
-                          <span data-off="' . Labels::getLabel('LBL_Active', $adminLangId) . '" data-on="' . Labels::getLabel('LBL_Inactive', $adminLangId) . '" class="switch-labels"></span>
+                          <span data-off="' . Labels::getLabel('LBL_Active', $siteLangId) . '" data-on="' . Labels::getLabel('LBL_Inactive', $siteLangId) . '" class="switch-labels"></span>
                           <span class="switch-handles"></span>
                         </label>';
                     $td->appendElement('plaintext', array(), $str, true);
@@ -69,7 +69,7 @@ foreach ($arrListing as $sn => $row) {
     $sr_no--;
 }
 if (count($arrListing) == 0) {
-    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
+    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
 }
 
 $frm = new Form('frmAdmUsersListing', array('id' => 'frmAdmUsersListing'));

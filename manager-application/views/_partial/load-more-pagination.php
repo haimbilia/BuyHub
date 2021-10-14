@@ -15,7 +15,7 @@ if (1 < $pageCount) { ?>
             echo FatUtility::createHiddenFormFromData($postedData, array(
                 'name' => 'frmLoadMoreRecordsPaging'
             )); ?>
-            <a class='btn btn-link' href="javascript:void(0);" onclick="loadMore();">... <?php echo Labels::getLabel('MSG_LOAD_MORE', $adminLangId); ?> ...</a>
+            <a class='btn btn-link' href="javascript:void(0);" onclick="loadMore();">... <?php echo Labels::getLabel('MSG_LOAD_MORE', $siteLangId); ?> ...</a>
         </div>
     </div>
 <?php } ?>

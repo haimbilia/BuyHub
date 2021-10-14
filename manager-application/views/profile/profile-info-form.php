@@ -21,7 +21,7 @@ $imageFld->addFieldTagAttribute('accept','image/*');
 <div class="card">
     <div class="card-head">
         <div class="card-head-label">
-            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_MY_PROFILE', $adminLangId); ?></h3>
+            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_MY_PROFILE', $siteLangId); ?></h3>
         </div>
     </div>
     <?php echo $frm->getFormTag(); ?>
@@ -37,10 +37,10 @@ $imageFld->addFieldTagAttribute('accept','image/*');
                         <?php echo $imageFld->getHTML(); ?>
                     </label>   
                     <?php if ($newImage == false) { ?>
-                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-image-input-action="remove" data-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_Edit', $adminLangId); ?>" onclick="popupImage();">
+                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-image-input-action="remove" data-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>" onclick="popupImage();">
                             <i class="bi bi-x fs-2"></i>
                         </span>
-                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-image-input-action="remove" data-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $adminLangId); ?>" onclick="removeProfileImage();">
+                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-image-input-action="remove" data-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onclick="removeProfileImage();">
                             <i class="bi bi-x fs-2"></i>
                         </span>
                     <?php } ?>
@@ -73,7 +73,11 @@ $imageFld->addFieldTagAttribute('accept','image/*');
     <div class="card-foot">
         <div class="row">                                    
             <div class="col-auto">
+<<<<<<< HEAD
                 <button type="submit" class="btn btn-brand "><?php echo Labels::getLabel('LBL_UPDATE', $adminLangId); ?></button>
+=======
+                <button type="submit" class="btn btn-brand gb-btn gb-btn-primary"><?php echo Labels::getLabel('LBL_UPDATE', $siteLangId); ?></button>
+>>>>>>> dcb74d5c219c2cc219cb2515001a6e3cc7e94a8f
             </div>
         </div>
     </div> 

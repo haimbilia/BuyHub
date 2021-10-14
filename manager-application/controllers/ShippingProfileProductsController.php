@@ -46,7 +46,7 @@ class ShippingProfileProductsController extends AdminBaseController
     {
         $post = FatApp::getPostedData();
         $shipProfileId = FatApp::getPostedData('shipProfileId', FatUtility::VAR_INT, 0);
-        $srch = new ProductSearch($this->adminLangId);        
+        $srch = new ProductSearch($this->siteLangId);        
         $srch->addOrder('product_name');
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
@@ -90,13 +90,13 @@ class ShippingProfileProductsController extends AdminBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         
         if (false == $post) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
         $prodType = Product::getAttributesById($post['shippro_product_id'], 'product_type');
         if (Product::PRODUCT_TYPE_DIGITAL == $prodType) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_DIGITAL_PRODUCTS_ARE_NOT_ALLOWED', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('LBL_DIGITAL_PRODUCTS_ARE_NOT_ALLOWED', $this->siteLangId));
         }
 
         $data = array(
@@ -132,7 +132,7 @@ class ShippingProfileProductsController extends AdminBaseController
         }
         /* ] */
         
-        $this->set('msg', Labels::getLabel('LBL_Product_Removed_from_current_profile.', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Product_Removed_from_current_profile.', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
     
@@ -141,9 +141,9 @@ class ShippingProfileProductsController extends AdminBaseController
         $profileId = FatUtility::int($profileId);
         $frm = new Form('frmProfileProducts');
         $frm->addHiddenField('LBL_Product_Name', 'shippro_shipprofile_id', $profileId)->requirement->setRequired(true);
-        $frm->addHiddenField(Labels::getLabel('LBL_Product_Name', $this->adminLangId), 'shippro_product_id', '')->requirements()->setRequired(true);
+        $frm->addHiddenField(Labels::getLabel('LBL_Product_Name', $this->siteLangId), 'shippro_product_id', '')->requirements()->setRequired(true);
         $fld = $frm->addTextBox('', 'product_name');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 }

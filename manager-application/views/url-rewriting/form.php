@@ -6,7 +6,7 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
-        <?php echo Labels::getLabel('LBL_URL_REWRITE_SETUP', $adminLangId); ?>
+        <?php echo Labels::getLabel('LBL_URL_REWRITE_SETUP', $siteLangId); ?>
     </h5>
 </div>
 <div class="modal-body form-edit">
@@ -20,9 +20,9 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
                 <button type="button" class="btn btn-brand  submitBtnJs">
                     <?php 
                         if (0 < $recordId) {
-                            echo Labels::getLabel('LBL_UPDATE', $adminLangId); 
+                            echo Labels::getLabel('LBL_UPDATE', $siteLangId); 
                         } else {
-                            echo Labels::getLabel('LBL_SAVE', $adminLangId); 
+                            echo Labels::getLabel('LBL_SAVE', $siteLangId); 
                         }
                     ?>
                 </button>

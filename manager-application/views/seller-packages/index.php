@@ -1,5 +1,5 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
-$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_SUBSCRIPTION_PACKAGE', $adminLangId);
+$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_SUBSCRIPTION_PACKAGE', $siteLangId);
 
 /* No sorting functionality required if no record found. */
 if (2 > count($arrListing)) {
@@ -34,9 +34,8 @@ $controller = str_replace('Controller', '', FatApp::getController());
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
-                        'adminLangId' => $adminLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES', $adminLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_PACKAGES', $adminLangId), ['{COUNT}' => $recordCount]),
+                        'siteLangId' => $siteLangId,
+                        'cardHeadTitle' => Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES', $siteLangId),
                         'newRecordBtn' => true,
                         'statusButtons' => true
                     ];

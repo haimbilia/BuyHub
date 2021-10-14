@@ -5,7 +5,7 @@ class ShippingPackagesController extends AdminBaseController
     {
         parent::__construct($action);
         if (1 > FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) {
-            $msg = Labels::getLabel('LBL_PLEASE_TURN_ON_PRODUCT_DIMENSION_SETTING_FIRST_GENERAL_SETTINGS_>_PRODUCT', $this->adminLangId);
+            $msg = Labels::getLabel('LBL_PLEASE_TURN_ON_PRODUCT_DIMENSION_SETTING_FIRST_GENERAL_SETTINGS_>_PRODUCT', $this->siteLangId);
             Message::addErrorMessage($msg);
             FatApp::redirectUser(UrlHelper::generateUrl('configurations'));
         }
@@ -38,7 +38,7 @@ class ShippingPackagesController extends AdminBaseController
         $records = FatApp::getDb()->fetchAll($rs);
         
         $this->set('arrListing', $records);
-        $this->set('unitTypeArray', ShippingPackage::getUnitTypes($this->adminLangId));
+        $this->set('unitTypeArray', ShippingPackage::getUnitTypes($this->siteLangId));
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -71,13 +71,13 @@ class ShippingPackagesController extends AdminBaseController
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (empty($post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         $packageName = FatApp::getPostedData('shippack_name', FatUtility::VAR_STRING, '');
         $recordId = FatUtility::int(ShippingPackage::getPackageIdByName($packageName));
         if (0 < $recordId) {
-            Message::addErrorMessage(Labels::getLabel('LBL_THIS_PACKAGE_NAME_ALREDY_IN_USE.', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_THIS_PACKAGE_NAME_ALREDY_IN_USE.', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -99,9 +99,9 @@ class ShippingPackagesController extends AdminBaseController
     public function getSearchForm()
     {
         $frm = new Form('frmSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -109,17 +109,17 @@ class ShippingPackagesController extends AdminBaseController
     
     private function getForm()
     {
-        $unitTypeArray = ShippingPackage::getUnitTypes($this->adminLangId);
+        $unitTypeArray = ShippingPackage::getUnitTypes($this->siteLangId);
         $frm = new Form('frmShippingPackages');
         $frm->addHiddenField('', 'shippack_id');
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Package_Name', $this->adminLangId), 'shippack_name');
-        $frm->addFloatField(Labels::getLabel('LBL_Length', $this->adminLangId), 'shippack_length');
-        $frm->addFloatField(Labels::getLabel('LBL_Width', $this->adminLangId), 'shippack_width');
-        $frm->addFloatField(Labels::getLabel('LBL_Height', $this->adminLangId), 'shippack_height');
+        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Package_Name', $this->siteLangId), 'shippack_name');
+        $frm->addFloatField(Labels::getLabel('LBL_Length', $this->siteLangId), 'shippack_length');
+        $frm->addFloatField(Labels::getLabel('LBL_Width', $this->siteLangId), 'shippack_width');
+        $frm->addFloatField(Labels::getLabel('LBL_Height', $this->siteLangId), 'shippack_height');
         
-        $frm->addSelectBox(Labels::getLabel('LBL_Unit', $this->adminLangId), 'shippack_units', $unitTypeArray, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
+        $frm->addSelectBox(Labels::getLabel('LBL_Unit', $this->siteLangId), 'shippack_units', $unitTypeArray, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
         
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         
         return $frm;
     }

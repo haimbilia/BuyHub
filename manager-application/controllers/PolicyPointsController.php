@@ -30,7 +30,7 @@ class PolicyPointsController extends AdminBaseController
     {
         $this->objPrivilege->canViewPolicyPoints();
 
-        $srch = PolicyPoint::getSearchObject($this->adminLangId, false);
+        $srch = PolicyPoint::getSearchObject($this->siteLangId, false);
 
         $srch->addMultipleFields(array('pp.*', 'pp_l.ppoint_title' ));
         $srch->addOrder('ppoint_active', 'desc');
@@ -42,7 +42,7 @@ class PolicyPointsController extends AdminBaseController
         }
 
         $this->set("arrListing", $records);
-        $this->set("policyPointTypeArr", PolicyPoint::getPolicyPointTypesArr($this->adminLangId));
+        $this->set("policyPointTypeArr", PolicyPoint::getPolicyPointTypesArr($this->siteLangId));
         $this->set('recordCount', $srch->recordCount());
         $this->_template->render(false, false);
     }
@@ -235,7 +235,7 @@ class PolicyPointsController extends AdminBaseController
         $ppointIdsArr = FatUtility::int(FatApp::getPostedData('ppoint_ids'));
         if (empty($ppointIdsArr) || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -256,7 +256,7 @@ class PolicyPointsController extends AdminBaseController
         $ppointId = FatUtility::int($ppointId);
         if (1 > $ppointId || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -288,7 +288,7 @@ class PolicyPointsController extends AdminBaseController
 
         if (empty($ppointIdsArr)) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -307,7 +307,7 @@ class PolicyPointsController extends AdminBaseController
         $ppoint_id = FatUtility::int($ppoint_id);
         if (1 > $ppoint_id) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
         $ppointObj = new PolicyPoint($ppoint_id);
@@ -329,14 +329,14 @@ class PolicyPointsController extends AdminBaseController
 
         $frm = new Form('frmPolicyPoint');
         $frm->addHiddenField('', 'ppoint_id', $ppointId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Policy_Point_Identifier', $this->adminLangId), 'ppoint_identifier');
+        $frm->addRequiredField(Labels::getLabel('LBL_Policy_Point_Identifier', $this->siteLangId), 'ppoint_identifier');
 
-        $policyPointTypeArr = PolicyPoint::getPolicyPointTypesArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->adminLangId), 'ppoint_type', $policyPointTypeArr, '', array(), '');
+        $policyPointTypeArr = PolicyPoint::getPolicyPointTypesArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->siteLangId), 'ppoint_type', $policyPointTypeArr, '', array(), '');
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'ppoint_active', $activeInactiveArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'ppoint_active', $activeInactiveArr, '', array(), '');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -345,17 +345,17 @@ class PolicyPointsController extends AdminBaseController
         $this->objPrivilege->canViewPolicyPoints();
         $frm = new Form('frmPolicyPointLang');
         $frm->addHiddenField('', 'ppoint_id', $ppointId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Policy_Point_Title', $this->adminLangId), 'ppoint_title');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Policy_Point_Title', $this->siteLangId), 'ppoint_title');
         
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 }

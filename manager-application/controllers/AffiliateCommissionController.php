@@ -15,7 +15,7 @@ class AffiliateCommissionController extends AdminBaseController
 
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_AFFILIATE_COMMISSION', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_AFFILIATE_COMMISSION', $this->siteLangId));
         $this->getListingData();
         $this->_template->addJs(array('js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));
@@ -39,7 +39,7 @@ class AffiliateCommissionController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -55,12 +55,12 @@ class AffiliateCommissionController extends AdminBaseController
         }
 
         $attr = array('afcs.*', 'affiliate_cred.credential_username', 'IFNULL(prd_cat_l.prodcat_name, prod_cat.prodcat_identifier) as prodcat_name', 'afcommsetting_id as listSerial');
-        $srch = AffiliateCommission::getSearchObject($this->adminLangId);
+        $srch = AffiliateCommission::getSearchObject($this->siteLangId);
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'afcs.afcommsetting_user_id = affiliate_user.user_id', 'affiliate_user');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'affiliate_cred.credential_user_id = affiliate_user.user_id', 'affiliate_cred');
 
         $srch->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'prod_cat.prodcat_id = afcs.afcommsetting_prodcat_id', 'prod_cat');
-        $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT OUTER JOIN', 'prod_cat.prodcat_id = prd_cat_l.prodcatlang_prodcat_id AND prd_cat_l.prodcatlang_lang_id = ' . $this->adminLangId, 'prd_cat_l');
+        $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT OUTER JOIN', 'prod_cat.prodcat_id = prd_cat_l.prodcatlang_prodcat_id AND prd_cat_l.prodcatlang_lang_id = ' . $this->siteLangId, 'prd_cat_l');
 
         $srch->addMultipleFields($attr);
 
@@ -69,7 +69,7 @@ class AffiliateCommissionController extends AdminBaseController
             $cond->attachCondition('prodcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -127,7 +127,7 @@ class AffiliateCommissionController extends AdminBaseController
 
             if ($data['afcommsetting_prodcat_id'] > 0) {
                 $prodCat = new ProductCategory();
-                $selectedCatName = $prodCat->getParentTreeStructure($data['afcommsetting_prodcat_id'], 0, '', $this->adminLangId);
+                $selectedCatName = $prodCat->getParentTreeStructure($data['afcommsetting_prodcat_id'], 0, '', $this->siteLangId);
                 $catArr[$data['afcommsetting_prodcat_id']] = html_entity_decode($selectedCatName);
             }
         }
@@ -139,7 +139,7 @@ class AffiliateCommissionController extends AdminBaseController
 
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
+        $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -173,13 +173,13 @@ class AffiliateCommissionController extends AdminBaseController
         }
 
         if ($post['afcommsetting_id'] == 0) {
-            $srch = AffiliateCommission::getSearchObject($this->adminLangId);
+            $srch = AffiliateCommission::getSearchObject($this->siteLangId);
             $srch->addCondition('afcs.afcommsetting_user_id', '=', $post['afcommsetting_user_id']);
             $srch->addCondition('afcs.afcommsetting_prodcat_id', '=', $post['afcommsetting_prodcat_id']);
             $rs = $srch->getResultSet();
             $records = FatApp::getDb()->fetchAll($rs);
             if ($records) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Record_already_exists', $this->adminLangId));
+                Message::addErrorMessage(Labels::getLabel('MSG_Record_already_exists', $this->siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
             }
         }
@@ -214,7 +214,7 @@ class AffiliateCommissionController extends AdminBaseController
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
 
-        $srch = AffiliateCommission::getAffiliateCommissionHistoryObj($this->adminLangId);
+        $srch = AffiliateCommission::getAffiliateCommissionHistoryObj($this->siteLangId);
         $srch->addCondition('tacsh.acsh_afcommsetting_id', '=', $recordId);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
@@ -286,7 +286,7 @@ class AffiliateCommissionController extends AdminBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
         if ($row['afcommsetting_is_mandatory']) {
-            LibHelper::exitWithError(Labels::getLabel("LBL_Default_record_cannot_be_deleted", $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("LBL_Default_record_cannot_be_deleted", $this->siteLangId), true);
         }
         FatApp::getDb()->deleteRecords(AffiliateCommission::DB_TBL, array('smt' => 'afcommsetting_id = ?', 'vals' => array($recordId)));
     }
@@ -304,11 +304,11 @@ class AffiliateCommissionController extends AdminBaseController
         }
 
         if (!$isMandatory) {
-            $frm->addSelectBox(Labels::getLabel('LBL_Category_Name', $this->adminLangId), 'afcommsetting_prodcat_id', $catArr, '', [], '');
-            $frm->addSelectBox(Labels::getLabel('LBL_Affiliate_Name', $this->adminLangId), 'afcommsetting_user_id', $userArr, '', [], '');
+            $frm->addSelectBox(Labels::getLabel('LBL_Category_Name', $this->siteLangId), 'afcommsetting_prodcat_id', $catArr, '', [], '');
+            $frm->addSelectBox(Labels::getLabel('LBL_Affiliate_Name', $this->siteLangId), 'afcommsetting_user_id', $userArr, '', [], '');
         }
 
-        $frm->addFloatField(Labels::getLabel('LBL_Affiliate_Commission_fees', $this->adminLangId), 'afcommsetting_fees');
+        $frm->addFloatField(Labels::getLabel('LBL_Affiliate_Commission_fees', $this->siteLangId), 'afcommsetting_fees');
         return $frm;
     }
 
@@ -319,8 +319,8 @@ class AffiliateCommissionController extends AdminBaseController
         switch ($action) {
             case 'index':
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_AFFILIATE_COMMISSION', $this->adminLangId)]
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_AFFILIATE_COMMISSION', $this->siteLangId)]
                 ];
         }
         return $this->nodes;
@@ -328,20 +328,20 @@ class AffiliateCommissionController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $affCommissionTblHeadingCols = CacheHelper::get('affCommissionTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $affCommissionTblHeadingCols = CacheHelper::get('affCommissionTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($affCommissionTblHeadingCols) {
             return json_decode($affCommissionTblHeadingCols);
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'afcommsetting_prodcat_id' => Labels::getLabel('LBL_Category', $this->adminLangId),
-            'afcommsetting_user_id' => Labels::getLabel('LBL_Affiliate', $this->adminLangId),
-            'afcommsetting_fees' => Labels::getLabel('LBL_Fees_[%]', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'afcommsetting_prodcat_id' => Labels::getLabel('LBL_Category', $this->siteLangId),
+            'afcommsetting_user_id' => Labels::getLabel('LBL_Affiliate', $this->siteLangId),
+            'afcommsetting_fees' => Labels::getLabel('LBL_Fees_[%]', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('affCommissionTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('affCommissionTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 

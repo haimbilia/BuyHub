@@ -28,11 +28,11 @@ foreach ($arrListing as $sn => $row) {
                 }
                 break;
             case 'taxstr_is_combined':
-                $td->appendElement('plaintext', $tdAttr, applicationConstants::getYesNoArr($adminLangId)[$row[$key]]);
+                $td->appendElement('plaintext', $tdAttr, applicationConstants::getYesNoArr($siteLangId)[$row[$key]]);
                 break;
             case 'action':
                 $data = [
-                    'adminLangId' => $adminLangId,
+                    'siteLangId' => $siteLangId,
                     'recordId' => $row['taxstr_id']
                 ];
 
@@ -56,7 +56,7 @@ if (count($arrListing) == 0) {
         array(
             'colspan' => count($fields)
         ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId)
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );
 }
 

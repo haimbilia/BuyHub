@@ -6,7 +6,7 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
-        <?php echo Labels::getLabel('LBL_TAX_STRUCTURE_SETUP', $adminLangId); ?>
+        <?php echo Labels::getLabel('LBL_TAX_STRUCTURE_SETUP', $siteLangId); ?>
     </h5>
 </div>
 <div class="modal-body form-edit">
@@ -58,8 +58,8 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
                                     <div class="field-wraper">
                                         <div class="field_cover d-flex">
                                             <input type="text" name="taxstr_component_name[<?php echo $combTaxCount; ?>][<?php echo $siteDefaultLangId; ?>]" value="<?php echo isset($combinedTax[$siteDefaultLangId]) ? $combinedTax[$siteDefaultLangId] : ''; ?>">
-                                            <button type="button" data-id="<?php echo $combTaxCount; ?>" class="btn btn--secondary ripplelink remove-combined-form--js ml-2" title="<?php echo Labels::getLabel('LBL_Remove', $adminLangId); ?>"><i class="ion-minus-round"></i></button>
-                                            <button type="button" class="btn btn--secondary ripplelink addCombinedFormJs ml-2" title="<?php echo Labels::getLabel('LBL_Add', $adminLangId); ?>"><i class="ion-plus-round"></i></button>
+                                            <button type="button" data-id="<?php echo $combTaxCount; ?>" class="btn btn--secondary ripplelink remove-combined-form--js ml-2" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>"><i class="ion-minus-round"></i></button>
+                                            <button type="button" class="btn btn--secondary ripplelink addCombinedFormJs ml-2" title="<?php echo Labels::getLabel('LBL_Add', $siteLangId); ?>"><i class="ion-plus-round"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -83,8 +83,8 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
                                 <div class="field-wraper">
                                     <div class="field_cover d-flex">
                                         <?php echo $frm->getFieldHtml('taxstr_component_name[' . $combTaxCount . '][' . $siteDefaultLangId . ']'); ?>
-                                        <button type="button" data-id="<?php echo $combTaxCount; ?>" class="btn btn--secondary ripplelink remove-combined-form--js ml-2" title="<?php echo Labels::getLabel('LBL_Remove', $adminLangId); ?>"><i class="ion-minus-round"></i></button>
-                                        <button type="button" class="btn btn--secondary ripplelink addCombinedFormJs ml-2" title="<?php echo Labels::getLabel('LBL_Add', $adminLangId); ?>"><i class="ion-plus-round"></i></button>
+                                        <button type="button" data-id="<?php echo $combTaxCount; ?>" class="btn btn--secondary ripplelink remove-combined-form--js ml-2" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>"><i class="ion-minus-round"></i></button>
+                                        <button type="button" class="btn btn--secondary ripplelink addCombinedFormJs ml-2" title="<?php echo Labels::getLabel('LBL_Add', $siteLangId); ?>"><i class="ion-plus-round"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -98,7 +98,7 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
                         <div class="accordian_panel">
                             <span class="accordian_title accordianhead accordian_title" id="collapse_<?php echo $langId; ?>">
                                 <?php echo $data . " ";
-                                echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
+                                echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
                             </span>
                             <div class="accordian_body accordiancontent p-0" style="display: none;">
                                 <div class="row">
@@ -182,9 +182,9 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
                 <button type="button" class="btn btn-brand  submitBtnJs">
                     <?php
                     if (0 < $recordId) {
-                        echo Labels::getLabel('LBL_UPDATE', $adminLangId);
+                        echo Labels::getLabel('LBL_UPDATE', $siteLangId);
                     } else {
-                        echo Labels::getLabel('LBL_SAVE', $adminLangId);
+                        echo Labels::getLabel('LBL_SAVE', $siteLangId);
                     }
                     ?>
                 </button>
@@ -198,7 +198,7 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
         $(document).on('click', '.addCombinedFormJs', function(event) {
             event.stopImmediatePropagation();
             combTaxCount++;
-            var rowHtml = '<div class="col-md-12 combined-tax-row' + combTaxCount + '"><div class="field-set"><div class="field-wraper"><div class="field_cover d-flex"><input type="text" name="taxstr_component_name[' + combTaxCount + '][<?php echo $siteDefaultLangId; ?>]" value=""><button type="button" data-id="' + combTaxCount + '" class="btn btn--secondary ripplelink remove-combined-form--js ml-2" title="<?php echo Labels::getLabel('LBL_Remove', $adminLangId); ?>"><i class="ion-minus-round"></i></button><button type="button" class="btn btn--secondary ripplelink addCombinedFormJs ml-2" title="<?php echo Labels::getLabel('LBL_Add', $adminLangId); ?>"><i class="ion-plus-round"></i></button></div></div></div></div>';
+            var rowHtml = '<div class="col-md-12 combined-tax-row' + combTaxCount + '"><div class="field-set"><div class="field-wraper"><div class="field_cover d-flex"><input type="text" name="taxstr_component_name[' + combTaxCount + '][<?php echo $siteDefaultLangId; ?>]" value=""><button type="button" data-id="' + combTaxCount + '" class="btn btn--secondary ripplelink remove-combined-form--js ml-2" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>"><i class="ion-minus-round"></i></button><button type="button" class="btn btn--secondary ripplelink addCombinedFormJs ml-2" title="<?php echo Labels::getLabel('LBL_Add', $siteLangId); ?>"><i class="ion-plus-round"></i></button></div></div></div></div>';
             $('.combined-tax--js').append(rowHtml);
 
             <?php foreach ($otherLangData as $langId => $data) { ?>

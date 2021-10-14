@@ -7,38 +7,38 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 
 <div class="modal-header">
     <h5 class="modal-title">
-        <?php echo Labels::getLabel('LBL_COMMENT_DETAILS', $adminLangId); ?>
+        <?php echo Labels::getLabel('LBL_COMMENT_DETAILS', $siteLangId); ?>
     </h5>
 </div>
 <div class="modal-body form-edit">
     <div class="form-edit-body loaderContainerJs">
         <div class="listview">
             <dl class="list">
-                <dt><?php echo Labels::getLabel('LBL_Full_Name',$adminLangId); ?></dt>
+                <dt><?php echo Labels::getLabel('LBL_Full_Name',$siteLangId); ?></dt>
                 <dd><?php echo CommonHelper::displayName($data['bpcomment_author_name']);?></dd>
             </dl>
             <dl class="list">
-                <dt><?php echo Labels::getLabel('LBL_Email',$adminLangId); ?></dt>
+                <dt><?php echo Labels::getLabel('LBL_Email',$siteLangId); ?></dt>
                 <dd><?php echo $data['bpcomment_author_email'];?></dd>
             </dl>
             <dl class="list">
-                <dt><?php echo Labels::getLabel('LBL_Posted_On',$adminLangId); ?></dt>
+                <dt><?php echo Labels::getLabel('LBL_Posted_On',$siteLangId); ?></dt>
                 <dd><?php echo FatDate::format($data['bpcomment_added_on']);?></dd>
             </dl>
             <dl class="list">
-                <dt><?php echo Labels::getLabel('LBL_Blog_Post_Title',$adminLangId); ?></dt>
+                <dt><?php echo Labels::getLabel('LBL_Blog_Post_Title',$siteLangId); ?></dt>
                 <dd><?php echo $data['post_title'];?></dd>
             </dl>
             <dl class="list">
-                <dt><?php echo Labels::getLabel('LBL_Comment',$adminLangId); ?></dt>
+                <dt><?php echo Labels::getLabel('LBL_Comment',$siteLangId); ?></dt>
                 <dd><?php echo nl2br($data['bpcomment_content']);?></dd>
             </dl>
             <dl class="list">
-                <dt><?php echo Labels::getLabel('LBL_User_IP',$adminLangId); ?></dt>
+                <dt><?php echo Labels::getLabel('LBL_User_IP',$siteLangId); ?></dt>
                 <dd><?php echo $data['bpcomment_user_ip'];?></dd>
             </dl>
             <dl class="list">
-                <dt><?php echo Labels::getLabel('LBL_User_Agent',$adminLangId); ?></dt>
+                <dt><?php echo Labels::getLabel('LBL_User_Agent',$siteLangId); ?></dt>
                 <dd><?php echo $data['bpcomment_user_agent'];?></dd>
             </dl>
         </div>
@@ -51,9 +51,9 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
                 <button type="button" class="btn btn-brand  submitBtnJs">
                     <?php 
                         if (0 < $recordId) {
-                            echo Labels::getLabel('LBL_UPDATE', $adminLangId); 
+                            echo Labels::getLabel('LBL_UPDATE', $siteLangId); 
                         } else {
-                            echo Labels::getLabel('LBL_SAVE', $adminLangId); 
+                            echo Labels::getLabel('LBL_SAVE', $siteLangId); 
                         }
                     ?>
                 </button>

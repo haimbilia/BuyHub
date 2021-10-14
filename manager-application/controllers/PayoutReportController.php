@@ -32,7 +32,7 @@ class PayoutReportController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_DESC;
         }
         $srchFrm = $this->getSearchForm($fields);
@@ -67,7 +67,7 @@ class PayoutReportController extends AdminBaseController
 
             array_push($sheetData, array_values($fields));
             $count = 1;
-            $statusArr = Transactions::getStatusArr($this->adminLangId);
+            $statusArr = Transactions::getStatusArr($this->siteLangId);
             while ($row = FatApp::getDb()->fetch($rs)) {
                 $arr = [];
                 foreach ($fields as $key => $val) {
@@ -94,7 +94,7 @@ class PayoutReportController extends AdminBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel("LBL_Transaction_Report", $this->adminLangId) . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel("LBL_Transaction_Report", $this->siteLangId) . '.csv', ',');
             exit;
         }
 
@@ -124,8 +124,8 @@ class PayoutReportController extends AdminBaseController
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
 
         if (!empty($fields)) {
             $frm->addHiddenField('', 'sortBy', 'product_name');
@@ -133,8 +133,8 @@ class PayoutReportController extends AdminBaseController
             $frm->addHiddenField('', 'reportColumns', '');
         }
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
 
         return $frm;
@@ -142,16 +142,16 @@ class PayoutReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $payoutReportsCacheVar = FatCache::get('payoutReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $payoutReportsCacheVar = FatCache::get('payoutReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$payoutReportsCacheVar) {
             $arr = [
-                'orderDate' => Labels::getLabel('LBL_Date', $this->adminLangId),
-                'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $this->adminLangId),
-                'affiliateCommissionCharged' => Labels::getLabel('LBL_Affiliate_Commision', $this->adminLangId),
-                'discountTotal' => Labels::getLabel('LBL_Coupon_Discount', $this->adminLangId),
-                'totalAmount' => Labels::getLabel('LBL_Total_Amount', $this->adminLangId),
+                'orderDate' => Labels::getLabel('LBL_Date', $this->siteLangId),
+                'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $this->siteLangId),
+                'affiliateCommissionCharged' => Labels::getLabel('LBL_Affiliate_Commision', $this->siteLangId),
+                'discountTotal' => Labels::getLabel('LBL_Coupon_Discount', $this->siteLangId),
+                'totalAmount' => Labels::getLabel('LBL_Total_Amount', $this->siteLangId),
             ];
-            FatCache::set('payoutReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            FatCache::set('payoutReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {
             $arr =  unserialize($payoutReportsCacheVar);
         }

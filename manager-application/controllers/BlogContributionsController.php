@@ -16,7 +16,7 @@ class BlogContributionsController extends AdminBaseController
 
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_BLOG_CONTRIBUTIONS', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_BLOG_CONTRIBUTIONS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -38,7 +38,7 @@ class BlogContributionsController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -126,10 +126,10 @@ class BlogContributionsController extends AdminBaseController
         $frm = $this->getForm($recordId);
         $data = BlogContribution::getAttributesById($recordId);
         if ($data === false) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
         }
         $frm->fill($data);
-        $statusArr = BlogContribution::getBlogContributionStatusArr($this->adminLangId);
+        $statusArr = BlogContribution::getBlogContributionStatusArr($this->siteLangId);
         if ($attachedFile = AttachedFile::getAttachment(AttachedFile::FILETYPE_BLOG_CONTRIBUTION, $recordId)) {
             $this->set('attachedFile', $attachedFile['afile_name']);
         }
@@ -138,7 +138,7 @@ class BlogContributionsController extends AdminBaseController
         $this->set('data', $data);
         $this->set('frm', $frm);
         $this->set('recordId', $recordId);
-        $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
+        $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -194,7 +194,7 @@ class BlogContributionsController extends AdminBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('bcontributions_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -211,7 +211,7 @@ class BlogContributionsController extends AdminBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
         $obj = new BlogContribution($recordId);
         if (!$obj->deleteRecord()) {
@@ -225,7 +225,7 @@ class BlogContributionsController extends AdminBaseController
             return false;
         }
         $emailObj = new EmailHandler();
-        $emailObj->sendBlogContributionStatusChangeEmail($this->adminLangId, $data);
+        $emailObj->sendBlogContributionStatusChangeEmail($this->siteLangId, $data);
     }
 
     private function getForm($recordId = 0)
@@ -234,9 +234,9 @@ class BlogContributionsController extends AdminBaseController
 
         $frm = new Form('frmBlogContribution', array('id' => 'frmBlogContribution'));
         $frm->addHiddenField('', 'bcontributions_id', $recordId);
-        $statusArr = BlogContribution::getBlogContributionStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Contribution_Status', $this->adminLangId), 'bcontributions_status', $statusArr, '', array(), '');
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $statusArr = BlogContribution::getBlogContributionStatusArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Contribution_Status', $this->siteLangId), 'bcontributions_status', $statusArr, '', array(), '');
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -248,11 +248,11 @@ class BlogContributionsController extends AdminBaseController
             $this->addSortingElements($frm);
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $statusArr = BlogContribution::getBlogContributionStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Contribution_Status', $this->adminLangId), 'bcontributions_status', $statusArr, '', array(), Labels::getLabel('LBL_SELECT_CONTRIBUTION_STATUS', $this->adminLangId));        
+        $statusArr = BlogContribution::getBlogContributionStatusArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Contribution_Status', $this->siteLangId), 'bcontributions_status', $statusArr, '', array(), Labels::getLabel('LBL_SELECT_CONTRIBUTION_STATUS', $this->siteLangId));        
         
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -261,22 +261,22 @@ class BlogContributionsController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $blogContributionTblHeadingCols = CacheHelper::get('blogContributionTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $blogContributionTblHeadingCols = CacheHelper::get('blogContributionTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($blogContributionTblHeadingCols) {
             return json_decode($blogContributionTblHeadingCols);
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'author_name' => Labels::getLabel('LBL_Author_Name', $this->adminLangId),
-            'bcontributions_author_email' => Labels::getLabel('LBL_Author_Email', $this->adminLangId),
-            'bcontributions_author_phone' => Labels::getLabel('LBL_Author_Phone', $this->adminLangId),
-            'bcontributions_status' => Labels::getLabel('LBL_Status', $this->adminLangId),
-            'bcontributions_added_on' => Labels::getLabel('LBL_Posted_On', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'author_name' => Labels::getLabel('LBL_Author_Name', $this->siteLangId),
+            'bcontributions_author_email' => Labels::getLabel('LBL_Author_Email', $this->siteLangId),
+            'bcontributions_author_phone' => Labels::getLabel('LBL_Author_Phone', $this->siteLangId),
+            'bcontributions_status' => Labels::getLabel('LBL_Status', $this->siteLangId),
+            'bcontributions_added_on' => Labels::getLabel('LBL_Posted_On', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('blogContributionTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('blogContributionTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 

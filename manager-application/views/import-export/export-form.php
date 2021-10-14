@@ -1,10 +1,7 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-HtmlHelper::formatFormFields($frm);
-
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
 $frm->setFormTagAttribute('onSubmit', 'exportData(this,' . $actionType . '); return false;');
+<<<<<<< HEAD
 
 $frm->developerTags['colClassPrefix'] = 'col-md-';
 $frm->developerTags['fld_default_col'] = 12;
@@ -61,3 +58,13 @@ if (in_array($actionType, $actionTypeArr)) {
 		</div>
 	</div>
 </div>
+=======
+$actionTypeArr = [
+    Importexport::TYPE_PRODUCTS,
+    Importexport::TYPE_SELLER_PRODUCTS,
+    Importexport::TYPE_INVENTORIES,
+    Importexport::TYPE_USERS
+];
+$activeContentTab = true;
+require_once(CONF_THEME_PATH . 'import-export/_partial/export-form-head.php');
+>>>>>>> dcb74d5c219c2cc219cb2515001a6e3cc7e94a8f

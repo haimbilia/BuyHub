@@ -244,7 +244,7 @@ class AccountController extends LoggedUserController
             $field_id,
             $_FILES['file']['name'],
             -1,
-            $unique_record = false
+            false
         )) {
             /* Message::addErrorMessage($fileHandlerObj->getError()); */
             FatUtility::dieJsonError($fileHandlerObj->getError());

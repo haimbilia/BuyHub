@@ -48,7 +48,7 @@ class PatchUpdateController extends AdminBaseController
         }
         $countryId = -1;
         $stateId = -1;
-        $taxCatArr = Tax::getSaleTaxCatArr($this->adminLangId);
+        $taxCatArr = Tax::getSaleTaxCatArr($this->siteLangId);
         $structureId = TaxStructure::getDefaultTaxStructureId();
         foreach ($taxCatArr as $taxCatId => $cat) {
             $srch = TaxRuleLocation::getSearchObject();
@@ -117,7 +117,7 @@ class PatchUpdateController extends AdminBaseController
         }
         $pluginKey = $getDefaultPlugin['plugin_code'];
         $pluginId = $getDefaultPlugin['plugin_id'];
-        if (false === $taxPluginObj = PluginHelper::callPlugin($pluginKey, [$this->adminLangId], $error, $this->adminLangId)) {
+        if (false === $taxPluginObj = PluginHelper::callPlugin($pluginKey, [$this->siteLangId], $error, $this->siteLangId)) {
             FatUtility::dieWithError($error);
         }
 
@@ -176,15 +176,15 @@ class PatchUpdateController extends AdminBaseController
 
             $data = array(
                 'taxcatlang_taxcat_id' => $taxCatId,
-                'taxcatlang_lang_id' => $this->adminLangId,
+                'taxcatlang_lang_id' => $this->siteLangId,
                 'taxcat_name' => ($code->description != '') ? $code->description : $code->taxCode,
             );
 
             $taxObj = new Tax($taxCatId);
-            $taxObj->updateLangData($this->adminLangId, $data);
+            $taxObj->updateLangData($this->siteLangId, $data);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Record_Added_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Record_Added_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

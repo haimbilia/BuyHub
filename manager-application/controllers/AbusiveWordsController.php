@@ -16,7 +16,7 @@ class AbusiveWordsController extends AdminBaseController
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('languages', Language::getAllNames());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ABUSIVE_KEYWORDS', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ABUSIVE_KEYWORDS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -39,7 +39,7 @@ class AbusiveWordsController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -118,7 +118,7 @@ class AbusiveWordsController extends AdminBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('languages', Language::getAllNames());
-        $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
+        $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -180,7 +180,7 @@ class AbusiveWordsController extends AdminBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('abusive_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -199,7 +199,7 @@ class AbusiveWordsController extends AdminBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
         $obj = new Abusive($recordId);
         if (!$obj->deleteRecord(false)) {
@@ -214,12 +214,12 @@ class AbusiveWordsController extends AdminBaseController
             $this->addSortingElements($frm);
         }
         
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         $languages = Language::getAllNames();
         if(1 < count($languages)){           
-            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->adminLangId));
+            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
         }
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -232,7 +232,7 @@ class AbusiveWordsController extends AdminBaseController
         $frm->addHiddenField('', 'abusive_id', $recordId);
         $languages = Language::getAllNames();
 		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'abusive_lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->adminLangId));
+			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'abusive_lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
 		} else  {
 			$lang_id = array_key_first($languages); 
 			$frm->addHiddenField('', 'abusive_lang_id', $lang_id);
@@ -244,24 +244,24 @@ class AbusiveWordsController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $abusiveWordsTblHeadingCols = CacheHelper::get('abusiveWordsTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $abusiveWordsTblHeadingCols = CacheHelper::get('abusiveWordsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($abusiveWordsTblHeadingCols) {
             return json_decode($abusiveWordsTblHeadingCols);
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'abusive_keyword' => Labels::getLabel('LBL_Keyword', $this->adminLangId),
-            'language_name' => Labels::getLabel('LBL_Language', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'abusive_keyword' => Labels::getLabel('LBL_Keyword', $this->siteLangId),
+            'language_name' => Labels::getLabel('LBL_Language', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
 
         if(count(Language::getAllNames()) < 2 ){
             unset($arr['language_name']);
         }
 
-        CacheHelper::create('abusiveWordsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('abusiveWordsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
@@ -288,8 +288,8 @@ class AbusiveWordsController extends AdminBaseController
         switch ($action) {
             case 'index':
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_ABUSIVE_KEYWORDS', $this->adminLangId)]
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_ABUSIVE_KEYWORDS', $this->siteLangId)]
                 ];
         }
         return $this->nodes;

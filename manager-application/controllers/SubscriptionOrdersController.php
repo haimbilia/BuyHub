@@ -19,14 +19,14 @@ class SubscriptionOrdersController extends AdminBaseController
     public function index()
     {
         $this->objPrivilege->canViewSubscriptionOrders();
-        $this->set('frmSearch', $this->getOrderSearchForm($this->adminLangId));
+        $this->set('frmSearch', $this->getOrderSearchForm($this->siteLangId));
         $this->_template->render();
     }
     
     public function search()
     {
         $this->objPrivilege->canViewSubscriptionOrders();
-        $frmSearch = $this->getOrderSearchForm($this->adminLangId);
+        $frmSearch = $this->getOrderSearchForm($this->siteLangId);
         
         $data = FatApp::getPostedData();
         $post = $frmSearch->getFormDataFromArray($data);
@@ -97,7 +97,7 @@ class SubscriptionOrdersController extends AdminBaseController
     {
         $this->objPrivilege->canViewSubscriptionOrders();
         
-        $srch = new OrderSubscriptionSearch($this->adminLangId);
+        $srch = new OrderSubscriptionSearch($this->siteLangId);
         $srch->joinOrders();
         $srch->joinOrderPaymentMethod();
         $srch->doNotCalculateRecords();
@@ -112,12 +112,12 @@ class SubscriptionOrdersController extends AdminBaseController
         $rs = $srch->getResultSet();
         $order = FatApp::getDb()->fetch($rs);
         if (!$order) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Order_data_not_found', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Order_data_not_found', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl("SubscriptionOrders"));
         }
         
         
-        $opSrch = new OrderSubscriptionSearch($this->adminLangId, false, true);
+        $opSrch = new OrderSubscriptionSearch($this->siteLangId, false, true);
         //$opSrch->addCountsOfOrderedProducts();
         //$opSrch->joinOrderSuscriptionStatus();
         
@@ -138,13 +138,13 @@ class SubscriptionOrdersController extends AdminBaseController
         $order['products'] = FatApp::getDb()->fetchAll($opRs, 'ossubs_id');
     
         $orderObj = new Orders($order['order_id']);
-        $order['comments'] = $orderObj->getOrderComments($this->adminLangId, array("order_id" => $order['order_id']));
+        $order['comments'] = $orderObj->getOrderComments($this->siteLangId, array("order_id" => $order['order_id']));
         $order['payments'] = $orderObj->getOrderPayments(array("order_id" => $order['order_id']));
 
 
-        $paymentMethodName = Labels::getLabel('LBL_WALLET', $this->adminLangId);
+        $paymentMethodName = Labels::getLabel('LBL_WALLET', $this->siteLangId);
         if (0 < (int) $order['order_pmethod_id']) {
-            $srch = Plugin::getSearchObject($this->adminLangId, false);
+            $srch = Plugin::getSearchObject($this->siteLangId, false);
             $srch->addMultipleFields(['COALESCE(plugin_name, plugin_identifier) as plugin_name']);
             $srch->addCondition('plugin_id', '=', $order['order_pmethod_id']);
             $srch->setPageSize(1);
@@ -152,12 +152,12 @@ class SubscriptionOrdersController extends AdminBaseController
             $paymentMethodName = current((array) FatApp::getDb()->fetch($srch->getResultSet()));
         }
         
-        $frm = $this->getPaymentForm($this->adminLangId, $order['order_id']);
+        $frm = $this->getPaymentForm($this->siteLangId, $order['order_id']);
         $this->set('frm', $frm);
         $this->set('paymentMethodName', $paymentMethodName);
-        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->adminLangId));
+        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->set('order', $order);
-        $orderStatuses = Orders::getOrderSubscriptionStatusArr($this->adminLangId);
+        $orderStatuses = Orders::getOrderSubscriptionStatusArr($this->siteLangId);
         $this->set('orderStatuses', $orderStatuses);
         $this->_template->render();
     }
@@ -165,7 +165,7 @@ class SubscriptionOrdersController extends AdminBaseController
     public function updatePayment()
     {
         $this->objPrivilege->canEditSubscriptionOrders();
-        $frm = $this->getPaymentForm($this->adminLangId);
+        $frm = $this->getPaymentForm($this->siteLangId);
     
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
@@ -179,13 +179,13 @@ class SubscriptionOrdersController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
         
-        $orderPaymentObj = new OrderPayment($orderId, $this->adminLangId);
+        $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         if (!$orderPaymentObj->addOrderPayment($post["opayment_method"], $post['opayment_gateway_txn_id'], $post["opayment_amount"], $post["opayment_comments"])) {
             Message::addErrorMessage($orderPaymentObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
         
-        $this->set('msg', Labels::getLabel('LBL_Payment_Details_Added_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Payment_Details_Added_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
     
@@ -197,7 +197,7 @@ class SubscriptionOrdersController extends AdminBaseController
         $order = $orderObj->getOrderById($order_id);
         
         if ($order == false) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Error:_Please_perform_this_action_on_valid_record.', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Error:_Please_perform_this_action_on_valid_record.', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         
@@ -213,7 +213,7 @@ class SubscriptionOrdersController extends AdminBaseController
             }
         }
         
-        $this->set('msg', Labels::getLabel('LBL_Payment_Details_Added_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Payment_Details_Added_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
     
@@ -221,11 +221,11 @@ class SubscriptionOrdersController extends AdminBaseController
     {
         $frm = new Form('frmPayment');
         $frm->addHiddenField('', 'opayment_order_id', $orderId);
-        $frm->addTextArea(Labels::getLabel('LBL_Comments', $this->adminLangId), 'opayment_comments', '')->requirements()->setRequired();
-        $frm->addRequiredField(Labels::getLabel('LBL_Payment_Method', $this->adminLangId), 'opayment_method');
-        $frm->addRequiredField(Labels::getLabel('LBL_Txn_ID', $this->adminLangId), 'opayment_gateway_txn_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_Amount', $this->adminLangId), 'opayment_amount')->requirements()->setFloatPositive(true);
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addTextArea(Labels::getLabel('LBL_Comments', $this->siteLangId), 'opayment_comments', '')->requirements()->setRequired();
+        $frm->addRequiredField(Labels::getLabel('LBL_Payment_Method', $this->siteLangId), 'opayment_method');
+        $frm->addRequiredField(Labels::getLabel('LBL_Txn_ID', $this->siteLangId), 'opayment_gateway_txn_id');
+        $frm->addRequiredField(Labels::getLabel('LBL_Amount', $this->siteLangId), 'opayment_amount')->requirements()->setFloatPositive(true);
+        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
     
@@ -236,11 +236,11 @@ class SubscriptionOrdersController extends AdminBaseController
         $currencySymbol = ($currencyData['currency_symbol_left'] != '') ? $currencyData['currency_symbol_left'] : $currencyData['currency_symbol_right'];
         
         $frm = new Form('frmSubscriptionOrderSearch');
-        $keyword = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+        $keyword = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
         
-        $frm->addTextBox(Labels::getLabel('LBL_SELLER', $this->adminLangId), 'seller', '');
+        $frm->addTextBox(Labels::getLabel('LBL_SELLER', $this->siteLangId), 'seller', '');
         
-        $frm->addSelectBox(Labels::getLabel('LBL_Payment_Status', $this->adminLangId), 'order_payment_status', Orders::getOrderPaymentStatusArr($langId), '', array(), Labels::getLabel('LBL_Select_Payment_Status', $this->adminLangId));
+        $frm->addSelectBox(Labels::getLabel('LBL_Payment_Status', $this->siteLangId), 'order_payment_status', Orders::getOrderPaymentStatusArr($langId), '', array(), Labels::getLabel('LBL_Select_Payment_Status', $this->siteLangId));
         
         $frm->addDateField('', 'date_from', '', array('placeholder' => 'Date From', 'readonly' => 'readonly' ));
         $frm->addDateField('', 'date_to', '', array('placeholder' => 'Date To', 'readonly' => 'readonly' ));
@@ -249,8 +249,8 @@ class SubscriptionOrdersController extends AdminBaseController
         
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'user_id');
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

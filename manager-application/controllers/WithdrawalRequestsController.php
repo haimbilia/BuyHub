@@ -19,7 +19,7 @@ class WithdrawalRequestsController extends AdminBaseController
     {
         $this->objPrivilege->canViewWithdrawRequests();
         $data = FatApp::getPostedData();
-        $frmSearch = $this->getSearchForm($this->adminLangId);
+        $frmSearch = $this->getSearchForm($this->siteLangId);
         if ($data) {
             $data['withdrawal_id'] = $data['id'];
             unset($data['id']);
@@ -34,7 +34,7 @@ class WithdrawalRequestsController extends AdminBaseController
         $this->objPrivilege->canViewWithdrawRequests();
 
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $searchForm = $this->getSearchForm($this->adminLangId);
+        $searchForm = $this->getSearchForm($this->siteLangId);
         $data = FatApp::getPostedData();
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         if ($page < 2) {
@@ -116,7 +116,7 @@ class WithdrawalRequestsController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->set('statusArr', Transactions::getWithdrawlStatusArr($this->adminLangId));
+        $this->set('statusArr', Transactions::getWithdrawlStatusArr($this->siteLangId));
         $this->_template->render(false, false);
     }
     
@@ -155,8 +155,8 @@ class WithdrawalRequestsController extends AdminBaseController
         }
 
         $emailNotificationObj = new EmailHandler();
-        if (!$emailNotificationObj->sendWithdrawRequestNotification($withdrawalId, $this->adminLangId, "U")) {
-            Message::addErrorMessage(Labels::getLabel($emailNotificationObj->getError(), $this->adminLangId));
+        if (!$emailNotificationObj->sendWithdrawRequestNotification($withdrawalId, $this->siteLangId, "U")) {
+            Message::addErrorMessage(Labels::getLabel($emailNotificationObj->getError(), $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -182,17 +182,17 @@ class WithdrawalRequestsController extends AdminBaseController
             $txnArray["utxn_status"] = Transactions::STATUS_COMPLETED;
             $txnArray["utxn_withdrawal_id"] = $txnDetail["utxn_withdrawal_id"];
             $txnArray["utxn_type"] = Transactions::TYPE_MONEY_WITHDRAWL_REFUND;
-            $txnArray["utxn_comments"] = sprintf(Labels::getLabel('MSG_Withdrawal_Request_Declined_Amount_Refunded', $this->adminLangId), $formattedRequestValue);
+            $txnArray["utxn_comments"] = sprintf(Labels::getLabel('MSG_Withdrawal_Request_Declined_Amount_Refunded', $this->siteLangId), $formattedRequestValue);
             if (!empty($comment)) {
                 $txnArray["utxn_comments"] = $txnArray["utxn_comments"] . "( " . $comment . " )";
             }
 
             if ($txnId = $transObj->addTransaction($txnArray)) {
-                $emailNotificationObj->sendTxnNotification($txnId, $this->adminLangId);
+                $emailNotificationObj->sendTxnNotification($txnId, $this->siteLangId);
             }
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Status_Updated_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Status_Updated_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -237,21 +237,21 @@ class WithdrawalRequestsController extends AdminBaseController
     public function getSearchForm($langId)
     {
         $frm = new Form('frmReqSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $frm->addTextBox(Labels::getLabel('LBL_From', $this->adminLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'minprice')->requirements()->setFloatPositive(true);
-        $frm->addTextBox(Labels::getLabel('LBL_To', $this->adminLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'maxprice')->requirements()->setFloatPositive(true);
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel('LBL_From', $this->siteLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'minprice')->requirements()->setFloatPositive(true);
+        $frm->addTextBox(Labels::getLabel('LBL_To', $this->siteLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'maxprice')->requirements()->setFloatPositive(true);
 
         $statusArr = Transactions::getWithdrawlStatusArr($langId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'status', array('-1' => 'Does not matter') + $statusArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', array('-1' => 'Does not matter') + $statusArr, '', array(), '');
 
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
 
-        $arr_options2 = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->adminLangId)) + User::getUserTypesArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_User_Type', $this->adminLangId), 'type', $arr_options2, -1, array(), '');
+        $arr_options2 = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + User::getUserTypesArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_User_Type', $this->siteLangId), 'type', $arr_options2, -1, array(), '');
         $frm->addHiddenField('', 'withdrawal_id', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearTagSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearTagSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -260,14 +260,14 @@ class WithdrawalRequestsController extends AdminBaseController
     {
         $frm = new Form('frmUpdateStatus');
         $statusArr = array(
-            Transactions::WITHDRAWL_STATUS_PENDING => Labels::getLabel('LBL_Withdrawal_Request_Pending', $this->adminLangId),
-            Transactions::WITHDRAWL_STATUS_APPROVED => Labels::getLabel('LBL_Withdrawal_Request_Approved', $this->adminLangId),
-            Transactions::WITHDRAWL_STATUS_DECLINED => Labels::getLabel('LBL_Withdrawal_Request_Declined', $this->adminLangId),
+            Transactions::WITHDRAWL_STATUS_PENDING => Labels::getLabel('LBL_Withdrawal_Request_Pending', $this->siteLangId),
+            Transactions::WITHDRAWL_STATUS_APPROVED => Labels::getLabel('LBL_Withdrawal_Request_Approved', $this->siteLangId),
+            Transactions::WITHDRAWL_STATUS_DECLINED => Labels::getLabel('LBL_Withdrawal_Request_Declined', $this->siteLangId),
         );
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'withdrawal_status', $statusArr, '', array(), '');
-        $frm->addTextarea(Labels::getLabel('LBL_Comment', $this->adminLangId), 'withdrawal_comments');
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'withdrawal_status', $statusArr, '', array(), '');
+        $frm->addTextarea(Labels::getLabel('LBL_Comment', $this->siteLangId), 'withdrawal_comments');
         $fld = $frm->addHiddenField('', 'withdrawal_id', $withdrawalId);
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
 }

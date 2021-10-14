@@ -44,7 +44,7 @@ if (!$canEdit || 2 > count($arrListing) || $isKingPinType) {
 $tableId = "pluginsJs";
 require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
 
-$aspectRatioArr = AttachedFile::getRatioTypeArray($adminLangId);
+$aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
 $msg = '';
 
 $serialNo = 0;
@@ -82,29 +82,23 @@ foreach ($arrListing as $sn => $row) {
                 $imgHtm = '<img src="' . $imageUrl . '" data-ratio="' . $aspectRatio . '">';
                 $td->appendElement('plaintext', $tdAttr, $imgHtm, true);
                 break;
-            case 'plugin_identifier':
+            case 'plugin_name':
                 $defaultCurrConvAPI = FatApp::getConfig('CONF_DEFAULT_PLUGIN_' . $row['plugin_type'], FatUtility::VAR_INT, 0);
                 $htm = '';
                 if (!empty($defaultCurrConvAPI) && $row['plugin_id'] == $defaultCurrConvAPI) {
-                    $htm = ' <span class="badge badge-success">'  . Labels::getLabel('LBL_DEFAULT', $adminLangId) . '</span>';
+                    $htm = ' <span class="badge badge-success">'  . Labels::getLabel('LBL_DEFAULT', $siteLangId) . '</span>';
                 }
 
                 if (in_array($row['plugin_code'], Plugin::PAY_LATER)) {
-                    $htm .= ' <span class="badge badge-warning">'  . Labels::getLabel('LBL_PAY_LATER', $adminLangId) . '</span>';
+                    $htm .= ' <span class="badge badge-warning">'  . Labels::getLabel('LBL_PAY_LATER', $siteLangId) . '</span>';
                 }
-                if ($row['plugin_name'] != '') {
-                    $td->appendElement('plaintext', $tdAttr, $row['plugin_name'] . $htm, true);
-                    $td->appendElement('br', $tdAttr);
-                    $td->appendElement('plaintext', $tdAttr, '(' . $row[$key] . ')', true);
-                } else {
-                    $td->appendElement('plaintext', $tdAttr, $row[$key] . $htm, true);
-                }
+                $td->appendElement('plaintext', $tdAttr, $row[$key] . $htm, true);
                 break;
             case 'plugin_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['plugin_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
                 if (!empty($otherPluginTypes) && $canEdit) {
                     if (empty($msg)) {
-                        $msg = Labels::getLabel("MSG_TURNING_ON_{PLUGIN-TYPE}_WILL_TURN_OFF_{OTHER-PLUGIN-TYPE}_PLUGINS._DO_YOU_WANT_TO_CONTINUE_?", $adminLangId);
+                        $msg = Labels::getLabel("MSG_TURNING_ON_{PLUGIN-TYPE}_WILL_TURN_OFF_{OTHER-PLUGIN-TYPE}_PLUGINS._DO_YOU_WANT_TO_CONTINUE_?", $siteLangId);
                         $msg = CommonHelper::replaceStringData($msg, ['{PLUGIN-TYPE}' => $pluginTypes[$row['plugin_type']], '{OTHER-PLUGIN-TYPE}' => $otherPluginTypes]);
                     }
                     $statusAct = "changeStatusEitherPluginTypes(this, " . ($row['plugin_active'] > 0 ? 0 : 1) . ", '" . $msg . "')";
@@ -123,7 +117,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 $data = [
-                    'adminLangId' => $adminLangId,
+                    'siteLangId' => $siteLangId,
                     'recordId' => $row['plugin_id']
                 ];
 
@@ -134,7 +128,7 @@ foreach ($arrListing as $sn => $row) {
                             'attr' => [
                                 'href' => 'javascript:void(0)',
                                 'onclick' => "editSettingForm('" . $row['plugin_code'] . "')",
-                                'title' => Labels::getLabel('LBL_SETTINGS', $adminLangId)
+                                'title' => Labels::getLabel('LBL_SETTINGS', $siteLangId)
                             ],
                             'label' => '<svg class="svg" width="20" height="20">
                                             <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-system-setting">
@@ -159,7 +153,7 @@ if (count($arrListing) == 0) {
         array(
             'colspan' => count($fields)
         ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId)
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );
 }
 
@@ -176,17 +170,14 @@ $frm->addHiddenField('', 'status'); ?>
 <div class="card-head">
     <h3 class="card-head-label">
         <span class="card-head-title">
-            <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGINS', $adminLangId), ['{PLUGIN-NAME}' =>  $pluginTypes[$type]]); ?>
-        </span>
-        <span class="text-muted">
-            <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_PLUGINS', $adminLangId), ['{PLUGIN-NAME}' =>  $pluginTypes[$type], '{COUNT}' => $recordCount]); ?>
+            <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGINS', $siteLangId), ['{PLUGIN-NAME}' =>  $pluginTypes[$type]]); ?>
         </span>
     </h3>
     <div class="card-toolbar">
         <?php
         $data = [
             'canEdit' => $canEdit,
-            'adminLangId' => $adminLangId,
+            'siteLangId' => $siteLangId,
             'statusButtons' => (1 < count($arrListing) && $canEdit && !$isKingPinType),
         ];
         $this->includeTemplate('_partial/listing/action-buttons.php', $data, false);

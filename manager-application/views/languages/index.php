@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
 
-$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_LANGUAGE', $adminLangId);
+$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_LANGUAGE', $siteLangId);
 
 /* No sorting functionality required if no record found. */
 if (2 > count($arrListing)) {
@@ -44,9 +44,8 @@ $controller = str_replace('Controller', '', FatApp::getController());
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
-                        'adminLangId' => $adminLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_LANGUAGE', $adminLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_LANGUAGES', $adminLangId), ['{COUNT}' => $recordCount]),
+                        'siteLangId' => $siteLangId,
+                        'cardHeadTitle' => Labels::getLabel('LBL_LANGUAGE', $siteLangId),
                         'newRecordBtn' => true,
                         'statusButtons' => true
                     ];

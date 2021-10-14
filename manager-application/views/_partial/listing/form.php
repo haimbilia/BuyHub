@@ -7,10 +7,11 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 $activeGentab = true;
 $disabled = (isset($recordId) && 1 > $recordId) ? 'disabled' : '';
 require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
-<div class="form-edit-body loaderContainerJs">
-    <?php echo $frm->getFormHtml(); ?>
-</div>
+    <div class="form-edit-body loaderContainerJs">
+        <?php echo $frm->getFormHtml(); ?>
+    </div>
 
+<<<<<<< HEAD
 <div class="form-edit-foot">
     <div class="row">
         <div class="col-auto">
@@ -23,7 +24,21 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
                 }
                 ?>
             </button>
+=======
+    <div class="form-edit-foot">
+        <div class="row">
+            <div class="col-auto">
+                <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
+                    <?php
+                    if (0 < $recordId) {
+                        echo Labels::getLabel('LBL_UPDATE', $siteLangId);
+                    } else {
+                        echo Labels::getLabel('LBL_SAVE', $siteLangId);
+                    }
+                    ?>
+                </button>
+            </div>
+>>>>>>> dcb74d5c219c2cc219cb2515001a6e3cc7e94a8f
         </div>
     </div>
-</div>
 </div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->

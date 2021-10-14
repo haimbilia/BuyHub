@@ -14,7 +14,7 @@ class PluginSettingController extends AdminBaseController
         $this->objPrivilege->canEditPlugins($this->admin_id);
 
         if (get_called_class() == __CLASS__) {
-            LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_ACCESS', $this->adminLangId));
+            LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
         }
 
         $this->keyName = FatApp::getPostedData('keyName', FatUtility::VAR_STRING, '');
@@ -26,7 +26,7 @@ class PluginSettingController extends AdminBaseController
                 LibHelper::dieJsonError($message);
             }
             if (empty($this->keyName)) {
-                LibHelper::dieJsonError(Labels::getLabel('LBL_INVALID_KEY_NAME', $this->adminLangId));
+                LibHelper::dieJsonError(Labels::getLabel('LBL_INVALID_KEY_NAME', $this->siteLangId));
             }
         }
     }
@@ -37,7 +37,7 @@ class PluginSettingController extends AdminBaseController
         $pluginSetting = new PluginSetting(0, $this->keyName);
         $settings = $pluginSetting->get();
         if (false === $settings) {
-            $msg = empty($pluginSetting->getError()) ? Labels::getLabel('LBL_SETTINGS_NOT_AVALIABLE_FOR_THIS_PLUGIN', $this->adminLangId) : $pluginSetting->getError();
+            $msg = empty($pluginSetting->getError()) ? Labels::getLabel('LBL_SETTINGS_NOT_AVALIABLE_FOR_THIS_PLUGIN', $this->siteLangId) : $pluginSetting->getError();
             FatUtility::dieJsonError($msg);
         }
         $this->frmObj->fill($settings);
@@ -73,7 +73,7 @@ class PluginSettingController extends AdminBaseController
             if (false == method_exists($class, 'form')) {
                 FatUtility::dieJsonError($e->getMessage());
             }
-            $frm = $class::form($this->adminLangId);
+            $frm = $class::form($this->siteLangId);
         }
         
         if ((empty($requirements) || !is_array($requirements)) && !isset($frm)) {
@@ -82,7 +82,7 @@ class PluginSettingController extends AdminBaseController
         if (isset($frm)) {
             $frm = PluginSetting::addKeyFields($frm);
         } else {
-            $frm = PluginSetting::getForm($requirements, $this->adminLangId);
+            $frm = PluginSetting::getForm($requirements, $this->siteLangId);
         }
         $frm->fill(['keyName' => $this->keyName]);
         return $frm;

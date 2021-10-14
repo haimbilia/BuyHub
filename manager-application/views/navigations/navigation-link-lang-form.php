@@ -9,22 +9,22 @@ $langFld->setfieldTagAttribute('onChange', "navigationLinkLangForm(" . $nav_id .
 <section class="section">
     <div class="sectionhead">
 
-        <h4><?php echo Labels::getLabel('LBL_navigation_Setup', $adminLangId); ?>
+        <h4><?php echo Labels::getLabel('LBL_navigation_Setup', $siteLangId); ?>
         </h4>
     </div>
     <div class="sectionbody space">
         <div class="row">
             <div class="col-sm-12">
-                <h1><?php //echo Labels::getLabel('LBL_Navigation_Setup',$adminLangId);?>
+                <h1><?php //echo Labels::getLabel('LBL_Navigation_Setup',$siteLangId);?>
                 </h1>
                 <div class="tabs_nav_container responsive flat">
                     <ul class="tabs_nav">
                         <li><a href="javascript:void(0);"
-                                onclick="navigationLinkForm(<?php echo $nav_id . ',' . $nlink_id ?>);"><?php echo Labels::getLabel('LBL_General', $adminLangId); ?></a>
+                                onclick="navigationLinkForm(<?php echo $nav_id . ',' . $nlink_id ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a>
                         </li>
                         <li class="<?php echo (0 == $nlink_id) ? 'fat-inactive' : ''; ?>">
                             <a class="active" href="javascript:void(0);">
-                                <?php echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
+                                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
                             </a>
                         </li>
                     </ul>
@@ -37,7 +37,7 @@ $langFld->setfieldTagAttribute('onChange', "navigationLinkLangForm(" . $nav_id .
                                     <div class="row justify-content-end">
                                         <div class="col-auto mb-4">
                                             <input class="btn btn-outline-brand btn-sm" type="button"
-                                                value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>"
+                                                value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>"
                                                 onClick="navigationLinkLangForm(<?php echo $nav_id; ?>, <?php echo $nlink_id; ?>, <?php echo $nav_lang_id; ?>, 1)">
                                         </div>
                                     </div>

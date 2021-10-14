@@ -8,7 +8,7 @@ class Common
 
         $controller = new $controllerName('');
         $template->set('nodes', $controller->getBreadcrumbNodes($action));
-        $template->set('adminLangId', CommonHelper::getlangId());
+        $template->set('siteLangId', CommonHelper::getlangId());
     }
     
     public static function excludeKeysForSort()

@@ -26,7 +26,7 @@
                 <div class="widget__body">
                     <div class="widget__content">
                         <div class="widget__info">
-                            <span class="widget__label"><?php echo Labels::getLabel('LBL_EMAIL', $adminLangId); ?>:</span>
+                            <span class="widget__label"><?php echo Labels::getLabel('LBL_EMAIL', $siteLangId); ?>:</span>
                             <a href="#" class="widget__data"><?php echo $adminDetails['admin_email'];?></a>
                         </div>                       
                     </div>
@@ -58,7 +58,7 @@
                                         </g>
                                     </svg> </span>
                                 <span class="widget__desc">
-                                    <?php echo Labels::getLabel('LBL_CHANGE_PASSWORD', $adminLangId); ?>
+                                    <?php echo Labels::getLabel('LBL_CHANGE_PASSWORD', $siteLangId); ?>
                                 </span>
                             </span>                            
                         </a>               

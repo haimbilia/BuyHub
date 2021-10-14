@@ -11,7 +11,7 @@ $langFld->setfieldTagAttribute('onChange', "addLangForm(" . $nav_id . ", this.va
 <section class="section">
     <div class="sectionhead">
 
-        <h4><?php echo Labels::getLabel('LBL_navigation_Setup', $adminLangId); ?>
+        <h4><?php echo Labels::getLabel('LBL_navigation_Setup', $siteLangId); ?>
         </h4>
     </div>
     <div class="sectionbody space">
@@ -21,11 +21,11 @@ $langFld->setfieldTagAttribute('onChange', "addLangForm(" . $nav_id . ", this.va
                     <div class="tabs_nav_container responsive flat">
                         <ul class="tabs_nav">
                             <li><a href="javascript:void(0);"
-                                    onclick="addForm(<?php echo $nav_id ?>);"><?php echo Labels::getLabel('LBL_General', $adminLangId); ?></a>
+                                    onclick="addForm(<?php echo $nav_id ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a>
                             </li>
                             <li class="<?php echo (0 == $nav_id) ? 'fat-inactive' : ''; ?>">
                                 <a class="active" href="javascript:void(0);" <?php echo (0 < $nav_id) ? "onclick='addLangForm(" . $nav_id . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                                    <?php echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
+                                    <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
                                 </a>
                             </li>
                         </ul>
@@ -38,7 +38,7 @@ $langFld->setfieldTagAttribute('onChange', "addLangForm(" . $nav_id . ", this.va
                                     <div class="col-auto mb-4">
                                         <input class="btn btn-outline-brand btn-sm" 
                                             type="button" 
-                                            value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" 
+                                            value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" 
                                             onClick="addLangForm(<?php echo $nav_id; ?>, <?php echo $nav_lang_id; ?>, 1)">
                                     </div>
                                 </div>

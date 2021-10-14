@@ -26,13 +26,13 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         <form class="form">
                             <div class="row justify-content-center">
                                 <div class="col-md-12">
-                                    <input type="search" id="settingsSearch" class="form-control omni-search" name="search" value="" placeholder="<?php echo Labels::getLabel('LBL_SEARCH', $adminLangId); ?>">
+                                    <input type="search" id="settingsSearch" class="form-control omni-search" name="search" value="" placeholder="<?php echo Labels::getLabel('LBL_SEARCH', $siteLangId); ?>">
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="settings settingListJs">
-                        <?php /* if ($objPrivilege->canViewGeneralSettings(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <?php if ($objPrivilege->canViewGeneralSettings(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <a class="setting" href="<?php echo UrlHelper::generateUrl('configurations'); ?>">
                                 <div class="setting__icon">
                                     <span class="icon">
@@ -43,11 +43,11 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('LBL_GENERAL_SETTINGS', $adminLangId); ?></h6>
+                                    <h6><?php echo Labels::getLabel('LBL_GENERAL_SETTINGS', $siteLangId); ?></h6>
                                     <span>Display, Sound, notifications, power</span>
                                 </div>
                             </a>
-                        <?php } */ ?>
+                        <?php } ?>
 
                         <?php if ($objPrivilege->canViewPlugins(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <a class="setting" href="<?php echo UrlHelper::generateUrl('Plugins'); ?>">
@@ -60,7 +60,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('LBL_PLUGINS', $adminLangId); ?></h6>
+                                    <h6><?php echo Labels::getLabel('LBL_PLUGINS', $siteLangId); ?></h6>
                                     <span>Addons, Third party services</span>
                                 </div>
                             </a>
@@ -77,7 +77,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('LBL_LABELS', $adminLangId); ?></h6>
+                                    <h6><?php echo Labels::getLabel('LBL_LABELS', $siteLangId); ?></h6>
                                     <span>Manage application labels</span>
                                 </div>
                             </a>
@@ -94,7 +94,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('LBL_THEME', $adminLangId); ?></h6>
+                                    <h6><?php echo Labels::getLabel('LBL_THEME', $siteLangId); ?></h6>
                                     <span>Fonts, color, styling</span>
                                 </div>
                             </a>
@@ -111,7 +111,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('LBL_CURRENCIES', $adminLangId); ?></h6>
+                                    <h6><?php echo Labels::getLabel('LBL_CURRENCIES', $siteLangId); ?></h6>
                                     <span>Currency, Symbol, conversions</span>
                                 </div>
                             </a>
@@ -128,7 +128,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('LBL_SITE_COMMISSION', $adminLangId); ?></h6>
+                                    <h6><?php echo Labels::getLabel('LBL_SITE_COMMISSION', $siteLangId); ?></h6>
                                     <span>Category, Seller, product, commision fees</span>
                                 </div>
                             </a>
@@ -145,7 +145,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('LBL_AFFILIATE_COMMISSION', $adminLangId); ?></h6>
+                                    <h6><?php echo Labels::getLabel('LBL_AFFILIATE_COMMISSION', $siteLangId); ?></h6>
                                     <span>Category, Users, Commision fees</span>
                                 </div>
                             </a>
@@ -162,7 +162,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('LBL_SELLER_PACKAGES', $adminLangId); ?></h6>
+                                    <h6><?php echo Labels::getLabel('LBL_SELLER_PACKAGES', $siteLangId); ?></h6>
                                     <span>Subscription, Packages for seller</span>
                                 </div>
                             </a>
@@ -179,7 +179,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('LBL_ZONES', $adminLangId); ?></h6>
+                                    <h6><?php echo Labels::getLabel('LBL_ZONES', $siteLangId); ?></h6>
                                     <span>Manage country zones</span>
                                 </div>
                             </a>
@@ -195,7 +195,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('LBL_COUNTRIES', $adminLangId); ?></h6>
+                                    <h6><?php echo Labels::getLabel('LBL_COUNTRIES', $siteLangId); ?></h6>
                                     <span>Addresses, Shipping Rates configuration and Tax rates</span>
                                 </div>
                             </a>
@@ -212,7 +212,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('LBL_STATES', $adminLangId); ?></h6>
+                                    <h6><?php echo Labels::getLabel('LBL_STATES', $siteLangId); ?></h6>
                                     <span>Addresses, Shipping Rates configuration and Tax rates</span>
                                 </div>
                             </a>
@@ -229,7 +229,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('LBL_ABUSIVE_KEYWORDS', $adminLangId); ?></h6>
+                                    <h6><?php echo Labels::getLabel('LBL_ABUSIVE_KEYWORDS', $siteLangId); ?></h6>
                                     <span>Configure Abusive keywords</span>
                                 </div>
                             </a>
@@ -246,7 +246,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('LBL_EMPTY_CART', $adminLangId); ?></h6>
+                                    <h6><?php echo Labels::getLabel('LBL_EMPTY_CART', $siteLangId); ?></h6>
                                     <span>Items for empty cart page</span>
                                 </div>
                             </a>

@@ -16,7 +16,7 @@ class PickupAddressesController extends AdminBaseController
 
     public function search()
     {
-        $address = new Address(0, $this->adminLangId);
+        $address = new Address(0, $this->siteLangId);
         $addresses = $address->getData(Address::TYPE_ADMIN_PICKUP, 0);
         $this->set('arrListing', $addresses);
         $this->set('canEdit', $this->objPrivilege->canEditPickupAddresses($this->admin_id, true));
@@ -83,9 +83,9 @@ class PickupAddressesController extends AdminBaseController
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($langId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Country', $langId), 'addr_country_id', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId))->requirement->setRequired(true);
+        $frm->addSelectBox(Labels::getLabel('LBL_Country', $langId), 'addr_country_id', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $langId), 'addr_state_id', array(), '', array(), Labels::getLabel('LBL_Select', $this->adminLangId))->requirement->setRequired(true);
+        $frm->addSelectBox(Labels::getLabel('LBL_State', $langId), 'addr_state_id', array(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
         $frm->addRequiredField(Labels::getLabel('LBL_City', $langId), 'addr_city');
 
         $zipFld = $frm->addRequiredField(Labels::getLabel('LBL_Postalcode', $langId), 'addr_zip');
@@ -97,14 +97,14 @@ class PickupAddressesController extends AdminBaseController
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $langId));
 
-        $slotTimingsTypeArr = TimeSlot::getSlotTypeArr($this->adminLangId);
-        $frm->addRadioButtons(Labels::getLabel('LBL_Slot_Timings', $this->adminLangId), 'tslot_availability', $slotTimingsTypeArr, TimeSlot::DAY_INDIVIDUAL_DAYS);
+        $slotTimingsTypeArr = TimeSlot::getSlotTypeArr($this->siteLangId);
+        $frm->addRadioButtons(Labels::getLabel('LBL_Slot_Timings', $this->siteLangId), 'tslot_availability', $slotTimingsTypeArr, TimeSlot::DAY_INDIVIDUAL_DAYS);
 
-        $daysArr = TimeSlot::getDaysArr($this->adminLangId);
+        $daysArr = TimeSlot::getDaysArr($this->siteLangId);
         for ($i = 0; $i < count($daysArr); $i++) {
             $frm->addCheckBox($daysArr[$i], 'tslot_day[' . $i . ']', $i, array(), false);
-            $frm->addSelectBox(Labels::getLabel('LBL_From', $this->adminLangId), 'tslot_from_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
-            $frm->addSelectBox(Labels::getLabel('LBL_To', $this->adminLangId), 'tslot_to_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
+            $frm->addSelectBox(Labels::getLabel('LBL_From', $this->siteLangId), 'tslot_from_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('LBL_To', $this->siteLangId), 'tslot_to_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
             $frm->addButton('', 'btn_add_row[' . $i . ']', '+');
         }
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
@@ -172,7 +172,7 @@ class PickupAddressesController extends AdminBaseController
             }
         }        
         if (!empty($slotDays) && $availability == TimeSlot::DAY_ALL_DAYS) {
-            $daysArr = TimeSlot::getDaysArr($this->adminLangId);
+            $daysArr = TimeSlot::getDaysArr($this->siteLangId);
             foreach ($daysArr as $day => $label) {
                 foreach ($slotFromTime[TimeSlot::DAY_SUNDAY] as $key => $fromTime) {
                     if (!empty($fromTime) && !empty($slotToTime[TimeSlot::DAY_SUNDAY][$key])) {

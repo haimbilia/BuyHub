@@ -1,7 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
 $frm->setFormTagAttribute('onSubmit', 'importFile("importData",' . $actionType . '); return false;');
+<<<<<<< HEAD
 $frm->developerTags['colClassPrefix'] = 'col-md-';
 $frm->developerTags['fld_default_col'] = 12;
 
@@ -46,3 +45,7 @@ $frm->developerTags['fld_default_col'] = 12;
         </div>
     </div>
 </div>
+=======
+$activeContentTab = true;
+require_once(CONF_THEME_PATH . 'import-export/_partial/import-form.php');
+>>>>>>> dcb74d5c219c2cc219cb2515001a6e3cc7e94a8f

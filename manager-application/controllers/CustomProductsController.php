@@ -39,10 +39,10 @@ class CustomProductsController extends AdminBaseController
         $page = FatUtility::int($page);
         $post = $srchForm->getFormDataFromArray($data);
 
-        $srch = ProductRequest::getSearchObject($this->adminLangId, false, true);
+        $srch = ProductRequest::getSearchObject($this->siteLangId, false, true);
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'preq_user_id = u.user_id', 'u');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', Shop::DB_TBL_PREFIX . 'user_id = if(u.user_parent > 0, u.user_parent, u.user_id)', 'shop');
-        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->adminLangId, 's_l');
+        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
         /*$srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.credential_user_id = u.user_id', 'uc');*/
         $srch->addOrder('preq_added_on', 'desc');
         $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'user_parent', 'ifnull(shop_name, shop_identifier) as shop_name'));
@@ -105,7 +105,7 @@ class CustomProductsController extends AdminBaseController
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
         $this->set('reqStatusClassArr', User::getCatalogRequestClassArr());
-        $this->set('reqStatusArr', ProductRequest::getStatusArr($this->adminLangId));
+        $this->set('reqStatusArr', ProductRequest::getStatusArr($this->siteLangId));
         $this->set('canViewCustomProductRequests', $this->objPrivilege->canViewCustomProductRequests($this->admin_id, true));
         $this->set('canEditCustomProductRequests', $this->objPrivilege->canEditCustomProductRequests($this->admin_id, true));
         $this->_template->render(false, false);
@@ -211,7 +211,7 @@ class CustomProductsController extends AdminBaseController
         $nextLangId = key($languages);
 
         $preq_id = $prodReqObj->getMainTableRecordId();
-        $this->set('msg', Labels::getLabel('LBL_Product_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Product_Setup_Successful', $this->siteLangId));
         $this->set('preq_id', $preq_id);
         $this->set('lang_id', $nextLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -258,7 +258,7 @@ class CustomProductsController extends AdminBaseController
 
         $preqId = FatApp::getPostedData('selprod_product_id', FatUtility::VAR_INT, 0);
         if (!$preqId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $post = FatApp::getPostedData();
@@ -291,7 +291,7 @@ class CustomProductsController extends AdminBaseController
         reset($languages);
         $nextLangId = key($languages);
 
-        $this->set('msg', Labels::getLabel('LBL_Product_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Product_Setup_Successful', $this->siteLangId));
         $this->set('preq_id', $preqId);
         $this->set('lang_id', $nextLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -334,7 +334,7 @@ class CustomProductsController extends AdminBaseController
         $data = array();
         $data['product_id'] = $preqId;
         $data['prodspec_id'] = $prodspecId;
-        $this->set('adminLangId', $this->adminLangId);
+        $this->set('siteLangId', $this->siteLangId);
         $this->set('languages', Language::getAllNames());
         $this->set('preqId', $preqId);
         $this->set('divCount', $divCount);
@@ -347,7 +347,7 @@ class CustomProductsController extends AdminBaseController
 
         $post = FatApp::getPostedData();
         if (false === $post) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Please_fill_Specifications', $this->adminLangId));
+            FatUtility::dieWithError(Labels::getLabel('MSG_Please_fill_Specifications', $this->siteLangId));
         }
 
         $languages = Language::getAllNames();
@@ -385,7 +385,7 @@ class CustomProductsController extends AdminBaseController
         $nextLangId = key($languages);
 
         $preqId = $prodReqObj->getMainTableRecordId();
-        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->siteLangId));
         $this->set('preqId', $preqId);
         $this->set('lang_id', $nextLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -530,7 +530,7 @@ class CustomProductsController extends AdminBaseController
         $productData = json_decode($data['preq_content'], true);
         $productOptions = !empty($productData['product_option']) ? $productData['product_option'] : array();
 
-        $this->set('msg', Labels::getLabel('LBL_Product_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Product_Setup_Successful', $this->siteLangId));
         $this->set('preq_id', $preq_id);
         $this->set('productOptions', $productOptions);
         $this->set('lang_id', $newTabLangId);
@@ -562,7 +562,7 @@ class CustomProductsController extends AdminBaseController
         $this->set('preqId', $preqId);
         $this->set('productOptions', $productOptions);
         $this->set('languages', Language::getAllNames());
-        $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
+        $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -581,11 +581,11 @@ class CustomProductsController extends AdminBaseController
         //$update_withselprod = $post['preq_update_withselprod'];
         $update_withselprod = 0;
 
-        $srch = ProductRequest::getSearchObject($this->adminLangId);
+        $srch = ProductRequest::getSearchObject($this->siteLangId);
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = preq.preq_user_id', 'u');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'c.credential_user_id = u.user_id', 'c');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', Shop::DB_TBL_PREFIX . 'user_id = u.user_id', 'shop');
-        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->adminLangId, 's_l');
+        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
         $srch->addCondition('preq_id', '=', $preqId);
         $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'credential_email', 'user_phone_dcode', 'user_phone', 'ifnull(shop_name, shop_identifier) as shop_name'));
         $srch->doNotCalculateRecords();
@@ -995,7 +995,7 @@ class CustomProductsController extends AdminBaseController
                         $prodSpecObj->assignValues($data_to_be_save);
 
                         if (!$prodSpecObj->save()) {
-                            Message::addErrorMessage(Labels::getLabel($prodSpecObj->getError(), $this->adminLangId));
+                            Message::addErrorMessage(Labels::getLabel($prodSpecObj->getError(), $this->siteLangId));
                             FatUtility::dieWithError(Message::getHtml());
                         };
                         $prodSpecObj = new ProdSpecification($prodSpecObj->getMainTableRecordId());
@@ -1004,7 +1004,7 @@ class CustomProductsController extends AdminBaseController
                         $data_to_save_lang['prodspec_value'] = $prodSpecData['prod_spec_value'][$langId][$specKey];
                         $data_to_save_lang['prodspeclang_lang_id'] = $langId;
                         if (!$prodSpecObj->updateLangData($langId, $data_to_save_lang)) {
-                            Message::addErrorMessage(Labels::getLabel($ProdSpecObj->getError(), $this->adminLangId));
+                            Message::addErrorMessage(Labels::getLabel($ProdSpecObj->getError(), $this->siteLangId));
                             FatUtility::dieWithError(Message::getHtml());
                         }
                     }
@@ -1031,16 +1031,16 @@ class CustomProductsController extends AdminBaseController
         $customCatalogReq = $data;
         $customCatalogReq['preq_status'] = $post['preq_status'];
         $customCatalogReq['preq_comment'] = $post['preq_comment'];
-        if (!$email->sendCustomCatalogRequestStatusChangeNotification($this->adminLangId, $customCatalogReq)) {
+        if (!$email->sendCustomCatalogRequestStatusChangeNotification($this->siteLangId, $customCatalogReq)) {
             $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel('MSG_Email_could_not_be_Sent', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Email_could_not_be_Sent', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         if ($status == ProductRequest::STATUS_APPROVED) {
             Product::updateMinPrices($product_id);
         }
         $db->commitTransaction();
-        $this->set('msg', Labels::getLabel('MSG_Status_updated_successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Status_updated_successfully', $this->siteLangId));
         $this->set('preq_id', $preqId);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -1073,7 +1073,7 @@ class CustomProductsController extends AdminBaseController
         /* ] */
         
 
-        $productOptions = ProductRequest::getProductReqOptions($preqId, $this->adminLangId, true);
+        $productOptions = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '|');
 
         $this->set('productOptions', $productOptions);
@@ -1091,7 +1091,7 @@ class CustomProductsController extends AdminBaseController
     {
         $post = FatApp::getPostedData();
         if (empty($post) || $post['code'] == '') {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_fill_UPC/EAN_code', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Please_fill_UPC/EAN_code', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -1102,7 +1102,7 @@ class CustomProductsController extends AdminBaseController
         $rs = $srch->getResultSet();
         $totalRecords = FatApp::getDb()->totalRecords($rs);
         if ($totalRecords > 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_This_UPC/EAN_code_already_assigned_to_another_product', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_This_UPC/EAN_code_already_assigned_to_another_product', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $this->_template->render(false, false, 'json-success.php');
@@ -1117,7 +1117,7 @@ class CustomProductsController extends AdminBaseController
         if ($preqId) {
             $productReqRow = ProductRequest::getAttributesById($preqId);
             if ($productReqRow == false) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->adminLangId));
+                Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
             }
             $prodcat_id = $productReqRow['preq_prodcat_id'];
@@ -1126,7 +1126,7 @@ class CustomProductsController extends AdminBaseController
 
         $post = FatApp::getPostedData();
         if (false === $post) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_fill_UPC/EAN_code', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Please_fill_UPC/EAN_code', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -1144,7 +1144,7 @@ class CustomProductsController extends AdminBaseController
             FatUtility::dieWithError($prodReqObj->getError());
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->siteLangId));
         $this->set('preq_id', $preqId);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -1162,7 +1162,7 @@ class CustomProductsController extends AdminBaseController
         $srch->joinTable(
             Tag::DB_TBL . '_lang',
             'LEFT OUTER JOIN',
-            'taglang_tag_id = tag_id AND taglang_lang_id = ' . $this->adminLangId
+            'taglang_tag_id = tag_id AND taglang_lang_id = ' . $this->siteLangId
         );
         $srch->addMultipleFields(array('tag_id, tag_name, tag_identifier'));
         $srch->addCondition('tag_id', 'IN', $post['tags']);
@@ -1187,7 +1187,7 @@ class CustomProductsController extends AdminBaseController
             return false;
         }
 
-        $srch = Option::getSearchObject($this->adminLangId);
+        $srch = Option::getSearchObject($this->siteLangId);
         $srch->addMultipleFields(array('option_id, option_name, option_identifier'));
         $srch->addCondition('option_id', 'IN', $post['options']);
         $srch->addOrder('option_identifier');
@@ -1213,12 +1213,12 @@ class CustomProductsController extends AdminBaseController
 
         $shipping_rates = array();
         $productReqData = ProductRequest::getAttributesById($preq_id, array('preq_id', 'preq_user_id'));
-        $shipping_rates = ProductRequest::getProductShippingRates($preq_id, $this->adminLangId, 0, $productReqData['preq_user_id']);
+        $shipping_rates = ProductRequest::getProductShippingRates($preq_id, $this->siteLangId, 0, $productReqData['preq_user_id']);
         /* $shipping_rates = array();
         $productReqData = ProductRequest::getAttributesById($preq_id);
         $productReqData = json_decode($productReqData['preq_content'],true);
         $shipping_rates = !(empty($productReqData['product_shipping']))?$productReqData['product_shipping']:array(); */
-        $this->set('adminLangId', $this->adminLangId);
+        $this->set('siteLangId', $this->siteLangId);
         $this->set('product_id', $preq_id);
         $this->set('shipping_rates', $shipping_rates);
         $this->_template->render(false, false, 'products/get-shipping-tab.php');
@@ -1233,9 +1233,9 @@ class CustomProductsController extends AdminBaseController
         }
 
         if (!$row = ProductRequest::getAttributesById($preq_id)) {
-            FatUtility::dieWithError(Labels::getLabel('LBL_No_Record_Found', $this->adminLangId));
+            FatUtility::dieWithError(Labels::getLabel('LBL_No_Record_Found', $this->siteLangId));
         }
-        $imagesFrm = $this->getImagesFrm($preq_id, $this->adminLangId);
+        $imagesFrm = $this->getImagesFrm($preq_id, $this->siteLangId);
         $this->set('preq_id', $preq_id);
         $this->set('imagesFrm', $imagesFrm);
         $this->_template->render(false, false);
@@ -1250,7 +1250,7 @@ class CustomProductsController extends AdminBaseController
         }
 
         if (!$row = ProductRequest::getAttributesById($preq_id)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_No_Record_Found', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_No_Record_Found', $this->siteLangId));
         }
 		
 		$languages = Language::getAllNames();
@@ -1262,7 +1262,7 @@ class CustomProductsController extends AdminBaseController
 		}
 		
         
-        $imgTypesArr = $this->getSeparateImageOptions($preq_id, $this->adminLangId);
+        $imgTypesArr = $this->getSeparateImageOptions($preq_id, $this->siteLangId);
 
         $this->set('images', $product_images);
         $this->set('preq_id', $preq_id);
@@ -1287,7 +1287,7 @@ class CustomProductsController extends AdminBaseController
             Message::addErrorMessage($preqObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
-        $this->set("msg", Labels::getLabel('LBL_Ordered_Successfully', $this->adminLangId));
+        $this->set("msg", Labels::getLabel('LBL_Ordered_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1296,7 +1296,7 @@ class CustomProductsController extends AdminBaseController
         $this->objPrivilege->canEditCustomProductRequests();
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -1313,7 +1313,7 @@ class CustomProductsController extends AdminBaseController
        
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_File', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_File', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         $fileHandlerObj = new AttachedFile();
@@ -1322,7 +1322,7 @@ class CustomProductsController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $this->set("msg", Labels::getLabel('LBL_Image_Uploaded_Successfully', $this->adminLangId));
+        $this->set("msg", Labels::getLabel('LBL_Image_Uploaded_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1342,7 +1342,7 @@ class CustomProductsController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $this->set("msg", Labels::getLabel('LBL_Image_Removed_Successfully', $this->adminLangId));
+        $this->set("msg", Labels::getLabel('LBL_Image_Removed_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1351,14 +1351,14 @@ class CustomProductsController extends AdminBaseController
         $this->objPrivilege->canViewCustomProductRequests();
         $imgTypesArr = $this->getSeparateImageOptions($preq_id, $lang_id);
         $frm = new Form('imageFrm', array('id' => 'imageFrm'));
-        $frm->addSelectBox(Labels::getLabel('LBL_Image_File_Type', $this->adminLangId), 'option_id', $imgTypesArr, 0, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Image_File_Type', $this->siteLangId), 'option_id', $imgTypesArr, 0, array(), '');
 		
 		
         $languagesAssocArr = Language::getAllNames();
        
 		$languages = Language::getAllNames();
 		if(count($languagesAssocArr) > 1){
-			$frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->adminLangId)) + $languagesAssocArr, '', array(), '');
+			$frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
 		} else  {
 			$lang_id = array_key_first($languagesAssocArr); 
 			$frm->addHiddenField('', 'lang_id', $lang_id);
@@ -1366,9 +1366,9 @@ class CustomProductsController extends AdminBaseController
 	   
 		
        
-	   $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Photo(s):', $this->adminLangId), 'prod_image', array('id' => 'prod_image'));
+	   $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Photo(s):', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
         $fldImg->htmlBeforeField = '<div class="filefield"><span class="filename"></span>';
-        $fldImg->htmlAfterField = '<label class="filelabel">' . Labels::getLabel('LBL_Browse_File', $this->adminLangId) . '</label></div><br/><small>' . Labels::getLabel('LBL_Please_keep_image_dimensions_greater_than_500_x_500', $this->adminLangId) . '</small>';
+        $fldImg->htmlAfterField = '<label class="filelabel">' . Labels::getLabel('LBL_Browse_File', $this->siteLangId) . '</label></div><br/><small>' . Labels::getLabel('LBL_Please_keep_image_dimensions_greater_than_500_x_500', $this->siteLangId) . '</small>';
         $frm->addHiddenField('', 'min_width', 500);
         $frm->addHiddenField('', 'min_height', 500);
         $frm->addHiddenField('', 'preq_id', $preq_id);
@@ -1377,7 +1377,7 @@ class CustomProductsController extends AdminBaseController
 
     private function getSeparateImageOptions($preq_id, $lang_id)
     {
-        $imgTypesArr = array(0 => Labels::getLabel('LBL_For_All_Options', $this->adminLangId));
+        $imgTypesArr = array(0 => Labels::getLabel('LBL_For_All_Options', $this->siteLangId));
 
         if ($preq_id) {
             $reqData = ProductRequest::getAttributesById($preq_id, array('preq_content'));
@@ -1417,7 +1417,7 @@ class CustomProductsController extends AdminBaseController
 		
 		$languages = Language::getAllNames();
 		if(count($languages) > 1){
-			$frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $langId, array(), '');
+			$frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $langId, array(), '');
 		} else  {
 			$lang_id = array_key_first($languages); 
 			$frm->addHiddenField('', 'lang_id', $lang_id);
@@ -1425,21 +1425,21 @@ class CustomProductsController extends AdminBaseController
         
 		
 		
-        $frm->addRequiredField(Labels::getLabel('LBL_Product_Name', $this->adminLangId), 'product_name');
-        /* $frm->addRequiredField(Labels::getLabel('LBL_Seller_Product_Title', $this->adminLangId), 'selprod_title');
-        $frm->addTextBox(Labels::getLabel('LBL_Any_extra_comment_for_buyer', $this->adminLangId), 'selprod_comments'); */
-        $frm->addHtmlEditor(Labels::getLabel('LBL_Description', $this->adminLangId), 'product_description');
-        $frm->addTextBox(Labels::getLabel('LBL_YouTube_Video', $this->adminLangId), 'product_youtube_video');
+        $frm->addRequiredField(Labels::getLabel('LBL_Product_Name', $this->siteLangId), 'product_name');
+        /* $frm->addRequiredField(Labels::getLabel('LBL_Seller_Product_Title', $this->siteLangId), 'selprod_title');
+        $frm->addTextBox(Labels::getLabel('LBL_Any_extra_comment_for_buyer', $this->siteLangId), 'selprod_comments'); */
+        $frm->addHtmlEditor(Labels::getLabel('LBL_Description', $this->siteLangId), 'product_description');
+        $frm->addTextBox(Labels::getLabel('LBL_YouTube_Video', $this->siteLangId), 'product_youtube_video');
 
 
-        /* $adminLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        /* $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
-        if (!empty($translatorSubscriptionKey) && $langId == $adminLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         } */
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -1447,14 +1447,14 @@ class CustomProductsController extends AdminBaseController
     {
         $frm = new Form('frmUpdateStatus');
 
-        $statusArr = ProductRequest::getStatusArr($this->adminLangId);
+        $statusArr = ProductRequest::getStatusArr($this->siteLangId);
         unset($statusArr[ProductRequest::STATUS_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('LBL_Select_Status', $this->adminLangId), 'preq_status', $statusArr, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('LBL_Select_Status', $this->siteLangId), 'preq_status', $statusArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
 
-        /*$frm->addCheckbox(Labels::getLabel('LBL_Move_seller_data_along_with_catalog_request_data', $this->adminLangId), 'preq_update_withselprod', 1, array(), true, 0);*/
+        /*$frm->addCheckbox(Labels::getLabel('LBL_Move_seller_data_along_with_catalog_request_data', $this->siteLangId), 'preq_update_withselprod', 1, array(), true, 0);*/
         $frm->addHiddenField('', 'preq_id');
         $frm->addTextArea('', 'preq_comment', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -1463,8 +1463,8 @@ class CustomProductsController extends AdminBaseController
         $frm = new Form('frmCustomProdReqSrch');
         $frm->addTextBox('Keyword', 'keyword', '');
 
-        $statusArr = array('-1' => Labels::getLabel('LBL_All', $this->adminLangId)) + ProductRequest::getStatusArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'status', $statusArr, '', array(), '');
+        $statusArr = array('-1' => Labels::getLabel('LBL_All', $this->siteLangId)) + ProductRequest::getStatusArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', $statusArr, '', array(), '');
         $frm->addDateField('Date From', 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addDateField('Date To', 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', 'Search');
@@ -1505,7 +1505,7 @@ class CustomProductsController extends AdminBaseController
 
             CommonHelper::jsonEncodeUnicode($data, true);
         }
-        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
     }
 
     /* Digital downloads*/
@@ -1521,18 +1521,18 @@ class CustomProductsController extends AdminBaseController
         }
         $ddpObj = new DigitalDownloadPrivilages();
 
-        $canDo = $ddpObj->canEdit($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
+        $canDo = $ddpObj->canEdit($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->siteLangId, false, true);
 
-        $frm = DigitalDownload::getDownloadForm($this->adminLangId);
+        $frm = DigitalDownload::getDownloadForm($this->siteLangId);
 
-        $productOptions = ProductRequest::getProductReqOptions($preqId, $this->adminLangId, true);
+        $productOptions = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
         
         $fld = $frm->getField('option_comb_id');
         if (1 > count($optionCombinations)) {
             $frm->removeField($fld);
         } else {
-            $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->adminLangId)) + $optionCombinations;
+            $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
             $fld->options = $optionCombinations;
         }
 
@@ -1552,7 +1552,7 @@ class CustomProductsController extends AdminBaseController
                 $frmData['product_downloadable_link'] = $linkDetail['pdl_download_link'];
                 $frmData['product_preview_link'] = $linkDetail['pdl_preview_link'];
                 $fld = $frm->getField('attachment_link_btn');
-                $fld->value = Labels::getLabel('LBL_Update', $this->adminLangId);
+                $fld->value = Labels::getLabel('LBL_Update', $this->siteLangId);
             } else {
                 $msg = 'Invalid Link. Please refresh to get latest list!!!';
             }
@@ -1563,7 +1563,7 @@ class CustomProductsController extends AdminBaseController
         $this->set('canDo', $canDo);
         $this->set('downloadFrm', $frm);
         $this->set('productOptions', $productOptions);
-        $this->set('adminLangId', $this->adminLangId);
+        $this->set('siteLangId', $this->siteLangId);
         $this->set('msg', $msg);
         $this->set('preqId', $preqId);
         $this->_template->render(false, false, 'custom-products/download-setup-frm.php');
@@ -1580,7 +1580,7 @@ class CustomProductsController extends AdminBaseController
         }
         $ddpObj = new DigitalDownloadPrivilages();
 
-        if (false == $ddpObj->canEdit($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true)) {
+        if (false == $ddpObj->canEdit($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->siteLangId, false, true)) {
             FatUtility::dieJsonError($ddObj->getError());
         }
         
@@ -1618,7 +1618,7 @@ class CustomProductsController extends AdminBaseController
         if ((!isset($_FILES['downloadable_file']['tmp_name']) || !is_uploaded_file($_FILES['downloadable_file']['tmp_name']))
             && (!isset($_FILES['preview_file']['tmp_name']) || !is_uploaded_file($_FILES['preview_file']['tmp_name']))
         ) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -1645,7 +1645,7 @@ class CustomProductsController extends AdminBaseController
                 return false;
             }
 
-            Message::addMessage(Labels::getLabel('MSG_Main_file_Uploaded_Successfully', $this->adminLangId));
+            Message::addMessage(Labels::getLabel('MSG_Main_file_Uploaded_Successfully', $this->siteLangId));
         }
 
         if (isset($_FILES['preview_file']['tmp_name'])
@@ -1655,7 +1655,7 @@ class CustomProductsController extends AdminBaseController
                 Message::addErrorMessage($ddObj->getError());
                 return false;
             }
-            Message::addMessage(Labels::getLabel('MSG_Preview_Uploaded_Successfully', $this->adminLangId));
+            Message::addMessage(Labels::getLabel('MSG_Preview_Uploaded_Successfully', $this->siteLangId));
         }
 
         return true;
@@ -1703,7 +1703,7 @@ class CustomProductsController extends AdminBaseController
         $previewLink = FatApp::getPostedData('product_preview_link', null, '');
 
         if ('' == $downloadLink && '' == $previewLink) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_add_link', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Please_add_link', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         
@@ -1724,7 +1724,7 @@ class CustomProductsController extends AdminBaseController
             }
         }
         
-        Message::addMessage(Labels::getLabel('LBL_Links_added_successfully', $this->adminLangId));
+        Message::addMessage(Labels::getLabel('LBL_Links_added_successfully', $this->siteLangId));
         return true;
     }
 
@@ -1747,18 +1747,18 @@ class CustomProductsController extends AdminBaseController
         
         $ddpObj = new DigitalDownloadPrivilages();
         
-        $canDo = $ddpObj->canEdit($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
+        $canDo = $ddpObj->canEdit($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->siteLangId, false, true);
         $this->set('canDo', $canDo);
 
         $languages = Language::getAllNames();
-        $languages = array('0' => Labels::getLabel('LBL_All', $this->adminLangId)) + $languages;
+        $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $languages;
         $this->set('languages', $languages);
         
-        $optionArr = ProductRequest::getProductReqOptions($preqId, $this->adminLangId, true);
+        $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
         
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
 
-        $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->adminLangId)) + $optionCombinations;
+        $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
     
         $this->set('options', $optionCombinations);
         echo $this->_template->render(false, false, 'custom-products/digital-download-links-list.php', true);
@@ -1787,17 +1787,17 @@ class CustomProductsController extends AdminBaseController
         
         $ddpObj = new DigitalDownloadPrivilages();
 
-        $canDo = $ddpObj->canEdit($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->adminLangId, false, true);
+        $canDo = $ddpObj->canEdit($preqId, Product::CATALOG_TYPE_REQUEST, 0, $this->siteLangId, false, true);
         $this->set('canDo', $canDo);
         
         $languages = Language::getAllNames();
-        $languages = array('0' => Labels::getLabel('LBL_All', $this->adminLangId)) + $languages;
+        $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $languages;
         $this->set('languages', $languages);
 
-        $optionArr = ProductRequest::getProductReqOptions($preqId, $this->adminLangId, true);
+        $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
         
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
-        $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->adminLangId)) + $optionCombinations;
+        $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
         
         $this->set('options', $optionCombinations);
         
@@ -1817,18 +1817,18 @@ class CustomProductsController extends AdminBaseController
         $linkId = FatUtility::int($linkId);
 
         if (1 > $refId || 1 > $linkId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
         
         $reference = DigitalDownload::getAttributesById($refId);
         
         if (false == $reference) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
 
         $link = DigitalDownloadSearch::getLinkDetail($linkId);
         if (1 > count($link)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
 
         $ddpObj = new DigitalDownloadPrivilages();
@@ -1837,7 +1837,7 @@ class CustomProductsController extends AdminBaseController
             $link['pddr_record_id'],
             $link['pddr_type'],
             0,
-            $this->adminLangId,
+            $this->siteLangId,
             false,
             true
         );
@@ -1859,7 +1859,7 @@ class CustomProductsController extends AdminBaseController
             $ddObj->deleteReference($refId);
         }
 
-        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Removed_successfully', $this->adminLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Removed_successfully', $this->siteLangId));
     }
 
     public function deleteDigitalFile()
@@ -1871,14 +1871,14 @@ class CustomProductsController extends AdminBaseController
         $delFullRow = FatApp::getPostedData('frow', FatUtility::VAR_INT, 0);
 
         if (1 > $refId || 1 > $aFileId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
         $reference = DigitalDownload::getAttributesById($refId);
         
         if (false == $reference) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -1888,7 +1888,7 @@ class CustomProductsController extends AdminBaseController
             $reference['pddr_record_id'],
             $reference['pddr_type'],
             0,
-            $this->adminLangId,
+            $this->siteLangId,
             false,
             true
         );
@@ -1903,7 +1903,7 @@ class CustomProductsController extends AdminBaseController
             FatUtility::dieJsonError($digDownload->getError());
         }
 
-        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Removed_successfully', $this->adminLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Removed_successfully', $this->siteLangId));
     }
 
     public function downloadAttachment($aFileId, $recordId, $requestType, $isPreview = 0)
@@ -1916,16 +1916,16 @@ class CustomProductsController extends AdminBaseController
         $requestType = FatUtility::int($requestType);
 
         if (1 > $aFileId || 1 > $recordId) {
-            FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->adminLangId));
+            FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId));
         }
         /* $reqData = ProductRequest::getAttributesById($recordId, array('preq_user_id', 'preq_status', 'preq_deleted'));
         if (false == $reqData) {
-            FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->adminLangId));
+            FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId));
         } */
 
         $ddpObj = new DigitalDownloadPrivilages();
 
-        $canDo = $ddpObj->canDownload($recordId, $requestType, 0, $this->adminLangId, $isPreview, true);
+        $canDo = $ddpObj->canDownload($recordId, $requestType, 0, $this->siteLangId, $isPreview, true);
         
         if (false == $canDo) {
             FatUtility::dieJsonError($ddpObj->getError());
@@ -1934,15 +1934,15 @@ class CustomProductsController extends AdminBaseController
         $file = DigitalDownloadSearch::getAttachmentDetail($aFileId, $recordId, $requestType, $isPreview);
         
         if (1 > count($file)) {
-            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->adminLangId));
+            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
         }
         
         if ($file['pddr_record_id'] != $recordId) {
-            FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->adminLangId));
+            FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
         }
         
         if (!file_exists(CONF_UPLOADS_PATH . $file['afile_physical_path'])) {
-            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->adminLangId));
+            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
         }
         
         $fileName = isset($file['afile_physical_path']) ? $file['afile_physical_path'] : '';

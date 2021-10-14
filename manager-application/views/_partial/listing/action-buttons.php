@@ -14,7 +14,7 @@ if (isset($newRecordBtn) && true === $newRecordBtn && $canEdit) {
         [
             'href' => 'javascript:void(0)',
             'class' => 'btn btn-icon btn-light btn-add',
-            'title' => Labels::getLabel('LBL_NEW', $adminLangId),
+            'title' => Labels::getLabel('LBL_NEW', $siteLangId),
             'onclick' => "addNew()"
         ],
         '<i class="icn">
@@ -23,7 +23,7 @@ if (isset($newRecordBtn) && true === $newRecordBtn && $canEdit) {
                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
                 </use>
             </svg>
-        </i><span> ' . Labels::getLabel('LBL_NEW', $adminLangId) . '</span>',
+        </i><span> ' . Labels::getLabel('LBL_NEW', $siteLangId) . '</span>',
         true
     );
 }
@@ -37,7 +37,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         [
             'href' => 'javascript:void(0)',
             'class' => 'toolbar-btn-js disabled',
-            'title' => Labels::getLabel('LBL_ACTIVE', $adminLangId),
+            'title' => Labels::getLabel('LBL_ACTIVE', $siteLangId),
             'onclick' => "toggleBulkStatues(1, '" . $msg . "')"
         ],
         '<svg class="svg" width="18" height="18">
@@ -54,7 +54,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         [
             'href' => 'javascript:void(0)',
             'class' => 'toolbar-btn-js disabled',
-            'title' => Labels::getLabel('LBL_IN-ACTIVE', $adminLangId),
+            'title' => Labels::getLabel('LBL_IN-ACTIVE', $siteLangId),
             'onclick' => "toggleBulkStatues(0, '" . $msg . "')"
         ],
         '<svg class="svg" width="18" height="18">
@@ -73,7 +73,7 @@ if (isset($deleteButton) && true === $deleteButton && $canEdit) {
         [
             'href' => 'javascript:void(0)',
             'class' => 'toolbar-btn-js disabled',
-            'title' => Labels::getLabel('LBL_DELETE', $adminLangId),
+            'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
             'onclick' => "deleteSelected()"
         ],
         '<svg class="svg" width="18" height="18">

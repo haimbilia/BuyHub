@@ -15,7 +15,7 @@ class ImportInstructionsController extends AdminBaseController
 
         $this->set('canEdit', $this->objPrivilege->canEditImportInstructions($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_IMPORT_INSTRUCTIONS', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_IMPORT_INSTRUCTIONS', $this->siteLangId));
         $this->getListingData();
 
         $this->set('includeEditor', true);
@@ -43,7 +43,7 @@ class ImportInstructionsController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -52,7 +52,7 @@ class ImportInstructionsController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
-        $srch = Extrapage::getSearchObject($this->adminLangId, false);
+        $srch = Extrapage::getSearchObject($this->siteLangId, false);
         $srch->addCondition('epage_content_for', '=', Extrapage::CONTENT_IMPORT_INSTRUCTION);
         $srch->addMultipleFields([
             'ep.*',
@@ -202,21 +202,21 @@ class ImportInstructionsController extends AdminBaseController
         $frm->addHiddenField('', 'epage_id', $recordId);
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
         } else {
             $lang_id = array_key_first($languages);
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
-        $frm->addRequiredField(Labels::getLabel('LBL_SECTION_TITLE', $this->adminLangId), 'epage_label');
+        $frm->addRequiredField(Labels::getLabel('LBL_SECTION_TITLE', $this->siteLangId), 'epage_label');
 
-        $frm->addHtmlEditor(Labels::getLabel('LBL_Section_Content', $this->adminLangId), 'epage_content');
+        $frm->addHtmlEditor(Labels::getLabel('LBL_Section_Content', $this->siteLangId), 'epage_content');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;
@@ -224,17 +224,17 @@ class ImportInstructionsController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $importInstructionsTblHeadingCols = CacheHelper::get('importInstructionsTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $importInstructionsTblHeadingCols = CacheHelper::get('importInstructionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($importInstructionsTblHeadingCols) {
             return json_decode($importInstructionsTblHeadingCols);
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'epage_identifier' => Labels::getLabel('LBL_TITLE', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'epage_identifier' => Labels::getLabel('LBL_TITLE', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('importInstructionsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('importInstructionsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         
         return $arr;
     }

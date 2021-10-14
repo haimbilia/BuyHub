@@ -2,7 +2,7 @@
 <ul class="breadcrumb ">
     <li class="breadcrumb-item">
         <a href="<?php echo UrlHelper::generateUrl('') ?>">
-            <?php echo labels::getLabel('LBL_Home', $adminLangId); ?>
+            <?php echo labels::getLabel('LBL_Home', $siteLangId); ?>
         </a>
     </li>
     <?php
@@ -12,13 +12,13 @@
                 <li class="breadcrumb-item">
                     <a href="<?php echo $nodes['href']; ?>" <?php echo (!empty($nodes['other'])) ? $nodes['other'] : ''; ?>>
                         <?php $title = str_replace(' ', '_', $nodes['title']);
-                        echo Labels::getLabel('LBL_' . $title, $adminLangId); ?>
+                        echo Labels::getLabel('LBL_' . $title, $siteLangId); ?>
                     </a>
                 </li>
             <?php } else { ?>
                 <li class="breadcrumb-item">
                     <?php $title = str_replace(' ', '_', $nodes['title']);
-                    echo (isset($nodes['title'])) ? Labels::getLabel('LBL_' . $title, $adminLangId) : ''; ?>
+                    echo (isset($nodes['title'])) ? Labels::getLabel('LBL_' . $title, $siteLangId) : ''; ?>
                 </li>
     <?php }
         }

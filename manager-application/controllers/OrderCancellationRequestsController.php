@@ -19,7 +19,7 @@
         public function index()
         {
             $this->objPrivilege->canViewOrderCancellationRequests();
-            $frmSearch = $this->getOrderCancellationRequestSearchForm($this->adminLangId);
+            $frmSearch = $this->getOrderCancellationRequestSearchForm($this->siteLangId);
             $data = FatApp::getPostedData();
             if ($data) {
                 $data['ocrequest_id'] = FatUtility::int($data['id']);
@@ -33,7 +33,7 @@
         public function search()
         {
             $this->objPrivilege->canViewOrderCancellationRequests();
-            $frmSearch = $this->getOrderCancellationRequestSearchForm($this->adminLangId);
+            $frmSearch = $this->getOrderCancellationRequestSearchForm($this->siteLangId);
 
             $data = FatApp::getPostedData();
             $post = $frmSearch->getFormDataFromArray($data);
@@ -41,7 +41,7 @@
             $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : FatUtility::int($data['page']);
             $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
-            $srch = new OrderCancelRequestSearch($this->adminLangId);
+            $srch = new OrderCancelRequestSearch($this->siteLangId);
             $srch->joinOrderProducts();
             $srch->joinOrders();
             $srch->joinOrderBuyerUser();
@@ -120,7 +120,7 @@
             $this->set('pageSize', $pageSize);
             $this->set('postedData', $post);
             $this->set('recordCount', $srch->recordCount());
-            $this->set('requestStatusArr', OrderCancelRequest::getRequestStatusArr($this->adminLangId));
+            $this->set('requestStatusArr', OrderCancelRequest::getRequestStatusArr($this->siteLangId));
             $this->set('statusClassArr', OrderCancelRequest::getStatusClassArr());
             $this->_template->render(false, false);
         }
@@ -147,13 +147,13 @@
             $canRefundToCard = false;
             $pluginKey = Plugin::getAttributesById($row['order_pmethod_id'], 'plugin_code');
             $paymentMethodObj = new PaymentMethods();
-            if (true === $paymentMethodObj->canRefundToCard($pluginKey, $this->adminLangId)) {
+            if (true === $paymentMethodObj->canRefundToCard($pluginKey, $this->siteLangId)) {
                 $canRefundToCard = true;
             }
 
             $this->set('orderRewardUsed', $orderRewardUsed);
             $this->objPrivilege->canEditOrderCancellationRequests();
-            $this->set('frm', $this->getUpdateStatusForm($ocrequest_id, $this->adminLangId, $canRefundToCard));
+            $this->set('frm', $this->getUpdateStatusForm($ocrequest_id, $this->siteLangId, $canRefundToCard));
             $this->_template->render(false, false);
         }
 
@@ -162,14 +162,14 @@
             $this->objPrivilege->canEditOrderCancellationRequests();
 
             $ocrequest_id = FatApp::getPostedData('ocrequest_id', FatUtility::VAR_INT, 0);
-            $frm = $this->getUpdateStatusForm($ocrequest_id, $this->adminLangId);
+            $frm = $this->getUpdateStatusForm($ocrequest_id, $this->siteLangId);
             $post = $frm->getFormDataFromArray(FatApp::getPostedData());
             if (false == $post) {
                 Message::addErrorMessage($frm->getValidationErrors());
                 FatUtility::dieJsonError(Message::getHtml());
             }
 
-        $srch = new OrderCancelRequestSearch($this->adminLangId);
+        $srch = new OrderCancelRequestSearch($this->siteLangId);
         $srch->joinOrderProducts();
         $srch->joinOrders();
         $srch->addCondition('ocrequest_id', '=', $ocrequest_id);
@@ -180,14 +180,14 @@
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!$row) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_or_Status_is_already_Approved_or_Declined!', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_or_Status_is_already_Approved_or_Declined!', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
             $db = FatApp::getDb();
             $db->startTransaction();
 
-            $msgString = Labels::getLabel('LBL_Cancellation_request_has_been_{updatedStatus}_successfully.', $this->adminLangId);
+            $msgString = Labels::getLabel('LBL_Cancellation_request_has_been_{updatedStatus}_successfully.', $this->siteLangId);
             switch ($post['ocrequest_status']) {
                 case OrderCancelRequest::CANCELLATION_REQUEST_STATUS_APPROVED:
                     $notAllowedStatusChangeArr = array_merge(
@@ -196,15 +196,15 @@
                         (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS")
                     );
                     $notAllowedStatusChangeArr = array_diff($notAllowedStatusChangeArr, (array) FatApp::getConfig("CONF_DEFAULT_INPROCESS_ORDER_STATUS"));
-                    $status = Orders::getOrderStatusArr($this->adminLangId);
+                    $status = Orders::getOrderStatusArr($this->siteLangId);
                     if (in_array($row['op_status_id'], $notAllowedStatusChangeArr)) {
-                        Message::addErrorMessage(Labels::getLabel(str_replace('{currentStatus}', $status[$row['op_status_id']], 'LBL_This_order_is_{currentStatus}_now,_so_not_eligible_for_cancellation'), $this->adminLangId));
+                        Message::addErrorMessage(Labels::getLabel(str_replace('{currentStatus}', $status[$row['op_status_id']], 'LBL_This_order_is_{currentStatus}_now,_so_not_eligible_for_cancellation'), $this->siteLangId));
                         FatUtility::dieJsonError(Message::getHtml());
                     }
 
                     $transferTo = FatApp::getPostedData('ocrequest_refund_in_wallet', FatUtility::VAR_INT, 0);
                     $dataToUpdate = array('ocrequest_status' => OrderCancelRequest::CANCELLATION_REQUEST_STATUS_APPROVED, 'ocrequest_refund_in_wallet' => $transferTo, 'ocrequest_admin_comment' => $post['ocrequest_admin_comment']);
-                    $successMsgString = str_replace(strToLower('{updatedStatus}'), OrderCancelRequest::getRequestStatusArr($this->adminLangId)[OrderCancelRequest::CANCELLATION_REQUEST_STATUS_APPROVED], $msgString);
+                    $successMsgString = str_replace(strToLower('{updatedStatus}'), OrderCancelRequest::getRequestStatusArr($this->siteLangId)[OrderCancelRequest::CANCELLATION_REQUEST_STATUS_APPROVED], $msgString);
                     $oObj = new Orders();
                     if (true == $oObj->addChildProductOrderHistory($row['ocrequest_op_id'], $row['order_language_id'], FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS"), Labels::getLabel('MSG_Cancellation_Request_Approved', $row['order_language_id']), true, '', 0, $transferTo)) {
                         if ((PaymentMethods::MOVE_TO_CUSTOMER_CARD == $transferTo)) {
@@ -225,22 +225,22 @@
 
                                 // Debit from wallet if plugin/payment method support's direct payment to card.
                                 if (!empty($resp->id)) {
-                                    $childOrderInfo = $oObj->getOrderProductsByOpId($row['ocrequest_op_id'], $this->adminLangId);
+                                    $childOrderInfo = $oObj->getOrderProductsByOpId($row['ocrequest_op_id'], $this->siteLangId);
                                     $txnAmount = $paymentMethodObj->getTxnAmount();
-                                    $comments = Labels::getLabel('LBL_TRANSFERED_TO_YOUR_CARD._INVOICE_#{invoice-no}', $this->adminLangId);
+                                    $comments = Labels::getLabel('LBL_TRANSFERED_TO_YOUR_CARD._INVOICE_#{invoice-no}', $this->siteLangId);
                                     $comments = CommonHelper::replaceStringData($comments, ['{invoice-no}' => $childOrderInfo['op_invoice_number']]);
-                                    Transactions::debitWallet($childOrderInfo['order_user_id'], Transactions::TYPE_ORDER_REFUND, $txnAmount, $this->adminLangId, $comments, $row['ocrequest_op_id'], $resp->id);
+                                    Transactions::debitWallet($childOrderInfo['order_user_id'], Transactions::TYPE_ORDER_REFUND, $txnAmount, $this->siteLangId, $comments, $row['ocrequest_op_id'], $resp->id);
                                 }
                             }
                         }
                     }
                     break;
                 case OrderCancelRequest::CANCELLATION_REQUEST_STATUS_DECLINED:
-                    $successMsgString = str_replace(strToLower('{updatedStatus}'), OrderCancelRequest::getRequestStatusArr($this->adminLangId)[OrderCancelRequest::CANCELLATION_REQUEST_STATUS_DECLINED], $msgString);
+                    $successMsgString = str_replace(strToLower('{updatedStatus}'), OrderCancelRequest::getRequestStatusArr($this->siteLangId)[OrderCancelRequest::CANCELLATION_REQUEST_STATUS_DECLINED], $msgString);
                     $dataToUpdate = array('ocrequest_status' => OrderCancelRequest::CANCELLATION_REQUEST_STATUS_DECLINED);
                     break;
                 case OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING:
-                    $successMsgString = str_replace(strToLower('{updatedStatus}'), OrderCancelRequest::getRequestStatusArr($this->adminLangId)[OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING], $msgString);
+                    $successMsgString = str_replace(strToLower('{updatedStatus}'), OrderCancelRequest::getRequestStatusArr($this->siteLangId)[OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING], $msgString);
                     $dataToUpdate = array('ocrequest_status' => OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING);
                     break;
             }
@@ -254,8 +254,8 @@
                 }
             }
             $emailObj = new EmailHandler();
-            if (!$emailObj->sendOrderCancellationRequestUpdateNotification($row['ocrequest_id'], $this->adminLangId)) {
-                Message::addErrorMessage(Labels::getLabel('LBL_Email_Sending_Error', $this->adminLangId) . " " . $emailObj->getError());
+            if (!$emailObj->sendOrderCancellationRequestUpdateNotification($row['ocrequest_id'], $this->siteLangId)) {
+                Message::addErrorMessage(Labels::getLabel('LBL_Email_Sending_Error', $this->siteLangId) . " " . $emailObj->getError());
                 CommonHelper::redirectUserReferer();
             }
             $db->commitTransaction();
@@ -265,21 +265,21 @@
         private function getOrderCancellationRequestSearchForm($langId)
         {
             $frm = new Form('frmRequestSearch');
-            $keyword = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+            $keyword = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
 
-            $frm->addSelectBox(Labels::getLabel('LBL_Request_Status', $this->adminLangId), 'ocrequest_status', OrderCancelRequest::getRequestStatusArr($langId), '', array(), Labels::getLabel('LBL_All_Request_Status', $this->adminLangId));
+            $frm->addSelectBox(Labels::getLabel('LBL_Request_Status', $this->siteLangId), 'ocrequest_status', OrderCancelRequest::getRequestStatusArr($langId), '', array(), Labels::getLabel('LBL_All_Request_Status', $this->siteLangId));
 
-            $frm->addSelectBox(Labels::getLabel('LBL_Order_Payment_Status', $this->adminLangId), 'op_status_id', Orders::getOrderProductStatusArr($langId), '', array(), Labels::getLabel('LBL_All_Order_Payment_Status', $this->adminLangId));
-            $frm->addSelectBox(Labels::getLabel('LBL_Cancel_Reason', $this->adminLangId), 'ocrequest_ocreason_id', OrderCancelReason::getOrderCancelReasonArr($langId), '', array(), Labels::getLabel('LBL_All_Order_Cancel_Reason', $this->adminLangId));
-            $frm->addTextBox(Labels::getLabel('LBL_Buyer_Details', $this->adminLangId), 'buyer');
-            $frm->addTextBox(Labels::getLabel('LBL_Seller_Details', $this->adminLangId), 'seller');
-            $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly'));
-            $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly'));
+            $frm->addSelectBox(Labels::getLabel('LBL_Order_Payment_Status', $this->siteLangId), 'op_status_id', Orders::getOrderProductStatusArr($langId), '', array(), Labels::getLabel('LBL_All_Order_Payment_Status', $this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('LBL_Cancel_Reason', $this->siteLangId), 'ocrequest_ocreason_id', OrderCancelReason::getOrderCancelReasonArr($langId), '', array(), Labels::getLabel('LBL_All_Order_Cancel_Reason', $this->siteLangId));
+            $frm->addTextBox(Labels::getLabel('LBL_Buyer_Details', $this->siteLangId), 'buyer');
+            $frm->addTextBox(Labels::getLabel('LBL_Seller_Details', $this->siteLangId), 'seller');
+            $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly'));
+            $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly'));
 
             $frm->addHiddenField('', 'page');
             $frm->addHiddenField('', 'ocrequest_id', 0);
-            $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-            $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+            $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+            $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
             $fld_submit->attachField($fld_cancel);
             return $frm;
         }
@@ -287,19 +287,19 @@
         private function getUpdateStatusForm($ocrequest_id, $langId, $canRefundToCard = false)
         {
             $frm = new Form('frmUpdateStatus');
-            $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'ocrequest_status', OrderCancelRequest::getRequestStatusArr($langId), '', array(), '');
-            // $frm->addCheckBox(Labels::getLabel('LBL_Transfer_Refund_to_Wallet', $this->adminLangId), 'ocrequest_refund_in_wallet', 1, array('checked' => 'checked'), false, 0);
-            $moveRefundLocationArr = PaymentMethods::moveRefundLocationsArr($this->adminLangId);
+            $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'ocrequest_status', OrderCancelRequest::getRequestStatusArr($langId), '', array(), '');
+            // $frm->addCheckBox(Labels::getLabel('LBL_Transfer_Refund_to_Wallet', $this->siteLangId), 'ocrequest_refund_in_wallet', 1, array('checked' => 'checked'), false, 0);
+            $moveRefundLocationArr = PaymentMethods::moveRefundLocationsArr($this->siteLangId);
             if (false == $canRefundToCard) {
                 unset($moveRefundLocationArr[PaymentMethods::MOVE_TO_CUSTOMER_CARD]);
             } else {
                 unset($moveRefundLocationArr[PaymentMethods::MOVE_TO_CUSTOMER_WALLET]);
             }
 
-            $frm->addRadioButtons(Labels::getLabel('LBL_TRANSFER_REFUND', $this->adminLangId), 'ocrequest_refund_in_wallet', $moveRefundLocationArr, PaymentMethods::MOVE_TO_ADMIN_WALLET, array('class' => 'list-inline'));
-            $frm->addTextarea(Labels::getLabel('LBL_Comment', $this->adminLangId), 'ocrequest_admin_comment');
+            $frm->addRadioButtons(Labels::getLabel('LBL_TRANSFER_REFUND', $this->siteLangId), 'ocrequest_refund_in_wallet', $moveRefundLocationArr, PaymentMethods::MOVE_TO_ADMIN_WALLET, array('class' => 'list-inline'));
+            $frm->addTextarea(Labels::getLabel('LBL_Comment', $this->siteLangId), 'ocrequest_admin_comment');
             $frm->addHiddenField('', 'ocrequest_id', $ocrequest_id);
-            $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+            $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
             return $frm;
         }
     }

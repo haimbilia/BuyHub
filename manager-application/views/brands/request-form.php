@@ -19,7 +19,7 @@ $fldBl->htmlAfterField = '</span>';
 <section class="section">
     <div class="sectionhead">
         <h4>
-            <?php echo Labels::getLabel('LBL_Product_Brand_Setup', $adminLangId); ?>
+            <?php echo Labels::getLabel('LBL_Product_Brand_Setup', $siteLangId); ?>
         </h4>
     </div>
     <div class="sectionbody space">
@@ -28,11 +28,11 @@ $fldBl->htmlAfterField = '</span>';
                 <div class="tabs_nav_container responsive flat">
                     <ul class="tabs_nav">
                         <li><a class="active" href="javascript:void(0)"
-                                onclick="brandRequestForm(<?php echo $brand_id ?>);"><?php echo Labels::getLabel('LBL_General', $adminLangId);?></a>
+                                onclick="brandRequestForm(<?php echo $brand_id ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId);?></a>
                         </li>
                         <li class="<?php echo (0 == $brand_id) ? 'fat-inactive' : ''; ?>">
                             <a href="javascript:void(0);" <?php echo (0 < $brand_id) ? "onclick='brandRequestLangForm(" . $brand_id . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                                <?php echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
+                                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
                             </a>
                         </li>
                         <?php $inactive = ($brand_id == 0) ? 'fat-inactive' : '';?>
@@ -41,7 +41,7 @@ $fldBl->htmlAfterField = '</span>';
                                 <?php if ($brand_id > 0) { ?>
                                     onclick="brandRequestMediaForm(<?php echo $brand_id ?>);" 
                                 <?php } ?>>
-                                <?php echo Labels::getLabel('LBL_Media', $adminLangId);?>
+                                <?php echo Labels::getLabel('LBL_Media', $siteLangId);?>
                             </a>
                         </li>
                     </ul>

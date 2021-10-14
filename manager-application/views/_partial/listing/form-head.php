@@ -2,7 +2,7 @@
 $activeGentab = !empty($activeGentab) ? 'active' : '';
 $activeLangtab = !empty($activeLangtab) ? 'active' : '';
 $disabled = !empty($disabled) ? ' disabled' : '';
-$formTitle = !empty($formTitle) ? $formTitle : Labels::getLabel('LBL_SETUP', $adminLangId);
+$formTitle = !empty($formTitle) ? $formTitle : Labels::getLabel('LBL_SETUP', $siteLangId);
 ?>
 
 <div class="modal-header">
@@ -11,15 +11,17 @@ $formTitle = !empty($formTitle) ? $formTitle : Labels::getLabel('LBL_SETUP', $ad
     </h5>
 </div>
 <div class="modal-body form-edit"> <!-- Closing tag must be added inside the files who include this file. -->
-    <?php if (0 < count($languages)) { ?>
+    <?php if (0 < count($languages) || isset($otherButtons)) { ?>
         <div class="form-edit-head">
             <nav class="nav nav-tabs">
-                <a class="nav-link <?php echo $activeGentab; ?>" href="javascript:void(0)" onclick="editRecord(<?php echo $recordId ?>);" title="<?php echo Labels::getLabel('LBL_GENERAL', $adminLangId); ?>">
-                    <?php echo Labels::getLabel('LBL_GENERAL', $adminLangId); ?>
+                <a class="nav-link <?php echo $activeGentab; ?>" href="javascript:void(0)" onclick="editRecord(<?php echo $recordId ?>);" title="<?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>">
+                    <?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>
                 </a>
-                <a class="nav-link <?php echo $activeLangtab . $disabled; ?>" href="javascript:void(0);" <?php echo (0 < $recordId) ? "onclick='editLangData(" . $recordId . "," . array_key_first($languages) . ");'" : ""; ?> title="<?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $adminLangId); ?>">
-                    <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $adminLangId); ?>
-                </a>
+                <?php if (0 < count($languages)) { ?>
+                    <a class="nav-link <?php echo $activeLangtab . $disabled; ?>" href="javascript:void(0);" <?php echo (0 < $recordId) ? "onclick='editLangData(" . $recordId . "," . array_key_first($languages) . ");'" : ""; ?> title="<?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>">
+                        <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>
+                    </a>
+                <?php } ?>
                 <?php
                 /* 
                 *    EXAMPLE : $otherButtons = [

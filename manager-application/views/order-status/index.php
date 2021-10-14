@@ -36,9 +36,8 @@ $controller = str_replace('Controller', '', FatApp::getController());
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
-                        'adminLangId' => $adminLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_ORDER_STATUS', $adminLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_STAUESES', $adminLangId), ['{COUNT}' => $recordCount]),
+                        'siteLangId' => $siteLangId,
+                        'cardHeadTitle' => Labels::getLabel('LBL_ORDER_STATUS', $siteLangId),
                         'newRecordBtn' => true,
                         'statusButtons' => true
                     ];
@@ -101,7 +100,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         fcom.ajax(fcom.makeUrl('OrderStatus', 'setOrderStatusesOrder'), value, function(res) {
                             fcom.removeLoader();
                             $.ykmsg.close();
-                            var ans = $.parseJSON(res);
+                            var ans = JSON.parse(res);
                             if (ans.status == 1) {
                                 $.ykmsg.success(ans.msg);
                                 return;

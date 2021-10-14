@@ -18,16 +18,16 @@ class AbandonedCartController extends AdminBaseController
     public function getSearchForm()
     {
         $frm = new Form('frmAbandonedCartSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_User', $this->adminLangId), 'user_name');
-        $frm->addTextBox(Labels::getLabel('LBL_Seller_Product', $this->adminLangId), 'seller_product');
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->adminLangId), 'readonly' => 'readonly' ));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->adminLangId), 'readonly' => 'readonly' ));
+        $frm->addTextBox(Labels::getLabel('LBL_User', $this->siteLangId), 'user_name');
+        $frm->addTextBox(Labels::getLabel('LBL_Seller_Product', $this->siteLangId), 'seller_product');
+        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId), 'readonly' => 'readonly' ));
+        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId), 'readonly' => 'readonly' ));
         $frm->addHiddenField('', 'abandonedcart_user_id');
         $frm->addHiddenField('', 'abandonedcart_selprod_id');
         $frm->addHiddenField('', 'abandonedcart_action');
         $frm->addHiddenField('', 'page', 1);
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -86,7 +86,7 @@ class AbandonedCartController extends AdminBaseController
         $abandonedcartId = FatApp::getPostedData('abandonedcartId', FatUtility::VAR_INT, 0);
         $couponId = FatApp::getPostedData('couponId', FatUtility::VAR_INT, 0);
         if ($abandonedcartId < 1 || $couponId < 1) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Email_Not_Sent_Invalid_Parameters', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Email_Not_Sent_Invalid_Parameters', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         
@@ -96,7 +96,7 @@ class AbandonedCartController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
         $abandonedCart->updateDiscountNotification();
-        $this->set('msg', Labels::getLabel('MSG_Email_Sent_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Email_Sent_Successful', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
     
@@ -104,13 +104,13 @@ class AbandonedCartController extends AdminBaseController
     {
         $productId = FatUtility::int($productId);
         if ( $productId < 1 ) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         
         $product = AbandonedCart::validateProductForNotification($productId);
         if(empty($product)){
-            Message::addErrorMessage(Labels::getLabel('MSG_Product_is_either_deleted/disabled_or_out_of_stock', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Product_is_either_deleted/disabled_or_out_of_stock', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
         $this->_template->render(false, false, 'json-success.php');

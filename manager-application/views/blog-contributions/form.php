@@ -7,35 +7,35 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 
 <div class="modal-header">
     <h5 class="modal-title">
-        <?php echo Labels::getLabel('LBL_CONTRIBUTION_DETAIL', $adminLangId); ?>
+        <?php echo Labels::getLabel('LBL_CONTRIBUTION_DETAIL', $siteLangId); ?>
     </h5>
 </div>
 <div class="modal-body form-edit">
     <div class="form-edit-body loaderContainerJs">
         <div class="listview">
             <dl class="list">
-                <dt><?php echo Labels::getLabel('LBL_Full_Name',$adminLangId); ?></dt>
+                <dt><?php echo Labels::getLabel('LBL_Full_Name',$siteLangId); ?></dt>
                 <dd><?php echo CommonHelper::displayName($data['bcontributions_author_first_name'].' '.$data['bcontributions_author_last_name']);?></dd>
             </dl>
             <dl class="list">
-                <dt><?php echo Labels::getLabel('LBL_Email',$adminLangId); ?></dt>
+                <dt><?php echo Labels::getLabel('LBL_Email',$siteLangId); ?></dt>
                 <dd><?php echo $data['bcontributions_author_email'];?></dd>
             </dl>
             <dl class="list">
-                <dt><?php echo Labels::getLabel('LBL_Phone',$adminLangId); ?></dt>
+                <dt><?php echo Labels::getLabel('LBL_Phone',$siteLangId); ?></dt>
                 <dd><?php echo ValidateElement::formatDialCode($data['bcontributions_author_phone_dcode']) . $data['bcontributions_author_phone'];?></dd>
             </dl>
             <dl class="list">
-                <dt><?php echo Labels::getLabel('LBL_Posted_On',$adminLangId); ?></dt>
+                <dt><?php echo Labels::getLabel('LBL_Posted_On',$siteLangId); ?></dt>
                 <dd><?php echo $data['bcontributions_added_on'];?></dd>
             </dl>
             <dl class="list">
-                <dt><?php echo Labels::getLabel('LBL_Status',$adminLangId); ?></dt>
+                <dt><?php echo Labels::getLabel('LBL_Status',$siteLangId); ?></dt>
                 <dd><?php echo $statusArr[$data['bcontributions_status']];?></dd>
             </dl>
             <?php if(!empty($attachedFile)){?>
             <dl class="list">
-                <dt><?php echo Labels::getLabel('LBL_Attached_File',$adminLangId); ?></dt>
+                <dt><?php echo Labels::getLabel('LBL_Attached_File',$siteLangId); ?></dt>
                 <dd><a target="_new" href="<?php echo UrlHelper::generateUrl('BlogContributions','downloadAttachedFile',array($data['bcontributions_id']));?>" ><?php echo $attachedFile; ?></a></dd>
             </dl>			
             <?php } ?>
@@ -49,9 +49,9 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
                 <button type="button" class="btn btn-brand  submitBtnJs">
                     <?php 
                         if (0 < $recordId) {
-                            echo Labels::getLabel('LBL_UPDATE', $adminLangId); 
+                            echo Labels::getLabel('LBL_UPDATE', $siteLangId); 
                         } else {
-                            echo Labels::getLabel('LBL_SAVE', $adminLangId); 
+                            echo Labels::getLabel('LBL_SAVE', $siteLangId); 
                         }
                     ?>
                 </button>

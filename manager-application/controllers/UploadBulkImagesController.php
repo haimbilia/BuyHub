@@ -7,7 +7,7 @@ class UploadBulkImagesController extends AdminBaseController
         parent::__construct($action);
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
         $this->objPrivilege->canUploadBulkImages();
-        $this->langId = $this->adminLangId;
+        $this->langId = $this->siteLangId;
     }
 
     public function index()
@@ -74,12 +74,12 @@ class UploadBulkImagesController extends AdminBaseController
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->setRequiredStarWith('caption');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
 
-        $frm->addTextBox(Labels::getLabel('LBL_User', $this->adminLangId), 'user', '');
+        $frm->addTextBox(Labels::getLabel('LBL_User', $this->siteLangId), 'user', '');
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'afile_record_id');
@@ -123,8 +123,8 @@ class UploadBulkImagesController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->adminLangId, true));
-        $this->set('adminLangId', $this->adminLangId);
+        $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->siteLangId, true));
+        $this->set('siteLangId', $this->siteLangId);
         $this->_template->render(false, false);
     }
 
@@ -142,7 +142,7 @@ class UploadBulkImagesController extends AdminBaseController
 
         if (empty($uploadDirsArr)) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
         $obj = new UploadBulkImages();
@@ -177,7 +177,7 @@ class UploadBulkImagesController extends AdminBaseController
     public function downloadPathsFile($path)
     {
         if (empty($path)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
         $filesPathArr = UploadBulkImages::getAllFilesPath(base64_decode($path));
         if (!empty($filesPathArr) && 0 < count($filesPathArr)) {
@@ -186,7 +186,7 @@ class UploadBulkImagesController extends AdminBaseController
             CommonHelper::convertToCsv($filesPathArr, time() . '.csv');
             exit;
         }
-        Message::addErrorMessage(Labels::getLabel('MSG_No_File_Found', $this->adminLangId));
+        Message::addErrorMessage(Labels::getLabel('MSG_No_File_Found', $this->siteLangId));
         CommonHelper::redirectUserReferer();
     }
 }

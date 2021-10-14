@@ -37,7 +37,7 @@ class QuestionBanksController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         
-        $srch = QuestionBanks::getSearchObject($this->adminLangId, false);
+        $srch = QuestionBanks::getSearchObject($this->siteLangId, false);
         
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
@@ -247,9 +247,9 @@ class QuestionBanksController extends AdminBaseController
     {
         $this->objPrivilege->canViewQuestionBanks();
         $frm = new Form('frmQuestionBankSearch');
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -261,10 +261,10 @@ class QuestionBanksController extends AdminBaseController
         
         $frm = new Form('frmQuestionBank');
         $frm->addHiddenField('', 'qbank_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->adminLangId), 'qbank_identifier');
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'qbank_active', $activeInactiveArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->siteLangId), 'qbank_identifier');
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'qbank_active', $activeInactiveArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
     
@@ -272,17 +272,17 @@ class QuestionBanksController extends AdminBaseController
     {
         $frm = new Form('frmQuestionBankLang');
         $frm->addHiddenField('', 'qbank_id', $qbank_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Question_Bank_Name', $this->adminLangId), 'qbank_name');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Question_Bank_Name', $this->siteLangId), 'qbank_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
                 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
 }

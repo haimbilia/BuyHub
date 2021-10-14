@@ -9,7 +9,7 @@ class RewardsOnPurchaseController extends AdminBaseController
     {
         $ajaxCallArray = array('deleteRecord', 'form', 'langForm', 'search', 'setup', 'langSetup');
         if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die(Labels::getLabel('LBL_Invalid_Action', $this->adminLangId));
+            die(Labels::getLabel('LBL_Invalid_Action', $this->siteLangId));
         }
         parent::__construct($action);
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
@@ -116,7 +116,7 @@ class RewardsOnPurchaseController extends AdminBaseController
         }
 
 
-        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->siteLangId));
         $this->set('ropId', $rop_id);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -144,7 +144,7 @@ class RewardsOnPurchaseController extends AdminBaseController
 
         if (empty($ropIdsArr)) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -163,7 +163,7 @@ class RewardsOnPurchaseController extends AdminBaseController
         $ropId = FatUtility::int($ropId);
         if (1 > $ropId) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
         $obj = new RewardsOnPurchase($ropId);
@@ -185,8 +185,8 @@ class RewardsOnPurchaseController extends AdminBaseController
     {
         $frm = new Form('frmRewardsOnPurchase');
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -197,11 +197,11 @@ class RewardsOnPurchaseController extends AdminBaseController
 
         $frm = new Form('frmRewardsOnPurchase');
         $frm->addHiddenField('', 'rop_id', 0);
-        $fld = $frm->addFloatField(Labels::getLabel('LBL_Purchase_upto', $this->adminLangId), 'rop_purchase_upto');
+        $fld = $frm->addFloatField(Labels::getLabel('LBL_Purchase_upto', $this->siteLangId), 'rop_purchase_upto');
         $fld->requirements()->setFloatPositive();
-        $fld = $frm->addFloatField(Labels::getLabel('LBL_Reward_Point', $this->adminLangId), 'rop_reward_point');
+        $fld = $frm->addFloatField(Labels::getLabel('LBL_Reward_Point', $this->siteLangId), 'rop_reward_point');
         $fld->requirements()->setFloatPositive();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 }

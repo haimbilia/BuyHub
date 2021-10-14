@@ -23,12 +23,12 @@ $iconLangFld->addFieldTagAttribute('class', 'icon-language-js');
 $iconFld = $prodCatFrm->getField('cat_icon');
 $iconFld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
 $iconFld->addFieldTagAttribute('onChange', 'iconPopupImage(this)');
-$iconFld->htmlAfterField = '<small class="text--small">' . sprintf(Labels::getLabel('LBL_This_will_be_displayed_in_%s_on_your_store', $adminLangId), '60*60') . '</small>';
+$iconFld->htmlAfterField = '<small class="text--small">' . sprintf(Labels::getLabel('LBL_This_will_be_displayed_in_%s_on_your_store', $siteLangId), '60*60') . '</small>';
 
 $bannerFld = $prodCatFrm->getField('cat_banner');
 $bannerFld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
 $bannerFld->addFieldTagAttribute('onChange', 'bannerPopupImage(this)');
-$bannerFld->htmlAfterField = '<small class="text--small" class="preferredDimensions-js">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $adminLangId), '2000 x 500') . '</small>';
+$bannerFld->htmlAfterField = '<small class="text--small" class="preferredDimensions-js">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500') . '</small>';
 
 $bannerLangFld = $prodCatFrm->getField('banner_lang_id');
 $bannerLangFld->addFieldTagAttribute('class', 'banner-language-js');
@@ -53,7 +53,7 @@ if (null != $fld) {
 <div class="sectionbody space">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <h3 class="form__heading"><?php echo Labels::getLabel('LBL_General', $adminLangId); ?></h3>
+            <h3 class="form__heading"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></h3>
             <div class="row">
                 <div class="col-md-6">
                     <div class="field-set">
@@ -170,7 +170,7 @@ if (null != $fld) {
                 </div>
             <?php } ?>
             <div class="p-4 mb-4 border rounded">
-                <h3 class="mb-4"><?php echo Labels::getLabel('LBL_Icon', $adminLangId); ?></h3>
+                <h3 class="mb-4"><?php echo Labels::getLabel('LBL_Icon', $siteLangId); ?></h3>
                 <div class="row">
                     <?php
 
@@ -220,7 +220,7 @@ if (null != $fld) {
                     <div class="col-md-4" id="icon-image-listing"></div>
                 </div>
                 <div class="divider"></div>
-                <h3 class="mb-4"><?php echo Labels::getLabel('LBL_Banner', $adminLangId); ?></h3>
+                <h3 class="mb-4"><?php echo Labels::getLabel('LBL_Banner', $siteLangId); ?></h3>
                 <div class="row">
                 <?php
 
@@ -288,7 +288,7 @@ if (null != $fld) {
                         <div class="accordian_panel">
                             <span class="accordian_title accordianhead accordian_title" id="collapse_<?php echo $langId; ?>">
                                 <?php echo $data . " ";
-                                echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
+                                echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
                             </span>
                             <div class="accordian_body accordiancontent" style="display: none;">
                                 <div class="row">
@@ -404,11 +404,11 @@ foreach ($categories as $catId => $catName) {
             }
             var data = 'ratingtype_active=1&ratingtype_id=0&ratingtype_identifier=' + ratingtype_name
             fcom.ajax(fcom.makeUrl('RatingTypes', 'setup'), data, function(t) {
-                var ans = $.parseJSON(t);
+                var ans = JSON.parse(t);
                 var newRtId = ans.rtId;
-                var dataLang = 'ratingtypelang_ratingtype_id=' + newRtId + '&ratingtype_name=' + ratingtype_name + '&ratingtypelang_lang_id=<?php echo $adminLangId; ?>';
+                var dataLang = 'ratingtypelang_ratingtype_id=' + newRtId + '&ratingtype_name=' + ratingtype_name + '&ratingtypelang_lang_id=<?php echo $siteLangId; ?>';
                 fcom.ajax(fcom.makeUrl('RatingTypes', 'langSetup'), dataLang, function(t2) {
-                    var ans = $.parseJSON(t2);
+                    var ans = JSON.parse(t2);
                     fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + newRtId, function(t3) {
                         $('tag[value="' + e.detail.data.value + '"]').attr('id', newRtId);
                     });
@@ -436,7 +436,7 @@ foreach ($categories as $catId => $catName) {
         fcom.ajax(fcom.makeUrl('ProductCategories', 'ratingTypeAutoComplete'), {
             keyword: keyword
         }, function(t) {
-            var ans = $.parseJSON(t);
+            var ans = JSON.parse(t);
             for (i = 0; i < ans.length; i++) {
                 list.push({
                     "id": ans[i].id,

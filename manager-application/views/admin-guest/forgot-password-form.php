@@ -29,25 +29,25 @@ if (null != $captchaFld) {
                         <div class="logo">
                             <a href="<?php echo UrlHelper::generateUrl(); ?>">
                                 <?php
-                                $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $adminLangId, false);
-                                $aspectRatioArr = AttachedFile::getRatioTypeArray($adminLangId);
+                                $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $siteLangId, false);
+                                $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
                                 $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                                 ?>
-                                <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $adminLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($adminLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $adminLangId); ?>">
+                                <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
                             </a>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="title">
                             <h2><?php echo Labels::getLabel('LBL_Forgot_Your_Password?', CommonHelper::getLangId()); ?></h2>
-                            <p><?php echo Labels::getLabel('LBL_Enter_The_E-mail_Address_Associated_With_Your_Account', $adminLangId) ?></p>
+                            <p><?php echo Labels::getLabel('LBL_Enter_The_E-mail_Address_Associated_With_Your_Account', $siteLangId) ?></p>
                         </div>                        
                         <?php echo $frm->getFormHtml(); ?>                       
                     </div>
                     <div class="card-foot">
                         <ul class="other-links">
                             <li>
-                                <a href="<?php echo UrlHelper::generateUrl('adminGuest', 'loginForm'); ?>" class="link"><?php echo Labels::getLabel('LBL_Back_to_Login', $adminLangId); ?></a>
+                                <a href="<?php echo UrlHelper::generateUrl('adminGuest', 'loginForm'); ?>" class="link"><?php echo Labels::getLabel('LBL_Back_to_Login', $siteLangId); ?></a>
                             </li>
                         </ul>
                     </div>

@@ -9,15 +9,15 @@ defined( 'SYSTEM_INIT' ) or die( 'Invalid Usage.' );
 			  <div class="box box--white">
                     <figure class="logo">
                         <?php
-                        $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $adminLangId, false);
-                        $aspectRatioArr = AttachedFile::getRatioTypeArray($adminLangId);
+                        $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $siteLangId, false);
+                        $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
                         ?>
-                        <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio= "<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo UrlHelper::generateFileUrl('Image','siteAdminLogo', array(  $adminLangId)); ?>" alt="">
+                        <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio= "<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo UrlHelper::generateFileUrl('Image','siteAdminLogo', array(  $siteLangId)); ?>" alt="">
                     </figure>
                    
                    <div class="-align-center">
                        <h3><?php echo Labels::getLabel('LBL_Reset_Password',CommonHelper::getLangId()); ?> </h3>
-                       <!--<p><?php echo Labels::getLabel('LBL_Enter_The_E-mail_Address_Associated_With_Your_Account',$adminLangId) ?></p>-->
+                       <!--<p><?php echo Labels::getLabel('LBL_Enter_The_E-mail_Address_Associated_With_Your_Account',$siteLangId) ?></p>-->
                    </div>
                     <div class="box__centered box__centered--form">
                         <?php echo $frmResetPassword->getFormTag(); ?>
@@ -54,7 +54,7 @@ defined( 'SYSTEM_INIT' ) or die( 'Invalid Usage.' );
                             <div class="row -align-center">
                                 <div class="col-md-12">
                                     <div class="field-set">
-                                        <a href="<?php echo UrlHelper::generateUrl('adminGuest','loginForm');?>" class="-link-underline -txt-uppercase"><?php echo Labels::getLabel('LBL_Back_to_Login',$adminLangId); ?></a>
+                                        <a href="<?php echo UrlHelper::generateUrl('adminGuest','loginForm');?>" class="-link-underline -txt-uppercase"><?php echo Labels::getLabel('LBL_Back_to_Login',$siteLangId); ?></a>
                                     </div>
                                 </div>
                             </div>

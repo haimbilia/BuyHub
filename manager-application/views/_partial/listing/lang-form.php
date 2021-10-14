@@ -19,7 +19,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
                 <div class="col-auto mb-4">
                     <input class="btn btn-outline-brand btn-sm" 
                         type="button" 
-                        value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" 
+                        value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" 
                         onClick="editLangData(<?php echo $recordId; ?>, <?php echo $lang_id; ?>, 1)">
                 </div>
             </div>
@@ -30,8 +30,13 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
     <div class="form-edit-foot">
         <div class="row">
             <div class="col-auto">
+<<<<<<< HEAD
                 <button type="button" class="btn btn-brand  submitBtnJs">
                     <?php echo Labels::getLabel('LBL_UPDATE', $adminLangId); ?>
+=======
+                <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
+                    <?php echo Labels::getLabel('LBL_UPDATE', $siteLangId); ?>
+>>>>>>> dcb74d5c219c2cc219cb2515001a6e3cc7e94a8f
                 </button>
             </div>
         </div>

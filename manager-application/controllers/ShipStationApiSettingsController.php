@@ -26,11 +26,11 @@ class ShipStationApiSettingsController extends ShippingSettingsController
     {
         $frm = new Form('frmShippingMethods');
         
-        $fld = $frm->addTextBox(Labels::getLabel("LBL_Shipstation_Api_key", $this->adminLangId), 'shipstation_api_key');
-        $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Please_enter_your_shipstation_Api_Key_here.", $this->adminLangId) . "</small>";
+        $fld = $frm->addTextBox(Labels::getLabel("LBL_Shipstation_Api_key", $this->siteLangId), 'shipstation_api_key');
+        $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Please_enter_your_shipstation_Api_Key_here.", $this->siteLangId) . "</small>";
         
-        $fld = $frm->addTextBox(Labels::getLabel("LBL_Shipstation_Api_Secret_key", $this->adminLangId), 'shipstation_api_secret_key');
-        $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Please_enter_your_shipstation_api_Secret_Key_here.", $this->adminLangId) . "</small>";
+        $fld = $frm->addTextBox(Labels::getLabel("LBL_Shipstation_Api_Secret_key", $this->siteLangId), 'shipstation_api_secret_key');
+        $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Please_enter_your_shipstation_api_Secret_Key_here.", $this->siteLangId) . "</small>";
         
         return $frm;
     }
