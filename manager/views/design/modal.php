@@ -1034,7 +1034,7 @@
                                     <div class="modal-footer text-right"><button type="reset"
                                             class="btn btn-outline-brand">Cancel</button>
                                         <button type="submit"
-                                            class="btn btn-brand gb-btn gb-btn-primary ml-auto">Update</button>
+                                            class="btn btn-brand  ml-auto">Update</button>
 
 
                                     </div>

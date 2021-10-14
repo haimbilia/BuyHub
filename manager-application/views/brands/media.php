@@ -48,16 +48,8 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
             </div>
         </div>
     </div>
-
-    <div class="form-edit-foot">
-        <div class="row">
-            <div class="col-auto">
-                <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
-                    <?php echo Labels::getLabel('LBL_UPDATE', $siteLangId); ?>
-                </button>
-            </div>
-        </div>
-    </div>
+    
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>
 
 <script>

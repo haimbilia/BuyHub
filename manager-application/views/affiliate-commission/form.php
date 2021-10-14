@@ -22,7 +22,6 @@ $fld->setfieldTagAttribute('id', "afcommsetting_prodcat_id");
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>
     </div>
-
     
     <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>

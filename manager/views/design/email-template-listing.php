@@ -664,7 +664,7 @@
                                                 <div class="col"><button type="reset" class="btn btn-outline-brand">Cancel</button>
                                                 </div>
                                                 <div class="col-auto">
-                                                    <button type="submit" class="btn btn-brand gb-btn gb-btn-primary ">Update</button>
+                                                    <button type="submit" class="btn btn-brand  ">Update</button>
                                                 </div>
                                             </div>
                                         </div>

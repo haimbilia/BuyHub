@@ -43,7 +43,6 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
         </div>
         <?php echo $frm->getFormHtml(); ?>
     </div>
-
     
     <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>

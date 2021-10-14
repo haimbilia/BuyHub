@@ -25,6 +25,9 @@
                  border-radius: 0px;
                  height: inherit;
                  overflow-y: auto;
+                 .modal-header {
+                     padding: 1.5rem 2rem;
+                 }
              }
          }
          &.fade .modal-dialog-vertical {
