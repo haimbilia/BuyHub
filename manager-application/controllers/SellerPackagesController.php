@@ -433,7 +433,7 @@ class SellerPackagesController extends AdminBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'spackage_identifier' => Labels::getLabel('LBL_Package_Name', $this->siteLangId),
             'spackage_active' => Labels::getLabel('LBL_Status', $this->siteLangId),
             'action' => '',

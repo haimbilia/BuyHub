@@ -181,7 +181,7 @@ class TaxStructureController extends AdminBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'taxstr_identifier' => Labels::getLabel('LBL_Tax_Structure_Name', $this->siteLangId),
             'taxstr_is_combined' => Labels::getLabel('LBL_Combined_Tax', $this->siteLangId),
             'action' =>  Labels::getLabel('LBL_ACTION', $this->siteLangId),

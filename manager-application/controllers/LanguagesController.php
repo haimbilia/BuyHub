@@ -268,7 +268,7 @@ class LanguagesController extends AdminBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'language_code' => Labels::getLabel('LBL_Language_Code', $this->siteLangId),
             'language_name' => Labels::getLabel('LBL_Language_Name', $this->siteLangId),
             'language_active' => Labels::getLabel('LBL_Status', $this->siteLangId),

@@ -163,7 +163,7 @@ class SystemLogController extends AdminBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'slog_title' => Labels::getLabel('LBL_Title', $this->siteLangId),
             'slog_content' => Labels::getLabel('LBL_Content', $this->siteLangId),
             'slog_response' => Labels::getLabel('LBL_Response', $this->siteLangId),

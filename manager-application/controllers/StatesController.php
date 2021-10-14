@@ -280,7 +280,7 @@ class StatesController extends AdminBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),          
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),          
             'state_name' => Labels::getLabel('LBL_State_Name', $this->siteLangId),
             'state_code' => Labels::getLabel('LBL_State_Code', $this->siteLangId),
             'country_name' => Labels::getLabel('LBL_Country_Name', $this->siteLangId),

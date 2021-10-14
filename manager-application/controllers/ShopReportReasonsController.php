@@ -226,7 +226,7 @@ class ShopReportReasonsController extends AdminBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId), 
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), 
             'reportreason_title' => Labels::getLabel('LBL_Reason_Title', $this->siteLangId),
             'action' =>  Labels::getLabel('LBL_ACTION', $this->siteLangId),
         ];
