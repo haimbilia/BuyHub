@@ -19,7 +19,7 @@ $formTitle = CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}
     <div class="form-edit-foot">
         <div class="row">
             <div class="col-auto">
-                <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
+                <button type="button" class="btn btn-brand  submitBtnJs">
                     <?php  echo Labels::getLabel('LBL_SAVE', $adminLangId); ?>
                 </button>
             </div>

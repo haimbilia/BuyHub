@@ -53,9 +53,19 @@ $card:'card';
             margin-#{$end-direction}: 1rem;
         }
         >.actions {
+            li {
+                margin: 0;
+                a {
+                    &:hover {
+                        background: none;
+                    }
+                }
+            }
             .selected {
-                background-color: $brand-color;
-                color: $brand-color-inverse;
+                color: $brand-color;
+                .svg {
+                    fill: currentColor;
+                }
             }
         }
     }

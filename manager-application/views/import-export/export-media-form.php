@@ -46,7 +46,7 @@ if ($actionType == Importexport::TYPE_PRODUCTS || $actionType == Importexport::T
 	<div class="form-edit-foot">
 		<div class="row">
 			<div class="col-auto">
-				<button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
+				<button type="button" class="btn btn-brand  submitBtnJs">
 					<?php
 					echo Labels::getLabel('LBL_EXPORT', $adminLangId);
 					?>

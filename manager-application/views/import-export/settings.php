@@ -18,7 +18,7 @@
     ?>
 </div>
 <div class="card-foot">
-    <button type="button" class="btn btn-brand gb-btn gb-btn-primary importExportBtnJs" onclick="updateSettings('frmImportExportSetting')">
+    <button type="button" class="btn btn-brand  importExportBtnJs" onclick="updateSettings('frmImportExportSetting')">
         <?php
         echo Labels::getLabel('LBL_UPDATE', $adminLangId);
         ?>

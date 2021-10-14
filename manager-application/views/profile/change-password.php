@@ -40,7 +40,7 @@ $confPassFld = $frm->getField('conf_new_password');
     <div class="card-foot">
         <div class="row">                                    
             <div class="col-auto">
-                <button type="submit" class="btn btn-brand gb-btn gb-btn-primary"><?php echo Labels::getLabel('LBL_UPDATE', $adminLangId); ?></button>
+                <button type="submit" class="btn btn-brand "><?php echo Labels::getLabel('LBL_UPDATE', $adminLangId); ?></button>
             </div>
         </div>
     </div> 

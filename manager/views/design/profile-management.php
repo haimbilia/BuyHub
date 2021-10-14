@@ -1860,22 +1860,22 @@
                                                                 <div class="">
                                                                     <ul>
                                                                         <li>
-                                                                            <span class="switch switch-sm switch-icon">
-                                                                                <label>
-                                                                                    <input type="checkbox"
-                                                                                        checked="checked" name="">
-                                                                                    <span></span>Email
-                                                                                </label>
-                                                                            </span>
+
+                                                                            <label class="switch switch-sm switch-icon">
+                                                                                <input type="checkbox" checked="checked"
+                                                                                    name="">
+                                                                                <span></span>Email
+                                                                            </label>
+
                                                                         </li>
                                                                         <li>
-                                                                            <span class="switch switch-sm switch-icon">
-                                                                                <label>
-                                                                                    <input type="checkbox"
-                                                                                        checked="checked" name="">
-                                                                                    <span></span>Phone
-                                                                                </label>
-                                                                            </span>
+
+                                                                            <label class="switch switch-sm switch-icon">
+                                                                                <input type="checkbox" checked="checked"
+                                                                                    name="">
+                                                                                <span></span>Phone
+                                                                            </label>
+
                                                                         </li>
                                                                     </ul>
                                                                 </div>
@@ -1890,13 +1890,13 @@
                                                                 <!--begin::Label-->
                                                                 <label class="label">Allow Marketing</label>
                                                                 <div class="">
-                                                                    <span class="switch switch-sm switch-icon">
-                                                                        <label>
-                                                                            <input type="checkbox" checked="checked"
-                                                                                name="">
-                                                                            <span></span>
-                                                                        </label>
-                                                                    </span>
+
+                                                                    <label class="switch switch-sm switch-icon">
+                                                                        <input type="checkbox" checked="checked"
+                                                                            name="">
+                                                                        <span></span>
+                                                                    </label>
+
                                                                 </div>
                                                                 <!--end::Label-->
                                                             </div>
@@ -1912,7 +1912,7 @@
                                                         </div>
                                                         <div class="col-auto">
                                                             <button type="submit"
-                                                                class="btn btn-brand gb-btn gb-btn-primary ">Update</button>
+                                                                class="btn btn-brand  ">Update</button>
                                                         </div>
                                                     </div>
 
