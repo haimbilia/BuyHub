@@ -1,7 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
+$frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ')');
+$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 
 $activeGentab = true;
@@ -11,19 +12,5 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
         <?php echo $frm->getFormHtml(); ?>
     </div>
 
-    <div class="form-edit-foot">
-        <div class="row">
-            <div class="col-auto">
-                <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
-                    <?php
-                    if (0 < $recordId) {
-                        echo Labels::getLabel('LBL_UPDATE', $siteLangId);
-                    } else {
-                        echo Labels::getLabel('LBL_SAVE', $siteLangId);
-                    }
-                    ?>
-                </button>
-            </div>
-        </div>
-    </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->

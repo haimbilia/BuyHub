@@ -47,6 +47,22 @@ $(document).on('search', "input[name='keyword']", function () {
     }
 });
 
+$(document).on('keyup', '.modalFormJs, .modalLangFormJs', function(e) {
+    e.stopImmediatePropagation();
+    if (e.keyCode === 13) {
+        $('.submitBtnJs').click();
+    }
+});
+
+$(document).on('click', '.resetModalFormJs', function(e) {
+    if (0 > $('.navTabsJs .nav-link').length) {
+        $('.navTabsJs .nav-link.active').click();
+    } else {
+        var onClear = $('.modalFormJs').data('onclear');
+        eval(onClear);
+    }
+});
+
 (function () {
     var dv = '.listingRecordJs';
     var paginationDv = '.listingPaginationJs';

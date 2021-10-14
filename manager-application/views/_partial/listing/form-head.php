@@ -13,7 +13,7 @@ $formTitle = !empty($formTitle) ? $formTitle : Labels::getLabel('LBL_SETUP', $si
 <div class="modal-body form-edit"> <!-- Closing tag must be added inside the files who include this file. -->
     <?php if (0 < count($languages) || isset($otherButtons)) { ?>
         <div class="form-edit-head">
-            <nav class="nav nav-tabs">
+            <nav class="nav nav-tabs navTabsJs">
                 <a class="nav-link <?php echo $activeGentab; ?>" href="javascript:void(0)" onclick="editRecord(<?php echo $recordId ?>);" title="<?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>">
                     <?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>
                 </a>

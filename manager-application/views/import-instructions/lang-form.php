@@ -3,7 +3,8 @@
 HtmlHelper::formatFormFields($langFrm);
 
 $langFrm->setFormTagAttribute('id', 'editorLangFormJs');
-$langFrm->setFormTagAttribute('class', 'modal-body form form-edit layout--' . $formLayout);
+$langFrm->setFormTagAttribute('data-onclear', 'editLangData(' . $recordId . ', ' . $siteLangId . ')');
+$langFrm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
 $langFrm->setFormTagAttribute('dir', $formLayout);
 $langFrm->setFormTagAttribute('onsubmit', 'saveLangData($("#editorLangFormJs")); return(false);');
 
@@ -43,13 +44,5 @@ $fld->htmlAfterField = '<a class="btn btn-outline-brand btn-sm" onClick="resetTo
         <?php echo $langFrm->getFormHtml(); ?>
     </div>
 
-    <div class="form-edit-foot">
-        <div class="row">
-            <div class="col-auto">
-                <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
-                    <?php echo Labels::getLabel('LBL_UPDATE', $siteLangId); ?>
-                </button>
-            </div>
-        </div>
-    </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>

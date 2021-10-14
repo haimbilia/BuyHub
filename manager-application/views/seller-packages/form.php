@@ -19,5 +19,3 @@ $fld = $frm->getField('spackage_display_order');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); 
-
-?>
