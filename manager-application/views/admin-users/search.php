@@ -69,7 +69,8 @@ foreach ($arrListing as $sn => $row) {
     $sr_no--;
 }
 if (count($arrListing) == 0) {
-    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
+    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds),
+    'class' => 'noRecordFoundJs'), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
 }
 
 $frm = new Form('frmAdmUsersListing', array('id' => 'frmAdmUsersListing'));
