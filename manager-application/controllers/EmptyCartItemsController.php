@@ -1,5 +1,4 @@
 <?php
-
 class EmptyCartItemsController extends AdminBaseController
 {
     public function __construct($action)

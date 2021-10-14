@@ -1,5 +1,4 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->setFormTagAttribute('onsubmit', 'login(this, loginValidator); return(false);');
 $frm->setFormTagAttribute('id', 'adminLoginForm');
 $frm->setFormTagAttribute('class', 'form');

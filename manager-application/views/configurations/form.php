@@ -1,8 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$clearFormFn = isset($clearFormFn) ? $clearFormFn : 'getForm(' . $frmType . ')';
+
 HtmlHelper::formatFormFields($frm);
 $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group mt-3';
-$frm->setFormTagAttribute('class', 'form form--settings layout--' . $formLayout);
+$frm->setFormTagAttribute('class', 'form form--settings modalFormJs layout--' . $formLayout);
+$frm->setFormTagAttribute('data-onclear', $clearFormFn);
 $frm->setFormTagAttribute('id', 'frmConfSetting');
 $tbid = isset($tabId) ? $tabId : 'tabs_' . $frmType;
 
@@ -90,14 +93,12 @@ switch ($frmType) {
 <div class="card-body">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <?php if ($dispLangTab) { ?>
+            <?php if ($dispLangTab && $frmType != Configurations::FORM_MEDIA && $frmType != Configurations::FORM_SHARING) { ?>
                 <div class="form-section-head mt-0">
-                    <nav class="nav nav-tabs">
-                        <?php if ($frmType != Configurations::FORM_MEDIA && $frmType != Configurations::FORM_SHARING) { ?>
-                            <a class="nav-link <?php echo ($lang_id == 0) ? 'active' : ''; ?>" href="javascript:void(0)" onClick="getForm(<?php echo $frmType; ?>)">
-                                <?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?>
-                            </a>
-                        <?php } ?>
+                    <nav class="nav nav-tabs navTabsJs">
+                        <a class="nav-link <?php echo ($lang_id == 0) ? 'active' : ''; ?>" href="javascript:void(0)" onClick="getForm(<?php echo $frmType; ?>)">
+                            <?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?>
+                        </a>
 
                         <a class="nav-link <?php echo (0 < $lang_id ? 'active' : '') ?>" href="javascript:void(0);" onClick="getLangForm(<?php echo $frmType; ?>, <?php echo FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1); ?>)">
                             <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
@@ -119,7 +120,10 @@ switch ($frmType) {
         <div class="col-md-10">
             <div class="row">
                 <div class="col">
-                    <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_UPDATE', $siteLangId), 'button'); ?>
+                    <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_RESET', $siteLangId), 'button', 'btn_reset_form', 'btn btn-outline-brand resetModalFormJs'); ?>
+                </div>
+                <div class="col-auto">
+                    <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_SAVE', $siteLangId), 'button', 'btn_save', 'btn btn-brand gb-btn gb-btn-primary submitBtnJs'); ?>
                 </div>
             </div>
         </div>
