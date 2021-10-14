@@ -10,8 +10,9 @@ $card:'card';
     background-color: $bg-white;
     border-radius: $radius-common;
     border: none;
+    margin-bottom: 20px;
     +.#{$card} {
-        margin-top: 20px;
+        //margin-top: 20px;
     }
     &-head {
         $selfHead: &;
