@@ -15,7 +15,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back"></use>
                                     </svg>
                                 </a>
-                                <?php echo Labels::getLabel('LBL_GENERAL_SETTINGS', $adminLangId); ?>
+                                <?php echo Labels::getLabel('LBL_CONFIGURATION_SETTINGS', $adminLangId); ?>
                             </h3>
                         </div>
                     </div>
@@ -56,7 +56,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                 </div>
             </div>
             <div class="col-md-8">
-                <div id="frmBlock" class="card">
+                <div id="frmBlockJs" class="card">
                     <?php require_once(CONF_THEME_PATH . 'configurations/form.php'); ?>
                 </div>
             </div>

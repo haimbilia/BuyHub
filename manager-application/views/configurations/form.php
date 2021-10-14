@@ -1,9 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
+$frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group mt-3';
 $frm->setFormTagAttribute('class', 'form form--settings layout--' . $formLayout);
 $frm->setFormTagAttribute('id', 'frmConfSetting');
-
 $tbid = isset($tabId) ? $tabId : 'tabs_' . $frmType;
 
 if ($lang_id > 0) {
@@ -76,11 +76,22 @@ switch ($frmType) {
         break;
 }
 ?>
+<div class="card-head">
+    <div class="card-head-label flex-grow-1">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <h3 class="card-head-title">
+                    <?php echo $tabs[$frmType] . ' ' . Labels::getLabel('LBL_SETTINGS', $adminLangId); ?>
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="card-body">
     <div class="row justify-content-center">
         <div class="col-md-10">
             <?php if ($dispLangTab) { ?>
-                <div class="form-edit-head">
+                <div class="form-section-head mt-0">
                     <nav class="nav nav-tabs">
                         <?php if ($frmType != Configurations::FORM_MEDIA && $frmType != Configurations::FORM_SHARING) { ?>
                             <a class="nav-link <?php echo ($lang_id == 0) ? 'active' : ''; ?>" href="javascript:void(0)" onClick="getForm(<?php echo $frmType; ?>)">
@@ -94,10 +105,10 @@ switch ($frmType) {
                     </nav>
                 </div>
             <?php } ?>
-            <div class="form-edit-body formBodyJs">
+            <div class="form-section-body formBodyJs">
                 <?php echo $frm->getFormHtml(); ?>
                 <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-                    <div id="map" style="width:900px; height:500px"></div>
+                    <div id="map" style="height:500px"></div>
                 <?php } ?>
             </div>
         </div>
@@ -187,5 +198,17 @@ switch ($frmType) {
         $('#frmConfSetting').find('.checkbox').addClass('switch switch-sm switch-icon').removeClass('checkbox');
         $('#frmConfSetting i').replaceWith('<span></span>');
         $('#frmConfSetting').find('.caption-wraper').remove();
+
+        $('#frmConfSetting .label').each(function() {
+            if ('' == ($(this).text()).trim()) {
+                $(this).remove();
+            }
+        });
+        $('#frmConfSetting ul.list-inline li').each(function() {
+            $(this).addClass('list-inline-item');
+            if (0 < $(this).find('.radio').length) {
+                $(this).find('.radio').parent('label').addClass("radio-list d-block");
+            }
+        });
     });
 </script>
