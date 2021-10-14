@@ -29,6 +29,10 @@ $input-color: #474747;
         background-color: darken($input-bg, 5%);
         transition: 0.3s all ease-in-out;
     }
+    &.error {
+        border: 1px solid $danger-color;
+        background-color: transparent;
+    }
 }
 
 @mixin select {
@@ -727,5 +731,15 @@ form.custom-form {
         i {
             font-size: 1.5rem;
         }
+    }
+}
+
+.errorlist {
+    color: $danger-color;
+    list-style: none;
+    font-size: 0.75rem;
+    padding: 4px;
+    a {
+        color: currentColor;
     }
 }
