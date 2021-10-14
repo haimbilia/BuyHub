@@ -309,7 +309,7 @@ class UrlRewritingController extends AdminBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'urlrewrite_original' => Labels::getLabel('LBL_Original', $this->siteLangId),
             'language_code' => Labels::getLabel('LBL_Language', $this->siteLangId),
             'urlrewrite_custom' => Labels::getLabel('LBL_Custom', $this->siteLangId),

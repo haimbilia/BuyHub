@@ -47,7 +47,8 @@ if (count($arrListing) == 0) {
     $tbody->appendElement('tr')->appendElement(
         'td',
         array(
-            'colspan' => count($fields)
+            'colspan' => count($fields),
+            'class' => 'noRecordFoundJs'
         ),
         Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );

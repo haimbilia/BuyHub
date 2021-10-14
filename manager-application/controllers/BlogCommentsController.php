@@ -259,7 +259,7 @@ class BlogCommentsController extends AdminBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'bpcomment_author_name' => Labels::getLabel('LBL_AUTHOR_NAME', $this->siteLangId),
             'bpcomment_author_email' => Labels::getLabel('LBL_AUTHOR_EMAIL', $this->siteLangId),
             'bpcomment_approved' => Labels::getLabel('LBL_STATUS', $this->siteLangId),

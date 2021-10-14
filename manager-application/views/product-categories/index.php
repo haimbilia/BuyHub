@@ -17,21 +17,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
                     <div class="card-body" id="listing"></div>
                 </div>
             </div>
-            <!-- <div class="col-md-3">
-                <div class="card">
-                    <div class="card-head">
-                        <h3 class="card-head-label">
-                            <span class="card-head-title">
-                                <?php 
-                                    $title = Labels::getLabel('LBL_Total_{CAT-COUNT}_CATEGORIES', $siteLangId);
-                                    echo CommonHelper::replaceStringData($title, ['{CAT-COUNT}' => $recordCount]);
-                                ?>
-                            </span>
-                        </h3>
-                    </div>
-                    <div class="card-body" id="total-block"></div>
-                </div>
-            </div> -->
         </div>
     </div>
 </main>

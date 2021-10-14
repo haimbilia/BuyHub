@@ -268,7 +268,7 @@ class BlogContributionsController extends AdminBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'author_name' => Labels::getLabel('LBL_Author_Name', $this->siteLangId),
             'bcontributions_author_email' => Labels::getLabel('LBL_Author_Email', $this->siteLangId),
             'bcontributions_author_phone' => Labels::getLabel('LBL_Author_Phone', $this->siteLangId),
