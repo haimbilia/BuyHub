@@ -286,7 +286,7 @@ class LabelsController extends AdminBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'label_key' => Labels::getLabel('LBL_SYSTEM_CODE', $this->siteLangId),
             'label_caption' => Labels::getLabel('LBL_CAPTION', $this->siteLangId),
             'label_type' => Labels::getLabel('LBL_PLATFORM', $this->siteLangId),

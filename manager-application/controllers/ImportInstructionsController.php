@@ -230,7 +230,7 @@ class ImportInstructionsController extends AdminBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'epage_identifier' => Labels::getLabel('LBL_TITLE', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];

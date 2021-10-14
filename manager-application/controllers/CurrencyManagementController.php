@@ -286,7 +286,7 @@ class CurrencyManagementController extends AdminBaseController
         $arr = [
             'dragdrop' => '',
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'currency_code' => Labels::getLabel('LBL_Currency', $this->siteLangId),
             'currency_symbol_left' => Labels::getLabel('LBL_Symbol_Left', $this->siteLangId),
             'currency_symbol_right' => Labels::getLabel('LBL_Symbol_Right', $this->siteLangId),

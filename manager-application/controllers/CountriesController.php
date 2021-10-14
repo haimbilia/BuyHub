@@ -262,7 +262,7 @@ class CountriesController extends AdminBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'country_code' => Labels::getLabel('LBL_COUNTRY_CODE', $this->siteLangId),
             'country_code_alpha3' => Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->siteLangId),
             'country_name' => Labels::getLabel('LBL_COUNTRY_NAME', $this->siteLangId),

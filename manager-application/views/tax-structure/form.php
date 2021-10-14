@@ -1,7 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit layout--' . $formLayout);
+$frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ')');
+$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 ?>
 <div class="modal-header">
@@ -175,22 +176,8 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
         </form>
         <?php echo $frm->getExternalJS(); ?>
     </div>
-
-    <div class="form-edit-foot">
-        <div class="row">
-            <div class="col-auto">
-                <button type="button" class="btn btn-brand  submitBtnJs">
-                    <?php
-                    if (0 < $recordId) {
-                        echo Labels::getLabel('LBL_UPDATE', $siteLangId);
-                    } else {
-                        echo Labels::getLabel('LBL_SAVE', $siteLangId);
-                    }
-                    ?>
-                </button>
-            </div>
-        </div>
-    </div>
+    
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>
 <script>
     $(document).ready(function() {

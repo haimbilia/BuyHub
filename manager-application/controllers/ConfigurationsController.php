@@ -100,17 +100,19 @@ class ConfigurationsController extends AdminBaseController
             Configurations::FORM_MEDIA,
         ];
 
-        if (in_array($frmType, $mediaTabsArr)) {
-            $submitBtn = $frm->getField('btn_submit');
+        $submitBtn = $frm->getField('btn_submit');
+        if (in_array($frmType, $mediaTabsArr) && null != $submitBtn) {
             $submitBtn->setfieldTagAttribute('class', "hide");
         }
-
+        $tabs = Configurations::getTabsArr();
+        $this->set('tabs', $tabs);
         $this->set('languages', Language::getAllNames());
         $this->set('frm', $frm);
         $this->set('dispLangTab', $dispLangTab);
         $this->set('lang_id', $langId);
         $this->set('frmType', $frmType);
         $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->set('clearFormFn', 'getLangForm(' . $frmType . ', ' . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ')');
         $this->_template->render(false, false, 'configurations/form.php');
     }
 

@@ -82,7 +82,8 @@
             }
         }
         if (count($arrListing) == 0) {
-            $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
+            $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds),
+            'class' => 'noRecordFoundJs'), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
         }
         $frm = new Form('frmNavListing', array('id' => 'frmNavListing'));
         $frm->setFormTagAttribute('class', 'web_form last_td_nowrap actionButtons-js');

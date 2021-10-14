@@ -1085,7 +1085,7 @@ class ImportExportController extends AdminBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'user' => Labels::getLabel('LBL_USER', $this->siteLangId),
             'afile_physical_path' => Labels::getLabel('LBL_FILE_LOCATION', $this->siteLangId),
             'files'    => Labels::getLabel('LBL_FILES', $this->siteLangId),

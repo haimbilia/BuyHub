@@ -222,7 +222,7 @@ class OrderReturnReasonsController extends AdminBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             /*'orreason_identifier' => Labels::getLabel('LBL_REASON_IDENTIFIER', $this->siteLangId),*/
             'orreason_title' => Labels::getLabel('LBL_REASON_TITLE', $this->siteLangId),
             'action' =>  Labels::getLabel('LBL_ACTION', $this->siteLangId),
