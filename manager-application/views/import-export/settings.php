@@ -10,7 +10,7 @@
 </div>
 <div class="card-foot">
     <button type="button" class="btn btn-brand  importExportBtnJs" onclick="updateSettings('frmImportExportSetting')">
-        <?php echo Labels::getLabel('LBL_UPDATE', $adminLangId); ?>
+        <?php echo Labels::getLabel('LBL_UPDATE', $siteLangId); ?>
     </button>
 </div>
 <script>
