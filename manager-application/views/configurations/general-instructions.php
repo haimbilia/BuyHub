@@ -4,7 +4,7 @@
 ?>
 <ul class="tabs_nav innerul">
 	<?php if( $frmType == Configurations::FORM_IMPORT_EXPORT){ ?>
-		<li><a class='active' href="javascript:void(0);" onclick="generalInstructions(<?php echo $frmType;?>);"><?php echo Labels::getLabel('LBL_Instructions',$adminLangId); ?></a></li>
+		<li><a class='active' href="javascript:void(0);" onclick="generalInstructions(<?php echo $frmType;?>);"><?php echo Labels::getLabel('LBL_Instructions',$siteLangId); ?></a></li>
 	<?php } ?>
 	<?php if( $frmType != Configurations::FORM_MEDIA && $frmType != Configurations::FORM_SHARING ){ ?>
 	<?php
@@ -13,7 +13,7 @@
 		$active = 'active';
 	}
 	?>
-	<li><a class='<?php echo $active; ?>' href="javascript:void(0)" onClick="getForm(<?php echo $frmType;?>,'<?php echo $tbid;?>')"><?php echo Labels::getLabel('LBL_Basic',$adminLangId); ?></a></li>
+	<li><a class='<?php echo $active; ?>' href="javascript:void(0)" onClick="getForm(<?php echo $frmType;?>,'<?php echo $tbid;?>')"><?php echo Labels::getLabel('LBL_Basic',$siteLangId); ?></a></li>
 	<?php } ?>
 	<?php
 	if( $dispLangTab ){

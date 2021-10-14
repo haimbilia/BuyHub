@@ -12,7 +12,7 @@ $fld->setFieldTagAttribute('disabled', 'disabled');
 
 <div class="modal-header">
     <h5 class="modal-title">
-        <?php echo Labels::getLabel('LBL_MANAGE_LABELS', $adminLangId); ?>
+        <?php echo Labels::getLabel('LBL_MANAGE_LABELS', $siteLangId); ?>
     </h5>
 </div>
 <div class="modal-body form-edit">
@@ -22,7 +22,7 @@ $fld->setFieldTagAttribute('disabled', 'disabled');
         if (!empty($translatorSubscriptionKey) && 1 < count($languages)) { ?>
             <div class="row justify-content-end">
                 <div class="col-auto mb-4">
-                    <input class="btn btn-outline-brand btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" onClick="labelsForm(<?php echo $recordId; ?>, <?php echo $labelType; ?>, 1)">
+                    <input class="btn btn-outline-brand btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onClick="labelsForm(<?php echo $recordId; ?>, <?php echo $labelType; ?>, 1)">
                 </div>
             </div>
         <?php } ?>
@@ -33,7 +33,7 @@ $fld->setFieldTagAttribute('disabled', 'disabled');
         <div class="row">
             <div class="col-auto">
                 <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
-                    <?php echo Labels::getLabel('LBL_UPDATE', $adminLangId); ?>
+                    <?php echo Labels::getLabel('LBL_UPDATE', $siteLangId); ?>
                 </button>
             </div>
         </div>

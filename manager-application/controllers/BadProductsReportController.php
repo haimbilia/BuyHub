@@ -41,12 +41,12 @@ class BadProductsReportController extends AdminBaseController
     public function getSearchForm()
     {
         $frm = new Form('frmBadProductsReportSearch');
-        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->adminLangId), 'report_type', $this->getReportTypeArr(), '', array(), Labels::getLabel('LBL_overAll', $this->adminLangId));
-        $frm->addSelectBox(Labels::getLabel('LBL_Records_Per_Page', $this->adminLangId), 'pagesize', array( 10 => '10', 20 => '20', 30 => '30', 50 => '50'), '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->siteLangId), 'report_type', $this->getReportTypeArr(), '', array(), Labels::getLabel('LBL_overAll', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('LBL_Records_Per_Page', $this->siteLangId), 'pagesize', array( 10 => '10', 20 => '20', 30 => '30', 50 => '50'), '', array(), '');
         $frm->addHiddenField('', 'page', 1);
         $frm->addHiddenField('', 'top_perfomed', 0);
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

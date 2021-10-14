@@ -1,14 +1,14 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (count($arrListing) == 0) {
-    $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $adminLangId));
+    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
 }else{
 
 $arr_flds = array(
-    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
-    'shop_name' => Labels::getLabel('LBL_Requested_BY', $adminLangId),
-    'brand_logo' => Labels::getLabel('LBL_Logo', $adminLangId),
-    'brand_identifier' => Labels::getLabel('LBL_Brand_Name', $adminLangId),
-    'brand_requested_on' => Labels::getLabel('LBL_Requested_On', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $siteLangId),
+    'shop_name' => Labels::getLabel('LBL_Requested_BY', $siteLangId),
+    'brand_logo' => Labels::getLabel('LBL_Logo', $siteLangId),
+    'brand_identifier' => Labels::getLabel('LBL_Brand_Name', $siteLangId),
+    'brand_requested_on' => Labels::getLabel('LBL_Requested_On', $siteLangId),
     'action' => '',
 );
 
@@ -50,7 +50,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement(
                     'plaintext',
                     array('style' => 'text-align:center'),
-                    '<img  class="max-img"  src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $adminLangId, 'MINITHUMB'), CONF_WEBROOT_FRONT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '">',
+                    '<img  class="max-img"  src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, 'MINITHUMB'), CONF_WEBROOT_FRONT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '">',
                     true
                 );
                 break;
@@ -77,7 +77,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 if ($canEdit) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $adminLangId), "onclick" => "addBrandRequestForm(" . $row['brand_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "addBrandRequestForm(" . $row['brand_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
                 }
                 break;
             default:
@@ -92,6 +92,6 @@ $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array(
     'name' => 'frmBrandSearchPaging'
 ));
-$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'adminLangId' => $adminLangId);
+$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'siteLangId' => $siteLangId);
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
 }

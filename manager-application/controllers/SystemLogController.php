@@ -15,7 +15,7 @@ class SystemLogController extends AdminBaseController
 
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_SYSTEM_LOG', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_SYSTEM_LOG', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -38,7 +38,7 @@ class SystemLogController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -74,7 +74,7 @@ class SystemLogController extends AdminBaseController
             $srch->addCondition('slog_module_type', '=', $module_type);
         }
 
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -122,10 +122,10 @@ class SystemLogController extends AdminBaseController
             $this->addSortingElements($frm);
         }
         
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
-        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->adminLangId), 'log_type', array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->adminLangId)) + SystemLog::getTypes(), -1, array(), ''); 
-        $frm->addSelectBox(Labels::getLabel('LBL_Module_Type', $this->adminLangId), 'module_type', array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->adminLangId)) + SystemLog::getModuleTypes(), -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->siteLangId), 'log_type', array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + SystemLog::getTypes(), -1, array(), ''); 
+        $frm->addSelectBox(Labels::getLabel('LBL_Module_Type', $this->siteLangId), 'module_type', array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + SystemLog::getModuleTypes(), -1, array(), '');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         
@@ -157,21 +157,21 @@ class SystemLogController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $systemLogTblHeadingCols = CacheHelper::get('systemLogTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $systemLogTblHeadingCols = CacheHelper::get('systemLogTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($systemLogTblHeadingCols) {
             return json_decode($systemLogTblHeadingCols);
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'slog_title' => Labels::getLabel('LBL_Title', $this->adminLangId),
-            'slog_content' => Labels::getLabel('LBL_Content', $this->adminLangId),
-            'slog_response' => Labels::getLabel('LBL_Response', $this->adminLangId),
-            'slog_type'    => Labels::getLabel('LBL_Log_Type', $this->adminLangId),
-            'slog_module_type' => Labels::getLabel('LBL_Module_Type', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'slog_title' => Labels::getLabel('LBL_Title', $this->siteLangId),
+            'slog_content' => Labels::getLabel('LBL_Content', $this->siteLangId),
+            'slog_response' => Labels::getLabel('LBL_Response', $this->siteLangId),
+            'slog_type'    => Labels::getLabel('LBL_Log_Type', $this->siteLangId),
+            'slog_module_type' => Labels::getLabel('LBL_Module_Type', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('systemLogTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('systemLogTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 

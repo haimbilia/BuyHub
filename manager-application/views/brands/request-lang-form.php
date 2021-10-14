@@ -12,7 +12,7 @@ $langFld->setfieldTagAttribute('onChange', "brandRequestLangForm(" . $brand_id .
 <section class="section">
     <div class="sectionhead">
 
-        <h4><?php echo Labels::getLabel('LBL_Product_Brand_Setup', $adminLangId); ?>
+        <h4><?php echo Labels::getLabel('LBL_Product_Brand_Setup', $siteLangId); ?>
         </h4>
     </div>
     <div class="sectionbody space">
@@ -21,11 +21,11 @@ $langFld->setfieldTagAttribute('onChange', "brandRequestLangForm(" . $brand_id .
                 <div class="tabs_nav_container responsive flat">
                     <ul class="tabs_nav">
                         <li><a href="javascript:void(0);"
-                                onclick="brandRequestForm(<?php echo $brand_id ?>);"><?php echo Labels::getLabel('LBL_General', $adminLangId); ?></a>
+                                onclick="brandRequestForm(<?php echo $brand_id ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a>
                         </li>
                         <li class="<?php echo (0 == $brand_id) ? 'fat-inactive' : ''; ?>">
                             <a class="active" href="javascript:void(0);" <?php echo (0 < $brand_id) ? "onclick='brandRequestLangForm(" . $brand_id . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                                <?php echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
+                                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
                             </a>
                         </li>
                         <li>
@@ -33,7 +33,7 @@ $langFld->setfieldTagAttribute('onChange', "brandRequestLangForm(" . $brand_id .
                                 <?php if ($brand_id > 0) { ?>
                                         onclick="brandRequestMediaForm(<?php echo $brand_id ?>);"
                                 <?php } ?>>
-                                <?php echo Labels::getLabel('LBL_Media', $adminLangId); ?>
+                                <?php echo Labels::getLabel('LBL_Media', $siteLangId); ?>
                             </a>
                         </li>
                     </ul>
@@ -46,7 +46,7 @@ $langFld->setfieldTagAttribute('onChange', "brandRequestLangForm(" . $brand_id .
                                 <div class="col-auto mb-4">
                                     <input class="btn btn-outline-brand btn-sm" 
                                         type="button" 
-                                        value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" 
+                                        value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" 
                                         onClick="brandRequestLangForm(<?php echo $brand_id; ?>, <?php echo $brand_lang_id; ?>, 1)">
                                 </div>
                             </div>

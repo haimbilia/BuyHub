@@ -32,7 +32,7 @@ class SubscriptionPlanReportController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_DESC;
         }
         $srchFrm = $this->getSearchForm($fields);
@@ -45,7 +45,7 @@ class SubscriptionPlanReportController extends AdminBaseController
 
 
         $srch = new SellerPackagePlansSearch();
-        $srch->joinPackage($this->adminLangId);
+        $srch->joinPackage($this->siteLangId);
         $srch->includeCount();
         $srch->addMultipleFields(['ifnull(spackage_name,spackage_identifier) as spackage_name', 'spplan_price', 'spplan_frequency', 'spackage_type', 'spplan_interval', 'activeSubscribers', 'spackageCancelled', 'spackageSold', 'spRenewalPendings', 'spRenewals']);
         $srch->addCondition('spplan_active', '=', applicationConstants::ACTIVE);
@@ -55,7 +55,7 @@ class SubscriptionPlanReportController extends AdminBaseController
             $cnd->attachCondition('spackage_name', 'like', '%' . $keyword . '%');
         }
 
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -72,7 +72,7 @@ class SubscriptionPlanReportController extends AdminBaseController
             $sheetData = array();
 
             array_push($sheetData, array_values($fields));
-            $subcriptionPeriodArr = SellerPackagePlans::getSubscriptionPeriods($this->adminLangId);
+            $subcriptionPeriodArr = SellerPackagePlans::getSubscriptionPeriods($this->siteLangId);
             $count = 1;
             while ($row = FatApp::getDb()->fetch($rs)) {
                 $arr = [];
@@ -86,7 +86,7 @@ class SubscriptionPlanReportController extends AdminBaseController
                             break;
                         case 'spackage_name':
                             $name = $row['spackage_name'] . ' ';
-                            $name .= ($row['spackage_type'] == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_Per", $this->adminLangId) : Labels::getLabel("LBL_For", $this->adminLangId);
+                            $name .= ($row['spackage_type'] == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_Per", $this->siteLangId) : Labels::getLabel("LBL_For", $this->siteLangId);
 
                             $name .= " " . (($row['spplan_interval'] > 0) ? $row['spplan_interval'] : '')
                                 . "  " . $subcriptionPeriodArr[$row['spplan_frequency']];
@@ -102,7 +102,7 @@ class SubscriptionPlanReportController extends AdminBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel("LBL_Subscription_Plan_Report", $this->adminLangId) . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel("LBL_Subscription_Plan_Report", $this->siteLangId) . '.csv', ',');
             exit;
         }
 
@@ -132,15 +132,15 @@ class SubscriptionPlanReportController extends AdminBaseController
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
-        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->adminLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
         if (!empty($fields)) {
             $frm->addHiddenField('', 'sortBy', 'spackage_name');
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
         }
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
 
         return $frm;
@@ -148,18 +148,18 @@ class SubscriptionPlanReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $spackageReportsCacheVar = FatCache::get('spackageReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $spackageReportsCacheVar = FatCache::get('spackageReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$spackageReportsCacheVar) {
             $arr = [
-                'spackage_name' => Labels::getLabel('LBL_Package_Name', $this->adminLangId),
-                'spackageSold' => Labels::getLabel('LBL_Sold', $this->adminLangId),
-                'activeSubscribers' => Labels::getLabel('LBL_Active_Subscribers', $this->adminLangId),
-                'spRenewalPendings' => Labels::getLabel('LBL_Pending_To_Renew', $this->adminLangId),
-                'spRenewals' => Labels::getLabel('LBL_Renewed', $this->adminLangId),
-                'spackageCancelled' => Labels::getLabel('LBL_Cancellation', $this->adminLangId),
-                'spplan_price' => Labels::getLabel('LBL_Package_Cost', $this->adminLangId)
+                'spackage_name' => Labels::getLabel('LBL_Package_Name', $this->siteLangId),
+                'spackageSold' => Labels::getLabel('LBL_Sold', $this->siteLangId),
+                'activeSubscribers' => Labels::getLabel('LBL_Active_Subscribers', $this->siteLangId),
+                'spRenewalPendings' => Labels::getLabel('LBL_Pending_To_Renew', $this->siteLangId),
+                'spRenewals' => Labels::getLabel('LBL_Renewed', $this->siteLangId),
+                'spackageCancelled' => Labels::getLabel('LBL_Cancellation', $this->siteLangId),
+                'spplan_price' => Labels::getLabel('LBL_Package_Cost', $this->siteLangId)
             ];
-            FatCache::set('spackageReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            FatCache::set('spackageReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {
             $arr =  unserialize($spackageReportsCacheVar);
         }

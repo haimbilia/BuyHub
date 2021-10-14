@@ -15,7 +15,7 @@ class LabelsController extends AdminBaseController
 
         $this->set('canEdit', $this->objPrivilege->canEditLanguageLabels($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_LABELS', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_LABELS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -43,7 +43,7 @@ class LabelsController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -73,7 +73,7 @@ class LabelsController extends AdminBaseController
             $cond = $srch->addCondition('lbl.label_key', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('lbl.label_caption', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
-        $srch->addCondition('lbl.label_lang_id', '=', $this->adminLangId);
+        $srch->addCondition('lbl.label_lang_id', '=', $this->siteLangId);
 
         $page = FatUtility::int($page);
         $page = (empty($page) || $page <= 0) ? 1 : $page;
@@ -110,7 +110,7 @@ class LabelsController extends AdminBaseController
 
     public function langForm($labelType = Labels::TYPE_WEB, $autoFillLangData = 0)
     {
-        $labelTypeArr = Labels::getTypeArr($this->adminLangId);
+        $labelTypeArr = Labels::getTypeArr($this->siteLangId);
 
         if (!array_key_exists($labelType, $labelTypeArr)) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -175,7 +175,7 @@ class LabelsController extends AdminBaseController
         $this->set('labelKey', $labelKey);
         $this->set('langFrm', $frm);
         $this->set('languages', Language::getAllNames());
-        $this->set('formLayout', Language::getLayoutDirection($this->adminLangId));
+        $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -192,7 +192,7 @@ class LabelsController extends AdminBaseController
 
         $labelKey = $post['label_key'];
         $labelType = FatApp::getPostedData('label_type', FatUtility::VAR_INT, Labels::TYPE_WEB);
-        $labelTypeArr = Labels::getTypeArr($this->adminLangId);
+        $labelTypeArr = Labels::getTypeArr($this->siteLangId);
 
         if (!array_key_exists($labelType, $labelTypeArr)) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -240,10 +240,10 @@ class LabelsController extends AdminBaseController
             $this->addSortingElements($frm);
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->adminLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $frm->addSelectBox(Labels::getLabel('LBL_TYPE', $this->adminLangId), 'label_type', array('-1' => Labels::getLabel('LBL_SELECT_PLATFORM', $this->adminLangId)) + Labels::getTypeArr($this->adminLangId), -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_TYPE', $this->siteLangId), 'label_type', array('-1' => Labels::getLabel('LBL_SELECT_PLATFORM', $this->siteLangId)) + Labels::getTypeArr($this->siteLangId), -1, array(), '');
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -257,7 +257,7 @@ class LabelsController extends AdminBaseController
         $frm->addHiddenField('', 'label_key', $label_key);
         $frm->addHiddenField('', 'label_type', $label_type);
         $languages = Language::getAllNames();
-        $frm->addTextbox(Labels::getLabel('LBL_Key', $this->adminLangId), 'key', $label_key);
+        $frm->addTextbox(Labels::getLabel('LBL_Key', $this->siteLangId), 'key', $label_key);
         foreach ($languages as $langId => $langName) {
             $fld = $frm->addTextArea($langName, 'label_caption' . $langId);
             $fld->requirements()->setRequired();
@@ -271,28 +271,28 @@ class LabelsController extends AdminBaseController
         foreach ($languages as $langId => $langCode) {
             $resp = Labels::updateDataToFile($langId, $langCode, $labelType, true);
             if ($resp === false) {
-                LibHelper::exitWithError(Labels::getLabel('MSG_Unable_to_update_file', $this->adminLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('MSG_Unable_to_update_file', $this->siteLangId), true);
             }
         }
-        $message = Labels::getLabel('MSG_File_successfully_updated', $this->adminLangId);
+        $message = Labels::getLabel('MSG_File_successfully_updated', $this->siteLangId);
         FatUtility::dieJsonSuccess($message);
     }
 
     private function getFormColumns(): array
     {
-        $labelsTblHeadingCols = CacheHelper::get('labelsTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $labelsTblHeadingCols = CacheHelper::get('labelsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($labelsTblHeadingCols) {
             return json_decode($labelsTblHeadingCols);
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'label_key' => Labels::getLabel('LBL_SYSTEM_CODE', $this->adminLangId),
-            'label_caption' => Labels::getLabel('LBL_CAPTION', $this->adminLangId),
-            'label_type' => Labels::getLabel('LBL_PLATFORM', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'label_key' => Labels::getLabel('LBL_SYSTEM_CODE', $this->siteLangId),
+            'label_caption' => Labels::getLabel('LBL_CAPTION', $this->siteLangId),
+            'label_type' => Labels::getLabel('LBL_PLATFORM', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION', $this->siteLangId),
         ];
-        CacheHelper::create('labelsTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('labelsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
     }
@@ -320,8 +320,8 @@ class LabelsController extends AdminBaseController
         switch ($action) {
             case 'index':
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_MANAGE_LABELS', $this->adminLangId)]
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_MANAGE_LABELS', $this->siteLangId)]
                 ];
         }
         return $this->nodes;

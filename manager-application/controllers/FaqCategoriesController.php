@@ -36,7 +36,7 @@ class FaqCategoriesController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
-        $srch = FaqCategory::getSearchObject($this->adminLangId);
+        $srch = FaqCategory::getSearchObject($this->siteLangId);
 
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('fc.faqcat_identifier', 'like', '%' . $post['keyword'] . '%');
@@ -133,10 +133,10 @@ class FaqCategoriesController extends AdminBaseController
             }
         } else {
             $catId = $record->getMainTableRecordId();
-            $newTabLangId = $this->adminLangId;
+            $newTabLangId = $this->siteLangId;
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Category_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Category_Setup_Successful', $this->siteLangId));
         $this->set('catId', $catId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -165,7 +165,7 @@ class FaqCategoriesController extends AdminBaseController
     FatUtility::dieJsonError( Message::getHtml() );
     }
 
-    $this->set('msg', Labels::getLabel('LBL_Category_Setup_Successful',$this->adminLangId));
+    $this->set('msg', Labels::getLabel('LBL_Category_Setup_Successful',$this->siteLangId));
     $this->_template->render(false, false, 'json-success.php');
     } */
 
@@ -261,7 +261,7 @@ class FaqCategoriesController extends AdminBaseController
             }
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Category_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Category_Setup_Successful', $this->siteLangId));
         $this->set('catId', $faqcat_id);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -294,7 +294,7 @@ class FaqCategoriesController extends AdminBaseController
 
         if (empty($faqcatIdsArr)) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -313,7 +313,7 @@ class FaqCategoriesController extends AdminBaseController
         $faqcatId = FatUtility::int($faqcatId);
         if (1 > $faqcatId) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
         $faqCatObj = new FaqCategory($faqcatId);
@@ -335,7 +335,7 @@ class FaqCategoriesController extends AdminBaseController
                 Message::addErrorMessage($faqCatObj->getError());
                 FatUtility::dieJsonError(Message::getHtml());
             }
-            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Order_Updated_Successfully', $this->adminLangId));
+            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
         }
     }
 
@@ -380,7 +380,7 @@ class FaqCategoriesController extends AdminBaseController
         $faqcatIdsArr = FatUtility::int(FatApp::getPostedData('faqcat_ids'));
         if (empty($faqcatIdsArr) || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -401,7 +401,7 @@ class FaqCategoriesController extends AdminBaseController
         $faqcatId = FatUtility::int($faqcatId);
         if (1 > $faqcatId || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -415,9 +415,9 @@ class FaqCategoriesController extends AdminBaseController
     public function getSearchForm()
     {
         $frm = new Form('frmSearch');
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -432,17 +432,17 @@ class FaqCategoriesController extends AdminBaseController
     $selectedOptions = $cmsPagesToFaq;
     }
     $frm = new Form('frmFaqToCms');
-    $cPagesArr = ContentPage::getPagesForSelectBox($this->adminLangId);
-    $frm->addSelectBox(Labels::getLabel('LBL_CMS_Pages',$this->adminLangId), 'cms_pages[]', $cPagesArr, $selectedOptions,array('multiple'=>'multiple','class'=>'multiple--select'),'Select');
+    $cPagesArr = ContentPage::getPagesForSelectBox($this->siteLangId);
+    $frm->addSelectBox(Labels::getLabel('LBL_CMS_Pages',$this->siteLangId), 'cms_pages[]', $cPagesArr, $selectedOptions,array('multiple'=>'multiple','class'=>'multiple--select'),'Select');
 
-    $frm->addSubmitButton('', 'btn_submit',Labels::getLabel('LBL_Save_Changes',$this->adminLangId));
+    $frm->addSubmitButton('', 'btn_submit',Labels::getLabel('LBL_Save_Changes',$this->siteLangId));
     return $frm;
     } */
 
     private function getForm()
     {
         $this->objPrivilege->canEditFaqCategories();
-        $langId = $this->adminLangId;
+        $langId = $this->siteLangId;
 
         $frm = new Form('frmFaqCat');
         $frm->addHiddenField('', 'faqcat_id');
@@ -469,21 +469,21 @@ class FaqCategoriesController extends AdminBaseController
 
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $languages, $lang_id, array(), '');
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
         } else {
             $lang_id = array_key_first($languages);
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
-        $frm->addRequiredField(Labels::getLabel('LBL_Category_Name', $this->adminLangId), 'faqcat_name');
+        $frm->addRequiredField(Labels::getLabel('LBL_Category_Name', $this->siteLangId), 'faqcat_name');
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
 
@@ -492,7 +492,7 @@ class FaqCategoriesController extends AdminBaseController
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE');
         $post = FatApp::getPostedData();
 
-        $srch = FaqCategory::getSearchObject($this->adminLangId);
+        $srch = FaqCategory::getSearchObject($this->siteLangId);
         $srch->addMultipleFields(array('faqcat_id, IFNULL(faqcat_name, faqcat_identifier) as faqcat_name'));
 
         if (!empty($post['keyword'])) {

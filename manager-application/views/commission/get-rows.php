@@ -4,7 +4,7 @@ $theDay = '';
 $count = 1;
 $lastDate = isset($postedData['reference']) ? date('Y-m-d', strtotime($postedData['reference'])) : '';
 foreach ($arrListing as $sn => $row) {
-    $headTitle = HtmlHelper::getTheDay($row['csh_added_on'], $adminLangId);
+    $headTitle = HtmlHelper::getTheDay($row['csh_added_on'], $siteLangId);
     $canAddHead = (empty($lastDate) || (!empty($lastDate) && $lastDate != date('Y-m-d', strtotime($row['csh_added_on']))));
     if ($theDay != $headTitle && $canAddHead) {
         $theDay = $headTitle;
@@ -28,18 +28,18 @@ foreach ($arrListing as $sn => $row) {
                         </span>
                         <?php if (!empty($row['prodcat_name'])) { ?>
                             <span class="timeline-v4__item-text">
-                                <b><?php echo Labels::getLabel('LBL_Category', $adminLangId); ?>:</b> <?php echo  CommonHelper::displayText($row['prodcat_name']); ?>
+                                <b><?php echo Labels::getLabel('LBL_Category', $siteLangId); ?>:</b> <?php echo  CommonHelper::displayText($row['prodcat_name']); ?>
                             </span>
                         <?php } ?>
                         <?php if (!empty($row['product_name'])) { ?>
                             <span class="timeline-v4__item-text">
-                                <b><?php echo Labels::getLabel('LBL_Product', $adminLangId); ?>:</b> <?php echo CommonHelper::displayText($row['product_name']); ?>
+                                <b><?php echo Labels::getLabel('LBL_Product', $siteLangId); ?>:</b> <?php echo CommonHelper::displayText($row['product_name']); ?>
                             </span>
                         <?php } ?>
                         <?php if (!empty($row['vendor'])) { ?>
                             <span class="timeline-v4__item-user-name">
                                 <a href="#" class="link link--dark timeline-v4__item-link">
-                                    <?php echo Labels::getLabel('LBL_BY', $adminLangId); ?> <?php echo CommonHelper::displayText($row['vendor']); ?>
+                                    <?php echo Labels::getLabel('LBL_BY', $siteLangId); ?> <?php echo CommonHelper::displayText($row['vendor']); ?>
                                 </a>
                             </span>
                         <?php } ?>

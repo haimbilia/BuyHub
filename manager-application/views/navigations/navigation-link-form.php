@@ -20,23 +20,23 @@ $nlink_urlFld->setWrapperAttribute('id', 'nlink_url_div');
 <section class="section">
     <div class="sectionhead">
 
-        <h4><?php echo Labels::getLabel('LBL_Navigation_Link_Setup', $adminLangId); ?>
+        <h4><?php echo Labels::getLabel('LBL_Navigation_Link_Setup', $siteLangId); ?>
         </h4>
     </div>
     <div class="sectionbody space">
         <div class="row">
             <div class="col-sm-12">
-                <h1><?php //echo Labels::getLabel('LBL_Navigation_Link_Setup',$adminLangId);?>
+                <h1><?php //echo Labels::getLabel('LBL_Navigation_Link_Setup',$siteLangId);?>
                 </h1>
                 <div class="tabs_nav_container responsive flat">
                     <ul class="tabs_nav">
                         <li><a class="active" href="javascript:void(0)"
-                                onclick="navigationLinkForm(<?php echo $nav_id . ',' . $nlink_id ?>);"><?php echo Labels::getLabel('LBL_General', $adminLangId); ?></a>
+                                onclick="navigationLinkForm(<?php echo $nav_id . ',' . $nlink_id ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a>
                         </li>
                         <li
                             class="<?php echo (0 == $nlink_id) ? 'fat-inactive' : ''; ?>">
                             <a href="javascript:void(0);" <?php echo (0 < $nlink_id) ? "onclick='navigationLinkLangForm(" . $nav_id . "," . $nlink_id . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                                <?php echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
+                                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
                             </a>
                         </li>
                     </ul>

@@ -18,7 +18,7 @@ $otherButtons = isset($otherButtons) ? $otherButtons : []; ?>
         <?php
         $data = [
             'canEdit' => $canEdit,
-            'adminLangId' => $adminLangId,
+            'siteLangId' => $siteLangId,
             'newRecordBtn' => $newRecordBtn,
             'statusButtons' => $statusButtons,
             'deleteButton' => $deleteButton,

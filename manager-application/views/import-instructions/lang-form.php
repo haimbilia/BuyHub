@@ -11,7 +11,7 @@ $langFld = $langFrm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this.value);");
 
 $fld = $langFrm->getField('epage_content');
-$fld->htmlAfterField = '<a class="btn btn-outline-brand btn-sm" onClick="resetToDefaultContent();" href="javascript:void(0)">' . Labels::getLabel('LBL_RESET_EDITOR_CONTENT_TO_DEFAULT', $adminLangId) . '</a>';
+$fld->htmlAfterField = '<a class="btn btn-outline-brand btn-sm" onClick="resetToDefaultContent();" href="javascript:void(0)">' . Labels::getLabel('LBL_RESET_EDITOR_CONTENT_TO_DEFAULT', $siteLangId) . '</a>';
 ?>
 <!-- editor's default content[ -->
 
@@ -22,7 +22,7 @@ $fld->htmlAfterField = '<a class="btn btn-outline-brand btn-sm" onClick="resetTo
 
 <div class="modal-header">
     <h5 class="modal-title">
-        <?php echo Labels::getLabel('LBL_SETUP_IMPORT_INSTRUCTIONS', $adminLangId); ?>
+        <?php echo Labels::getLabel('LBL_SETUP_IMPORT_INSTRUCTIONS', $siteLangId); ?>
     </h5>
 </div>
 <div class="modal-body form-edit"> 
@@ -35,7 +35,7 @@ $fld->htmlAfterField = '<a class="btn btn-outline-brand btn-sm" onClick="resetTo
                 <div class="col-auto mb-4">
                     <input class="btn btn-outline-brand btn-sm" 
                         type="button" 
-                        value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" 
+                        value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" 
                         onClick="editLangData(<?php echo $recordId; ?>, <?php echo $lang_id; ?>, 1)">
                 </div>
             </div>
@@ -47,7 +47,7 @@ $fld->htmlAfterField = '<a class="btn btn-outline-brand btn-sm" onClick="resetTo
         <div class="row">
             <div class="col-auto">
                 <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
-                    <?php echo Labels::getLabel('LBL_UPDATE', $adminLangId); ?>
+                    <?php echo Labels::getLabel('LBL_UPDATE', $siteLangId); ?>
                 </button>
             </div>
         </div>

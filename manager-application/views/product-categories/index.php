@@ -8,9 +8,9 @@ $controller = str_replace('Controller', '', FatApp::getController());
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
-                        'adminLangId' => $adminLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_CATEGORIES', $adminLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_CATEGORIES', $adminLangId), ['{COUNT}' => $recordCount]),
+                        'siteLangId' => $siteLangId,
+                        'cardHeadTitle' => Labels::getLabel('LBL_CATEGORIES', $siteLangId),
+                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_CATEGORIES', $siteLangId), ['{COUNT}' => $recordCount]),
                         'newRecordBtn' => true
                     ];
 
@@ -24,7 +24,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         <h3 class="card-head-label">
                             <span class="card-head-title">
                                 <?php 
-                                    $title = Labels::getLabel('LBL_Total_{CAT-COUNT}_CATEGORIES', $adminLangId);
+                                    $title = Labels::getLabel('LBL_Total_{CAT-COUNT}_CATEGORIES', $siteLangId);
                                     echo CommonHelper::replaceStringData($title, ['{CAT-COUNT}' => $recordCount]);
                                 ?>
                             </span>

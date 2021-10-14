@@ -5,7 +5,7 @@ HtmlHelper::formatFormFields($logoFrm);
 $logoFld = $logoFrm->getField('logo');
 $logoFld->addFieldTagAttribute('onChange', 'loadImageCropper(this)');
 
-$htmlAfterField = '<small class="text--small logoPreferredDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $adminLangId), '500 x 500') . '</small>';
+$htmlAfterField = '<small class="text--small logoPreferredDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '500 x 500') . '</small>';
 $htmlAfterField .= '<div id="logoListingJs"></div>';
 $logoFld->htmlAfterField = $htmlAfterField;
 /* Logo Image */
@@ -15,7 +15,7 @@ $logoFld->htmlAfterField = $htmlAfterField;
 HtmlHelper::formatFormFields($imageFrm);
 $imageFld = $imageFrm->getField('image');
 $imageFld->addFieldTagAttribute('onChange', 'loadImageCropper(this)');
-$htmlAfterField = '<div style="margin-top:15px;" class="preferredDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $adminLangId), '2000 x 500') . '</div>';
+$htmlAfterField = '<div style="margin-top:15px;" class="preferredDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500') . '</div>';
 $htmlAfterField .= '<div id="image-listing"></div>';
 $imageFld->htmlAfterField = $htmlAfterField;
 /* Image Form */
@@ -25,24 +25,24 @@ $otherButtons = [
        'attr' => [
             'href' => 'javascript:void(0)',
             'onclick' => 'mediaForm(' . $recordId . ')',
-            'title' => Labels::getLabel('LBL_MEDIA', $adminLangId),
+            'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         ],
-        'label' => Labels::getLabel('LBL_MEDIA', $adminLangId),
+        'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         'isActive' => true
     ]
 ]; 
 
-$formTitle = Labels::getLabel('LBL_BRAND_SETUP', $adminLangId);
+$formTitle = Labels::getLabel('LBL_BRAND_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
 
     <div class="form-edit-body loaderContainerJs">
         <div class="section section--first">
-            <h3 class="section__title"><?php echo Labels::getLabel('LBL_LOGO', $adminLangId); ?></h3>
+            <h3 class="section__title"><?php echo Labels::getLabel('LBL_LOGO', $siteLangId); ?></h3>
             <div class="section__body">
                 <?php echo $logoFrm->getFormHtml(); ?>
             </div>
             <div class="separator separator--border-dashed separator--space-lg"></div>
-            <h3 class="section__title"><?php echo Labels::getLabel('LBL_IMAGE', $adminLangId); ?></h3>
+            <h3 class="section__title"><?php echo Labels::getLabel('LBL_IMAGE', $siteLangId); ?></h3>
             <div class="section__body">
                 <?php echo $imageFrm->getFormHtml(); ?>
             </div>
@@ -53,7 +53,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
         <div class="row">
             <div class="col-auto">
                 <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
-                    <?php echo Labels::getLabel('LBL_UPDATE', $adminLangId); ?>
+                    <?php echo Labels::getLabel('LBL_UPDATE', $siteLangId); ?>
                 </button>
             </div>
         </div>

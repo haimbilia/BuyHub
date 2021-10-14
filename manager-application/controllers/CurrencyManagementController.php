@@ -15,7 +15,7 @@ class CurrencyManagementController extends AdminBaseController
 
         $this->set('canEdit', $this->objPrivilege->canEditCurrencyManagement($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_CURRENCIES', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_CURRENCIES', $this->siteLangId));
         $this->_template->addJs('js/jquery.tablednd.js');
         $this->getListingData();
 
@@ -45,7 +45,7 @@ class CurrencyManagementController extends AdminBaseController
         $sortBy = 'currency_code' == $sortBy ? 'currency_name' : $sortBy;
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -54,7 +54,7 @@ class CurrencyManagementController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
-        $srch = Currency::getSearchObject($this->adminLangId, false);
+        $srch = Currency::getSearchObject($this->siteLangId, false);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
 
@@ -72,7 +72,7 @@ class CurrencyManagementController extends AdminBaseController
         $records = FatApp::getDb()->fetchAll($rs);
 
         $defaultCurrencyId = FatApp::getConfig("CONF_CURRENCY", FatUtility::VAR_INT, 1);
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set("defaultCurrencyId", $defaultCurrencyId);
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
@@ -125,7 +125,7 @@ class CurrencyManagementController extends AdminBaseController
         $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);    
         $this->set('frm', $frm);
-        $this->set('formTitle', Labels::getLabel('LBL_CURRENCY_SETUP', $this->adminLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_CURRENCY_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -166,7 +166,7 @@ class CurrencyManagementController extends AdminBaseController
         $this->objPrivilege->canEditCurrencyManagement();
         $this->modelObj = (new ReflectionClass('Currency'))->newInstanceArgs($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_CURRENCY_SETUP', $this->adminLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_CURRENCY_SETUP', $this->siteLangId));
     }
 
     public function updateOrder()
@@ -180,7 +180,7 @@ class CurrencyManagementController extends AdminBaseController
                 LibHelper::exitWithError($currencyObj->getError(), true);
             }
 
-            $this->set('msg', Labels::getLabel('LBL_Order_Updated_Successfully', $this->adminLangId));
+            $this->set('msg', Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
     }
@@ -189,22 +189,22 @@ class CurrencyManagementController extends AdminBaseController
     {
         $frm = new Form('frmCurrency');
         $frm->addHiddenField('', 'currency_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_Currency_Name', $this->adminLangId), 'currency_name');
-        $frm->addRequiredField(Labels::getLabel('LBL_Currency_code', $this->adminLangId), 'currency_code');
-        $frm->addTextbox(Labels::getLabel('LBL_Currency_Symbol_Left', $this->adminLangId), 'currency_symbol_left');
-        $frm->addTextbox(Labels::getLabel('LBL_Currency_Symbol_Right', $this->adminLangId), 'currency_symbol_right');
-        $fld = $frm->addFloatField(Labels::getLabel('LBL_Currency_Conversion_Value', $this->adminLangId), 'currency_value');
+        $frm->addRequiredField(Labels::getLabel('LBL_Currency_Name', $this->siteLangId), 'currency_name');
+        $frm->addRequiredField(Labels::getLabel('LBL_Currency_code', $this->siteLangId), 'currency_code');
+        $frm->addTextbox(Labels::getLabel('LBL_Currency_Symbol_Left', $this->siteLangId), 'currency_symbol_left');
+        $frm->addTextbox(Labels::getLabel('LBL_Currency_Symbol_Right', $this->siteLangId), 'currency_symbol_right');
+        $fld = $frm->addFloatField(Labels::getLabel('LBL_Currency_Conversion_Value', $this->siteLangId), 'currency_value');
         if ($defaultCurrency) {
-            $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_This_is_your_default_currency', $this->adminLangId) . '</small>';
+            $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_This_is_your_default_currency', $this->siteLangId) . '</small>';
         }
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'currency_active', $activeInactiveArr, '', array(), '');
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'currency_active', $activeInactiveArr, '', array(), '');
 
         $languageArr = Language::getDropDownList();        
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, ''); 
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         } 
 
         return $frm;
@@ -214,8 +214,8 @@ class CurrencyManagementController extends AdminBaseController
     {
         $frm = new Form('frmCurrencyLang');
         $frm->addHiddenField('', 'currency_id', $currencyId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Currency_Name', $this->adminLangId), 'currency_name');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Currency_Name', $this->siteLangId), 'currency_name');
         return $frm;
     }
 
@@ -248,7 +248,7 @@ class CurrencyManagementController extends AdminBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('currency_ids'));
         if (empty($recordIdsArr) || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -267,7 +267,7 @@ class CurrencyManagementController extends AdminBaseController
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $obj = new Currency($recordId);
@@ -278,22 +278,22 @@ class CurrencyManagementController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $currencyTblHeadingCols = CacheHelper::get('currencyTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $currencyTblHeadingCols = CacheHelper::get('currencyTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($currencyTblHeadingCols) {
             return json_decode($currencyTblHeadingCols);
         }
 
         $arr = [
             'dragdrop' => '',
-            'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'currency_code' => Labels::getLabel('LBL_Currency', $this->adminLangId),
-            'currency_symbol_left' => Labels::getLabel('LBL_Symbol_Left', $this->adminLangId),
-            'currency_symbol_right' => Labels::getLabel('LBL_Symbol_Right', $this->adminLangId),
-            'currency_active' => Labels::getLabel('LBL_Status', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'currency_code' => Labels::getLabel('LBL_Currency', $this->siteLangId),
+            'currency_symbol_left' => Labels::getLabel('LBL_Symbol_Left', $this->siteLangId),
+            'currency_symbol_right' => Labels::getLabel('LBL_Symbol_Right', $this->siteLangId),
+            'currency_active' => Labels::getLabel('LBL_Status', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('currencyTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('currencyTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
     }
@@ -329,8 +329,8 @@ class CurrencyManagementController extends AdminBaseController
         switch ($action) {
             case 'index':
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_CURRENCY', $this->adminLangId)]
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_CURRENCY', $this->siteLangId)]
                 ];
         }
         return $this->nodes;

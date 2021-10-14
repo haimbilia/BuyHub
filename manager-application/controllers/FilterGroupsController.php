@@ -30,9 +30,9 @@ class FilterGroupsController extends AdminBaseController
     public function getSearchForm()
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('class' => 'search-input'));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -64,7 +64,7 @@ class FilterGroupsController extends AdminBaseController
         $srch->joinTable(
             FilterGroup::DB_TBL . '_lang',
             'LEFT OUTER JOIN',
-            'fgl.filtergrouplang_filtergroup_id = fg.filtergroup_id AND fgl.filtergrouplang_lang_id = ' . $this->adminLangId,
+            'fgl.filtergrouplang_filtergroup_id = fg.filtergroup_id AND fgl.filtergrouplang_lang_id = ' . $this->siteLangId,
             'fgl'
         );
         $srch->addMultipleFields(array("fgl.filtergroup_name"));
@@ -124,7 +124,7 @@ class FilterGroupsController extends AdminBaseController
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
         
-        $this->set('msg', Labels::getLabel('LBL_Filter_Group_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Filter_Group_Setup_Successful', $this->siteLangId));
         $this->set('filterGroupId', $filterGroupId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -177,7 +177,7 @@ class FilterGroupsController extends AdminBaseController
             }
         }
     
-        $this->set('msg', Labels::getLabel('LBL_Filter_Group_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Filter_Group_Setup_Successful', $this->siteLangId));
         $this->set('filterGroupId', $filtergroup_id);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -209,16 +209,16 @@ class FilterGroupsController extends AdminBaseController
         $this->objPrivilege->canEditFilterGroups();
         $filtergroup_id = FatUtility::int($filtergroup_id);
 
-        $action = Labels::getLabel('LBL_Add_New', $this->adminLangId);
+        $action = Labels::getLabel('LBL_Add_New', $this->siteLangId);
         if ($filtergroup_id > 0) {
-            $action = Labels::getLabel('LBL_Update', $this->adminLangId);
+            $action = Labels::getLabel('LBL_Update', $this->siteLangId);
         }
         $filterGroupObj = new FilterGroup();
         $frm = new Form('frmFilterGroups', array('id' => 'frmFilterGroups'));
         $frm->addHiddenField('', 'filtergroup_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_Filter_Group_Identifier', $this->adminLangId), 'filtergroup_identifier');
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Filter_Group_Active', $this->adminLangId), 'filtergroup_active', $activeInactiveArr, '', array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Filter_Group_Identifier', $this->siteLangId), 'filtergroup_identifier');
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Filter_Group_Active', $this->siteLangId), 'filtergroup_active', $activeInactiveArr, '', array(), '');
         $frm->addSubmitButton('', 'btn_submit', $action);
         return $frm;
     }
@@ -262,17 +262,17 @@ class FilterGroupsController extends AdminBaseController
     {
         $frm = new Form('frmFilterGroupLang', array('id' => 'frmFilterGroupLang'));
         $frm->addHiddenField('', 'filtergroup_id', $filtergroup_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Brand_Name', $this->adminLangId), 'filtergroup_name');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Brand_Name', $this->siteLangId), 'filtergroup_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
                 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
     

@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <button class="help-btn btn btn-light" data-toggle="modal" data-target="#help">
-    <span class="help_label"><?php echo Labels::getLabel('LBL_HELP', $adminLangId); ?></span>
+    <span class="help_label"><?php echo Labels::getLabel('LBL_HELP', $siteLangId); ?></span>
 </button>
 
 <div class="modal fixed-right fade" id="help" tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">

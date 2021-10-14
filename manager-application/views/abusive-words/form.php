@@ -10,7 +10,7 @@ $fld->addFieldTagAttribute( 'onChange', 'changeFormLayOut(this);' );
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
-        <?php echo Labels::getLabel('LBL_ABUSIVE_KEYWORD_SETUP', $adminLangId); ?>
+        <?php echo Labels::getLabel('LBL_ABUSIVE_KEYWORD_SETUP', $siteLangId); ?>
     </h5>
 </div>
 <div class="modal-body form-edit">
@@ -24,9 +24,9 @@ $fld->addFieldTagAttribute( 'onChange', 'changeFormLayOut(this);' );
                 <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
                     <?php 
                         if (0 < $recordId) {
-                            echo Labels::getLabel('LBL_UPDATE', $adminLangId); 
+                            echo Labels::getLabel('LBL_UPDATE', $siteLangId); 
                         } else {
-                            echo Labels::getLabel('LBL_SAVE', $adminLangId); 
+                            echo Labels::getLabel('LBL_SAVE', $siteLangId); 
                         }
                     ?>
                 </button>

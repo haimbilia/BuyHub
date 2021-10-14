@@ -160,7 +160,7 @@ class AdminUsersController extends AdminBaseController
             $records = FatApp::getDb()->fetchAll($rs);
         }
 
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set("arrListing", $records);
 
         $this->set('recordCount', $srch->recordCount());
@@ -229,7 +229,7 @@ class AdminUsersController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->siteLangId));
         $this->set('adminId', $adminId);
 
         $this->_template->render(false, false, 'json-success.php');
@@ -288,7 +288,7 @@ class AdminUsersController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Password_Changed_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Password_Changed_Successfully', $this->siteLangId));
         $this->set('adminId', $adminId);
 
         $this->_template->render(false, false, 'json-success.php');
@@ -325,7 +325,7 @@ class AdminUsersController extends AdminBaseController
         $adminIdsArr = FatUtility::int(FatApp::getPostedData('admin_ids'));
         if (empty($adminIdsArr) || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -346,7 +346,7 @@ class AdminUsersController extends AdminBaseController
         $adminId = FatUtility::int($adminId);
         if (1 > $adminId || -1 == $status) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -393,7 +393,7 @@ class AdminUsersController extends AdminBaseController
         }
 
         $permissionModules = AdminPrivilege::getPermissionModulesArr();
-        /* $permissionModules = array(0 => Labels::getLabel('MSG_All_Modules',$this->adminLangId)) + $permissionModules; */
+        /* $permissionModules = array(0 => Labels::getLabel('MSG_All_Modules',$this->siteLangId)) + $permissionModules; */
         $this->set('arrListing', $permissionModules);
         $this->set('userData', $userData);
         $this->set('canViewAdminPermissions', $this->objPrivilege->canViewAdminPermissions(AdminAuthentication::getLoggedAdminId(), true));
@@ -440,7 +440,7 @@ class AdminUsersController extends AdminBaseController
             }
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Updated_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Updated_Successfully', $this->siteLangId));
         $this->set('moduleId', $moduleId);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -459,30 +459,30 @@ class AdminUsersController extends AdminBaseController
 
         $frm = new Form('frmAdminUser');
         $frm->addHiddenField('', 'admin_id', $adminId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Full_Name', $this->adminLangId), 'admin_name');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Username', $this->adminLangId), 'admin_username', '', array('id' => 'admin_username'));
+        $frm->addRequiredField(Labels::getLabel('LBL_Full_Name', $this->siteLangId), 'admin_name');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'admin_username', '', array('id' => 'admin_username'));
         $fld->setUnique(AdminUsers::DB_TBL, AdminUsers::DB_TBL_PREFIX . 'username', 'admin_id', 'admin_id', 'admin_id');
         $fld->requirements()->setRequired();
         $fld->requirements()->setUsername();
-        $emailFld = $frm->addRequiredField(Labels::getLabel('LBL_Email', $this->adminLangId), 'admin_email', '', array('id' => 'admin_username'));
+        $emailFld = $frm->addRequiredField(Labels::getLabel('LBL_Email', $this->siteLangId), 'admin_email', '', array('id' => 'admin_username'));
         $emailFld->setUnique(AdminUsers::DB_TBL, AdminUsers::DB_TBL_PREFIX . 'email', 'admin_id', 'admin_id', 'admin_id');
 
         if ($adminId == 0) {
-            $fld = $frm->addPasswordField(Labels::getLabel('LBL_Password', $this->adminLangId), 'password');
+            $fld = $frm->addPasswordField(Labels::getLabel('LBL_Password', $this->siteLangId), 'password');
             $fld->requirements()->setRequired();
             $fld->requirements()->setPassword();
-            $fld = $frm->addPasswordField(Labels::getLabel('LBL_Confirm_Password', $this->adminLangId), 'confirm_password');
+            $fld = $frm->addPasswordField(Labels::getLabel('LBL_Confirm_Password', $this->siteLangId), 'confirm_password');
             $fld->requirements()->setRequired();
             $fld->requirements()->setCompareWith('password', 'eq', '');
         }
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         if ($adminId != 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'admin_active', $activeInactiveArr, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'admin_active', $activeInactiveArr, '', array(), '');
         }
 
-        $frm->addCheckBox(Labels::getLabel('LBL_Send_Email_Notification', $this->adminLangId), 'admin_email_notification', applicationConstants::YES, array(), false, applicationConstants::NO);
+        $frm->addCheckBox(Labels::getLabel('LBL_Send_Email_Notification', $this->siteLangId), 'admin_email_notification', applicationConstants::YES, array(), false, applicationConstants::NO);
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -492,9 +492,9 @@ class AdminUsersController extends AdminBaseController
         $permissionArr = AdminPrivilege::getPermissionArr();
         $frm = new Form('frmAllAccess');
         $frm->setFormTagAttribute('class', 'web_form form_horizontal');
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Select_permission_for_all_modules', $this->adminLangId), 'permissionForAll', $permissionArr, '', array('class' => 'permissionForAll'), Labels::getLabel('LBL_Select', $this->adminLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Select_permission_for_all_modules', $this->siteLangId), 'permissionForAll', $permissionArr, '', array('class' => 'permissionForAll'), Labels::getLabel('LBL_Select', $this->siteLangId));
         $fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Apply_to_All', $this->adminLangId), array('onclick' => 'updatePermission(0);return false;'));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Apply_to_All', $this->siteLangId), array('onclick' => 'updatePermission(0);return false;'));
         return $frm;
     }
 
@@ -502,13 +502,13 @@ class AdminUsersController extends AdminBaseController
     {
         $frm = new Form('frmAdminUserChangePassword');
         $frm->addHiddenField('', 'admin_id', $adminId);
-        $fld = $frm->addPasswordField(Labels::getLabel('LBL_New_Password', $this->adminLangId), 'password');
+        $fld = $frm->addPasswordField(Labels::getLabel('LBL_New_Password', $this->siteLangId), 'password');
         $fld->requirements()->setRequired(true);
         $fld->requirements()->setLength(4, 20);
-        $fld = $frm->addPasswordField(Labels::getLabel('LBL_Confirm_Password', $this->adminLangId), 'confirm_password');
+        $fld = $frm->addPasswordField(Labels::getLabel('LBL_Confirm_Password', $this->siteLangId), 'confirm_password');
         $fld->requirements()->setRequired();
         $fld->requirements()->setCompareWith('password', 'eq', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 }

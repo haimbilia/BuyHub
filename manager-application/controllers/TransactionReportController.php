@@ -31,7 +31,7 @@ class TransactionReportController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_DESC;
         }
 
@@ -67,7 +67,7 @@ class TransactionReportController extends AdminBaseController
             $cond = $srch->addCondition('cast( utxn.`utxn_date` as date)', '<=', $toDate, 'and', true);
         }
 
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -85,7 +85,7 @@ class TransactionReportController extends AdminBaseController
 
             array_push($sheetData, array_values($fields));
             $count = 1;
-            $statusArr = Transactions::getStatusArr($this->adminLangId);
+            $statusArr = Transactions::getStatusArr($this->siteLangId);
             while ($row = FatApp::getDb()->fetch($rs)) {
                 $arr = [];
                 foreach ($fields as $key => $val) {
@@ -121,7 +121,7 @@ class TransactionReportController extends AdminBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel("LBL_Transaction_Report", $this->adminLangId) . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel("LBL_Transaction_Report", $this->siteLangId) . '.csv', ',');
             exit;
         }
 
@@ -151,21 +151,21 @@ class TransactionReportController extends AdminBaseController
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
-        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->adminLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
 
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
 
         if (!empty($fields)) {
             $frm->addHiddenField('', 'sortBy', 'utxn_date');
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_DESC);
             $frm->addHiddenField('', 'reportColumns', '');
-            // $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
-            // $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  '');
+            // $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
+            // $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  '');
         }
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
 
         return $frm;
@@ -173,20 +173,20 @@ class TransactionReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $transcationReportsCacheVar = FatCache::get('transcationReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $transcationReportsCacheVar = FatCache::get('transcationReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$transcationReportsCacheVar) {
             $arr = [
-                'utxn_date' => Labels::getLabel('LBL_Date', $this->adminLangId),
-                'utxn_id' => Labels::getLabel('LBL_Transaction_ID', $this->adminLangId),
-                'utxn_status' => Labels::getLabel('LBL_Payment_Status', $this->adminLangId),
-                'utxn_order_id' => Labels::getLabel('LBL_Order_Id', $this->adminLangId),
-                'user_name' => Labels::getLabel('LBL_Name', $this->adminLangId),
-                'utxn_credit' => Labels::getLabel('LBL_Credit', $this->adminLangId),
-                'utxn_debit' => Labels::getLabel('LBL_Debit', $this->adminLangId),
-                'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->adminLangId),
-                'utxn_comments' => Labels::getLabel('LBL_Comments', $this->adminLangId),
+                'utxn_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
+                'utxn_id' => Labels::getLabel('LBL_Transaction_ID', $this->siteLangId),
+                'utxn_status' => Labels::getLabel('LBL_Payment_Status', $this->siteLangId),
+                'utxn_order_id' => Labels::getLabel('LBL_Order_Id', $this->siteLangId),
+                'user_name' => Labels::getLabel('LBL_Name', $this->siteLangId),
+                'utxn_credit' => Labels::getLabel('LBL_Credit', $this->siteLangId),
+                'utxn_debit' => Labels::getLabel('LBL_Debit', $this->siteLangId),
+                'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->siteLangId),
+                'utxn_comments' => Labels::getLabel('LBL_Comments', $this->siteLangId),
             ];
-            FatCache::set('transcationReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            FatCache::set('transcationReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {
             $arr =  unserialize($transcationReportsCacheVar);
         }

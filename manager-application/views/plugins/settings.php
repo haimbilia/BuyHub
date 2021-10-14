@@ -3,7 +3,7 @@
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form form-edit');
 $frm->setFormTagAttribute('onsubmit', 'setupPluginsSettings(this); return(false);');
-$formTitle = CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $adminLangId), ['{PLUGIN-NAME}' => $identifier]);
+$formTitle = CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $siteLangId), ['{PLUGIN-NAME}' => $identifier]);
 ?>
 
 <div class="modal-header">
@@ -20,7 +20,7 @@ $formTitle = CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}
         <div class="row">
             <div class="col-auto">
                 <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
-                    <?php  echo Labels::getLabel('LBL_SAVE', $adminLangId); ?>
+                    <?php  echo Labels::getLabel('LBL_SAVE', $siteLangId); ?>
                 </button>
             </div>
         </div>

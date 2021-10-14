@@ -17,7 +17,7 @@
     ?>
 </div>
 <div class="card-foot">
-    <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_UPDATE', $adminLangId), 'button', '', '', "updateSettings('frmImportExportSetting')"); ?>
+    <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_UPDATE', $siteLangId), 'button', '', '', "updateSettings('frmImportExportSetting')"); ?>
 </div>
 <script>
     $(document).ready(function() {

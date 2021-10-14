@@ -30,9 +30,9 @@ class CategoryRequestsController extends AdminBaseController
     public function getSearchForm()
     {
         $frm = new Form('frmCategoryReqSearch', array('id' => 'frmcategoryReqSearch'));
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '', array('class' => 'search-input'));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearCategoryRequestSearch();'));
+        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearCategoryRequestSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -48,7 +48,7 @@ class CategoryRequestsController extends AdminBaseController
         $post = $searchForm->getFormDataFromArray($data);
 
         /* $categoryReqObj = new CategoryRequest(); */
-        $srch = CategoryRequest::getSearchObject($this->adminLangId);
+        $srch = CategoryRequest::getSearchObject($this->siteLangId);
         $srch->addFld('cat.*');
 
         if (!empty($post['keyword'])) {
@@ -67,7 +67,7 @@ class CategoryRequestsController extends AdminBaseController
         if ($rs) {
             $records = FatApp::getDb()->fetchAll($rs);
         }
-        $statusArr = CategoryRequest::getCategoryReqStatusArr($this->adminLangId);
+        $statusArr = CategoryRequest::getCategoryReqStatusArr($this->siteLangId);
         $this->set('statusArr', $statusArr);
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
@@ -81,7 +81,7 @@ class CategoryRequestsController extends AdminBaseController
     public function form($categoryReqId = 0)
     {
         $this->objPrivilege->canEditCategoryRequests();
-        $statusArr = CategoryRequest::getCategoryReqStatusArr($this->adminLangId);
+        $statusArr = CategoryRequest::getCategoryReqStatusArr($this->siteLangId);
         $categoryReqId = FatUtility::int($categoryReqId);
         $frm = $this->getForm($categoryReqId);
 
@@ -107,12 +107,12 @@ class CategoryRequestsController extends AdminBaseController
         $frm = new Form('frmcategoryReq', array('id' => 'frmCategoryReq'));
         $frm->addHiddenField('', 'scategoryreq_id', $categoryReqId);
         $frm->addHiddenField('', 'scategoryreq_seller_id', $categoryReqId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Category_Request_Identifier', $this->adminLangId), 'scategoryreq_identifier');
-        $statusArr = CategoryRequest::getCategoryReqStatusArr($this->adminLangId);
+        $frm->addRequiredField(Labels::getLabel('LBL_Category_Request_Identifier', $this->siteLangId), 'scategoryreq_identifier');
+        $statusArr = CategoryRequest::getCategoryReqStatusArr($this->siteLangId);
         unset($statusArr[CategoryRequest::CATEGORY_REQUEST_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
         $frm->addTextArea('', 'comments', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -141,7 +141,7 @@ class CategoryRequestsController extends AdminBaseController
 
         $statusArr = array(CategoryRequest::CATEGORY_REQUEST_APPROVED, CategoryRequest::CATEGORY_REQUEST_CANCELLED);
         if (!in_array($post['status'], $statusArr)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Status_Request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Status_Request', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -160,14 +160,14 @@ class CategoryRequestsController extends AdminBaseController
         $sCategoryRequest['scategoryreq_status'] = $post['status'];
         $sCategoryRequest['scategoryreq_comments'] = $post['comments'];
         
-        if (!$email->SendCategoryRequestStatusChangeNotification($this->adminLangId, $sCategoryRequest)) {
+        if (!$email->SendCategoryRequestStatusChangeNotification($this->siteLangId, $sCategoryRequest)) {
             $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         } */
 
         $db->commitTransaction();
-        $this->set('msg', Labels::getLabel('LBL_Status_Updated_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Status_Updated_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -236,7 +236,7 @@ class CategoryRequestsController extends AdminBaseController
     }
     }
 
-    $this->set('msg', Labels::getLabel('LBL_Category_Request_Setup_Successful',$this->adminLangId));
+    $this->set('msg', Labels::getLabel('LBL_Category_Request_Setup_Successful',$this->siteLangId));
     $this->set('categoryReqId', $categoryReqId);
     $this->set('langId', $newTabLangId);
     $this->_template->render(false, false, 'json-success.php');
@@ -247,8 +247,8 @@ class CategoryRequestsController extends AdminBaseController
         $frm = new Form('frmCategoryReqLang', array('id' => 'frmCategoryReqLang'));
         $frm->addHiddenField('', 'scategoryreq_id', $categoryReqId);
         $frm->addHiddenField('', 'lang_id', $lang_id);
-        $frm->addRequiredField(Labels::getLabel('LBL_Category_Request_Name', $this->adminLangId), 'scategoryreq_name');
-        /* $frm->addSubmitButton('', 'btn_submit',Labels::getLabel('LBL_Update',$this->adminLangId)); */
+        $frm->addRequiredField(Labels::getLabel('LBL_Category_Request_Name', $this->siteLangId), 'scategoryreq_name');
+        /* $frm->addSubmitButton('', 'btn_submit',Labels::getLabel('LBL_Update',$this->siteLangId)); */
         return $frm;
     }
 

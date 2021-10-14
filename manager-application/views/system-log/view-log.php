@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="modal-header">
     <h5 class="modal-title">
-        <?php echo Labels::getLabel('LBL_LOG_DETAILS', $adminLangId); ?>
+        <?php echo Labels::getLabel('LBL_LOG_DETAILS', $siteLangId); ?>
     </h5>
 </div>
 <div class="modal-body form-edit">
@@ -10,7 +10,7 @@
             <div class="rowJs">
                 <div class="timeline-v4__item-date">
                     <span class="tag">
-                        <?php echo HtmlHelper::getTheDay($detail['slog_created_at'], $adminLangId); ?>
+                        <?php echo HtmlHelper::getTheDay($detail['slog_created_at'], $siteLangId); ?>
                     </span>
                 </div>
                 <ul class="timeline-v4__items">
@@ -22,17 +22,17 @@
                             </span>
                             <?php if (!empty($detail['slog_type'])) { ?>
                                 <span class="timeline-v4__item-text">
-                                    <b><?php echo Labels::getLabel('LBL_Type', $adminLangId); ?>:</b> <?php echo  $types[$detail['slog_type']]; ?>
+                                    <b><?php echo Labels::getLabel('LBL_Type', $siteLangId); ?>:</b> <?php echo  $types[$detail['slog_type']]; ?>
                                 </span>
                             <?php } ?>
                             <?php if (!empty($detail['slog_module_type'])) { ?>
                                 <span class="timeline-v4__item-text">
-                                    <b><?php echo Labels::getLabel('LBL_Module', $adminLangId); ?>:</b> <?php echo $moduleTypes[$detail['slog_module_type']]; ?>
+                                    <b><?php echo Labels::getLabel('LBL_Module', $siteLangId); ?>:</b> <?php echo $moduleTypes[$detail['slog_module_type']]; ?>
                                 </span>
                             <?php } ?>
                             <?php if (!empty($detail['slog_content'])) { ?>
                                 <br><span class="timeline-v4__item-text">
-                                    <b><?php echo Labels::getLabel('LBL_Content', $adminLangId); ?>:</b> <?php echo $detail['slog_content']; ?>
+                                    <b><?php echo Labels::getLabel('LBL_Content', $siteLangId); ?>:</b> <?php echo $detail['slog_content']; ?>
                                 </span>
                             <?php } ?>
                             <?php if (!empty($detail['slog_backtrace'])) { ?>
@@ -40,16 +40,16 @@
                                     <?php 
                                         $backTrace = json_decode($detail['slog_backtrace']);
                                         if(!empty($backTrace->file)){
-                                            echo '<br><a href="#" class="link link--dark timeline-v4__item-link"><b>' . Labels::getLabel('LBL_FILE', $adminLangId) . " :-</b> ".$backTrace->file."</a><br>";
+                                            echo '<br><a href="#" class="link link--dark timeline-v4__item-link"><b>' . Labels::getLabel('LBL_FILE', $siteLangId) . " :-</b> ".$backTrace->file."</a><br>";
                                         }
                                         if(!empty($backTrace->class)){
-                                            echo "<b>" . Labels::getLabel('LBL_CLASS', $adminLangId) . " :-</b> ".$backTrace->class."<br>";
+                                            echo "<b>" . Labels::getLabel('LBL_CLASS', $siteLangId) . " :-</b> ".$backTrace->class."<br>";
                                         }
                                         if(!empty($backTrace->function)){
-                                            echo "<b>" . Labels::getLabel('LBL_FUNCTION', $adminLangId) . " :-</b> ".$backTrace->function."<br>";
+                                            echo "<b>" . Labels::getLabel('LBL_FUNCTION', $siteLangId) . " :-</b> ".$backTrace->function."<br>";
                                         }
                                         if(!empty($backTrace->line)){
-                                            echo "<b>" . Labels::getLabel('LBL_LINE', $adminLangId) . " :-</b> ".$backTrace->line."<br>";
+                                            echo "<b>" . Labels::getLabel('LBL_LINE', $siteLangId) . " :-</b> ".$backTrace->line."<br>";
                                         }
                                     ?>
                                 </span>

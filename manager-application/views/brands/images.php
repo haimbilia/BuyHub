@@ -17,15 +17,15 @@
                         <?php } ?>
                     </div>
                     <?php if (isset($imgTypesArr) && !empty($imgTypesArr[$row['afile_record_subid']])) {
-                        echo '<small class=""><strong>' . Labels::getLabel('LBL_Type', $adminLangId) . ': </strong> ' . $imgTypesArr[$row['afile_record_subid']] . '</small><br/>';
+                        echo '<small class=""><strong>' . Labels::getLabel('LBL_Type', $siteLangId) . ': </strong> ' . $imgTypesArr[$row['afile_record_subid']] . '</small><br/>';
                     }
 
-                    $lang_name = Labels::getLabel('LBL_All', $adminLangId);
+                    $lang_name = Labels::getLabel('LBL_All', $siteLangId);
                     if ($row['afile_lang_id'] > 0) {
                         $lang_name = $languages[$row['afile_lang_id']]; ?>
                     <?php } ?>
                     <small class="">
-                        <strong><?php echo Labels::getLabel('LBL_Language', $adminLangId); ?>:</strong> <?php echo $lang_name; ?>
+                        <strong><?php echo Labels::getLabel('LBL_Language', $siteLangId); ?>:</strong> <?php echo $lang_name; ?>
                     </small>
                 </div>
             </li>

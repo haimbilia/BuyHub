@@ -32,7 +32,7 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'directi
 		</script>' . "\r\n";
 
 
-	if (AttachedFile::getAttachment(AttachedFile::FILETYPE_FAVICON, 0, 0, $adminLangId)) { ?>
-		<link rel="shortcut icon" href="<?php echo UrlHelper::generateUrl('image', 'favicon', array($adminLangId), CONF_WEBROOT_FRONT_URL) ?>">
+	if (AttachedFile::getAttachment(AttachedFile::FILETYPE_FAVICON, 0, 0, $siteLangId)) { ?>
+		<link rel="shortcut icon" href="<?php echo UrlHelper::generateUrl('image', 'favicon', array($siteLangId), CONF_WEBROOT_FRONT_URL) ?>">
 	<?php } ?>
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">

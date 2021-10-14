@@ -11,7 +11,7 @@ class AdminBaseController extends FatController
     protected $str_delete_record;
     protected $str_invalid_Action;
     protected $str_setup_successful;
-    protected $adminLangId;
+    protected $siteLangId;
     protected $nodes = [];
     protected object $modelObj;
     protected array $formLangFields;
@@ -50,22 +50,22 @@ class AdminBaseController extends FatController
     private function setCommonValues()
     {
         CommonHelper::initCommonVariables(true);
-        $this->adminLangId = CommonHelper::getLangId();
+        $this->siteLangId = CommonHelper::getLangId();
         $this->layoutDirection = CommonHelper::getLayoutDirection();
         $this->siteLangCode = CommonHelper::getLangCode();
         $this->siteLangCountryCode = CommonHelper::getLangCountryCode();
 
-        $adminLangLabelCache = FatCache::get('adminLangLabelCache' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $adminLangLabelCache = FatCache::get('adminLangLabelCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$adminLangLabelCache) {
             $arr = [
-                'str_update_record' => Labels::getLabel('LBL_Record_Updated_Successfully', $this->adminLangId),
-                'str_invalid_request_id' => Labels::getLabel('LBL_Invalid_Request_Id', $this->adminLangId),
-                'str_invalid_request' => Labels::getLabel('LBL_Invalid_Request', $this->adminLangId),
-                'str_delete_record' => Labels::getLabel('LBL_Record_Deleted_Successfully', $this->adminLangId),
-                'str_invalid_Action' => Labels::getLabel('LBL_Invalid_Action', $this->adminLangId),
-                'str_setup_successful' => Labels::getLabel('LBL_Setup_Successful', $this->adminLangId)
+                'str_update_record' => Labels::getLabel('LBL_Record_Updated_Successfully', $this->siteLangId),
+                'str_invalid_request_id' => Labels::getLabel('LBL_Invalid_Request_Id', $this->siteLangId),
+                'str_invalid_request' => Labels::getLabel('LBL_Invalid_Request', $this->siteLangId),
+                'str_delete_record' => Labels::getLabel('LBL_Record_Deleted_Successfully', $this->siteLangId),
+                'str_invalid_Action' => Labels::getLabel('LBL_Invalid_Action', $this->siteLangId),
+                'str_setup_successful' => Labels::getLabel('LBL_Setup_Successful', $this->siteLangId)
             ];
-            FatCache::set('adminLangLabelCache' . $this->adminLangId, serialize($arr), '.txt');
+            FatCache::set('adminLangLabelCache' . $this->siteLangId, serialize($arr), '.txt');
         } else {
             $arr =  unserialize($adminLangLabelCache);
         }
@@ -80,104 +80,104 @@ class AdminBaseController extends FatController
         $defultCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
         $defaultCountryCode = Countries::getAttributesById($defultCountryId, 'country_code');
 
-        $jsAdminVariablesCache = FatCache::get('jsAdminVariablesCache' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $jsAdminVariablesCache = FatCache::get('jsAdminVariablesCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$jsAdminVariablesCache) {
 
             $jsVariables = array(
-                'confirmRemove' => Labels::getLabel('LBL_Do_you_want_to_remove', $this->adminLangId),
-                'confirmRemoveOption' => Labels::getLabel('LBL_Do_you_want_to_remove_this_option', $this->adminLangId),
-                'confirmRemoveShop' => Labels::getLabel('LBL_Do_you_want_to_remove_this_shop', $this->adminLangId),
-                'confirmRemoveBrand' => Labels::getLabel('LBL_Do_you_want_to_remove_this_brand', $this->adminLangId),
-                'confirmRemoveProduct' => Labels::getLabel('LBL_Do_you_want_to_remove_this_product', $this->adminLangId),
-                'confirmRemoveCategory' => Labels::getLabel('LBL_Do_you_want_to_remove_this_category', $this->adminLangId),
-                'confirmReset' => Labels::getLabel('LBL_Do_you_want_to_reset_settings', $this->adminLangId),
-                'confirmActivate' => Labels::getLabel('LBL_Do_you_want_to_activate_status', $this->adminLangId),
-                'confirmUpdate' => Labels::getLabel('LBL_Do_you_want_to_update', $this->adminLangId),
-                'confirmUpdateStatus' => Labels::getLabel('LBL_Do_you_want_to_update', $this->adminLangId),
-                'confirmDelete' => Labels::getLabel('LBL_Do_you_want_to_delete', $this->adminLangId),
-                'confirmDeleteImage' => Labels::getLabel('LBL_Do_you_want_to_delete_image', $this->adminLangId),
-                'confirmDeleteBackgroundImage' => Labels::getLabel('LBL_Do_you_want_to_delete_background_image', $this->adminLangId),
-                'confirmDeleteLogo' => Labels::getLabel('LBL_Do_you_want_to_delete_logo', $this->adminLangId),
-                'confirmDeleteBanner' => Labels::getLabel('LBL_Do_you_want_to_delete_banner', $this->adminLangId),
-                'confirmDeleteIcon' => Labels::getLabel('LBL_Do_you_want_to_delete_icon', $this->adminLangId),
-                'confirmDefault' => Labels::getLabel('LBL_Do_you_want_to_set_default', $this->adminLangId),
-                'setMainProduct' => Labels::getLabel('LBL_Set_as_main_product', $this->adminLangId),
+                'confirmRemove' => Labels::getLabel('LBL_Do_you_want_to_remove', $this->siteLangId),
+                'confirmRemoveOption' => Labels::getLabel('LBL_Do_you_want_to_remove_this_option', $this->siteLangId),
+                'confirmRemoveShop' => Labels::getLabel('LBL_Do_you_want_to_remove_this_shop', $this->siteLangId),
+                'confirmRemoveBrand' => Labels::getLabel('LBL_Do_you_want_to_remove_this_brand', $this->siteLangId),
+                'confirmRemoveProduct' => Labels::getLabel('LBL_Do_you_want_to_remove_this_product', $this->siteLangId),
+                'confirmRemoveCategory' => Labels::getLabel('LBL_Do_you_want_to_remove_this_category', $this->siteLangId),
+                'confirmReset' => Labels::getLabel('LBL_Do_you_want_to_reset_settings', $this->siteLangId),
+                'confirmActivate' => Labels::getLabel('LBL_Do_you_want_to_activate_status', $this->siteLangId),
+                'confirmUpdate' => Labels::getLabel('LBL_Do_you_want_to_update', $this->siteLangId),
+                'confirmUpdateStatus' => Labels::getLabel('LBL_Do_you_want_to_update', $this->siteLangId),
+                'confirmDelete' => Labels::getLabel('LBL_Do_you_want_to_delete', $this->siteLangId),
+                'confirmDeleteImage' => Labels::getLabel('LBL_Do_you_want_to_delete_image', $this->siteLangId),
+                'confirmDeleteBackgroundImage' => Labels::getLabel('LBL_Do_you_want_to_delete_background_image', $this->siteLangId),
+                'confirmDeleteLogo' => Labels::getLabel('LBL_Do_you_want_to_delete_logo', $this->siteLangId),
+                'confirmDeleteBanner' => Labels::getLabel('LBL_Do_you_want_to_delete_banner', $this->siteLangId),
+                'confirmDeleteIcon' => Labels::getLabel('LBL_Do_you_want_to_delete_icon', $this->siteLangId),
+                'confirmDefault' => Labels::getLabel('LBL_Do_you_want_to_set_default', $this->siteLangId),
+                'setMainProduct' => Labels::getLabel('LBL_Set_as_main_product', $this->siteLangId),
                 'layoutDirection' => CommonHelper::getLayoutDirection(),
-                'selectPlan' => Labels::getLabel('LBL_Please_Select_any_Plan', $this->adminLangId),
-                'alreadyHaveThisPlan' => Labels::getLabel('LBL_ALREADY_HAVE_THIS_PLAN', $this->adminLangId),
-                'invalidRequest' => Labels::getLabel('LBL_Invalid_Request!', $this->adminLangId),
-                'pleaseWait' => Labels::getLabel('LBL_Please_Wait...', $this->adminLangId),
-                'DoYouWantTo' => Labels::getLabel('LBL_Do_you_really_want_to', $this->adminLangId),
-                'theRequest' => Labels::getLabel('LBL_the_request', $this->adminLangId),
-                'confirmCancelOrder' => Labels::getLabel('LBL_Are_you_sure_to_cancel_this_order', $this->adminLangId),
-                'confirmReplaceCurrentToDefault' => Labels::getLabel('LBL_CONFIRM_REPLACE_CURRENT_TO_DEFAULT', $this->adminLangId),
-                'processing' => Labels::getLabel('LBL_Processing...', $this->adminLangId),
-                'preferredDimensions' => Labels::getLabel('LBL_Preferred_Dimensions_%s', $this->adminLangId),
-                'confirmRestore' => Labels::getLabel('LBL_Do_you_want_to_restore', $this->adminLangId),
-                'thanksForSharing' => Labels::getLabel('LBL_Msg_Thanks_for_sharing', $this->adminLangId),
-                'isMandatory' => Labels::getLabel('VLBL_is_mandatory', $this->adminLangId),
-                'pleaseEnterValidEmailId' => Labels::getLabel('VLBL_Please_enter_valid_email_ID_for', $this->adminLangId),
-                'charactersSupportedFor' => Labels::getLabel('VLBL_Only_characters_are_supported_for', $this->adminLangId),
-                'pleaseEnterIntegerValue' => Labels::getLabel('VLBL_Please_enter_integer_value_for', $this->adminLangId),
-                'pleaseEnterNumericValue' => Labels::getLabel('VLBL_Please_enter_numeric_value_for', $this->adminLangId),
-                'startWithLetterOnlyAlphanumeric' => Labels::getLabel('LBL_START_WITH_LETTER_ONLY_ALPHANUMERIC', $this->adminLangId),
-                'mustBeBetweenCharacters' => Labels::getLabel('VLBL_Length_Must_be_between_6_to_20_characters', $this->adminLangId),
-                'invalidValues' => Labels::getLabel('VLBL_Length_Invalid_value_for', $this->adminLangId),
-                'shouldNotBeSameAs' => Labels::getLabel('VLBL_should_not_be_same_as', $this->adminLangId),
-                'mustBeSameAs' => Labels::getLabel('VLBL_must_be_same_as', $this->adminLangId),
-                'mustBeGreaterOrEqual' => Labels::getLabel('VLBL_must_be_greater_than_or_equal_to', $this->adminLangId),
-                'mustBeGreaterThan' => Labels::getLabel('VLBL_must_be_greater_than', $this->adminLangId),
-                'mustBeLessOrEqual' => Labels::getLabel('VLBL_must_be_less_than_or_equal_to', $this->adminLangId),
-                'mustBeLessThan' => Labels::getLabel('VLBL_must_be_less_than', $this->adminLangId),
-                'lengthOf' => Labels::getLabel('VLBL_Length_of', $this->adminLangId),
-                'valueOf' => Labels::getLabel('VLBL_Value_of', $this->adminLangId),
-                'mustBeBetween' => Labels::getLabel('VLBL_must_be_between', $this->adminLangId),
-                'mustBeBetween' => Labels::getLabel('VLBL_must_be_between', $this->adminLangId),
-                'and' => Labels::getLabel('VLBL_and', $this->adminLangId),
-                'pleaseSelect' => Labels::getLabel('VLBL_Please_select', $this->adminLangId),
-                'to' => Labels::getLabel('VLBL_to', $this->adminLangId),
-                'options' => Labels::getLabel('VLBL_options', $this->adminLangId),
-                'isNotAvailable' => Labels::getLabel('VLBL_is_not_available', $this->adminLangId),
-                'confirmRestoreBackup' => Labels::getLabel('LBL_Do_you_want_to_restore_database_to_this_record', $this->adminLangId),
-                'confirmChangeRequestStatus' => Labels::getLabel('LBL_Do_you_want_to_change_request_status', $this->adminLangId),
-                'confirmTruncateUserData' => Labels::getLabel('LBL_Do_you_want_to_truncate_User_Data', $this->adminLangId),
-                'atleastOneRecord' => Labels::getLabel('LBL_Please_select_atleast_one_record.', $this->adminLangId),
-                'primaryLanguageField' => Labels::getLabel('LBL_PRIMARY_LANGUAGE_FIELD_DATA_REQUIRED', $this->adminLangId),
-                'updateCurrencyRates' => Labels::getLabel('LBL_WANT_TO_UPDATE_CURRENCY_RATES?.', $this->adminLangId),
-                'cloneNotification' => Labels::getLabel('LBL_DO_YOU_REALLY_WANT_TO_CLONE?', $this->adminLangId),
-                'clonedNotification' => Labels::getLabel('LBL_NOTIFICATION_CLONED_SUCCESSFULLY', $this->adminLangId),
-                'confirmRemoveBlog' => Labels::getLabel('LBL_Do_you_want_to_remove_this_blog', $this->adminLangId),
-                'actionButtonsClass' => Labels::getLabel('LBL_ACTION_BUTTONS_CLASS_REQUIREMENT', $this->adminLangId),
+                'selectPlan' => Labels::getLabel('LBL_Please_Select_any_Plan', $this->siteLangId),
+                'alreadyHaveThisPlan' => Labels::getLabel('LBL_ALREADY_HAVE_THIS_PLAN', $this->siteLangId),
+                'invalidRequest' => Labels::getLabel('LBL_Invalid_Request!', $this->siteLangId),
+                'pleaseWait' => Labels::getLabel('LBL_Please_Wait...', $this->siteLangId),
+                'DoYouWantTo' => Labels::getLabel('LBL_Do_you_really_want_to', $this->siteLangId),
+                'theRequest' => Labels::getLabel('LBL_the_request', $this->siteLangId),
+                'confirmCancelOrder' => Labels::getLabel('LBL_Are_you_sure_to_cancel_this_order', $this->siteLangId),
+                'confirmReplaceCurrentToDefault' => Labels::getLabel('LBL_CONFIRM_REPLACE_CURRENT_TO_DEFAULT', $this->siteLangId),
+                'processing' => Labels::getLabel('LBL_Processing...', $this->siteLangId),
+                'preferredDimensions' => Labels::getLabel('LBL_Preferred_Dimensions_%s', $this->siteLangId),
+                'confirmRestore' => Labels::getLabel('LBL_Do_you_want_to_restore', $this->siteLangId),
+                'thanksForSharing' => Labels::getLabel('LBL_Msg_Thanks_for_sharing', $this->siteLangId),
+                'isMandatory' => Labels::getLabel('VLBL_is_mandatory', $this->siteLangId),
+                'pleaseEnterValidEmailId' => Labels::getLabel('VLBL_Please_enter_valid_email_ID_for', $this->siteLangId),
+                'charactersSupportedFor' => Labels::getLabel('VLBL_Only_characters_are_supported_for', $this->siteLangId),
+                'pleaseEnterIntegerValue' => Labels::getLabel('VLBL_Please_enter_integer_value_for', $this->siteLangId),
+                'pleaseEnterNumericValue' => Labels::getLabel('VLBL_Please_enter_numeric_value_for', $this->siteLangId),
+                'startWithLetterOnlyAlphanumeric' => Labels::getLabel('LBL_START_WITH_LETTER_ONLY_ALPHANUMERIC', $this->siteLangId),
+                'mustBeBetweenCharacters' => Labels::getLabel('VLBL_Length_Must_be_between_6_to_20_characters', $this->siteLangId),
+                'invalidValues' => Labels::getLabel('VLBL_Length_Invalid_value_for', $this->siteLangId),
+                'shouldNotBeSameAs' => Labels::getLabel('VLBL_should_not_be_same_as', $this->siteLangId),
+                'mustBeSameAs' => Labels::getLabel('VLBL_must_be_same_as', $this->siteLangId),
+                'mustBeGreaterOrEqual' => Labels::getLabel('VLBL_must_be_greater_than_or_equal_to', $this->siteLangId),
+                'mustBeGreaterThan' => Labels::getLabel('VLBL_must_be_greater_than', $this->siteLangId),
+                'mustBeLessOrEqual' => Labels::getLabel('VLBL_must_be_less_than_or_equal_to', $this->siteLangId),
+                'mustBeLessThan' => Labels::getLabel('VLBL_must_be_less_than', $this->siteLangId),
+                'lengthOf' => Labels::getLabel('VLBL_Length_of', $this->siteLangId),
+                'valueOf' => Labels::getLabel('VLBL_Value_of', $this->siteLangId),
+                'mustBeBetween' => Labels::getLabel('VLBL_must_be_between', $this->siteLangId),
+                'mustBeBetween' => Labels::getLabel('VLBL_must_be_between', $this->siteLangId),
+                'and' => Labels::getLabel('VLBL_and', $this->siteLangId),
+                'pleaseSelect' => Labels::getLabel('VLBL_Please_select', $this->siteLangId),
+                'to' => Labels::getLabel('VLBL_to', $this->siteLangId),
+                'options' => Labels::getLabel('VLBL_options', $this->siteLangId),
+                'isNotAvailable' => Labels::getLabel('VLBL_is_not_available', $this->siteLangId),
+                'confirmRestoreBackup' => Labels::getLabel('LBL_Do_you_want_to_restore_database_to_this_record', $this->siteLangId),
+                'confirmChangeRequestStatus' => Labels::getLabel('LBL_Do_you_want_to_change_request_status', $this->siteLangId),
+                'confirmTruncateUserData' => Labels::getLabel('LBL_Do_you_want_to_truncate_User_Data', $this->siteLangId),
+                'atleastOneRecord' => Labels::getLabel('LBL_Please_select_atleast_one_record.', $this->siteLangId),
+                'primaryLanguageField' => Labels::getLabel('LBL_PRIMARY_LANGUAGE_FIELD_DATA_REQUIRED', $this->siteLangId),
+                'updateCurrencyRates' => Labels::getLabel('LBL_WANT_TO_UPDATE_CURRENCY_RATES?.', $this->siteLangId),
+                'cloneNotification' => Labels::getLabel('LBL_DO_YOU_REALLY_WANT_TO_CLONE?', $this->siteLangId),
+                'clonedNotification' => Labels::getLabel('LBL_NOTIFICATION_CLONED_SUCCESSFULLY', $this->siteLangId),
+                'confirmRemoveBlog' => Labels::getLabel('LBL_Do_you_want_to_remove_this_blog', $this->siteLangId),
+                'actionButtonsClass' => Labels::getLabel('LBL_ACTION_BUTTONS_CLASS_REQUIREMENT', $this->siteLangId),
                 'allowedFileSize' => LibHelper::getMaximumFileUploadSize(),
-                'fileSizeExceeded' => Labels::getLabel("MSG_FILE_SIZE_SHOULD_BE_LESSER_THAN_{SIZE-LIMIT}", $this->adminLangId),
-                'currentPrice' => Labels::getLabel('LBL_Current_Price', $this->adminLangId),
-                'currentStock' => Labels::getLabel('LBL_Current_Stock', $this->adminLangId),
-                'discountPercentage' => Labels::getLabel('LBL_Discount_Percentage', $this->adminLangId),
-                'shippingUser' => Labels::getLabel('MSG_Please_assign_shipping_user', $this->adminLangId),
-                'saveProfileFirst' => Labels::getLabel('LBL_Save_Profile_First', $this->adminLangId),
-                'minimumOneLocationRequired' => Labels::getLabel('LBL_Minimum_one_location_is_required', $this->adminLangId),
-                'confirmTransfer' => Labels::getLabel('LBL_CONFIRM_TRANSFER_?', $this->adminLangId),
-                'invalidFromTime' => Labels::getLabel('LBL_PLEASE_SELECT_VALID_FROM_TIME', $this->adminLangId),
-                'selectTimeslotDay' => Labels::getLabel('LBL_ATLEAST_ONE_DAY_AND_TIMESLOT_NEEDS_TO_BE_CONFIGURED', $this->adminLangId),
-                'invalidTimeSlot' => Labels::getLabel('LBL_PLEASE_CONFIGURE_FROM_AND_TO_TIME', $this->adminLangId),
-                'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->adminLangId),
-                'disableChildCategories' => Labels::getLabel('LBL_DISABLE_CHILD_CATEGORY_VALIDATION', $this->adminLangId),
-                'addNewRatingType' => Labels::getLabel('LBL_ADD_NEW_RATING_TYPE?', $this->adminLangId),
-                'areYouSure' => Labels::getLabel('LBL_ARE_YOU_SURE?', $this->adminLangId),
-                'enableParentCategories' => Labels::getLabel('LBL_ENABLE_PARENT_CATEGORIES_VALIDATION', $this->adminLangId),
+                'fileSizeExceeded' => Labels::getLabel("MSG_FILE_SIZE_SHOULD_BE_LESSER_THAN_{SIZE-LIMIT}", $this->siteLangId),
+                'currentPrice' => Labels::getLabel('LBL_Current_Price', $this->siteLangId),
+                'currentStock' => Labels::getLabel('LBL_Current_Stock', $this->siteLangId),
+                'discountPercentage' => Labels::getLabel('LBL_Discount_Percentage', $this->siteLangId),
+                'shippingUser' => Labels::getLabel('MSG_Please_assign_shipping_user', $this->siteLangId),
+                'saveProfileFirst' => Labels::getLabel('LBL_Save_Profile_First', $this->siteLangId),
+                'minimumOneLocationRequired' => Labels::getLabel('LBL_Minimum_one_location_is_required', $this->siteLangId),
+                'confirmTransfer' => Labels::getLabel('LBL_CONFIRM_TRANSFER_?', $this->siteLangId),
+                'invalidFromTime' => Labels::getLabel('LBL_PLEASE_SELECT_VALID_FROM_TIME', $this->siteLangId),
+                'selectTimeslotDay' => Labels::getLabel('LBL_ATLEAST_ONE_DAY_AND_TIMESLOT_NEEDS_TO_BE_CONFIGURED', $this->siteLangId),
+                'invalidTimeSlot' => Labels::getLabel('LBL_PLEASE_CONFIGURE_FROM_AND_TO_TIME', $this->siteLangId),
+                'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->siteLangId),
+                'disableChildCategories' => Labels::getLabel('LBL_DISABLE_CHILD_CATEGORY_VALIDATION', $this->siteLangId),
+                'addNewRatingType' => Labels::getLabel('LBL_ADD_NEW_RATING_TYPE?', $this->siteLangId),
+                'areYouSure' => Labels::getLabel('LBL_ARE_YOU_SURE?', $this->siteLangId),
+                'enableParentCategories' => Labels::getLabel('LBL_ENABLE_PARENT_CATEGORIES_VALIDATION', $this->siteLangId),
                 'defaultCountryCode' => $defaultCountryCode,
-                'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->adminLangId),
-                'copied' => Labels::getLabel('LBL_Copied', $this->adminLangId),
-                'from' => Labels::getLabel('LBL_FROM', $this->adminLangId),
-                'rate' => Labels::getLabel('LBL_RATE(FLOAT)', $this->adminLangId),
-                'unlinkRecords' => Labels::getLabel('LBL_FIRST_UNLINK_ALL_RECORDS', $this->adminLangId),
-                'remove' => Labels::getLabel('LBL_REMOVE', $this->adminLangId),
-                'alreadySelected' => Labels::getLabel('MSG_ALREADY_SELECTED', $this->adminLangId),
-                'invalidSeller' => Labels::getLabel('MSG_PLEASE_SELECT_THE_SELLER_FIRST', $this->adminLangId),
-                'controllerNameRequired' => Labels::getLabel('MSG_CONTROLLER_NAME_MUST_BE_DECLARED', $this->adminLangId),
-                'selectFont' => Labels::getLabel('MSG_PLEASE_SELECT_FONT_FAMILY', $this->adminLangId),
-                'dropFilesToUpload' => Labels::getLabel('MSG_DROP_FILES_HERE_TO_UPLOAD', $this->adminLangId),
-                'invalidUploadFileType' => Labels::getLabel('MSG_INVALID_FILE_TYPE._ONLY_{FILE-TYPE}_FILE_CAN_BE_UPLOADED', $this->adminLangId),
+                'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->siteLangId),
+                'copied' => Labels::getLabel('LBL_Copied', $this->siteLangId),
+                'from' => Labels::getLabel('LBL_FROM', $this->siteLangId),
+                'rate' => Labels::getLabel('LBL_RATE(FLOAT)', $this->siteLangId),
+                'unlinkRecords' => Labels::getLabel('LBL_FIRST_UNLINK_ALL_RECORDS', $this->siteLangId),
+                'remove' => Labels::getLabel('LBL_REMOVE', $this->siteLangId),
+                'alreadySelected' => Labels::getLabel('MSG_ALREADY_SELECTED', $this->siteLangId),
+                'invalidSeller' => Labels::getLabel('MSG_PLEASE_SELECT_THE_SELLER_FIRST', $this->siteLangId),
+                'controllerNameRequired' => Labels::getLabel('MSG_CONTROLLER_NAME_MUST_BE_DECLARED', $this->siteLangId),
+                'selectFont' => Labels::getLabel('MSG_PLEASE_SELECT_FONT_FAMILY', $this->siteLangId),
+                'dropFilesToUpload' => Labels::getLabel('MSG_DROP_FILES_HERE_TO_UPLOAD', $this->siteLangId),
+                'invalidUploadFileType' => Labels::getLabel('MSG_INVALID_FILE_TYPE._ONLY_{FILE-TYPE}_FILE_CAN_BE_UPLOADED', $this->siteLangId),
             );
             $languages = Language::getAllNames(false);
             foreach ($languages as $val) {
@@ -187,7 +187,7 @@ class AdminBaseController extends FatController
                 $jsVariables['language' . $val['language_id']] = $val['language_layout_direction'];
             }
             $jsVariables['languages'] = $languages;
-            FatCache::set('jsAdminVariablesCache' . $this->adminLangId, serialize($jsVariables), '.txt');
+            FatCache::set('jsAdminVariablesCache' . $this->siteLangId, serialize($jsVariables), '.txt');
         } else {
             $jsVariables =  unserialize($jsAdminVariablesCache);
         }
@@ -209,7 +209,7 @@ class AdminBaseController extends FatController
 
         $this->siteDefaultCurrencyCode = CommonHelper::getCurrencyCode();
 
-        $this->set('adminLangId', $this->adminLangId);
+        $this->set('siteLangId', $this->siteLangId);
         $this->set('siteDefaultCurrencyCode', $this->siteDefaultCurrencyCode);
         $this->set('jsVariables', $jsVariables);
         $this->set('notifyCount', $notifyCount);
@@ -234,7 +234,7 @@ class AdminBaseController extends FatController
             case 'shops':
             case 'shops':
             case 'shops':
-                $link = Labels::getLabel('MSG_Catalog', $this->adminLangId);
+                $link = Labels::getLabel('MSG_Catalog', $this->siteLangId);
                 break;
         }
         return $link;
@@ -301,11 +301,11 @@ class AdminBaseController extends FatController
         $langId = FatUtility::int($langId);
 
         if ($langId == 0) {
-            $langId = $this->adminLangId;
+            $langId = $this->siteLangId;
         }
 
         $stateObj = new States();
-        $statesArr = $stateObj->getStatesByCountryId($countryId, $this->adminLangId, true, $idCol);
+        $statesArr = $stateObj->getStatesByCountryId($countryId, $this->siteLangId, true, $idCol);
 
         $this->set('statesArr', $statesArr);
         $this->set('stateId', $stateId);
@@ -315,33 +315,33 @@ class AdminBaseController extends FatController
     public function getStatesByCountryCode($countryCode, $stateCode = '', $idCol = 'state_id')
     {
         $countryId = Countries::getCountryByCode($countryCode, 'country_id');
-        $this->getStates($countryId, $stateCode, $this->adminLangId, $idCol);
+        $this->getStates($countryId, $stateCode, $this->siteLangId, $idCol);
     }
 
     protected function getUserSearchForm()
     {
         $frm = new Form('frmUserSearch');
-        $keyword = $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email', $this->adminLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+        $keyword = $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
         //$keyword->setFieldTagAttribute('onKeyUp','usersAutocomplete(this)');
 
-        $arr_options = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->adminLangId)) + applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $arr_options1 = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->adminLangId)) + applicationConstants::getYesNoArr($this->adminLangId);
+        $arr_options = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $arr_options1 = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId);
 
-        $arr_options2 = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->adminLangId)) + User::getUserTypesArr($this->adminLangId);
-        $arr_options2 = $arr_options2 + array(User::USER_TYPE_BUYER_SELLER => Labels::getLabel('LBL_Buyer', $this->adminLangId) . '+' . Labels::getLabel('LBL_Seller', $this->adminLangId));
-        $arr_options2 = $arr_options2 + array(User::USER_TYPE_SUB_USER => Labels::getLabel('LBL_Sub_User', $this->adminLangId));
+        $arr_options2 = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + User::getUserTypesArr($this->siteLangId);
+        $arr_options2 = $arr_options2 + array(User::USER_TYPE_BUYER_SELLER => Labels::getLabel('LBL_Buyer', $this->siteLangId) . '+' . Labels::getLabel('LBL_Seller', $this->siteLangId));
+        $arr_options2 = $arr_options2 + array(User::USER_TYPE_SUB_USER => Labels::getLabel('LBL_Sub_User', $this->siteLangId));
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Active_Users', $this->adminLangId), 'user_active', $arr_options, -1, array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_Email_Verified', $this->adminLangId), 'user_verified', $arr_options1, -1, array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_User_Type', $this->adminLangId), 'type', $arr_options2, -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Active_Users', $this->siteLangId), 'user_active', $arr_options, -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Email_Verified', $this->siteLangId), 'user_verified', $arr_options1, -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_User_Type', $this->siteLangId), 'type', $arr_options2, -1, array(), '');
 
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->adminLangId), 'user_regdate_from', '', array('readonly' => 'readonly'));
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->adminLangId), 'user_regdate_to', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->siteLangId), 'user_regdate_from', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->siteLangId), 'user_regdate_to', '', array('readonly' => 'readonly'));
 
         $frm->addHiddenField('', 'page', 1);
         $frm->addHiddenField('', 'user_id', '');
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -354,29 +354,29 @@ class AdminBaseController extends FatController
         $frm = new Form('frmUser', array('id' => 'frmUser'));
         $frm->addHiddenField('', 'user_id', $user_id);
         $frm->addHiddenField('', 'user_type');
-        $frm->addTextBox(Labels::getLabel('LBL_Username', $this->adminLangId), 'credential_username', '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Customer_name', $this->adminLangId), 'user_name');
-        $frm->addDateField(Labels::getLabel('LBL_Date_of_birth', $this->adminLangId), 'user_dob', '', array('readonly' => 'readonly'));
+        $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'credential_username', '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Customer_name', $this->siteLangId), 'user_name');
+        $frm->addDateField(Labels::getLabel('LBL_Date_of_birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly'));
         $frm->addHiddenField('', 'user_phone_dcode');
-        $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->adminLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+        $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        $frm->addEmailField(Labels::getLabel('LBL_Email', $this->adminLangId), 'credential_email', '');
+        $frm->addEmailField(Labels::getLabel('LBL_Email', $this->siteLangId), 'credential_email', '');
 
         $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesAssocArr($this->adminLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->adminLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), array(), Labels::getLabel('LBL_Select', $this->adminLangId));
+        $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), array(), Labels::getLabel('LBL_Select', $this->siteLangId));
         $fld->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->adminLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirement->setRequired(true);
-        $frm->addTextBox(Labels::getLabel('LBL_City', $this->adminLangId), 'user_city');
+        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
+        $frm->addTextBox(Labels::getLabel('LBL_City', $this->siteLangId), 'user_city');
 
         switch ($userType) {
             case User::USER_TYPE_SHIPPING_COMPANY:
-                $frm->addTextBox(Labels::getLabel('LBL_Tracking_Site_Url', $this->adminLangId), 'user_order_tracking_url');
+                $frm->addTextBox(Labels::getLabel('LBL_Tracking_Site_Url', $this->siteLangId), 'user_order_tracking_url');
                 break;
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -387,45 +387,45 @@ class AdminBaseController extends FatController
         $currencySymbol = ($currencyData['currency_symbol_left'] != '') ? $currencyData['currency_symbol_left'] : $currencyData['currency_symbol_right'];
 
         $frm = new Form('frmVendorOrderSearch');
-        $keyword = $frm->addTextBox(Labels::getLabel('LBL_Keywords', $this->adminLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-        $frm->addTextBox(Labels::getLabel('LBL_Buyer', $this->adminLangId), 'buyer', '');
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'op_status_id', Orders::getOrderStatusArr($langId), '', array(), Labels::getLabel('LBL_All', $langId));
-        $frm->addTextBox(Labels::getLabel('LBL_Seller/Shop', $this->adminLangId), 'shop_name');
-        /* $frm->addTextBox(Labels::getLabel('LBL_Customer',$this->adminLangId),'customer_name'); */
+        $keyword = $frm->addTextBox(Labels::getLabel('LBL_Keywords', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+        $frm->addTextBox(Labels::getLabel('LBL_Buyer', $this->siteLangId), 'buyer', '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'op_status_id', Orders::getOrderStatusArr($langId), '', array(), Labels::getLabel('LBL_All', $langId));
+        $frm->addTextBox(Labels::getLabel('LBL_Seller/Shop', $this->siteLangId), 'shop_name');
+        /* $frm->addTextBox(Labels::getLabel('LBL_Customer',$this->siteLangId),'customer_name'); */
 
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->adminLangId), 'readonly' => 'readonly'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->adminLangId), 'readonly' => 'readonly'));
-        $frm->addTextBox('', 'price_from', '', array('placeholder' => Labels::getLabel('LBL_Order_From', $this->adminLangId) . ' [' . $currencySymbol . ']'));
-        $frm->addTextBox('', 'price_to', '', array('placeholder' => Labels::getLabel('LBL_Order_To', $this->adminLangId) . ' [' . $currencySymbol . ']'));
+        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId), 'readonly' => 'readonly'));
+        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId), 'readonly' => 'readonly'));
+        $frm->addTextBox('', 'price_from', '', array('placeholder' => Labels::getLabel('LBL_Order_From', $this->siteLangId) . ' [' . $currencySymbol . ']'));
+        $frm->addTextBox('', 'price_to', '', array('placeholder' => Labels::getLabel('LBL_Order_To', $this->siteLangId) . ' [' . $currencySymbol . ']'));
 
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'user_id');
         $frm->addHiddenField('', 'order_id');
         $frm->addHiddenField('', 'shipping_company_user_id', 0);
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
 
     protected function getProductCatalogForm($attrgrp_id = 0, $type = 'CUSTOM_PRODUCT', $productType = Product::PRODUCT_TYPE_PHYSICAL)
     {
-        $langId = $this->adminLangId;
+        $langId = $this->siteLangId;
         $this->objPrivilege->canViewProducts();
         $frm = new Form('frmProduct', array('id' => 'frmProduct'));
         if ($type == 'CUSTOM_PRODUCT') {
-            $fld = $frm->addTextBox(Labels::getLabel('LBL_User', $this->adminLangId), 'selprod_user_shop_name', '', array(' ' => ' '));
-            $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_Please_leave_empty_if_you_want_to_add_product_in_system_catalog', $this->adminLangId) . ' </small>';
+            $fld = $frm->addTextBox(Labels::getLabel('LBL_User', $this->siteLangId), 'selprod_user_shop_name', '', array(' ' => ' '));
+            $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_Please_leave_empty_if_you_want_to_add_product_in_system_catalog', $this->siteLangId) . ' </small>';
             $frm->addHtml('', 'user_shop', '<div id="user_shop_name"></div>');
         }
 
         $frm->addHiddenField('', 'product_seller_id');
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Product_Identifier', $this->adminLangId), 'product_identifier');
-        $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_It_may_be_same_as_of_Product_Name', $this->adminLangId) . ' </small>';
+        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Product_Identifier', $this->siteLangId), 'product_identifier');
+        $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_It_may_be_same_as_of_Product_Name', $this->siteLangId) . ' </small>';
 
-        $pTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->adminLangId), 'product_type', Product::getProductTypes($langId), Product::PRODUCT_TYPE_PHYSICAL, array('id' => 'product_type'), '');
+        $pTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->siteLangId), 'product_type', Product::getProductTypes($langId), Product::PRODUCT_TYPE_PHYSICAL, array('id' => 'product_type'), '');
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Product_Download_attachements_at_inventory_level', $this->adminLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($this->adminLangId), '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Product_Download_attachements_at_inventory_level', $this->siteLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($this->siteLangId), '', array(), '');
 
         /* $downloadAttachementsWithInventoryTrue = new FormFieldRequirement('product_attachements_with_inventory', 'value');
 $downloadAttachementsWithInventoryTrue->setRequired();
@@ -437,12 +437,12 @@ $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants:
 $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'product_attachements_with_inventory', $downloadAttachementsWithInventoryFalse); */
 
         if ($type == 'REQUESTED_CATALOG_PRODUCT') {
-            $brandFld = $frm->addTextBox(Labels::getLabel('LBL_Brand/Manfacturer', $this->adminLangId), 'brand_name');
+            $brandFld = $frm->addTextBox(Labels::getLabel('LBL_Brand/Manfacturer', $this->siteLangId), 'brand_name');
             if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
                 $brandFld->requirements()->setRequired();
             }
 
-            //$fld1 = $frm->addTextBox(Labels::getLabel('LBL_Category',$this->adminLangId),'category_name');
+            //$fld1 = $frm->addTextBox(Labels::getLabel('LBL_Category',$this->siteLangId),'category_name');
 
             $frm->addHiddenField('', 'product_brand_id');
             $frm->addHiddenField('', 'product_category_id');
@@ -450,37 +450,37 @@ $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants:
             $frm->addHiddenField('', 'product_options');
         }
 
-        $fld_model = $frm->addTextBox(Labels::getLabel('LBL_Model', $this->adminLangId), 'product_model');
+        $fld_model = $frm->addTextBox(Labels::getLabel('LBL_Model', $this->siteLangId), 'product_model');
         if (FatApp::getConfig("CONF_PRODUCT_MODEL_MANDATORY", FatUtility::VAR_INT, 1)) {
             $fld_model->requirements()->setRequired();
         }
-        $frm->addCheckBox(Labels::getLabel('LBL_Product_Featured', $this->adminLangId), 'product_featured', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel('LBL_Product_Featured', $this->siteLangId), 'product_featured', 1, array(), false, 0);
 
         $fld = $frm->addFloatField(Labels::getLabel('LBL_Minimum_Selling_Price', $langId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'product_min_selling_price', '');
         $fld->requirements()->setPositive();
 
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_PRODUCT_WARRANTY', $this->adminLangId), 'product_warranty');
+        $fld = $frm->addRequiredField(Labels::getLabel('LBL_PRODUCT_WARRANTY', $this->siteLangId), 'product_warranty');
         $fld->requirements()->setInt();
         $fld->requirements()->setPositive();
-        $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $this->adminLangId) . ' </small>';
+        $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
         if (Product::PRODUCT_TYPE_DIGITAL == $productType) {
             $fld->requirements()->setRequired(false);
         }
-        $taxCategories = Tax::getSaleTaxCatArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Tax_Category', $this->adminLangId), 'ptt_taxcat_id', $taxCategories, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired(true);
+        $taxCategories = Tax::getSaleTaxCatArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Tax_Category', $this->siteLangId), 'ptt_taxcat_id', $taxCategories, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired(true);
 
         if (Product::PRODUCT_TYPE_PHYSICAL == $productType) {
-            $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, 0, true, true);
+            $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, 0, true, true);
             if ($type == 'REQUESTED_CATALOG_PRODUCT') {
-                $fulFillmentArr = Shipping::getFulFillmentArr($this->adminLangId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
-                $fulFillmentTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->adminLangId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, ['class' => 'fieldsVisibility-js'], Labels::getLabel('LBL_Select', $this->adminLangId));
+                $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
+                $fulFillmentTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->siteLangId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, ['class' => 'fieldsVisibility-js'], Labels::getLabel('LBL_Select', $this->siteLangId));
                 $fulFillmentTypeFld->requirements()->setRequired();
             }
-            $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
+            $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->siteLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
             if ($fulFillmentTypeFld) {
-                $profileUnReqObj = new FormFieldRequirement('shipping_profile', Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId));
+                $profileUnReqObj = new FormFieldRequirement('shipping_profile', Labels::getLabel('LBL_Shipping_Profile', $this->siteLangId));
                 $profileUnReqObj->setRequired(false);
-                $profileReqObj = new FormFieldRequirement('shipping_profile', Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId));
+                $profileReqObj = new FormFieldRequirement('shipping_profile', Labels::getLabel('LBL_Shipping_Profile', $this->siteLangId));
                 $profileReqObj->setRequired(true);
 
                 $fulFillmentTypeFld->requirements()->addOnChangerequirementUpdate(Shipping::FULFILMENT_PICKUP, 'eq', 'shipping_profile', $profileUnReqObj);
@@ -491,12 +491,12 @@ $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants:
         if (FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) {
             if (Product::PRODUCT_TYPE_PHYSICAL == $productType) {
                 $shipPackArr = ShippingPackage::getAllNames();
-                $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Package', $this->adminLangId), 'product_ship_package', $shipPackArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
+                $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Package', $this->siteLangId), 'product_ship_package', $shipPackArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
             }
 
             /* weight unit[ */
             $weightUnitsArr = applicationConstants::getWeightUnitsArr($langId);
-            $frm->addSelectBox(Labels::getLabel('LBL_Weight_Unit', $langId), 'product_weight_unit', $weightUnitsArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
+            $frm->addSelectBox(Labels::getLabel('LBL_Weight_Unit', $langId), 'product_weight_unit', $weightUnitsArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
             $pWeightUnitUnReqObj = new FormFieldRequirement('product_weight_unit', Labels::getLabel('LBL_Weight_Unit', $langId));
             $pWeightUnitUnReqObj->setRequired(false);
 
@@ -526,30 +526,30 @@ $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants:
 $frm->addTextBox('ISBN Code','product_isbn'); */
         if ($type == 'CUSTOM_PRODUCT') {
             $approveUnApproveArr = Product::getApproveUnApproveArr($langId);
-            $frm->addSelectBox(Labels::getLabel('LBL_Approval_Status', $this->adminLangId), 'product_approved', $approveUnApproveArr, Product::APPROVED, array(), '');
+            $frm->addSelectBox(Labels::getLabel('LBL_Approval_Status', $this->siteLangId), 'product_approved', $approveUnApproveArr, Product::APPROVED, array(), '');
         }
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($langId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Product_Status', $this->adminLangId), 'product_active', $activeInactiveArr, applicationConstants::NO, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Product_Status', $this->siteLangId), 'product_active', $activeInactiveArr, applicationConstants::NO, array(), '');
 
         $yesNoArr = applicationConstants::getYesNoArr($langId);
-        $codFld = $frm->addSelectBox(Labels::getLabel('LBL_Available_for_COD', $this->adminLangId), 'product_cod_enabled', $yesNoArr, applicationConstants::NO, array(), '');
+        $codFld = $frm->addSelectBox(Labels::getLabel('LBL_Available_for_COD', $this->siteLangId), 'product_cod_enabled', $yesNoArr, applicationConstants::NO, array(), '');
 
         $paymentMethod = new PaymentMethods();
         if (!$paymentMethod->cashOnDeliveryIsActive()) {
             $codFld->addFieldTagAttribute('disabled', 'disabled');
-            $codFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_COD_option_is_disabled_in_payment_gateway_settings', $this->adminLangId) . '</small>';
+            $codFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_COD_option_is_disabled_in_payment_gateway_settings', $this->siteLangId) . '</small>';
         }
 
         if ($type == 'REQUESTED_CATALOG_PRODUCT') {
-            $fld1 = $frm->addTextBox(Labels::getLabel('LBL_Add_Option_Groups', $this->adminLangId), 'option_name');
+            $fld1 = $frm->addTextBox(Labels::getLabel('LBL_Add_Option_Groups', $this->siteLangId), 'option_name');
             $fld1->htmlAfterField = '<div class="box--scroller"><ul class="columlist list--vertical" id="product-option-js"></ul></div>';
 
-            $fld1 = $frm->addTextBox(Labels::getLabel('LBL_Add_Tag', $this->adminLangId), 'tag_name');
+            $fld1 = $frm->addTextBox(Labels::getLabel('LBL_Add_Tag', $this->siteLangId), 'tag_name');
             $fld1->htmlAfterField = '<div class="box--scroller"><ul class="columlist list--vertical" id="product-tag-js"></ul></div>';
         }
         if ($type != 'REQUESTED_CATALOG_PRODUCT') {
-            $frm->addTextBox(Labels::getLabel('LBL_EAN/UPC/GTIN_code', $this->adminLangId), 'product_upc');
+            $frm->addTextBox(Labels::getLabel('LBL_EAN/UPC/GTIN_code', $this->siteLangId), 'product_upc');
         }
 
         if ($type != 'REQUESTED_CATALOG_PRODUCT') {
@@ -611,7 +611,7 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
         }
         $frm->addHiddenField('', 'product_attrgrp_id', $attrgrp_id);
         $frm->addHiddenField('', 'product_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -629,7 +629,7 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
                 $frm->addHtml('', 'optionSectionHeading', '');
             }
             foreach ($optionArr as $val) {
-                $optionSrch = Option::getSearchObject($this->adminLangId);
+                $optionSrch = Option::getSearchObject($this->siteLangId);
                 $optionSrch->addMultipleFields(array('IFNULL(option_name,option_identifier) as option_name', 'option_id'));
                 $optionSrch->doNotCalculateRecords();
                 $optionSrch->setPageSize(1);
@@ -639,9 +639,9 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
                 if ($option == false) {
                     continue;
                 }
-                $optionValues = Product::getOptionValues($option['option_id'], $this->adminLangId);
+                $optionValues = Product::getOptionValues($option['option_id'], $this->siteLangId);
                 $option_name = ($option['option_name'] != '') ? $option['option_name'] : $option['option_identifier'];
-                $fld = $frm->addSelectBox($option_name, 'selprodoption_optionvalue_id[' . $option['option_id'] . ']', $optionValues, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
+                $fld = $frm->addSelectBox($option_name, 'selprodoption_optionvalue_id[' . $option['option_id'] . ']', $optionValues, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
                 $fld->requirements()->setRequired();
             }
         } else {
@@ -650,16 +650,16 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
                 $defaultProductCond = Product::CONDITION_NEW;
             }
 
-            $productOptions = Product::getProductOptions($product_id, $this->adminLangId, true);
+            $productOptions = Product::getProductOptions($product_id, $this->siteLangId, true);
             if ($productOptions) {
                 $frm->addHtml('', 'optionSectionHeading', '');
                 foreach ($productOptions as $option) {
                     $option_name = ($option['option_name'] != '') ? $option['option_name'] : $option['option_identifier'];
-                    $fld = $frm->addSelectBox($option_name, 'selprodoption_optionvalue_id[' . $option['option_id'] . ']', $option['optionValues'], '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
+                    $fld = $frm->addSelectBox($option_name, 'selprodoption_optionvalue_id[' . $option['option_id'] . ']', $option['optionValues'], '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
                     // $fld->requirements()->setRequired();
                 }
             }
-            $frm->addTextBox(Labels::getLabel('LBL_User', $this->adminLangId), 'selprod_user_shop_name', '', array(' ' => ' '))->requirements()->setRequired();
+            $frm->addTextBox(Labels::getLabel('LBL_User', $this->siteLangId), 'selprod_user_shop_name', '', array(' ' => ' '))->requirements()->setRequired();
             $frm->addHtml('', 'user_shop', '<div id="user_shop_name"></div>');
         }
 
@@ -671,83 +671,83 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
         }
 
         $frm->addHiddenField('', 'selprod_user_id');
-        $frm->addTextBox(Labels::getLabel('LBL_Url_Keyword', $this->adminLangId), 'selprod_url_keyword');
+        $frm->addTextBox(Labels::getLabel('LBL_Url_Keyword', $this->siteLangId), 'selprod_url_keyword');
 
-        $costPrice = $frm->addFloatField(Labels::getLabel('LBL_Cost_Price', $this->adminLangId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'selprod_cost');
+        $costPrice = $frm->addFloatField(Labels::getLabel('LBL_Cost_Price', $this->siteLangId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'selprod_cost');
         $costPrice->requirements()->setPositive();
 
-        $fld = $frm->addFloatField(Labels::getLabel('LBL_Price', $this->adminLangId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'selprod_price');
+        $fld = $frm->addFloatField(Labels::getLabel('LBL_Price', $this->siteLangId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'selprod_price');
         $fld->requirements()->setPositive();
         if (isset($productData['product_min_selling_price'])) {
             $fld->requirements()->setRange($productData['product_min_selling_price'], 9999999999);
         }
 
-        $fld = $frm->addIntegerField(Labels::getLabel('LBL_Quantity', $this->adminLangId), 'selprod_stock');
+        $fld = $frm->addIntegerField(Labels::getLabel('LBL_Quantity', $this->siteLangId), 'selprod_stock');
         $fld->requirements()->setPositive();
-        $fld = $frm->addIntegerField(Labels::getLabel('LBL_Minimum_Quantity', $this->adminLangId), 'selprod_min_order_qty');
+        $fld = $frm->addIntegerField(Labels::getLabel('LBL_Minimum_Quantity', $this->siteLangId), 'selprod_min_order_qty');
         $fld->requirements()->setPositive();
-        $frm->addCheckBox(Labels::getLabel('LBL_System_Should_Maintain_Stock_Levels', $this->adminLangId), 'selprod_subtract_stock', applicationConstants::YES, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel('LBL_System_Should_Track_Product_Inventory', $this->adminLangId), 'selprod_track_inventory', Product::INVENTORY_TRACK, array(), false, 0);
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Alert_Stock_Level', $this->adminLangId), 'selprod_threshold_stock_level');
+        $frm->addCheckBox(Labels::getLabel('LBL_System_Should_Maintain_Stock_Levels', $this->siteLangId), 'selprod_subtract_stock', applicationConstants::YES, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel('LBL_System_Should_Track_Product_Inventory', $this->siteLangId), 'selprod_track_inventory', Product::INVENTORY_TRACK, array(), false, 0);
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Alert_Stock_Level', $this->siteLangId), 'selprod_threshold_stock_level');
         $fld->requirements()->setInt();
 
-        /* $threshold_stock_levelUnReqObj = new FormFieldRequirement( 'selprod_threshold_stock_level', Labels::getLabel('LBL_Alert_Stock_Level', $this->adminLangId) );
+        /* $threshold_stock_levelUnReqObj = new FormFieldRequirement( 'selprod_threshold_stock_level', Labels::getLabel('LBL_Alert_Stock_Level', $this->siteLangId) );
 $threshold_stock_levelUnReqObj->setRequired(false);
 
-$threshold_stock_levelReqObj = new FormFieldRequirement( 'selprod_threshold_stock_level', Labels::getLabel('LBL_Alert_Stock_Level', $this->adminLangId) );
+$threshold_stock_levelReqObj = new FormFieldRequirement( 'selprod_threshold_stock_level', Labels::getLabel('LBL_Alert_Stock_Level', $this->siteLangId) );
 $threshold_stock_levelReqObj->setRequired(true);
 
 $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Product::INVENTORY_TRACK, 'eq', 'selprod_threshold_stock_level', $threshold_stock_levelUnReqObj);
 $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Product::INVENTORY_NOT_TRACK, 'eq', 'selprod_threshold_stock_level', $threshold_stock_levelReqObj); */
 
-        $fld_sku = $frm->addTextBox(Labels::getLabel('LBL_Product_SKU', $this->adminLangId), 'selprod_sku');
+        $fld_sku = $frm->addTextBox(Labels::getLabel('LBL_Product_SKU', $this->siteLangId), 'selprod_sku');
         if (FatApp::getConfig("CONF_PRODUCT_SKU_MANDATORY", FatUtility::VAR_INT, 1)) {
             $fld_sku->requirements()->setRequired();
         }
 
         if ($productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-            $fld = $frm->addIntegerField(Labels::getLabel('LBL_Max_Download_Times', $this->adminLangId), 'selprod_max_download_times');
-            $fld->htmlAfterField = '<small class="text--small">' . Labels::getLabel('LBL_-1_for_unlimited', $this->adminLangId) . '</small>';
+            $fld = $frm->addIntegerField(Labels::getLabel('LBL_Max_Download_Times', $this->siteLangId), 'selprod_max_download_times');
+            $fld->htmlAfterField = '<small class="text--small">' . Labels::getLabel('LBL_-1_for_unlimited', $this->siteLangId) . '</small>';
 
-            $fld1 = $frm->addIntegerField(Labels::getLabel('LBL_Validity_(days)', $this->adminLangId), 'selprod_download_validity_in_days');
-            $fld1->htmlAfterField = '<small class="text--small">' . Labels::getLabel('LBL_-1_for_unlimited', $this->adminLangId) . '</small>';
+            $fld1 = $frm->addIntegerField(Labels::getLabel('LBL_Validity_(days)', $this->siteLangId), 'selprod_download_validity_in_days');
+            $fld1->htmlAfterField = '<small class="text--small">' . Labels::getLabel('LBL_-1_for_unlimited', $this->siteLangId) . '</small>';
             $frm->addHiddenField('', 'selprod_condition', $defaultProductCond);
         } else {
-            $fld = $frm->addSelectBox(Labels::getLabel('LBL_Product_Condition', $this->adminLangId), 'selprod_condition', Product::getConditionArr($this->adminLangId), '', array(), Labels::getLabel('LBL_Select_Condition', $this->adminLangId));
+            $fld = $frm->addSelectBox(Labels::getLabel('LBL_Product_Condition', $this->siteLangId), 'selprod_condition', Product::getConditionArr($this->siteLangId), '', array(), Labels::getLabel('LBL_Select_Condition', $this->siteLangId));
             $fld->requirements()->setRequired();
         }
 
-        $frm->addDateField(Labels::getLabel('LBL_Date_Available', $this->adminLangId), 'selprod_available_from', '', array('readonly' => 'readonly'))->requirements()->setRequired();
+        $frm->addDateField(Labels::getLabel('LBL_Date_Available', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly'))->requirements()->setRequired();
 
-        /* $frm->addDateTimeField( Labels::getLabel('LBL_Date_Available', $this->adminLangId), 'selprod_available_from', '' , array('readonly' => 'readonly')); */
+        /* $frm->addDateTimeField( Labels::getLabel('LBL_Date_Available', $this->siteLangId), 'selprod_available_from', '' , array('readonly' => 'readonly')); */
 
-        /* $frm->addTextArea( Labels::getLabel( 'LBL_Any_Extra_Comment_for_buyer', $this->adminLangId), 'selprod_comments'); */
+        /* $frm->addTextArea( Labels::getLabel( 'LBL_Any_Extra_Comment_for_buyer', $this->siteLangId), 'selprod_comments'); */
 
-        $useShopPolicy = $frm->addCheckBox(Labels::getLabel('LBL_USE_SHOP_RETURN_AND_CANCELLATION_AGE_POLICY', $this->adminLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
+        $useShopPolicy = $frm->addCheckBox(Labels::getLabel('LBL_USE_SHOP_RETURN_AND_CANCELLATION_AGE_POLICY', $this->siteLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
 
-        $fld = $frm->addIntegerField(Labels::getLabel('LBL_Product_Order_Return_Period_(Days)', $this->adminLangId), 'selprod_return_age');
+        $fld = $frm->addIntegerField(Labels::getLabel('LBL_Product_Order_Return_Period_(Days)', $this->siteLangId), 'selprod_return_age');
 
-        $orderReturnAgeReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('LBL_Product_Order_Return_Period_(Days)', $this->adminLangId));
+        $orderReturnAgeReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('LBL_Product_Order_Return_Period_(Days)', $this->siteLangId));
         $orderReturnAgeReqFld->setRequired(true);
         $orderReturnAgeReqFld->setPositive();
-        $orderReturnAgeReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $this->adminLangId) . ' </small>';
+        $orderReturnAgeReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
 
-        $orderReturnAgeUnReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('LBL_Product_Order_Return_Period_(Days)', $this->adminLangId));
+        $orderReturnAgeUnReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('LBL_Product_Order_Return_Period_(Days)', $this->siteLangId));
         $orderReturnAgeUnReqFld->setRequired(false);
         $orderReturnAgeUnReqFld->setPositive();
-        $orderReturnAgeUnReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $this->adminLangId) . ' </small>';
+        $orderReturnAgeUnReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
 
-        $fld = $frm->addIntegerField(Labels::getLabel('LBL_Product_Order_Cancellation_Period_(Days)', $this->adminLangId), 'selprod_cancellation_age');
+        $fld = $frm->addIntegerField(Labels::getLabel('LBL_Product_Order_Cancellation_Period_(Days)', $this->siteLangId), 'selprod_cancellation_age');
 
-        $orderCancellationAgeReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('LBL_Product_Order_Cancellation_Period_(Days)', $this->adminLangId));
+        $orderCancellationAgeReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('LBL_Product_Order_Cancellation_Period_(Days)', $this->siteLangId));
         $orderCancellationAgeReqFld->setRequired(true);
         $orderCancellationAgeReqFld->setPositive();
-        $orderCancellationAgeReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $this->adminLangId) . ' </small>';
+        $orderCancellationAgeReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
 
-        $orderCancellationAgeUnReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('LBL_Product_Order_Cancellation_Period_(Days)', $this->adminLangId));
+        $orderCancellationAgeUnReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('LBL_Product_Order_Cancellation_Period_(Days)', $this->siteLangId));
         $orderCancellationAgeUnReqFld->setRequired(false);
         $orderCancellationAgeUnReqFld->setPositive();
-        $orderCancellationAgeUnReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $this->adminLangId) . ' </small>';
+        $orderCancellationAgeUnReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
 
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_return_age', $orderReturnAgeUnReqFld);
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_return_age', $orderReturnAgeReqFld);
@@ -755,33 +755,33 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_cancellation_age', $orderCancellationAgeUnReqFld);
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_cancellation_age', $orderCancellationAgeReqFld);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_PUBLISH_INVENTORY', $this->adminLangId), 'selprod_active', applicationConstants::getYesNoArr($this->adminLangId), applicationConstants::YES, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_PUBLISH_INVENTORY', $this->siteLangId), 'selprod_active', applicationConstants::getYesNoArr($this->siteLangId), applicationConstants::YES, array(), '');
 
-        $yesNoArr = applicationConstants::getYesNoArr($this->adminLangId);
-        $codFld = $frm->addSelectBox(Labels::getLabel('LBL_Available_for_COD', $this->adminLangId), 'selprod_cod_enabled', $yesNoArr, '0', array(), '');
+        $yesNoArr = applicationConstants::getYesNoArr($this->siteLangId);
+        $codFld = $frm->addSelectBox(Labels::getLabel('LBL_Available_for_COD', $this->siteLangId), 'selprod_cod_enabled', $yesNoArr, '0', array(), '');
         $paymentMethod = new PaymentMethods();
         if (!$paymentMethod->cashOnDeliveryIsActive()) {
             $codFld->addFieldTagAttribute('disabled', 'disabled');
-            $codFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_COD_option_is_disabled_in_payment_gateway_settings', $this->adminLangId) . '</small>';
+            $codFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_COD_option_is_disabled_in_payment_gateway_settings', $this->siteLangId) . '</small>';
         }
 
-        $fulFillmentArr = Shipping::getFulFillmentArr($this->adminLangId, $isPickupEnabled);
+        $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId, $isPickupEnabled);
         if ($productData['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
-            $fld = $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->adminLangId), 'selprod_fulfillment_type', $fulFillmentArr, applicationConstants::NO, array(), Labels::getLabel('LBL_Select', $this->adminLangId));
+            $fld = $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->siteLangId), 'selprod_fulfillment_type', $fulFillmentArr, applicationConstants::NO, array(), Labels::getLabel('LBL_Select', $this->siteLangId));
             $fld->requirement->setRequired(true);
         }
-        $frm->addRequiredField(Labels::getLabel('LBL_Title', $this->adminLangId), 'selprod_title' . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
-        $frm->addTextArea(Labels::getLabel('LBL_Any_Extra_Comment_for_buyer', $this->adminLangId), 'selprod_comments' . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
+        $frm->addRequiredField(Labels::getLabel('LBL_Title', $this->siteLangId), 'selprod_title' . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
+        $frm->addTextArea(Labels::getLabel('LBL_Any_Extra_Comment_for_buyer', $this->siteLangId), 'selprod_comments' . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
 
         $languages = Language::getAllNames();
         unset($languages[FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1)]);
         foreach ($languages as $langId => $langName) {
-            $frm->addTextBox(Labels::getLabel('LBL_Title', $this->adminLangId), 'selprod_title' . $langId);
-            $frm->addTextArea(Labels::getLabel('LBL_Any_Extra_Comment_for_buyer', $this->adminLangId), 'selprod_comments' . $langId);
+            $frm->addTextBox(Labels::getLabel('LBL_Title', $this->siteLangId), 'selprod_title' . $langId);
+            $frm->addTextArea(Labels::getLabel('LBL_Any_Extra_Comment_for_buyer', $this->siteLangId), 'selprod_comments' . $langId);
         }
         $frm->addHiddenField('', 'selprod_product_id', $product_id);
         $frm->addHiddenField('', 'selprod_id');
-        $fld1 = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $fld1 = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -813,7 +813,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
             }
             return $translatedText;
         }
-        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
     }
 
     public function imgCropper()
@@ -960,7 +960,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
     {
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         if (!empty($fields)) {

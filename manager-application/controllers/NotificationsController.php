@@ -39,7 +39,7 @@ class NotificationsController extends AdminBaseController
 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set('labelArr', Notification::getLabelKeyString($this->adminLangId));
+        $this->set('labelArr', Notification::getLabelKeyString($this->siteLangId));
         $this->set('arrListing', $records);
         $this->set('pageCount', $srch->pages());
         $this->set('page', $page);
@@ -101,7 +101,7 @@ class NotificationsController extends AdminBaseController
 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set('labelArr', Notification::getLabelKeyString($this->adminLangId));
+        $this->set('labelArr', Notification::getLabelKeyString($this->siteLangId));
         $this->set('arrListing', $records);
         $this->_template->render(false, false);
     }

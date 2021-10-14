@@ -16,11 +16,11 @@ class MobileAppSettingsController extends AdminBaseController
     private function getAppThemeForm()
     {
         $frm = new Form('frmAppThemeSettings');
-        $frm->addRequiredField(Labels::getLabel('LBL_PRIMARY_THEME_COLOR', $this->adminLangId), 'CONF_PRIMARY_APP_THEME_COLOR')->addFieldTagAttribute('class', 'jscolor');
-        $frm->addRequiredField(Labels::getLabel('LBL_PRIMARY_INVERSE_THEME_COLOR', $this->adminLangId), 'CONF_PRIMARY_INVERSE_APP_THEME_COLOR')->addFieldTagAttribute('class', 'jscolor');
-        $frm->addRequiredField(Labels::getLabel('LBL_SECONDARY_THEME_COLOR', $this->adminLangId), 'CONF_SECONDARY_APP_THEME_COLOR')->addFieldTagAttribute('class', 'jscolor');
-        $frm->addRequiredField(Labels::getLabel('LBL_SECONDARY_INVERSE_THEME_COLOR', $this->adminLangId), 'CONF_SECONDARY_INVERSE_APP_THEME_COLOR')->addFieldTagAttribute('class', 'jscolor');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_Save", $this->adminLangId));
+        $frm->addRequiredField(Labels::getLabel('LBL_PRIMARY_THEME_COLOR', $this->siteLangId), 'CONF_PRIMARY_APP_THEME_COLOR')->addFieldTagAttribute('class', 'jscolor');
+        $frm->addRequiredField(Labels::getLabel('LBL_PRIMARY_INVERSE_THEME_COLOR', $this->siteLangId), 'CONF_PRIMARY_INVERSE_APP_THEME_COLOR')->addFieldTagAttribute('class', 'jscolor');
+        $frm->addRequiredField(Labels::getLabel('LBL_SECONDARY_THEME_COLOR', $this->siteLangId), 'CONF_SECONDARY_APP_THEME_COLOR')->addFieldTagAttribute('class', 'jscolor');
+        $frm->addRequiredField(Labels::getLabel('LBL_SECONDARY_INVERSE_THEME_COLOR', $this->siteLangId), 'CONF_SECONDARY_INVERSE_APP_THEME_COLOR')->addFieldTagAttribute('class', 'jscolor');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_Save", $this->siteLangId));
         return $frm;
     }
 
@@ -58,7 +58,7 @@ class MobileAppSettingsController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 }

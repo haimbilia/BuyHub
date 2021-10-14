@@ -21,7 +21,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back"></use>
                                     </svg>
                                 </a>
-                                <?php echo Labels::getLabel('LBL_PLUGINS', $adminLangId); ?>
+                                <?php echo Labels::getLabel('LBL_PLUGINS', $siteLangId); ?>
                             </h3>
                         </div>
                     </div>

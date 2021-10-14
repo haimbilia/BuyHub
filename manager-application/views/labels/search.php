@@ -24,14 +24,14 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, nl2br($row[$key]), true);
                 break;
             case 'label_type':
-                $typeArr = Labels::getTypeArr($adminLangId);
+                $typeArr = Labels::getTypeArr($siteLangId);
                 $type = 1 > FatUtility::int($row[$key]) ? Labels::TYPE_WEB : $row[$key];
                 $td->appendElement('plaintext', $tdAttr, $typeArr[$type], true);
                 break;
             case 'action':
 
                 $data = [
-                    'adminLangId' => $adminLangId,
+                    'siteLangId' => $siteLangId,
                     'recordId' => $row['label_id']
                 ];
                 
@@ -41,7 +41,7 @@ foreach ($arrListing as $sn => $row) {
                             'attr' => [
                                 'href' => 'javascript:void(0)',
                                 'onclick' => "labelsForm(" . $row['label_id'] . "," . $row['label_type'] . ");",
-                                'title' => Labels::getLabel('LBL_EDIT', $adminLangId)
+                                'title' => Labels::getLabel('LBL_EDIT', $siteLangId)
                             ],
                             'label' => '<svg class="svg" width="18" height="18">
                                             <use
@@ -68,7 +68,7 @@ if (count($arrListing) == 0) {
         array(
             'colspan' => count($fields)
         ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $adminLangId)
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );
 }
 

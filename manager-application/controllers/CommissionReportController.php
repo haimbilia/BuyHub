@@ -34,7 +34,7 @@ class CommissionReportController extends AdminBaseController
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
                         
         $attr = array('op_shop_name', 'op.op_selprod_user_id', 'o.order_id', 'op.op_id', 'count(op.op_id) as totChildOrders', 'seller.user_name as owner_name', 'seller_cred.credential_email as owner_email', 'sum(( op_unit_price * op_qty ) + op_other_charges - op_refund_amount) as total_sales', 'SUM(op_commission_charged - op_refund_commission) as total_commission');
-        $srch = Report::salesReportObject($this->adminLangId, true, $attr);
+        $srch = Report::salesReportObject($this->siteLangId, true, $attr);
         
         $srch->addGroupBy('op.op_shop_id');
         /* $srch->addMultipleFields( array('op_shop_name', 'op.op_selprod_user_id', 'o.order_id', 'op.op_id', 'count(op.op_id) as totChildOrders', 'seller.user_name as owner_name','seller_cred.credential_email as owner_email', 'sum(( op_unit_price * op_qty ) + op_other_charges - op_refund_amount) as total_sales', 'SUM(op_commission_charged - op_refund_commission) as total_commission') ); */
@@ -69,13 +69,13 @@ class CommissionReportController extends AdminBaseController
             $srch->doNotLimitRecords();
             $rs = $srch->getResultSet();
             $sheetData = array();
-            $arr = array( Labels::getLabel("LBL_Shop_Name", $this->adminLangId), Labels::getLabel("LBL_Owner", $this->adminLangId), Labels::getLabel("LBL_Sales", $this->adminLangId), Labels::getLabel("LBL_Coimmission", $this->adminLangId) );
+            $arr = array( Labels::getLabel("LBL_Shop_Name", $this->siteLangId), Labels::getLabel("LBL_Owner", $this->siteLangId), Labels::getLabel("LBL_Sales", $this->siteLangId), Labels::getLabel("LBL_Coimmission", $this->siteLangId) );
             array_push($sheetData, $arr);
             while ($row = $db->fetch($rs)) {
                 $arr = array( $row['op_shop_name'], $row['owner_name'] . "\n(" . $row['owner_email'] . ")", CommonHelper::displayMoneyFormat($row['total_sales'], true, true), CommonHelper::displayMoneyFormat($row['total_commission'], true, true) );
                 array_push($sheetData, $arr);
             }
-            CommonHelper::convertToCsv($sheetData, str_replace("{generationdate}", date("d-M-Y"), Labels::getLabel("LBL_Commission_Report_{generationdate}", $this->adminLangId)) . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, str_replace("{generationdate}", date("d-M-Y"), Labels::getLabel("LBL_Commission_Report_{generationdate}", $this->siteLangId)) . '.csv', ',');
             exit;
         } else {
             $srch->setPageNumber($page);
@@ -102,14 +102,14 @@ class CommissionReportController extends AdminBaseController
         $frm = new Form('frmCommissionReportSearch');
         $frm->addHiddenField('', 'page', 1);
         
-        $frm->addTextBox(Labels::getLabel('LBL_Shop', $this->adminLangId), 'shop_name');
+        $frm->addTextBox(Labels::getLabel('LBL_Shop', $this->siteLangId), 'shop_name');
         $frm->addHiddenField('', 'op_shop_id', 0);
         
-        $frm->addTextBox(Labels::getLabel('LBL_Shop_Owner', $this->adminLangId), 'user_name');
+        $frm->addTextBox(Labels::getLabel('LBL_Shop_Owner', $this->siteLangId), 'user_name');
         $frm->addHiddenField('', 'op_selprod_user_id', 0);
         
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

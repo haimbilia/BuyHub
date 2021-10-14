@@ -1,17 +1,17 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="sectionhead">
-    <h4><?php echo Labels::getLabel('LBL_navigation_Pages_Listing', $adminLangId); ?></h4>
+    <h4><?php echo Labels::getLabel('LBL_navigation_Pages_Listing', $siteLangId); ?></h4>
     <?php
     $ul = new HtmlElement("ul", array("class" => "actions actions--centered"));
     $li = $ul->appendElement("li", array('class' => 'droplink'));
-    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $adminLangId)), '<i class="ion-android-more-horizontal icon"></i>', true);
+    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId)), '<i class="ion-android-more-horizontal icon"></i>', true);
     $innerDiv = $li->appendElement('div', array('class' => 'dropwrap'));
     $innerUl = $innerDiv->appendElement('ul', array('class' => 'linksvertical'));
     $innerLiBack = $innerUl->appendElement('li');
-    $innerLiBack->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_back_To_Navigations', $adminLangId), "onclick" => "searchNavigations()"), Labels::getLabel('LBL_back_To_Navigations', $adminLangId), true);
+    $innerLiBack->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_back_To_Navigations', $siteLangId), "onclick" => "searchNavigations()"), Labels::getLabel('LBL_back_To_Navigations', $siteLangId), true);
     if ($canEdit) {
         $innerLiAdd = $innerUl->appendElement('li');
-        $innerLiAdd->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Add_Navigation_Page', $adminLangId), "onclick" => "addNavigationLinkForm(" . $nav_id . ",0)"), Labels::getLabel('LBL_Add_Navigation_Page', $adminLangId), true);
+        $innerLiAdd->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Add_Navigation_Page', $siteLangId), "onclick" => "addNavigationLinkForm(" . $nav_id . ",0)"), Labels::getLabel('LBL_Add_Navigation_Page', $siteLangId), true);
     }
     echo $ul->getHtml();
     ?>
@@ -22,8 +22,8 @@
         <?php /* if( isset($arrListing) && count($arrListing) ){ */
         $arr_flds = array(
             'dragdrop' => '',
-            'listserial' => Labels::getLabel('LBL_#', $adminLangId),
-            'nlink_identifier' => Labels::getLabel('LBL_caption', $adminLangId),
+            'listserial' => Labels::getLabel('LBL_#', $siteLangId),
+            'nlink_identifier' => Labels::getLabel('LBL_caption', $siteLangId),
             'action' => '',
         );
         if (!$canEdit) {
@@ -65,8 +65,8 @@
                         break;
                     case 'action':
                         if ($canEdit) {
-                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $adminLangId), "onclick" => "addNavigationLinkForm(" . $row['nlink_nav_id'] . ", " . $row['nlink_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
-                            $td->appendElement('a', array('href' => "javascript:void(0)", 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Delete', $adminLangId), "onclick" => "deleteNavigationLink(" . $row['nlink_nav_id'] . ", " . $row['nlink_id'] . ")"), "<i class='fa fa-trash  icon'></i>", true);
+                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "addNavigationLinkForm(" . $row['nlink_nav_id'] . ", " . $row['nlink_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
+                            $td->appendElement('a', array('href' => "javascript:void(0)", 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteNavigationLink(" . $row['nlink_nav_id'] . ", " . $row['nlink_id'] . ")"), "<i class='fa fa-trash  icon'></i>", true);
                         }
                         break;
                     default:
@@ -80,7 +80,7 @@
 
 
         if (count($arrListing) == 0) {
-            $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
+            $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
         }
 
         echo $tbl->getHtml();

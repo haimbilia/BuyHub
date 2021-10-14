@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_EMPTY_CART_ITEMS', $adminLangId);
+$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_EMPTY_CART_ITEMS', $siteLangId);
 
 /* No sorting functionality required if no record found. */
 if (2 > count($arrListing)) {

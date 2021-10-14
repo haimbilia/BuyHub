@@ -33,7 +33,7 @@ class BuyersReportController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_DESC;
         }
         $srchFrm = $this->getSearchForm($fields);
@@ -130,7 +130,7 @@ class BuyersReportController extends AdminBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Buyers_Sales_Report', $this->adminLangId) . '_' . date("d-M-Y") . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Buyers_Sales_Report', $this->siteLangId) . '_' . date("d-M-Y") . '.csv', ',');
             exit;
         }
 
@@ -156,7 +156,7 @@ class BuyersReportController extends AdminBaseController
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page');
         
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         if (!empty($fields)) {
@@ -164,46 +164,46 @@ class BuyersReportController extends AdminBaseController
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
 
-            /* $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  ''); */
+            /* $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  ''); */
         }
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
 
     private function getFormColumns()
     {
-        $buyerReportsCacheVar = FatCache::get('buyerReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $buyerReportsCacheVar = FatCache::get('buyerReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$buyerReportsCacheVar) {
             $arr = [
-                'buyerName' => Labels::getLabel('LBL_Name', $this->adminLangId),
-                'totOrders' => Labels::getLabel('LBL_No._of_Orders', $this->adminLangId),
-                'orderItems' => Labels::getLabel('LBL_Ordered_Items', $this->adminLangId),
-                'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $this->adminLangId),
-                'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $this->adminLangId),
-                'grossSales' => Labels::getLabel('LBL_Gross_Sale', $this->adminLangId),
-                // 'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->adminLangId),
-                'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $this->adminLangId),
+                'buyerName' => Labels::getLabel('LBL_Name', $this->siteLangId),
+                'totOrders' => Labels::getLabel('LBL_No._of_Orders', $this->siteLangId),
+                'orderItems' => Labels::getLabel('LBL_Ordered_Items', $this->siteLangId),
+                'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $this->siteLangId),
+                'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $this->siteLangId),
+                'grossSales' => Labels::getLabel('LBL_Gross_Sale', $this->siteLangId),
+                // 'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->siteLangId),
+                'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $this->siteLangId),
 
-                'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->adminLangId),
+                'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->siteLangId),
 
-                'shippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->adminLangId),
+                'shippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->siteLangId),
 
-                'discountTotal' => Labels::getLabel('LBL_Total_Discount', $this->adminLangId),
-                'couponDiscount' => Labels::getLabel('LBL_Coupon_Discount', $this->adminLangId),
-                'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $this->adminLangId),
-                'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $this->adminLangId),
+                'discountTotal' => Labels::getLabel('LBL_Total_Discount', $this->siteLangId),
+                'couponDiscount' => Labels::getLabel('LBL_Coupon_Discount', $this->siteLangId),
+                'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $this->siteLangId),
+                'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $this->siteLangId),
 
-                'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->adminLangId),
-                'refundedShipping' => Labels::getLabel('LBL_Refunded_Shipping', $this->adminLangId),
-                'refundedTax' => Labels::getLabel('LBL_Refunded_Tax', $this->adminLangId),
+                'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->siteLangId),
+                'refundedShipping' => Labels::getLabel('LBL_Refunded_Shipping', $this->siteLangId),
+                'refundedTax' => Labels::getLabel('LBL_Refunded_Tax', $this->siteLangId),
 
-                'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->adminLangId),
+                'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->siteLangId),
             ];
-            FatCache::set('buyerReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            FatCache::set('buyerReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {
             $arr =  unserialize($buyerReportsCacheVar);
         }

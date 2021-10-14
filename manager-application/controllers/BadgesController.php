@@ -17,9 +17,9 @@ class BadgesController extends AdminBaseController
         switch ($action) {
             case 'list':
             case 'form':
-                $title = Labels::getLabel('LBL_BADGES', $this->adminLangId);
+                $title = Labels::getLabel('LBL_BADGES', $this->siteLangId);
                 if ('badges/list/' . Badge::TYPE_RIBBON == current($_GET)) {
-                    $title = Labels::getLabel('LBL_RIBBONS', $this->adminLangId);
+                    $title = Labels::getLabel('LBL_RIBBONS', $this->siteLangId);
                 }
                 $this->nodes = [
                     ['title' => $title]
@@ -55,7 +55,7 @@ class BadgesController extends AdminBaseController
             FatUtility::dieJsonError(current($searchForm->getValidationErrors()));
         }
 
-        $srch = new BadgeSearch($this->adminLangId);
+        $srch = new BadgeSearch($this->siteLangId);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
@@ -85,7 +85,7 @@ class BadgesController extends AdminBaseController
         $srch->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC');
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $approvalStatusArr = Badge::getApprovalStatusArr($this->adminLangId);
+        $approvalStatusArr = Badge::getApprovalStatusArr($this->siteLangId);
         
         $this->set("badgeType", $badgeType);
         $this->set("approvalStatusArr", $approvalStatusArr);
@@ -174,7 +174,7 @@ class BadgesController extends AdminBaseController
         if (!$record->save()) {
             $msg = $record->getError();
             if (false !== strpos(strtolower($msg), 'duplicate')) {
-                $msg = Labels::getLabel('MSG_DUPLICATE_RECORD_NAME', $this->adminLangId);
+                $msg = Labels::getLabel('MSG_DUPLICATE_RECORD_NAME', $this->siteLangId);
             }
             FatUtility::dieJsonError($msg);
         }
@@ -232,7 +232,7 @@ class BadgesController extends AdminBaseController
 
         $this->set('badge_id', $badgeId);
         $this->set('badge_type', $badgeType);
-        $this->set('msg', Labels::getLabel('MGS_ADDED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MGS_ADDED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -240,18 +240,18 @@ class BadgesController extends AdminBaseController
     {
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'badge_type');
-        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->adminLangId), 'keyword', '');
+        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'keyword', '');
 
         if (Badge::TYPE_BADGE == $badgeType) {
-            $approvalArr = Badge::getApprovalStatusArr($this->adminLangId);
-            $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->adminLangId), 'badge_required_approval', $approvalArr);
+            $approvalArr = Badge::getApprovalStatusArr($this->siteLangId);
+            $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr);
             
-            $conditionTypeArr = Badge::getConditionTypeArr($this->adminLangId);
-            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badge_condition_type', $conditionTypeArr);
+            $conditionTypeArr = Badge::getConditionTypeArr($this->siteLangId);
+            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->siteLangId), 'badge_condition_type', $conditionTypeArr);
         }
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -263,54 +263,54 @@ class BadgesController extends AdminBaseController
         $frm->addHiddenField('', 'badge_type', $type);
 
         if (Badge::TYPE_RIBBON == $type) {
-            $badgeShapeTypes = Badge::getShapeTypesArr($this->adminLangId);
-            $fld = $frm->addSelectBox(Labels::getLabel('LBL_SHAPE', $this->adminLangId), 'badge_shape_type', $badgeShapeTypes);
+            $badgeShapeTypes = Badge::getShapeTypesArr($this->siteLangId);
+            $fld = $frm->addSelectBox(Labels::getLabel('LBL_SHAPE', $this->siteLangId), 'badge_shape_type', $badgeShapeTypes);
             $fld->requirement->setRequired(true);
-            $frm->addCheckBox(Labels::getLabel('LBL_DISPLAY_INSIDE', $this->adminLangId), 'badge_display_inside', 1, [], false, 0 );
-            $frm->addRequiredField(Labels::getLabel('LBL_COLOR', $this->adminLangId), 'badge_color', '', ['class' => 'jscolor']);
+            $frm->addCheckBox(Labels::getLabel('LBL_DISPLAY_INSIDE', $this->siteLangId), 'badge_display_inside', 1, [], false, 0 );
+            $frm->addRequiredField(Labels::getLabel('LBL_COLOR', $this->siteLangId), 'badge_color', '', ['class' => 'jscolor']);
         } else {
-            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badge_condition_type', Badge::getConditionTypeArr($this->adminLangId), '', [], '');
+            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->siteLangId), 'badge_condition_type', Badge::getConditionTypeArr($this->siteLangId), '', [], '');
         }
 
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $langData = Language::getAllNames();
         foreach ($langData as $langId => $data) {
-            $fld = $frm->addTextBox(Labels::getLabel('LBL_NAME', $this->adminLangId), 'badge_name[' . $langId . ']');
+            $fld = $frm->addTextBox(Labels::getLabel('LBL_NAME', $this->siteLangId), 'badge_name[' . $langId . ']');
             if ($siteDefaultLangId == $langId) {
                 $fld->requirement->setRequired(true);
             }
             if (Badge::TYPE_RIBBON == $type) {
-                $fld->htmlAfterField = '<small>' . CommonHelper::replaceStringData(Labels::getLabel('LBL_MIN_LENGTH_{MINLEN}_CHARACTERS_AND_MAX_LENGTH_{MAXLEN}_CHARACTERS.', $this->adminLangId), ['{MINLEN}' => Badge::RIBB_TEXT_MIN_LEN, '{MAXLEN}' => Badge::RIBB_TEXT_MAX_LEN]) . '</small>';
+                $fld->htmlAfterField = '<small>' . CommonHelper::replaceStringData(Labels::getLabel('LBL_MIN_LENGTH_{MINLEN}_CHARACTERS_AND_MAX_LENGTH_{MAXLEN}_CHARACTERS.', $this->siteLangId), ['{MINLEN}' => Badge::RIBB_TEXT_MIN_LEN, '{MAXLEN}' => Badge::RIBB_TEXT_MAX_LEN]) . '</small>';
             }
         }
         
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         unset($langData[$siteDefaultLangId]);
         if (!empty($translatorSubscriptionKey) && count($langData) > 0) {
-            $frm->addCheckBox(Labels::getLabel('LBL_TRANSLATE_TO_OTHER_LANGUAGES', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_TRANSLATE_TO_OTHER_LANGUAGES', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         if (Badge::TYPE_BADGE == $type) {
-            $requireApprovalArr = Badge::getApprovalStatusArr($this->adminLangId);
-            $fld = $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->adminLangId), 'badge_required_approval', $requireApprovalArr);
+            $requireApprovalArr = Badge::getApprovalStatusArr($this->siteLangId);
+            $fld = $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->siteLangId), 'badge_required_approval', $requireApprovalArr);
             $fld->requirement->setRequired(($conditionType == Badge::COND_MANUAL));
         }
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->adminLangId), 'badge_active', $activeInactiveArr, '', array(), '');
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->siteLangId), 'badge_active', $activeInactiveArr, '', array(), '');
         $fld->requirement->setRequired(true);
 
         if (Badge::TYPE_BADGE == $type) {
             $mediaLanguages = applicationConstants::bannerTypeArr();
-            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'icon_lang_id', $mediaLanguages, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'icon_lang_id', $mediaLanguages, '', array(), '');
             $frm->addHiddenField('', 'icon_file_type', AttachedFile::FILETYPE_BADGE);
             $frm->addHiddenField('', 'logo_min_width');
             $frm->addHiddenField('', 'logo_min_height');
-            $frm->addFileUpload(Labels::getLabel('LBL_UPLOAD', $this->adminLangId), 'badge_icon', array('accept' => 'image/*', 'data-frm' => 'frmCategoryIcon'));
+            $frm->addFileUpload(Labels::getLabel('LBL_UPLOAD', $this->siteLangId), 'badge_icon', array('accept' => 'image/*', 'data-frm' => 'frmCategoryIcon'));
             $frm->addHiddenField('', 'attachment_ids');
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
         return $frm;
     }
 
@@ -386,7 +386,7 @@ class BadgesController extends AdminBaseController
         $pagesize = 20;
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
 
-        $srch = new BadgeSearch($this->adminLangId, -1, applicationConstants::ACTIVE);
+        $srch = new BadgeSearch($this->siteLangId, -1, applicationConstants::ACTIVE);
         $srch->setPageSize($pagesize);
         if (!empty($keyword)) {
             $srch->addCondition(Badge::DB_TBL_PREFIX . 'name', 'LIKE', '%' . $keyword . '%');
@@ -435,7 +435,7 @@ class BadgesController extends AdminBaseController
         $badge_type = FatApp::getPostedData('badge_type', FatUtility::VAR_INT, 0);
 
         if (Badge::TYPE_RIBBON == $badge_type) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_BADGE_TYPE', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_BADGE_TYPE', $this->siteLangId));
         }
 
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
@@ -446,7 +446,7 @@ class BadgesController extends AdminBaseController
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Please_Select_A_File', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('LBL_Please_Select_A_File', $this->siteLangId));
         }
 
         Badge::deleteImagesWithOutBadgeId();
@@ -470,7 +470,7 @@ class BadgesController extends AdminBaseController
         $this->set('attachFileId', $fileHandlerObj->getMainTableRecordId());
         $this->set('file', $_FILES['cropped_image']['name']);
         $this->set('badge_id', $badge_id);
-        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('LBL_UPLOADED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('LBL_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -490,7 +490,7 @@ class BadgesController extends AdminBaseController
         }
 
         $this->set('imageType', $imageType);
-        $this->set('msg', Labels::getLabel('MSG_IMAGE_DELETED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_IMAGE_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

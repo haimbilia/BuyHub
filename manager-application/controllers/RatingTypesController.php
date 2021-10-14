@@ -29,7 +29,7 @@ class RatingTypesController extends AdminBaseController
             FatUtility::dieJsonError(current($searchForm->getValidationErrors()));
         }
 
-        $srch = new RatingTypeSearch($this->adminLangId);
+        $srch = new RatingTypeSearch($this->siteLangId);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
@@ -50,7 +50,7 @@ class RatingTypesController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->set('types', RatingType::getTypeArr($this->adminLangId));
+        $this->set('types', RatingType::getTypeArr($this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -120,7 +120,7 @@ class RatingTypesController extends AdminBaseController
 
         $restrictTypes = [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY];
         if (in_array($rtId, $restrictTypes)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_NOT_ALLOWED_TO_UPDATE_DEFAULT_RATING_TYPE_IDENTIFIER', $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel('MSG_NOT_ALLOWED_TO_UPDATE_DEFAULT_RATING_TYPE_IDENTIFIER', $this->siteLangId));
         }
         $post['ratingtype_type'] = RatingType::TYPE_OTHER;
         $record = new RatingType($rtId);
@@ -145,7 +145,7 @@ class RatingTypesController extends AdminBaseController
 
         $this->set('rtId', $rtId);
         $this->set('langId', $newTabLangId);
-        $this->set('msg', Labels::getLabel('MGS_ADDED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MGS_ADDED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -156,7 +156,7 @@ class RatingTypesController extends AdminBaseController
 		
 		$languages = Language::getAllNames();
 		if(count($languages) > 1){
-			$langId = FatApp::getPostedData('ratingtypelang_lang_id', FatUtility::VAR_INT, $this->adminLangId);
+			$langId = FatApp::getPostedData('ratingtypelang_lang_id', FatUtility::VAR_INT, $this->siteLangId);
 		} else  {
 			$langId = array_key_first($languages); 
 			$post['ratingtypelang_lang_id'] = $langId;
@@ -196,7 +196,7 @@ class RatingTypesController extends AdminBaseController
             }
         }
 
-        $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->set('rtId', $rtId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -205,9 +205,9 @@ class RatingTypesController extends AdminBaseController
     public function getSearchForm()
     {
         $frm = new Form('frmSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->adminLangId), 'keyword', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'keyword', '');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -216,11 +216,11 @@ class RatingTypesController extends AdminBaseController
     {
         $frm = new Form('frmRatingTypes');
         $frm->addHiddenField('', 'ratingtype_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_RATING_TYPE', $this->adminLangId), 'ratingtype_identifier');
+        $frm->addRequiredField(Labels::getLabel('LBL_RATING_TYPE', $this->siteLangId), 'ratingtype_identifier');
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->adminLangId), 'ratingtype_active', $activeInactiveArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->adminLangId));
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->siteLangId), 'ratingtype_active', $activeInactiveArr, '', array(), '');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
         return $frm;
     }
 
@@ -276,7 +276,7 @@ class RatingTypesController extends AdminBaseController
         $ratingtypeIdsArr = FatUtility::int(FatApp::getPostedData('ratingtypeIds'));
         if (empty($ratingtypeIdsArr) || -1 == $status) {
             FatUtility::dieJsonError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -297,13 +297,13 @@ class RatingTypesController extends AdminBaseController
         $rtId = FatUtility::int($rtId);
         if (1 > $rtId || -1 == $status) {
             FatUtility::dieJsonError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
         if ($rtId == RatingType::TYPE_PRODUCT) {
             FatUtility::dieJsonError(
-                Labels::getLabel('MSG_NOT_ALLOWED', $this->adminLangId)
+                Labels::getLabel('MSG_NOT_ALLOWED', $this->siteLangId)
             );
         }
 

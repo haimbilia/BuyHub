@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_CURRENCY', $adminLangId);
+$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_CURRENCY', $siteLangId);
 
 /* No sorting functionality required if no record found. */
 if (2 > count($arrListing)) {
@@ -43,14 +43,14 @@ $controller = str_replace('Controller', '', FatApp::getController());
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
-                        'adminLangId' => $adminLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_CURRENCY', $adminLangId),
-                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_CURRENCIES', $adminLangId), ['{COUNT}' => $recordCount]),
+                        'siteLangId' => $siteLangId,
+                        'cardHeadTitle' => Labels::getLabel('LBL_CURRENCY', $siteLangId),
+                        'recordsTitle' => CommonHelper::replaceStringData(Labels::getLabel('LBL_OVER_{COUNT}_CURRENCIES', $siteLangId), ['{COUNT}' => $recordCount]),
                         'newRecordBtn' => true,
                         'statusButtons' => true
                     ];
 
-                    $currencyPlugins = Plugin::getNamesByType(Plugin::TYPE_CURRENCY_CONVERTER, $adminLangId);
+                    $currencyPlugins = Plugin::getNamesByType(Plugin::TYPE_CURRENCY_CONVERTER, $siteLangId);
                     $obj = new Currency();
                     $currencyConverter = $obj->getCurrencyConverterApi();
                     if (!empty($currencyPlugins) && 0 < count($currencyPlugins) && false !== $currencyConverter) {
@@ -58,7 +58,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                             'attr' => [
                                 'href' => 'javascript:void(0)',
                                 'onclick' => "updateCurrencyRates('" . $currencyConverter . "')",
-                                'title' => Labels::getLabel('LBL_UPDATE_CURRENCY', $adminLangId)
+                                'title' => Labels::getLabel('LBL_UPDATE_CURRENCY', $siteLangId)
                             ],
                             'label' => '<i class="fas fa-file-download"></i>'
                         ];

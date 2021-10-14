@@ -68,8 +68,8 @@ class UserGdprRequestsController extends AdminBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $userRequestTypeArr = UserGdprRequest::getUserRequestTypesArr($this->adminLangId);
-        $userRequestStatusArr = UserGdprRequest::getUserRequestStatusesArr($this->adminLangId);
+        $userRequestTypeArr = UserGdprRequest::getUserRequestTypesArr($this->siteLangId);
+        $userRequestStatusArr = UserGdprRequest::getUserRequestStatusesArr($this->siteLangId);
         $this->set("arrListing", $records);
         $this->set("userRequestTypeArr", $userRequestTypeArr);
         $this->set("userRequestStatusArr", $userRequestStatusArr);
@@ -83,18 +83,18 @@ class UserGdprRequestsController extends AdminBaseController
     private function getUsersRequestSearchForm()
     {
         $frm = new Form('frmUserRequestSearch');
-        $keyword = $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email', $this->adminLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+        $keyword = $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
         /* $keyword->setFieldTagAttribute('onKeyUp','usersAutocomplete(this)'); */
-        $requestType = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->adminLangId)) + UserGdprRequest::getUserRequestTypesArr($this->adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Request_Type', $this->adminLangId), 'request_type', $requestType, -1, array(), '');
+        $requestType = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + UserGdprRequest::getUserRequestTypesArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Request_Type', $this->siteLangId), 'request_type', $requestType, -1, array(), '');
 
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->adminLangId), 'user_request_from');
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->adminLangId), 'user_request_to');
+        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->siteLangId), 'user_request_from');
+        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->siteLangId), 'user_request_to');
 
         $frm->addHiddenField('', 'page', 1);
         $frm->addHiddenField('', 'user_id', 0);
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -117,7 +117,7 @@ class UserGdprRequestsController extends AdminBaseController
         }
 
         $emailNotificationObj = new EmailHandler();
-        if (!$emailNotificationObj->gdprRequestStatusUpdate($userReqId, $this->adminLangId)) {
+        if (!$emailNotificationObj->gdprRequestStatusUpdate($userReqId, $this->siteLangId)) {
             Message::addErrorMessage($emailNotificationObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
@@ -179,7 +179,7 @@ class UserGdprRequestsController extends AdminBaseController
     }
 
     $this->set('userReqId', $userReqId);
-    $this->set('msg', Labels::getLabel('LBL_Updated_Successfully',$this->adminLangId));
+    $this->set('msg', Labels::getLabel('LBL_Updated_Successfully',$this->siteLangId));
     $this->_template->render(false, false, 'json-success.php');
     } */
 
@@ -197,13 +197,13 @@ class UserGdprRequestsController extends AdminBaseController
 
         $userObj = new User($userId);
         if (!$userObj->truncateUserInfo()) {
-            Message::addErrorMessage(Labels::getLabel("MSG_USER_INFO_COULD_NOT_BE_DELETED", $this->adminLangId) . $userObj->getError());
+            Message::addErrorMessage(Labels::getLabel("MSG_USER_INFO_COULD_NOT_BE_DELETED", $this->siteLangId) . $userObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
 
         $emailNotificationObj = new EmailHandler();
-        if (!$emailNotificationObj->gdprRequestStatusUpdate($userReqId, $this->adminLangId)) {
-            Message::addErrorMessage(Labels::getLabel($emailNotificationObj->getError(), $this->adminLangId));
+        if (!$emailNotificationObj->gdprRequestStatusUpdate($userReqId, $this->siteLangId)) {
+            Message::addErrorMessage(Labels::getLabel($emailNotificationObj->getError(), $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -222,7 +222,7 @@ class UserGdprRequestsController extends AdminBaseController
         /* ] */
 
         $this->set('userReqId', $userReqId);
-        $this->set('msg', Labels::getLabel('LBL_Successfully_Deleted_User_data', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Successfully_Deleted_User_data', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 }

@@ -15,7 +15,7 @@ class LanguagesController extends AdminBaseController
 
         $this->set('canEdit', $this->objPrivilege->canEditLanguage($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_LANGUAGES', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_LANGUAGES', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -41,7 +41,7 @@ class LanguagesController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -50,7 +50,7 @@ class LanguagesController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
-        $srch = Language::getSearchObject(false, $this->adminLangId);
+        $srch = Language::getSearchObject(false, $this->siteLangId);
 
         $srch->addFld('l.*, l.language_id as listSerial');
 
@@ -67,7 +67,7 @@ class LanguagesController extends AdminBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -107,7 +107,7 @@ class LanguagesController extends AdminBaseController
             $frm->fill($data);
         }
 
-        $langId = 1 > $recordId ? $this->adminLangId : $recordId;
+        $langId = 1 > $recordId ? $this->siteLangId : $recordId;
 
         $this->set('languages', Language::getAllNames());
         $this->set('recordId', $recordId);
@@ -131,19 +131,19 @@ class LanguagesController extends AdminBaseController
 
         $status = FatApp::getPostedData('language_active', FatUtility::VAR_INT, 0);
         if($status == applicationConstants::INACTIVE && 1 > count(Language::getAllNames()) ){
-            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->siteLangId), true);
         }
 
         $record = new Language($recordId);
         $record->assignValues($post);
 
         if (!$record->save()) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_This_language_code_is_not_available', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_This_language_code_is_not_available', $this->siteLangId), true);
         }
 
-        $msg = Labels::getLabel('MSG_ADDED_SUCCESSFULLY', $this->adminLangId);
+        $msg = Labels::getLabel('MSG_ADDED_SUCCESSFULLY', $this->siteLangId);
         if (0 < $recordId) {
-            $msg = Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->adminLangId);
+            $msg = Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->siteLangId);
         }
         $this->set('msg', $msg);
         $this->_template->render(false, false, 'json-success.php');
@@ -154,31 +154,31 @@ class LanguagesController extends AdminBaseController
     {
         $recordId = FatUtility::int($recordId);
         
-        $adminLangId = $this->adminLangId;
+        $siteLangId = $this->siteLangId;
         if (0 < $recordId) {
-            $adminLangId = $recordId;
+            $siteLangId = $recordId;
         }
 
         $frm = new Form('frmLanguage');
         $frm->addHiddenField('', 'language_id', $recordId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Language_code', $adminLangId), 'language_code');
-        $frm->addRequiredField(Labels::getLabel('LBL_Language_name', $adminLangId), 'language_name');
+        $frm->addRequiredField(Labels::getLabel('LBL_Language_code', $siteLangId), 'language_code');
+        $frm->addRequiredField(Labels::getLabel('LBL_Language_name', $siteLangId), 'language_name');
         $fld = $frm->addRadioButtons(
-            Labels::getLabel("LBL_Language_Layout_Direction", $adminLangId),
+            Labels::getLabel("LBL_Language_Layout_Direction", $siteLangId),
             'language_layout_direction',
-            applicationConstants::getLayoutDirections($adminLangId),
+            applicationConstants::getLayoutDirections($siteLangId),
             '',
             array('class' => 'list-inline')
         );
 
 		$countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesAssocArr($adminLangId, true, 'country_code');
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $adminLangId), 'language_country_code', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $adminLangId));
+        $countriesArr = $countryObj->getCountriesAssocArr($siteLangId, true, 'country_code');
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $siteLangId), 'language_country_code', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $siteLangId));
         $fld->requirement->setRequired(true);
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($adminLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $adminLangId), 'language_active', $activeInactiveArr, '', array(), '');
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $adminLangId));
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $siteLangId), 'language_active', $activeInactiveArr, '', array(), '');
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $siteLangId));
         return $frm;
     }
 
@@ -229,7 +229,7 @@ class LanguagesController extends AdminBaseController
         }
 
         if($status == applicationConstants::INACTIVE && 1 > count(Language::getAllNames()) ){
-            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->adminLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->siteLangId), true);
         } 
 
         $countryObj = new Language($recordId);
@@ -261,20 +261,20 @@ class LanguagesController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $languagesTblHeadingCols = CacheHelper::get('languagesTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $languagesTblHeadingCols = CacheHelper::get('languagesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($languagesTblHeadingCols) {
             return json_decode($languagesTblHeadingCols);
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'language_code' => Labels::getLabel('LBL_Language_Code', $this->adminLangId),
-            'language_name' => Labels::getLabel('LBL_Language_Name', $this->adminLangId),
-            'language_active' => Labels::getLabel('LBL_Status', $this->adminLangId),
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'language_code' => Labels::getLabel('LBL_Language_Code', $this->siteLangId),
+            'language_name' => Labels::getLabel('LBL_Language_Name', $this->siteLangId),
+            'language_active' => Labels::getLabel('LBL_Status', $this->siteLangId),
             'action' =>  '',
         ];
-        CacheHelper::create('languagesTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('languagesTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         
         return $arr;
     }

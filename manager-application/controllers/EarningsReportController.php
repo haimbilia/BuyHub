@@ -32,7 +32,7 @@ class EarningsReportController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_DESC;
         }
         $srchFrm = $this->getSearchForm($fields);
@@ -67,7 +67,7 @@ class EarningsReportController extends AdminBaseController
         $opSrch->setDateCondition($fromDate, $toDate);
 
         /* Subscription earning */
-        $sSrch = new OrderSubscriptionSearch($this->adminLangId, true, true);
+        $sSrch = new OrderSubscriptionSearch($this->siteLangId, true, true);
         $sSrch->joinSubscription();
         $sSrch->joinOrderUser();
         $sSrch->joinOtherCharges();
@@ -169,19 +169,19 @@ class EarningsReportController extends AdminBaseController
     {
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         if (!empty($fields)) {
             $frm->addHiddenField('', 'sortBy', 'date');
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_DESC);
             $frm->addHiddenField('', 'reportColumns', '');
 
-            /* $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  ''); */
+            /* $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  ''); */
         }
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
 
         return $frm;
@@ -189,16 +189,16 @@ class EarningsReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $earningsReportsCacheVar = FatCache::get('earningsReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $earningsReportsCacheVar = FatCache::get('earningsReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$earningsReportsCacheVar) {
             $arr = [
-                'date' => Labels::getLabel('LBL_Date', $this->adminLangId),
-                'subscriptionCharges' => Labels::getLabel('LBL_Subscription_Charges', $this->adminLangId),
-                'promotionCharged' => Labels::getLabel('LBL_Advertisement_Charges', $this->adminLangId),
-                'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $this->adminLangId),
-                'totalEarning' => Labels::getLabel('LBL_Total_Earnings', $this->adminLangId),
+                'date' => Labels::getLabel('LBL_Date', $this->siteLangId),
+                'subscriptionCharges' => Labels::getLabel('LBL_Subscription_Charges', $this->siteLangId),
+                'promotionCharged' => Labels::getLabel('LBL_Advertisement_Charges', $this->siteLangId),
+                'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $this->siteLangId),
+                'totalEarning' => Labels::getLabel('LBL_Total_Earnings', $this->siteLangId),
             ];
-            FatCache::set('earningsReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            FatCache::set('earningsReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {
             $arr =  unserialize($earningsReportsCacheVar);
         }

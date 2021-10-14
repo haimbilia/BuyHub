@@ -46,7 +46,7 @@ $langFld->setfieldTagAttribute('onChange', "categoryLangForm(" . $prodcat_id . "
 <section class="section">
     <div class="sectionhead">
 
-        <h4><?php echo Labels::getLabel('LBL_Product_Categories_Setup', $adminLangId); ?>
+        <h4><?php echo Labels::getLabel('LBL_Product_Categories_Setup', $siteLangId); ?>
         </h4>
     </div>
     <div class="sectionbody space">
@@ -56,17 +56,17 @@ $langFld->setfieldTagAttribute('onChange', "categoryLangForm(" . $prodcat_id . "
                 <div class="tabs_nav_container responsive flat">
                     <ul class="tabs_nav">
                         <li><a href="javascript:void(0);"
-                                onclick="categoryForm(<?php echo $prodcat_id ?>);"><?php echo Labels::getLabel('LBL_General', $adminLangId); ?></a>
+                                onclick="categoryForm(<?php echo $prodcat_id ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a>
                         </li>
                         <li class="<?php echo (0 == $prodcat_id) ? 'fat-inactive' : ''; ?>">
                             <a class="active" href="javascript:void(0);">
-                                <?php echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
+                                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
                             </a>
                         </li>
                         <li class="<?php echo (!$prodcat_id) ? 'fat-inactive' : ''; ?>">
                             <a href="javascript:void(0);" <?php if ($prodcat_id > 0) { ?>
                                 onclick="categoryMediaForm(<?php echo $prodcat_id ?>);" <?php }?>>
-                                <?php echo Labels::getLabel('LBL_Media', $adminLangId); ?>
+                                <?php echo Labels::getLabel('LBL_Media', $siteLangId); ?>
                             </a>
                         </li>
                     </ul>
@@ -79,7 +79,7 @@ $langFld->setfieldTagAttribute('onChange', "categoryLangForm(" . $prodcat_id . "
                                 <div class="col-auto mb-4">
                                     <input class="btn btn-outline-brand btn-sm" 
                                         type="button" 
-                                        value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" 
+                                        value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" 
                                         onClick="categoryLangForm(<?php echo $prodcat_id; ?>, <?php echo $prodcat_lang_id; ?>, 1)">
                                 </div>
                             </div>

@@ -10,7 +10,7 @@ $allAccessfrm->developerTags['fld_default_col'] = 12; ?>
                         <div class="col--first col-lg-6">
                             <span class="page__icon">
                             <i class="ion-android-star"></i></span>
-                            <h5><?php echo Labels::getLabel('LBL_Manage', $adminLangId); ?> <?php echo $data['admin_username'];?> <?php echo Labels::getLabel('LBL_User_Permission', $adminLangId); ?> </h5>
+                            <h5><?php echo Labels::getLabel('LBL_Manage', $siteLangId); ?> <?php echo $data['admin_username'];?> <?php echo Labels::getLabel('LBL_User_Permission', $siteLangId); ?> </h5>
                             <?php $this->includeTemplate('_partial/header/header-breadcrumb.php'); ?>
                             <?php echo $frm->getFormHtml();?>
                         </div>
@@ -18,7 +18,7 @@ $allAccessfrm->developerTags['fld_default_col'] = 12; ?>
                 </div>
                 <section class="section">
                     <div class="sectionhead">
-                        <h4><?php echo Labels::getLabel('LBL_Admin_User_Listing', $adminLangId); ?> : <?php echo $data['admin_username'];?></h4>
+                        <h4><?php echo Labels::getLabel('LBL_Admin_User_Listing', $siteLangId); ?> : <?php echo $data['admin_username'];?></h4>
                     </div>
                     <div class="sectionbody space">
                         <?php echo $allAccessfrm->getFormHtml(); ?>
@@ -28,7 +28,7 @@ $allAccessfrm->developerTags['fld_default_col'] = 12; ?>
                     <div class="sectionbody">
                         <div class="tablewrap">
                             <div id="listing">
-                                <?php echo Labels::getLabel('LBL_Processing...', $adminLangId); ?>
+                                <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?>
                             </div>
                         </div>
                     </div>

@@ -15,7 +15,7 @@ class CountriesController extends AdminBaseController
 
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_COUNTRIES', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_COUNTRIES', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -37,7 +37,7 @@ class CountriesController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -52,7 +52,7 @@ class CountriesController extends AdminBaseController
             $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         }
 
-        $srch = Countries::getSearchObject(false, $this->adminLangId);
+        $srch = Countries::getSearchObject(false, $this->siteLangId);
         $srch->addMultipleFields(['c.* , COALESCE(c_l.country_name, c.country_code) as country_name', 'c.country_id as listSerial']);
 
         if (!empty($post['keyword'])) {
@@ -60,7 +60,7 @@ class CountriesController extends AdminBaseController
             $condition->attachCondition('c_l.country_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -78,7 +78,7 @@ class CountriesController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->adminLangId));
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -116,7 +116,7 @@ class CountriesController extends AdminBaseController
         $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);     
-        $this->set('formTitle', Labels::getLabel('LBL_COUNTRY_SETUP', $this->adminLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_COUNTRY_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -152,7 +152,7 @@ class CountriesController extends AdminBaseController
         $this->objPrivilege->canEditCountries();
         $this->modelObj = (new ReflectionClass('Countries'))->newInstanceArgs($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_COUNTRY_SETUP', $this->adminLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_COUNTRY_SETUP', $this->siteLangId));
     }
 
     private function getForm()
@@ -160,33 +160,33 @@ class CountriesController extends AdminBaseController
         $frm = new Form('frmCountry');
         $frm->addHiddenField('', 'country_id');
 
-        $zoneArr = Zone::getAllZones($this->adminLangId, true);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_ZONE', $this->adminLangId), 'country_zone_id', $zoneArr, '', [], Labels::getLabel('LBL_SELECT', $this->adminLangId));
+        $zoneArr = Zone::getAllZones($this->siteLangId, true);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_ZONE', $this->siteLangId), 'country_zone_id', $zoneArr, '', [], Labels::getLabel('LBL_SELECT', $this->siteLangId));
         $fld->requirements()->setRequired();
 
-        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_NAME', $this->adminLangId), 'country_name');
+        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_NAME', $this->siteLangId), 'country_name');
 
-        $currencyArr = Currency::getCurrencyNameWithCode($this->adminLangId);
+        $currencyArr = Currency::getCurrencyNameWithCode($this->siteLangId);
         $currencyId = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
         $currencyData = Currency::getAttributesById($currencyId, array('currency_code'));
-        $defaultCurrentySelect = Labels::getLabel('LBL_DEFAULT', $this->adminLangId) . '(' . $currencyData['currency_code'] . ')';
-        $frm->addSelectBox(Labels::getLabel('LBL_CURRENCY', $this->adminLangId), 'country_currency_id', $currencyArr, '', [], $defaultCurrentySelect);
+        $defaultCurrentySelect = Labels::getLabel('LBL_DEFAULT', $this->siteLangId) . '(' . $currencyData['currency_code'] . ')';
+        $frm->addSelectBox(Labels::getLabel('LBL_CURRENCY', $this->siteLangId), 'country_currency_id', $currencyArr, '', [], $defaultCurrentySelect);
 
-        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_CODE', $this->adminLangId), 'country_code');
-        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->adminLangId), 'country_code_alpha3');
+        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_CODE', $this->siteLangId), 'country_code');
+        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->siteLangId), 'country_code_alpha3');
         
         $languageArr = Language::getDropDownList();
         if (1 < count($languageArr)) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'country_language_id', $languageArr, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'country_language_id', $languageArr, '', array(), '');
         } else {
             $frm->addHiddenField('', 'country_language_id', FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
         }    
 
-        $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->adminLangId), 'country_active', applicationConstants::getActiveInactiveArr($this->adminLangId), '', array(), '');    
+        $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->siteLangId), 'country_active', applicationConstants::getActiveInactiveArr($this->siteLangId), '', array(), '');    
         
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, ''); 
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         } 
         
         return $frm;
@@ -196,8 +196,8 @@ class CountriesController extends AdminBaseController
     {
         $frm = new Form('frmCountryLang');
         $frm->addHiddenField('', 'country_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_NAME', $this->adminLangId), 'country_name');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_NAME', $this->siteLangId), 'country_name');
         return $frm;
     }
 
@@ -255,21 +255,21 @@ class CountriesController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $countriesTblHeadingCols = CacheHelper::get('countriesTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $countriesTblHeadingCols = CacheHelper::get('countriesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($countriesTblHeadingCols) {
             return json_decode($countriesTblHeadingCols);
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->adminLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId),
-            'country_code' => Labels::getLabel('LBL_COUNTRY_CODE', $this->adminLangId),
-            'country_code_alpha3' => Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->adminLangId),
-            'country_name' => Labels::getLabel('LBL_COUNTRY_NAME', $this->adminLangId),
-            'country_active' => Labels::getLabel('LBL_STATUS', $this->adminLangId),
-            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->adminLangId),
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'country_code' => Labels::getLabel('LBL_COUNTRY_CODE', $this->siteLangId),
+            'country_code_alpha3' => Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->siteLangId),
+            'country_name' => Labels::getLabel('LBL_COUNTRY_NAME', $this->siteLangId),
+            'country_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('countriesTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('countriesTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
@@ -290,8 +290,8 @@ class CountriesController extends AdminBaseController
         switch ($action) {
             case 'index':
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->adminLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_COUNTRIES', $this->adminLangId)]
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_COUNTRIES', $this->siteLangId)]
                 ];
         }
         return $this->nodes;

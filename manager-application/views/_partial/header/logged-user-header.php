@@ -10,7 +10,7 @@
                             if (array_key_exists('pageTitle', $this->variables)) {
                                 echo $this->variables['pageTitle'];
                             } else {
-                                echo Labels::getLabel('LBL_Dashboard', $adminLangId);
+                                echo Labels::getLabel('LBL_Dashboard', $siteLangId);
                             } ?>
                         </h1>
                         <?php $this->includeTemplate('_partial/header/header-breadcrumb.php'); ?>
@@ -32,7 +32,7 @@
                                             <div class="modal-body p-5">
                                                 <?php
                                                 $data = [
-                                                    'adminLangId' => $adminLangId
+                                                    'siteLangId' => $siteLangId
                                                 ];
                                                 $this->includeTemplate('_partial/navigation/quick-search.php', $data, false); ?>
 
@@ -49,7 +49,7 @@
                                 </div>
                             </div>
                             <div class="header-action__item">
-                                <a class="header-action__trigger" href="<?php echo CONF_WEBROOT_FRONT_URL; ?>" title="<?php echo Labels::getLabel('LBL_VIEW_STORE', $adminLangId); ?>">
+                                <a class="header-action__trigger" href="<?php echo CONF_WEBROOT_FRONT_URL; ?>" title="<?php echo Labels::getLabel('LBL_VIEW_STORE', $siteLangId); ?>">
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-store">
@@ -59,7 +59,7 @@
                                 </a>
                             </div>
                             <div class="header-action__item">
-                                <a class="header-action__trigger" href="javascript:void()" onclick="clearCache()" title="<?php echo Labels::getLabel('LBL_CLEAR_CACHE', $adminLangId); ?>">
+                                <a class="header-action__trigger" href="javascript:void()" onclick="clearCache()" title="<?php echo Labels::getLabel('LBL_CLEAR_CACHE', $siteLangId); ?>">
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-cache">
@@ -359,15 +359,15 @@
                                                 <img alt="" src="<?php echo UrlHelper::generateFileUrl('Image','profileImage',array(AdminAuthentication::getLoggedAdminId(),'croped',true));?>">
                                             </div>
                                             <div class="profile__detail">
-                                                <h6><?php echo  Labels::getLabel('LBL_HI', $adminLangId); ?>, <?php echo AdminAuthentication::getLoggedAdminAttribute('admin_name',true);?> <h6>
+                                                <h6><?php echo  Labels::getLabel('LBL_HI', $siteLangId); ?>, <?php echo AdminAuthentication::getLoggedAdminAttribute('admin_name',true);?> <h6>
                                                         <a href="mailto:<?php echo AdminAuthentication::getLoggedAdminAttribute('admin_email',true);?>" ><?php echo AdminAuthentication::getLoggedAdminAttribute('admin_email',true);?></a>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="separator m-0"></div>
                                     <nav class="nav nav--header-account">
-                                        <a href="<?php echo UrlHelper::generateUrl('profile'); ?>"> <?php echo  Labels::getLabel('LBL_MY_PROFILE', $adminLangId); ?></a>                                      
-                                        <a href="<?php echo UrlHelper::generateUrl('profile','index',['changePassword']); ?>"><?php echo  Labels::getLabel('LBL_CHANGE_PASSWORD', $adminLangId); ?></a>
+                                        <a href="<?php echo UrlHelper::generateUrl('profile'); ?>"> <?php echo  Labels::getLabel('LBL_MY_PROFILE', $siteLangId); ?></a>                                      
+                                        <a href="<?php echo UrlHelper::generateUrl('profile','index',['changePassword']); ?>"><?php echo  Labels::getLabel('LBL_CHANGE_PASSWORD', $siteLangId); ?></a>
                                     </nav>
                                     <div class="separator m-0"></div>
                                     <nav class="nav nav--header-account">
@@ -382,13 +382,13 @@
                                                     </span>
                                                     <div class="languages">
                                                     <?php foreach ($languages as $langId => $language) { ?>
-                                                        <span <?php echo ($adminLangId == $langId) ? 'class="is--active"' : ''; ?> onClick="setSiteDefaultLang(<?php echo $langId; ?>)"><?php echo $language['language_name']; ?></span>                                                       
+                                                        <span <?php echo ($siteLangId == $langId) ? 'class="is--active"' : ''; ?> onClick="setSiteDefaultLang(<?php echo $langId; ?>)"><?php echo $language['language_name']; ?></span>                                                       
                                                         <?php } ?>
                                                     </div>
                                                 </a>
                                         <?php 
                                         } ?>                                       
-                                        <a href="<?php echo UrlHelper::generateUrl('profile','logout'); ?>"><?php echo  Labels::getLabel('LBL_LOGOUT', $adminLangId); ?></a>
+                                        <a href="<?php echo UrlHelper::generateUrl('profile','logout'); ?>"><?php echo  Labels::getLabel('LBL_LOGOUT', $siteLangId); ?></a>
                                     </nav>
                                 </div>
                             </div>

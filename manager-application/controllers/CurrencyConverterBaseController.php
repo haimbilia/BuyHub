@@ -12,7 +12,7 @@ class CurrencyConverterBaseController extends PluginSettingController
 
     protected function getAllCurrencies($exceptDefault = false)
     {
-        $currencies = Currency::getCurrencyAssoc($this->adminLangId);
+        $currencies = Currency::getCurrencyAssoc($this->siteLangId);
         if (true === $exceptDefault) {
             unset($currencies[$this->baseCurrencyId]);
         }
@@ -23,7 +23,7 @@ class CurrencyConverterBaseController extends PluginSettingController
     {
         $defaultConverter = get_called_class();
         if (__CLASS__ === $defaultConverter) {
-            $msg = Labels::getLabel('MSG_INVALID_ACCESS', $this->adminLangId);
+            $msg = Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId);
             LibHelper::dieJsonError($msg);
         }
         
@@ -31,7 +31,7 @@ class CurrencyConverterBaseController extends PluginSettingController
         $obj = new $defaultConverter(__FUNCTION__);
         $currenciesData = $obj->getRates($currencies);
         if (empty($currenciesData) || false === $currenciesData['status'] || !isset($currenciesData['data']) || empty($currenciesData['data'])) {
-            $msg = !empty($currenciesData['msg']) ? $currenciesData['msg'] : Labels::getLabel('MSG_UNABLE_TO_UPDATE', $this->adminLangId);
+            $msg = !empty($currenciesData['msg']) ? $currenciesData['msg'] : Labels::getLabel('MSG_UNABLE_TO_UPDATE', $this->siteLangId);
             LibHelper::dieJsonError($msg);
         }
 
@@ -40,6 +40,6 @@ class CurrencyConverterBaseController extends PluginSettingController
             LibHelper::dieJsonError($currObj->getError());
         }
 
-        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->adminLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
     }
 }

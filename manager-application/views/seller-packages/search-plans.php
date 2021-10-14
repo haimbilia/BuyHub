@@ -1,17 +1,17 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="sectionhead">
-    <h4><?php echo Labels::getLabel('LBL_Seller_Packages_Listings', $adminLangId);?>
+    <h4><?php echo Labels::getLabel('LBL_Seller_Packages_Listings', $siteLangId);?>
     </h4>
     <?php
         $url = UrlHelper::generateUrl('FaqCategories');
         $data = [
-            'adminLangId' => $adminLangId,
+            'siteLangId' => $siteLangId,
             'otherButtons' => [
                 [
                     'attr' => [
                         'href' => 'javascript:void(0)',
                         'onclick' => "searchPackages()",
-                        'title' => Labels::getLabel('LBL_BACK', $adminLangId)
+                        'title' => Labels::getLabel('LBL_BACK', $siteLangId)
                     ],
                     'label' => '<i class="fas fa-arrow-left"></i>'
                 ],
@@ -23,7 +23,7 @@
                 'attr' => [
                     'href' => 'javascript:void(0)',
                     'onclick' => "planForm(" . $spackageId . ")",
-                    'title' => Labels::getLabel('LBL_Add_New', $adminLangId)
+                    'title' => Labels::getLabel('LBL_Add_New', $siteLangId)
                 ],
                 'label' => '<i class="fas fa-plus"></i>'
             ];
@@ -36,8 +36,8 @@
     <div class="tablewrap">
         <?php
         $arr_flds = array(
-            'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
-            SellerPackagePlans::DB_TBL_PREFIX . 'price' => Labels::getLabel('LBL_Plan_Price', $adminLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $siteLangId),
+            SellerPackagePlans::DB_TBL_PREFIX . 'price' => Labels::getLabel('LBL_Plan_Price', $siteLangId),
             'action' => '',
         );
 
@@ -75,7 +75,7 @@
 
                     case 'action':
                         if ($canEdit) {
-                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $adminLangId), "onclick" => "planForm(" . $row[SellerPackagePlans::DB_TBL_PREFIX . 'spackage_id'] . "," . $row[SellerPackagePlans::DB_TBL_PREFIX . 'id'] . ")"), '<i class="far fa-edit icon"></i>', true);
+                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "planForm(" . $row[SellerPackagePlans::DB_TBL_PREFIX . 'spackage_id'] . "," . $row[SellerPackagePlans::DB_TBL_PREFIX . 'id'] . ")"), '<i class="far fa-edit icon"></i>', true);
                         }
                         break;
                     default:
@@ -86,7 +86,7 @@
             $serialNo++;
         }
         if (count($arrListing) == 0) {
-            $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
+            $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
         }
         echo $tbl->getHtml();?>
     </div>

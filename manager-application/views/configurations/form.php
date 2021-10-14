@@ -81,7 +81,7 @@ switch ($frmType) {
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <h3 class="card-head-title">
-                    <?php echo $tabs[$frmType] . ' ' . Labels::getLabel('LBL_SETTINGS', $adminLangId); ?>
+                    <?php echo $tabs[$frmType] . ' ' . Labels::getLabel('LBL_SETTINGS', $siteLangId); ?>
                 </h3>
             </div>
         </div>
@@ -95,12 +95,12 @@ switch ($frmType) {
                     <nav class="nav nav-tabs">
                         <?php if ($frmType != Configurations::FORM_MEDIA && $frmType != Configurations::FORM_SHARING) { ?>
                             <a class="nav-link <?php echo ($lang_id == 0) ? 'active' : ''; ?>" href="javascript:void(0)" onClick="getForm(<?php echo $frmType; ?>)">
-                                <?php echo Labels::getLabel('LBL_Basic', $adminLangId); ?>
+                                <?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?>
                             </a>
                         <?php } ?>
 
                         <a class="nav-link <?php echo (0 < $lang_id ? 'active' : '') ?>" href="javascript:void(0);" onClick="getLangForm(<?php echo $frmType; ?>, <?php echo FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1); ?>)">
-                            <?php echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
+                            <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
                         </a>
                     </nav>
                 </div>
@@ -119,7 +119,7 @@ switch ($frmType) {
         <div class="col-md-10">
             <div class="row">
                 <div class="col">
-                    <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_UPDATE', $adminLangId), 'button'); ?>
+                    <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_UPDATE', $siteLangId), 'button'); ?>
                 </div>
             </div>
         </div>

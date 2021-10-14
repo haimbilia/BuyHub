@@ -9,7 +9,7 @@
                 </svg>
             </i>
             <div class="">
-                <h6 class="settings-inner-title"><?php echo Labels::getLabel('LBL_EXPORT', $adminLangId); ?></h6>
+                <h6 class="settings-inner-title"><?php echo Labels::getLabel('LBL_EXPORT', $siteLangId); ?></h6>
                 <span class="settings-inner-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit est quos </span>
             </div>
         </a>
@@ -23,7 +23,7 @@
                 </svg>
             </i>
             <div class="">
-                <h6 class="settings-inner-title"><?php echo Labels::getLabel('LBL_IMPORT', $adminLangId); ?></h6>
+                <h6 class="settings-inner-title"><?php echo Labels::getLabel('LBL_IMPORT', $siteLangId); ?></h6>
                 <span class="settings-inner-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit est quos </span>
             </div>
         </a>
@@ -37,7 +37,7 @@
                 </svg>
             </i>
             <div class="">
-                <h6 class="settings-inner-title"><?php echo Labels::getLabel('LBL_ADD_MEDIA_TO_SERVER', $adminLangId); ?></h6>
+                <h6 class="settings-inner-title"><?php echo Labels::getLabel('LBL_ADD_MEDIA_TO_SERVER', $siteLangId); ?></h6>
                 <span class="settings-inner-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit est quos </span>
             </div>
         </a>
@@ -51,7 +51,7 @@
                 </svg>
             </i>
             <div class="">
-                <h6 class="settings-inner-title"><?php echo Labels::getLabel('LBL_SETTINGS', $adminLangId); ?></h6>
+                <h6 class="settings-inner-title"><?php echo Labels::getLabel('LBL_SETTINGS', $siteLangId); ?></h6>
                 <span class="settings-inner-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit est quos </span>
             </div>
         </a>

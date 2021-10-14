@@ -38,7 +38,7 @@ class ShippingZoneRatesController extends AdminBaseController
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (empty($post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -191,7 +191,7 @@ class ShippingZoneRatesController extends AdminBaseController
             }
 
             if (false === $canDelete) {
-                $msg = Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEASE_ONE_SHIPPING_RATE_WITHOUT_CONDITION', $this->adminLangId);
+                $msg = Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEASE_ONE_SHIPPING_RATE_WITHOUT_CONDITION', $this->siteLangId);
                 Message::addErrorMessage($msg);
                 FatUtility::dieJsonError(Message::getHtml());
             }
@@ -202,47 +202,47 @@ class ShippingZoneRatesController extends AdminBaseController
             Message::addErrorMessage($sObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
-        $this->set('msg', Labels::getLabel('LBL_Rate_Deleted_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('LBL_Rate_Deleted_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
     
     private function getForm($zoneId = 0, $rateId = 0)
     {
-        $conditionTypes = ShippingRate::getConditionTypes($this->adminLangId);
+        $conditionTypes = ShippingRate::getConditionTypes($this->siteLangId);
         $zoneId = FatUtility::int($zoneId);
         $rateId = FatUtility::int($rateId);
         $frm = new Form('frmShippingRates');
         $frm->addHiddenField('', 'shiprate_shipprozone_id', $zoneId);
         $frm->addHiddenField('', 'shiprate_id', $rateId);
         $cndFld = $frm->addHiddenField('', 'is_condition', 0);
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Rate_Name', $this->adminLangId), 'shiprate_identifier');
+        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Rate_Name', $this->siteLangId), 'shiprate_identifier');
         
-        $fld = $frm->addFloatField(Labels::getLabel('LBL_Cost', $this->adminLangId), 'shiprate_cost');
+        $fld = $frm->addFloatField(Labels::getLabel('LBL_Cost', $this->siteLangId), 'shiprate_cost');
         
         $fld = $frm->addRadioButtons('', 'shiprate_condition_type', $conditionTypes, '', array('class' => 'list-inline'));        
         
-        $fldCndTypeUnReq = new FormFieldRequirement('shiprate_condition_type', Labels::getLabel('LBL_Condition_type', $this->adminLangId));
+        $fldCndTypeUnReq = new FormFieldRequirement('shiprate_condition_type', Labels::getLabel('LBL_Condition_type', $this->siteLangId));
         $fldCndTypeUnReq->setRequired(false);
 
-        $fldCndTypeReq = new FormFieldRequirement('shiprate_condition_type', Labels::getLabel('LBL_Condition_type', $this->adminLangId));
+        $fldCndTypeReq = new FormFieldRequirement('shiprate_condition_type', Labels::getLabel('LBL_Condition_type', $this->siteLangId));
         $fldCndTypeReq->setRequired(true);
         
-        $frm->addFloatField(Labels::getLabel('LBL_Minimum', $this->adminLangId), 'shiprate_min_val');
+        $frm->addFloatField(Labels::getLabel('LBL_Minimum', $this->siteLangId), 'shiprate_min_val');
         
-        $fldMinUnReq = new FormFieldRequirement('shiprate_min_val', Labels::getLabel('LBL_Minimum', $this->adminLangId));
+        $fldMinUnReq = new FormFieldRequirement('shiprate_min_val', Labels::getLabel('LBL_Minimum', $this->siteLangId));
         $fldMinUnReq->setRequired(false);
 
-        $fldMinReq = new FormFieldRequirement('shiprate_min_val', Labels::getLabel('LBL_Minimum', $this->adminLangId));
+        $fldMinReq = new FormFieldRequirement('shiprate_min_val', Labels::getLabel('LBL_Minimum', $this->siteLangId));
         $fldMinReq->setRequired(true);
         $fldMinReq->setFloatPositive();
         $fldMinReq->setRange('0.001', '99999999');
         
-        $frm->addFloatField(Labels::getLabel('LBL_Maximum', $this->adminLangId), 'shiprate_max_val');
+        $frm->addFloatField(Labels::getLabel('LBL_Maximum', $this->siteLangId), 'shiprate_max_val');
         
-        $fldMaxUnReq = new FormFieldRequirement('shiprate_max_val', Labels::getLabel('LBL_Maximum', $this->adminLangId));
+        $fldMaxUnReq = new FormFieldRequirement('shiprate_max_val', Labels::getLabel('LBL_Maximum', $this->siteLangId));
         $fldMaxUnReq->setRequired(false);
 
-        $fldMaxReq = new FormFieldRequirement('shiprate_max_val', Labels::getLabel('LBL_Maximum', $this->adminLangId));
+        $fldMaxReq = new FormFieldRequirement('shiprate_max_val', Labels::getLabel('LBL_Maximum', $this->siteLangId));
         $fldMaxReq->setRequired(true);
         $fldMaxReq->setFloatPositive();
         $fldMaxReq->setRange('0.001', '99999999');
@@ -257,9 +257,9 @@ class ShippingZoneRatesController extends AdminBaseController
         $cndFld->requirements()->addOnChangerequirementUpdate(1, 'eq', 'shiprate_condition_type', $fldCndTypeReq);
         $cndFld->requirements()->addOnChangerequirementUpdate(0, 'eq', 'shiprate_condition_type', $fldCndTypeUnReq);
         
-        $fld = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $fld = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         /*
-        $btn = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $this->adminLangId));
+        $btn = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $this->siteLangId));
         $fld->attachField($btn);
          * 
          */
@@ -272,10 +272,10 @@ class ShippingZoneRatesController extends AdminBaseController
         $frm->addHiddenField('', 'zone_id', $zoneId);
         $frm->addHiddenField('', 'rate_id', $rateId);
         $frm->addHiddenField('', 'lang_id', $langId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Rate_Name', $this->adminLangId), 'shiprate_name');
-        $fld = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addRequiredField(Labels::getLabel('LBL_Rate_Name', $this->siteLangId), 'shiprate_name');
+        $fld = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         /*
-        $btn = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $this->adminLangId));
+        $btn = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $this->siteLangId));
         $fld->attachField($btn);
          * 
          */

@@ -78,10 +78,10 @@ class Labels extends MyAppModel
         return $srch;
     }
 
-    public static function getLabel(string $lblKey, int $langId, int $type = Labels::TYPE_WEB)
+    public static function getLabel(string $lblKey, int $langId = 0, int $type = Labels::TYPE_WEB): string
     {
         if (empty($lblKey)) {
-            return;
+            return '';
         }
 
         if (preg_match('/\s/', $lblKey)) {
@@ -90,10 +90,7 @@ class Labels extends MyAppModel
 
         $type = ($type != static::TYPE_APP) ? static::TYPE_WEB : static::TYPE_APP;
 
-        $langId = FatUtility::int($langId);
-        if ($langId == 0) {
-            $langId = CommonHelper::getLangId();
-        }
+        $langId = (0 < $langId) ? $langId : CommonHelper::getLangId();
 
         $cacheAvailable = static::isAPCUcacheAvailable();
         if ($cacheAvailable) {

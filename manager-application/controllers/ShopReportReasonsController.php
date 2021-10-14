@@ -15,7 +15,7 @@ class ShopReportReasonsController extends AdminBaseController
 
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_SHOP_REPORT_REASONS', $this->adminLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_SHOP_REPORT_REASONS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -38,7 +38,7 @@ class ShopReportReasonsController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
@@ -53,7 +53,7 @@ class ShopReportReasonsController extends AdminBaseController
             $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         }
 
-        $srch = ShopReportReason::getSearchObject($this->adminLangId);
+        $srch = ShopReportReason::getSearchObject($this->siteLangId);
         $srch->addMultipleFields(array('reportreason.*', 'reportreason_l.reportreason_title', 'reportreason_id as listSerial'));
 
         if (!empty($post['keyword'])) {
@@ -109,7 +109,7 @@ class ShopReportReasonsController extends AdminBaseController
         $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->set('formTitle', Labels::getLabel('LBL_SHOP_REPORT_REASON_SETUP', $this->adminLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_SHOP_REPORT_REASON_SETUP', $this->siteLangId));
         $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
@@ -144,20 +144,20 @@ class ShopReportReasonsController extends AdminBaseController
         $this->objPrivilege->canEditShopReportReasons();
         $this->modelObj = (new ReflectionClass('ShopReportReason'))->newInstanceArgs($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('title')];
-        $this->set('formTitle', Labels::getLabel('LBL_SHOP_REPORT_REASON_SETUP', $this->adminLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_SHOP_REPORT_REASON_SETUP', $this->siteLangId));
     }
 
     private function getForm()
     {
         $frm = new Form('frmShopReportReason');
         $frm->addHiddenField('', 'reportreason_id');
-        /*$frm->addRequiredField(Labels::getLabel('LBL_Reason_Identifier', $this->adminLangId), 'reportreason_identifier');*/
-        $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->adminLangId), 'reportreason_title');
+        /*$frm->addRequiredField(Labels::getLabel('LBL_Reason_Identifier', $this->siteLangId), 'reportreason_identifier');*/
+        $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->siteLangId), 'reportreason_title');
         $languageArr = Language::getDropDownList();
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;
@@ -167,8 +167,8 @@ class ShopReportReasonsController extends AdminBaseController
     {
         $frm = new Form('frmShopReportReasonLang');
         $frm->addHiddenField('', 'reportreason_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->adminLangId), 'reportreason_title');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->siteLangId), 'reportreason_title');
         return $frm;
     }
 
@@ -219,18 +219,18 @@ class ShopReportReasonsController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $shopReportReasonTblHeadingCols = CacheHelper::get('shopReportReasonTblHeadingCols' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $shopReportReasonTblHeadingCols = CacheHelper::get('shopReportReasonTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopReportReasonTblHeadingCols) {
             return json_decode($shopReportReasonTblHeadingCols);
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_Select_all', $this->adminLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $this->adminLangId), 
-            'reportreason_title' => Labels::getLabel('LBL_Reason_Title', $this->adminLangId),
-            'action' =>  Labels::getLabel('LBL_ACTION', $this->adminLangId),
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId), 
+            'reportreason_title' => Labels::getLabel('LBL_Reason_Title', $this->siteLangId),
+            'action' =>  Labels::getLabel('LBL_ACTION', $this->siteLangId),
         ];
-        CacheHelper::create('shopReportReasonTblHeadingCols' . $this->adminLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('shopReportReasonTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         
         return $arr;
     }

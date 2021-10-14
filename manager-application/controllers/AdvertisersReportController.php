@@ -32,7 +32,7 @@ class AdvertisersReportController extends AdminBaseController
         }
 
         $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->adminLangId))) {
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_DESC;
         }
         $srchFrm = $this->getSearchForm($fields);
@@ -100,7 +100,7 @@ class AdvertisersReportController extends AdminBaseController
                             $arr[] = $name;
                             break;
                         case 'user_is_supplier':
-                            $yesNoArr = applicationConstants::getYesNoArr($this->adminLangId);
+                            $yesNoArr = applicationConstants::getYesNoArr($this->siteLangId);
                             $arr[] = $yesNoArr[$row['user_is_supplier']];
                             break;
                         case 'availableBalance':
@@ -117,7 +117,7 @@ class AdvertisersReportController extends AdminBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, str_replace("{reportgenerationdate}", date("d-M-Y"), Labels::getLabel("LBL_Advertisers_Report_{reportgenerationdate}", $this->adminLangId)) . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, str_replace("{reportgenerationdate}", date("d-M-Y"), Labels::getLabel("LBL_Advertisers_Report_{reportgenerationdate}", $this->siteLangId)) . '.csv', ',');
             exit;
         }
 
@@ -149,21 +149,21 @@ class AdvertisersReportController extends AdminBaseController
         $frm = new Form('frmReportSearch');
         $frm->addHiddenField('', 'page', 1);
         
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->adminLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->adminLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         if (!empty($fields)) {
             $frm->addHiddenField('', 'sortBy', 'product_name');
             $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
             $frm->addHiddenField('', 'reportColumns', '');
-            /* $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->adminLangId), 'sortBy', $fields, '', array(), '');
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->adminLangId), 'sortOrder', applicationConstants::sortOrder($this->adminLangId), 0, array(),  ''); */
+            /* $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  ''); */
         }
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
 
         return $frm;
@@ -171,18 +171,18 @@ class AdvertisersReportController extends AdminBaseController
 
     private function getFormColumns()
     {
-        $avdertiserUserReportsCacheVar = FatCache::get('avdertiserUserReportsCacheVar' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $avdertiserUserReportsCacheVar = FatCache::get('avdertiserUserReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$avdertiserUserReportsCacheVar) {
             $arr = [
-                'name' => Labels::getLabel('LBL_Name', $this->adminLangId),
-                'user_regdate' => Labels::getLabel('LBL_Registration_Date', $this->adminLangId),
-                'user_is_supplier' => Labels::getLabel('LBL_Is_Seller', $this->adminLangId),
-                'promotionsCount' => Labels::getLabel('LBL_Total_Promotions', $this->adminLangId),
-                'activePromotions' => Labels::getLabel('LBL_Active_Promotions', $this->adminLangId),
-                'promotionCharged' => Labels::getLabel('LBL_Promotions_Cost', $this->adminLangId),
-                'availableBalance' => Labels::getLabel('LBL_Available_Balance', $this->adminLangId),
+                'name' => Labels::getLabel('LBL_Name', $this->siteLangId),
+                'user_regdate' => Labels::getLabel('LBL_Registration_Date', $this->siteLangId),
+                'user_is_supplier' => Labels::getLabel('LBL_Is_Seller', $this->siteLangId),
+                'promotionsCount' => Labels::getLabel('LBL_Total_Promotions', $this->siteLangId),
+                'activePromotions' => Labels::getLabel('LBL_Active_Promotions', $this->siteLangId),
+                'promotionCharged' => Labels::getLabel('LBL_Promotions_Cost', $this->siteLangId),
+                'availableBalance' => Labels::getLabel('LBL_Available_Balance', $this->siteLangId),
             ];
-            FatCache::set('avdertiserUserReportsCacheVar' . $this->adminLangId, serialize($arr), '.txt');
+            FatCache::set('avdertiserUserReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {
             $arr =  unserialize($avdertiserUserReportsCacheVar);
         }

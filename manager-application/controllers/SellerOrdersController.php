@@ -26,18 +26,18 @@ class SellerOrdersController extends AdminBaseController
     {
         $this->objPrivilege->canViewSellerOrders();
 
-        $srch = new OrderProductSearch($this->adminLangId, true, true);
+        $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->addMultipleFields(['opshipping_by_seller_user_id']);
         $srch->joinShippingCharges(true);
         $vendors = array_unique(FatApp::getDb()->fetchAllAssoc($srch->getResultSet()));
         $vendors = array_map(
             function ($value) {
-                return $value ?: Labels::getLabel('LBL_ME', $this->adminLangId);
+                return $value ?: Labels::getLabel('LBL_ME', $this->siteLangId);
             },
             $vendors
         );
 
-        $frm = $this->getOrderSearchForm($this->adminLangId, $vendors);
+        $frm = $this->getOrderSearchForm($this->siteLangId, $vendors);
         $frm->fill(array('order_id' => $order_id));
         $this->set('frmSearch', $frm);
         $this->_template->render();
@@ -46,7 +46,7 @@ class SellerOrdersController extends AdminBaseController
     public function search()
     {
         $this->objPrivilege->canViewSellerOrders();
-        $frmSearch = $this->getOrderSearchForm($this->adminLangId);
+        $frmSearch = $this->getOrderSearchForm($this->siteLangId);
 
         $data = FatApp::getPostedData();
         $post = $frmSearch->getFormDataFromArray($data);
@@ -62,7 +62,7 @@ class SellerOrdersController extends AdminBaseController
         $ocSrch->addGroupBy('opc.opcharge_op_id');
         $qryOtherCharges = $ocSrch->getQuery();
 
-        $srch = new OrderProductSearch($this->adminLangId, true, true);
+        $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->joinOrderUser();
         $srch->joinPaymentMethod();
         $srch->joinShippingUsers();
@@ -154,7 +154,7 @@ class SellerOrdersController extends AdminBaseController
             $order['charges'] = $charges;
 
             if (!array_key_exists($order['opshipping_by_seller_user_id'],  $shippedBy)) {
-                $shippedBy[$order['opshipping_by_seller_user_id']] = 0 < $order['opshipping_by_seller_user_id'] ? $order['ship_by'] : Labels::getLabel('LBL_ME', $this->adminLangId);
+                $shippedBy[$order['opshipping_by_seller_user_id']] = 0 < $order['opshipping_by_seller_user_id'] ? $order['ship_by'] : Labels::getLabel('LBL_ME', $this->siteLangId);
             }
         }
 
@@ -174,7 +174,7 @@ class SellerOrdersController extends AdminBaseController
         $this->objPrivilege->canViewSellerOrders();
         $op_id = FatUtility::int($op_id);
 
-        $srch = new OrderProductSearch($this->adminLangId, true, true);
+        $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->joinOrderProductShipment();
         $srch->joinOrderUser();
         $srch->joinPaymentMethod();
@@ -206,7 +206,7 @@ class SellerOrdersController extends AdminBaseController
         $shippingApiObj = NULL;
         if ($opRow['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) {
             /* ShipStation */
-            $shippingApiObj = (new Shipping($this->adminLangId))->getShippingApiObj(($shippingHanldedBySeller ? $opRow['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+            $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj(($shippingHanldedBySeller ? $opRow['opshipping_by_seller_user_id'] : 0)) ?? NULL;
             if ($shippingApiObj) {
                 $shippingApiObj->getSettings();
             }
@@ -227,7 +227,7 @@ class SellerOrdersController extends AdminBaseController
             ];
 
             $shipmentTracking = new ShipmentTracking();
-            if (in_array($opRow['op_status_id'], $aftershipRequiredConfigStatus) && null !== $shippingApiObj && false !== $shipmentTracking->init($this->adminLangId)) {
+            if (in_array($opRow['op_status_id'], $aftershipRequiredConfigStatus) && null !== $shippingApiObj && false !== $shipmentTracking->init($this->siteLangId)) {
                 $srch = TrackingCourierCodeRelation::getSearchObject();
                 $srch->addCondition("tccr_shipapi_courier_code", "=", $opRow['opshipping_carrier_code']);
                 $srch->doNotCalculateRecords();
@@ -235,7 +235,7 @@ class SellerOrdersController extends AdminBaseController
                 $rs = $srch->getResultSet();
                 $data = FatApp::getDb()->fetch($rs);
                 if (null === $data) {
-                    Message::addErrorMessage(Labels::getLabel("MSG_PLEASE_MAP_YOUR_SHIPPING_CARRIER_CODE_WITH_TRACKING_CARRIER_CODE", $this->adminLangId));
+                    Message::addErrorMessage(Labels::getLabel("MSG_PLEASE_MAP_YOUR_SHIPPING_CARRIER_CODE_WITH_TRACKING_CARRIER_CODE", $this->siteLangId));
                     FatApp::redirectUser(UrlHelper::generateUrl("TrackingCodeRelation"));
                 }
             }
@@ -254,7 +254,7 @@ class SellerOrdersController extends AdminBaseController
         $pickUpAddress = $orderObj->getOrderAddresses($opRow['order_id'], $op_id);
         $opRow['pickupAddress'] = (!empty($pickUpAddress[Orders::PICKUP_ADDRESS_TYPE])) ? $pickUpAddress[Orders::PICKUP_ADDRESS_TYPE] : array();
 
-        $opRow['comments'] = $orderObj->getOrderComments($this->adminLangId, array("op_id" => $op_id));
+        $opRow['comments'] = $orderObj->getOrderComments($this->siteLangId, array("op_id" => $op_id));
 
         if ($opRow['plugin_code'] == 'CashOnDelivery') {
             $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(true);
@@ -280,7 +280,7 @@ class SellerOrdersController extends AdminBaseController
         $frm = $this->getOrderCommentsForm($opRow, $processingStatuses);
         $frm->fill($data);
 
-        $orderStatuses = Orders::getOrderProductStatusArr($this->adminLangId);
+        $orderStatuses = Orders::getOrderProductStatusArr($this->siteLangId);
 
         $allowedShippingUserStatuses = $orderObj->getAdminAllowedUpdateShippingUser();
         $displayShippingUserForm = false;
@@ -308,7 +308,7 @@ class SellerOrdersController extends AdminBaseController
 
             if (DigitalOrderProduct::canAttachMoreFiles($opRow['op_status_id'])) {
                 $canAttachMoreFiles = true;
-                $moreAttachmentsFrm = OrderProduct::moreAttachmentsForm($this->adminLangId);
+                $moreAttachmentsFrm = OrderProduct::moreAttachmentsForm($this->siteLangId);
                 $moreAttachmentsFrm->fill(['op_id' => $opRow['op_id']]);
                 $this->set('moreAttachmentsFrm', $moreAttachmentsFrm);
             }
@@ -324,7 +324,7 @@ class SellerOrdersController extends AdminBaseController
         } */
 
         $opChargesLog = new OrderProductChargeLog($op_id);
-        $taxOptions = $opChargesLog->getData($this->adminLangId);
+        $taxOptions = $opChargesLog->getData($this->siteLangId);
         $opRow['taxOptions'] = $taxOptions;
 
         $this->set('allLanguages', Language::getAllNames(false, 0, false, false));
@@ -336,7 +336,7 @@ class SellerOrdersController extends AdminBaseController
         $this->set('digitalDownloadLinks', $digitalDownloadLinks);
         $this->set('canAttachMoreFiles', $canAttachMoreFiles);
 
-        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->adminLangId));
+        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->set('displayForm', (in_array($opRow['op_status_id'], $processingStatuses) && $this->canEdit && $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED));
         $this->set('displayShippingUserForm', $displayShippingUserForm);
 
@@ -356,13 +356,13 @@ class SellerOrdersController extends AdminBaseController
         $this->objPrivilege->canViewSellerOrders();
         $op_id = FatUtility::int($op_id);
         if (1 > $op_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
         $orderObj = new Orders();
 
-        $srch = new OrderProductSearch($this->adminLangId, true, true);
+        $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->joinPaymentMethod();
         $srch->joinSellerProducts();
         $srch->joinShop();
@@ -381,7 +381,7 @@ class SellerOrdersController extends AdminBaseController
         $orderDetail = FatApp::getDb()->fetch($rs);
 
         if (!$orderDetail) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -394,7 +394,7 @@ class SellerOrdersController extends AdminBaseController
         }
 
         if (!empty($orderDetail["opship_orderid"])) {
-            $shippingApiObj = (new Shipping($this->adminLangId))->getShippingApiObj(($shippedBySeller ? $orderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+            $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj(($shippedBySeller ? $orderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;
             if (!empty($shippingApiObj) && false === $shippingApiObj->loadOrder($orderDetail["opship_orderid"])) {
                 Message::addErrorMessage($shippingApiObj->getError());
                 FatApp::redirectUser(UrlHelper::generateUrl("SellerOrders"));
@@ -410,25 +410,25 @@ class SellerOrdersController extends AdminBaseController
         $orderDetail['pickupAddress'] = (isset($pickUpAddress[Orders::PICKUP_ADDRESS_TYPE])) ? $pickUpAddress[Orders::PICKUP_ADDRESS_TYPE] : array();
 
         $opChargesLog = new OrderProductChargeLog($op_id);
-        $taxOptions = $opChargesLog->getData($this->adminLangId);
+        $taxOptions = $opChargesLog->getData($this->siteLangId);
         $orderDetail['taxOptions'] = $taxOptions;
 
         /* $this->set('orderDetail', $orderDetail);
         $this->set('languages', Language::getAllNames());
-        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->adminLangId));
+        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->set('canEdit', $this->objPrivilege->canEditSales(UserAuthentication::getLoggedUserId(), true));
         $this->_template->render(true, true); */
 
         $template = new FatTemplate('', '');
-        $template->set('adminLangId', $this->adminLangId);
+        $template->set('siteLangId', $this->siteLangId);
         $template->set('orderDetail', $orderDetail);
         $template->set('shippedBySeller', $shippedBySeller);
 
         require_once(CONF_INSTALLATION_PATH . 'library/tcpdf/tcpdf.php');
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor(FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->adminLangId));
-        $pdf->SetKeywords(FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->adminLangId));
+        $pdf->SetAuthor(FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId));
+        $pdf->SetKeywords(FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId));
         $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->SetHeaderMargin(0);
         $pdf->SetHeaderData('', 0, '', '', array(255, 255, 255), array(255, 255, 255));
@@ -438,11 +438,11 @@ class SellerOrdersController extends AdminBaseController
         $pdf->SetMargins(10, 10, 10);
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
         $pdf->AddPage();
-        $pdf->SetTitle(Labels::getLabel('LBL_Tax_Invoice', $this->adminLangId));
-        $pdf->SetSubject(Labels::getLabel('LBL_Tax_Invoice', $this->adminLangId));
+        $pdf->SetTitle(Labels::getLabel('LBL_Tax_Invoice', $this->siteLangId));
+        $pdf->SetSubject(Labels::getLabel('LBL_Tax_Invoice', $this->siteLangId));
 
         // set LTR direction for english translation
-        $pdf->setRTL(('rtl' == Language::getLayoutDirection($this->adminLangId)));
+        $pdf->setRTL(('rtl' == Language::getLayoutDirection($this->siteLangId)));
         // set font
         $pdf->SetFont('dejavusans');
 
@@ -468,7 +468,7 @@ class SellerOrdersController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $srch = new OrderProductSearch($this->adminLangId, true, true);
+        $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->joinPaymentMethod();
         $srch->joinShippingUsers();
         $srch->joinOrderUser();
@@ -548,7 +548,7 @@ class SellerOrdersController extends AdminBaseController
         $rs = $srch->getResultSet();
         $shippingUserRow = FatApp::getDb()->fetch($rs);
         if ($shippingUserRow && $orderDetail['plugin_code'] == "CashOnDelivery") {
-            $comments = Labels::getLabel('Msg_Cash_will_collect_against_COD_order', $this->adminLangId) . ' ' . $orderDetail['op_invoice_number'];
+            $comments = Labels::getLabel('Msg_Cash_will_collect_against_COD_order', $this->siteLangId) . ' ' . $orderDetail['op_invoice_number'];
             $amt = CommonHelper::orderProductAmount($orderDetail);
             $txnObj = new Transactions();
             $txnDataArr = array(
@@ -589,13 +589,13 @@ class SellerOrdersController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $shippingApiObj = (new Shipping($this->adminLangId))->getShippingApiObj() ?? NULL;
+        $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj() ?? NULL;
 
         $status = FatApp::getPostedData('op_status_id', FatUtility::VAR_INT, 0);
         $manualShipping = FatApp::getPostedData('manual_shipping', FatUtility::VAR_INT, 0);
         $trackingNumber = FatApp::getPostedData('tracking_number', FatUtility::VAR_STRING, '');
         if ($status ==  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && empty($trackingNumber) && 1 > $manualShipping && empty($shippingApiObj)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_SELECT_SELF_SHIPPING', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_SELECT_SELF_SHIPPING', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -606,13 +606,13 @@ class SellerOrdersController extends AdminBaseController
         $oCancelRequestSrch->addCondition('ocrequest_status', '!=', OrderCancelRequest::CANCELLATION_REQUEST_STATUS_DECLINED);
         $oCancelRequestRs = $oCancelRequestSrch->getResultSet();
         if (FatApp::getDb()->fetch($oCancelRequestRs)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Cancel_request_is_submitted_for_this_order', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Cancel_request_is_submitted_for_this_order', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
         $orderObj = new Orders();
 
-        $srch = new OrderProductSearch($this->adminLangId, true, true);
+        $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->joinOrderProductShipment();
         $srch->joinPaymentMethod();
         $srch->joinShippingUsers();
@@ -657,7 +657,7 @@ class SellerOrdersController extends AdminBaseController
         );
 
         if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && !CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']) && !$orderDetail['optsu_user_id'] && in_array($post["op_status_id"], $restrictOrderStatusChange) && $orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_assign_shipping_user', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Please_assign_shipping_user', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -707,7 +707,7 @@ class SellerOrdersController extends AdminBaseController
         }
 
         if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && (FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") == $post["op_status_id"] || FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS") == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
-            $orderProducts = new OrderProductSearch($this->adminLangId, true, true);
+            $orderProducts = new OrderProductSearch($this->siteLangId, true, true);
             $orderProducts->joinPaymentMethod();
             $orderProducts->addMultipleFields(['op_status_id']);
             $orderProducts->addCondition('op_order_id', '=', $orderDetail['order_id']);
@@ -720,7 +720,7 @@ class SellerOrdersController extends AdminBaseController
                     $updateArray = array('order_payment_status' => Orders::ORDER_PAYMENT_PAID);
                     $whr = array('smt' => 'order_id = ?', 'vals' => array($orderDetail['order_id']));
                     if (!FatApp::getDb()->updateFromArray(Orders::DB_TBL, $updateArray, $whr)) {
-                        Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->adminLangId));
+                        Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
                         FatUtility::dieJsonError(Message::getHtml());
                     }
                 }
@@ -739,19 +739,19 @@ class SellerOrdersController extends AdminBaseController
         $recordId = FatUtility::int($recordId);
 
         if (1 > $aFileId || 1 > $recordId) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('SellerOrders'));
         }
 
         $file_row = AttachedFile::getAttributesById($aFileId);
 
         if ($file_row == false || ($file_row['afile_record_id'] != $recordId)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('SellerOrders'));
         }
 
         if (!file_exists(CONF_UPLOADS_PATH . $file_row['afile_physical_path'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_File_not_found', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_File_not_found', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('SellerOrders'));
         }
 
@@ -765,11 +765,11 @@ class SellerOrdersController extends AdminBaseController
         $op_id = FatUtility::int($op_id);
 
         if (false !== OrderCancelRequest::getCancelRequestById($op_id)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_User_have_already_sent_the_cancellation_request_for_this_order', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_User_have_already_sent_the_cancellation_request_for_this_order', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
-        $srch = new OrderProductSearch($this->adminLangId, true, true);
+        $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->joinOrderUser();
         $srch->joinPaymentMethod();
         $srch->addOrderProductCharges();
@@ -797,21 +797,21 @@ class SellerOrdersController extends AdminBaseController
         $addresses = $orderObj->getOrderAddresses($opRow['order_id']);
         $opRow['billingAddress'] = $addresses[Orders::BILLING_ADDRESS_TYPE];
         $opRow['shippingAddress'] = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : array();
-        $opRow['comments'] = $orderObj->getOrderComments($this->adminLangId, array("op_id" => $op_id));
+        $opRow['comments'] = $orderObj->getOrderComments($this->siteLangId, array("op_id" => $op_id));
 
-        $orderStatuses = Orders::getOrderProductStatusArr($this->adminLangId);
+        $orderStatuses = Orders::getOrderProductStatusArr($this->siteLangId);
 
         $notEligible = false;
         $notAllowedStatues = $orderObj->getNotAllowedOrderCancellationStatuses();
 
         if (in_array($opRow["op_status_id"], $notAllowedStatues)) {
             $notEligible = true;
-            Message::addErrorMessage(sprintf(Labels::getLabel('LBL_this_order_already', $this->adminLangId), $orderStatuses[$opRow["op_status_id"]]));
+            Message::addErrorMessage(sprintf(Labels::getLabel('LBL_this_order_already', $this->siteLangId), $orderStatuses[$opRow["op_status_id"]]));
             //FatUtility::dieWithError( Message::getHtml() );
             CommonHelper::redirectUserReferer();
         }
 
-        $frm = $this->getOrderCancelForm($this->adminLangId);
+        $frm = $this->getOrderCancelForm($this->siteLangId);
         $frm->fill(array('op_id' => $op_id));
 
         $this->set('notEligible', $notEligible);
@@ -822,7 +822,7 @@ class SellerOrdersController extends AdminBaseController
 
     public function cancelReason()
     {
-        $frm = $this->getOrderCancelForm($this->adminLangId);
+        $frm = $this->getOrderCancelForm($this->siteLangId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (!false === $post) {
@@ -832,19 +832,19 @@ class SellerOrdersController extends AdminBaseController
 
         $op_id = FatUtility::int($post['op_id']);
         if (1 > $op_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_access', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_access', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
         if (false !== OrderCancelRequest::getCancelRequestById($op_id)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_User_have_already_sent_the_cancellation_request_for_this_order', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_User_have_already_sent_the_cancellation_request_for_this_order', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
         $orderObj = new Orders();
         $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses();
 
-        $srch = new OrderProductSearch($this->adminLangId, true, true);
+        $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->joinOrderUser();
         $srch->addCondition('op_id', '=', $op_id);
         $srch->doNotCalculateRecords();
@@ -853,26 +853,26 @@ class SellerOrdersController extends AdminBaseController
         $orderDetail = (array) FatApp::getDb()->fetch($rs);
 
         if (empty($orderDetail)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
         $notAllowedStatues = $orderObj->getNotAllowedOrderCancellationStatuses();
-        $orderStatuses = Orders::getOrderProductStatusArr($this->adminLangId);
+        $orderStatuses = Orders::getOrderProductStatusArr($this->siteLangId);
 
         if (in_array($orderDetail["op_status_id"], $notAllowedStatues)) {
-            Message::addErrorMessage(sprintf(Labels::getLabel('LBL_this_order_already', $this->adminLangId), $orderStatuses[$orderDetail["op_status_id"]]));
+            Message::addErrorMessage(sprintf(Labels::getLabel('LBL_this_order_already', $this->siteLangId), $orderStatuses[$orderDetail["op_status_id"]]));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        if (!$orderObj->addChildProductOrderHistory($op_id, $this->adminLangId, FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS"), $post["comments"], true)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_ERROR_INVALID_REQUEST', $this->adminLangId));
+        if (!$orderObj->addChildProductOrderHistory($op_id, $this->siteLangId, FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS"), $post["comments"], true)) {
+            Message::addErrorMessage(Labels::getLabel('MSG_ERROR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
         /* Update To Shipping Service */
         if (FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") == $orderDetail["op_status_id"]) {
-            $this->langId = $this->adminLangId;
+            $this->langId = $this->siteLangId;
             $this->refundShipment($op_id);
         }
         /* Update To Shipping Service */
@@ -880,27 +880,27 @@ class SellerOrdersController extends AdminBaseController
         $pluginKey = Plugin::getAttributesById($orderDetail['order_pmethod_id'], 'plugin_code');
 
         $paymentMethodObj = new PaymentMethods();
-        if (true === $paymentMethodObj->canRefundToCard($pluginKey, $this->adminLangId)) {
+        if (true === $paymentMethodObj->canRefundToCard($pluginKey, $this->siteLangId)) {
             if (false == $paymentMethodObj->initiateRefund($orderDetail, PaymentMethods::REFUND_TYPE_CANCEL)) {
                 FatUtility::dieJsonError($paymentMethodObj->getError());
             }
 
             $resp = $paymentMethodObj->getResponse();
             if (empty($resp)) {
-                FatUtility::dieJsonError(Labels::getLabel('LBL_UNABLE_TO_PLACE_GATEWAY_REFUND_REQUEST', $this->adminLangId));
+                FatUtility::dieJsonError(Labels::getLabel('LBL_UNABLE_TO_PLACE_GATEWAY_REFUND_REQUEST', $this->siteLangId));
             }
 
             // Debit from wallet if plugin/payment method support's direct payment to card of customer.
             if (!empty($resp->id)) {
-                $childOrderInfo = $orderObj->getOrderProductsByOpId($op_id, $this->adminLangId);
+                $childOrderInfo = $orderObj->getOrderProductsByOpId($op_id, $this->siteLangId);
                 $txnAmount = $paymentMethodObj->getTxnAmount();
-                $comments = Labels::getLabel('LBL_TRANSFERED_TO_YOUR_CARD._INVOICE_#{invoice-no}', $this->adminLangId);
+                $comments = Labels::getLabel('LBL_TRANSFERED_TO_YOUR_CARD._INVOICE_#{invoice-no}', $this->siteLangId);
                 $comments = CommonHelper::replaceStringData($comments, ['{invoice-no}' => $childOrderInfo['op_invoice_number']]);
-                Transactions::debitWallet($childOrderInfo['order_user_id'], Transactions::TYPE_ORDER_REFUND, $txnAmount, $this->adminLangId, $comments, $op_id, $resp->id);
+                Transactions::debitWallet($childOrderInfo['order_user_id'], Transactions::TYPE_ORDER_REFUND, $txnAmount, $this->siteLangId, $comments, $op_id, $resp->id);
             }
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Updated_Successfully', $this->adminLangId));
+        $this->set('msg', Labels::getLabel('MSG_Updated_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -916,10 +916,10 @@ class SellerOrdersController extends AdminBaseController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAllAssoc($rs);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Shipping_User', $this->adminLangId), 'optsu_user_id', $records, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('LBL_Shipping_User', $this->siteLangId), 'optsu_user_id', $records, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
         $frm->addHiddenField('', 'op_id', 0);
         if ($displayShippingUserForm) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         }
         return $frm;
     }
@@ -927,55 +927,55 @@ class SellerOrdersController extends AdminBaseController
     private function getOrderCommentsForm($orderData = array(), $processingOrderStatus = [])
     {
         $frm = new Form('frmOrderComments');
-        $frm->addTextArea(Labels::getLabel('LBL_Your_Comments', $this->adminLangId), 'comments');
+        $frm->addTextArea(Labels::getLabel('LBL_Your_Comments', $this->siteLangId), 'comments');
 
-        $orderStatusArr = Orders::getOrderProductStatusArr($this->adminLangId, $processingOrderStatus, $orderData['op_status_id']);
+        $orderStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingOrderStatus, $orderData['op_status_id']);
 
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->adminLangId), 'op_status_id', $orderStatusArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'op_status_id', $orderStatusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
         $fld->requirements()->setRequired();
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Notify_Customer', $this->adminLangId), 'customer_notified', applicationConstants::getYesNoArr($this->adminLangId), '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('LBL_Notify_Customer', $this->siteLangId), 'customer_notified', applicationConstants::getYesNoArr($this->siteLangId), '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
         if (array_key_exists('opship_tracking_number', $orderData) && (empty($orderData['opship_tracking_number']) || $orderData['opshipping_plugin_code'] == 'ShipStationShipping') && $orderData['orderstatus_id'] !=  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {
-            $manualFld = $frm->addCheckBox(Labels::getLabel('LBL_SELF_SHIPPING', $this->adminLangId), 'manual_shipping', 1, array(), false, 0);
-            $manualShipUnReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->adminLangId));
+            $manualFld = $frm->addCheckBox(Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId), 'manual_shipping', 1, array(), false, 0);
+            $manualShipUnReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId));
             $manualShipUnReqObj->setRequired(false);
-            $manualShipReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->adminLangId));
+            $manualShipReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId));
             $manualShipReqObj->setRequired(true);
 
             $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"), 'eq', 'manual_shipping', $manualShipReqObj);
             $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"), 'ne', 'manual_shipping', $manualShipUnReqObj);
 
-            $frm->addTextBox(Labels::getLabel('LBL_Tracking_Number', $this->adminLangId), 'tracking_number');
+            $frm->addTextBox(Labels::getLabel('LBL_Tracking_Number', $this->siteLangId), 'tracking_number');
 
-            $trackingUnReqObj = new FormFieldRequirement('tracking_number', Labels::getLabel('LBL_Tracking_Number', $this->adminLangId));
+            $trackingUnReqObj = new FormFieldRequirement('tracking_number', Labels::getLabel('LBL_Tracking_Number', $this->siteLangId));
             $trackingUnReqObj->setRequired(false);
 
-            $trackingReqObj = new FormFieldRequirement('tracking_number', Labels::getLabel('LBL_Tracking_Number', $this->adminLangId));
+            $trackingReqObj = new FormFieldRequirement('tracking_number', Labels::getLabel('LBL_Tracking_Number', $this->siteLangId));
             $trackingReqObj->setRequired(true);
 
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'tracking_number', $trackingReqObj);
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'tracking_number', $trackingUnReqObj);
 
-            $frm->addTextBox(Labels::getLabel('LBL_TRACKING_URL', $this->adminLangId), 'opship_tracking_url');
+            $frm->addTextBox(Labels::getLabel('LBL_TRACKING_URL', $this->siteLangId), 'opship_tracking_url');
 
-            $trackingUrlUnReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('LBL_TRACKING_URL', $this->adminLangId));
+            $trackingUrlUnReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('LBL_TRACKING_URL', $this->siteLangId));
             $trackingUrlUnReqObj->setRequired(false);
 
-            $trackingurlReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('LBL_TRACKING_URL', $this->adminLangId));
+            $trackingurlReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('LBL_TRACKING_URL', $this->siteLangId));
             $trackingurlReqObj->setRequired(true);
 
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'opship_tracking_url', $trackingurlReqObj);
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'opship_tracking_url', $trackingUrlUnReqObj);
 
             $shipmentTracking = new ShipmentTracking();
-            if (false !== $shipmentTracking->init($this->adminLangId) && false !== $shipmentTracking->getTrackingCouriers()) {
+            if (false !== $shipmentTracking->init($this->siteLangId) && false !== $shipmentTracking->getTrackingCouriers()) {
                 $trackCarriers = $shipmentTracking->getResponse();
-                $frm->addSelectBox(Labels::getLabel('LBL_TRACKING_COURIER', $this->adminLangId), 'oshistory_courier', $trackCarriers, '', array(), Labels::getLabel('LBL_Select', $this->adminLangId));
+                $frm->addSelectBox(Labels::getLabel('LBL_TRACKING_COURIER', $this->siteLangId), 'oshistory_courier', $trackCarriers, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
 
-                $trackCarrierFldUnReqObj = new FormFieldRequirement('oshistory_courier', Labels::getLabel('LBL_TRACKING_COURIER', $this->adminLangId));
+                $trackCarrierFldUnReqObj = new FormFieldRequirement('oshistory_courier', Labels::getLabel('LBL_TRACKING_COURIER', $this->siteLangId));
                 $trackCarrierFldUnReqObj->setRequired(false);
 
-                $trackCarrierFldReqObj = new FormFieldRequirement('oshistory_courier', Labels::getLabel('LBL_TRACKING_COURIER', $this->adminLangId));
+                $trackCarrierFldReqObj = new FormFieldRequirement('oshistory_courier', Labels::getLabel('LBL_TRACKING_COURIER', $this->siteLangId));
                 $trackCarrierFldReqObj->setRequired(true);
 
                 $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'oshistory_courier', $trackCarrierFldReqObj);
@@ -984,7 +984,7 @@ class SellerOrdersController extends AdminBaseController
         }
 
         $frm->addHiddenField('', 'op_id', 0);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -1034,12 +1034,12 @@ class SellerOrdersController extends AdminBaseController
     public function orderTrackingInfo($trackingNumber, $courier, $orderNumber)
     {
         if (empty($trackingNumber) || empty($courier)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         $shipmentTracking = new ShipmentTracking();
-        if (false === $shipmentTracking->init($this->adminLangId)) {
+        if (false === $shipmentTracking->init($this->siteLangId)) {
             Message::addErrorMessage($shipmentTracking->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -1060,7 +1060,7 @@ class SellerOrdersController extends AdminBaseController
     {
         $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
         if (1 > $opId) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->adminLangId) . __LINE__);
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId) . __LINE__);
         }
 
         $opSrch = OrderProduct::getSearchObject();
@@ -1077,18 +1077,18 @@ class SellerOrdersController extends AdminBaseController
         $row = FatApp::getDb()->fetch($rs);
 
         if (!is_array($row)) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId));
         }
 
         if (!DigitalOrderProduct::canAttachMoreFiles($row['op_status_id'])) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->adminLangId));
+            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId));
         }
 
         if (
             !isset($_FILES['additional_attachment']['tmp_name'])
             || !is_uploaded_file($_FILES['additional_attachment']['tmp_name'])
         ) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->adminLangId));
+            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -1104,7 +1104,7 @@ class SellerOrdersController extends AdminBaseController
             false,
             0
         )) {
-            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_File_uploaded_successfully', $this->adminLangId));
+            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_File_uploaded_successfully', $this->siteLangId));
         }
 
         FatUtility::dieJsonError($fileHandlerObj->getError());

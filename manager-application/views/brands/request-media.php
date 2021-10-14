@@ -9,7 +9,7 @@ $logoFld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
 $logoFld->addFieldTagAttribute('onChange', 'logoPopupImage(this)');
 $logoLangFld = $brandLogoFrm->getField('lang_id');
 $logoLangFld->addFieldTagAttribute('class', 'logo-language-js');
-$logoPreferredDimensions = '<small class="text--small logoPreferredDimensions-js">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $adminLangId), '500 x 500').'</small>';
+$logoPreferredDimensions = '<small class="text--small logoPreferredDimensions-js">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '500 x 500').'</small>';
 $htmlAfterField = $logoPreferredDimensions;
 $htmlAfterField .= '<div id="logo-listing"></div>';
 $logoFld->htmlAfterField = $htmlAfterField;
@@ -25,31 +25,31 @@ $imageLangFld->addFieldTagAttribute('class', 'image-language-js');
 $screenFld = $brandImageFrm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('class', 'prefDimensions-js');
 
-$htmlAfterField = '<div style="margin-top:15px;" class="preferredDimensions-js">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $adminLangId), '2000 x 500').'</div>';
+$htmlAfterField = '<div style="margin-top:15px;" class="preferredDimensions-js">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500').'</div>';
 $htmlAfterField .= '<div id="image-listing"></div>';
 $imageFld->htmlAfterField = $htmlAfterField;
 
-/*$ImagePreferredDimensions = '<small class="text--small">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $adminLangId), '2000*500').'<br/>'. Labels::getLabel('LBL_This_image_will_be_displayed_for_homepage_brands_collection', $adminLangId) .'</small>';
+/*$ImagePreferredDimensions = '<small class="text--small">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), '2000*500').'<br/>'. Labels::getLabel('LBL_This_image_will_be_displayed_for_homepage_brands_collection', $siteLangId) .'</small>';
 $htmlAfterField = $ImagePreferredDimensions;
 $htmlAfterField .= '<div id="image-listing"></div>';
 $imageFld->htmlAfterField = $htmlAfterField;*/ ?>
 <div id="cropperBox-js"></div>
 <section class="section" id="mediaForm-js">
     <div class="sectionhead">
-        <h4><?php echo Labels::getLabel('LBL_Product_Brand_setup', $adminLangId); ?></h4>
+        <h4><?php echo Labels::getLabel('LBL_Product_Brand_setup', $siteLangId); ?></h4>
     </div>
     <div class="sectionbody space">
         <div class="row">
             <div class="col-sm-12">
                 <div class="tabs_nav_container responsive flat">
                     <ul class="tabs_nav">
-                        <li><a href="javascript:void(0)" onclick="brandRequestForm(<?php echo $brand_id ?>);"><?php echo Labels::getLabel('LBL_General', $adminLangId); ?></a></li>
+                        <li><a href="javascript:void(0)" onclick="brandRequestForm(<?php echo $brand_id ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
                         <li class="<?php echo (0 == $brand_id) ? 'fat-inactive' : ''; ?>">
                             <a href="javascript:void(0);" <?php echo (0 < $brand_id) ? "onclick='brandRequestLangForm(" . $brand_id . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                                <?php echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
+                                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
                             </a>
                         </li>
-                        <li><a class="active" href="javascript:void(0)" onclick="brandRequestMediaForm(<?php echo $brand_id ?>);"><?php echo Labels::getLabel('LBL_Media', $adminLangId); ?></a></li>
+                        <li><a class="active" href="javascript:void(0)" onclick="brandRequestMediaForm(<?php echo $brand_id ?>);"><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
                     </ul>
                     <div class="tabs_panel_wrap">
                         <div class="tabs_panel">

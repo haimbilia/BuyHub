@@ -37,7 +37,7 @@ class ShippingDurationsController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
-        $srch = ShippingDurations::getSearchObject($this->adminLangId);
+        $srch = ShippingDurations::getSearchObject($this->siteLangId);
 
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('sd.sduration_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
@@ -118,7 +118,7 @@ class ShippingDurationsController extends AdminBaseController
             }
         } else {
             $sduration_id = $record->getMainTableRecordId();
-            $newTabLangId = $this->adminLangId;
+            $newTabLangId = $this->siteLangId;
         }
 
         $this->set('msg', $this->str_setup_successful);
@@ -237,7 +237,7 @@ class ShippingDurationsController extends AdminBaseController
 
         if (empty($sdurationIdsArr)) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -256,7 +256,7 @@ class ShippingDurationsController extends AdminBaseController
         $sduration_id = FatUtility::int($sduration_id);
         if (1 > $sduration_id) {
             FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
         $obj = new ShippingDurations($sduration_id);
@@ -276,9 +276,9 @@ class ShippingDurationsController extends AdminBaseController
     public function getSearchForm()
     {
         $frm = new Form('frmshipDurationSearch');
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->adminLangId), 'keyword', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -289,7 +289,7 @@ class ShippingDurationsController extends AdminBaseController
 
         $frm = new Form('frmShippingDuration');
         $frm->addHiddenField('', 'sduration_id', 0);
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->adminLangId), 'sduration_identifier');
+        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->siteLangId), 'sduration_identifier');
         $fld->setUnique(ShippingDurations::DB_TBL, 'sduration_identifier', 'sduration_id', 'sduration_id', 'sduration_id');
 
         $arr = array();
@@ -297,11 +297,11 @@ class ShippingDurationsController extends AdminBaseController
             $arr[$i] = $i;
         }
 
-        $frm->addSelectbox(Labels::getLabel('LBL_From', $this->adminLangId), 'sduration_from', $arr, '', array(), '');
-        $frm->addSelectbox(Labels::getLabel('LBL_To', $this->adminLangId), 'sduration_to', $arr, '', array(), '');
-        $frm->addSelectbox(Labels::getLabel('LBL_Duration', $this->adminLangId), 'sduration_days_or_weeks', ShippingDurations::getShippingDurationDaysOrWeekArr($this->adminLangId), '', array(), '');
+        $frm->addSelectbox(Labels::getLabel('LBL_From', $this->siteLangId), 'sduration_from', $arr, '', array(), '');
+        $frm->addSelectbox(Labels::getLabel('LBL_To', $this->siteLangId), 'sduration_to', $arr, '', array(), '');
+        $frm->addSelectbox(Labels::getLabel('LBL_Duration', $this->siteLangId), 'sduration_days_or_weeks', ShippingDurations::getShippingDurationDaysOrWeekArr($this->siteLangId), '', array(), '');
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
@@ -314,17 +314,17 @@ class ShippingDurationsController extends AdminBaseController
 
         $frm = new Form('frmShippingDurationLang');
         $frm->addHiddenField('', 'sduration_id', $sduration_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Label', $this->adminLangId), 'sduration_name');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Label', $this->siteLangId), 'sduration_name');
         
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->adminLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 }

@@ -33,7 +33,7 @@ if (!empty($googleFontFamilyUrl)) {
                 <div class="card">
                     <div class="card-head">
                         <div class="card-head-label">
-                            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_THEME_SETTINGS', $adminLangId); ?></h3>
+                            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_THEME_SETTINGS', $siteLangId); ?></h3>
                         </div>
                     </div>
                     <div class="card-body">
@@ -49,20 +49,20 @@ if (!empty($googleFontFamilyUrl)) {
                                         <?php if (!empty($apiKey)) { ?>
                                             <div class="form-group">
                                                 <label class="labeled">
-                                                    <label class="label"><?php echo Labels::getLabel('LBL_FONT_FAMILY', $adminLangId); ?>*</label>
-                                                    <input type="search" name="CONF_THEME_FONT_FAMILY" placeholder="<?php echo Labels::getLabel('LBL_SEARCH_FONTS', $adminLangId); ?>" value="<?php echo $googleFontFamily; ?>">
+                                                    <label class="label"><?php echo Labels::getLabel('LBL_FONT_FAMILY', $siteLangId); ?>*</label>
+                                                    <input type="search" name="CONF_THEME_FONT_FAMILY" placeholder="<?php echo Labels::getLabel('LBL_SEARCH_FONTS', $siteLangId); ?>" value="<?php echo $googleFontFamily; ?>">
                                                 </label>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="label">
-                                                    <?php echo Labels::getLabel('LBL_SELECT_FONT_WEIGHT', $adminLangId); ?>*
+                                                    <?php echo Labels::getLabel('LBL_SELECT_FONT_WEIGHT', $siteLangId); ?>*
                                                 </label>
-                                                <input name='CONF_THEME_FONT_WEIGHT' class='form-control tagify--outside tagifyWeightJs' placeholder='<?php echo Labels::getLabel('LBL_SELECT_WEIGHT', $adminLangId); ?>' <?php echo $disabled; ?> value="<?php echo htmlentities($fontWeight); ?>">
+                                                <input name='CONF_THEME_FONT_WEIGHT' class='form-control tagify--outside tagifyWeightJs' placeholder='<?php echo Labels::getLabel('LBL_SELECT_WEIGHT', $siteLangId); ?>' <?php echo $disabled; ?> value="<?php echo htmlentities($fontWeight); ?>">
                                             </div>
                                         <?php } ?>
                                         <div class="form-group">
-                                            <label class="label"><?php echo Labels::getLabel('LBL_THEME_COLOR', $adminLangId); ?></label>
+                                            <label class="label"><?php echo Labels::getLabel('LBL_THEME_COLOR', $siteLangId); ?></label>
                                             <div class="color-data colorBlockJs">
                                                 <?php 
                                                     $fld = $frm->getField('CONF_THEME_COLOR_RGB');
@@ -78,21 +78,21 @@ if (!empty($googleFontFamilyUrl)) {
                                                     <input type="color" value="<?php echo $themeColor; ?>" class="themeColorJs colorPickerJs" name="CONF_THEME_COLOR">
                                                 </div>
                                                 <div class="color-label">
-                                                    <h5><?php echo Labels::getLabel('LBL_HEX', $adminLangId); ?></h5>
+                                                    <h5><?php echo Labels::getLabel('LBL_HEX', $siteLangId); ?></h5>
                                                     <span class="hex hexJs"><?php echo $themeColor; ?></span>
                                                 </div>
                                                 <div class="color-label">
-                                                    <h5><?php echo Labels::getLabel('LBL_RGB', $adminLangId); ?></h5>
+                                                    <h5><?php echo Labels::getLabel('LBL_RGB', $siteLangId); ?></h5>
                                                     <span class="rgb rgbJs"><?php echo $themeColorRgb; ?></span>
                                                 </div>
                                                 <div class="color-label">
-                                                    <h5><?php echo Labels::getLabel('LBL_HSL', $adminLangId); ?></h5>
+                                                    <h5><?php echo Labels::getLabel('LBL_HSL', $siteLangId); ?></h5>
                                                     <span class="hsl hslJs"><?php echo $themeColorHsl; ?></span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="label"><?php echo Labels::getLabel('LBL_THEME_COLOR_INVERSE', $adminLangId); ?></label>
+                                            <label class="label"><?php echo Labels::getLabel('LBL_THEME_COLOR_INVERSE', $siteLangId); ?></label>
                                             <div class="color-data colorBlockJs">
                                                 <?php 
                                                     $fld = $frm->getField('CONF_THEME_COLOR_INVERSE_RGB');
@@ -108,15 +108,15 @@ if (!empty($googleFontFamilyUrl)) {
                                                     <input type="color" value="<?php echo $themeColorInverse; ?>" class="themeColorInverseJs colorPickerJs" name="CONF_THEME_COLOR_INVERSE">
                                                 </div>
                                                 <div class="color-label">
-                                                    <h5><?php echo Labels::getLabel('LBL_HEX', $adminLangId); ?></h5>
+                                                    <h5><?php echo Labels::getLabel('LBL_HEX', $siteLangId); ?></h5>
                                                     <span class="hex hexJs"><?php echo $themeColorInverse; ?></span>
                                                 </div>
                                                 <div class="color-label">
-                                                    <h5><?php echo Labels::getLabel('LBL_RGB', $adminLangId); ?></h5>
+                                                    <h5><?php echo Labels::getLabel('LBL_RGB', $siteLangId); ?></h5>
                                                     <span class="rgb rgbJs"><?php echo $themeColorInverseRgb; ?></span>
                                                 </div>
                                                 <div class="color-label">
-                                                    <h5><?php echo Labels::getLabel('LBL_HSL', $adminLangId); ?></h5>
+                                                    <h5><?php echo Labels::getLabel('LBL_HSL', $siteLangId); ?></h5>
                                                     <span class="hsl hslJs"><?php echo $themeColorInverseHsl; ?></span>
                                                 </div>
                                             </div>
@@ -126,7 +126,7 @@ if (!empty($googleFontFamilyUrl)) {
                                                 <i class="flaticon-warning"></i>
                                             </div>
                                             <div class="alert-text text-xs">
-                                                <?php echo Labels::getLabel('LBL_DISCLAIMER:_INVERSE_COLOR_SHOULD_BE_IN_CONTRAST_TO_THE_THEME_COLOR', $adminLangId); ?>
+                                                <?php echo Labels::getLabel('LBL_DISCLAIMER:_INVERSE_COLOR_SHOULD_BE_IN_CONTRAST_TO_THE_THEME_COLOR', $siteLangId); ?>
                                             </div>
                                         </div>
 
