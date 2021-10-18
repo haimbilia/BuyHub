@@ -88,7 +88,7 @@
                                 </div>
                             </div>
                             <div class="card">
-                                <img  src="<?php echo CONF_WEBROOT_URL; ?>images/navigation-management.png" alt="">
+                                <img  src="<?php echo CONF_WEBROOT_URL; ?>images/navigation-management.png " alt="">
                             </div>
                         </div>
                     </div>
