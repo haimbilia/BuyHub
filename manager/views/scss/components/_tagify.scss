@@ -30,50 +30,75 @@
             // @extend .dropdown-menu;
         }
     }
-    &.customLook {
-        .tagify__tag {
-            margin-top: 0;
-            >div {
-                border-radius: 25px;
+}
+
+.customLook {
+    display: inline-block;
+    min-width: 0;
+    border: none;
+    .tagify__tag {
+        margin-top: 0;
+        >div {
+            border-radius: 25px;
+            padding: 0.5rem 1rem;
+            &:before {
+                box-shadow: none;
+                background: $bg-gray;
             }
-            &:only-of-type {
-                .tagify__tag__removeBtn {
-                    display: none;
+        }
+        &:only-of-type {
+            .tagify__tag__removeBtn {
+                display: none;
+            }
+        }
+        .tagify__tag__removeBtn {
+            opacity: 0;
+            transform: translateX(-6px) scale(.5);
+            margin-left: -3ch;
+            transition: .12s;
+        }
+        &:hover {
+            >div {
+                color: #fff;
+                &:before {
+                    box-shadow: none;
+                    background: $danger-color;
+                    border-color: $danger-color;
                 }
             }
             .tagify__tag__removeBtn {
-                opacity: 0;
-                transform: translateX(-6px) scale(.5);
-                margin-left: -3ch;
-                transition: .12s;
+                transform: none;
+                opacity: 1;
+                margin-left: -1ch;
             }
-            &:hover {
-                .tagify__tag__removeBtn {
-                    transform: none;
-                    opacity: 1;
-                    margin-left: -1ch;
+        }
+        &--editable {
+            >div {
+                &:before {
+                    box-shadow: none!important;
                 }
             }
         }
-        +button {
-            color: $brand-color;
-            border: 0;
-            background: none;
-            box-shadow: 0 0 0 2px inset currentColor;
-            border-radius: 50%;
-            width: 1.65em;
-            height: 1.65em;
-            cursor: pointer;
-            outline: none;
-            transition: .1s ease-out;
-            margin: 0 0 0 5px;
-            vertical-align: top;
-            &:hover {
-                box-shadow: 0 0 0 5px inset currentColor;
-            }
-        }
-        .tagify__input {
-            display: none;
+    }
+    .tagify__input {
+        display: none;
+    }
+    +button {
+        color: $brand-color;
+        font: bold 1.4em/1.65 Arial;
+        border: 0;
+        background: none;
+        box-shadow: 0 0 0 2px inset currentColor;
+        border-radius: 50%;
+        width: 1.85em;
+        height: 1.85em;
+        cursor: pointer;
+        outline: none;
+        transition: .1s ease-out;
+        margin: 0 0 0 5px;
+        vertical-align: top;
+        &:hover {
+            box-shadow: 0 0 0 5px inset currentColor;
         }
     }
 }
