@@ -77,6 +77,7 @@
                                     </div>
                                     <div class="card-body">
                                         <ul class="pages__list-wrapper">
+                                            <li><a href="orders-list.php">Orders list</a></li>
                                             <li><a href="collections-managements.php">Collections Managements</a></li>
                                             <li><a href="products.php">Products</a></li>
                                             <li><a href="listing.php">Listing</a></li>
@@ -715,6 +716,9 @@
                                                             </li>
                                                             <li><a href="#">Error Pages</a>
                                                                 <ul>
+                                                                    <li><a href="no-result-found.php">Result not
+                                                                            found</a>
+                                                                    </li>
                                                                     <li><a href="400.php">Bad Request (400)</a></li>
                                                                     <li><a href="401.php">Unauthorised (401)</a>
                                                                     </li>
