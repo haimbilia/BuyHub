@@ -4,6 +4,23 @@ $controller = str_replace('Controller', '', FatApp::getController());
 <main class="main mainJs">
     <div class="container">
         <div class="card">
+            <div class="card-head">
+                <h3 class="card-head-label">
+                    <span class="card-head-title"><?php echo Labels::getLabel('MSG_SETTINGS', $siteLangId); ?></span>
+                </h3>
+                <div class="card-toolbar">
+                    <div class="maintenance-mode">
+                        <label class="switch switch-sm">
+                            <?php 
+                                $status = FatApp::getConfig('CONF_MAINTENANCE', FatUtility::VAR_INT, 0); 
+                                $checked = applicationConstants::ON == $status ? 'checked' : '';
+                            ?>
+                            <input type="checkbox" name="CONF_MAINTENANCE" data-old-status="<?php echo $status; ?>" value="<?php echo $status; ?>" onclick="updateMaintenanceModeStatus(event, this, <?php echo ((int) !$status); ?>)" <?php echo $checked; ?>>
+                            <span></span><?php echo Labels::getLabel('MSG_MAINTENANCE_MODE', $siteLangId); ?>
+                        </label>
+                    </div>
+                </div>
+            </div>
             <div class="card-body">
                 <?php if (
                     $objPrivilege->canViewGeneralSettings(AdminAuthentication::getLoggedAdminId(), true) ||
@@ -20,8 +37,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
                     $objPrivilege->canViewEmptyCartItems(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewAbusiveWords(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-
-
                     <div class="setting-search">
                         <form class="form">
                             <div class="row justify-content-center">
@@ -287,4 +302,14 @@ $controller = str_replace('Controller', '', FatApp::getController());
     $(document).on("keyup", "#settingsSearch", function(e) {
         searhSettings($(this));
     });
+
+    updateMaintenanceModeStatus = function(e, obj, status) {
+        $('.settingListJs').prepend(fcom.getLoader());
+        e.stopPropagation();
+        var oldStatus = $(obj).attr("data-old-status");
+        var data = $(obj).attr('name') + '=' + status + '&form_type=<?php echo Configurations::FORM_SERVER; ?>';
+        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'setup'), data, function(t) {
+            fcom.removeLoader();
+        });
+    }
 </script>

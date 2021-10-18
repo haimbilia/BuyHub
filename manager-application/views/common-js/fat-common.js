@@ -128,6 +128,7 @@ var fcom = {
         var o = $.extend(true, { fOutMode: 'json' }, options);
         this.ajax(url, data, function (ans) {
             $.ykmsg.close();
+            fcom.removeLoader();
             if (ans.status != 1) {
                 $.ykmsg.error(ans.msg);
                 return;

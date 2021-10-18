@@ -21,9 +21,12 @@ $fld->setFieldTagAttribute('disabled', 'disabled');
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languages)) { ?>
             <div class="row justify-content-end">
-                <div class="col-auto mb-4">
-                    <input class="btn btn-outline-brand btn-sm" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onClick="labelsForm(<?php echo $recordId; ?>, <?php echo $labelType; ?>, 1)">
-                </div>
+                <a class="col-auto mb-4" href="javascript:void(0);" onclick="labelsForm(<?php echo $recordId; ?>, <?php echo $labelType; ?>, 1)" class="btn" title="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>">
+                    <svg class="svg" width="18" height="18">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-translate">
+                        </use>
+                    </svg>
+                </a>
             </div>
         <?php } ?>
         <?php echo $langFrm->getFormHtml(); ?>
