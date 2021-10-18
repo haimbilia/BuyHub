@@ -88,6 +88,7 @@ class StatesController extends AdminBaseController
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('st.state_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('st_l.state_name', 'like', '%' . $post['keyword'] . '%', 'OR');
+            $condition->attachCondition('st.state_code', 'like', $post['keyword'], 'OR');
         }
         if (!empty($post['country'])) {
             $condition = $srch->addCondition('st.state_country_id', '=', $post['country']);

@@ -337,7 +337,7 @@ class AffiliateCommissionController extends AdminBaseController
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'afcommsetting_prodcat_id' => Labels::getLabel('LBL_Category', $this->siteLangId),
-            'afcommsetting_user_id' => Labels::getLabel('LBL_Affiliate', $this->siteLangId),
+            'afcommsetting_user_id' => Labels::getLabel('LBL_Affiliate_User', $this->siteLangId),
             'afcommsetting_fees' => Labels::getLabel('LBL_Fees_[%]', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
