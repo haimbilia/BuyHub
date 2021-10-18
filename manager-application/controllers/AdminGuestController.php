@@ -392,7 +392,7 @@ class AdminGuestController extends FatController
         $frm->addTextBox(Labels::getlabel('LBL_USERNAME', $this->siteLangId), 'username', $userName)->requirements()->setRequired();
         $frm->addPasswordField(Labels::getlabel('LBL_PASSWORD', $this->siteLangId), 'password', $pass)->requirements()->setRequired();
         $frm->addCheckBox('', 'rememberme', 1);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Sign_In', $this->siteLangId));
+        $frm->addHtml('', 'btn_submit', HtmlHelper::addButtonHtml(Labels::getLabel('LBL_SIGN_IN', $this->siteLangId), 'submit', 'btn_submit', 'btn btn-brand btn-lg btn-block'));
         return $frm;
     }
 
