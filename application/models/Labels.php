@@ -322,3 +322,15 @@ class Labels extends MyAppModel
         return FatApp::getDb()->fetchAllAssoc($rs);
     }
 }
+
+/*
+ERR - ERROR Messages
+SUC- Success Messages
+LBL - LABLES (General labels)
+FRM - Form fields (Labels, Place holders)
+MSG - Messages
+VLBL- Form Validations
+TXT - Text
+NAV - Navigation
+CON - confiramtion
+*/
