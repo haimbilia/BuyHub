@@ -40,7 +40,6 @@
                                 <div class="card-body">
                                     <div class="help-window">
                                         <img src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-data-cuate.svg" alt="">
-
                                         <div class="data">
                                             <h6>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
                                                 consectetur, adipisci velit...</h6>
@@ -57,11 +56,7 @@
 
                                         </div>
                                     </div>
-
-
                                 </div>
-
-
                             </div>
                         </div>
 
@@ -73,14 +68,42 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-3">
-                            <div class="card">
-                                <div class="card-head">
+                            <div class="card mb-0 h-100">
+                                <div class="card-head flex-column">
                                     <h3 class="card-head-label">
                                         <span class="card-head-title">Messages</span>
                                     </h3>
-                                    <div class="">
+                                    <div class="message__search">
                                         <form action="" class="form">
-                                            <input type="search" placeholder="keyword">
+                                            <div class="d-flex align-items-center">
+                                                <input type="search" placeholder="keyword">
+                                                <div class="dropdown">
+                                                        <a class="dropdown-toggle no-after p-2" data-toggle="dropdown" href="">
+                                                            <span class="icon">
+                                                                <svg class="svg" width="20" height="20">
+                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-filters">
+                                                                    </use>
+                                                                </svg>
+                                                            </span>
+                                                        </a>
+                                                        <div class="header-action__target p-3 dropdown-menu dropdown-menu-right dropdown-menu-anim">
+                                                            <div class="form-group">
+                                                                <label class="label">From</label>
+                                                                <input type="text" value="">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="label">Date From</label>
+                                                                <input class="field--calender fld-date hasDatepicker" type="text" value="">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="label">Date To</label>
+                                                                <input class="field--calender fld-date hasDatepicker" type="text" value="">
+                                                            </div>
+                                                            <input class="btn btn-brand btn-block" type="submit" value="Search">
+                                                        </div>
+                                                    </div>
+                                            </div>
+
                                         </form>
                                     </div>
                                 </div>
@@ -123,13 +146,85 @@
                                                 </div>
                                             </div>
                                         </li>
+                                        <li class="message__list-item">
+                                            <div class="message-from">
+                                                <div class="message-media">
+                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_21.jpg" alt="">
+                                                </div>
+                                                <div class="message-data">
+                                                    <h4 class="title">Michael Williams</h4>
+                                                    <p>Thank you for the information 😊</p>
+                                                </div>
+                                            </div>
+                                            <div class="message-to">
+                                                <div class="message-media">
+                                                    <div class="user user-sm user-circle">
+                                                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_1.jpg" alt="image">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="message__list-item">
+                                            <div class="message-from">
+                                                <div class="message-media">
+                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_21.jpg" alt="">
+                                                </div>
+                                                <div class="message-data">
+                                                    <h4 class="title">Michael Williams</h4>
+                                                    <p>Thank you for the information 😊</p>
+                                                </div>
+                                            </div>
+                                            <div class="message-to">
+                                                <div class="message-media">
+                                                    <div class="user user-sm user-circle">
+                                                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_1.jpg" alt="image">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="message__list-item">
+                                            <div class="message-from">
+                                                <div class="message-media">
+                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_21.jpg" alt="">
+                                                </div>
+                                                <div class="message-data">
+                                                    <h4 class="title">Michael Williams</h4>
+                                                    <p>Thank you for the information 😊</p>
+                                                </div>
+                                            </div>
+                                            <div class="message-to">
+                                                <div class="message-media">
+                                                    <div class="user user-sm user-circle">
+                                                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_1.jpg" alt="image">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="message__list-item">
+                                            <div class="message-from">
+                                                <div class="message-media">
+                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_21.jpg" alt="">
+                                                </div>
+                                                <div class="message-data">
+                                                    <h4 class="title">Michael Williams</h4>
+                                                    <p>Thank you for the information 😊</p>
+                                                </div>
+                                            </div>
+                                            <div class="message-to">
+                                                <div class="message-media">
+                                                    <div class="user user-sm user-circle">
+                                                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_1.jpg" alt="image">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
 
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="card h-100">
+                            <div class="card mb-0 h-100">
                                 <div class="card-head">
                                     <h3 class="card-head-label">
                                         <div class="card-head-title d-flex align-items-center">
@@ -221,7 +316,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="card">
+                            <div class="card mb-0 h-100">
                                 <div class="card-body">
                                     <div class="message__user">
                                         <div class="user user-circle">
@@ -230,11 +325,46 @@
                                         <h3 class="message__user-name">Michael Williams</h3>
                                         <ul class="list__group">
                                             <li class="list__group-item">
-                                                
+                                                <div class="list__group-icon">
+                                                    <svg class="svg">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-mail">
+                                                        </use>
+                                                    </svg>
+                                                </div>
+                                                <div class="list__group-title">
+                                                    <h4>Michael@gmail.com</h4>
+                                                </div>
+                                            </li>
+                                            <li class="list__group-item">
+                                                <div class="list__group-icon">
+                                                    <svg class="svg">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-phone">
+                                                        </use>
+                                                    </svg>
+                                                </div>
+                                                <div class="list__group-title">
+                                                    <h4>+1 854-5454-865</h4>
+                                                </div>
+                                            </li>
+                                            <li class="list__group-item">
+                                                <div class="list__group-icon">
+                                                    <svg class="svg">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-map">
+                                                        </use>
+                                                    </svg>
+                                                </div>
+                                                <div class="list__group-title">
+                                                    <h4>Smith Apartment 1c 213 Street Boston, MS 142 USA</h4>
+                                                </div>
                                             </li>
                                         </ul>
                                     </div>
 
+                                </div>
+                                <div class="card-foot">
+                                    <a href="javascript:0" class="btn btn-block btn-danger btn-danger-light">
+                                        Block User
+                                    </a>
                                 </div>
                             </div>
                         </div>
