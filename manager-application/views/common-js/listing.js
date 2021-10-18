@@ -225,15 +225,17 @@ $(document).on('click', '.resetModalFormJs', function(e) {
         });
     };
 
-    editRecord = function (recordId) {
+    editRecord = function (recordId, displayInPopup = false) {
         if (false === checkControllerName()) {
             return false;
         }
 
-        $.ykmodal(fcom.getLoader());
+        var modalClass = (displayInPopup ? null : '');
+
+        $.ykmodal(fcom.getLoader(), modalClass);
         data = 'recordId=' + recordId;
         fcom.ajax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
-            $.ykmodal(t);
+            $.ykmodal(t, modalClass);
             fcom.removeLoader();
         });
     };
