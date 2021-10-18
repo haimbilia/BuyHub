@@ -90,7 +90,7 @@ class ProductCategoriesController extends AdminBaseController
         $this->objPrivilege->canEditProductCategories();
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $prodCatFrm = $this->getCategoryForm($recordId, $productReq);
+        $frm = $this->getCategoryForm($recordId, $productReq);
         $prodCat = new ProductCategory();
         $categoriesArr = $prodCat->getCategoriesForSelectBox($this->siteLangId, $recordId, [], false);
         $categories =  array(0 => Labels::getLabel('LBL_Root_Category', $this->siteLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
@@ -116,17 +116,19 @@ class ProductCategoriesController extends AdminBaseController
             $ratingTypes = ['rating_type' => json_encode($ratingTypes)];
             $data = array_merge($data, $catNameArr, $ratingTypes);
         }
-        $prodCatFrm->fill($data);
+        $frm->fill($data);
         $mediaLanguages = applicationConstants::bannerTypeArr();
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
         $langData = Language::getAllNames();
         unset($langData[$siteDefaultLangId]);
         $this->set('productReq', $productReq);
-        $this->set('prodCatFrm', $prodCatFrm);
+        $this->set('recordId', $recordId);
+        $this->set('frm', $frm);
         $this->set('mediaLanguages', $mediaLanguages);
         $this->set('screenArr', $screenArr);
         $this->set('otherLangData', $langData);
         $this->set('categories', $categories);
+        $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -210,9 +212,6 @@ class ProductCategoriesController extends AdminBaseController
                 $frm->addHiddenField('', 'cat_banner_image_id[' . $key . '_' . $key1 . ']');
             }
         }
-
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->siteLangId));
-        // $frm->addButton('', 'btn_discard', Labels::getLabel('LBL_Discard', $this->siteLangId));
         return $frm;
     }
 

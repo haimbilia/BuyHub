@@ -1,4 +1,5 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php
+defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->setFormTagAttribute('onsubmit', 'login(this, loginValidator); return(false);');
 $frm->setFormTagAttribute('id', 'adminLoginForm');
 $frm->setFormTagAttribute('class', 'form');
@@ -17,69 +18,72 @@ $passwordFld->addFieldTagAttribute('autocomplete', 'off');
 
 $submitBtn = $frm->getField('btn_submit');
 $submitBtn->addFieldTagAttribute('class', 'btn btn-brand btn-lg btn-block');
+
+$fld = $frm->getField('rememberme');
+$fld->addFieldTagAttribute('class', 'rememberFldJs');
 ?>
 <div id="particles-js"></div>
 <div class="login-page login-1">
     <div class="container">
-        <div class="row align-item-center justify-content-center">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-head">
-                        <div class="logo">
-                            <a href="<?php echo UrlHelper::generateUrl(); ?>">
-                                <?php
-                                $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $siteLangId, false);
-                                $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
-                                $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                                ?>
-                                <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
-                            </a>
-                        </div>
-
+        <div class="login-block">
+            <div class="card">
+                <div class="card-head">
+                    <div class="logo">
+                        <a href="<?php echo UrlHelper::generateUrl(); ?>">
+                            <?php
+                            $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $siteLangId, false);
+                            $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+                            $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                            ?>
+                            <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
+                        </a>
                     </div>
-                    <div class="card-body">
-                        <div class="title">
-                            <h2><?php echo Labels::getlabel('LBL_SIGN_IN', $siteLangId); ?></h2>
-                        </div>
-                        <?php echo $frm->getFormTag(); ?>
-                        <div class="form-group">
-                            <label class="label"><?php echo $userNameFld->getCaption() ?></label>
-                            <?php echo $userNameFld->getHTML('username'); ?>
-                        </div>
-                        <div class="form-group">
-                            <label class="label"><?php echo $passwordFld->getCaption() ?></label>
-                            <?php echo $passwordFld->getHTML('password'); ?>
-                        </div>
-                        <div class="row py-3">
-                            <div class="col-12">
-                                <label class="switch switch--sm remember-me">
-                                    <?php
-                                    $remeberfld = $frm->getFieldHTML('rememberme');
-                                    $remeberfld = str_replace("<label>", "", $remeberfld);
-                                    $remeberfld = str_replace("</label>", "", $remeberfld);
-                                    echo $remeberfld;
-                                    ?>
-                                    <span></span><?php echo Labels::getlabel('LBL_Remember_me', $siteLangId); ?> 
-                                </label>
-                            </div>
 
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <?php echo $frm->getFieldHTML('btn_submit'); ?>
-                            </div>
-                        </div>
-                        <?php echo $frm->getExternalJS(); ?>
-                        </form>
-                    </div>
-                    <div class="card-foot">
-                        <ul class="other-links">
-                            <li><a href="<?php echo UrlHelper::generateUrl('adminGuest', 'forgotPasswordForm'); ?>" class="link"><?php echo Labels::getLabel('LBL_Forgot_Password?', $siteLangId); ?></a></li>
-
-                        </ul>
-                    </div>
                 </div>
-                <p class="version"><?php $this->includeTemplate('_partial/footer/copyright-text.php', $this->variables, false); ?></p>
+                <div class="card-body">
+                    <div class="title">
+                        <h2><?php echo Labels::getlabel('LBL_SIGN_IN', $siteLangId); ?></h2>
+                    </div>
+                    <?php echo $frm->getFormTag(); ?>
+                    <div class="form-group">
+                        <label class="label"><?php echo $userNameFld->getCaption() ?></label>
+                        <?php echo $userNameFld->getHTML('username'); ?>
+                    </div>
+                    <div class="form-group">
+                        <label class="label"><?php echo $passwordFld->getCaption() ?></label>
+                        <?php echo $passwordFld->getHTML('password'); ?>
+                    </div>
+                    <div class="row py-3">
+                        <div class="col-12">
+                            <label class="switch switch-sm remember-me">
+                                <?php echo $frm->getFieldHTML('rememberme'); ?>
+                                <span></span><?php echo Labels::getlabel('LBL_Remember_me', $siteLangId); ?>
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?php echo $frm->getFieldHTML('btn_submit'); ?>
+                        </div>
+                    </div>
+                    <?php echo $frm->getExternalJS(); ?>
+                    </form>
+                </div>
+                <div class="card-foot">
+                    <ul class="other-links">
+                        <li><a href="<?php echo UrlHelper::generateUrl('adminGuest', 'forgotPasswordForm'); ?>" class="link"><?php echo Labels::getLabel('LBL_Forgot_Password?', $siteLangId); ?></a></li>
+
+                    </ul>
+                </div>
             </div>
+            <p class="version"><?php $this->includeTemplate('_partial/footer/copyright-text.php', $this->variables, false); ?></p>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            if ($(".rememberFldJs").parent().is("label")) {
+                $(".rememberFldJs").unwrap();
+            }
+        });
+    </script>

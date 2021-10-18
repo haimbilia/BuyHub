@@ -2016,7 +2016,8 @@ strong {
     }
 }
 
-.user-profile {
+.user-profile,
+.media-profile {
     display: flex;
     align-items: center;
     &_photo {
@@ -2040,6 +2041,8 @@ strong {
     }
     &_title {
         font-weight: 600;
+        font-size: 0.875rem;
+        margin: 0;
         color: $txt-body;
     }
 }
