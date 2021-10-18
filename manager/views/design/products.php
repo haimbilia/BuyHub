@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light" dir="ltr">
-
 <head>
     <meta charset="utf-8" />
     <title>FATbit | Dashboard</title>
@@ -10,7 +9,6 @@
     <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="images/favicon.ico" />
 </head>
-
 <body class="fb-body">
     <div class="app">
         <?php

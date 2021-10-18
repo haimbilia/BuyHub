@@ -2,7 +2,7 @@
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->setFormTagAttribute('onsubmit', 'login(this, loginValidator); return(false);');
 $frm->setFormTagAttribute('id', 'adminLoginForm');
-$frm->setFormTagAttribute('class', 'form');
+$frm->setFormTagAttribute('class', 'form form-login');
 $frm->setRequiredStarPosition('none');
 $frm->setRequiredStarWith('none');
 $frm->setJsErrorDisplay(FORM::FORM_ERROR_TYPE_AFTER_FIELD);
@@ -15,9 +15,6 @@ $userNameFld->addFieldTagAttribute('autocomplete', 'off');
 $passwordFld = $frm->getField('password');
 $passwordFld->addFieldTagAttribute('title', $passwordFld->getCaption());
 $passwordFld->addFieldTagAttribute('autocomplete', 'off');
-
-$submitBtn = $frm->getField('btn_submit');
-$submitBtn->addFieldTagAttribute('class', 'btn btn-brand btn-lg btn-block');
 
 $fld = $frm->getField('rememberme');
 $fld->addFieldTagAttribute('class', 'rememberFldJs');

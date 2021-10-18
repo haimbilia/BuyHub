@@ -88,6 +88,7 @@
                                             <li><a href="setting.php">Settings</a></li>
                                             <li><a href="theme-setting.php">Theme Setting</a></li>
                                             <li><a href="plugins-setting.php">Plugins Setting</a></li>
+                                            <li><a href="messages.php">Messages</a></li>
                                             <li><a href="email-template-settings.php" target="_blank">Email temaplate -
                                                     Settings</a> </li>
                                             <li><a href="email-template-listing.php" target="_blank">Email temaplate -
