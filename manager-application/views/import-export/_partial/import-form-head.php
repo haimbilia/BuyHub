@@ -2,10 +2,14 @@
 $activeInstTab = !empty($activeInstTab) ? 'active' : '';
 $activeContentTab = !empty($activeContentTab) ? 'active' : '';
 $activeMediaTab = !empty($activeMediaTab) ? 'active' : '';
+$formSubTitle = !empty($formSubTitle) ? $formSubTitle : '';
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
         <?php echo $formTitle; ?>
+        <?php if (!empty($formSubTitle)) { ?>
+            <span class="text-muted"><?php echo $formSubTitle; ?></span>
+        <?php } ?>
     </h5>
 </div>
 <div class="modal-body form-edit"> <!-- Closing tag must be added inside the files who include this file. -->

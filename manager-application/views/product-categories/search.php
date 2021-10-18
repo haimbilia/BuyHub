@@ -97,10 +97,11 @@ $(function() {
         baseCss: {
             'list-style-type': 'none',
         },
+        listsClass:"sorting-categories",
         onDragStart: function(e, cEl) {
             var catId = $(cEl).attr('id');
             $("#" + catId).children().children().children('.sorting-title').css('margin-left', '25px');
-            $("#" + catId).children('ul').css('list-style-type', 'none');
+            $("#" + catId).children('ul').css('list-style-type', 'none');            
         },
         complete: function(cEl) {
             var catId = $(cEl).attr('id');

@@ -272,7 +272,7 @@ class LanguagesController extends AdminBaseController
             'language_code' => Labels::getLabel('LBL_Language_Code', $this->siteLangId),
             'language_name' => Labels::getLabel('LBL_Language_Name', $this->siteLangId),
             'language_active' => Labels::getLabel('LBL_Status', $this->siteLangId),
-            'action' =>  '',
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('languagesTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         

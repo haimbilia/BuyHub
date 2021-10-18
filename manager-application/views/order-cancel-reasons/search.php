@@ -28,7 +28,13 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = [];
+                    $attr = [];
+                    if (1 > count($languages)) {
+                        $attr = [
+                            'onClick' => 'editRecord(' . $row['ocreason_id'] . ', true)'
+                        ];
+                    }
+                    $data['editButton'] = $attr;
                     $data['deleteButton'] = [];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);

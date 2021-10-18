@@ -744,3 +744,9 @@ form.custom-form {
         color: currentColor;
     }
 }
+
+.field-translate{
+    >div{
+        display: flex;
+    }
+}

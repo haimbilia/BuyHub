@@ -1,5 +1,5 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('LBL_SEARCH_CONTRIBUTIONS', $siteLangId);
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_AUTHOR_NAME,_EMAIL_AND_PHONE', $siteLangId);
 
 /* No sorting functionality required if no record found. */
 if (2 > count($arrListing)) {
