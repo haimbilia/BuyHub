@@ -95,7 +95,7 @@
                             <div class="card">
                                 <div class="card-head">
                                     <h3 class="card-head-label">
-                                        <span class="card-head-title">Buy Together Products </span>
+                                        <span class="card-head-title">Related Products </span>
                                     </h3>
 
                                 </div>
@@ -115,7 +115,7 @@
                                                     <th class="sorting">#</th>
                                                     <th class=""> Product </th>
                                                     <th class="sorting" width="50%">
-                                                        <span>Buy Together Product
+                                                        <span>Related Product
                                                             <i class="icn">
                                                                 <svg class="svg" width="18" height="18">
                                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-down">

@@ -87,6 +87,7 @@ class AbusiveWordsController extends AdminBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditAbusiveWords($this->admin_id, true));
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
     }
 
     public function search()

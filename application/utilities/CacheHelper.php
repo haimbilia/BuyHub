@@ -59,5 +59,4 @@ class CacheHelper extends FatCache
     {
         return FatCache::get($key, $expiry, $extension);
     }
-
 }

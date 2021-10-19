@@ -7,7 +7,7 @@ $frmSearch->setFormTagAttribute('class', 'form');
 
 $keyWordFld = $frmSearch->getField('keyword');
 $keyWordFld->addFieldtagAttribute('class', 'form-control');
-$keyWordFld->setFieldtagAttribute('placeholder', Labels::getLabel('LBL_SEARCH_ORDER_STATUS', $siteLangId));
+$keyWordFld->setFieldtagAttribute('placeholder', Labels::getLabel('FRM_SEARCH_BY_NAME', $siteLangId));
 
 $sortByFld = $frmSearch->getField('sortBy');
 $sortByFld->setFieldTagAttribute('id', 'sortBy');

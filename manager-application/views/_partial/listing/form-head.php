@@ -3,11 +3,15 @@ $activeGentab = !empty($activeGentab) ? 'active' : '';
 $activeLangtab = !empty($activeLangtab) ? 'active' : '';
 $disabled = !empty($disabled) ? ' disabled' : '';
 $formTitle = !empty($formTitle) ? $formTitle : Labels::getLabel('LBL_SETUP', $siteLangId);
+$formSubTitle = !empty($formSubTitle) ? $formSubTitle : '';
 ?>
 
 <div class="modal-header">
     <h5 class="modal-title">
         <?php echo $formTitle; ?>
+        <?php if (!empty($formSubTitle)) { ?>
+            <span class="text-muted"><?php echo $formSubTitle; ?></span>
+        <?php } ?>
     </h5>
 </div>
 <div class="modal-body form-edit"> <!-- Closing tag must be added inside the files who include this file. -->

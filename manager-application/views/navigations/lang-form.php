@@ -6,6 +6,19 @@ $langFrm->developerTags['fld_default_col'] = 12;
 
 $langFld = $langFrm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "addLangForm(" . $nav_id . ", this.value);");
+
+$translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+$siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+if (!empty($translatorSubscriptionKey) && $nav_lang_id != $siteDefaultLangId) {
+    $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
+    $langFld->htmlAfterField = '<a href="javascript:void(0);" onclick="addLangForm(' . $nav_id . ', ' . $nav_lang_id . ', 1)" class="btn" title="' .  Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId) . '">
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
+                                            </use>
+                                        </svg>
+                                    </a>';
+} 
+
 ?>
 
 <section class="section">
@@ -30,19 +43,6 @@ $langFld->setfieldTagAttribute('onChange', "addLangForm(" . $nav_id . ", this.va
                             </li>
                         </ul>
                         <div class="tabs_panel_wrap">
-                            <?php
-                            $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-                            $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-                            if (!empty($translatorSubscriptionKey) && $nav_lang_id != $siteDefaultLangId) { ?> 
-                                <div class="row justify-content-end"> 
-                                    <div class="col-auto mb-4">
-                                        <input class="btn btn-outline-brand btn-sm" 
-                                            type="button" 
-                                            value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" 
-                                            onClick="addLangForm(<?php echo $nav_id; ?>, <?php echo $nav_lang_id; ?>, 1)">
-                                    </div>
-                                </div>
-                            <?php } ?>
                             <div class="tabs_panel">
                                 <?php echo $langFrm->getFormHtml(); ?>
                             </div>
