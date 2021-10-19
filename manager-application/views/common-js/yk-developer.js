@@ -84,12 +84,25 @@ $(document).ready(function () {
         if (value.length < 1) {
             return;
         }
-        $(".navMenuItems li").each(function () {
-            if ($(this).find('h6').text().toLowerCase().search(value) > -1 || $(this).find('a').text().toLowerCase().search(value) > -1) {
+        $(".navMenuItems li").find('h6').hide();
+        $(".navMenuItems li").find('.search-result').hide();
+
+        $(".navMenuItems li .search-result").each(function () {
+            if ($(this).find('a').text().toLowerCase().search(value) > -1) {
+                $(this).parent('li').find('h6').show();
                 $(this).show();
                 $('.navMenuItems').show();
             } else {
                 $(this).hide();
+                $('.navMenuItems').show();
+            }
+        });
+
+        $(".navMenuItems li").each(function () {
+            if ($(this).find('h6').text().toLowerCase().search(value) > -1) {
+                $(this).show();
+                $(this).find('h6').show();
+                $(this).find('.search-result').show();
                 $('.navMenuItems').show();
             }
         });
