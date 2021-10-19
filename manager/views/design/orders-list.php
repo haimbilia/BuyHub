@@ -90,48 +90,116 @@
 
                                     </div>
                                     <div class="card-body">
-                                        <form class="form my-4" action="#">
-                                            <div class="row">
-                                                <div class="col-md-12">
+
+                                        <div class="row justify-content-between">
+                                            <div class="col">
+                                                <form class="form mb-4" action="#">
                                                     <div class="input-group-append"> <input type="search"
                                                             placeholder="Search orders, tags, customers, products">
 
                                                         <button type="button" data-toggle="dropdown"
-                                                            class="btn btn-brand dropdown-toggle"
+                                                            class="btn btn-brand btn-wide dropdown-toggle"
                                                             aria-expanded="false">Filters</button>
                                                         <div class="dropdown-menu">
 
-                                                            <ul class="">
-                                                                <li class="dropdown-item nav__item">
+                                                            <ul class="list-checkbox">
+                                                                <li>
                                                                     <label class="checkbox">
                                                                         <input type="checkbox" value="1">
                                                                         Pending
                                                                         <span></span></label>
                                                                 </li>
-                                                                <li class="dropdown-item nav__item"><label
-                                                                        class="checkbox"><input type="checkbox"
+                                                                <li><label class="checkbox"><input type="checkbox"
                                                                             value="2">
                                                                         Paid
                                                                         <span></span></label></li>
-                                                                <li class="dropdown-item nav__item"><label
-                                                                        class="checkbox"><input type="checkbox"
+                                                                <li><label class="checkbox"><input type="checkbox"
                                                                             value="cod">
                                                                         Cash
                                                                         <span></span></label></li>
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </form>
                                             </div>
-                                        </form>
+                                            <div class="col-auto">
+                                                <ul class="actions">
+                                                    <li class="custom-drag-drop">
+                                                        <a href="#" data-toggle="dropdown" aria-expanded="false">
+
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#more">
+                                                                </use>
+                                                            </svg>
+                                                        </a>
+
+                                                        <div
+                                                            class="dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-anim scroll scroll-y">
+                                                            <ul class="list-checkbox list-drag-drop ui-sortable">
+                                                                <li>
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" checked value="1">
+                                                                        Order ID. <span></span></label>
+                                                                    <i class="icn fas fa-grip-lines"></i>
+                                                                </li>
+                                                                <li>
+                                                                    <label class="checkbox"><input type="checkbox"
+                                                                            checked value="2">
+                                                                        Customer
+
+                                                                        <span></span></label> <i
+                                                                        class="icn fas fa-grip-lines"></i>
+                                                                </li>
+                                                                <li><label class="checkbox"><input type="checkbox"
+                                                                            checked value="cod">
+                                                                        Purchased
+
+                                                                        <span></span></label> <i
+                                                                        class="icn fas fa-grip-lines"></i></li>
+                                                                <li><label class="checkbox"><input type="checkbox"
+                                                                            checked value="cod"> Order date & time
+
+                                                                        <span></span></label> <i
+                                                                        class="icn fas fa-grip-lines"></i></li>
+                                                                <li><label class="checkbox"><input type="checkbox"
+                                                                            checked value="cod"> Payment Status
+
+                                                                        <span></span></label>
+                                                                    <i class="icn fas fa-grip-lines"></i>
+                                                                </li>
+                                                                <li><label class="checkbox"><input type="checkbox"
+                                                                            checked value="cod"> Fulfillment Status
+
+                                                                        <span></span></label> <i
+                                                                        class="icn fas fa-grip-lines"></i></li>
+                                                                <li><label class="checkbox"><input type="checkbox"
+                                                                            value="cod"> Payment Mode
+
+                                                                        <span></span></label> <i
+                                                                        class="icn fas fa-grip-lines"></i></li>
+
+
+                                                                <li><label class="checkbox"><input type="checkbox"
+                                                                            checked value="cod"> Total
+                                                                        <span></span></label> <i
+                                                                        class="icn fas fa-grip-lines"></i></li>
+
+                                                            </ul>
+                                                        </div>
+
+                                                    </li>
+
+                                                </ul>
+
+                                            </div>
+                                        </div>
+
                                         <div class="table-responsive">
                                             <table width="100%" class="table table-orders">
                                                 <thead>
                                                     <tr>
-                                                        <th>
-                                                            Sr no.
-                                                        </th>
-                                                        <th class="sorting"> <span>Order ID. <i class="icn">
+                                                        <th width="15%" class="sorting"> <span>Order ID. <i class="icn">
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use
                                                                             xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-up">
@@ -163,13 +231,6 @@
                                                                         </use>
                                                                     </svg>
                                                                 </i> </span></th>
-                                                        <th class="sorting"> <span>Amount <i class="icn">
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-up">
-                                                                        </use>
-                                                                    </svg>
-                                                                </i></span></th>
 
 
 
@@ -180,15 +241,23 @@
                                                                         </use>
                                                                     </svg>
                                                                 </i></span></th>
+                                                        <th class="">Fulfillment Status</th>
 
-                                                        <th class="align-right">Action</th>
+
+                                                        <th class="align-right sorting"> <span>Total <i class="icn">
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-up">
+                                                                        </use>
+                                                                    </svg>
+                                                                </i></span></th>
                                                     </tr>
 
                                                 </thead>
 
                                                 <tbody>
                                                     <tr>
-                                                        <td>01</td>
+
                                                         <td><a href="">00055886982</a> </td>
                                                         <td>
                                                             <a href="" class="user-profile user-profile-sm">
@@ -209,34 +278,15 @@
                                                                     more</span></span></td>
                                                         <td> <span class="date"> 13/10/2021 <time>15:45</time></span>
                                                         </td>
-                                                        <td>$90.00</td>
+
+                                                        <td> <span class="text-success">Paid</span> </td>
                                                         <td> <span class="badge badge-success">Paid</span> </td>
                                                         <td class="align-right">
-                                                            <ul class="actions">
-                                                                <li>
-                                                                    <a href="#" title="Edit">
-
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)" class="">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+                                                            <span class="amount"> $90.00</span>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>02</td>
+
                                                         <td><a href="">000558854982</a> </td>
                                                         <td>
                                                             <a href="" class="user-profile user-profile-sm">
@@ -254,34 +304,14 @@
                                                         <td> <span class="purchased">Rainbow Flatware </span></td>
                                                         <td> <span class="date"> 23/10/2022 <time>11:45</time></span>
                                                         </td>
-                                                        <td>$70.00</td>
+                                                        <td> <span class="text-success">Paid</span> </td>
                                                         <td> <span class="badge badge-danger">Pending</span> </td>
                                                         <td class="align-right">
-                                                            <ul class="actions">
-                                                                <li>
-                                                                    <a href="#" title="Edit">
-
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)" class="">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+                                                            <span class="amount"> $90.00</span>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>58</td>
+
                                                         <td><a href="">00055699982</a> </td>
                                                         <td>
                                                             <a href="" class="user-profile user-profile-sm">
@@ -296,39 +326,21 @@
                                                                 </div>
                                                             </a>
                                                         </td>
-                                                        <td> <span class="purchased">Smart Personal Air Cooler<span
+                                                        <td>
+                                                            <span class="purchased">Smart Personal Air Cooler<span
                                                                     class="text-muted fw-bold">+ 2
-                                                                    more</span></span></td>
+                                                                    more</span></span>
+                                                        </td>
                                                         <td> <span class="date"> 01/05/2021 <time>15:45</time></span>
                                                         </td>
-                                                        <td>$90.00</td>
+                                                        <td> <span class="text-danger">Pending</span> </td>
                                                         <td> <span class="badge badge-success">Paid</span> </td>
                                                         <td class="align-right">
-                                                            <ul class="actions">
-                                                                <li>
-                                                                    <a href="#" title="Edit">
-
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)" class="">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+                                                            <span class="amount"> $90.00</span>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>25</td>
+
                                                         <td><a href="">000525686982</a> </td>
                                                         <td>
                                                             <a href="" class="user-profile user-profile-sm">
@@ -346,34 +358,14 @@
                                                         <td> <span class="purchased">Reusable Straws </span></td>
                                                         <td> <span class="date"> 13/10/2021 <time>15:45</time></span>
                                                         </td>
-                                                        <td>$2140.00</td>
+                                                        <td> <span class="text-success">Paid</span> </td>
                                                         <td> <span class="badge badge-danger">Pending</span> </td>
                                                         <td class="align-right">
-                                                            <ul class="actions">
-                                                                <li>
-                                                                    <a href="#" title="Edit">
-
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)" class="">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+                                                            <span class="amount"> $90.00</span>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>01</td>
+
                                                         <td><a href="">003546486982</a> </td>
                                                         <td>
                                                             <a href="" class="user-profile user-profile-sm">
@@ -393,34 +385,14 @@
                                                                     more</span></span></td>
                                                         <td> <span class="date"> 13/02/2018 <time>15:45</time></span>
                                                         </td>
-                                                        <td>$90.00</td>
+                                                        <td> <span class="text-danger">Pending</span> </td>
                                                         <td> <span class="badge badge-success">Paid</span> </td>
                                                         <td class="align-right">
-                                                            <ul class="actions">
-                                                                <li>
-                                                                    <a href="#" title="Edit">
-
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)" class="">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+                                                            <span class="amount"> $90.00</span>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>56</td>
+
                                                         <td><a href="">00055886987</a> </td>
                                                         <td>
                                                             <a href="" class="user-profile user-profile-sm">
@@ -440,34 +412,14 @@
                                                                     more</span></span></td>
                                                         <td> <span class="date"> 13/10/2021 <time>15:45</time></span>
                                                         </td>
-                                                        <td>$8690.00</td>
+                                                        <td> <span class="text-danger">Pending</span> </td>
                                                         <td> <span class="badge badge-success">Paid</span> </td>
                                                         <td class="align-right">
-                                                            <ul class="actions">
-                                                                <li>
-                                                                    <a href="#" title="Edit">
-
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)" class="">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+                                                            <span class="amount"> $520.00</span>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>01</td>
+
                                                         <td><a href="">00055886258</a> </td>
                                                         <td>
                                                             <a href="" class="user-profile user-profile-sm">
@@ -488,34 +440,14 @@
                                                                     more</span></span></td>
                                                         <td> <span class="date"> 13/10/2021 <time>15:45</time></span>
                                                         </td>
-                                                        <td>$90.00</td>
+                                                        <td> <span class="text-success">Paid</span> </td>
                                                         <td> <span class="badge badge-success">Paid</span> </td>
                                                         <td class="align-right">
-                                                            <ul class="actions">
-                                                                <li>
-                                                                    <a href="#" title="Edit">
-
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)" class="">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+                                                            <span class="amount"> $350.00</span>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>02</td>
+
                                                         <td><a href="">000558854369</a> </td>
                                                         <td>
                                                             <a href="" class="user-profile user-profile-sm">
@@ -533,34 +465,14 @@
                                                         <td> <span class="purchased">Rainbow Flatware </span></td>
                                                         <td> <span class="date"> 23/10/2022 <time>11:45</time></span>
                                                         </td>
-                                                        <td>$70.00</td>
+                                                        <td> <span class="text-success">Paid</span> </td>
                                                         <td> <span class="badge badge-danger">Pending</span> </td>
                                                         <td class="align-right">
-                                                            <ul class="actions">
-                                                                <li>
-                                                                    <a href="#" title="Edit">
-
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)" class="">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+                                                            <span class="amount"> $10.00</span>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>58</td>
+
                                                         <td><a href="">00055699147</a> </td>
                                                         <td>
                                                             <a href="" class="user-profile user-profile-sm">
@@ -580,34 +492,14 @@
                                                                     more</span></span></td>
                                                         <td> <span class="date"> 01/05/2021 <time>15:45</time></span>
                                                         </td>
-                                                        <td>$90.00</td>
+                                                        <td> <span class="text-danger">Pending</span> </td>
                                                         <td> <span class="badge badge-success">Paid</span> </td>
                                                         <td class="align-right">
-                                                            <ul class="actions">
-                                                                <li>
-                                                                    <a href="#" title="Edit">
-
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)" class="">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+                                                            <span class="amount"> $6450.00</span>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>25</td>
+
                                                         <td><a href="">000525686369</a> </td>
                                                         <td>
                                                             <a href="" class="user-profile user-profile-sm">
@@ -625,34 +517,14 @@
                                                         <td> <span class="purchased">Reusable Straws </span></td>
                                                         <td> <span class="date"> 13/10/2021 <time>15:45</time></span>
                                                         </td>
-                                                        <td>$2140.00</td>
+                                                        <td> <span class="text-danger">Pending</span> </td>
                                                         <td> <span class="badge badge-danger">Pending</span> </td>
                                                         <td class="align-right">
-                                                            <ul class="actions">
-                                                                <li>
-                                                                    <a href="#" title="Edit">
-
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)" class="">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+                                                            <span class="amount"> $02.00</span>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>01</td>
+
                                                         <td><a href="">003546486954</a> </td>
                                                         <td>
                                                             <a href="" class="user-profile user-profile-sm">
@@ -672,34 +544,14 @@
                                                                     more</span></span></td>
                                                         <td> <span class="date"> 13/02/2018 <time>15:45</time></span>
                                                         </td>
-                                                        <td>$90.00</td>
+                                                        <td> <span class="text-danger">Pending</span> </td>
                                                         <td> <span class="badge badge-success">Paid</span> </td>
                                                         <td class="align-right">
-                                                            <ul class="actions">
-                                                                <li>
-                                                                    <a href="#" title="Edit">
-
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)" class="">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+                                                            <span class="amount"> $250.00</span>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>56</td>
+
                                                         <td><a href="">00055886935</a> </td>
                                                         <td>
                                                             <a href="" class="user-profile user-profile-sm">
@@ -719,30 +571,10 @@
                                                                     more</span></span></td>
                                                         <td> <span class="date"> 13/10/2021 <time>15:45</time></span>
                                                         </td>
-                                                        <td>$8690.00</td>
+                                                        <td> <span class="text-danger">Pending</span> </td>
                                                         <td> <span class="badge badge-success">Paid</span> </td>
                                                         <td class="align-right">
-                                                            <ul class="actions">
-                                                                <li>
-                                                                    <a href="#" title="Edit">
-
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)" class="">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+                                                            <span class="amount"> $200.00</span>
                                                         </td>
                                                     </tr>
 

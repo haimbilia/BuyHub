@@ -79,11 +79,143 @@
                                 <div class="card">
                                     <div class="card-head">
                                         <div class="card-head-label">
-                                            <h3 class="card-head-title">Head</h3>
+                                            <h3 class="card-head-title">
+                                                <a class="back" href="">
+                                                    <svg class="svg" width="24" height="24">
+                                                        <use
+                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                                                        </use>
+                                                    </svg>
+                                                </a>
+                                                Order no. #10039
+
+                                            </h3>
+
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-orders">
+                                            <li>
+                                                <div class="product-profile">
+                                                    <div class="product-profile__thumbnail">
+                                                        <img
+                                                            src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg" />
+
+
+                                                    </div>
+                                                    <div class="product-profile__data">
+                                                        <div class="title">Gabby Smocked Floral-Print Mini Dress
+                                                        </div>
+                                                        <p class="options"><span>m</span>
+
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="product-quantity">
+                                                    <div class="by-quantity"><span>$108.00</span> <span>×</span>
+                                                        <span>1</span>
+                                                    </div>
+                                                </div>
+                                                <div class="product-price font-weight-bold">$108.00</div>
+
+                                            </li>
+                                            <li>
+
+                                                <div class="product-profile">
+                                                    <div class="product-profile__thumbnail">
+                                                        <img
+                                                            src="<?php echo CONF_WEBROOT_URL;?>images/products/product3.jpg" />
+                                                    </div>
+                                                    <div class="product-profile__data">
+                                                        <div class="title">Lace-Yoke Handkerchief-Hem Top</div>
+                                                        <p class="options"><span>mango mojito | m</span>
+
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="product-quantity">
+                                                    <div class="by-quantity"><span>$40.87</span> <span>×</span>
+                                                        <span>1</span>
+                                                    </div>
+                                                </div>
+                                                <div class="product-price font-weight-bold">$40.87</div>
+
+                                            </li>
+                                            <li>
+
+                                                <div class="product-profile">
+                                                    <div class="product-profile__thumbnail">
+                                                        <img
+                                                            src="<?php echo CONF_WEBROOT_URL;?>images/products/product4.jpg" />
+
+                                                    </div>
+                                                    <div class="product-profile__data">
+                                                        <div class="title">Sixteen Stone Ring</div>
+                                                        <p class="options"><span>4</span>
+
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="product-quantity">
+                                                    <div class="by-quantity"><span>$499.00</span> <span>×</span>
+                                                        <span>1</span>
+                                                    </div>
+                                                </div>
+                                                <div class="product-price font-weight-bold">$499.00</div>
+
+                                            </li>
+                                            <li>
+
+                                                <div class="product-profile">
+                                                    <div class="product-profile__thumbnail">
+                                                        <img
+                                                            src="<?php echo CONF_WEBROOT_URL;?>images/products/product5.jpg" />
+
+                                                    </div>
+                                                    <div class="product-profile__data">
+                                                        <div class="title">Calvin Klein Printed Handheld Bag</div>
+                                                        <p class="options"><span>white</span>
+
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="product-quantity">
+                                                    <div class="by-quantity"><span>$89.99</span> <span>×</span>
+                                                        <span>1</span>
+                                                    </div>
+                                                </div>
+                                                <div class="product-price font-weight-bold">$89.99</div>
+
+                                            </li>
+                                        </ul>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="">
+                                                    <ul
+                                                        class="list-group list-group-sm list-group-flush-y list-group-flush-x">
+                                                        <li class="list-group-item d-flex"><span>Subtotal</span> <span
+                                                                class="ml-auto">$737.86</span></li>
+                                                        <li class="list-group-item d-flex"><span>Tax</span> <span
+                                                                class="ml-auto">$73.79</span></li>
+
+
+
+
+                                                        <li
+                                                            class="list-group-item d-flex font-size-lg font-weight-bold">
+                                                            <span>Total</span> <span class="ml-auto">$ 811.65</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
 
+
                                     </div>
-                                    <div class="card-body">Body</div>
                                     <div class="card-foot">Foot</div>
                                 </div>
 
@@ -106,7 +238,6 @@
                                             +1 4804568915
                                         </p>
                                     </div>
-
                                 </div>
                                 <div class="card">
                                     <div class="card-head">
@@ -115,7 +246,6 @@
                                                 Payment Details
                                             </h3>
                                         </div>
-
                                     </div>
                                     <div class="card-body">
                                         <div class="payment-mode">
@@ -145,7 +275,7 @@
                                         <p class="list-text"><span class="lable">Apartment / House:</span>
                                             University Drive
                                         </p>
-                                        <!---->
+
                                         <p class="list-text"><span class="lable">City &amp; State:</span>
                                             Mumbai, Maharashtra
                                         </p>
@@ -159,7 +289,7 @@
                                             +91
                                             7895456525
                                         </p>
-                                        <!---->
+
                                     </div>
 
                                 </div>
@@ -179,7 +309,7 @@
                                         <p class="list-text"><span class="lable">Apartment / House:</span>
                                             University Drive
                                         </p>
-                                        <!---->
+
                                         <p class="list-text"><span class="lable">City &amp; State:</span>
                                             Mumbai, Maharashtra
                                         </p>
@@ -193,7 +323,7 @@
                                             +91
                                             7895456525
                                         </p>
-                                        <!---->
+
                                     </div>
 
                                 </div>

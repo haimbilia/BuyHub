@@ -30,11 +30,14 @@ $card:'card';
             flex-direction: column;
         }
         &-title {
-            font-size: inherit;
+            font-size: 1.1rem;
             font-weight: inherit;
             line-height: 1.5;
             margin: 0;
             padding: 0;
+            >i {
+                margin-#{$end-direction}: 0.5rem;
+            }
         }
         .text-muted {
             font-size: 0.8rem;
