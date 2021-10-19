@@ -78,6 +78,7 @@
                                     <div class="card-body">
                                         <ul class="pages__list-wrapper">
                                             <li><a href="orders-list.php">Orders list</a></li>
+                                            <li><a href="order-detail.php">Order detail</a></li>
                                             <li><a href="collections-managements.php">Collections Managements</a></li>
                                             <li><a href="products.php">Products</a></li>
                                             <li><a href="listing.php">Listing</a></li>

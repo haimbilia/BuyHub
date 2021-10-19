@@ -76,252 +76,94 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-md-12">
-                                <form class="form" action="#">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-md-10">
-                                                    <div class="input-group">
-                                                        <input type="search" class="form-control" name="search" value=""
-                                                            placeholder="Search">
-                                                        <div class="input-group-append">
-                                                            <button type="button"
-                                                                class="btn btn-brand btn-wide ml-2">Search</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-2">
-                                                    <a class="btn btn-link" data-toggle="collapse"
-                                                        href="#collapseExample" aria-expanded="false"
-                                                        aria-controls="collapseExample">Advanced
-                                                        Search</a>
-                                                </div>
-                                            </div>
-                                            <div class="collapse" id="collapseExample">
-                                                <div class="separator separator-dashed my-4"></div>
-
-                                                <div class="row">
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="label">Product</label>
-                                                            <select>
-                                                                <option value="-1" selected="selected">All</option>
-                                                                <option value="1">Custom Products</option>
-                                                                <option value="0">Catalog Products</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="label">User</label>
-                                                            <input type="text" placeholder="">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="label">Product Categories</label>
-                                                            <select>
-                                                                <option value="-1">Does Not Matter</option>
-                                                                <option value="171">Mobile Cases</option>
-                                                                <option value="109">Electronics</option>
-                                                                <option value="110"> » Televisions</option>
-                                                                <option value="111"> » Washing Machines</option>
-                                                                <option value="117"> » Mobiles</option>
-                                                                <option value="170"> » » Phones</option>
-                                                                <option value="112"> » » Men</option>
-                                                                <option value="124"> » » » Footwears</option>
-                                                                <option value="126"> » » » » Casual shoes</option>
-                                                                <option value="128"> » » » » Formal shoes</option>
-                                                                <option value="129"> » » » » Floaters</option>
-                                                                <option value="130"> » » » » Sneakers</option>
-                                                                <option value="132"> » » » » Sports shoes</option>
-                                                                <option value="134"> » » » » Boots</option>
-                                                                <option value="135"> » » » » Flip-Flops</option>
-                                                                <option value="131"> » » » » Loafers</option>
-                                                                <option value="136"> » » » » Sandals</option>
-                                                                <option value="160"> » » » Sports Wear</option>
-                                                                <option value="161"> » » » » Sports T-Shirts</option>
-                                                                <option value="162"> » » » » Track Pants</option>
-                                                                <option value="163"> » » » » Track Suits</option>
-                                                                <option value="164"> » » » » Shorts</option>
-                                                                <option value="165"> » » » Watches</option>
-                                                                <option value="166"> » » » » Fossil</option>
-                                                                <option value="167"> » » » » Fastrack</option>
-                                                                <option value="168"> » » » » Casio</option>
-                                                                <option value="169"> » » » » Titan</option>
-                                                                <option value="123"> » » Clothing</option>
-                                                                <option value="172"> » » Headphones</option>
-                                                                <option value="114"> » » » Jeans</option>
-                                                                <option value="119"> » » » Shirts</option>
-                                                                <option value="158"> » » » Trousers</option>
-                                                                <option value="159"> » » » Jackets</option>
-                                                                <option value="180"> » » » Fragrances</option>
-                                                                <option value="173"> » » Screengaurds</option>
-                                                                <option value="122"> » » Laptops</option>
-                                                                <option value="157"> » » » Antivirus</option>
-                                                                <option value="174"> » » » Laptop Bags</option>
-                                                                <option value="175"> » » » Business Laptops</option>
-                                                                <option value="121"> » Gaming Consoles</option>
-                                                                <option value="176"> » » Xbox one</option>
-                                                                <option value="177"> » » PS4</option>
-                                                                <option value="178"> » » Handheld Consoles</option>
-                                                                <option value="113">Women</option>
-                                                                <option value="116"> » Jeans &amp; Bottom wear</option>
-                                                                <option value="120"> » Tops &amp; T-shirts</option>
-                                                                <option value="156">Baby &amp; Kids</option>
-                                                                <option value="150"> » Toys</option>
-                                                                <option value="152"> » » Puzzles</option>
-                                                                <option value="153"> » » Art &amp; Craft</option>
-                                                                <option value="154"> » » Baby Toys</option>
-                                                                <option value="155"> » » Action Figures</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="label">Active
-                                                            </label>
-                                                            <select>
-                                                                <option value="-1">Does Not Matter</option>
-                                                                <option value="1">Active</option>
-                                                                <option value="0">In-active</option>
-                                                            </select>
-
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="label">Approval Status </label>
-                                                            <select>
-                                                                <option value="-1">Does Not Matter</option>
-                                                                <option value="0">Un-approved</option>
-                                                                <option value="1">Approved</option>
-                                                            </select>
-
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="label"> Product Type </label>
-                                                            <select>
-                                                                <option value="">Select</option>
-                                                                <option value="1">Physical</option>
-                                                                <option value="2">Digital</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label class="label">Date From</label>
-                                                            <input class="field--calender fld-date hasDatepicker"
-                                                                type="text" value="">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label class="label">Date To </label>
-                                                            <input class="field--calender fld-date hasDatepicker"
-                                                                type="text" value="">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label class="label"></label>
-                                                            <button type="reset"
-                                                                class="btn btn-outline-brand">Cancel</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                                <div class="card">
+                                <div class="card card-tabs">
                                     <div class="card-head">
-                                        <h3 class="card-head-label">
-                                            <span class="card-head-title">Catalog Products </span>
+                                        <nav class="nav nav-tabs">
+                                            <a class="nav-link active" href="#">All</a>
+                                            <a class="nav-link" href="#">Ship</a>
+                                            <a class="nav-link" href="#">Pickup</a>
+                                            <a class="nav-link" href="#">Unpaid</a>
+                                            <a class="nav-link" href="#">Return</a>
+                                            <a class="nav-link" href="#">Cancellation</a>
+                                            <a class="nav-link" href="#">Completed</a>
+                                        </nav>
 
-                                        </h3>
-                                        <div class="card-toolbar">
-
-                                            <ul class="actions">
-                                                <li> <a href="#" class="btn btn-icon btn-light btn-add">
-                                                        <i class="icn">
-                                                            <svg class="svg">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
-                                                                </use>
-                                                            </svg></i>
-                                                        <span>New</span>
-                                                    </a></li>
-                                                <li>
-                                                    <a class="" href="#" title="">
-                                                        <svg class="svg" width="18" height="18">
-                                                            <use
-                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#active">
-                                                            </use>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="" href="#" title="">
-                                                        <svg class="svg" width="18" height="18">
-                                                            <use
-                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#in-active">
-                                                            </use>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0)" class="">
-                                                        <svg class="svg" width="18" height="18">
-                                                            <use
-                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
-                                                            </use>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                            </ul>
-
-                                        </div>
                                     </div>
                                     <div class="card-body">
+                                        <form class="form my-4" action="#">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="input-group-append"> <input type="search"
+                                                            placeholder="Search orders, tags, customers, products">
+
+                                                        <button type="button" data-toggle="dropdown"
+                                                            class="btn btn-brand dropdown-toggle"
+                                                            aria-expanded="false">Filters</button>
+                                                        <div class="dropdown-menu">
+
+                                                            <ul class="">
+                                                                <li class="dropdown-item nav__item">
+                                                                    <label class="checkbox">
+                                                                        <input type="checkbox" value="1">
+                                                                        Pending
+                                                                        <span></span></label>
+                                                                </li>
+                                                                <li class="dropdown-item nav__item"><label
+                                                                        class="checkbox"><input type="checkbox"
+                                                                            value="2">
+                                                                        Paid
+                                                                        <span></span></label></li>
+                                                                <li class="dropdown-item nav__item"><label
+                                                                        class="checkbox"><input type="checkbox"
+                                                                            value="cod">
+                                                                        Cash
+                                                                        <span></span></label></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
                                         <div class="table-responsive">
-                                            <!-- <div class="table-processing">
-                                                <div class="spinner spinner--sm spinner--brand"></div>
-                                            </div> -->
-                                            <table width="100%" class="table">
+                                            <table width="100%" class="table table-orders">
                                                 <thead>
                                                     <tr>
-                                                        <th class="">
-                                                            <label class="checkbox">
-                                                                <input type="checkbox" value="1">
-                                                            </label>
+                                                        <th>
+                                                            Sr no.
                                                         </th>
-                                                        <th class="sorting">#</th>
-                                                        <th class=""> Images </th>
-                                                        <th class="sorting" width="30%"> <span> Full Name <i
-                                                                    class="icn">
+                                                        <th class="sorting"> <span>Order ID. <i class="icn">
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-down">
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-up">
                                                                         </use>
                                                                     </svg>
                                                                 </i></span></th>
-                                                        <th class="sorting"> <span>Stock <i class="icn">
+                                                        <th class="sorting">
+                                                            <span>Customer <i class="icn">
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-up">
+                                                                        </use>
+                                                                    </svg>
+                                                                </i></span>
+                                                        </th>
+                                                        <th class="sorting">
+                                                            <span>Purchased <i class="icn">
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-up">
+                                                                        </use>
+                                                                    </svg>
+                                                                </i></span>
+                                                        </th>
+                                                        <th class="sorting"> <span>Order date & time <i class="icn">
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use
                                                                             xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-up">
                                                                         </use>
                                                                     </svg>
                                                                 </i> </span></th>
-                                                        <th class="sorting"> <span>User <i class="icn">
+                                                        <th class="sorting"> <span>Amount <i class="icn">
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use
                                                                             xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-up">
@@ -331,112 +173,52 @@
 
 
 
-                                                        <th class="sorting"> <span>Status <i class="icn">
+                                                        <th class="sorting"> <span>Payment Status <i class="icn">
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use
                                                                             xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-up">
                                                                         </use>
                                                                     </svg>
                                                                 </i></span></th>
-                                                        <th class="sorting"> <span> Publish <i class="icn">
-                                                                    <svg class="svg" width="18" height="18">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-up">
-                                                                        </use>
-                                                                    </svg>
-                                                                </i></span></th>
+
                                                         <th class="align-right">Action</th>
                                                     </tr>
+
                                                 </thead>
+
                                                 <tbody>
                                                     <tr>
+                                                        <td>01</td>
+                                                        <td><a href="">00055886982</a> </td>
                                                         <td>
-                                                            <label class="checkbox">
-                                                                <input type="checkbox" value="1">
-                                                            </label>
-
-                                                        </td>
-                                                        <td>432</td>
-                                                        <td>
-                                                            <div class="media-group">
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg"
+                                                            <a href="" class="user-profile user-profile-sm">
+                                                                <figure class="user-profile_photo">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg"
                                                                         alt="image">
-                                                                </a>
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product2.jpg"
-                                                                        alt="image">
-                                                                </a>
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product3.jpg"
-                                                                        alt="image">
-                                                                </a>
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product4.jpg"
-                                                                        alt="image">
-                                                                </a>
-
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <span>6+</span>
-                                                                </a>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="user-profile">
-
+                                                                </figure>
                                                                 <div class="user-profile_data">
-                                                                    <a class="user-profile_title"
-                                                                        href="javascript:void(0)">Avocado</a>
-                                                                    <span class="text-muted fw-bold">Doice & Gabbana
-                                                                        Dolce & Gabbana D&g</span>
+                                                                    <span class="text-muted fw-bold">
+                                                                        Michael
+                                                                        Williams </span>
 
                                                                 </div>
-                                                            </div>
-
+                                                            </a>
                                                         </td>
-                                                        <td>
-                                                            <p class="stock">42 </p>
+                                                        <td> <span class="purchased"> Cadbury fruit and nut <span
+                                                                    class="text-muted fw-bold">+ 2
+                                                                    more</span></span></td>
+                                                        <td> <span class="date"> 13/10/2021 <time>15:45</time></span>
                                                         </td>
-                                                        <td>
-                                                            <div class="user">
-                                                                Admin
-                                                            </div>
-                                                        </td>
-
-                                                        <td><span class="badge badge-warning">In Progress</span></td>
-
-                                                        <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
-                                                        </td>
+                                                        <td>$90.00</td>
+                                                        <td> <span class="badge badge-success">Paid</span> </td>
                                                         <td class="align-right">
                                                             <ul class="actions">
                                                                 <li>
-                                                                    <a href="#" data-toggle="modal" data-target="#edit"
-                                                                        title="Edit">
+                                                                    <a href="#" title="Edit">
 
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
                                                                             </use>
                                                                         </svg>
                                                                     </a>
@@ -445,194 +227,7 @@
                                                                     <a href="javascript:void(0)" class="">
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td>
-                                                            <label class="checkbox">
-                                                                <input type="checkbox" value="1">
-                                                            </label>
-
-                                                        </td>
-                                                        <td>433</td>
-                                                        <td>
-                                                            <div class="media-group">
-
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product3.jpg"
-                                                                        alt="image">
-                                                                </a>
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product4.jpg"
-                                                                        alt="image">
-                                                                </a>
-
-
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="user-profile">
-
-                                                                <div class="user-profile_data">
-                                                                    <a class="user-profile_title"
-                                                                        href="javascript:void(0)">Avocado</a>
-                                                                    <span class="text-muted fw-bold">Doice & Gabbana
-                                                                        Dolce & Gabbana D&g</span>
-
-                                                                </div>
-                                                            </div>
-
-                                                        </td>
-                                                        <td>
-                                                            <p class="stock">56 </p>
-                                                        </td>
-                                                        <td>
-                                                            <div class="user">
-                                                                <a href="" class="link-text text-nowrap">Rohit</a>
-                                                            </div>
-                                                        </td>
-
-                                                        <td><span class="badge badge-info">Rejected</span></td>
-
-                                                        <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
-                                                        </td>
-                                                        <td class="align-right">
-                                                            <ul class="actions">
-                                                                <li>
-                                                                    <a href="#" data-toggle="modal" data-target="#edit"
-                                                                        title="Edit">
-
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)" class="">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td>
-                                                            <label class="checkbox">
-                                                                <input type="checkbox" value="1">
-                                                            </label>
-
-                                                        </td>
-                                                        <td>565</td>
-                                                        <td>
-                                                            <div class="media-group">
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg"
-                                                                        alt="image">
-                                                                </a>
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product2.jpg"
-                                                                        alt="image">
-                                                                </a>
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product3.jpg"
-                                                                        alt="image">
-                                                                </a>
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product4.jpg"
-                                                                        alt="image">
-                                                                </a>
-
-
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="user-profile">
-
-                                                                <div class="user-profile_data">
-                                                                    <a class="user-profile_title"
-                                                                        href="javascript:void(0)">Avocado</a>
-                                                                    <span class="text-muted fw-bold">Doice & Gabbana
-                                                                        Dolce & Gabbana D&g</span>
-
-                                                                </div>
-                                                            </div>
-
-                                                        </td>
-                                                        <td>
-                                                            <p class="stock">64 </p>
-                                                        </td>
-                                                        <td>
-                                                            <div class="user">
-                                                                <a href="" class="link-text text-nowrap"> Kanwar</a>
-                                                            </div>
-                                                        </td>
-
-                                                        <td><span class="badge badge-warning">In Progress</span></td>
-
-                                                        <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
-                                                        </td>
-                                                        <td class="align-right">
-                                                            <ul class="actions">
-                                                                <li>
-                                                                    <a href="#" data-toggle="modal" data-target="#edit"
-                                                                        title="Edit">
-
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:void(0)" class="">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                                             </use>
                                                                         </svg>
                                                                     </a>
@@ -641,77 +236,34 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
+                                                        <td>02</td>
+                                                        <td><a href="">000558854982</a> </td>
                                                         <td>
-                                                            <label class="checkbox">
-                                                                <input type="checkbox" value="1">
-                                                            </label>
-
-                                                        </td>
-                                                        <td>877</td>
-                                                        <td>
-                                                            <div class="media-group">
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg"
+                                                            <a href="" class="user-profile user-profile-sm">
+                                                                <figure class="user-profile_photo">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg"
                                                                         alt="image">
-                                                                </a>
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product2.jpg"
-                                                                        alt="image">
-                                                                </a>
-
-
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="user-profile">
-
+                                                                </figure>
                                                                 <div class="user-profile_data">
-                                                                    <a class="user-profile_title"
-                                                                        href="javascript:void(0)">Avocado</a>
-                                                                    <span class="text-muted fw-bold">Doice & Gabbana
-                                                                        Dolce & Gabbana D&g</span>
+                                                                    <span class="text-muted fw-bold">
+                                                                        Jason Smith</span>
 
                                                                 </div>
-                                                            </div>
-
+                                                            </a>
                                                         </td>
-                                                        <td>
-                                                            <p class="stock">576 </p>
+                                                        <td> <span class="purchased">Rainbow Flatware </span></td>
+                                                        <td> <span class="date"> 23/10/2022 <time>11:45</time></span>
                                                         </td>
-                                                        <td>
-                                                            <div class="user">
-                                                                <a href="" class="link-text text-nowrap">Sachin
-                                                                    Tendulkar</a>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <span class="badge badge-success">Approved</span>
-                                                        </td>
-
-                                                        <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
-                                                        </td>
+                                                        <td>$70.00</td>
+                                                        <td> <span class="badge badge-danger">Pending</span> </td>
                                                         <td class="align-right">
                                                             <ul class="actions">
                                                                 <li>
-                                                                    <a href="#" data-toggle="modal" data-target="#edit"
-                                                                        title="Edit">
+                                                                    <a href="#" title="Edit">
 
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
                                                                             </use>
                                                                         </svg>
                                                                     </a>
@@ -720,7 +272,7 @@
                                                                     <a href="javascript:void(0)" class="">
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                                             </use>
                                                                         </svg>
                                                                     </a>
@@ -729,87 +281,36 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
+                                                        <td>58</td>
+                                                        <td><a href="">00055699982</a> </td>
                                                         <td>
-                                                            <label class="checkbox">
-                                                                <input type="checkbox" value="1">
-                                                            </label>
-
-                                                        </td>
-                                                        <td>98</td>
-                                                        <td>
-                                                            <div class="media-group">
-
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product2.jpg"
+                                                            <a href="" class="user-profile user-profile-sm">
+                                                                <figure class="user-profile_photo">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg"
                                                                         alt="image">
-                                                                </a>
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product3.jpg"
-                                                                        alt="image">
-                                                                </a>
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product4.jpg"
-                                                                        alt="image">
-                                                                </a>
-
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <span>6+</span>
-                                                                </a>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="user-profile">
-
+                                                                </figure>
                                                                 <div class="user-profile_data">
-                                                                    <a class="user-profile_title"
-                                                                        href="javascript:void(0)">Avocado</a>
-                                                                    <span class="text-muted fw-bold">Doice & Gabbana
-                                                                        Dolce & Gabbana D&g</span>
+                                                                    <span class="text-muted fw-bold">
+                                                                        Sachin Tendulkar </span>
 
                                                                 </div>
-                                                            </div>
-
+                                                            </a>
                                                         </td>
-                                                        <td>
-                                                            <p class="stock">23 </p>
+                                                        <td> <span class="purchased">Smart Personal Air Cooler<span
+                                                                    class="text-muted fw-bold">+ 2
+                                                                    more</span></span></td>
+                                                        <td> <span class="date"> 01/05/2021 <time>15:45</time></span>
                                                         </td>
-                                                        <td>
-                                                            <div class="user">
-                                                                Admin
-                                                            </div>
-                                                        </td>
-
-                                                        <td><span class="badge badge-danger">Approved</span></td>
-
-                                                        <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
-                                                        </td>
+                                                        <td>$90.00</td>
+                                                        <td> <span class="badge badge-success">Paid</span> </td>
                                                         <td class="align-right">
                                                             <ul class="actions">
                                                                 <li>
-                                                                    <a href="#" data-toggle="modal" data-target="#edit"
-                                                                        title="Edit">
+                                                                    <a href="#" title="Edit">
 
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
                                                                             </use>
                                                                         </svg>
                                                                     </a>
@@ -818,7 +319,7 @@
                                                                     <a href="javascript:void(0)" class="">
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                                             </use>
                                                                         </svg>
                                                                     </a>
@@ -827,88 +328,34 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
+                                                        <td>25</td>
+                                                        <td><a href="">000525686982</a> </td>
                                                         <td>
-                                                            <label class="checkbox">
-                                                                <input type="checkbox" value="1">
-                                                            </label>
-
-                                                        </td>
-                                                        <td>95</td>
-                                                        <td>
-                                                            <div class="media-group">
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg"
+                                                            <a href="" class="user-profile user-profile-sm">
+                                                                <figure class="user-profile_photo">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg"
                                                                         alt="image">
-                                                                </a>
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product2.jpg"
-                                                                        alt="image">
-                                                                </a>
-
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product4.jpg"
-                                                                        alt="image">
-                                                                </a>
-
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <span>6+</span>
-                                                                </a>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="user-profile">
-
+                                                                </figure>
                                                                 <div class="user-profile_data">
-                                                                    <a class="user-profile_title"
-                                                                        href="javascript:void(0)">Avocado</a>
-                                                                    <span class="text-muted fw-bold">Doice & Gabbana
-                                                                        Dolce & Gabbana D&g</span>
+                                                                    <span class="text-muted fw-bold">
+                                                                        Robinson </span>
 
                                                                 </div>
-                                                            </div>
-
+                                                            </a>
                                                         </td>
-                                                        <td>
-                                                            <p class="stock">768 </p>
+                                                        <td> <span class="purchased">Reusable Straws </span></td>
+                                                        <td> <span class="date"> 13/10/2021 <time>15:45</time></span>
                                                         </td>
-                                                        <td>
-                                                            <div class="user">
-                                                                <a href="" class="link-text text-nowrap">Michael
-                                                                    Williams</a>
-                                                            </div>
-                                                        </td>
-
-                                                        <td><span class="badge badge-success">Approved</span></td>
-
-                                                        <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
-                                                        </td>
+                                                        <td>$2140.00</td>
+                                                        <td> <span class="badge badge-danger">Pending</span> </td>
                                                         <td class="align-right">
                                                             <ul class="actions">
                                                                 <li>
-                                                                    <a href="#" data-toggle="modal" data-target="#edit"
-                                                                        title="Edit">
+                                                                    <a href="#" title="Edit">
 
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
                                                                             </use>
                                                                         </svg>
                                                                     </a>
@@ -917,7 +364,7 @@
                                                                     <a href="javascript:void(0)" class="">
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                                             </use>
                                                                         </svg>
                                                                     </a>
@@ -926,87 +373,36 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
+                                                        <td>01</td>
+                                                        <td><a href="">003546486982</a> </td>
                                                         <td>
-                                                            <label class="checkbox">
-                                                                <input type="checkbox" value="1">
-                                                            </label>
-
-                                                        </td>
-                                                        <td>12</td>
-                                                        <td>
-                                                            <div class="media-group">
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg"
+                                                            <a href="" class="user-profile user-profile-sm">
+                                                                <figure class="user-profile_photo">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_5.jpg"
                                                                         alt="image">
-                                                                </a>
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product2.jpg"
-                                                                        alt="image">
-                                                                </a>
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product3.jpg"
-                                                                        alt="image">
-                                                                </a>
-
-
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <span>6+</span>
-                                                                </a>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="user-profile">
-
+                                                                </figure>
                                                                 <div class="user-profile_data">
-                                                                    <a class="user-profile_title"
-                                                                        href="javascript:void(0)">Avocado</a>
-                                                                    <span class="text-muted fw-bold">Doice & Gabbana
-                                                                        Dolce & Gabbana D&g</span>
+                                                                    <span class="text-muted fw-bold">
+                                                                        Jackie </span>
 
                                                                 </div>
-                                                            </div>
-
+                                                            </a>
                                                         </td>
-                                                        <td>
-                                                            <p class="stock">21 </p>
+                                                        <td> <span class="purchased">Wooden Alarm Clock <span
+                                                                    class="text-muted fw-bold">+ 8
+                                                                    more</span></span></td>
+                                                        <td> <span class="date"> 13/02/2018 <time>15:45</time></span>
                                                         </td>
-                                                        <td>
-                                                            <div class="user">
-                                                                <a href="" class="link-text text-nowrap"> Admin</a>
-                                                            </div>
-                                                        </td>
-
-                                                        <td><span class="badge badge-success">Approved</span></td>
-
-                                                        <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
-                                                        </td>
+                                                        <td>$90.00</td>
+                                                        <td> <span class="badge badge-success">Paid</span> </td>
                                                         <td class="align-right">
                                                             <ul class="actions">
                                                                 <li>
-                                                                    <a href="#" data-toggle="modal" data-target="#edit"
-                                                                        title="Edit">
+                                                                    <a href="#" title="Edit">
 
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
                                                                             </use>
                                                                         </svg>
                                                                     </a>
@@ -1015,7 +411,7 @@
                                                                     <a href="javascript:void(0)" class="">
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                                             </use>
                                                                         </svg>
                                                                     </a>
@@ -1024,82 +420,36 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
+                                                        <td>56</td>
+                                                        <td><a href="">00055886987</a> </td>
                                                         <td>
-                                                            <label class="checkbox">
-                                                                <input type="checkbox" value="1">
-                                                            </label>
-
-                                                        </td>
-                                                        <td>534</td>
-                                                        <td>
-                                                            <div class="media-group">
-
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product2.jpg"
+                                                            <a href="" class="user-profile user-profile-sm">
+                                                                <figure class="user-profile_photo">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg"
                                                                         alt="image">
-                                                                </a> <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg"
-                                                                        alt="image">
-                                                                </a>
-
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product4.jpg"
-                                                                        alt="image">
-                                                                </a>
-
-
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="user-profile">
-
+                                                                </figure>
                                                                 <div class="user-profile_data">
-                                                                    <a class="user-profile_title"
-                                                                        href="javascript:void(0)">Avocado</a>
-                                                                    <span class="text-muted fw-bold">Doice & Gabbana
-                                                                        Dolce & Gabbana D&g</span>
+                                                                    <span class="text-muted fw-bold">
+                                                                        Sourabh Rana </span>
 
                                                                 </div>
-                                                            </div>
-
+                                                            </a>
                                                         </td>
-                                                        <td>
-                                                            <p class="stock">556 </p>
+                                                        <td> <span class="purchased"> Cadbury fruit and nut <span
+                                                                    class="text-muted fw-bold">+ 2
+                                                                    more</span></span></td>
+                                                        <td> <span class="date"> 13/10/2021 <time>15:45</time></span>
                                                         </td>
-                                                        <td>
-                                                            <div class="user">
-                                                                Admin
-                                                            </div>
-                                                        </td>
-
-                                                        <td><span class="badge badge-success">Approved</span></td>
-
-                                                        <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
-                                                        </td>
+                                                        <td>$8690.00</td>
+                                                        <td> <span class="badge badge-success">Paid</span> </td>
                                                         <td class="align-right">
                                                             <ul class="actions">
                                                                 <li>
-                                                                    <a href="#" data-toggle="modal" data-target="#edit"
-                                                                        title="Edit">
+                                                                    <a href="#" title="Edit">
 
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
                                                                             </use>
                                                                         </svg>
                                                                     </a>
@@ -1108,7 +458,7 @@
                                                                     <a href="javascript:void(0)" class="">
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                                             </use>
                                                                         </svg>
                                                                     </a>
@@ -1117,88 +467,37 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
+                                                        <td>01</td>
+                                                        <td><a href="">00055886258</a> </td>
                                                         <td>
-                                                            <label class="checkbox">
-                                                                <input type="checkbox" value="1">
-                                                            </label>
-
-                                                        </td>
-                                                        <td>110</td>
-                                                        <td>
-                                                            <div class="media-group">
-
-
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product3.jpg"
+                                                            <a href="" class="user-profile user-profile-sm">
+                                                                <figure class="user-profile_photo">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg"
                                                                         alt="image">
-                                                                </a>
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product4.jpg"
-                                                                        alt="image">
-                                                                </a>
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg"
-                                                                        alt="image">
-                                                                </a>
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <span>6+</span>
-                                                                </a>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="user-profile">
-
+                                                                </figure>
                                                                 <div class="user-profile_data">
-                                                                    <a class="user-profile_title"
-                                                                        href="javascript:void(0)">Avocado</a>
-                                                                    <span class="text-muted fw-bold">Doice & Gabbana
-                                                                        Dolce & Gabbana D&g</span>
+                                                                    <span class="text-muted fw-bold">
+                                                                        Michael
+                                                                        Williams </span>
 
                                                                 </div>
-                                                            </div>
-
+                                                            </a>
                                                         </td>
-                                                        <td>
-                                                            <p class="stock">56 </p>
+                                                        <td> <span class="purchased"> Cadbury fruit and nut <span
+                                                                    class="text-muted fw-bold">+ 2
+                                                                    more</span></span></td>
+                                                        <td> <span class="date"> 13/10/2021 <time>15:45</time></span>
                                                         </td>
-                                                        <td>
-                                                            <div class="user">
-                                                                <a href="" class="link-text text-nowrap">Michael
-                                                                    Williams</a>
-                                                            </div>
-                                                        </td>
-
-                                                        <td> <span class="badge badge-info">Pending</span></td>
-
-                                                        <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
-                                                        </td>
+                                                        <td>$90.00</td>
+                                                        <td> <span class="badge badge-success">Paid</span> </td>
                                                         <td class="align-right">
                                                             <ul class="actions">
                                                                 <li>
-                                                                    <a href="#" data-toggle="modal" data-target="#edit"
-                                                                        title="Edit">
+                                                                    <a href="#" title="Edit">
 
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
                                                                             </use>
                                                                         </svg>
                                                                     </a>
@@ -1207,7 +506,7 @@
                                                                     <a href="javascript:void(0)" class="">
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                                             </use>
                                                                         </svg>
                                                                     </a>
@@ -1215,13 +514,246 @@
                                                             </ul>
                                                         </td>
                                                     </tr>
+                                                    <tr>
+                                                        <td>02</td>
+                                                        <td><a href="">000558854369</a> </td>
+                                                        <td>
+                                                            <a href="" class="user-profile user-profile-sm">
+                                                                <figure class="user-profile_photo">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg"
+                                                                        alt="image">
+                                                                </figure>
+                                                                <div class="user-profile_data">
+                                                                    <span class="text-muted fw-bold">
+                                                                        Jason Smith</span>
+
+                                                                </div>
+                                                            </a>
+                                                        </td>
+                                                        <td> <span class="purchased">Rainbow Flatware </span></td>
+                                                        <td> <span class="date"> 23/10/2022 <time>11:45</time></span>
+                                                        </td>
+                                                        <td>$70.00</td>
+                                                        <td> <span class="badge badge-danger">Pending</span> </td>
+                                                        <td class="align-right">
+                                                            <ul class="actions">
+                                                                <li>
+                                                                    <a href="#" title="Edit">
+
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" class="">
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>58</td>
+                                                        <td><a href="">00055699147</a> </td>
+                                                        <td>
+                                                            <a href="" class="user-profile user-profile-sm">
+                                                                <figure class="user-profile_photo">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg"
+                                                                        alt="image">
+                                                                </figure>
+                                                                <div class="user-profile_data">
+                                                                    <span class="text-muted fw-bold">
+                                                                        Sachin Tendulkar </span>
+
+                                                                </div>
+                                                            </a>
+                                                        </td>
+                                                        <td> <span class="purchased">Smart Personal Air Cooler<span
+                                                                    class="text-muted fw-bold">+ 2
+                                                                    more</span></span></td>
+                                                        <td> <span class="date"> 01/05/2021 <time>15:45</time></span>
+                                                        </td>
+                                                        <td>$90.00</td>
+                                                        <td> <span class="badge badge-success">Paid</span> </td>
+                                                        <td class="align-right">
+                                                            <ul class="actions">
+                                                                <li>
+                                                                    <a href="#" title="Edit">
+
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" class="">
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>25</td>
+                                                        <td><a href="">000525686369</a> </td>
+                                                        <td>
+                                                            <a href="" class="user-profile user-profile-sm">
+                                                                <figure class="user-profile_photo">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg"
+                                                                        alt="image">
+                                                                </figure>
+                                                                <div class="user-profile_data">
+                                                                    <span class="text-muted fw-bold">
+                                                                        Robinson </span>
+
+                                                                </div>
+                                                            </a>
+                                                        </td>
+                                                        <td> <span class="purchased">Reusable Straws </span></td>
+                                                        <td> <span class="date"> 13/10/2021 <time>15:45</time></span>
+                                                        </td>
+                                                        <td>$2140.00</td>
+                                                        <td> <span class="badge badge-danger">Pending</span> </td>
+                                                        <td class="align-right">
+                                                            <ul class="actions">
+                                                                <li>
+                                                                    <a href="#" title="Edit">
+
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" class="">
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>01</td>
+                                                        <td><a href="">003546486954</a> </td>
+                                                        <td>
+                                                            <a href="" class="user-profile user-profile-sm">
+                                                                <figure class="user-profile_photo">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_5.jpg"
+                                                                        alt="image">
+                                                                </figure>
+                                                                <div class="user-profile_data">
+                                                                    <span class="text-muted fw-bold">
+                                                                        Jackie </span>
+
+                                                                </div>
+                                                            </a>
+                                                        </td>
+                                                        <td> <span class="purchased">Wooden Alarm Clock <span
+                                                                    class="text-muted fw-bold">+ 8
+                                                                    more</span></span></td>
+                                                        <td> <span class="date"> 13/02/2018 <time>15:45</time></span>
+                                                        </td>
+                                                        <td>$90.00</td>
+                                                        <td> <span class="badge badge-success">Paid</span> </td>
+                                                        <td class="align-right">
+                                                            <ul class="actions">
+                                                                <li>
+                                                                    <a href="#" title="Edit">
+
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" class="">
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>56</td>
+                                                        <td><a href="">00055886935</a> </td>
+                                                        <td>
+                                                            <a href="" class="user-profile user-profile-sm">
+                                                                <figure class="user-profile_photo">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg"
+                                                                        alt="image">
+                                                                </figure>
+                                                                <div class="user-profile_data">
+                                                                    <span class="text-muted fw-bold">
+                                                                        Sourabh Rana </span>
+
+                                                                </div>
+                                                            </a>
+                                                        </td>
+                                                        <td> <span class="purchased"> Cadbury fruit and nut <span
+                                                                    class="text-muted fw-bold">+ 2
+                                                                    more</span></span></td>
+                                                        <td> <span class="date"> 13/10/2021 <time>15:45</time></span>
+                                                        </td>
+                                                        <td>$8690.00</td>
+                                                        <td> <span class="badge badge-success">Paid</span> </td>
+                                                        <td class="align-right">
+                                                            <ul class="actions">
+                                                                <li>
+                                                                    <a href="#" title="Edit">
+
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" class="">
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+
 
 
                                                 </tbody>
+
                                             </table>
                                         </div>
-
                                     </div>
+
                                     <div class="card-foot">
                                         <div class="row justify-content-between">
                                             <div class="col">
@@ -1250,7 +782,10 @@
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
+
+
                             </div>
 
                             <div class="modal fixed-right fade " id="edit" tabindex="-1" role="dialog"
