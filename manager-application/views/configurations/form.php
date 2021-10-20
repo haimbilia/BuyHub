@@ -7,6 +7,7 @@ $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group mt-3';
 $frm->setFormTagAttribute('class', 'form form--settings modalFormJs layout--' . $formLayout);
 $frm->setFormTagAttribute('data-onclear', $clearFormFn);
 $frm->setFormTagAttribute('id', 'frmConfSetting');
+
 $tbid = isset($tabId) ? $tabId : 'tabs_' . $frmType;
 
 if ($lang_id > 0) {
@@ -19,8 +20,48 @@ if ($lang_id > 0) {
 
 $stateData = FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 1);
 $displayMap = false;
+$colMd6Arr = [];
 switch ($frmType) {
+    case Configurations::FORM_GENERAL:
+        if (1 > $lang_id) {
+            $colMd6Arr = ['CONF_SITE_OWNER_EMAIL', 'CONF_SITE_PHONE', 'CONF_SITE_FAX', 'CONF_ABOUT_US_PAGE', 'CONF_PRIVACY_POLICY_PAGE', 'CONF_GDPR_POLICY_PAGE', 'CONF_COOKIES_BUTTON_LINK', 'CONF_TERMS_AND_CONDITIONS_PAGE'];
+        } else {
+            $colMd6Arr = ['lang_id', 'CONF_WEBSITE_NAME_' . $lang_id, 'CONF_SITE_OWNER_' . $lang_id];
+        }
+        break;
+    case Configurations::FORM_LOCAL:
+        if (1 > $lang_id) {
+            $colMd6Arr = ['CONF_DEFAULT_SITE_LANG', 'CONF_TIMEZONE', 'CONF_COUNTRY', 'CONF_ZIP_CODE', 'CONF_STATE', 'CONF_DATE_FORMAT', 'CONF_DEFAULT_CURRENCY_SEPARATOR', 'CONF_FAQ_PAGE_MAIN_CATEGORY', 'CONF_SELLER_PAGE_MAIN_CATEGORY', 'CONF_CURRENCY'];
+        } else {
+            $colMd6Arr = ['lang_id', 'CONF_CITY_' . $lang_id, 'CONF_ADDRESS_' . $lang_id, 'CONF_ADDRESS_LINE_2_' . $lang_id];
+        }
+        break;
+    case Configurations::FORM_SEO:
+        if (1 > $lang_id) {
+            $colMd6Arr = ['CONF_TWITTER_USERNAME', 'googleFileVerification', 'google_file_verification', 'bingFileVerification', 'bing_file_verification'];
+        }
+        break;
+    case Configurations::FORM_USER_ACCOUNT:
+        if (1 > $lang_id) {
+            $colMd6Arr = ['CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', 'CONF_MIN_WITHDRAW_LIMIT', 'CONF_MAX_WITHDRAW_LIMIT', 'CONF_MIN_INTERVAL_WITHDRAW_REQUESTS'];
+        }
+        break;
+    case Configurations::FORM_CART_WISHLIST:
+        if (1 > $lang_id) {
+            $colMd6Arr = ['CONF_REMINDER_INTERVAL_PRODUCTS_IN_CART', 'CONF_SENT_CART_REMINDER_COUNT', 'CONF_REMINDER_INTERVAL_PRODUCTS_IN_WISHLIST', 'CONF_SENT_WISHLIST_REMINDER_COUNT'];
+        }
+        break;
+    case Configurations::FORM_CHECKOUT_PROCESS:
+        if (1 > $lang_id) {
+            $colMd6Arr = ['CONF_MIN_COD_ORDER_LIMIT', 'CONF_MAX_COD_ORDER_LIMIT', 'CONF_COD_MIN_WALLET_BALANCE', 'CONF_TIME_SLOT_ADDITION', 'CONF_DEFAULT_ORDER_STATUS', 'CONF_DEFAULT_PAID_ORDER_STATUS', 'CONF_DEFAULT_APPROVED_ORDER_STATUS', 'CONF_DEFAULT_INPROCESS_ORDER_STATUS', 'CONF_DEFAULT_SHIPPING_ORDER_STATUS', 'CONF_DEFAULT_DEIVERED_ORDER_STATUS', 'CONF_DEFAULT_CANCEL_ORDER_STATUS', 'CONF_RETURN_REQUEST_ORDER_STATUS', 'CONF_RETURN_REQUEST_WITHDRAWN_ORDER_STATUS', 'CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS', 'CONF_PAY_AT_STORE_ORDER_STATUS', 'CONF_COD_ORDER_STATUS', 'CONF_PICKUP_READY_ORDER_STATUS', 'CONF_DEFAULT_COMPLETED_ORDER_STATUS', 'CONF_DEFAULT_RETURN_AGE'];
+        }
+        break;
+
     case Configurations::FORM_PRODUCT:
+        if (1 > $lang_id) {
+            $colMd6Arr = ['CONF_FULFILLMENT_TYPE', 'CONF_ITEMS_PER_PAGE_CATALOG', 'CONF_DEFAULT_GEO_LOCATION', 'CONF_GEO_DEFAULT_COUNTRY', 'CONF_GEO_DEFAULT_STATE', 'CONF_GEO_DEFAULT_ZIPCODE'];
+        }
+
         $geoFld = $frm->getField('CONF_PRODUCT_GEO_LOCATION');
         $geoFld->setFieldTagAttribute('class', 'geoLocation');
 
@@ -78,6 +119,14 @@ switch ($frmType) {
         }
         break;
 }
+
+if (!empty($colMd6Arr)) {
+    foreach ($colMd6Arr as $val) {
+        $fld = $frm->getField($val);
+        $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+    }
+}
+
 ?>
 <div class="card-head">
     <div class="card-head-label flex-grow-1">
