@@ -104,3 +104,18 @@
         }
     }
 }
+
+.list-orders {
+    display: flex;
+    flex-direction: column;
+    li {
+        padding-bottom: 1rem;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+    }
+    .product-profile {
+        max-width: 300px;
+        min-width: 0;
+    }
+}

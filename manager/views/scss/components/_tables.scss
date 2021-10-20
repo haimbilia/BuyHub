@@ -604,12 +604,12 @@
     li {
         display: inline-block;
         vertical-align: top;
-        margin-#{$end-direction}: 10px;
+        //margin-#{$end-direction}: 10px;
         &:last-child {
             margin-#{$end-direction}: 0;
         }
         a {
-            //background: lighten($bg-gray, 0.1);
+            //background: lighten($bg-gray, 0.1); 
             color: darken($bg-gray, 50);
             //color: $brand-color-inverse; 
             padding: 10px;
@@ -624,6 +624,12 @@
             align-items: center;
             justify-content: center;
             text-decoration: none;
+            border: $input-border;
+            height: $input-height;
+            padding: $input-padding;
+            font-size: $input-font-size;
+            line-height: $input-line-height;
+            border-radius: $input-border-radius;
             &:hover {
                 background: lighten($bg-gray, 0.20);
             }
