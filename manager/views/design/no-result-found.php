@@ -45,12 +45,10 @@
 
     <body>
         <div class="not-found">
-            <img src="<?php echo CONF_WEBROOT_URL;?>images/retina/error-404.svg" />
-            <h3>404. Page not found.</h3>
-            <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae amet nesciunt eos velit omnis cumque
-                quos, repellendus...
-            </p>
 
+            <img width="250" src="<?php echo CONF_WEBROOT_URL;?>images/retina/no-data-cuate.svg" alt="">
+            <h3>Sorry, No result found :( </h3>
+            <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae amet </p>
             <div class="action">
                 <a class="btn btn-outline-brand btn-wide" href="index.html">
                     Action

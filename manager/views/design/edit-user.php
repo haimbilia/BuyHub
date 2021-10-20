@@ -74,7 +74,7 @@
 
                 <!-- begin:: Content -->
                 <div class="container">
-                    <div class="card card--tabs">
+                    <div class="card card-tabs">
                         <div class="card-head">
                             <div class="card-head-toolbar">
                                 <ul class="nav nav-tabs nav-tabs-space-xl nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">

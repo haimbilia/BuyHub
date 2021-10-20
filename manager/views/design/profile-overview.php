@@ -445,7 +445,7 @@
 								</div>
 								<div class="col-xl-6">
 									<!--begin:: Widgets/Tasks -->
-									<div class="card card--tabs card--height-fluid">
+									<div class="card card-tabs card--height-fluid">
 										<div class="card-head">
 											<div class="card-head-label">
 												<h3 class="card-head-title">

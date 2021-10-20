@@ -77,6 +77,8 @@
                                     </div>
                                     <div class="card-body">
                                         <ul class="pages__list-wrapper">
+                                            <li><a href="orders-list.php">Orders list</a></li>
+                                            <li><a href="order-detail.php">Order detail</a></li>
                                             <li><a href="collections-managements.php">Collections Managements</a></li>
                                             <li><a href="products.php">Products</a></li>
                                             <li><a href="listing.php">Listing</a></li>
@@ -89,6 +91,8 @@
                                             <li><a href="theme-setting.php">Theme Setting</a></li>
                                             <li><a href="plugins-setting.php">Plugins Setting</a></li>
                                             <li><a href="messages.php">Messages</a></li>
+                                            <li><a href="buy-together-products.php">Buy Together Products</a></li>
+                                            <li><a href="related-products.php">Related Products</a></li>
                                             <li><a href="email-template-settings.php" target="_blank">Email temaplate -
                                                     Settings</a> </li>
                                             <li><a href="email-template-listing.php" target="_blank">Email temaplate -
@@ -716,6 +720,9 @@
                                                             </li>
                                                             <li><a href="#">Error Pages</a>
                                                                 <ul>
+                                                                    <li><a href="no-result-found.php">Result not
+                                                                            found</a>
+                                                                    </li>
                                                                     <li><a href="400.php">Bad Request (400)</a></li>
                                                                     <li><a href="401.php">Unauthorised (401)</a>
                                                                     </li>

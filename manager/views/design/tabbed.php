@@ -77,7 +77,7 @@
 					<div class="row">
 						<div class="col-xl-6">
 							<!--begin::card-->
-							<div class="card card--tabs">
+							<div class="card card-tabs">
 								<div class="card-head">
 									<div class="card-head-label">
 										<h3 class="card-head-title">
@@ -121,7 +121,7 @@
 							<!--end::card-->
 
 							<!--begin::card-->
-							<div class="card card--tabs">
+							<div class="card card-tabs">
 								<div class="card-head">
 									<div class="card-head-label">
 										<h3 class="card-head-title">
@@ -166,7 +166,7 @@
 							<!--end::card-->
 
 							<!--begin::card-->
-							<div class="card card--tabs">
+							<div class="card card-tabs">
 								<div class="card-head">
 									<div class="card-head-label">
 										<h3 class="card-head-title">
@@ -409,7 +409,7 @@
 							<!--end::card-->
 
 							<!--begin::card-->
-							<div class="card card--tabs">
+							<div class="card card-tabs">
 								<div class="card-head">
 									<div class="card-head-toolbar">
 										<ul class="nav nav-tabs nav-tabs-line nav-tabs-line-success" role="tablist">
@@ -448,7 +448,7 @@
 							<!--end::card-->
 
 							<!--begin::card-->
-							<div class="card card--tabs">
+							<div class="card card-tabs">
 								<div class="card-head">
 									<div class="card-head-toolbar">
 										<ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x nav-tabs-line-right nav-tabs-bold" role="tablist">
@@ -487,7 +487,7 @@
 							<!--end::card-->
 
 							<!--begin::card-->
-							<div class="card card--tabs">
+							<div class="card card-tabs">
 								<div class="card-head">
 									<div class="card-head-toolbar">
 										<ul class="nav nav-tabs nav-tabs-line nav-tabs-line-brand nav-tabs-line-2x nav-tabs-line-right nav-tabs-bold" role="tablist">

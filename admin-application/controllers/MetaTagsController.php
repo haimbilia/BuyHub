@@ -230,6 +230,7 @@ class MetaTagsController extends AdminBaseController
         $post = FatApp::getPostedData();
 
         $metaId = $post['meta_id'];
+        unset($post['meta_id']);
 
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
