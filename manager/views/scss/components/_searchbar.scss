@@ -1,4 +1,5 @@
 .quick-search {
+    color: $txt-body;
     .search-primary-scroll {
         max-height: 300px;
         overflow: auto;
@@ -13,28 +14,25 @@
     & &__form {
         padding: 0;
         background-color: $bg-white;
-        color: #5c5f62;
     }
     &__wrapper {
-        background-color: #fff;
-        color: $txt-body;
-        color: #697386;
-        padding: 8px 8px 0;
-        border-radius: 0 0 8px 8px;
+        min-height: 250px;
     }
 }
 
 .list--search-result {
-    margin-top: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
     max-height: 330px;
     overflow-y: auto;
     li {
         list-style: none;
         display: flex;
         flex-direction: column;
-        margin-bottom: 1rem;
+        margin-bottom: 2.5rem;
         h6 {
             padding: 8px 8px 0 8px;
+            margin: 0;
         }
     }
     .search-result {
