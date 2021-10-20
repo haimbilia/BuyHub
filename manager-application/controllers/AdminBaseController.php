@@ -960,7 +960,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
     {
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         if (!empty($fields)) {

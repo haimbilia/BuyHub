@@ -1,16 +1,18 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
-$keywordPlaceholder = isset($keywordPlaceholder) ? $keywordPlaceholder : Labels::getLabel('LBL_SEARCH', $siteLangId);
+$keywordPlaceholder = isset($keywordPlaceholder) ? $keywordPlaceholder : Labels::getLabel('FRM_SEARCH', $siteLangId);
+$onSubmit = $onSubmit ?? 'searchRecords(this); return(false);';
 
 $frmSearch->setFormTagAttribute('name', 'frmRecordSearch');
-$frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this, false); return(false);');
+$frmSearch->setFormTagAttribute('onsubmit', $onSubmit);
 $frmSearch->setFormTagAttribute('id', 'frmRecordSearch');
 $frmSearch->setFormTagAttribute('class', 'form');
 
 $keyWordFld = $frmSearch->getField('keyword');
-
-$keyWordFld->addFieldtagAttribute('class', 'form-control');
-$keyWordFld->setFieldtagAttribute('placeholder', $keywordPlaceholder);
+if (null != $keyWordFld) {
+    $keyWordFld->addFieldtagAttribute('class', 'form-control');
+    $keyWordFld->setFieldtagAttribute('placeholder', $keywordPlaceholder);
+}
 
 $frmFields = [
     'hidden' => [],
@@ -19,74 +21,99 @@ $frmFields = [
 
 $i = $x = 0;
 $haveExtraFlds = false;
+$firstElement = [];
 foreach ($frmSearch->getAllFields() as $key => $frmFld) {
     if ('btn_submit' == $frmFld->getName() || 'keyword' == $frmFld->getName()) {
         continue;
     } else if ('hidden' == $frmFld->fldType) {
         $frmFields['hidden'][] = $frmFld->getName();
     } else {
-        if ('btn_clear' != $frmFld->getName() && false === $haveExtraFlds) {
-            $haveExtraFlds = true;
-        }
+        if (null == $keyWordFld && empty($firstElement) && 'btn_clear' != $frmFld->getName()) {
+            $firstElement = [
+                'name' => $frmFld->getName(),
+                'caption' => $frmFld->getCaption()
+            ];
+        } else {
+            if ('btn_clear' != $frmFld->getName() && false === $haveExtraFlds) {
+                $haveExtraFlds = true;
+            }
+            
+            $frmFields['advSrchFlds'][$x][] = [
+                'name' => $frmFld->getName(),
+                'caption' => $frmFld->getCaption()
+            ];
 
-        $frmFields['advSrchFlds'][$x][] = [
-            'name' => $frmFld->getName(),
-            'caption' => $frmFld->getCaption()
-        ];
-
-        $i++;
-        if (3 == $i) {
-            $x++;
-            $i = 0;
+            $i++;
+            if (3 == $i) {
+                $x++;
+                $i = 0;
+            }
         }
     }
 }
 
 echo $frmSearch->getFormTag();
-foreach ($frmFields['hidden'] as $fldName) {
-    echo $frmSearch->getFieldHtml($fldName);
-}
-?>
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="input-group">
-                    <?php echo $frmSearch->getFieldHtml('keyword'); ?>
-                    <div class="input-group-append">
-                        <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                    </div>
-                </div>
-            </div>
+    foreach ($frmFields['hidden'] as $fldName) {
+        echo $frmSearch->getFieldHtml($fldName);
+    }
 
-            <?php if ($haveExtraFlds) { ?>
-                <div class="col-md-2">
-                    <a class="btn btn-link" data-toggle="collapse" href="#advanceSearch" aria-expanded="false" aria-controls="advanceSearch">
-                        <?php echo Labels::getLabel('LBL_ADVANCE_SEARCH', $siteLangId); ?>
-                    </a>
-                </div>
-            <?php } ?>
-        </div>
-
-        <?php if ($haveExtraFlds) { ?>
-            <div class="collapse" id="advanceSearch">
-                <div class="separator separator-dashed my-4"></div>
-                <?php
-                foreach ($frmFields['advSrchFlds'] as $fldsGroup) { ?>
-                    <div class="row">
-                        <?php foreach ($fldsGroup as $frmFld) { ?>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="label"><?php echo $frmFld['caption']; ?></label>
-                                    <?php echo $frmSearch->getFieldHtml($frmFld['name']); ?>
+    if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) { ?>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <?php if (null != $keyWordFld) { ?>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+                                <div class="input-group-append">
+                                    <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
                                 </div>
+                            </div>
+                        </div>
+                    <?php } else { ?>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <?php 
+                                    $fld = $frmSearch->getField($firstElement['name']);
+                                    $fld->addFieldTagAttribute('class', 'form-control');
+                                    $fld->addFieldTagAttribute('title', $firstElement['caption']);
+                                    echo $frmSearch->getFieldHtml($firstElement['name']); ?>
+                                <div class="input-group-append">
+                                    <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+
+                    <?php if ($haveExtraFlds) { ?>
+                        <div class="col-md-3">
+                            <a class="btn btn-link" data-toggle="collapse" href="#advanceSearch" aria-expanded="false" aria-controls="advanceSearch">
+                                <?php echo Labels::getLabel('BTN_ADVANCE_SEARCH', $siteLangId); ?>
+                            </a>
+                        </div>
+                    <?php } ?>
+                </div>
+
+                <?php if ($haveExtraFlds) { ?>
+                    <div class="collapse" id="advanceSearch">
+                        <div class="separator separator-dashed my-4"></div>
+                        <?php
+                        foreach ($frmFields['advSrchFlds'] as $itr => $fldsGroup) { ?>
+                            <div class="row">
+                                <?php foreach ($fldsGroup as $frmFld) { ?>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="label"><?php echo $frmFld['caption']; ?></label>
+                                            <?php echo $frmSearch->getFieldHtml($frmFld['name']); ?>
+                                        </div>
+                                    </div>
+                                <?php } ?>
                             </div>
                         <?php } ?>
                     </div>
                 <?php } ?>
             </div>
-        <?php } ?>
-    </div>
-</div>
+        </div>
+    <?php } ?>
 </form>
 <?php echo $frmSearch->getExternalJS(); ?>

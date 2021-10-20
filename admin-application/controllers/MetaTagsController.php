@@ -376,7 +376,7 @@ class MetaTagsController extends AdminBaseController
         return $frm;
     }
 
-    private function getSearchForm($metaType)
+    public function getSearchForm($metaType = '')
     {
         switch ($metaType) {
             case MetaTag::META_GROUP_PRODUCT_DETAIL:

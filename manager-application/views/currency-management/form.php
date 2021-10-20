@@ -12,5 +12,4 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('currency_active');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
-require_once(CONF_THEME_PATH . '_partial/listing/form.php'); 
-?>
+require_once(CONF_THEME_PATH . '_partial/listing/form.php');

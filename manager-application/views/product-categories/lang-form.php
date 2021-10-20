@@ -47,7 +47,7 @@ $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY
 $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
 if (!empty($translatorSubscriptionKey) && $prodcat_lang_id != $siteDefaultLangId) {
     $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
-    $langFld->htmlAfterField = '<a href="javascript:void(0);" onclick="categoryLangForm(' . $prodcat_id . ', ' . $prodcat_lang_id . ', 1)" class="btn" title="' .  Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId) . '">
+    $langFld->htmlAfterField = '<a href="javascript:void(0);" onclick="categoryLangForm(' . $prodcat_id . ', ' . $prodcat_lang_id . ', 1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $siteLangId) . '">
                                         <svg class="svg" width="18" height="18">
                                             <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
                                             </use>

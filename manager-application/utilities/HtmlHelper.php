@@ -122,12 +122,14 @@ class HtmlHelper
 
     public static function addSearchButton(Form &$frm, string $lbl = '')
     {
-        $frm->addHtml('', 'btn_submit', self::addButtonHtml(Labels::getLabel('LBL_SEARCH', CommonHelper::getLangId()), 'submit', 'btn_submit'));
+        $lbl = empty($lbl) ? Labels::getLabel('FRM_SEARCH', CommonHelper::getLangId()) : $lbl;
+        $frm->addHtml('', 'btn_submit', self::addButtonHtml($lbl, 'submit', 'btn_submit'));
     }
 
-    public static function addClearButton(Form &$frm)
+    public static function addClearButton(Form &$frm, string $lbl = '')
     {
-        $frm->addHtml('', 'btn_clear', self::addButtonHtml(Labels::getLabel('LBL_CLEAR', CommonHelper::getLangId()), 'button', 'btn_clear', 'btn btn-light', 'clearSearch()'));
+        $lbl = empty($lbl) ? Labels::getLabel('FRM_CLEAR', CommonHelper::getLangId()) : $lbl;
+        $frm->addHtml('', 'btn_clear', self::addButtonHtml($lbl, 'button', 'btn_clear', 'btn btn-light', 'clearSearch()'));
     }
 
     public static function renderHiddenFields(Form $frmSearch)

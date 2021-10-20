@@ -14,7 +14,6 @@ $(document).on("click", ".headerColumnJs", function (e) {
 
     $('.sortingIconJs').remove();
     $('.headerColumnJs').removeClass('sorting_asc sorting_desc');
-
     if (document.getElementById("sortOrder").value == 'ASC') {
         if ('undefined' != typeof frm) {
             $(frm.sortOrder).val('DESC');
@@ -43,18 +42,18 @@ $(document).on("click", ".headerColumnJs", function (e) {
 /* Reset result on clear on keyword. */
 $(document).on('search', "input[name='keyword']", function () {
     if ('' == $(this).val()) {
-        searchRecords(document.frmRecordSearch, false);
+        searchRecords(document.frmRecordSearch);
     }
 });
 
-$(document).on('keyup', '.modalFormJs, .modalLangFormJs', function(e) {
+$(document).on('keyup', '.modalFormJs, .modalLangFormJs', function (e) {
     e.stopImmediatePropagation();
     if (e.keyCode === 13) {
         $('.submitBtnJs').click();
     }
 });
 
-$(document).on('click', '.resetModalFormJs', function(e) {
+$(document).on('click', '.resetModalFormJs', function (e) {
     if (0 > $('.navTabsJs .nav-link').length) {
         $('.navTabsJs .nav-link.active').click();
     } else {
@@ -129,8 +128,7 @@ $(document).on('click', '.resetModalFormJs', function(e) {
     }
 
     reloadList = function () {
-        var frm = document.frmRecordSearchPaging;
-        searchRecords(frm);
+        searchRecords(document.frmRecordSearchPaging);
     };
 
     searchRecords = function (frm) {
@@ -143,7 +141,6 @@ $(document).on('click', '.resetModalFormJs', function(e) {
         if (frm) {
             data = fcom.frmData(frm);
         }
-
         $(listingTableJs).prepend(fcom.getLoader());
 
         fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
@@ -169,14 +166,14 @@ $(document).on('click', '.resetModalFormJs', function(e) {
         document.frmRecordSearch.submit();
     }
 
-    clearSearch = function () {
+    clearSearch = function (loadRowsOnly = false) {
         document.frmRecordSearch.reset();
         $("input:checkbox[name=listingColumns]:checked").each(function () {
             if ($(this).attr('disabled') != 'disabled') {
                 $(this).prop('checked', false);
             }
         });
-        searchRecords(document.frmRecordSearch, false);
+        searchRecords(document.frmRecordSearch, loadRowsOnly);
     };
 
     setColumnsData = function (frm) {
@@ -565,6 +562,21 @@ $(document).on('click', '.resetModalFormJs', function(e) {
             rect.right <= (window.innerWidth || document.documentElement.clientWidth)
 
         );
+    }
+
+    isElement = function (obj) {
+        try {
+            //Using W3 DOM2 (works for FF, Opera and Chrome)
+            return obj instanceof HTMLElement;
+        }
+        catch (e) {
+            //Browsers not supporting W3 DOM2 don't have HTMLElement and
+            //an exception is thrown and we end up here. Testing some
+            //properties that all elements have (works on IE7)
+            return (typeof obj === "object") &&
+                (obj.nodeType === 1) && (typeof obj.style === "object") &&
+                (typeof obj.ownerDocument === "object");
+        }
     }
 })();
 
