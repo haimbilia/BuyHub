@@ -397,4 +397,25 @@ class HomeController extends AdminBaseController
         Message::addErrorMessage(Labels::getLabel('MSG_Please_select_any_language', $this->siteLangId));
         FatUtility::dieWithError(Message::getHtml());
     }
+
+    public function segregateUrl()
+    {
+        $url = FatApp::getPostedData('url', FatUtility::VAR_STRING, '');
+        if (empty($url)) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+        }
+
+        $segments = CommonHelper::segregateUrl($url);
+        if (empty($segments)) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_URL', $this->siteLangId), true);
+        }
+
+        $data = [
+            'controller' => $segments[0] ?? '',
+            'action' => $segments[1] ?? '',
+            'recordId' => $segments[2] ?? 0,
+            'subRecordId' => $segments[3] ?? 0,
+        ];
+        FatUtility::dieJsonSuccess($data);
+    }
 }
