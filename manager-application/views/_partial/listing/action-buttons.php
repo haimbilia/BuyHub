@@ -23,7 +23,7 @@ if (isset($newRecordBtn) && true === $newRecordBtn && $canEdit) {
                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
                 </use>
             </svg>
-        </i><span> ' . Labels::getLabel('LBL_NEW', $siteLangId) . '</span>',
+        </i><span> ' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>',
         true
     );
 }

@@ -1904,26 +1904,25 @@ class CommonHelper extends FatUtility
         return $str;
     }
 
-    public static function getUrlTypeData($url)
+    public static function segregateUrl(string $url): array
     {
         if (empty($url)) {
-            return false;
+            return [];
         }
 
         if (strpos($url, "?") !== false) {
             $url = str_replace('?', '/?', $url);
         }
-        $originalUrl = $url;
         $url = preg_replace('/https:/', 'http:', $url, 1);
         /* [ Check url rewritten by the system and "/" discarded in url rewrite*/
-        $systemUrl = UrlHelper::generateFullUrl();
+        $systemUrl = UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONTEND);
         $systemUrl = preg_replace('/https:/', 'http:', $systemUrl, 1);
         $systemUrl = substr($url, strlen($systemUrl));
         $systemUrl = rtrim($systemUrl, '/');
         $customUrl = array_filter(explode('/', $systemUrl));
         $customUrl = array_values($customUrl);
         if (empty($customUrl)) {
-            return false;
+            return [];
         }
         $srch = UrlRewrite::getSearchObject();
         $srch->doNotCalculateRecords();
@@ -1937,9 +1936,17 @@ class CommonHelper extends FatUtility
         } else {
             $url = $row['urlrewrite_original'];
         }
+        
+        return array_values(array_filter(explode('/', $url)));
+    }
 
+    public static function getUrlTypeData($url)
+    {
+        $arr = self::segregateUrl($url);
+        if (empty($arr)) {
+            return false;
+        }
 
-        $arr = array_values(array_filter(explode('/', $url)));
         $controller = (isset($arr[0])) ? $arr[0] : '';
         array_shift($arr);
         $action = (isset($arr[0])) ? $arr[0] : '';

@@ -1,7 +1,6 @@
 (function ($) {
     $.ykmodal = function (data, modalClass = "", dialogClass = "", bodyClass = "") {
         modalClass = "" === modalClass ? "fixed-right" : modalClass;
-        console.log(modalClass);
         dialogClass = "" === dialogClass ? "modal-dialog-vertical" : dialogClass;
         bodyClass = "" === bodyClass ? "pd-0" : bodyClass;
 

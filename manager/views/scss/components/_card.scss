@@ -11,9 +11,9 @@ $card:'card';
     border-radius: $radius-common;
     border: none;
     margin-bottom: 20px;
-    // +.#{$card} {
-    //     margin-top: 20px;
-    // }
+    +.#{$card} {
+        //margin-top: 20px;
+    }
     &-head {
         $selfHead: &;
         display: flex;
@@ -21,6 +21,7 @@ $card:'card';
         justify-content: space-between;
         position: relative;
         padding: 20px 25px;
+        border-bottom: $border;
         &-label {
             color: $txt-body;
             font-size: 1.2rem;
@@ -29,18 +30,18 @@ $card:'card';
             flex-direction: column;
         }
         &-title {
-            font-size: inherit;
+            font-size: 1.1rem;
             font-weight: inherit;
             line-height: 1.5;
             margin: 0;
             padding: 0;
+            >i {
+                margin-#{$end-direction}: 0.5rem;
+            }
         }
         .text-muted {
             font-size: 0.8rem;
             color: $txt-gray;
-        }
-        &~.card-body {
-            padding-top: 0;
         }
     }
     &-icon {
@@ -338,6 +339,8 @@ $card:'card';
     }
     &#{&}-tabs {
         #{$selfHead} {
+            padding-top: 0;
+            padding-bottom: 0;
             #{$selfHead}-toolbar {
                 display: flex;
                 align-items: stretch;

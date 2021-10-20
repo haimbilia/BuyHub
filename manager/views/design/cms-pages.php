@@ -81,12 +81,117 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="search" class="form-control" name="search" value=""
-                                                        placeholder="Search">
+                                                    <div class="input-group">
+                                                        <input type="search" class="form-control" name="search" value=""
+                                                            placeholder="Search">
+                                                        <div class="input-group-append">
+                                                            <button type="button"
+                                                                class="btn btn-brand btn-wide ml-2">Search</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
+
                                                 <div class="col-md-2">
-                                                    <button type="button"
-                                                        class="btn btn-brand btn-block">Search</button>
+                                                    <a class="btn btn-link collapsed" data-toggle="collapse"
+                                                        href="#collapseExample" aria-expanded="false"
+                                                        aria-controls="collapseExample">Advanced
+                                                        Search</a>
+                                                </div>
+                                            </div>
+                                            <div class="collapse" id="collapseExample" style="">
+                                                <div class="separator separator-dashed my-4"></div>
+
+                                                <div class="row">
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="label">From
+                                                                [USD]</label>
+                                                            <input data-field-caption="From [USD]"
+                                                                data-fatreq="{&quot;required&quot;:false,&quot;floating&quot;:true,&quot;range&quot;:{&quot;minval&quot;:0,&quot;maxval&quot;:9999999999,&quot;numeric&quot;:true}}"
+                                                                type="text" name="minprice" value="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="label">To
+                                                                [USD]</label>
+                                                            <input data-field-caption="To [USD]"
+                                                                data-fatreq="{&quot;required&quot;:false,&quot;floating&quot;:true,&quot;range&quot;:{&quot;minval&quot;:0,&quot;maxval&quot;:9999999999,&quot;numeric&quot;:true}}"
+                                                                type="text" name="maxprice" value="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="label">Status</label>
+                                                            <select data-field-caption="Status"
+                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                name="status">
+                                                                <option value="-1">Does not matter</option>
+                                                                <option value="0">Withdrawal Request Pending
+                                                                </option>
+                                                                <option value="1">Withdrawal Request Completed
+                                                                </option>
+                                                                <option value="2">Withdrawal Request Approved
+                                                                </option>
+                                                                <option value="3">Withdrawal Request Declined
+                                                                </option>
+                                                                <option value="4">Withdrawal Request Processed
+                                                                </option>
+                                                                <option value="5">Withdrawal Request Payout
+                                                                    Failed
+                                                                </option>
+                                                                <option value="6">Withdrawal Request Payout
+                                                                    Unclamed
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="label">Date
+                                                                From</label>
+                                                            <input readonly="readonly"
+                                                                class="field--calender fld-date hasDatepicker"
+                                                                data-field-caption="Date From"
+                                                                id="date_from_1630320541_71"
+                                                                data-fatdateformat="yy-mm-dd"
+                                                                data-fatreq="{&quot;required&quot;:false}" type="text"
+                                                                name="date_from" value="">
+
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="label">Date To</label>
+                                                            <input readonly="readonly"
+                                                                class="field--calender fld-date hasDatepicker"
+                                                                data-field-caption="Date To" id="date_to_1630320541_93"
+                                                                data-fatdateformat="yy-mm-dd"
+                                                                data-fatreq="{&quot;required&quot;:false}" type="text"
+                                                                name="date_to" value="">
+
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="label">User
+                                                                Type</label>
+                                                            <select data-field-caption="User Type"
+                                                                data-fatreq="{&quot;required&quot;:false}" name="type">
+                                                                <option value="-1" selected="selected">Does Not
+                                                                    Matter</option>
+                                                                <option value="1">Buyer</option>
+                                                                <option value="2">Seller</option>
+                                                                <option value="4">Advertiser</option>
+                                                                <option value="3">Affiliate</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -544,8 +649,7 @@
                                                             class="btn btn-outline-brand">Cancel</button>
                                                     </div>
                                                     <div class="col-auto">
-                                                        <button type="submit"
-                                                            class="btn btn-brand  ">Update</button>
+                                                        <button type="submit" class="btn btn-brand  ">Update</button>
                                                     </div>
                                                 </div>
                                             </div>

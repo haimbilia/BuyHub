@@ -15,6 +15,14 @@ if (isset($editButton) && is_array($editButton)) {
     $actionItems = true;
 }
 
+if (isset($otherButtons) && is_array($otherButtons)) {
+    foreach ($otherButtons as $attr) {
+        $li = $ul->appendElement('li');
+        $li->appendElement('a', $attr['attr'], (string) $attr['label'], true);
+    }
+    $actionItems = true;
+}
+
 if (isset($deleteButton) && is_array($deleteButton)) {
     $onClick = isset($deleteButton['onClick']) ? $deleteButton['onClick'] : "deleteRecord(" . $recordId . ")";
 
@@ -25,14 +33,6 @@ if (isset($deleteButton) && is_array($deleteButton)) {
         xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
     </use>
 </svg>', true);
-    $actionItems = true;
-}
-   
-if (isset($otherButtons) && is_array($otherButtons)) {
-    foreach ($otherButtons as $attr) {
-        $li = $ul->appendElement('li');
-        $li->appendElement('a', $attr['attr'], (string) $attr['label'], true);
-    }
     $actionItems = true;
 }
 

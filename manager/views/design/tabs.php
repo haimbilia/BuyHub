@@ -456,7 +456,7 @@
 							<!--end::card-->
 
 							<!--begin::card-->
-							<div class="card card--tabs">
+							<div class="card card-tabs">
 								<div class="card-head">
 									<div class="card-head-label">
 										<h3 class="card-head-title">
@@ -500,7 +500,7 @@
 							<!--end::card-->
 
 							<!--begin::card-->
-							<div class="card card--tabs">
+							<div class="card card-tabs">
 								<div class="card-head">
 									<div class="card-head-toolbar">
 										<ul class="nav nav-tabs nav-tabs-line nav-tabs-line-success nav-tabs-line-2x" role="tablist">
@@ -539,7 +539,7 @@
 							<!--end::card-->
 
 							<!--begin::card-->
-							<div class="card card--tabs">
+							<div class="card card-tabs">
 								<div class="card-head">
 									<div class="card-head-toolbar">
 										<ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x nav-tabs-line-right" role="tablist">

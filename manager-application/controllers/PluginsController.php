@@ -27,8 +27,6 @@ class PluginsController extends AdminBaseController
 
         $this->set('frmSearch', $frmSearch);
         $this->set('activeTab', Plugin::TYPE_CURRENCY_CONVERTER);
-        $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_PLUGINS', $this->siteLangId));
         $this->set('includeEditor', true);
         $this->getListingData();
 
