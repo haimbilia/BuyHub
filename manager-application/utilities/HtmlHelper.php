@@ -42,12 +42,12 @@ class HtmlHelper
         ];
     }
 
-    public static function formatFormFields(Form &$frm)
+    public static function formatFormFields(Form &$frm, $col = 12)
     {
         $frm->setCustomRendererClass('FormRendererBS');
         /* For Each Row On Above Elements */
         $frm->developerTags['colWidthClassesDefault'] = [null, 'col-md-', null, null];
-        $frm->developerTags['colWidthValuesDefault'] = [null, '12', null, null];
+        $frm->developerTags['colWidthValuesDefault'] = [null, $col, null, null];
         /* For Each Row On Above Elements */
 
         /* For Input Fields */
