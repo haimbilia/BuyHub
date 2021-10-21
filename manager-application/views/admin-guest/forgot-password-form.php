@@ -11,7 +11,7 @@ $fld->addFieldTagAttribute('autocomplete', 'off');
 $fld->setRequiredStarWith('none');
 
 $fld = $frm->getField('btn_forgot');
-$fld->addFieldTagAttribute('class', 'btn btn-brand btn-lg btn-block not-allowed');
+$fld->addFieldTagAttribute('class', 'btn btn-brand btn-lg btn-block');
 $captchaFld = $frm->getField('g-recaptcha-response');
 HtmlHelper::formatFormFields($frm);
 

@@ -12,7 +12,8 @@
     <div class="sidebar-menu">
         <ul class="menu">
             <?php if (
-                $objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
             ) {    ?>
                 <li class="menu-item dropdown">
                     <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?>">
@@ -33,11 +34,17 @@
                                     </a>
                                 </li>
                             <?php } ?>
+                            <?php if ($objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a href="<?php echo UrlHelper::generateUrl('ProductCategories'); ?>" class="nav_link ">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_CATEGORIES', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
                         </ul>
                     </div>
                 </li>
             <?php } ?>
-
             <?php if (
                 $objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true) ||
@@ -76,6 +83,57 @@
                                     </a>
                                 </li>
                             <?php } ?>
+                        </ul>
+                    </div>
+                </li>
+            <?php } ?>
+
+            <?php if (
+                $objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true) || 
+                $objPrivilege->canViewBlogPosts(AdminAuthentication::getLoggedAdminId(), true) ||               
+                $objPrivilege->canViewBlogContributions(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewBlogComments(AdminAuthentication::getLoggedAdminId(), true)
+            ) { ?>
+                <li class="menu-item dropdown">
+                    <button type="button" class="menu-link" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?>">
+                        <span class="menu-icon">
+                            <svg class="svg" width="24" height="24">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-import-export">
+                                </use>
+                            </svg>
+                        </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
+                        <h6 class=""><?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?></h6>
+                        <ul class="nav">
+                            <?php if($objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true)){ ?>
+                                <li class="nav_item">
+                                    <a href="<?php echo UrlHelper::generateUrl('BlogPostCategories'); ?>" class="nav_link ">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_BLOG_POST_CATEGORIES', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if($objPrivilege->canViewBlogPosts(AdminAuthentication::getLoggedAdminId(), true)){ ?>
+                                <li class="nav_item">
+                                    <a href="<?php echo UrlHelper::generateUrl('BlogPosts'); ?>" class="nav_link ">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_BLOG_POSTS', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if($objPrivilege->canViewBlogContributions(AdminAuthentication::getLoggedAdminId(), true)){ ?>
+                                <li class="nav_item">
+                                    <a href="<?php echo UrlHelper::generateUrl('BlogContributions'); ?>" class="nav_link ">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_BLOG_CONTRIBUTIONS', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if($objPrivilege->canViewBlogComments(AdminAuthentication::getLoggedAdminId(), true)){ ?>
+                                <li class="nav_item">
+                                    <a href="<?php echo UrlHelper::generateUrl('BlogComments'); ?>" class="nav_link ">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_BLOG_COMMENTS', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>  
                         </ul>
                     </div>
                 </li>

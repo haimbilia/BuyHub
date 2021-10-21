@@ -13,6 +13,7 @@ class BlogPostCategory extends MyAppModel
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
         $this->db = FatApp::getDb();
+        $this->objMainTableRecord->setSensitiveFields([self::DB_TBL_PREFIX . 'id']);
     }
 
     public static function getSearchObject($includeChildCount = false, $langId = 0, $bpcategory_active = true)
@@ -357,24 +358,24 @@ class BlogPostCategory extends MyAppModel
         return $return;
     }
 
-    public static function getBlogPostCatParentChildWiseArr(int $langId = 0, int $parentId = 0, bool $includeChildCat = true, bool $forSelectBox = false): array
+    public static function getBlogPostCatParentChildWiseArr(int $langId = 0, int $parentId = 0, bool $includeChildCat = true, bool $forSelectBox = false , bool $isActive = true): array
     {
         $parentId = FatUtility::int($parentId);
         $langId = FatUtility::int($langId);
         if (!$langId) {
             trigger_error(Labels::getLabel('MSG_Language_not_specified', $langId), E_USER_ERROR);
         }
-        $bpCatSrch = new BlogPostCategorySearch($langId);
+        $bpCatSrch = new BlogPostCategorySearch($langId, $isActive);
         $bpCatSrch->doNotCalculateRecords();
-        $bpCatSrch->doNotLimitRecords();
-        $bpCatSrch->addMultipleFields(array('bpcategory_id', 'ifNull(bpcategory_name,bpcategory_identifier) as bpcategory_name'));
+        $bpCatSrch->doNotLimitRecords();        
         $bpCatSrch->setParent($parentId);
         $bpCatSrch->addOrder('bpcategory_display_order', 'asc');
 
         $rs = $bpCatSrch->getResultSet();
         if ($forSelectBox) {
+            $bpCatSrch->addMultipleFields(array('bpcategory_id', 'ifNull(bpcategory_name,bpcategory_identifier) as bpcategory_name'));
             $categoriesArr = FatApp::getDb()->fetchAllAssoc($rs);
-        } else {
+        } else {            
             $categoriesArr = FatApp::getDb()->fetchAll($rs);
         }
         if (!$includeChildCat) {
@@ -468,5 +469,15 @@ class BlogPostCategory extends MyAppModel
             return $row;
         }
         return false;
+    }
+
+    public function updateCatParent($parentCatId)
+    {
+        if ($this->mainTableRecordId < 1) {
+            return false;
+        }
+        $parentCatId = FatUtility::int($parentCatId);         
+        FatApp::getDb()->updateFromArray(static::DB_TBL, array(static::DB_TBL_PREFIX . 'parent' => $parentCatId), array('smt' => static::DB_TBL_PREFIX . 'id = ?', 'vals' => array($this->mainTableRecordId)));     
+        return true;
     }
 }

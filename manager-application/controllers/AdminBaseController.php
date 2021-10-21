@@ -970,4 +970,78 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         HtmlHelper::addSearchButton($frm);
         return $frm;
     }
+
+    public function deleteRecord()
+    {   
+        $this->checkEditPrivilege();       
+        
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
+            FatUtility::dieJsonError($this->str_invalid_request_id);
+        }      
+
+        $this->markAsDeleted($recordId);
+        $this->set('msg', $this->str_delete_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    private function markAsDeleted($recordId)
+    {
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            FatUtility::dieJsonError($this->str_invalid_request_id);
+        }
+
+        $this->setModel([$recordId]);
+        /*
+        if (!$this->modelObj->canMarkRecordDelete($recordId)) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        */
+        $this->modelObj->assignValues(
+            [
+                $this->modelObj::tblFld('deleted') => 1,
+                $this->modelObj::tblFld('identifier') => 'mysql_func_CONCAT(' . $this->modelObj::tblFld('identifier') . ',"{deleted}",' . $this->modelObj::tblFld('id') . ')'
+            ],
+            false,
+            '',
+            '',
+            true
+        );
+        if (!$this->modelObj->save()) {
+            LibHelper::exitWithError($this->modelObj->getError(), true);
+        }
+    }
+
+    public function updateStatus()
+    {
+        $this->checkEditPrivilege();
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (0 == $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $this->changeStatus($recordId, $status);
+        $this->set('msg', $this->str_update_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    private function changeStatus($recordId, $status)
+    {
+        $status = FatUtility::int($status);
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $this->setModel([$recordId]);
+        if (!$this->modelObj->changeStatus($status)) {
+            LibHelper::exitWithError($this->modelObj->getError(), true);
+        }
+    }
 }

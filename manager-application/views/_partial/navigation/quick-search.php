@@ -22,6 +22,60 @@
                     </li>
                 <?php } ?>
                 <?php if (
+                    $objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true) || 
+                    $objPrivilege->canViewBlogPosts(AdminAuthentication::getLoggedAdminId(), true) ||                    
+                    $objPrivilege->canViewBlogContributions(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewBlogComments(AdminAuthentication::getLoggedAdminId(), true)
+                ) { ?>
+                    <li>
+                        <h6 class="title"><?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?></h6>
+                        <?php if ($objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('BlogPostCategories'); ?>"><?php echo Labels::getLabel('NAV_BLOG_POST_CATEGORIES', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewBlogPosts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('BlogPosts'); ?>"><?php echo Labels::getLabel('NAV_BLOG_POSTS', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewBlogContributions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('BlogContributions'); ?>"><?php echo Labels::getLabel('NAV_BLOG_CONTRIBUTIONS', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewBlogComments(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('BlogComments'); ?>"><?php echo Labels::getLabel('NAV_BLOG_COMMENTS', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
+                    </li>
+                <?php } ?>
+                <?php if (
                     $objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)
