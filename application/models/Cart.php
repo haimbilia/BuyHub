@@ -1802,6 +1802,10 @@ class Cart extends FatModel
             $tempUserId = session_id();
         }
 
+        if (!UserAuthentication::isUserLogged() && !UserAuthentication::isGuestUserLogged() && $userId > 0) {
+            $cart_user_id = $userId;
+        }
+
         /* to keep track of temporary hold the product stock[ */
         $db->updateFromArray('tbl_product_stock_hold', array('pshold_user_id' => $cart_user_id), array('smt' => 'pshold_user_id = ?', 'vals' => array($tempUserId)));
         /* ] */
