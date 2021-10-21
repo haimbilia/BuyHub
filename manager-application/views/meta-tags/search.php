@@ -151,13 +151,13 @@ if (1 > $loadRows) {
 } ?>
 <div class="card listingTableJs">
     <div class="card-head">
-        <h3 class="card-head-label">
-            <span class="card-head-title">
+        <div class="card-head-label">
+            <h3 class="card-head-title">
                 <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_{TAB-TITLE}_META_TAGS_LISTING', $siteLangId), ['{TAB-TITLE}' =>  $tabsArr[$metaType]['name']]); ?>
-            </span>
-        </h3>
+            </h3>
+        </div>
         <?php if ($metaType == MetaTag::META_GROUP_ADVANCED) { ?>
-            <div class="card-toolbar">
+        <div class="card-toolbar">
             <?php
                 $data = [
                     'canEdit' => $canEdit,
@@ -182,7 +182,7 @@ if (1 > $loadRows) {
                 ];
                 $this->includeTemplate('_partial/listing/action-buttons.php', $data, false);
                 ?>
-            </div>
+        </div>
         <?php } ?>
     </div>
     <div class="card-body">

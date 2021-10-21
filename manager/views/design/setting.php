@@ -21,9 +21,9 @@
                     <div class="container">
                         <div class="card">
                             <div class="card-head">
-                                <h3 class="card-head-label">
-                                    <span class="card-head-title">Settings </span>
-                                </h3>
+                                <div class="card-head-label">
+                                    <h3 class="card-head-title">Settings </h3>
+                                </div>
                                 <div class="card-toolbar">
                                     <div class="maintenance-mode">
                                         <label class="switch switch-sm">

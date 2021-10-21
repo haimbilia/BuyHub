@@ -75,12 +75,9 @@
                 <main class="main">
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <div class="card">
-                                    <div
-                                        class="card-head ribbon ribbon--brand ribbon--shadow ribbon--left ribbon--round">
-                                        <div class="ribbon__target" style="top: 15px; right: -2px;"><span><i
-                                                    class="far fa-credit-card"></i> Paid Via Stripe </span></div>
+                                    <div class="card-head">
                                         <div class="card-head-label">
                                             <h3 class="card-head-title">
                                                 <a class="back" href="">
@@ -95,6 +92,18 @@
                                             </h3>
 
                                         </div>
+
+                                        <div class="card-toolbar">
+                                            <select class="form-control" name="" id="">
+                                                <option value="All">All</option>
+                                                <option value="Seller1">Seller1</option>
+                                                <option value="Seller1">Seller1</option>
+                                                <option value="Seller1">Seller1</option>
+                                                <option value="Seller1">Seller1</option>
+                                                <option value="Seller1">Seller1</option>
+
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="card-body p-0">
                                         <div class="table-wrap">
@@ -103,7 +112,7 @@
                                                     <tr>
                                                         <th>Items Summary</th>
                                                         <th>Store</th>
-                                                        <th>Selling Price</th>
+                                                        <th>Status</th>
                                                         <th class="align-right">Amount</th>
                                                     </tr>
                                                 </thead>
@@ -141,8 +150,11 @@
                                                                 </svg> Akshay's E-Store
                                                             </div>
                                                         </td>
-                                                        <td><span class="currency-value" dir="ltr"><span
-                                                                    class="currency-symbol">$</span>20.00</span></td>
+
+
+                                                        <td>
+                                                            <span class="badge badge-info">Processing</span>
+                                                        </td>
                                                         <td class="align-right"><span class="currency-value"
                                                                 dir="ltr"><span
                                                                     class="currency-symbol">$</span>20.00</span></td>
@@ -180,8 +192,10 @@
                                                                 </svg> Kanwar's Shop
                                                             </div>
                                                         </td>
-                                                        <td><span class="currency-value" dir="ltr"><span
-                                                                    class="currency-symbol">$</span>20.00</span></td>
+                                                        <td>
+                                                            <span class="badge badge-warning">Shipped</span>
+
+                                                        </td>
                                                         <td class="align-right"><span class="currency-value"
                                                                 dir="ltr"><span
                                                                     class="currency-symbol">$</span>20.00</span></td>
@@ -220,8 +234,10 @@
                                                                 </svg> James Garments Store
                                                             </div>
                                                         </td>
-                                                        <td><span class="currency-value" dir="ltr"><span
-                                                                    class="currency-symbol">$</span>20.00</span></td>
+                                                        <td>
+                                                            <span class="badge badge-success">Delivered</span>
+
+                                                        </td>
                                                         <td class="align-right"><span class="currency-value"
                                                                 dir="ltr"><span
                                                                     class="currency-symbol">$</span>20.00</span></td>
@@ -237,8 +253,104 @@
                                     </div>
 
                                 </div>
-
                                 <div class="card">
+                                    <div class="card-head">
+                                        <div class="card-head-label">
+                                            <h3 class="card-head-title">Order Payment History </h3>
+                                        </div>
+
+                                    </div>
+                                    <div class="card-body">
+                                        <form class="form" action="">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="label">Comments</label>
+                                                        <textarea> </textarea>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label class="label">Payment
+                                                            Method</label>
+                                                        <input class="form-control" type="text" value="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label class="label">Transaction id</label>
+                                                        <input class="form-control" type="text" value="">
+                                                    </div>
+
+
+
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label class="label">Amount</label>
+                                                        <input class="form-control" type="text" value="">
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <button type="reset" class="btn btn-outline-brand">Cancel</button>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <button type="submit" class="btn btn-brand">Save Changes</button>
+                                                </div>
+                                            </div>
+
+                                        </form>
+
+                                        <div class="separator separator-dashed my-5"></div>
+
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th width="10%">Added On </th>
+                                                    <th width="10%">Transaction id </th>
+                                                    <th width="15%">Payment Method </th>
+                                                    <th width="10%">Amount </th>
+                                                    <th width="15%">Comments </th>
+                                                    <th width="25%">Gateway Response </th>
+                                                    <th width="15%">Status </th>
+                                                    <th width="15%">Action </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <tr>
+                                                    <td>21/10/2021 </td>
+                                                    <td>1245787/87/ </td>
+                                                    <td>Kotak </td>
+                                                    <td>$150.00 </td>
+                                                    <td>
+                                                        <div class="break-me">Order Payments<br>
+                                                            entry </div>
+                                                    </td>
+                                                    <td>
+                                                    </td>
+                                                    <td>
+
+                                                        <span class="badge badge-success">Approved</span>
+
+                                                    </td>
+                                                    <td>
+                                                        n/a </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+
+                                <!-- <div class="card">
                                     <div class="card-head">
                                         <div class="card-head-label">
                                             <h3 class="card-head-title">Timeline</h3>
@@ -320,10 +432,10 @@
                                         </div>
                                     </div>
 
-                                </div>
+                                </div> -->
 
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
 
                                 <div class="card">
                                     <div class="card-head">
@@ -386,12 +498,15 @@
 
                                     </div>
                                     <div class="card-body">
-                                        <p class="list-text"><span class="lable">Email:</span>
-                                            tribe@dummyid.com
-                                        </p>
-                                        <p class="list-text"><span class="lable">Phone:</span>
-                                            +1 4804568915
-                                        </p>
+                                        <ul class="list-text">
+                                            <li class="">
+                                                <span class="lable">Email:</span>
+                                                <span class="value">tribe@dummyid.com</span>
+                                            </li>
+                                            <li><span class="lable">Phone:</span>
+                                                <span class="value"> +1 4804568915</span>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
 
@@ -405,26 +520,28 @@
 
                                     </div>
                                     <div class="card-body">
-                                        <p class="list-text"><span class="lable">Name:</span>
-                                            John Doe
-                                        </p>
-                                        <p class="list-text"><span class="lable">Apartment / House:</span>
-                                            University Drive
-                                        </p>
+                                        <ul class="list-text">
+                                            <li>
+                                                <span class="lable">Name:</span>
+                                                <span class="value"> John Doe</span>
+                                            </li>
+                                            <li><span class="lable">Apartment / House:</span>
+                                                <span class="value"> University Drive</span>
+                                            </li>
 
-                                        <p class="list-text"><span class="lable">City &amp; State:</span>
-                                            Mumbai, Maharashtra
-                                        </p>
-                                        <p class="list-text"><span class="lable">Postal Code:</span>
-                                            45684
-                                        </p>
-                                        <p class="list-text"><span class="lable">Select Country:</span>
-                                            India
-                                        </p>
-                                        <p class="list-text"><span class="lable">Phone:</span>
-                                            +91
-                                            7895456525
-                                        </p>
+                                            <li><span class="lable">City &amp; State:</span>
+                                                <span class="value"> Mumbai, Maharashtra</span>
+                                            </li>
+                                            <li><span class="lable">Postal Code:</span>
+                                                <span class="value"> 45684 </span>
+                                            </li>
+                                            <li><span class="lable">Select Country:</span>
+                                                <span class="value"> India</span>
+                                            </li>
+                                            <li><span class="lable">Phone:</span>
+                                                <span class="value"> +91 7895456525 </span>
+                                            </li>
+                                        </ul>
 
                                     </div>
 
@@ -439,26 +556,27 @@
 
                                     </div>
                                     <div class="card-body">
-                                        <p class="list-text"><span class="lable">Name:</span>
-                                            John Doe
-                                        </p>
-                                        <p class="list-text"><span class="lable">Apartment / House:</span>
-                                            University Drive
-                                        </p>
+                                        <ul class="list-text">
+                                            <li><span class="lable">Name:</span>
+                                                <span class="value"> John Doe </span>
+                                            </li>
+                                            <li><span class="lable">Apartment / House:</span>
+                                                <span class="value"> University Drive </span>
+                                            </li>
 
-                                        <p class="list-text"><span class="lable">City &amp; State:</span>
-                                            Mumbai, Maharashtra
-                                        </p>
-                                        <p class="list-text"><span class="lable">Postal Code:</span>
-                                            45684
-                                        </p>
-                                        <p class="list-text"><span class="lable">Select Country:</span>
-                                            India
-                                        </p>
-                                        <p class="list-text"><span class="lable">Phone:</span>
-                                            +91
-                                            7895456525
-                                        </p>
+                                            <li><span class="lable">City &amp; State:</span>
+                                                <span class="value"> Mumbai, Maharashtra </span>
+                                            </li>
+                                            <li><span class="lable">Postal Code:</span>
+                                                <span class="value"> 45684 </span>
+                                            </li>
+                                            <li><span class="lable">Select Country:</span>
+                                                <span class="value"> India </span>
+                                            </li>
+                                            <li><span class="lable">Phone:</span>
+                                                <span class="value"> +91 7895456525 </span>
+                                            </li>
+                                        </ul>
 
                                     </div>
 
@@ -475,39 +593,30 @@
                                         <i class="dropdown-toggle-custom-arrow"></i>
                                     </div>
                                     <div class="card-body collapse" id="order-block2">
-                                        <div class="payment-mode">
-                                            <div class="payment-cc">
-                                                <i class="fas fa-credit-card"></i>
-                                                <span class="payment-cc-num">**** **** **** 0005</span>
-                                            </div>
-                                            <div class="payment-id">
-                                                <h6>Transaction number </h6>
-                                                <span>ch_1Ib3rfL1bMNoOfFv4tf7HZkN</span>
-                                            </div>
-                                        </div>
+                                        <h6 class="payment-cc mb-4">
+                                            <i class="fas fa-credit-card"></i>
+                                            <span class="payment-cc-num">**** **** **** 0005</span>
+                                        </h6>
+
+
+
+                                        <ul class="list-text">
+                                            <li>
+                                                <span class="lable">Transaction number </span>
+                                                <span class="value">ch_1Ib3rfL1bMNoOfFv4tf7HZkN</span>
+                                            </li>
+                                        </ul>
                                     </div>
-
                                 </div>
-
                             </div>
-
-
-
-
-
-
                         </div>
-
                     </div>
                 </main>
 
                 <?php
         include 'includes/footer.php';
         ?>
-
-
             </div>
-
         </div>
 
     </body>

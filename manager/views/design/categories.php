@@ -79,8 +79,8 @@
                                 <div class="card">
                                     <div class="card-head">
                                         <div class="card-head-label">
-                                            <h3 class="card-head-label">
-                                                <span class="card-head-title">Catagories</span>
+                                            <h3 class="card-head-title">
+                                                Catagories
                                                 <span class="text-muted">Lorem ipsum dolor sit amet consectetur
                                                 </span>
                                             </h3>

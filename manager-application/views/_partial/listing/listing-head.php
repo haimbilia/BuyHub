@@ -6,14 +6,14 @@ $newRecordBtn = isset($newRecordBtn) ? $newRecordBtn : false;
 $otherButtons = isset($otherButtons) ? $otherButtons : []; ?>
 
 <div class="card-head">
-    <h3 class="card-head-label">
+    <div class="card-head-label">
         <?php if (isset($cardHeadTitle) && !empty($cardHeadTitle)) { ?>
-            <span class="card-head-title"><?php echo $cardHeadTitle; ?></span>
+        <h3 class="card-head-title"><?php echo $cardHeadTitle; ?></h3>
         <?php } ?>
         <?php if (isset($recordsTitle) && !empty($recordsTitle)) { ?>
-            <span class="text-muted"><?php echo $recordsTitle; ?></span>
+        <span class="text-muted"><?php echo $recordsTitle; ?></span>
         <?php } ?>
-    </h3>
+    </div>
     <div class="card-toolbar">
         <?php
         $data = [

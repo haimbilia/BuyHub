@@ -244,10 +244,10 @@
                                 </form>
                                 <div class="card">
                                     <div class="card-head">
-                                        <h3 class="card-head-label">
-                                            <span class="card-head-title">Catalog Products </span>
+                                        <div class="card-head-label">
+                                            <h3 class="card-head-title">Catalog Products </h3>
 
-                                        </h3>
+                                        </div>
                                         <div class="card-toolbar">
 
                                             <ul class="actions">

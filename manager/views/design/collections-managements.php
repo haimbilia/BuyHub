@@ -79,9 +79,9 @@
 
                                 <div class="card">
                                     <div class="card-head">
-                                        <h3 class="card-head-label">
-                                            <span class="card-head-title">Collections Managements</span>
-                                        </h3>
+                                        <div class="card-head-label">
+                                            <h3 class="card-head-title">Collections Managements</h3>
+                                        </div>
                                         <div class="card-toolbar">
                                             <ul class="actions">
                                                 <li> <a href="#" class="btn btn-icon btn-light btn-add">
@@ -872,8 +872,7 @@
                                                             class="btn btn-outline-brand">Cancel</button>
                                                     </div>
                                                     <div class="col-auto">
-                                                        <button type="submit"
-                                                            class="btn btn-brand  ">Update</button>
+                                                        <button type="submit" class="btn btn-brand  ">Update</button>
                                                     </div>
                                                 </div>
                                             </div>

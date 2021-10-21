@@ -169,11 +169,11 @@ $frm->addHiddenField('', 'plugin_type', $pluginType);
 $frm->addHiddenField('', 'status'); ?>
 
 <div class="card-head">
-    <h3 class="card-head-label">
-        <span class="card-head-title">
+    <div class="card-head-label">
+        <h3 class="card-head-title">
             <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGINS', $siteLangId), ['{PLUGIN-NAME}' =>  $pluginTypes[$type]]); ?>
-        </span>
-    </h3>
+        </h3>
+    </div>
     <div class="card-toolbar">
         <?php
         $data = [
