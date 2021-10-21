@@ -8,6 +8,14 @@ class OrderStatusController extends AdminBaseController
         $this->objPrivilege->canViewOrderStatus();
     }
 
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditOrderStatus();
+        $this->modelObj = (new ReflectionClass('OrderStatus'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->siteLangId));
+    }
+
     public function index()
     {
         $fields = $this->getFormColumns();
@@ -164,14 +172,6 @@ class OrderStatusController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {
-        $this->objPrivilege->canEditOrderStatus();
-        $this->modelObj = (new ReflectionClass('OrderStatus'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->siteLangId));
-    }
-    
     private function getForm($recordId = 0)
     {
         $recordId = FatUtility::int($recordId);

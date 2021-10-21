@@ -8,6 +8,14 @@ class StatesController extends AdminBaseController
         $this->objPrivilege->canViewStates();
     }
 
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {        
+        $this->objPrivilege->canEditStates();
+        $this->modelObj = (new ReflectionClass('States'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_STATE_SETUP', $this->siteLangId));
+    }    
+
     public function index()
     {
         $fields = $this->getFormColumns();
@@ -200,14 +208,6 @@ class StatesController extends AdminBaseController
         } 
         return $frm;
     }
-
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {        
-        $this->objPrivilege->canEditStates();
-        $this->modelObj = (new ReflectionClass('States'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_STATE_SETUP', $this->siteLangId));
-    }    
 
     protected function getLangForm($recordId = 0, $lang_id = 0)
     {

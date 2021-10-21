@@ -7,6 +7,14 @@ class CountriesController extends AdminBaseController
         parent::__construct($action);
         $this->objPrivilege->canViewCountries();
     }
+    
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditCountries();
+        $this->modelObj = (new ReflectionClass('Countries'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_COUNTRY_SETUP', $this->siteLangId));
+    }
 
     public function index()
     {
@@ -145,14 +153,6 @@ class CountriesController extends AdminBaseController
         
         Product::updateMinPrices(0, 0, 0, $recordId);       
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {
-        $this->objPrivilege->canEditCountries();
-        $this->modelObj = (new ReflectionClass('Countries'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_COUNTRY_SETUP', $this->siteLangId));
     }
 
     private function getForm()

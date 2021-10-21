@@ -10,6 +10,14 @@ class BrandsController extends AdminBaseController
         $this->rewriteUrl = Brand::REWRITE_URL_PREFIX;
     }
 
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditBrands();
+        $this->modelObj = (new ReflectionClass('Brand'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_BRAND_SETUP', $this->siteLangId));
+    }  
+
     public function index()
     {
         $fields = $this->getFormColumns();
@@ -262,15 +270,7 @@ class BrandsController extends AdminBaseController
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }      
         return $frm;
-    }
-
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {
-        $this->objPrivilege->canEditBrands();
-        $this->modelObj = (new ReflectionClass('Brand'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_BRAND_SETUP', $this->siteLangId));
-    }   
+    } 
 
     protected function getLangForm($recordId = 0, $lang_id = 0)
     {

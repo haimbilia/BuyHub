@@ -1338,3 +1338,6 @@ ON DUPLICATE KEY UPDATE plugin_name = VALUES(plugin_name);
 DELETE FROM `tbl_language_labels` WHERE `label_key`  = 'LBL_ACTION_BUTTONS';
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
 ('LBL_ACTION_BUTTONS', '1', 'Actions', '1') ON DUPLICATE KEY UPDATE label_caption = 'Actions';
+
+INSERT IGNORE INTO tbl_blog_post_lang (`postlang_post_id`, `postlang_lang_id`, `post_title`)
+  SELECT post_id, 1, post_identifier FROM tbl_blog_post;

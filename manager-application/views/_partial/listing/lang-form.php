@@ -1,15 +1,17 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($langFrm);
-$langFrm->setFormTagAttribute('data-onclear', 'editLangData(' . $recordId . ',' . array_key_first($languages) . ')');
+$langFrm->setFormTagAttribute('id', 'frmLangJs');
+$langFrm->setFormTagAttribute('data-onclear', 'editLangData(' . $recordId . ',' . $lang_id . ')');
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
 $langFrm->setFormTagAttribute('dir', $formLayout);
-$langFrm->setFormTagAttribute('onsubmit', 'saveLangData(this); return(false);');
+$langFrm->setFormTagAttribute('onsubmit', 'saveLangData($("#frmLangJs")); return(false);');
 
 $langFld = $langFrm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this.value);");
 $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-if (!empty($translatorSubscriptionKey)) {
+$siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) {
     $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
     $langFld->htmlAfterField = '<a href="javascript:void(0);" onclick="editLangData(' . $recordId . ', ' . $lang_id . ', 1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $siteLangId) . '">
                                 <svg class="svg" width="18" height="18">

@@ -8,6 +8,16 @@ class PluginsController extends AdminBaseController
         $this->objPrivilege->canViewPlugins();
     }
 
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditPlugins();
+        $this->modelObj = (new ReflectionClass('Plugin'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name'), $this->modelObj::tblFld('description')];
+        $this->isPlugin = true;
+        $identifier = Plugin::getAttributesById($this->mainTableRecordId, 'plugin_identifier');
+        $this->set('formTitle', CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $this->siteLangId), ['{PLUGIN-NAME}' => $identifier]));
+    }
+
     public function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
@@ -225,16 +235,6 @@ class PluginsController extends AdminBaseController
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {
-        $this->objPrivilege->canEditPlugins();
-        $this->modelObj = (new ReflectionClass('Plugin'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('name'), $this->modelObj::tblFld('description')];
-        $this->isPlugin = true;
-        $identifier = Plugin::getAttributesById($this->mainTableRecordId, 'plugin_identifier');
-        $this->set('formTitle', CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $this->siteLangId), ['{PLUGIN-NAME}' => $identifier]));
     }
 
     public function uploadIcon($plugin_id)

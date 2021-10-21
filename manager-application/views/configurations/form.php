@@ -4,7 +4,7 @@ $clearFormFn = isset($clearFormFn) ? $clearFormFn : 'getForm(' . $frmType . ')';
 
 HtmlHelper::formatFormFields($frm);
 $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group mt-3';
-$frm->setFormTagAttribute('class', 'form form--settings modalFormJs layout--' . $formLayout);
+$frm->setFormTagAttribute('class', 'form form--settings modalFormJs checkboxSwitchJs layout--' . $formLayout);
 $frm->setFormTagAttribute('data-onclear', $clearFormFn);
 $frm->setFormTagAttribute('id', 'frmConfSetting');
 $tbid = isset($tabId) ? $tabId : 'tabs_' . $frmType;
@@ -196,23 +196,5 @@ switch ($frmType) {
         if (e.keyCode === 13) {
             $('.formBodyJs form').submit();
         }
-    });
-
-    $(document).ready(function() {
-        $('#frmConfSetting').find('.checkbox').addClass('switch switch-sm switch-icon').removeClass('checkbox');
-        $('#frmConfSetting i').replaceWith('<span></span>');
-        $('#frmConfSetting').find('.caption-wraper').remove();
-
-        $('#frmConfSetting .label').each(function() {
-            if ('' == ($(this).text()).trim()) {
-                $(this).remove();
-            }
-        });
-        $('#frmConfSetting ul.list-inline li').each(function() {
-            $(this).addClass('list-inline-item');
-            if (0 < $(this).find('.radio').length) {
-                $(this).find('.radio').parent('label').addClass("radio-list d-block");
-            }
-        });
     });
 </script>

@@ -11,7 +11,7 @@ $langFld->addFieldTagAttribute('class', 'icon-language-js');
 $preferredDimensionsStr = '<small class="text--small">'.sprintf(Labels::getLabel('LBL_This_will_be_displayed_in_%s_on_your_store', $siteLangId), '60*60').'</small>';
 
 $htmlAfterField = $preferredDimensionsStr;
-$htmlAfterField .= '<div id="icon-image-listing"></div>';
+$htmlAfterField .= '<div id="icon-imageListingJs"></div>';
 $fld->htmlAfterField = $htmlAfterField;
 
 $prodCatBannerFrm->setFormTagAttribute('class', 'web_form form_horizontal');
@@ -26,13 +26,13 @@ $screenFld = $prodCatBannerFrm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('class', 'prefDimensions-js');
 
 $htmlAfterField = '<div style="margin-top:15px;" class="preferredDimensions-js">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s',$siteLangId),'2000 x 500').'</div>';
-$htmlAfterField .= '<div id="banner-image-listing"></div>';
+$htmlAfterField .= '<div id="banner-imageListingJs"></div>';
 $fld2->htmlAfterField = $htmlAfterField;
 
 /*$preferredDimensionsStr = '<small class="text--small">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), '2000*500').'</small>';
 $htmlAfterField = $preferredDimensionsStr;
 $catBannerImages ='';
-$htmlAfterField .= '<div id="banner-image-listing"></div>';
+$htmlAfterField .= '<div id="banner-imageListingJs"></div>';
 $fld2->htmlAfterField = $htmlAfterField;*/ ?>
 <div id="cropperBox-js"></div>
 <section class="section" id="mediaForm-js">
