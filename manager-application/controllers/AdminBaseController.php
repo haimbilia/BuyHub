@@ -818,6 +818,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
 
     public function imgCropper()
     {
+        $this->set('title', FatApp::getPostedData('title', FatUtility::VAR_STRING, Labels::getLabel('LBL_UPLOAD_IMAGE', $this->siteLangId)));
         $this->_template->render(false, false, 'cropper/index.php');
     }
 
@@ -881,8 +882,10 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-
-        $renderPath = CONF_THEME_PATH . (str_replace("controller", "", strtolower(get_called_class()))) . DIRECTORY_SEPARATOR . "lang-form.php";
+                
+        $className = get_called_class();
+        $directory = (str_replace("-controller", "", strtolower(FatUtility::camel2dashed($className))));
+        $renderPath = CONF_THEME_PATH . $directory . DIRECTORY_SEPARATOR . "lang-form.php";
         if (file_exists($renderPath)) {
             $this->_template->render(false, false);
         } else {
@@ -897,7 +900,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         $recordId = FatApp::getPostedData($this->modelObj::tblFld('id'), FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
-        if ($recordId == 0 || $lang_id == 0) {
+        if (1 > $recordId || 1 > $lang_id) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
@@ -960,7 +963,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
     {
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         if (!empty($fields)) {

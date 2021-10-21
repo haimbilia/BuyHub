@@ -8,6 +8,14 @@ class CurrencyManagementController extends AdminBaseController
         $this->objPrivilege->canViewCurrencyManagement();
     }
 
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditCurrencyManagement();
+        $this->modelObj = (new ReflectionClass('Currency'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_CURRENCY_SETUP', $this->siteLangId));
+    }
+
     public function index()
     {
         $fields = $this->getFormColumns();
@@ -159,14 +167,6 @@ class CurrencyManagementController extends AdminBaseController
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]); 
         
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {
-        $this->objPrivilege->canEditCurrencyManagement();
-        $this->modelObj = (new ReflectionClass('Currency'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_CURRENCY_SETUP', $this->siteLangId));
     }
 
     public function updateOrder()

@@ -8,6 +8,14 @@ class OrderStatusController extends AdminBaseController
         $this->objPrivilege->canViewOrderStatus();
     }
 
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditOrderStatus();
+        $this->modelObj = (new ReflectionClass('OrderStatus'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->siteLangId));
+    }
+
     public function index()
     {
         $fields = $this->getFormColumns();
@@ -46,8 +54,6 @@ class OrderStatusController extends AdminBaseController
             $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         }
 
-        $data = FatApp::getPostedData();
-
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
@@ -66,8 +72,9 @@ class OrderStatusController extends AdminBaseController
 
         $searchForm = $this->getSearchForm($fields);
         
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
-        $post = $searchForm->getFormDataFromArray($data);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+        $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
 
         $srch = OrderStatus::getSearchObject(false, $this->siteLangId);
 
@@ -85,8 +92,6 @@ class OrderStatusController extends AdminBaseController
             $srch->addCondition('ostatus.orderstatus_type', '=', Orders::ORDER_PRODUCT);
         }
 
-        $page = FatUtility::int($page);
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
@@ -167,14 +172,6 @@ class OrderStatusController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {
-        $this->objPrivilege->canEditOrderStatus();
-        $this->modelObj = (new ReflectionClass('OrderStatus'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->siteLangId));
-    }
-    
     private function getForm($recordId = 0)
     {
         $recordId = FatUtility::int($recordId);
@@ -214,7 +211,7 @@ class OrderStatusController extends AdminBaseController
     {
         $frm = new Form('frmorderstatuslang');
         $frm->addHiddenField('', 'orderstatus_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');        
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_orderstatus_Name', $this->siteLangId), 'orderstatus_name');       
         return $frm;
     }

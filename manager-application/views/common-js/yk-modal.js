@@ -1,7 +1,6 @@
 (function ($) {
     $.ykmodal = function (data, modalClass = "", dialogClass = "", bodyClass = "") {
         modalClass = "" === modalClass ? "fixed-right" : modalClass;
-        console.log(modalClass);
         dialogClass = "" === dialogClass ? "modal-dialog-vertical" : dialogClass;
         bodyClass = "" === bodyClass ? "pd-0" : bodyClass;
 
@@ -51,12 +50,12 @@
             $("." + $.ykmodal.element).modal("show");
             return
         },
+        isAdded: function () {
+            return (0 < $("." + $.ykmodal.element).length);
+        }
     });
 
     function init(modalClass, dialogClass) {
-        modalClass = "" == modalClass ? "" : modalClass;
-        dialogClass = "" == dialogClass ? "" : dialogClass;
-
         if (1 > $("body").find("." + $.ykmodal.element).length) {
             var content = '<div class="modal-dialog ' + dialogClass + ' " role="document"><div class="modal-content contentBody--js"></div></div>';
             var htm = '<div class="modal ' + modalClass + ' fade ' + $.ykmodal.element + '" tabindex="-1" role="dialog">' + content + "</div>";

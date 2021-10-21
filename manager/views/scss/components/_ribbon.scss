@@ -1,20 +1,15 @@
 .ribbon {
     position: relative;
     .ribbon__target {
-        display: -webkit-box;
-        display: -ms-flexbox;
         display: flex;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
         justify-content: center;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
         align-items: center;
         padding: 5px 10px;
         position: absolute;
         z-index: 1;
+        font-size: 0.85rem;
         background-color: $brand-color;
-        color: #ffffff;
+        color: $brand-color-inverse;
         >.ribbon__inner {
             z-index: -1;
             position: absolute;
@@ -25,7 +20,7 @@
             left: 0;
         }
         &:after {
-            border-color: #082d88;
+            border-color: $brand-color;
         }
     }
     &--ver {
@@ -38,7 +33,6 @@
     }
     &--shadow {
         .ribbon__target {
-            -webkit-box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.4);
             box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.4);
         }
     }

@@ -188,16 +188,16 @@ $(document).ready(function () {
 	categoryImages = function (prodCatId, imageType, slide_screen, lang_id) {
 		fcom.ajax(fcom.makeUrl('ProductCategories', 'images', [prodCatId, imageType, lang_id, slide_screen]), '', function (t) {
 			if (imageType == 'icon') {
-				$('#icon-image-listing').html(t);
+				$('#icon-imageListingJs').html(t);
 				var prodCatId = $("[name='prodcat_id']").val();
 				if (prodCatId == 0) {
-					var iconImageId = $("#icon-image-listing li").attr('id');
+					var iconImageId = $("#icon-imageListingJs li").attr('id');
 					var selectedLangId = $(".icon-language-js").val();
 					$("[name='cat_icon_image_id[" + selectedLangId + "]']").val(iconImageId);
 				}
 			} else if (imageType == 'banner') {
-				$('#banner-image-listing').html(t);
-				var bannerImageId = $("#banner-image-listing li").attr('id');
+				$('#banner-imageListingJs').html(t);
+				var bannerImageId = $("#banner-imageListingJs li").attr('id');
 				var selectedLangId = $(".banner-language-js").val();
 				var screen = $(".prefDimensions-js").val();
 				$("[name='cat_banner_image_id[" + selectedLangId + "_" + screen + "]']").val(bannerImageId);
@@ -210,10 +210,10 @@ $(document).ready(function () {
 		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'removeImage', [fileId, prodcatId, imageType, langId, slide_screen]), '', function (t) {
 			//categoryImages( prodcatId, imageType, slide_screen, langId );
 			if (imageType == 'icon') {
-				$("#icon-image-listing").html('');
+				$("#icon-imageListingJs").html('');
 				$("[name='cat_icon_image_id[" + langId + "]']").val('');
 			} else if (imageType == 'banner') {
-				$("#banner-image-listing").html('');
+				$("#banner-imageListingJs").html('');
 				$("[name='cat_banner_image_id[" + langId + "_" + slide_screen + "]']").val('');
 			}
 		});
@@ -291,12 +291,12 @@ $(document).ready(function () {
 		var slideScreen = 0;
 		var prodcatId = $("[name='prodcat_id']").val();
 		if (frmName == 'frmCategoryIcon') {
-			var afileId = $("#icon-image-listing li").attr('id');
+			var afileId = $("#icon-imageListingJs li").attr('id');
 			var langId = $("[name='icon_lang_id']").val();
 			var fileType = $("[name='icon_file_type']").val();
 			var imageType = 'icon';
 		} else {
-			var afileId = $("#banner-image-listing li").attr('id');
+			var afileId = $("#banner-imageListingJs li").attr('id');
 			var langId = $("[name='banner_lang_id']").val();
 			var fileType = $("[name='banner_file_type']").val();
 			slideScreen = $("[name='slide_screen']").val();
@@ -376,13 +376,13 @@ $(document).on('click','.catFile-Js',function(){
 		var lang_id = $("[name='icon_lang_id']").val();
 		var prodcat_id = $("[name='prodcat_id']").val();
 		var imageType = 'icon';
-		var afile_id = $("#icon-image-listing li").attr('id');
+		var afile_id = $("#icon-imageListingJs li").attr('id');
 	}else if(formName == 'catBanner'){
 		var lang_id = $("[name='banner_lang_id']").val();
 		var prodcat_id = $("[name='prodcat_id']").val();
 		var slide_screen = $("[name='slide_screen']").val();
 		var imageType = 'banner';
-		var afile_id = $("#banner-image-listing li").attr('id');
+		var afile_id = $("#banner-imageListingJs li").attr('id');
 	}
 
 	var fileType = $(node).attr('data-file_type');
@@ -446,7 +446,7 @@ $(document).on('change', '.icon-language-js', function () {
 		if (imageId > 0) {
 			categoryImages(prodcat_id, 'icon', 0, lang_id);
 		} else {
-			$("#icon-image-listing").html('');
+			$("#icon-imageListingJs").html('');
 		}
 	} else {
 		categoryImages(prodcat_id, 'icon', 0, lang_id);
@@ -463,7 +463,7 @@ $(document).on('change', '.banner-language-js', function () {
 		if (imageId > 0) {
 			categoryImages(prodcat_id, 'banner', slide_screen, lang_id);
 		} else {
-			$("#banner-image-listing").html('');
+			$("#banner-imageListingJs").html('');
 		}
 	} else {
 		categoryImages(prodcat_id, 'banner', slide_screen, lang_id);
@@ -480,7 +480,7 @@ $(document).on('change', '.prefDimensions-js', function () {
 		if (imageId > 0) {
 			categoryImages(prodcat_id, 'banner', slide_screen, lang_id);
 		} else {
-			$("#banner-image-listing").html('');
+			$("#banner-imageListingJs").html('');
 		}
 	} else {
 		categoryImages(prodcat_id, 'banner', slide_screen, lang_id);

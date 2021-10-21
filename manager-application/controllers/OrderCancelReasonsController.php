@@ -8,6 +8,14 @@ class OrderCancelReasonsController extends AdminBaseController
         $this->objPrivilege->canViewOrderCancelReasons();
     }
 
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditOrderCancelReasons();
+        $this->modelObj = (new ReflectionClass('OrderCancelReason'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('title')];
+        $this->set('formTitle', Labels::getLabel('LBL_ORDER_CANCEL_REASON_SETUP', $this->siteLangId));
+    }  
+
     public function index()
     {
         $fields = $this->getFormColumns();
@@ -140,15 +148,7 @@ class OrderCancelReasonsController extends AdminBaseController
         $this->setLangData($recordObj, [$recordObj::tblFld('title') => $post[$recordObj::tblFld('title')]]);
 
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {
-        $this->objPrivilege->canEditOrderCancelReasons();
-        $this->modelObj = (new ReflectionClass('OrderCancelReason'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('title')];
-        $this->set('formTitle', Labels::getLabel('LBL_ORDER_CANCEL_REASON_SETUP', $this->siteLangId));
-    }    
+    }  
 
     private function getForm($recordId = 0)
     {

@@ -8,6 +8,14 @@ class OrderReturnReasonsController extends AdminBaseController
         $this->objPrivilege->canViewOrderReturnReasons();
     }
 
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {        
+        $this->objPrivilege->canEditOrderReturnReasons();
+        $this->modelObj = (new ReflectionClass('OrderReturnReason'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('title')];
+        $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->siteLangId));
+    }
+
     public function index()
     {
         $fields = $this->getFormColumns();
@@ -135,14 +143,6 @@ class OrderReturnReasonsController extends AdminBaseController
         $this->setLangData($recordObj, [$recordObj::tblFld('title') => $post[$recordObj::tblFld('title')]]);
 
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {        
-        $this->objPrivilege->canEditOrderReturnReasons();
-        $this->modelObj = (new ReflectionClass('OrderReturnReason'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('title')];
-        $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->siteLangId));
     }
 
     private function getForm()

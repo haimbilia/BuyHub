@@ -421,12 +421,12 @@
                                                         <td><span class="badge badge-warning">In Progress</span></td>
 
                                                         <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
+
+                                                            <label class="switch switch-sm switch-icon">
+                                                                <input type="checkbox" checked="checked" name="">
+                                                                <span></span>
+                                                            </label>
+
                                                         </td>
                                                         <td class="align-right">
                                                             <ul class="actions">
@@ -508,12 +508,11 @@
                                                         <td><span class="badge badge-info">Rejected</span></td>
 
                                                         <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
+                                                            <label class="switch switch-sm switch-icon">
+                                                                <input type="checkbox" name="">
+                                                                <span></span>
+                                                            </label>
+
                                                         </td>
                                                         <td class="align-right">
                                                             <ul class="actions">
@@ -608,12 +607,12 @@
                                                         <td><span class="badge badge-warning">In Progress</span></td>
 
                                                         <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
+
+                                                            <label class="switch switch-sm switch-icon">
+                                                                <input type="checkbox" checked="checked" name="">
+                                                                <span></span>
+                                                            </label>
+
                                                         </td>
                                                         <td class="align-right">
                                                             <ul class="actions">
@@ -696,12 +695,11 @@
                                                         </td>
 
                                                         <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
+                                                            <label class="switch switch-sm switch-icon">
+                                                                <input type="checkbox" name="">
+                                                                <span></span>
+                                                            </label>
+
                                                         </td>
                                                         <td class="align-right">
                                                             <ul class="actions">
@@ -794,12 +792,12 @@
                                                         <td><span class="badge badge-danger">Approved</span></td>
 
                                                         <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
+
+                                                            <label class="switch switch-sm switch-icon">
+                                                                <input type="checkbox" checked="checked" name="">
+                                                                <span></span>
+                                                            </label>
+
                                                         </td>
                                                         <td class="align-right">
                                                             <ul class="actions">
@@ -893,12 +891,12 @@
                                                         <td><span class="badge badge-success">Approved</span></td>
 
                                                         <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
+
+                                                            <label class="switch switch-sm switch-icon">
+                                                                <input type="checkbox" checked="checked" name="">
+                                                                <span></span>
+                                                            </label>
+
                                                         </td>
                                                         <td class="align-right">
                                                             <ul class="actions">
@@ -991,12 +989,11 @@
                                                         <td><span class="badge badge-success">Approved</span></td>
 
                                                         <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
+                                                            <label class="switch switch-sm switch-icon">
+                                                                <input type="checkbox" name="">
+                                                                <span></span>
+                                                            </label>
+
                                                         </td>
                                                         <td class="align-right">
                                                             <ul class="actions">
@@ -1084,12 +1081,11 @@
                                                         <td><span class="badge badge-success">Approved</span></td>
 
                                                         <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
+                                                            <label class="switch switch-sm switch-icon">
+                                                                <input type="checkbox" name="">
+                                                                <span></span>
+                                                            </label>
+
                                                         </td>
                                                         <td class="align-right">
                                                             <ul class="actions">
@@ -1183,12 +1179,12 @@
                                                         <td> <span class="badge badge-info">Pending</span></td>
 
                                                         <td>
-                                                            <span class="switch switch-sm switch-icon">
-                                                                <label>
-                                                                    <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
+
+                                                            <label class="switch switch-sm switch-icon">
+                                                                <input type="checkbox" checked="checked" name="">
+                                                                <span></span>
+                                                            </label>
+
                                                         </td>
                                                         <td class="align-right">
                                                             <ul class="actions">

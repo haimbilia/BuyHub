@@ -325,20 +325,6 @@ class applicationConstants
         return array('video/quicktime', 'video/mp4', 'video/x-m4v', 'video/webm');
     }
 
-
-    public static function getBlogPostStatusArr($langId)
-    {
-        $langId = FatUtility::int($langId);
-        if ($langId < 1) {
-            $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
-        }
-
-        return array(
-            static::DRAFT => Labels::getLabel('LBL_Draft', $langId),
-            static::PUBLISHED => Labels::getLabel('LBL_Published', $langId),
-        );
-    }
-
     public static function getGenderArr($langId)
     {
         $langId = FatUtility::int($langId);

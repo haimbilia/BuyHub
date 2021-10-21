@@ -543,10 +543,10 @@ class ConfigurationsController extends AdminBaseController
                 $frm->addCheckBox(Labels::getLabel("LBL_Header_Mega_Menu", $this->siteLangId), 'CONF_LAYOUT_MEGA_MENU', 1, array(), false, 0);
                 $frm->addCheckBox(Labels::getLabel("LBL_Home_page_loader", $this->siteLangId), 'CONF_LOADER', 1, array(), false, 0);
 
-                $fld3 = $frm->addTextBox(Labels::getLabel("LBL_Admin_Default_Items_Per_Page", $this->siteLangId), "CONF_ADMIN_PAGESIZE");
+                /* $fld3 = $frm->addTextBox(Labels::getLabel("LBL_Admin_Default_Items_Per_Page", $this->siteLangId), "CONF_ADMIN_PAGESIZE");
                 $fld3->requirements()->setInt();
                 $fld3->requirements()->setRange('1', '2000');
-                $fld3->htmlAfterField = "<small>" . Labels::getLabel("LBL_Determines_how_many_items_are_shown_per_page_(user_listing,_categories,_etc)", $this->siteLangId) . ".</small>";
+                $fld3->htmlAfterField = "<small>" . Labels::getLabel("LBL_Determines_how_many_items_are_shown_per_page_(user_listing,_categories,_etc)", $this->siteLangId) . ".</small>"; */
 
                 $iframeFld = $frm->addTextarea(Labels::getLabel('LBL_Google_Map_Iframe', $this->siteLangId), 'CONF_MAP_IFRAME_CODE');
                 $iframeFld->htmlAfterField = '<small>' . Labels::getLabel("LBL_This_is_the_Gogle_Map_Iframe_Script,_used_to_display_google_map_on_contact_us_page", $this->siteLangId) . '</small>';
@@ -608,8 +608,8 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Body_Script", $this->siteLangId), 'CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_code_provided_by_google_tag_manager_for_integration.", $this->siteLangId) . "</small>";
 
-                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Webmaster", $this->siteLangId) . '</h3>');
-                $fld = $frm->addFileUpload(Labels::getLabel('LBL_HTML_file_Verification', $this->siteLangId), 'google_file_verification', array('accept' => '.html', 'onChange' => 'updateVerificationFile(this, "google")'));
+                $fld = $frm->addHtml('', 'googleFileVerification', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Webmaster", $this->siteLangId) . '</h3>');
+                $frm->addFileUpload(Labels::getLabel('LBL_HTML_file_Verification', $this->siteLangId), 'google_file_verification', array('accept' => '.html', 'onChange' => 'updateVerificationFile(this, "google")'));
                 $htmlAfterField = '';
                 if (file_exists(CONF_UPLOADS_PATH . '/google-site-verification.html')) {
                     $htmlAfterField .= $fld->htmlAfterField = '<a href="' . UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . 'google-site-verification.html" target="_blank" class="btn btn-clean btn-sm btn-icon" title="' . Labels::getLabel("LBL_View_File", $this->siteLangId) . '"><i class="fas fa-eye icon"></i></a><a href="javascript:void();" class="btn btn-clean btn-sm btn-icon" title="' . Labels::getLabel("LBL_Delete_File", $this->siteLangId) . '" onclick="deleteVerificationFile(\'google\')"><i class="fa fa-trash  icon"></i></a>';
@@ -617,8 +617,8 @@ class ConfigurationsController extends AdminBaseController
                 $htmlAfterField .= "<small>" . Labels::getLabel("LBL_Upload_HTML_file_provided_by_Google_webmaster_tool.", $this->siteLangId) . "</small>";
                 $fld->htmlAfterField = $htmlAfterField;
 
-                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Bing_Webmaster", $this->siteLangId) . '</h3>');
-                $fld = $frm->addFileUpload(Labels::getLabel('LBL_XML_file_Authentication', $this->siteLangId), 'bing_file_verification', array('accept' => '.xml', 'onChange' => 'updateVerificationFile(this, "bing")'));
+                $fld = $frm->addHtml('', 'bingFileVerification', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Bing_Webmaster", $this->siteLangId) . '</h3>');
+                $frm->addFileUpload(Labels::getLabel('LBL_XML_file_Authentication', $this->siteLangId), 'bing_file_verification', array('accept' => '.xml', 'onChange' => 'updateVerificationFile(this, "bing")'));
                 $htmlAfterField = '';
                 if (file_exists(CONF_UPLOADS_PATH . '/BingSiteAuth.xml')) {
                     $htmlAfterField .= $fld->htmlAfterField = '<a href="' . UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . 'BingSiteAuth.xml' . '" target="_blank" class="btn btn-clean btn-sm btn-icon" title="' . Labels::getLabel("LBL_View_File", $this->siteLangId) . '"><i class="fas fa-eye icon"></i></a><a href="javascript:void();" class="btn btn-clean btn-sm btn-icon" title="' . Labels::getLabel("LBL_Delete_File", $this->siteLangId) . '" onclick="deleteVerificationFile(\'bing\')"><i class="fa fa-trash  icon"></i></a>';
@@ -626,18 +626,18 @@ class ConfigurationsController extends AdminBaseController
                 $htmlAfterField .= "<small>" . Labels::getLabel("LBL_Upload_BindSiteAuthXML_file_provided_by_Bing_webmaster_tool.", $this->siteLangId) . "</small>";
                 $fld->htmlAfterField = $htmlAfterField;
 
-                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Hotjar", $this->siteLangId) . '</h3>');
+                $frm->addHtml('', 'hotjar', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Hotjar", $this->siteLangId) . '</h3>');
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Head_Script", $this->siteLangId), 'CONF_HOTJAR_HEAD_SCRIPT');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_This_is_the_code_provided_by_hotjar_for_integration.", $this->siteLangId) . "</small>";
 
-                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Schema_COdes", $this->siteLangId) . '</h3>');
+                $frm->addHtml('', 'schemacode', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Schema_COdes", $this->siteLangId) . '</h3>');
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Default_Schema", $this->siteLangId), 'CONF_DEFAULT_SCHEMA_CODES_SCRIPT');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Update_Schema_code_related_information.", $this->siteLangId) . "</small>";
 
                 break;
 
             case Configurations::FORM_PRODUCT:
-                $frm->addHtml('', 'Product', '<h3 class="form-section-head">' . Labels::getLabel('LBL_Product', $this->siteLangId) . '</h3>');
+                // $frm->addHtml('', 'Product', '<h3 class="form-section-head">' . Labels::getLabel('LBL_Product', $this->siteLangId) . '</h3>');
 
                 $frm->addCheckBox(
                     Labels::getLabel("LBL_Allow_Sellers_to_add_products", $this->siteLangId),
@@ -695,14 +695,8 @@ class ConfigurationsController extends AdminBaseController
                 $fld3->htmlAfterField = "<small>" . Labels::getLabel("LBL_Determines_how_many_catalog_items_are_shown_per_page_(products,_categories,_etc)", $this->siteLangId) . ".</small>";
 
                 $frm->addHtml('', 'geolocation', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Location', $this->siteLangId) . '</h3>');
-                $fld = $frm->addRadioButtons(
-                    Labels::getLabel("LBL_ACTIVATE_GEO_LOCATION", $this->siteLangId),
-                    'CONF_ENABLE_GEO_LOCATION',
-                    applicationConstants::getYesNoArr($this->siteLangId),
-                    '',
-                    array('class' => 'list-inline')
-                );
-                $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_PRODUCT_LISTING", $this->siteLangId) . "</small>";
+                $fld = $frm->addCheckBox(Labels::getLabel("LBL_ACTIVATE_GEO_LOCATION", $this->siteLangId), 'CONF_ENABLE_GEO_LOCATION', 1, array(), false, 0);
+
 
                 $prodGeoSettingArr = applicationConstants::getProductListingSettings($this->siteLangId);
 
@@ -879,7 +873,7 @@ class ConfigurationsController extends AdminBaseController
                     $fld1->htmlAfterField = "<small>" . Labels::getLabel("LBL_MANUAL_SHIPPING_RATES_WERE_CONSIDERED_FOR_ADMIN_SHIPPING.", $this->siteLangId) . "</small>";
                 }
 
-                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_New_Order_Alert_Email", $this->siteLangId), 'CONF_NEW_ORDER_EMAIL', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-inline'));
+                $fld = $frm->addCheckBox(Labels::getLabel('LBL_New_Order_Alert_Email', $this->siteLangId), 'CONF_NEW_ORDER_EMAIL', 1, array(), false, 0);
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Send_an_email_to_store_owner_when_new_order_is_placed", $this->siteLangId) . "</small>";
 
                 $orderStatusArr = Orders::getOrderProductStatusArr($this->siteLangId);
@@ -1061,10 +1055,10 @@ class ConfigurationsController extends AdminBaseController
 
                 $frm->addHtml('', 'Cart', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Cart", $this->siteLangId) . '</h3>');
 
-                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_On_Payment_Cancel_Maintain_Cart", $this->siteLangId), 'CONF_MAINTAIN_CART_ON_PAYMENT_CANCEL', applicationConstants::getYesNoArr($this->siteLangId), applicationConstants::NO, array('class' => 'list-inline'));
+                $fld = $frm->addCheckBox(Labels::getLabel('LBL_On_Payment_Cancel_Maintain_Cart', $this->siteLangId), 'CONF_MAINTAIN_CART_ON_PAYMENT_CANCEL', 1, array(), false, 0);
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Cart_Items_Will_be_retained_on_Cancelling_the_payment", $this->siteLangId) . "</small>";
 
-                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_On_Payment_Failure_Maintain_Cart", $this->siteLangId), 'CONF_MAINTAIN_CART_ON_PAYMENT_FAILURE', applicationConstants::getYesNoArr($this->siteLangId), applicationConstants::NO, array('class' => 'list-inline'));
+                $fld = $frm->addCheckBox(Labels::getLabel('LBL_On_Payment_Failure_Maintain_Cart', $this->siteLangId), 'CONF_MAINTAIN_CART_ON_PAYMENT_FAILURE', 1, array(), false, 0);
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Cart_Items_Will_be_retained_on_payment_failure", $this->siteLangId) . "</small>";
 
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Reminder_Interval_For_Products_In_Cart_[Days]", $this->siteLangId), 'CONF_REMINDER_INTERVAL_PRODUCTS_IN_CART', '');
@@ -1204,7 +1198,7 @@ class ConfigurationsController extends AdminBaseController
                 $buyingInAnYearOrderSelected = (!empty($arrValues['CONF_BUYING_YEAR_REWARD_ORDER_STATUS'])) ? $arrValues['CONF_BUYING_YEAR_REWARD_ORDER_STATUS'] : 0;
                 $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Buying_Completion_Order_Status", $this->siteLangId), 'CONF_BUYING_YEAR_REWARD_ORDER_STATUS', $orderStatusArr, $buyingInAnYearOrderSelected, array('class' => 'list-inline'));
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_considered_completed_and_payment_released_to_Sellers.", $this->siteLangId) . "</small>";
-                
+
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Minimum_buying_value", $this->siteLangId), 'CONF_BUYING_IN_AN_YEAR_MIN_VALUE');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Min_buying_value_in_an_year_to_get_reward_points", $this->siteLangId) . "</small>";
 
@@ -1471,7 +1465,7 @@ class ConfigurationsController extends AdminBaseController
                 $orderSubscriptionStatusArr = Orders::getOrderSubscriptionStatusArr($this->siteLangId);
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Reminder_Email_Before_Subscription_Expire_Days", $this->siteLangId), 'CONF_BEFORE_EXIPRE_SUBSCRIPTION_REMINDER_EMAIL_DAYS');
                 $fld->htmlAfterField = "<small>" . Labels::getLabel("LBL_Before_How_many_Days_email_needs_to_be_sent_to_user_before_ending_subscription.", $this->siteLangId) . "</small>";
-               
+
                 $fld = $frm->addSelectBox(
                     Labels::getLabel("LBL_In-Active_Order_Status", $this->siteLangId),
                     'CONF_SUBSCRIPTION_INACTIVE_ORDER_STATUS',
@@ -1616,9 +1610,10 @@ class ConfigurationsController extends AdminBaseController
                 $frm->addTextarea(Labels::getLabel('LBL_Cookies_Policies_Text', $this->siteLangId), 'CONF_COOKIES_TEXT_' . $langId);
                 break;
             case Configurations::FORM_LOCAL:
+                $frm->addTextBox(Labels::getLabel("LBL_City", $this->siteLangId), 'CONF_CITY_' . $langId);
                 $frm->addTextarea(Labels::getLabel("LBL_Address", $this->siteLangId), 'CONF_ADDRESS_' . $langId);
                 $frm->addTextarea(Labels::getLabel("LBL_ADDRESS_LINE_2", $this->siteLangId), 'CONF_ADDRESS_LINE_2_' . $langId);
-                $frm->addTextBox(Labels::getLabel("LBL_City", $this->siteLangId), 'CONF_CITY_' . $langId);
+
                 break;
             case Configurations::FORM_EMAIL:
                 $frm->addTextBox(Labels::getLabel("LBL_From_Name", $this->siteLangId), 'CONF_FROM_NAME_' . $langId);
@@ -1778,7 +1773,7 @@ class ConfigurationsController extends AdminBaseController
                 }
 
                 $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="mobile_logo" id="mobile_logo" data-min_width = "168" data-min_height = "37" data-file_type=' . AttachedFile::FILETYPE_MOBILE_LOGO . ' value="Upload file"><small>' . Labels::getLabel('LBL_Dimensions', $this->siteLangId) . ' 168*37</small></div>';
-                
+
                 $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Invoice_Logo', $this->siteLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
 
 
