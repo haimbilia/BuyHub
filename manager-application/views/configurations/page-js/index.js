@@ -43,7 +43,7 @@ $(document).ready(function () {
         $('ul.confTypesJs li.tabJs-' + type).addClass('is-active');
         $('html, body').animate({
             scrollTop: $("#frmBlockJs").offset().top
-        }, 800);
+        });
     }
 
     getLangForm = function (frmType, langId, autoFillLangData = 0) {

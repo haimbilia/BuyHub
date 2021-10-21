@@ -412,21 +412,14 @@ form.custom-form {
     }
 }
 
-.form--fly {
+.form-fly {
     position: relative;
-    .form-group {
-        input[type="text"] {
-            border-radius: 25px;
-        }
-    }
-    input[type="text"] {
+    .fly-field {
         padding-#{$end-direction}: 3rem;
     }
-    input[type="tel"] {
-        border: 0;
-    }
-    .btn-fly {
+    .fly-btn {
         position: absolute;
+        top: 0;
         #{$end-direction}: 0px;
         background: none;
         display: flex;
@@ -434,9 +427,12 @@ form.custom-form {
         justify-content: center;
         padding: 0 5px;
         border: none;
-        height: 41px;
+        height: $input-height;
+        padding: $input-padding;
+        line-height: $input-line-height;
         color: $brand-color;
         z-index: 3;
+        width: 40px;
         .svg {
             width: 16px;
             height: 16px;
@@ -451,14 +447,11 @@ form.custom-form {
     }
 }
 
-.form--inline {
+.form-inline {
     display: flex;
     .form-group {
         margin-#{$end-direction}: 10px;
         flex: 1;
-    }
-    .btn-fly {
-        #{$end-direction}: 10px;
     }
 }
 
@@ -783,8 +776,8 @@ form.custom-form {
     }
 }
 
-.field-translate{
-    >div{
+.field-translate {
+    >div {
         display: flex;
     }
 }

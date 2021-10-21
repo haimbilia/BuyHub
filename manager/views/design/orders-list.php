@@ -125,6 +125,20 @@
                                             <div class="col-auto">
                                                 <ul class="actions">
                                                     <li class="custom-drag-drop">
+                                                        <a class="btn btn-icon btn-light btn-add" href="#">
+
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#export">
+                                                                </use>
+                                                            </svg> Export orders
+                                                        </a>
+
+
+
+                                                    </li>
+
+                                                    <li class="custom-drag-drop">
                                                         <a href="#" data-toggle="dropdown" aria-expanded="false">
 
                                                             <svg class="svg" width="18" height="18">
@@ -196,7 +210,7 @@
                                         </div>
 
                                         <div class="table-responsive">
-                                            <table width="100%" class="table table-orders">
+                                            <table width="100%" class="table">
                                                 <thead>
                                                     <tr>
                                                         <th width="15%" class="sorting"> <span>Order ID. <i class="icn">

@@ -317,3 +317,85 @@
         font-weight: 500;
     }
 }
+
+.cart-summary {
+    font-size: 0.85rem;
+    ul {
+        li {
+            padding: 0.8rem 0;
+            border-left: 0;
+            border-right: 0;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .label {
+                color: currentColor;
+                padding: 0;
+            }
+            .value {
+                font-weight: 500;
+                text-align:#{$end-direction};
+                margin-#{$start-direction}: auto;
+            }
+            &.highlighted {
+                font-weight: 500;
+                border-top: $border;
+                color: $txt-body;
+                margin-top: 1rem;
+                padding-top: 1rem;
+            }
+            &.text-success {
+                color: $success-color;
+            }
+            &:first-child {
+                padding-top: 0;
+            }
+            &:last-child {
+                padding-bottom: 0;
+            }
+        }
+    }
+}
+
+.dropdown-toggle-custom {
+    position: relative;
+    &-arrow {
+        position: absolute;
+        transform: translate(-6px, 0);
+        top: calc(50% - 4px);
+        #{$end-direction}: 25px;
+        &:after,
+        &:before {
+            content: "";
+            position: absolute;
+            background-color: currentColor;
+            width: 1px;
+            height: 9px;
+            transition: all 0.25s ease-in-out;
+        }
+        &:before {
+            transform: translate(-3px, 0) rotate(45deg);
+        }
+        &:after {
+            transform: translate(3px, 0) rotate(-45deg);
+        }
+    }
+    &:not(.collapsed) {
+        .dropdown-toggle-custom-arrow {
+            &:before {
+                transform: translate(3px, 0) rotate( 45deg);
+            }
+            &:after {
+                transform: translate(-3px, 0) rotate( -45deg);
+            }
+        }
+    }
+}
+
+.payment-mode {
+    font-size: 0.85rem;
+    .payment-id {
+        margin-top: 1.5rem;
+    }
+}
