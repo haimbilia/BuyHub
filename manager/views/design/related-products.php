@@ -145,8 +145,8 @@
                                                         <td>
                                                             <div class="media-profile">
                                                                 <figure class="media-profile_photo">
-                                                                    <img width="40" height="40" title="Macbook pro"
-                                                                        alt="Macbook pro"
+                                                                    <img data-aspect-ratio="1:1" width="40" height="40"
+                                                                        title="Macbook pro" alt="Macbook pro"
                                                                         src="<?php echo CONF_WEBROOT_URL; ?>images/products/product15.jpg">
                                                                 </figure>
                                                                 <div class="media-profile_data">
@@ -179,8 +179,8 @@
                                                         <td>
                                                             <div class="media-profile">
                                                                 <figure class="media-profile_photo">
-                                                                    <img width="40" height="40" title="Macbook pro"
-                                                                        alt="Macbook pro"
+                                                                    <img data-aspect-ratio="1:1" width="40" height="40"
+                                                                        title="Macbook pro" alt="Macbook pro"
                                                                         src="<?php echo CONF_WEBROOT_URL; ?>images/products/product15.jpg">
                                                                 </figure>
                                                                 <div class="media-profile_data">
@@ -213,8 +213,8 @@
                                                         <td>
                                                             <div class="media-profile">
                                                                 <figure class="media-profile_photo">
-                                                                    <img width="40" height="40" title="Macbook pro"
-                                                                        alt="Macbook pro"
+                                                                    <img data-aspect-ratio="1:1" width="40" height="40"
+                                                                        title="Macbook pro" alt="Macbook pro"
                                                                         src="<?php echo CONF_WEBROOT_URL; ?>images/products/product15.jpg">
                                                                 </figure>
                                                                 <div class="media-profile_data">
@@ -247,8 +247,8 @@
                                                         <td>
                                                             <div class="media-profile">
                                                                 <figure class="media-profile_photo">
-                                                                    <img width="40" height="40" title="Macbook pro"
-                                                                        alt="Macbook pro"
+                                                                    <img data-aspect-ratio="1:1" width="40" height="40"
+                                                                        title="Macbook pro" alt="Macbook pro"
                                                                         src="<?php echo CONF_WEBROOT_URL; ?>images/products/product15.jpg">
                                                                 </figure>
                                                                 <div class="media-profile_data">
@@ -281,8 +281,8 @@
                                                         <td>
                                                             <div class="media-profile">
                                                                 <figure class="media-profile_photo">
-                                                                    <img width="40" height="40" title="Macbook pro"
-                                                                        alt="Macbook pro"
+                                                                    <img data-aspect-ratio="1:1" width="40" height="40"
+                                                                        title="Macbook pro" alt="Macbook pro"
                                                                         src="<?php echo CONF_WEBROOT_URL; ?>images/products/product15.jpg">
                                                                 </figure>
                                                                 <div class="media-profile_data">
@@ -315,8 +315,8 @@
                                                         <td>
                                                             <div class="media-profile">
                                                                 <figure class="media-profile_photo">
-                                                                    <img width="40" height="40" title="Macbook pro"
-                                                                        alt="Macbook pro"
+                                                                    <img data-aspect-ratio="1:1" width="40" height="40"
+                                                                        title="Macbook pro" alt="Macbook pro"
                                                                         src="<?php echo CONF_WEBROOT_URL; ?>images/products/product15.jpg">
                                                                 </figure>
                                                                 <div class="media-profile_data">
@@ -349,8 +349,8 @@
                                                         <td>
                                                             <div class="media-profile">
                                                                 <figure class="media-profile_photo">
-                                                                    <img width="40" height="40" title="Macbook pro"
-                                                                        alt="Macbook pro"
+                                                                    <img data-aspect-ratio="1:1" width="40" height="40"
+                                                                        title="Macbook pro" alt="Macbook pro"
                                                                         src="<?php echo CONF_WEBROOT_URL; ?>images/products/product15.jpg">
                                                                 </figure>
                                                                 <div class="media-profile_data">
@@ -383,8 +383,8 @@
                                                         <td>
                                                             <div class="media-profile">
                                                                 <figure class="media-profile_photo">
-                                                                    <img width="40" height="40" title="Macbook pro"
-                                                                        alt="Macbook pro"
+                                                                    <img data-aspect-ratio="1:1" width="40" height="40"
+                                                                        title="Macbook pro" alt="Macbook pro"
                                                                         src="<?php echo CONF_WEBROOT_URL; ?>images/products/product15.jpg">
                                                                 </figure>
                                                                 <div class="media-profile_data">
@@ -417,8 +417,8 @@
                                                         <td>
                                                             <div class="media-profile">
                                                                 <figure class="media-profile_photo">
-                                                                    <img width="40" height="40" title="Macbook pro"
-                                                                        alt="Macbook pro"
+                                                                    <img data-aspect-ratio="1:1" width="40" height="40"
+                                                                        title="Macbook pro" alt="Macbook pro"
                                                                         src="<?php echo CONF_WEBROOT_URL; ?>images/products/product15.jpg">
                                                                 </figure>
                                                                 <div class="media-profile_data">
@@ -451,8 +451,8 @@
                                                         <td>
                                                             <div class="media-profile">
                                                                 <figure class="media-profile_photo">
-                                                                    <img width="40" height="40" title="Macbook pro"
-                                                                        alt="Macbook pro"
+                                                                    <img data-aspect-ratio="1:1" width="40" height="40"
+                                                                        title="Macbook pro" alt="Macbook pro"
                                                                         src="<?php echo CONF_WEBROOT_URL; ?>images/products/product15.jpg">
                                                                 </figure>
                                                                 <div class="media-profile_data">
@@ -485,8 +485,8 @@
                                                         <td>
                                                             <div class="media-profile">
                                                                 <figure class="media-profile_photo">
-                                                                    <img width="40" height="40" title="Macbook pro"
-                                                                        alt="Macbook pro"
+                                                                    <img data-aspect-ratio="1:1" width="40" height="40"
+                                                                        title="Macbook pro" alt="Macbook pro"
                                                                         src="<?php echo CONF_WEBROOT_URL; ?>images/products/product15.jpg">
                                                                 </figure>
                                                                 <div class="media-profile_data">

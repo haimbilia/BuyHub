@@ -204,17 +204,16 @@
                                             <span class="text-muted">Over 500 new products</span>
                                         </div>
                                         <div class="card-toolbar">
-
+                                            <a href="#" class="btn btn-icon btn-outline-brand btn-add">
+                                                <svg class="svg" width="18" height="18">
+                                                    <use
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
+                                                    </use>
+                                                </svg>
+                                                <span class="">New</span>
+                                            </a>
                                             <ul class="actions">
-                                                <li> <a href="#" class="btn btn-icon btn-light btn-add">
-                                                        <i class="icn">
-                                                            <svg class="svg">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
-                                                                </use>
-                                                            </svg></i>
-                                                        <span>New</span>
-                                                    </a></li>
+                                                <li> </li>
                                                 <li>
                                                     <a class="" href="#" title="">
                                                         <svg class="svg" width="18" height="18">

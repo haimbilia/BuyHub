@@ -71,10 +71,7 @@ $input-color: #474747;
 
 .form {
     .form-group {
-        margin-bottom: 1rem;
-    }
-    .field-set {
-        margin: 0.5rem 0;
+        margin-bottom: 1.8rem;
     }
     .label {
         font-size: 0.8rem;
@@ -245,6 +242,10 @@ $input-color: #474747;
     @include input;
 }
 
+.form-select {
+    @include select;
+}
+
 .required {
     &:after {
         content: "*";
@@ -254,10 +255,6 @@ $input-color: #474747;
         padding-#{$start-direction}: .25rem;
         font-weight: 700;
     }
-}
-
-.form-select {
-    @include select;
 }
 
 .input-group-text {

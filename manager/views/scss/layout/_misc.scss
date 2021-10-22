@@ -270,6 +270,7 @@
         max-height: 300px;
     }
     .list-drag-drop {
+        padding: 1rem;
         display: flex;
         flex-direction: column;
         li {
@@ -292,7 +293,7 @@
         max-width: 256px;
         overflow: hidden;
     }
-    .icn {
+    .svg {
         cursor: grab;
         margin-#{$start-direction}: 10px;
     }

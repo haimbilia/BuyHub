@@ -94,7 +94,7 @@
                                         </div>
 
                                         <div class="card-toolbar">
-                                            <select class="form-control" name="" id="">
+                                            <select class="form-select" name="" id="">
                                                 <option value="All">All</option>
                                                 <option value="Seller1">Seller1</option>
                                                 <option value="Seller1">Seller1</option>
@@ -110,7 +110,8 @@
                                             <table class="table table-orders">
                                                 <thead>
                                                     <tr>
-                                                        <th>Items Summary</th>
+                                                        <th width="50%">Items Summary</th>
+                                                        <th>Qty</th>
                                                         <th>Store</th>
                                                         <th>Status</th>
                                                         <th class="align-right">Amount</th>
@@ -120,8 +121,9 @@
                                                     <tr>
                                                         <td>
                                                             <div class="product-profile">
-                                                                <div class="product-profile__thumbnail">
-                                                                    <img
+                                                                <div class="product-profile__thumbnail"
+                                                                    data-ratio="1:1">
+                                                                    <img data-aspect-ratio="1:1"
                                                                         src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg" />
 
 
@@ -136,11 +138,12 @@
                                                                         Brand:
                                                                         Pepe Jeans </div>
 
-                                                                    <div class="options"> Qty: 1 </div>
+
                                                                 </div>
                                                             </div>
 
                                                         </td>
+                                                        <td>02</td>
                                                         <td>
                                                             <div class="sold_by">
                                                                 <svg class="svg" width="20" height="20">
@@ -162,8 +165,9 @@
                                                     <tr>
                                                         <td>
                                                             <div class="product-profile">
-                                                                <div class="product-profile__thumbnail">
-                                                                    <img
+                                                                <div class="product-profile__thumbnail"
+                                                                    data-ratio="1:1">
+                                                                    <img data-aspect-ratio="1:1"
                                                                         src="<?php echo CONF_WEBROOT_URL;?>images/products/product2.jpg" />
 
 
@@ -178,11 +182,12 @@
                                                                         Brand:
                                                                         Pepe Jeans </div>
 
-                                                                    <div class="options"> Qty: 1 </div>
+
                                                                 </div>
                                                             </div>
 
                                                         </td>
+                                                        <td>01</td>
                                                         <td>
                                                             <div class="sold_by">
                                                                 <svg class="svg" width="20" height="20">
@@ -203,8 +208,9 @@
                                                     <tr>
                                                         <td>
                                                             <div class="product-profile">
-                                                                <div class="product-profile__thumbnail">
-                                                                    <img
+                                                                <div class="product-profile__thumbnail"
+                                                                    data-ratio="1:1">
+                                                                    <img data-aspect-ratio="1:1"
                                                                         src="<?php echo CONF_WEBROOT_URL;?>images/products/product3.jpg" />
 
 
@@ -220,11 +226,12 @@
                                                                         Brand:
                                                                         Pepe Jeans </div>
 
-                                                                    <div class="options"> Qty: 1 </div>
+
                                                                 </div>
                                                             </div>
 
                                                         </td>
+                                                        <td>03</td>
                                                         <td>
                                                             <div class="sold_by">
                                                                 <svg class="svg" width="20" height="20">

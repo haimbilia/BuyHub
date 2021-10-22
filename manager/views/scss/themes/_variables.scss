@@ -1,29 +1,145 @@
-// $brand-color: #061873 !default;
-// $brand--inverse: #061873 !default;
-// $dark-color: #282a3c !default;
-// $light-color: #ffffff !default;
-// $primary-color: #5867dd !default;
-// $success-color: #1dc9b7 !default;
-// $warning-color: #ffb822 !default;
-// $info-color: #5578eb !default;
-// $danger-color: #fd397a !default;
-// $border-color: #e2e5ec !default;
-// $border-dark-color: #e2e5ec !default;
-// $border-light-color: #e2e5ec !default;
-// $txt-body: #181c32 !default;
-// $txt-gray:#000 !default;
-// //
-// $bg-white: var(--bg-white);
-// $bg-white-inverse: var(--bg-white-inverse);
-// //
-// $bg-black: var(--bg-black);
-// $bg-black-inverse: var(--bg-black-inverse);
-// //
-// $bg-gray:var(--bg-gray);
-// //$bg-gray-inverse:;
-// //
-//  $txt-body: var(--txt-body);
-//  $txt-gray:var(--txt-gray); 
-//fixed theme colors
-$txt-body: #000;
-$txt-gray:#8798ad;
+:root {
+    --brand-color: #0073CF;
+    --brand-color-inverse: #FFFFFF;
+    --primary-color: #0073CF;
+    --primary-color-inverse: #FFFFFF;
+    --third-color: #0073CF;
+    --third-color-inverse: #FFFFFF;
+}
+
+[data-theme="dark"] {
+    body {
+        background: var(--bg-gray);
+    }
+    &:root {
+        --txt-body: #fff;
+        --txt-gray: #888;
+        --bg-white: #000;
+        --bg-white-inverse: #fff;
+        --bg-black: #fff;
+        --bg-black-inverse: #000;
+        --bg-gray: #1d1d1d;
+        --border-color: #232323;
+    }
+}
+
+//default colors
+$dark-color:#888;
+//dynamic theme colors
+$brand-color: #0073CF;
+$brand-color-inverse:#FFFFFF;
+$primary-color: var(--primary-color);
+$primary-color-inverse: var(--primary-color-inverse);
+$secondary-color: #6DCDEF;
+$secondary-color-inverse: #FFFFFF;
+$third-color: var(--third-color);
+$third-color-inverse:var(--third-color-inverse);
+//fixed theme colors 
+$txt-body:#222222;
+$txt-gray:#888888;
+//border colors
+$border-color:#dee2e6;
+$border: solid 1px $border-color;
+$border-light: solid 1px lighten($border-color, 5);
+$border-transparent: solid 1px transparent;
+//backgrounds colors
+$bg-white: #fff;
+$bg-white-inverse:$txt-body;
+$bg-black: #000;
+$bg-black-inverse:#fff;
+$bg-brand-light: rgba(var(--brand-color-alpha), 0.1);
+$bg-light: #f3f4f5;
+$bg-gray: #f3f6f9;
+$gray-light :#f3f4f5;
+$bg-placeholder:rgba(0, 0, 0, 0.03);
+//shadow
+$shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+$shadow-rgb: var(--shadow-rgb);
+//radius
+$radius-common:1px;
+$radius4:4px;
+$radius3:3px;
+$radius2:2px;
+$radius1:1px;
+//messages
+$success-color: #1dc9b7;
+$warning-color: #ffb822;
+$info-color: #5578eb;
+$danger-color: #fd397a;
+//Push auto
+@mixin push--auto {
+    margin: {
+        left: auto;
+        right: auto;
+    }
+}
+
+//Pseudo
+@mixin pseudo($display: block, $pos: absolute, $content: '') {
+    content: $content;
+    display: $display;
+    position: $pos;
+}
+
+//Responsive ratio
+@mixin responsive-ratio($x, $y, $pseudo: false) {
+    $padding: unquote( ( $y / $x) * 100 + '%');
+    @if $pseudo {
+        &:before {
+            @include pseudo($pos: relative);
+            width: 100%;
+            padding-top: $padding;
+        }
+    }
+    @else {
+        padding-top: $padding;
+    }
+}
+
+// img absolute
+@mixin img-absolute {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+//Truncate
+@mixin truncate($truncation-boundary) {
+    max-width: $truncation-boundary;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@mixin placeholder {
+    animation: placeholderShimmer 2s linear;
+    animation-iteration-count: infinite;
+    background-color: #fff;
+    background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, .08)), color-stop(15%, rgba(0, 0, 0, .15)), color-stop(30%, rgba(0, 0, 0, .08)));
+    background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, .08) 0, rgba(0, 0, 0, .15) 15%, rgba(0, 0, 0, .08) 30%);
+    background-image: linear-gradient(to right, rgba(0, 0, 0, .08) 0, rgba(0, 0, 0, .15) 15%, rgba(0, 0, 0, .08) 30%);
+    background-size: 1200px 100%;
+}
+
+@-webkit-keyframes placeholderShimmer {
+    0% {
+        background-position: -1200px 0
+    }
+    100% {
+        background-position: 1200px 0
+    }
+}
+
+@keyframes placeholderShimmer {
+    0% {
+        background-position: -1200px 0
+    }
+    100% {
+        background-position: 1200px 0
+    }
+}
