@@ -21,6 +21,16 @@ class SystemLogController extends AdminBaseController
         $this->_template->render();
     }
 
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'system-log/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
     private function getListingData()
     {
         $db = FatApp::getDb();
@@ -103,17 +113,6 @@ class SystemLogController extends AdminBaseController
         $this->set('moduleTypes', $moduleTypes);
         $this->set('types', $types);
     }
-
-    public function search()
-    {
-        $this->getListingData();
-        $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'system-log/search.php', true),
-            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-        ];
-        LibHelper::exitWithSuccess($jsonData, true);
-    }
-
     
     public function getSearchForm($fields = [])
     {

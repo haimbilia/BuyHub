@@ -43,6 +43,15 @@ class PluginsController extends AdminBaseController
         $this->_template->render();
     }
 
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'plugins/search.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
     private function getListingData()
     {
         $db = FatApp::getDb();
@@ -129,15 +138,6 @@ class PluginsController extends AdminBaseController
         $this->set("pluginTypes", $pluginTypes);
         $this->set("otherPluginTypes", $otherPluginTypes);
         $this->set('canEdit', $this->objPrivilege->canEditCommissionSettings($this->admin_id, true));
-    }
-
-    public function search()
-    {
-        $this->getListingData();
-        $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'plugins/search.php', true)
-        ];
-        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     public function form()
