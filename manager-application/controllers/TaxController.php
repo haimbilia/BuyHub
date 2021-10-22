@@ -36,6 +36,16 @@ class TaxController extends AdminBaseController
         return $frm;
     }
 
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'tax/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
     private function getListingData()
     {
         $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
@@ -104,68 +114,6 @@ class TaxController extends AdminBaseController
         $this->set('canEdit', $this->objPrivilege->canEditTax($this->admin_id, true));
     }
 
-    
-
-    public function search()
-    {
-        $this->getListingData();
-        $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'tax/search.php', true),
-            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-        ];
-        LibHelper::exitWithSuccess($jsonData, true);
-    }
-    
-
-    // public function search()
-    // {
-    //     $this->objPrivilege->canViewTax();
-
-    //     $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-    //     $searchForm = $this->getSearchForm();
-    //     $data = FatApp::getPostedData();
-    //     $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
-    //     $post = $searchForm->getFormDataFromArray($data);
-
-    //     $srch = Tax::getSearchObject($this->siteLangId, false);
-    //     $srch->addCondition('taxcat_deleted', '=', 0);
-
-    //     $activatedTaxServiceId = Tax::getActivatedServiceId();
-    //     $srch->addCondition('taxcat_plugin_id', '=', $activatedTaxServiceId);
-
-    //     $srch->addFld('t.*');
-
-    //     if (!empty($post['keyword'])) {
-    //         $cnd = $srch->addCondition('t.taxcat_identifier', 'like', '%' . $post['keyword'] . '%');
-    //         $cnd->attachCondition('t_l.taxcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
-    //         $cnd->attachCondition('t.taxcat_code', 'like', '%' . $post['keyword'] . '%', 'OR');
-    //     }
-
-    //     $page = (empty($page) || $page <= 0) ? 1 : $page;
-    //     $page = FatUtility::int($page);
-    //     $srch->setPageNumber($page);
-    //     $srch->setPageSize($pagesize);
-
-    //     $srch->addMultipleFields(array("t_l.taxcat_name"));
-    //     $srch->addOrder('taxcat_active', 'DESC');
-    //     $rs = $srch->getResultSet();
-    //     $records = array();
-    //     if ($rs) {
-    //         $records = FatApp::getDb()->fetchAll($rs);
-    //     }
-
-    //     $this->set("arrListing", $records);
-    //     $this->set('pageCount', $srch->pages());
-    //     $this->set('recordCount', $srch->recordCount());
-    //     $this->set('page', $page);
-    //     $this->set('pageSize', $pagesize);
-    //     $this->set('postedData', $post);
-    //     $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
-    //     $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
-    //     $this->set('activatedTaxServiceId', $activatedTaxServiceId);
-    //     $this->_template->render(false, false);
-    // }
-
     public function setup()
     {
         $this->objPrivilege->canEditTax();
@@ -177,14 +125,6 @@ class TaxController extends AdminBaseController
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
         }
-
-        $activatedTaxServiceId = Tax::getActivatedServiceId();
-        /* if (!$activatedTaxServiceId) {
-          if (Tax::validatePostOptions($this->siteLangId) == false) {
-          Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Tax_Option_Rate', $this->siteLangId));
-          FatUtility::dieJsonError(Message::getHtml());
-          }
-          } */
 
         $taxcat_id = $post['taxcat_id'];
         unset($post['taxcat_id']);
@@ -198,15 +138,6 @@ class TaxController extends AdminBaseController
         if ($taxcat_id == 0) {
             $taxcat_id = $record->getMainTableRecordId();
         }
-
-        /* if (!$activatedTaxServiceId) {
-          $taxvalOptions = array();
-          $taxStructure = new TaxStructure(FatApp::getConfig('CONF_TAX_STRUCTURE', FatUtility::VAR_FLOAT, 0));
-          $options = $taxStructure->getOptions($this->siteLangId);
-          foreach ($options as $optionVal) {
-          $taxvalOptions[$optionVal['taxstro_id']] = $post[$optionVal['taxstro_id']];
-          }
-          } */
 
         $newTabLangId = 0;
         if ($taxcat_id > 0) {

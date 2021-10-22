@@ -22,6 +22,16 @@ class AffiliateCommissionController extends AdminBaseController
         $this->_template->render();
     }
 
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'affiliate-commission/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
     private function getListingData()
     {
         $db = FatApp::getDb();
@@ -92,16 +102,6 @@ class AffiliateCommissionController extends AdminBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditAffiliateCommissionSettings($this->admin_id, true));
-    }
-
-    public function search()
-    {
-        $this->getListingData();
-        $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'affiliate-commission/search.php', true),
-            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-        ];
-        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     public function form()

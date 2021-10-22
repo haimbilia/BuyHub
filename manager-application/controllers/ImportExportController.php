@@ -805,6 +805,21 @@ class ImportExportController extends AdminBaseController
         }
         return $frm;
     }
+    
+    /**
+     * search : Search Bulk Media
+     *
+     * @return void
+     */
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'import-export/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
     private function getListingData()
     {
@@ -860,21 +875,6 @@ class ImportExportController extends AdminBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditEmptyCartItems($this->admin_id, true));
-    }
-    
-    /**
-     * search : Search Bulk Media
-     *
-     * @return void
-     */
-    public function search()
-    {
-        $this->getListingData();
-        $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'import-export/search.php', true),
-            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-        ];
-        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     public function upload()
