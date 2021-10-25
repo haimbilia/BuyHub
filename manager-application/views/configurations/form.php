@@ -131,7 +131,7 @@ if (!empty($colMd6Arr)) {
 <div class="card-head">
     <div class="card-head-label flex-grow-1">
         <div class="row justify-content-center">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <h3 class="card-head-title">
                     <?php echo $tabs[$frmType] . ' ' . Labels::getLabel('LBL_SETTINGS', $siteLangId); ?>
                 </h3>
@@ -141,7 +141,7 @@ if (!empty($colMd6Arr)) {
 </div>
 <div class="card-body">
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <?php if ($dispLangTab && $frmType != Configurations::FORM_MEDIA && $frmType != Configurations::FORM_SHARING) { ?>
                 <div class="form-section-head mt-0">
                     <nav class="nav nav-tabs navTabsJs">
@@ -166,7 +166,7 @@ if (!empty($colMd6Arr)) {
 </div>
 <div class="card-foot">
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <div class="row">
                 <div class="col">
                     <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_RESET', $siteLangId), 'button', 'btn_reset_form', 'btn btn-outline-brand resetModalFormJs'); ?>

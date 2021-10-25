@@ -114,7 +114,7 @@ class PluginsController extends AdminBaseController
                     continue;
                 }
                 $gptSrch = Plugin::getSearchObject(0, true);
-                $gptSrch->addCondition('plg.'. Plugin::DB_TBL_PREFIX . 'type', '=', $pluginType);
+                $gptSrch->addCondition('plg.' . Plugin::DB_TBL_PREFIX . 'type', '=', $pluginType);
                 $gptSrch->setPageSize(1);
                 $gptSrch->getResultSet();
                 if (0 < $gptSrch->recordCount()) {
@@ -146,7 +146,7 @@ class PluginsController extends AdminBaseController
         if (0 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-
+        
         $data = Plugin::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, null, true);
         $pluginType = $data['plugin_type'];
         $frm = $this->getForm($pluginType, $recordId);
@@ -365,8 +365,7 @@ class PluginsController extends AdminBaseController
             if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId)) {
                 $uploadedTime = AttachedFile::setTimeParam($attachment['afile_updated_at']);
                 $fld->htmlAfterField .= '<div class="uploaded--image">
-                <img src="'.UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($recordId,'LARGE'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg').'"></div>';
-
+                <img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'plugin', array($recordId, 'LARGE'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '"></div>';
             }
         }
 

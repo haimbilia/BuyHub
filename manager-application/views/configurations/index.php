@@ -1,4 +1,4 @@
-<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $controller = str_replace('Controller', '', FatApp::getController());
 ?>
@@ -15,7 +15,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back"></use>
                                     </svg>
                                 </a>
-                                <?php echo Labels::getLabel('LBL_CONFIGURATION_SETTINGS', $siteLangId); ?>
+                                <?php echo Labels::getLabel('LBL_GENERAL_SETTINGS', $siteLangId); ?>
                             </h3>
                         </div>
                     </div>
@@ -23,16 +23,16 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         <div class="settings-inner">
                             <ul class="confTypesJs">
                                 <?php foreach ($tabs as $formType => $tabName) {
-                                        $tabsId = 'tabJs-' . $formType;
-                                        $onclick = 'return false';
-                                        if ($formType == Configurations::FORM_MEDIA || $formType == Configurations::FORM_SHARING) { 
-                                            $onclick = "getLangForm(" . $formType . ", " . $siteLangId . ")";
-                                        } elseif ($formType == Configurations::FORM_IMPORT_EXPORT) { 
-                                            $onclick = "generalInstructions(" . $formType . ")";
-                                        } else { 
-                                            $onclick = "getForm(" . $formType . ")";
-                                        }
-                                    ?>
+                                    $tabsId = 'tabJs-' . $formType;
+                                    $onclick = 'return false';
+                                    if ($formType == Configurations::FORM_MEDIA || $formType == Configurations::FORM_SHARING) {
+                                        $onclick = "getLangForm(" . $formType . ", " . $siteLangId . ")";
+                                    } elseif ($formType == Configurations::FORM_IMPORT_EXPORT) {
+                                        $onclick = "generalInstructions(" . $formType . ")";
+                                    } else {
+                                        $onclick = "getForm(" . $formType . ")";
+                                    }
+                                ?>
                                     <li class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $formType) ? 'is-active' : '' ?>" data-listType="<?php echo $formType; ?>">
                                         <a class="settings-inner-link" rel=<?php echo $tabsId; ?> href="javascript:void(0)" onclick="<?php echo $onclick; ?>">
                                             <i class="settings-inner-icn">
@@ -48,7 +48,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                                     elit. Suscipit est quos </span>
                                             </div>
                                         </a>
-                                    </li>   
+                                    </li>
                                 <?php } ?>
                             </ul>
                         </div>

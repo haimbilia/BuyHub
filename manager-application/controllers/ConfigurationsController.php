@@ -1913,7 +1913,7 @@ class ConfigurationsController extends AdminBaseController
             case 'index':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_CONFIGURATION_SETTINGS', $this->siteLangId)]
+                    ['title' => Labels::getLabel('LBL_GENERAL_SETTINGS', $this->siteLangId)]
                 ];
         }
         return $this->nodes;
