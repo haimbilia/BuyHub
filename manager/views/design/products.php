@@ -244,22 +244,21 @@
                                 </form>
                                 <div class="card">
                                     <div class="card-head">
-                                        <h3 class="card-head-label">
-                                            <span class="card-head-title">Catalog Products </span>
+                                        <div class="card-head-label">
+                                            <h3 class="card-head-title">Catalog Products </h3>
 
-                                        </h3>
+                                        </div>
                                         <div class="card-toolbar">
-
+                                            <a href="#" class="btn btn-icon btn-outline-brand btn-add">
+                                                <svg class="svg" width="18" height="18">
+                                                    <use
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                    </use>
+                                                </svg>
+                                                <span>New</span>
+                                            </a>
                                             <ul class="actions">
-                                                <li> <a href="#" class="btn btn-icon btn-light btn-add">
-                                                        <i class="icn">
-                                                            <svg class="svg">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
-                                                                </use>
-                                                            </svg></i>
-                                                        <span>New</span>
-                                                    </a></li>
+
                                                 <li>
                                                     <a class="" href="#" title="">
                                                         <svg class="svg" width="18" height="18">
@@ -363,28 +362,32 @@
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
                                                                         alt="image">
                                                                 </a>
                                                                 <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg"
                                                                         alt="image">
                                                                 </a>
                                                                 <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg"
                                                                         alt="image">
                                                                 </a>
                                                                 <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg"
                                                                         alt="image">
                                                                 </a>
 
@@ -469,14 +472,16 @@
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg"
                                                                         alt="image">
                                                                 </a>
                                                                 <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg"
                                                                         alt="image">
                                                                 </a>
 
@@ -554,28 +559,32 @@
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
                                                                         alt="image">
                                                                 </a>
                                                                 <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg"
                                                                         alt="image">
                                                                 </a>
                                                                 <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg"
                                                                         alt="image">
                                                                 </a>
                                                                 <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg"
                                                                         alt="image">
                                                                 </a>
 
@@ -653,14 +662,16 @@
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
                                                                         alt="image">
                                                                 </a>
                                                                 <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg"
                                                                         alt="image">
                                                                 </a>
 
@@ -685,8 +696,7 @@
                                                         </td>
                                                         <td>
                                                             <div class="user">
-                                                                <a href="" class="link-text text-nowrap">Sachin
-                                                                    Tendulkar</a>
+                                                                <a href="" class="link-text text-nowrap">Joy</a>
                                                             </div>
                                                         </td>
 
@@ -741,21 +751,24 @@
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg"
                                                                         alt="image">
                                                                 </a>
                                                                 <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg"
                                                                         alt="image">
                                                                 </a>
                                                                 <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg"
                                                                         alt="image">
                                                                 </a>
 
@@ -838,14 +851,16 @@
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
                                                                         alt="image">
                                                                 </a>
                                                                 <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg"
                                                                         alt="image">
                                                                 </a>
 
@@ -853,7 +868,8 @@
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg"
                                                                         alt="image">
                                                                 </a>
 
@@ -937,21 +953,24 @@
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
                                                                         alt="image">
                                                                 </a>
                                                                 <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg"
                                                                         alt="image">
                                                                 </a>
                                                                 <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg"
                                                                         alt="image">
                                                                 </a>
 
@@ -1035,13 +1054,15 @@
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg"
                                                                         alt="image">
                                                                 </a> <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
                                                                         alt="image">
                                                                 </a>
 
@@ -1049,7 +1070,8 @@
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg"
                                                                         alt="image">
                                                                 </a>
 
@@ -1128,21 +1150,24 @@
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg"
                                                                         alt="image">
                                                                 </a>
                                                                 <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg"
                                                                         alt="image">
                                                                 </a>
                                                                 <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
                                                                     data-original-title="avocado">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
+                                                                    <img data-aspect-ratio="1:1"
+                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
                                                                         alt="image">
                                                                 </a>
                                                                 <a href="#" class="media media-sm media-circle"

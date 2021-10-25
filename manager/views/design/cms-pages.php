@@ -199,9 +199,9 @@
                                 </form>
                                 <div class="card">
                                     <div class="card-head">
-                                        <h3 class="card-head-label">
-                                            <span class="card-head-title">Pages</span>
-                                        </h3>
+                                        <div class="card-head-label">
+                                            <h3 class="card-head-title">Pages</h3>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">

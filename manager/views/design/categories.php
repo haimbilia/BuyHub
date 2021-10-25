@@ -79,8 +79,8 @@
                                 <div class="card">
                                     <div class="card-head">
                                         <div class="card-head-label">
-                                            <h3 class="card-head-label">
-                                                <span class="card-head-title">Catagories</span>
+                                            <h3 class="card-head-title">
+                                                Catagories
                                                 <span class="text-muted">Lorem ipsum dolor sit amet consectetur
                                                 </span>
                                             </h3>
@@ -90,12 +90,12 @@
 
                                             <ul class="actions">
                                                 <li> <a href="#" class="btn btn-icon btn-light btn-add">
-                                                        <i class="icn">
-                                                            <svg class="svg">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
-                                                                </use>
-                                                            </svg></i>
+
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
+                                                            </use>
+                                                        </svg>
                                                         <span>New</span>
                                                     </a></li>
                                                 <li>

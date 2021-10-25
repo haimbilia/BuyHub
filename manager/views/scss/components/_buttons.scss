@@ -40,28 +40,34 @@
         background: none;
         border-color: $brand-color;
         color: $brand-color;
+        &:hover {
+            background-color: darken($brand-color, 5%);
+            color: $brand-color-inverse !important;
+        }
     }
+    &-secondary {}
     &-outline-secondary {
         background: none;
         border-color: $secondary-color;
         color: $secondary-color;
     }
-    &-danger {
-        &-light {
-            background: lighten($danger-color, 35%);
-            border-color: lighten($danger-color, 35%);
-            color: $danger-color;
-            font-weight: 500;
-        }
+    &-light {
+        background: $bg-gray;
+        border-color: $bg-gray;
     }
     &-white {
-        background: #fff;
-        color: #000;
+        background: $bg-white;
+        color: $txt-body;
     }
     &-outline-white {
         background: none;
         border-color: #fff;
-        color: #fff;
+        color: $txt-body;
+    }
+    &-gray {
+        background: $bg-gray;
+        border-color: $border-color;
+        color: $txt-body;
     }
     &-outline-gray {
         background: none;
@@ -82,6 +88,13 @@
             height: 12px;
             margin-top: -4px;
             margin-#{$end-direction}: 5px;
+        }
+    }
+    &-icon {
+        .svg {
+            // width: 12px;
+            // height: 12px;
+            margin-#{$end-direction}: 6px;
         }
     }
     //size

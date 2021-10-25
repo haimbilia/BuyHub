@@ -79,18 +79,17 @@
 
                                 <div class="card">
                                     <div class="card-head">
-                                        <h3 class="card-head-label">
-                                            <span class="card-head-title">Collections Managements</span>
-                                        </h3>
+                                        <div class="card-head-label">
+                                            <h3 class="card-head-title">Collections Managements</h3>
+                                        </div>
                                         <div class="card-toolbar">
                                             <ul class="actions">
                                                 <li> <a href="#" class="btn btn-icon btn-light btn-add">
-                                                        <i class="icn">
-                                                            <svg class="svg">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
-                                                                </use>
-                                                            </svg></i>
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
+                                                            </use>
+                                                        </svg>
                                                         <span>New</span>
                                                     </a></li>
                                                 <li>
@@ -872,8 +871,7 @@
                                                             class="btn btn-outline-brand">Cancel</button>
                                                     </div>
                                                     <div class="col-auto">
-                                                        <button type="submit"
-                                                            class="btn btn-brand  ">Update</button>
+                                                        <button type="submit" class="btn btn-brand  ">Update</button>
                                                     </div>
                                                 </div>
                                             </div>

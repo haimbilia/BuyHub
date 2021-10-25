@@ -246,22 +246,27 @@
                                             </div>
                                             <div class="col-lg-2">
                                                 <a class="thumbnail gallery2" href="media/products/product1.jpg"><img
+                                                        data-aspect-ratio="1:1"
                                                         src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg" /></a>
                                             </div>
                                             <div class="col-lg-2">
                                                 <a class="thumbnail gallery2" href="media/products/product1.jpg"><img
+                                                        data-aspect-ratio="1:1"
                                                         src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg" /></a>
                                             </div>
                                             <div class="col-lg-2">
                                                 <a class="thumbnail gallery2" href="media/products/product1.jpg"><img
+                                                        data-aspect-ratio="1:1"
                                                         src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg" /></a>
                                             </div>
                                             <div class="col-lg-2">
                                                 <a class="thumbnail gallery2" href="media/products/product1.jpg"><img
+                                                        data-aspect-ratio="1:1"
                                                         src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg" /></a>
                                             </div>
                                             <div class="col-lg-2">
                                                 <a class="thumbnail gallery2" href="media/products/product1.jpg"><img
+                                                        data-aspect-ratio="1:1"
                                                         src="<?php echo CONF_WEBROOT_URL;?>images/products/product1.jpg" /></a>
                                             </div>
                                         </div>

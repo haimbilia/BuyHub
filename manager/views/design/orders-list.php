@@ -87,127 +87,286 @@
                                             <a class="nav-link" href="#">Cancellation</a>
                                             <a class="nav-link" href="#">Completed</a>
                                         </nav>
+                                        <div class="card-toolbar">
+                                            <ul class="actions">
+                                                <li>
+                                                    <a class="btn btn-icon btn-link" href="#">
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#export">
+                                                            </use>
+                                                        </svg> Export orders
+                                                    </a>
+                                                </li>
+                                                <li class="custom-drag-drop">
+                                                    <a class="btn btn-icon btn-link" href="#" data-toggle="dropdown"
+                                                        aria-expanded="false">
+
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#columns">
+                                                            </use>
+                                                        </svg> Columns
+
+                                                    </a>
+
+                                                    <div
+                                                        class="dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-anim scroll scroll-y">
+                                                        <ul class="list-checkbox list-drag-drop ui-sortable">
+                                                            <li>
+                                                                <svg class="svg" width="18" height="18">
+                                                                    <use
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#drag">
+                                                                    </use>
+                                                                </svg>
+                                                                <label class="checkbox">
+                                                                    <input type="checkbox" checked value="1">
+                                                                    Order ID. <span></span></label>
+
+                                                            </li>
+                                                            <li> <svg class="svg" width="18" height="18">
+                                                                    <use
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#drag">
+                                                                    </use>
+                                                                </svg>
+                                                                <label class="checkbox"><input type="checkbox" checked
+                                                                        value="2">
+                                                                    Customer
+
+                                                                    <span></span></label>
+                                                            </li>
+                                                            <li> <svg class="svg" width="18" height="18">
+                                                                    <use
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#drag">
+                                                                    </use>
+                                                                </svg><label class="checkbox"><input type="checkbox"
+                                                                        checked value="cod">
+                                                                    Purchased
+
+                                                                    <span></span></label> </li>
+                                                            <li> <svg class="svg" width="18" height="18">
+                                                                    <use
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#drag">
+                                                                    </use>
+                                                                </svg><label class="checkbox"><input type="checkbox"
+                                                                        checked value="cod"> Order date & time
+
+                                                                    <span></span></label> </li>
+                                                            <li> <svg class="svg" width="18" height="18">
+                                                                    <use
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#drag">
+                                                                    </use>
+                                                                </svg><label class="checkbox"><input type="checkbox"
+                                                                        checked value="cod"> Payment Status
+
+                                                                    <span></span></label>
+
+                                                            </li>
+                                                            <li> <svg class="svg" width="18" height="18">
+                                                                    <use
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#drag">
+                                                                    </use>
+                                                                </svg><label class="checkbox"><input type="checkbox"
+                                                                        checked value="cod"> Fulfillment Status
+
+                                                                    <span></span></label> </li>
+                                                            <li> <svg class="svg" width="18" height="18">
+                                                                    <use
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#drag">
+                                                                    </use>
+                                                                </svg><label class="checkbox"><input type="checkbox"
+                                                                        value="cod">
+                                                                    Payment Mode
+
+                                                                    <span></span></label> </li>
+
+
+                                                            <li> <svg class="svg" width="18" height="18">
+                                                                    <use
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#drag">
+                                                                    </use>
+                                                                </svg><label class="checkbox"><input type="checkbox"
+                                                                        checked value="cod"> Total
+                                                                    <span></span></label> </li>
+
+                                                        </ul>
+                                                    </div>
+
+                                                </li>
+
+                                            </ul>
+                                        </div>
+
+
 
                                     </div>
                                     <div class="card-body">
+                                        <form class="form mb-4" action="#">
 
-                                        <div class="row justify-content-between">
-                                            <div class="col">
-                                                <form class="form mb-4" action="#">
-                                                    <div class="input-group-append"> <input type="search"
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <div class="input-group">
+                                                        <input type="search" class="form-control" name="search" value=""
                                                             placeholder="Search orders, tags, customers, products">
-
-                                                        <button type="button" data-toggle="dropdown"
-                                                            class="btn btn-brand btn-wide dropdown-toggle"
-                                                            aria-expanded="false">Filters</button>
-                                                        <div class="dropdown-menu">
-
-                                                            <ul class="list-checkbox">
-                                                                <li>
-                                                                    <label class="checkbox">
-                                                                        <input type="checkbox" value="1">
-                                                                        Pending
-                                                                        <span></span></label>
-                                                                </li>
-                                                                <li><label class="checkbox"><input type="checkbox"
-                                                                            value="2">
-                                                                        Paid
-                                                                        <span></span></label></li>
-                                                                <li><label class="checkbox"><input type="checkbox"
-                                                                            value="cod">
-                                                                        Cash
-                                                                        <span></span></label></li>
-                                                            </ul>
+                                                        <div class="input-group-append">
+                                                            <button type="button"
+                                                                class="btn btn-brand btn-wide ml-2">Search</button>
                                                         </div>
                                                     </div>
-                                                </form>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <a class="btn btn-link" data-toggle="collapse"
+                                                        href="#collapseExample" aria-expanded="false"
+                                                        aria-controls="collapseExample">Advanced
+                                                        Search</a>
+                                                </div>
                                             </div>
-                                            <div class="col-auto">
-                                                <ul class="actions">
-                                                    <li class="custom-drag-drop">
-                                                        <a class="btn btn-icon btn-light btn-add" href="#">
+                                            <div class="collapse" id="collapseExample">
+                                                <div class="separator separator-dashed my-4"></div>
 
-                                                            <svg class="svg" width="18" height="18">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#export">
-                                                                </use>
-                                                            </svg> Export orders
-                                                        </a>
-
-
-
-                                                    </li>
-
-                                                    <li class="custom-drag-drop">
-                                                        <a href="#" data-toggle="dropdown" aria-expanded="false">
-
-                                                            <svg class="svg" width="18" height="18">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#more">
-                                                                </use>
-                                                            </svg>
-                                                        </a>
-
-                                                        <div
-                                                            class="dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-anim scroll scroll-y">
-                                                            <ul class="list-checkbox list-drag-drop ui-sortable">
-                                                                <li>
-                                                                    <label class="checkbox">
-                                                                        <input type="checkbox" checked value="1">
-                                                                        Order ID. <span></span></label>
-                                                                    <i class="icn fas fa-grip-lines"></i>
-                                                                </li>
-                                                                <li>
-                                                                    <label class="checkbox"><input type="checkbox"
-                                                                            checked value="2">
-                                                                        Customer
-
-                                                                        <span></span></label> <i
-                                                                        class="icn fas fa-grip-lines"></i>
-                                                                </li>
-                                                                <li><label class="checkbox"><input type="checkbox"
-                                                                            checked value="cod">
-                                                                        Purchased
-
-                                                                        <span></span></label> <i
-                                                                        class="icn fas fa-grip-lines"></i></li>
-                                                                <li><label class="checkbox"><input type="checkbox"
-                                                                            checked value="cod"> Order date & time
-
-                                                                        <span></span></label> <i
-                                                                        class="icn fas fa-grip-lines"></i></li>
-                                                                <li><label class="checkbox"><input type="checkbox"
-                                                                            checked value="cod"> Payment Status
-
-                                                                        <span></span></label>
-                                                                    <i class="icn fas fa-grip-lines"></i>
-                                                                </li>
-                                                                <li><label class="checkbox"><input type="checkbox"
-                                                                            checked value="cod"> Fulfillment Status
-
-                                                                        <span></span></label> <i
-                                                                        class="icn fas fa-grip-lines"></i></li>
-                                                                <li><label class="checkbox"><input type="checkbox"
-                                                                            value="cod"> Payment Mode
-
-                                                                        <span></span></label> <i
-                                                                        class="icn fas fa-grip-lines"></i></li>
-
-
-                                                                <li><label class="checkbox"><input type="checkbox"
-                                                                            checked value="cod"> Total
-                                                                        <span></span></label> <i
-                                                                        class="icn fas fa-grip-lines"></i></li>
-
-                                                            </ul>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label class="label">Product</label>
+                                                            <select>
+                                                                <option value="-1" selected="selected">All</option>
+                                                                <option value="1">Custom Products</option>
+                                                                <option value="0">Catalog Products</option>
+                                                            </select>
                                                         </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label class="label">User</label>
+                                                            <input type="text" placeholder="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label class="label">Product Categories</label>
+                                                            <select>
+                                                                <option value="-1">Does Not Matter</option>
+                                                                <option value="171">Mobile Cases</option>
+                                                                <option value="109">Electronics</option>
+                                                                <option value="110"> » Televisions</option>
+                                                                <option value="111"> » Washing Machines</option>
+                                                                <option value="117"> » Mobiles</option>
+                                                                <option value="170"> » » Phones</option>
+                                                                <option value="112"> » » Men</option>
+                                                                <option value="124"> » » » Footwears</option>
+                                                                <option value="126"> » » » » Casual shoes</option>
+                                                                <option value="128"> » » » » Formal shoes</option>
+                                                                <option value="129"> » » » » Floaters</option>
+                                                                <option value="130"> » » » » Sneakers</option>
+                                                                <option value="132"> » » » » Sports shoes</option>
+                                                                <option value="134"> » » » » Boots</option>
+                                                                <option value="135"> » » » » Flip-Flops</option>
+                                                                <option value="131"> » » » » Loafers</option>
+                                                                <option value="136"> » » » » Sandals</option>
+                                                                <option value="160"> » » » Sports Wear</option>
+                                                                <option value="161"> » » » » Sports T-Shirts</option>
+                                                                <option value="162"> » » » » Track Pants</option>
+                                                                <option value="163"> » » » » Track Suits</option>
+                                                                <option value="164"> » » » » Shorts</option>
+                                                                <option value="165"> » » » Watches</option>
+                                                                <option value="166"> » » » » Fossil</option>
+                                                                <option value="167"> » » » » Fastrack</option>
+                                                                <option value="168"> » » » » Casio</option>
+                                                                <option value="169"> » » » » Titan</option>
+                                                                <option value="123"> » » Clothing</option>
+                                                                <option value="172"> » » Headphones</option>
+                                                                <option value="114"> » » » Jeans</option>
+                                                                <option value="119"> » » » Shirts</option>
+                                                                <option value="158"> » » » Trousers</option>
+                                                                <option value="159"> » » » Jackets</option>
+                                                                <option value="180"> » » » Fragrances</option>
+                                                                <option value="173"> » » Screengaurds</option>
+                                                                <option value="122"> » » Laptops</option>
+                                                                <option value="157"> » » » Antivirus</option>
+                                                                <option value="174"> » » » Laptop Bags</option>
+                                                                <option value="175"> » » » Business Laptops</option>
+                                                                <option value="121"> » Gaming Consoles</option>
+                                                                <option value="176"> » » Xbox one</option>
+                                                                <option value="177"> » » PS4</option>
+                                                                <option value="178"> » » Handheld Consoles</option>
+                                                                <option value="113">Women</option>
+                                                                <option value="116"> » Jeans &amp; Bottom wear</option>
+                                                                <option value="120"> » Tops &amp; T-shirts</option>
+                                                                <option value="156">Baby &amp; Kids</option>
+                                                                <option value="150"> » Toys</option>
+                                                                <option value="152"> » » Puzzles</option>
+                                                                <option value="153"> » » Art &amp; Craft</option>
+                                                                <option value="154"> » » Baby Toys</option>
+                                                                <option value="155"> » » Action Figures</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label class="label">Active
+                                                            </label>
+                                                            <select>
+                                                                <option value="-1">Does Not Matter</option>
+                                                                <option value="1">Active</option>
+                                                                <option value="0">In-active</option>
+                                                            </select>
 
-                                                    </li>
 
-                                                </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label class="label">Approval Status </label>
+                                                            <select>
+                                                                <option value="-1">Does Not Matter</option>
+                                                                <option value="0">Un-approved</option>
+                                                                <option value="1">Approved</option>
+                                                            </select>
 
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label class="label"> Product Type </label>
+                                                            <select>
+                                                                <option value="">Select</option>
+                                                                <option value="1">Physical</option>
+                                                                <option value="2">Digital</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label class="label">Date From</label>
+                                                            <input class="field--calender fld-date hasDatepicker"
+                                                                type="text" value="">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label class="label">Date To </label>
+                                                            <input class="field--calender fld-date hasDatepicker"
+                                                                type="text" value="">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label class="label"></label>
+                                                            <button type="reset"
+                                                                class="btn btn-outline-brand">Cancel</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </form>
+
+
+
 
                                         <div class="table-responsive">
                                             <table width="100%" class="table">
@@ -335,7 +494,7 @@
                                                                 </figure>
                                                                 <div class="user-profile_data">
                                                                     <span class="text-muted fw-bold">
-                                                                        Sachin Tendulkar </span>
+                                                                        T. Weisman </span>
 
                                                                 </div>
                                                             </a>
@@ -406,7 +565,6 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-
                                                         <td><a href="">00055886987</a> </td>
                                                         <td>
                                                             <a href="" class="user-profile user-profile-sm">
@@ -496,7 +654,7 @@
                                                                 </figure>
                                                                 <div class="user-profile_data">
                                                                     <span class="text-muted fw-bold">
-                                                                        Sachin Tendulkar </span>
+                                                                        T. Weisman </span>
 
                                                                 </div>
                                                             </a>
