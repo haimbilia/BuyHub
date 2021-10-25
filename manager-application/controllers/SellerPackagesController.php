@@ -8,6 +8,14 @@ class SellerPackagesController extends AdminBaseController
         $this->objPrivilege->canViewSellerPackages();
     }
 
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditSellerPackages();
+        $this->modelObj = (new ReflectionClass('SellerPackages'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES_SETUP', $this->siteLangId));
+    }
+
     public function index()
     {
         $fields = $this->getFormColumns();
@@ -18,6 +26,16 @@ class SellerPackagesController extends AdminBaseController
         $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_SUBSCRIPTION_PACKAGES', $this->siteLangId));
         $this->getListingData();
         $this->_template->render();
+    }
+
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'seller-packages/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     private function getListingData()
@@ -87,16 +105,6 @@ class SellerPackagesController extends AdminBaseController
         $this->set('canEdit', $this->objPrivilege->canEditSellerPackages($this->admin_id, true));
     }
 
-    public function search()
-    {
-        $this->getListingData();
-        $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'seller-packages/search.php', true),
-            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-        ];
-        LibHelper::exitWithSuccess($jsonData, true);
-    }
-
     public function form()
     {
         $this->objPrivilege->canEditSellerPackages();
@@ -141,14 +149,6 @@ class SellerPackagesController extends AdminBaseController
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
       
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {
-        $this->objPrivilege->canEditSellerPackages();
-        $this->modelObj = (new ReflectionClass('SellerPackages'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES_SETUP', $this->siteLangId));
     }
 
     private function getForm($recordId)

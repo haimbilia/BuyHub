@@ -2,528 +2,241 @@
 
 class BlogPostCategoriesController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
+
     public function __construct($action)
     {
-        $ajaxCallArray = array('deleteRecord', 'form', 'langForm', 'search', 'setup', 'langSetup', 'updateOrder');
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die(Labels::getLabel('MSG_Invalid_Action', $this->siteLangId));
-        }
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewBlogPostCategories($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditBlogPostCategories($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewBlogPostCategories();
     }
 
-    public function index($parent = 0)
+    /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
     {
-        $this->objPrivilege->canViewBlogPostCategories();
-        $parent = FatUtility::int($parent);
-        $bpCatData = BlogPostCategory::getAttributesById($parent);
-        $bpCatObj = new BlogPostCategory();
-        $category_structure = $bpCatObj->getCategoryStructure($parent);
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditBlogPostCategories($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditBlogPostCategories();
+        }
+    }
 
-        $search = $this->getSearchForm();
-        $data = array(
-        'bpcategory_parent' => $parent
-        );
-        $search->fill($data);
-        $this->set("search", $search);
+    /**
+     * setModel - This function is used to set related model class and used by its parent class.
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
+    protected function setModel(array $constructorArgs = []): void
+    {
+        $this->modelObj = (new ReflectionClass('BlogPostCategory'))->newInstanceArgs($constructorArgs);
+    }
 
-        $this->set("bpcategory_parent", $parent);
-        $this->set("bpCatData", $bpCatData);
-        $this->set("category_structure", $category_structure);
+    /**
+     * setLangTemplateData - This function is use to automate load langform and save it. 
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->checkEditPrivilege();
+        $this->setModel($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_BLOG_POST_CATEGORIES_SETUP', $this->siteLangId));
+    }
+
+    public function index()
+    {
+        $this->checkEditPrivilege(true);
+        $this->_template->addJs(array('js/jquery-sortable-lists.js'));
         $this->_template->render();
     }
 
     public function search()
     {
-        $searchForm = $this->getSearchForm();
-        $data = FatApp::getPostedData();
-        $post = $searchForm->getFormDataFromArray($data);
-        $parent = FatApp::getPostedData('bpcategory_parent', FatUtility::VAR_INT, 0);
-        $srch = BlogPostCategory::getSearchObject(true, $this->siteLangId, false);
-        $srch->addCondition('bpc.bpcategory_parent', '=', $parent);
+        $this->checkEditPrivilege(true);
+        $records = BlogPostCategory::getBlogPostCatParentChildWiseArr($this->siteLangId, 0, true, false, false);
 
-        $srch->addOrder('bpc.bpcategory_display_order', 'asc');
-        $srch->addFld('bpc.*');
-
-        if (!empty($post['keyword'])) {
-            $keywordCond = $srch->addCondition('bpc.bpcategory_identifier', 'like', '%' . $post['keyword'] . '%');
-            $keywordCond->attachCondition('bpc_l.bpcategory_name', 'like', '%' . $post['keyword'] . '%');
-        }
-        $parentCatData = BlogPostCategory::getAttributesById($parent);
-
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-
-        $srch->addMultipleFields(array("bpcategory_name"));
-        $rs = $srch->getResultSet();
-        $pageCount = $srch->pages();
-
-        $records = FatApp::getDb()->fetchAll($rs);
         $this->set("arrListing", $records);
-        $this->set('pageCount', $pageCount);
-        $this->set('parentData', $parentCatData);
-        $this->set('postedData', $post);
-
         $this->_template->render(false, false);
     }
 
-    public function form($bpcategory_id = 0, $bpcategory_parent = 0)
+    public function getSubCategories()
     {
-        $this->objPrivilege->canEditBlogPostCategories();
-        $bpcategory_id = FatUtility::int($bpcategory_id);
-        $bpcategory_parent = FatUtility::int($bpcategory_parent);
-        $frm = $this->getForm($bpcategory_id);
+        $this->checkEditPrivilege(true);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
-        if (0 < $bpcategory_id) {
-            $data = BlogPostCategory::getAttributesById($bpcategory_id);
+        $childCategories = BlogPostCategory::getBlogPostCatParentChildWiseArr($this->siteLangId, $recordId, true, false, false);
+        $this->set("childCategories", $childCategories);
+        $this->_template->render(false, false);
+    }
+
+    public function form()
+    {
+        $this->checkEditPrivilege();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $frm = $this->getForm($recordId);
+
+        if (0 < $recordId) {
+            $data = BlogPostCategory::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, null, true);
             if ($data === false) {
-                FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
-
             /* url data[ */
             $urlSrch = UrlRewrite::getSearchObject();
             $urlSrch->doNotCalculateRecords();
             $urlSrch->setPageSize(1);
             $urlSrch->addFld('urlrewrite_custom');
-            $urlSrch->addCondition('urlrewrite_original', '=', 'blog/category/' . $bpcategory_id);
-            $rs = $urlSrch->getResultSet();
-            $urlRow = FatApp::getDb()->fetch($rs);
+            $urlSrch->addCondition('urlrewrite_original', '=', 'blog/category/' . $recordId);
+            $urlRow = FatApp::getDb()->fetch($urlSrch->getResultSet());
             if ($urlRow) {
                 $data['urlrewrite_custom'] = $urlRow['urlrewrite_custom'];
             }
             /* ] */
-
-            $frm->fill($data);
-        } else {
-            $data = array('bpcategory_parent' => $bpcategory_parent);
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getAllNames());
-        $this->set('bpcategory_id', $bpcategory_id);
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
-    }
-
-    public function langForm($catId = 0, $lang_id = 0, $autoFillLangData = 0)
-    {
-        $this->objPrivilege->canEditBlogPostCategories();
-
-        $bpcategory_id = FatUtility::int($catId);
-        $lang_id = FatUtility::int($lang_id);
-
-        if ($bpcategory_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
-        }
-
-        $langFrm = $this->getLangForm($bpcategory_id, $lang_id);
-        if (0 < $autoFillLangData) {
-            $updateLangDataobj = new TranslateLangData(BlogPostCategory::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($bpcategory_id, $lang_id);
-            if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-            $langData = current($translatedData);
-        } else {
-            $langData = BlogPostCategory::getAttributesByLangId($lang_id, $bpcategory_id);
-        }
-
-        if ($langData) {
-            $langFrm->fill($langData);
-        }
-
-        $this->set('languages', Language::getAllNames());
-        $this->set('bpcategory_id', $bpcategory_id);
-        $this->set('bpcategory_lang_id', $lang_id);
-        $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($lang_id));
         $this->_template->render(false, false);
     }
 
     public function setup()
     {
-        $this->objPrivilege->canEditBlogPostCategories();
+        $this->checkEditPrivilege();
 
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+        if (false === $post) {        
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $bpcategory_id = FatUtility::int($post['bpcategory_id']);
-        $bpcategory_parent = FatUtility::int($post['bpcategory_parent']);
-        unset($post['bpcategory_id']);
-        $record = new BlogPostCategory($bpcategory_id);
+        $data = $post;
 
-        if ($bpcategory_id == 0) {
-            $display_order = $record->getMaxOrder($bpcategory_parent);
-            $post['bpcategory_display_order'] = $display_order;
-        }
-        $record->assignValues($post);
+        $recordId = FatUtility::int($post['bpcategory_id']);
+        $parentCatId = FatUtility::int($post['bpcategory_parent']);
 
-        if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+        $record = new BlogPostCategory($recordId);
+        if ($recordId == 0) {
+            $display_order = $record->getMaxOrder($parentCatId);
+            $data['bpcategory_display_order'] = $display_order;
         }
-        $bpcategory_id = $record->getMainTableRecordId();
+        $record->assignValues($data);
+
+        if (!$record->save()) {           
+            LibHelper::exitWithError($record->getError(), true);
+        }
+        $recordId = $record->getMainTableRecordId();
         /* url data[ */
-        $blogOriginalUrl = BlogPostCategory::REWRITE_URL_PREFIX . $bpcategory_id;
-        if ($post['urlrewrite_custom'] == '') {
-            FatApp::getDb()->deleteRecords(UrlRewrite::DB_TBL, array( 'smt' => 'urlrewrite_original = ?', 'vals' => array($blogOriginalUrl)));
+        $blogOriginalUrl = BlogPostCategory::REWRITE_URL_PREFIX . $recordId;
+        if ($data['urlrewrite_custom'] == '') {
+            FatApp::getDb()->deleteRecords(UrlRewrite::DB_TBL, array('smt' => 'urlrewrite_original = ?', 'vals' => array($blogOriginalUrl)));
         } else {
-            $record->rewriteUrl($post['urlrewrite_custom'], true, $bpcategory_parent);
+            $record->rewriteUrl($data['urlrewrite_custom'], true, $parentCatId);
         }
         /* ] */
 
+        if (!$record->updateLangData($this->getDefaultFormLangId(), ['bpcategory_name' => $data['bpcategory_name']])) {
+            LibHelper::exitWithError($record->getError(), true);
+        }
+
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataobj = new TranslateLangData(BlogPostCategory::DB_TBL_LANG);
+            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            }
+        }
+
         $newTabLangId = 0;
-        if ($bpcategory_id > 0) {
-            $catId = $bpcategory_id;
-            $languages = Language::getAllNames();
+        $languages = Language::getDropDownList($this->getDefaultFormLangId());
+        if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
-                if (!$row = BlogPostCategory::getAttributesByLangId($langId, $bpcategory_id)) {
+                if (!Brand::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
-        } else {
-            $catId = $record->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Category_Setup_Successful', $this->siteLangId));
-        $this->set('catId', $catId);
+        $this->set('msg', $this->str_setup_successful);
+        $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function langSetup()
-    {
-        $this->objPrivilege->canEditBlogPostCategories();
-        $post = FatApp::getPostedData();
-
-        $bpcategory_id = $post['bpcategory_id'];
-
-        $languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $lang_id = $post['lang_id'];
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$post['lang_id'] = $lang_id;
-		}
-       
-        if ($bpcategory_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $frm = $this->getLangForm($bpcategory_id, $lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        unset($post['bpcategory_id']);
-        unset($post['lang_id']);
-        $data = array(
-        'bpcategorylang_lang_id' => $lang_id,
-        'bpcategorylang_bpcategory_id' => $bpcategory_id,
-        'bpcategory_name' => $post['bpcategory_name'],
-
-        );
-
-        $bpCatObj = new BlogPostCategory($bpcategory_id);
-        if (!$bpCatObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($bpCatObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(BlogPostCategory::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($bpcategory_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = BlogPostCategory::getAttributesByLangId($langId, $bpcategory_id)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Category_Setup_Successful', $this->siteLangId));
-        $this->set('catId', $bpcategory_id);
-        $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function change_status()
-    {
-        if (!FatUtility::isAjaxCall()) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
-        }
-
-        if ($this->canEdit === false) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Unauthorized_Access', $this->siteLangId));
-        }
-
-        $bpcategory_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
-        if ($bpcategory_id < 1) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request_ID', $this->siteLangId));
-        }
-
-        $bpCatObj = new BlogPostCategory($bpcategory_id);
-        if (!$row = $bpCatObj->canUpdateRecordStatus($bpcategory_id)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request_ID', $this->siteLangId));
-        } else {
-            $bpCatObj->assignValues(array(BlogPostCategory::tblFld('active') => ($row['bpcategory_active'] != applicationConstants::ACTIVE ? applicationConstants::ACTIVE : applicationConstants::INACTIVE)));
-            if ($bpCatObj->save()) {
-                FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Setup_Updated_Successfully', $this->siteLangId));
-            } else {
-                FatUtility::dieJsonError($bpCatObj->getError());
-            }
-        }
-    }
-
-    public function deleteRecord()
-    {
-        $this->objPrivilege->canEditBlogPostCategories();
-
-        $bpcategory_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
-        if ($bpcategory_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-        $this->markAsDeleted($bpcategory_id);
-
-        FatUtility::dieJsonSuccess($this->str_delete_record);
-    }
-
-    public function deleteSelected()
-    {
-        $this->objPrivilege->canEditBlogPostCategories();
-        $bpcategoryIdsArr = FatUtility::int(FatApp::getPostedData('bpcategory_ids'));
-
-        if (empty($bpcategoryIdsArr)) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
-
-        foreach ($bpcategoryIdsArr as $bpcategoryId) {
-            if (1 > $bpcategoryId) {
-                continue;
-            }
-            $this->markAsDeleted($bpcategoryId);
-        }
-        $this->set('msg', $this->str_delete_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    private function markAsDeleted($bpcategoryId)
-    {
-        $bpcategoryId = FatUtility::int($bpcategoryId);
-        if (1 > $bpcategoryId) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
-        $bpCatObj = new BlogPostCategory($bpcategoryId);
-        if (!$bpCatObj->canMarkRecordDelete($bpcategoryId)) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $bpCatObj->assignValues(array(BlogPostCategory::tblFld('deleted') => 1));
-        if (!$bpCatObj->save()) {
-            Message::addErrorMessage($bpCatObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
     }
 
     public function updateOrder()
     {
-        $this->objPrivilege->canEditBlogPostCategories();
-
-        $post = FatApp::getPostedData();
-        if (!empty($post)) {
-            $bpCatObj = new BlogPostCategory();
-            if (!$bpCatObj->updateOrder($post['bpcategory'])) {
-                Message::addErrorMessage($bpCatObj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-            FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Order_Updated_Successfully', $this->siteLangId));
+        $this->checkEditPrivilege();
+        $recordId = FatApp::getPostedData('catId', FatUtility::VAR_INT, 0);
+        $parentCatId = FatApp::getPostedData('parentCatId', FatUtility::VAR_INT, 0);
+        $catOrderArr = json_decode(FatApp::getPostedData('catOrder'));
+        if ($recordId < 1 || count($catOrderArr) < 1) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
+
+        $catObj = new BlogPostCategory($recordId);
+        $catObj->updateCatParent($parentCatId);
+        if (!$catObj->updateOrder($catOrderArr)) {
+            LibHelper::exitWithError($catObj->getError(), true);
+        }
+
+        $this->set('msg', $this->str_setup_successful);
+        $this->_template->render(false, false, 'json-success.php');
     }
 
     public function getBreadcrumbNodes($action)
     {
-        $nodes = array();
-        $parameters = FatApp::getParameters();
+        parent::getBreadcrumbNodes($action);
+
         switch ($action) {
             case 'index':
-                $nodes[] = array('title' => Labels::getLabel('LBL_Root_categories', $this->siteLangId), 'href' => UrlHelper::generateUrl('BlogPostCategories'));
-                if (isset($parameters[0]) && $parameters[0] > 0) {
-                    $parent = FatUtility::int($parameters[0]);
-                    if ($parent > 0) {
-                        $cntInc = 1;
-                        $bpCatObj = new BlogPostCategory();
-                        $category_structure = $bpCatObj->getCategoryStructure($parent);
-                        foreach ($category_structure as $catKey => $catVal) {
-                            if ($cntInc < count($category_structure)) {
-                                $nodes[] = array('title' => $catVal["bpcategory_identifier"], 'href' => UrlHelper::generateUrl('BlogPostCategories', 'index', array($catVal['bpcategory_id'])));
-                            } else {
-                                $nodes[] = array('title' => $catVal["bpcategory_identifier"]);
-                            }
-                            $cntInc++;
-                        }
-                    }
-                }
-                break;
-
-            case 'form':
-                break;
+                $this->nodes = [                  
+                    ['title' => Labels::getLabel('LBL_BLOG_POST_CATEGORIES', $this->siteLangId)]
+                ];
         }
-        return $nodes;
+        return $this->nodes;
     }
 
-    public function changeStatus()
+    private function getForm($recordId = 0)
     {
-        $this->objPrivilege->canEditBlogPostCategories();
-        $bpcategoryId = FatApp::getPostedData('bpcategoryId', FatUtility::VAR_INT, 0);
-        if (0 >= $bpcategoryId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $data = BlogPostCategory::getAttributesById($bpcategoryId, array( 'bpcategory_id', 'bpcategory_active'));
-
-        if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $status = ($data['bpcategory_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
-
-        $this->updateBlogPostCatStatus($bpcategoryId, $status);
-
-        FatUtility::dieJsonSuccess($this->str_update_record);
-    }
-
-
-    public function toggleBulkStatuses()
-    {
-        $this->objPrivilege->canEditBlogPostCategories();
-
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $bpcategoryIdsArr = FatUtility::int(FatApp::getPostedData('bpcategory_ids'));
-        if (empty($bpcategoryIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
-
-        foreach ($bpcategoryIdsArr as $bpcategoryId) {
-            if (1 > $bpcategoryId) {
-                continue;
-            }
-
-            $this->updateBlogPostCatStatus($bpcategoryId, $status);
-        }
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    private function updateBlogPostCatStatus($bpcategoryId, $status)
-    {
-        $status = FatUtility::int($status);
-        $bpcategoryId = FatUtility::int($bpcategoryId);
-        if (1 > $bpcategoryId || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
-
-        $obj = new BlogPostCategory($bpcategoryId);
-        if (!$obj->changeStatus($status)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-    }
-
-    private function getForm($bpcategory_id = 0)
-    {
-        $bpcategory_id = FatUtility::int($bpcategory_id);
+        $recordId = FatUtility::int($recordId);
         $bpCatObj = new BlogPostCategory();
-        $arrCategories = $bpCatObj->getCategoriesForSelectBox($this->siteLangId, $bpcategory_id);
+        $arrCategories = $bpCatObj->getCategoriesForSelectBox($this->siteLangId, $recordId);
         $categories = $bpCatObj->makeAssociativeArray($arrCategories);
-        $frm = new Form('frmBlogPostCategory', array('id' => 'frmBlogPostCategory'));
-        $frm->addHiddenField('', 'bpcategory_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_Category_Identifier', $this->siteLangId), 'bpcategory_identifier');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_SEO_Friendly_URL', $this->siteLangId), 'urlrewrite_custom');
+        
+        $frm = new Form('frmBlogPostCategory');
+        $frm->addHiddenField('', 'bpcategory_id', $recordId);
+        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_IDENTIFIER', $this->siteLangId), 'bpcategory_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'bpcategory_name');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
-        $frm->addSelectBox(Labels::getLabel('LBL_Category_Parent', $this->siteLangId), 'bpcategory_parent', array(0 => Labels::getLabel('LBL_Root_Category', $this->siteLangId)) + $categories, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY_PARENT', $this->siteLangId), 'bpcategory_parent', array(0 => Labels::getLabel('LBL_ROOT_CATEGORY', $this->siteLangId)) + $categories, '', array(), '');
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Category_Status', $this->siteLangId), 'bpcategory_active', $activeInactiveArr, '', array(), '');
-        $frm->addCheckBox(Labels::getLabel('LBL_Featured', $this->siteLangId), 'bpcategory_featured', 1, array(), false, 0);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY_STATUS', $this->siteLangId), 'bpcategory_active', $activeInactiveArr, '', array(), '');
+        $frm->addCheckBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'bpcategory_featured', 1, array(), false, 0);
 
-        return $frm;
-    }
-
-    private function getLangForm($bpcategory_id = 0, $lang_id = 0)
-    {
-        $bpcategory_id = FatUtility::int($bpcategory_id);
-
-        $srch = BlogPostCategory::getSearchObject(true);
-        $srch->addCondition('bpc.bpcategory_id', '=', $bpcategory_id);
-        $srch->addCondition('bpc.bpcategory_parent', '=', 0);
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        $frm = new Form('frmBlogPostCatLang', array('id' => 'frmBlogPostCatLang'));
-        $frm->addHiddenField('', 'bpcategory_id', $bpcategory_id);
-        $languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-        
-        $frm->addRequiredField(Labels::getLabel('LBL_Category_Name', $this->siteLangId), 'bpcategory_name');
-        
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
+
         return $frm;
     }
 
-    public function getSearchForm()
+    protected function getLangForm($recordId = 0, $lang_id = 0)
     {
-        $frm = new Form('frmSearch', array('id' => 'frmSearch'));
-        $frm->addHiddenField('', 'bpcategory_parent', 0, array('id' => 'bpcategory_parent'));
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
-
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
+        $frm = new Form('frmBlogPostCatLang', array('id' => 'frmBlogPostCatLang'));
+        $frm->addHiddenField('', 'bpcategory_id', $recordId);
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_Category_Name', $this->siteLangId), 'bpcategory_name');
         return $frm;
     }
 }

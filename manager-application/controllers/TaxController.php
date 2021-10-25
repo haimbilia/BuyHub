@@ -2,60 +2,87 @@
 
 class TaxController extends AdminBaseController
 {
-
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
-        $ajaxCallArray = array('deleteRecord', 'form', 'langForm', 'search', 'setup', 'langSetup');
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die($this->str_invalid_Action);
-        }
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewTax($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditTax($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
-    }
+        $this->objPrivilege->canViewTax();
+        $this->rewriteUrl = Brand::REWRITE_URL_PREFIX;
+    } 
 
     public function index()
     {
-        $this->objPrivilege->canViewTax();
-        $frmSearch = $this->getSearchForm();
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm(false, $fields);
+
+        $this->set('canEdit', $this->objPrivilege->canEditTax($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->_template->addJs('js/import-export.js');
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_TAX_CATEGORIES', $this->siteLangId));
+        $this->getListingData();
         $this->_template->render();
     }
 
-    public function getSearchForm()
+    public function getSearchForm($fields = [])
     {
-        $frm = new Form('frmTaxSearch');
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
+        $frm = new Form('frmRecordSearch');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld->overrideFldType('search');        
+
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
     public function search()
     {
-        $this->objPrivilege->canViewTax();
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'tax/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $searchForm = $this->getSearchForm();
+    private function getListingData()
+    {
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
+
         $data = FatApp::getPostedData();
+
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        $searchForm = $this->getSearchForm($fields);
+
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
-        $srch = Tax::getSearchObject($this->siteLangId, false);
+        $srch = Tax::getSearchObject($this->siteLangId, false, false);
         $srch->addCondition('taxcat_deleted', '=', 0);
-
         $activatedTaxServiceId = Tax::getActivatedServiceId();
         $srch->addCondition('taxcat_plugin_id', '=', $activatedTaxServiceId);
-
-        $srch->addFld('t.*');
+        $srch->addMultipleFields([
+            't.*','t_l.taxcat_name'     
+        ]);       
 
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('t.taxcat_identifier', 'like', '%' . $post['keyword'] . '%');
@@ -66,26 +93,25 @@ class TaxController extends AdminBaseController
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->setPageSize($pageSize);
+        $srch->addOrder($sortBy, $sortOrder);
 
-        $srch->addMultipleFields(array("t_l.taxcat_name"));
-        $srch->addOrder('taxcat_active', 'DESC');
         $rs = $srch->getResultSet();
-        $records = array();
-        if ($rs) {
-            $records = FatApp::getDb()->fetchAll($rs);
-        }
+        $records = FatApp::getDb()->fetchAll($rs);
 
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
-        $this->set('activatedTaxServiceId', $activatedTaxServiceId);
-        $this->_template->render(false, false);
+
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditTax($this->admin_id, true));
     }
 
     public function setup()
@@ -100,14 +126,6 @@ class TaxController extends AdminBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $activatedTaxServiceId = Tax::getActivatedServiceId();
-        /* if (!$activatedTaxServiceId) {
-          if (Tax::validatePostOptions($this->siteLangId) == false) {
-          Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Tax_Option_Rate', $this->siteLangId));
-          FatUtility::dieJsonError(Message::getHtml());
-          }
-          } */
-
         $taxcat_id = $post['taxcat_id'];
         unset($post['taxcat_id']);
 
@@ -120,15 +138,6 @@ class TaxController extends AdminBaseController
         if ($taxcat_id == 0) {
             $taxcat_id = $record->getMainTableRecordId();
         }
-
-        /* if (!$activatedTaxServiceId) {
-          $taxvalOptions = array();
-          $taxStructure = new TaxStructure(FatApp::getConfig('CONF_TAX_STRUCTURE', FatUtility::VAR_FLOAT, 0));
-          $options = $taxStructure->getOptions($this->siteLangId);
-          foreach ($options as $optionVal) {
-          $taxvalOptions[$optionVal['taxstro_id']] = $post[$optionVal['taxstro_id']];
-          }
-          } */
 
         $newTabLangId = 0;
         if ($taxcat_id > 0) {
@@ -793,6 +802,41 @@ class TaxController extends AdminBaseController
         $this->set('taxStrId', $taxStrId);
         $this->set('combTaxes', $combTaxes);
         $this->_template->render(false, false);
+    }
+
+    private function getFormColumns(): array
+    {
+        $taxTblHeadingCols = CacheHelper::get('taxTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($taxTblHeadingCols) {
+            return json_decode($taxTblHeadingCols);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'taxcat_identifier' => Labels::getLabel('LBL_CATEGORY_NAME', $this->siteLangId),
+            'taxcat_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+        CacheHelper::create('taxTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return [
+            'select_all',
+            'listSerial',
+            'taxcat_identifier',
+            'taxcat_active',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['taxcat_active'], Common::excludeKeysForSort());
     }
 
 }

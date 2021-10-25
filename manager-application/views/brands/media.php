@@ -16,7 +16,7 @@ HtmlHelper::formatFormFields($imageFrm);
 $imageFld = $imageFrm->getField('image');
 $imageFld->addFieldTagAttribute('onChange', 'loadImageCropper(this)');
 $htmlAfterField = '<div style="margin-top:15px;" class="preferredDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500') . '</div>';
-$htmlAfterField .= '<div id="image-listing"></div>';
+$htmlAfterField .= '<div id="imageListingJs"></div>';
 $imageFld->htmlAfterField = $htmlAfterField;
 /* Image Form */
 

@@ -7,17 +7,34 @@ class EmptyCartItemsController extends AdminBaseController
         $this->objPrivilege->canViewEmptyCartItems();
     }
 
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditEmptyCartItems();
+        $this->modelObj = (new ReflectionClass('EmptyCartItems'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('title')];
+        $this->set('formTitle', Labels::getLabel('LBL_EMPTY_CART_ITEMS_SETUP', $this->siteLangId));
+    }
+
     public function index()
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $this->set('canEdit', $this->objPrivilege->canEditEmptyCartItems($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
         $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_EMPTY_CART_ITEMS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
+    }
+
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'empty-cart-items/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     private function getListingData()
@@ -26,8 +43,6 @@ class EmptyCartItemsController extends AdminBaseController
         if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
             $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         }
-
-        $data = FatApp::getPostedData();
 
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
@@ -47,8 +62,9 @@ class EmptyCartItemsController extends AdminBaseController
 
         $searchForm = $this->getSearchForm($fields);
 
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
-        $post = $searchForm->getFormDataFromArray($data);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+        $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
 
         $srch = EmptyCartItems::getSearchObject($this->siteLangId, false, false);
         $srch->addMultipleFields([
@@ -79,21 +95,12 @@ class EmptyCartItemsController extends AdminBaseController
         $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
 
+        $this->set('frmSearch', $searchForm);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditEmptyCartItems($this->admin_id, true));
-    }
-
-    public function search()
-    {
-        $this->getListingData();
-        $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'empty-cart-items/search.php', true),
-            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-        ];
-        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     public function form()
@@ -140,14 +147,6 @@ class EmptyCartItemsController extends AdminBaseController
         $this->setLangData($recordObj, [$recordObj::tblFld('title') => $post[$recordObj::tblFld('title')]]);
 
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {
-        $this->objPrivilege->canEditEmptyCartItems();
-        $this->modelObj = (new ReflectionClass('EmptyCartItems'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('title')];
-        $this->set('formTitle', Labels::getLabel('LBL_EMPTY_CART_ITEMS_SETUP', $this->siteLangId));
     }
 
     public function deleteRecord()
@@ -271,11 +270,11 @@ class EmptyCartItemsController extends AdminBaseController
         return $frm;
     }
 
-    protected function getLangForm($recordId, $lang_id = 0)
+    protected function getLangForm($recordId, $langId = 0)
     {
         $frm = new Form('frmEmptyCartItemLang');
         $frm->addHiddenField('', 'emptycartitem_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Empty_Cart_Item_Title', $this->siteLangId), 'emptycartitem_title');
         return $frm;
     }

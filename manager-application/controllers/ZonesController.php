@@ -7,6 +7,14 @@ class ZonesController extends AdminBaseController
         $this->objPrivilege->canViewZones();
     }
 
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditZones();
+        $this->modelObj = (new ReflectionClass('Zone'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_ZONE_SETUP', $this->siteLangId));
+    }
+
     public function index()
     {
         $fields = $this->getFormColumns();
@@ -18,6 +26,16 @@ class ZonesController extends AdminBaseController
         $this->getListingData();
 
         $this->_template->render();
+    }
+
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'zones/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     private function getListingData()
@@ -80,16 +98,6 @@ class ZonesController extends AdminBaseController
         $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
     }
 
-    public function search()
-    {
-        $this->getListingData();
-        $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'zones/search.php', true),
-            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-        ];
-        LibHelper::exitWithSuccess($jsonData, true);
-    }
-
     public function form()
     {
         $this->objPrivilege->canEditZones();
@@ -133,14 +141,6 @@ class ZonesController extends AdminBaseController
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
          
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {
-        $this->objPrivilege->canEditZones();
-        $this->modelObj = (new ReflectionClass('Zone'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_ZONE_SETUP', $this->siteLangId));
     }
 
     private function getForm()

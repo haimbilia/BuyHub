@@ -8,6 +8,14 @@ class OrderStatusController extends AdminBaseController
         $this->objPrivilege->canViewOrderStatus();
     }
 
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditOrderStatus();
+        $this->modelObj = (new ReflectionClass('OrderStatus'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->siteLangId));
+    }
+
     public function index()
     {
         $fields = $this->getFormColumns();
@@ -37,6 +45,16 @@ class OrderStatusController extends AdminBaseController
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
+    }
+
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'order-status/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     private function getListingData()
@@ -105,16 +123,6 @@ class OrderStatusController extends AdminBaseController
         $this->set('canEdit', $this->objPrivilege->canEditOrderStatus($this->admin_id, true));
     }
 
-    public function search()
-    {
-        $this->getListingData();
-        $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'order-status/search.php', true),
-            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-        ];
-        LibHelper::exitWithSuccess($jsonData, true);
-    }
-
     public function form()
     {
         $this->objPrivilege->canEditOrderStatus();
@@ -164,14 +172,6 @@ class OrderStatusController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {
-        $this->objPrivilege->canEditOrderStatus();
-        $this->modelObj = (new ReflectionClass('OrderStatus'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->siteLangId));
-    }
-    
     private function getForm($recordId = 0)
     {
         $recordId = FatUtility::int($recordId);

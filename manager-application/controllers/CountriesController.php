@@ -7,6 +7,14 @@ class CountriesController extends AdminBaseController
         parent::__construct($action);
         $this->objPrivilege->canViewCountries();
     }
+    
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditCountries();
+        $this->modelObj = (new ReflectionClass('Countries'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_COUNTRY_SETUP', $this->siteLangId));
+    }
 
     public function index()
     {
@@ -19,6 +27,16 @@ class CountriesController extends AdminBaseController
         $this->getListingData();
 
         $this->_template->render();
+    }
+
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'countries/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     private function getListingData()
@@ -87,16 +105,6 @@ class CountriesController extends AdminBaseController
         $this->set('canEdit', $this->objPrivilege->canEditCountries($this->admin_id, true));
     }
 
-    public function search()
-    {
-        $this->getListingData();
-        $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'countries/search.php', true),
-            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-        ];
-        LibHelper::exitWithSuccess($jsonData, true);
-    }
-
     public function form()
     {
         $this->objPrivilege->canEditCountries();
@@ -145,14 +153,6 @@ class CountriesController extends AdminBaseController
         
         Product::updateMinPrices(0, 0, 0, $recordId);       
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {
-        $this->objPrivilege->canEditCountries();
-        $this->modelObj = (new ReflectionClass('Countries'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_COUNTRY_SETUP', $this->siteLangId));
     }
 
     private function getForm()

@@ -61,6 +61,10 @@ $(document).ready(function () {
             return '<div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
 
+        getModalBody: function () {
+            return '<div class="modal fade" id="modalBoxJs" tabindex="-1" role="dialog" aria-labelledby="modalBoxJsLabel" aria-hidden="true"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body pd-0"><div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div></div></div></div></div>';
+        },
+
         removeLoader: function (cls) {
             $(document.body).css({ 'cursor': 'default' });
             $('.loaderJs').remove();

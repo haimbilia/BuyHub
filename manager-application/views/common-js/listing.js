@@ -62,6 +62,18 @@ $(document).on('click', '.resetModalFormJs', function (e) {
     }
 });
 
+$(document).on("hidden.bs.modal", '#modalBoxJs', function () {
+    $.ykmodal.show();
+});
+
+$(document).ready(function () {
+    convertCheckboxToSwitch();
+});
+
+$(document).ajaxComplete(function () {
+    convertCheckboxToSwitch();
+});
+
 (function () {
     var dv = '.listingRecordJs';
     var paginationDv = '.listingPaginationJs';
@@ -214,6 +226,7 @@ $(document).on('click', '.resetModalFormJs', function (e) {
         if (false === checkControllerName()) {
             return false;
         }
+        fcom.resetEditorInstance();
 
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(controllerName, 'form'), '', function (t) {
@@ -471,15 +484,22 @@ $(document).on('click', '.resetModalFormJs', function (e) {
         });
     };
 
+    loadCropperSkeleton = function () {
+        $('#modalBoxJs').remove();
+        $('body').append(fcom.getModalBody());
+        $('#modalBoxJs').modal("show");
+        $.ykmodal.close();
+    }
+
     loadImageCropper = function (inputBtn) {
         if (false === checkControllerName()) {
             return false;
         }
 
         if (inputBtn.files && inputBtn.files[0]) {
+            loadCropperSkeleton();
             fcom.ajax(fcom.makeUrl(controllerName, 'imgCropper'), '', function (t) {
-                $('#cropperBoxJs').html(t);
-                $("#mediaFormJs").css("display", "none");
+                $('#modalBoxJs .modal-body').html(t);
                 var file = inputBtn.files[0];
                 var minWidth = document.frmRecordImage.min_width.value;
                 var minHeight = document.frmRecordImage.min_height.value;
@@ -510,14 +530,22 @@ $(document).on('click', '.resetModalFormJs', function (e) {
         if (false === checkControllerName()) {
             return false;
         }
-
         var frmName = formData.get("frmName");
-        var recordId = document.frmName.record_id.value;
-        var langId = document.frmName.lang_id.value;
-        var fileType = document.frmName.file_type.value;
-        var imageType = document.frmName.file_type.value;
+        var frm = document.forms[frmName];
+        var recordId = frm.record_id.value;
+        var langId = frm.lang_id.value;
+        var fileType = frm.file_type.value;
+        var imageType = frm.file_type.value;
+        var callback = '';
+        if ('undefined' != typeof frm.dataset.callback) {
+            var callback = frm.dataset.callback;
+        }
         var ratio_type = $('input[name="ratio_type"]:checked').val();
 
+        var slideScreen = 0;
+        if ('undefined' != typeof frm.slide_screen) {
+            slideScreen = frm.slide_screen.value;
+        }
         formData.append('recordId', recordId);
         formData.append('slide_screen', slideScreen);
         formData.append('lang_id', langId);
@@ -534,9 +562,6 @@ $(document).on('click', '.resetModalFormJs', function (e) {
             beforeSend: function () {
                 $.ykmodal(fcom.getLoader());
             },
-            complete: function () {
-                $.ykmodal(fcom.getLoader());
-            },
             success: function (ans) {
                 fcom.removeLoader();
                 if (ans.status == 0) {
@@ -544,8 +569,19 @@ $(document).on('click', '.resetModalFormJs', function (e) {
                     return;
                 }
                 $.ykmsg.success(ans.msg);
-                mediaForm(ans.recordId, imageType, langId, slideScreen);
-                reloadList();
+                if (true === $.ykmodal.isAdded()) {
+                    $.ykmodal.show();
+                    $("#modalBoxJs").modal("hide").remove();
+                    if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " select[name='lang_id']").length) {
+                        $("." + $.ykmodal.element + " select[name='lang_id']").val(langId).change()
+                    } else if ('' != callback) {
+                        window[callback]();
+                    }
+                } else {
+                    mediaForm(ans.recordId, imageType, langId, slideScreen);
+                    reloadList();
+                }
+                fcom.removeLoader();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 $.ykmsg.error(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -560,7 +596,6 @@ $(document).on('click', '.resetModalFormJs', function (e) {
             rect.left >= 0 &&
             rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
             rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-
         );
     }
 
@@ -576,6 +611,26 @@ $(document).on('click', '.resetModalFormJs', function (e) {
             return (typeof obj === "object") &&
                 (obj.nodeType === 1) && (typeof obj.style === "object") &&
                 (typeof obj.ownerDocument === "object");
+        }
+    }
+
+    convertCheckboxToSwitch = function () {
+        if (0 < $('form.checkboxSwitchJs').length) {
+            $('form.checkboxSwitchJs').find('.checkbox').addClass('switch switch-sm switch-icon switchIconJs').removeClass('checkbox');
+            $('form.checkboxSwitchJs .switchIconJs i').replaceWith('<span></span>');
+            $('form.checkboxSwitchJs').find('.caption-wraper').remove();
+
+            $('form.checkboxSwitchJs .label').each(function () {
+                if ('' == ($(this).text()).trim()) {
+                    $(this).remove();
+                }
+            });
+            $('form.checkboxSwitchJs ul.list-inline li').each(function () {
+                $(this).addClass('list-inline-item');
+                if (0 < $(this).find('.radio').length) {
+                    $(this).find('.radio').parent('label').addClass("radio-list d-block");
+                }
+            });
         }
     }
 })();

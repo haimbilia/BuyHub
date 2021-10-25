@@ -21,6 +21,15 @@ class LabelsController extends AdminBaseController
         $this->_template->render();
     }
 
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'labels/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
     private function getListingData()
     {
@@ -96,16 +105,6 @@ class LabelsController extends AdminBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditLanguageLabels($this->admin_id, true));
-    }
-
-    public function search()
-    {
-        $this->getListingData();
-        $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'labels/search.php', true),
-            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-        ];
-        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     public function langForm($labelType = Labels::TYPE_WEB, $autoFillLangData = 0)

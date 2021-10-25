@@ -38,7 +38,9 @@ $controller = str_replace('Controller', '', FatApp::getController());
                     $objPrivilege->canViewCountries(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewStates(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewEmptyCartItems(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewAbusiveWords(AdminAuthentication::getLoggedAdminId(), true)
+                    $objPrivilege->canViewAbusiveWords(AdminAuthentication::getLoggedAdminId(), true)   ||
+                    $objPrivilege->canViewShopReportReasons(AdminAuthentication::getLoggedAdminId(), true)
+                    
                 ) { ?>
                 <div class="setting-search">
                     <form class="form">
@@ -280,6 +282,23 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         <div class="setting__detail">
                             <h6><?php echo Labels::getLabel('NAV_EMPTY_CART', $siteLangId); ?></h6>
                             <span>Items for empty cart page</span>
+                        </div>
+                    </a>
+                    <?php } ?>
+                    <?php if ($objPrivilege->canViewShopReportReasons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                    <a class="setting" href="<?php echo UrlHelper::generateUrl('ShopReportReasons'); ?>">
+                        <div class="setting__icon">
+                            <span class="icon">
+                                <svg class="icon" width="40" height="40">
+                                    <use
+                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                    </use>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="setting__detail">
+                            <h6><?php echo Labels::getLabel('NAV_SHOP_REPORT_REASONS_MANAGEMENT', $siteLangId); ?></h6>
+                            <span>Shop report reasons</span>
                         </div>
                     </a>
                     <?php } ?>

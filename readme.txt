@@ -278,6 +278,7 @@ Updates/Fixes :
     => 058557 - pagination issue in admin seller product pages
     => 058768 - if category identifier contain apostrophe then filter not coming on category page
     => 058807 - Unable to change the URL for a sellers collection    
+    => 059263 - On order product search with lang there is query issue 
 
 
 New Features:  

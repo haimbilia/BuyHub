@@ -8,6 +8,14 @@ class OrderReturnReasonsController extends AdminBaseController
         $this->objPrivilege->canViewOrderReturnReasons();
     }
 
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {        
+        $this->objPrivilege->canEditOrderReturnReasons();
+        $this->modelObj = (new ReflectionClass('OrderReturnReason'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('title')];
+        $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->siteLangId));
+    }
+
     public function index()
     {
         $fields = $this->getFormColumns();
@@ -19,6 +27,16 @@ class OrderReturnReasonsController extends AdminBaseController
         $this->getListingData();
 
         $this->_template->render();
+    }
+
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'order-return-reasons/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     private function getListingData()
@@ -82,16 +100,6 @@ class OrderReturnReasonsController extends AdminBaseController
         $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
     }
 
-    public function search()
-    {
-        $this->getListingData();
-        $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'order-return-reasons/search.php', true),
-            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-        ];
-        LibHelper::exitWithSuccess($jsonData, true);
-    }
-
     public function form()
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
@@ -135,14 +143,6 @@ class OrderReturnReasonsController extends AdminBaseController
         $this->setLangData($recordObj, [$recordObj::tblFld('title') => $post[$recordObj::tblFld('title')]]);
 
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {        
-        $this->objPrivilege->canEditOrderReturnReasons();
-        $this->modelObj = (new ReflectionClass('OrderReturnReason'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('title')];
-        $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->siteLangId));
     }
 
     private function getForm()

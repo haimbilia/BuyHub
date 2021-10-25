@@ -136,7 +136,6 @@ class MetaTagsController extends AdminBaseController
             MetaTag::META_GROUP_ALL_BRANDS,
             MetaTag::META_GROUP_BLOG_PAGE
         ];
-        $this->set('displaySearchForm', (!in_array($metaType, $withoutSearchForm)));
         $this->set('metaType', $metaType);
         $this->set('loadRows', FatApp::getPostedData('loadRows', FatUtility::VAR_INT, 0));
     }
@@ -594,7 +593,7 @@ class MetaTagsController extends AdminBaseController
         }
 
         if (!$post['meta_other_meta_tags'] == '' && $post['meta_other_meta_tags'] == strip_tags($post['meta_other_meta_tags'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Other_Meta_Tag', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_OTHER_META_TAG', $this->siteLangId), true);
         }
         $metaRecordId = isset($post['meta_record_id']) ? $post['meta_record_id'] : 0;
         $frm = $this->getLangForm($metaId, $langId, $metaType, $metaRecordId);

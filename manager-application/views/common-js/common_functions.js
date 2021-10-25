@@ -29,6 +29,18 @@ function getHelpCenterContent(controller, action = "") {
     });
 }
 
+copyText = function(obj){
+    var copyText = $(obj).data('title');
+    /*
+    document.addEventListener('copy', function(e) {
+        e.clipboardData.setData('text/plain', copyText);
+        e.preventDefault();
+    }, true);
+    */
+    navigator.clipboard.writeText(copyText)
+    
+}
+
 var gCaptcha = false;
 function googleCaptcha() {
     $("body").addClass("captcha");

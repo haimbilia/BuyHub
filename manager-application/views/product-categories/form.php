@@ -229,7 +229,7 @@ if (null != $fld) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4" id="icon-image-listing"></div>
+                                <div class="col-md-4" id="icon-imageListingJs"></div>
                             </div>
                             <div class="divider"></div>
                             <h3 class="mb-4"><?php echo Labels::getLabel('LBL_Banner', $siteLangId); ?></h3>
@@ -291,7 +291,7 @@ if (null != $fld) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4" id="banner-image-listing"></div>
+                                <div class="col-md-4" id="banner-imageListingJs"></div>
                             </div>
                         </div>
                         <?php if (!empty($otherLangData)) {

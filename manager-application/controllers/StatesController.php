@@ -8,6 +8,14 @@ class StatesController extends AdminBaseController
         $this->objPrivilege->canViewStates();
     }
 
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {        
+        $this->objPrivilege->canEditStates();
+        $this->modelObj = (new ReflectionClass('States'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_STATE_SETUP', $this->siteLangId));
+    }    
+
     public function index()
     {
         $fields = $this->getFormColumns();
@@ -38,6 +46,16 @@ class StatesController extends AdminBaseController
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
+    }
+
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'states/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     private function getListingData()
@@ -118,16 +136,6 @@ class StatesController extends AdminBaseController
         $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
     }
 
-    public function search()
-    {
-        $this->getListingData();
-        $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'states/search.php', true),
-            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-        ];
-        LibHelper::exitWithSuccess($jsonData, true);
-    }
-
     public function form()
     {
         $this->objPrivilege->canEditStates();
@@ -200,14 +208,6 @@ class StatesController extends AdminBaseController
         } 
         return $frm;
     }
-
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {        
-        $this->objPrivilege->canEditStates();
-        $this->modelObj = (new ReflectionClass('States'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_STATE_SETUP', $this->siteLangId));
-    }    
 
     protected function getLangForm($recordId = 0, $lang_id = 0)
     {

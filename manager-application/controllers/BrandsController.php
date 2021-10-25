@@ -10,6 +10,14 @@ class BrandsController extends AdminBaseController
         $this->rewriteUrl = Brand::REWRITE_URL_PREFIX;
     }
 
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditBrands();
+        $this->modelObj = (new ReflectionClass('Brand'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_BRAND_SETUP', $this->siteLangId));
+    }  
+
     public function index()
     {
         $fields = $this->getFormColumns();
@@ -44,6 +52,16 @@ class BrandsController extends AdminBaseController
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
+    }
+
+    public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'brands/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     private function getListingData()
@@ -111,16 +129,6 @@ class BrandsController extends AdminBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));
-    }
-
-    public function search()
-    {
-        $this->getListingData();
-        $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'brands/search.php', true),
-            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-        ];
-        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     public function form()
@@ -262,15 +270,7 @@ class BrandsController extends AdminBaseController
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }      
         return $frm;
-    }
-
-    public function setLangTemplateData(array $constructorArgs = []): void
-    {
-        $this->objPrivilege->canEditBrands();
-        $this->modelObj = (new ReflectionClass('Brand'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_BRAND_SETUP', $this->siteLangId));
-    }   
+    } 
 
     protected function getLangForm($recordId = 0, $lang_id = 0)
     {
