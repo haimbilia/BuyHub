@@ -41,6 +41,14 @@
         });
     };
 
+    updatePassword = function (frm) {
+        if (!$(frm).validate())
+            return;
+        var data = fcom.frmData(frm);
+        fcom.updateWithAjax(fcom.makeUrl('Profile', 'updatePassword'), data, function (t) {
+        });
+    };
+
     removeProfileImage = function () {
         fcom.ajax(fcom.makeUrl('Profile', 'removeProfileImage'), '', function (t) {
             profileInfoForm();
@@ -101,9 +109,8 @@
             complete: function () {
                 $('#loader-js').html(fcom.getLoader());
             },
-            success: function (ans) {
-                $('#dispMessage').html(ans.msg);
-                profileInfoForm();
+            success: function (ans) {   
+                $.ykmsg.success(ans.msg);             
                 $.ykmodal.close()
                 profileInfoForm();
             },
