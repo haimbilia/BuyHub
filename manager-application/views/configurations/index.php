@@ -12,7 +12,9 @@ $controller = str_replace('Controller', '', FatApp::getController());
                             <h3 class="card-head-title">
                                 <a class="back" href="<?php echo UrlHelper::generateUrl('Settings'); ?>">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back"></use>
+                                        <use
+                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                                        </use>
                                     </svg>
                                 </a>
                                 <?php echo Labels::getLabel('LBL_GENERAL_SETTINGS', $siteLangId); ?>
@@ -33,42 +35,45 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                         $onclick = "getForm(" . $formType . ")";
                                     }
                                 ?>
-                                    <li class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $formType) ? 'is-active' : '' ?>" data-listType="<?php echo $formType; ?>">
-                                        <a class="settings-inner-link" rel=<?php echo $tabsId; ?> href="javascript:void(0)" onclick="<?php echo $onclick; ?>">
-                                            <i class="settings-inner-icn">
-                                                <svg class="svg" width="20" height="20">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-system-setting">
-                                                    </use>
-                                                </svg>
-                                            </i>
-                                            <div>
-                                                <h6 class="settings-inner-title"><?php echo $tabName; ?></h6>
-                                                <span class="settings-inner-desc">Lorem ipsum dolor sit amet
-                                                    consectetur adipisicing
-                                                    elit. Suscipit est quos </span>
-                                            </div>
-                                        </a>
-                                    </li>
+                                <li class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $formType) ? 'is-active' : '' ?>"
+                                    data-listType="<?php echo $formType; ?>">
+                                    <a class="settings-inner-link" rel=<?php echo $tabsId; ?> href="javascript:void(0)"
+                                        onclick="<?php echo $onclick; ?>">
+                                        <i class="settings-inner-icn">
+                                            <svg class="svg" width="20" height="20">
+                                                <use
+                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-system-setting">
+                                                </use>
+                                            </svg>
+                                        </i>
+                                        <div>
+                                            <h6 class="settings-inner-title"><?php echo $tabName; ?></h6>
+                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                consectetur adipisicing
+                                                elit. Suscipit est quos </span>
+                                        </div>
+                                    </a>
+                                </li>
                                 <?php } ?>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
-                <div id="frmBlockJs" class="card">
-                    <?php require_once(CONF_THEME_PATH . 'configurations/form.php'); ?>
-                </div>
+            <div class="col-md-8" id="frmBlockJs">
+
+                <?php require_once(CONF_THEME_PATH . 'configurations/form.php'); ?>
+
             </div>
         </div>
     </div>
 </main>
 
 <script>
-    var controllerName = '<?php echo $controller; ?>';
-    getHelpCenterContent(controllerName);
+var controllerName = '<?php echo $controller; ?>';
+getHelpCenterContent(controllerName);
 
-    var YES = <?php echo applicationConstants::YES; ?>;
-    var NO = <?php echo applicationConstants::NO; ?>;
-    var FORM_MEDIA = <?php echo Configurations::FORM_MEDIA; ?>;
+var YES = <?php echo applicationConstants::YES; ?>;
+var NO = <?php echo applicationConstants::NO; ?>;
+var FORM_MEDIA = <?php echo Configurations::FORM_MEDIA; ?>;
 </script>

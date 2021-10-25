@@ -2189,22 +2189,6 @@ strong {
     }
 }
 
-.sticky-sidebar {
-    position: sticky;
-    top: 0;
-}
-
-.form {
-    &--settings {
-        label {
-            display: flex;
-            flex-direction: row-reverse;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-    }
-}
-
 .cms {
     font-size: 0.85rem;
     line-height: 1.8;

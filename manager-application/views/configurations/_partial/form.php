@@ -2,9 +2,9 @@
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 ?>
 <div id="tabs_0<?php echo $form_type; ?>" class="tabs_panel">
-	<div class="wrapcenter">
-						
-						<?php 
+    <div class="wrapcenter">
+
+        <?php 
 							
 							$frm->setValidatorJsObjectName ( 'formValidator_'.$form_type );
 							$frm->setFormTagAttribute ( 'onsubmit', 'submitForm(this,formValidator_'.$form_type.'); return(false);' );
@@ -16,9 +16,8 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
 							echo $table->getHtml();
 							echo $frm->getExternalJS();
 							
-						?>	
-						</form>
-						
-	</div>    
-</div>		
-		
+						?>
+        </form>
+
+    </div>
+</div>
