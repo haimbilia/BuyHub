@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32.001" viewBox="0 0 32 32.001">
+  <g id="Group_546" data-name="Group 546" transform="translate(-360.296 -63.241)">
+    <rect id="Rectangle_521" data-name="Rectangle 521" width="32" height="32" transform="translate(360.296 63.241)" fill="none"/>
+    <g id="Group_544" data-name="Group 544">
+      <g id="Group_542" data-name="Group 542">
+        <path id="Path_407" data-name="Path 407" d="M376.394,91.241a1.817,1.817,0,0,1-1.205-.458c-.389-.345-9.545-8.549-9.545-16.721a10.75,10.75,0,1,1,21.5,0c0,8.148-9.157,16.376-9.546,16.722A1.819,1.819,0,0,1,376.394,91.241Zm0-26a8.8,8.8,0,0,0-8.75,8.821c0,6.81,7.681,14.129,8.75,15.114,1.062-.983,8.75-8.323,8.75-15.114A8.8,8.8,0,0,0,376.394,65.241Z"/>
+      </g>
+      <g id="Group_543" data-name="Group 543">
+        <path id="Path_408" data-name="Path 408" d="M376.363,78.935a4.586,4.586,0,1,1,4.587-4.586A4.592,4.592,0,0,1,376.363,78.935Zm0-7.172a2.586,2.586,0,1,0,2.587,2.586A2.589,2.589,0,0,0,376.363,71.763Z"/>
+      </g>
+    </g>
+    <g id="Group_545" data-name="Group 545">
+      <rect id="Rectangle_522" data-name="Rectangle 522" width="16" height="2" transform="translate(368.394 93.242)"/>
+    </g>
+  </g>
+</svg>
