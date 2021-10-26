@@ -10,6 +10,19 @@
             rel="stylesheet">
         <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
         <link rel="shortcut icon" href="images/favicon.ico" />
+        <style>
+        .list-group {
+            flex-direction: row;
+            flex-wrap: wrap;
+
+
+        }
+
+        .list-group li {
+            flex: 0 0 33%;
+            max-width: 33%;
+        }
+        </style>
     </head>
 
     <body class="">
@@ -76,32 +89,67 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <ul class="pages__list-wrapper">
-                                            <li><a href="orders-list.php">Orders list</a></li>
-                                            <li><a href="order-detail.php">Order detail</a></li>
-                                            <li><a href="collections-managements.php">Collections Managements</a></li>
-                                            <li><a href="products.php">Products</a></li>
-                                            <li><a href="listing.php">Listing</a></li>
-                                            <li><a href="seller-packages.php">Seller Packages</a></li>
-                                            <li><a href="login-1.php">Login</a></li>
-                                            <li><a href="password-reset.php">Password Reset</a></li>
-                                            <li><a href="profile-management.php">Profile Management</a></li>
-                                            <li><a href="get-started.php">Getting Started</a></li>
-                                            <li><a href="setting.php">Settings</a></li>
-                                            <li><a href="theme-setting.php">Theme Setting</a></li>
-                                            <li><a href="plugins-setting.php">Plugins Setting</a></li>
-                                            <li><a href="messages.php">Messages</a></li>
-                                            <li><a href="buy-together-products.php">Buy Together Products</a></li>
-                                            <li><a href="related-products.php">Related Products</a></li>
-                                            <li><a href="email-template-settings.php" target="_blank">Email temaplate -
+                                        <ul class="list-group">
+                                            <li class="list-group-item"><a target="_blank" target="_blank"
+                                                    href="orders-list.php">Orders
+                                                    list</a></li>
+                                            <li class="list-group-item"><a target="_blank" href="order-detail.php">Order
+                                                    detail</a></li>
+                                            <li class="list-group-item"><a
+                                                    href="collections-managements.php">Collections Managements</a></li>
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="products.php">Products</a></li>
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="listing.php">Listing</a></li>
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="seller-packages.php">Seller
+                                                    Packages</a></li>
+                                            <li class="list-group-item"><a target="_blank" href="login-1.php">Login</a>
+                                            </li>
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="password-reset.php">Password Reset</a>
+                                            </li>
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="profile-management.php">Profile
+                                                    Management</a></li>
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="get-started.php">Getting Started</a>
+                                            </li>
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="settings.php">Settings</a></li>
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="settings-theme.php">Theme Setting</a>
+                                            </li>
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="settings-plugins.php">Plugins
+                                                    Setting</a></li>
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="settings-media.php">Media Setting</a>
+                                            </li>
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="messages.php">Messages</a></li>
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="buy-together-products.php">Buy Together
+                                                    Products</a></li>
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="related-products.php">Related
+                                                    Products</a></li>
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="email-template-settings.php" target="_blank">Email temaplate -
                                                     Settings</a> </li>
-                                            <li><a href="email-template-listing.php" target="_blank">Email temaplate -
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="email-template-listing.php" target="_blank">Email temaplate -
                                                     listing</a></li>
-                                            <li><a href="navigation-management.php">Navigation Management</a></li>
-                                            <li><a href="cms-pages.php">CMS Pages</a></li>
-                                            <li><a href="email-template-settings.php" target="_blank">Email temaplate -
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="navigation-management.php">Navigation
+                                                    Management</a></li>
+                                            <li class="list-group-item"><a target="_blank" href="cms-pages.php">CMS
+                                                    Pages</a></li>
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="email-template-settings.php" target="_blank">Email temaplate -
                                                     Settings</a> </li>
-                                            <li><a href="email-template-listing.php" target="_blank">Email temaplate -
+                                            <li class="list-group-item"><a target="_blank"
+                                                    href="email-template-listing.php" target="_blank">Email temaplate -
                                                     listing</a></li>
 
                                         </ul>

@@ -109,7 +109,7 @@
                                     <!--begin::Form-->
                                     <div class="card-body">
                                         <div class="py-5">
-                                            <div class="dropzone dropzone-default dz-clickable" id="dropzone_1">
+                                            <div class="dropzone">
                                                 <div class="upload_cover">
                                                     <div class="img--container uploded__img">
                                                         <img src="<?php echo CONF_WEBROOT_URL; ?>images/banners/hero-1.jpg"
@@ -154,13 +154,11 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="py-5">
-                                            <div class="dropzone dropzone-default dz-clickable" id="dropzone_1">
+                                            <div class="dropzone">
                                                 <div class="upload_cover">
-                                                    <div clas="img--container  ">
-                                                        <div class="file-upload">
-                                                            <img
-                                                                src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
-                                                        </div>
+                                                    <div class="file-upload">
+                                                        <img
+                                                            src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
                                                     </div>
                                                     <div class="needsclick">
                                                         <h3 class="dropzone-msg-title">click here to upload</h3>

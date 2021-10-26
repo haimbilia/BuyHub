@@ -2027,12 +2027,13 @@ strong {
         flex-shrink: 0;
         position: relative;
         border-radius: .475rem;
+        position: relative;
+        width: 40px;
+        height: 40px;
         >img {
-            width: 40px;
-            height: 40px;
             flex-shrink: 0;
             display: inline-block;
-            border-radius: 50%;
+            background: $bg-placeholder;
         }
     }
     &_data {

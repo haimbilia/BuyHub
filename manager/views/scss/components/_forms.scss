@@ -582,7 +582,7 @@ form.custom-form {
 .checkbox input:checked::before,
 .radio input:checked::before {
     height: 9px;
-    width: 6px;
+    width: 5px;
     position: absolute;
     content: '';
     display: inline-block;
@@ -594,7 +594,7 @@ form.custom-form {
     transform: rotate(45deg);
     left: 50%;
     top: 50%;
-    margin: -6px 0 0 -3px;
+    margin: -6px 0 0 -2px;
 }
 
 .checkbox input:checked::after,

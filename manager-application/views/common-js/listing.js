@@ -699,28 +699,28 @@ $(document).ajaxComplete(function () {
     }
   };
 
-  convertCheckboxToSwitch = function () {
-    if (0 < $("form.checkboxSwitchJs").length) {
-      $("form.checkboxSwitchJs")
-        .find("label")
-        .addClass("switch switch-sm switch-icon switchIconJs")
-        .removeClass("checkbox");
-      $("form.checkboxSwitchJs .switchIconJs i").replaceWith("<span></span>");
-      $("form.checkboxSwitchJs").find(".caption-wraper").remove();
+  // convertCheckboxToSwitch = function () {
+  //   if (0 < $("form.checkboxSwitchJs").length) {
+  //     $("form.checkboxSwitchJs")
+  //       .find("label")
+  //       .addClass("switch switch-sm switch-icon switchIconJs")
+  //       .removeClass("checkbox");
+  //     $("form.checkboxSwitchJs .switchIconJs i").replaceWith("<span></span>");
+  //     $("form.checkboxSwitchJs").find(".caption-wraper").remove();
 
-      $("form.checkboxSwitchJs .label").each(function () {
-        if ("" == $(this).text().trim()) {
-          $(this).remove();
-        }
-      });
-      $("form.checkboxSwitchJs ul.list-inline li").each(function () {
-        $(this).addClass("list-inline-item");
-        if (0 < $(this).find(".radio").length) {
-          $(this).find(".radio").parent("label").addClass("radio-list d-block");
-        }
-      });
-    }
-  };
+  //     $("form.checkboxSwitchJs .label").each(function () {
+  //       if ("" == $(this).text().trim()) {
+  //         $(this).remove();
+  //       }
+  //     });
+  //     $("form.checkboxSwitchJs ul.list-inline li").each(function () {
+  //       $(this).addClass("list-inline-item");
+  //       if (0 < $(this).find(".radio").length) {
+  //         $(this).find(".radio").parent("label").addClass("radio-list d-block");
+  //       }
+  //     });
+  //   }
+  // };
 })();
 
 $(document).on("click", ".selectItemJs", function () {

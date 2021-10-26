@@ -104,18 +104,3 @@
         }
     }
 }
-
-.list-switch-inline {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    grid-gap: 1rem;
-    li {
-        border: $border;
-        list-style: none;
-        border-radius: $radius-common;
-        .switch {
-            margin-bottom: 0;
-            padding: 1rem;
-        }
-    }
-}
