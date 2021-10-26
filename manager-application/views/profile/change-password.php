@@ -1,6 +1,7 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->setFormTagAttribute('class', 'form form-horizontal');
+$frm->setFormTagAttribute('onsubmit', 'updatePassword(this); return(false);');
 
 $currentPassFld = $frm->getField('current_password');
 $newPassFld = $frm->getField('new_password');

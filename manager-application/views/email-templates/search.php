@@ -43,7 +43,7 @@ foreach ($arrListing as $sn => $row) {
                     'recordId' => $row['etpl_code']
                 ];
                 
-                if ($canEdit) {
+                if ($canEdit) {                    
                     $data['otherButtons'][] = [
                         'attr' => [
                             'href' => 'javascript:void(0)',

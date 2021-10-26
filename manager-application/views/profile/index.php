@@ -16,7 +16,12 @@
         </div>
     </div>
 </main>
+
+<?php 
+    $controller = str_replace('Controller', '', FatApp::getController());
+?>
 <script>
+    var controllerName = '<?php echo $controller; ?>';
     $(document).ready(function() {        
         openProfileTab("<?php echo $tab ?>");
     });

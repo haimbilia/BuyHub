@@ -178,6 +178,8 @@ class AdminBaseController extends FatController
                 'selectFont' => Labels::getLabel('MSG_PLEASE_SELECT_FONT_FAMILY', $this->siteLangId),
                 'dropFilesToUpload' => Labels::getLabel('MSG_DROP_FILES_HERE_TO_UPLOAD', $this->siteLangId),
                 'invalidUploadFileType' => Labels::getLabel('MSG_INVALID_FILE_TYPE._ONLY_{FILE-TYPE}_FILE_CAN_BE_UPLOADED', $this->siteLangId),
+                'clickToCopy' => Labels::getLabel('LBL_CLICK_TO_COPY', $this->siteLangId),
+                'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
             );
             $languages = Language::getAllNames(false);
             foreach ($languages as $val) {
