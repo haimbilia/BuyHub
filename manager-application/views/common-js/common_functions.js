@@ -29,17 +29,45 @@ function getHelpCenterContent(controller, action = "") {
     });
 }
 
-copyText = function(obj){
-    var copyText = $(obj).data('title');
+copyText = function (obj, applyToolTipInfo = true) {
+
+    var title = $(obj).data('title');
     /*
     document.addEventListener('copy', function(e) {
         e.clipboardData.setData('text/plain', copyText);
         e.preventDefault();
     }, true);
-    */
-    navigator.clipboard.writeText(copyText)
-    
-}
+    */   
+
+    if (!navigator.clipboard) {
+        // Clipboard API  only works on localhost anf https as per doc
+        return
+    }
+    try {
+        navigator.clipboard.writeText(copyText);
+        if (applyToolTipInfo) {
+            tooltipCopyHelper(obj, title);
+        }
+    } catch (err) {
+        console.error('Failed to copy!', err);
+    }
+
+};
+tooltipCopyHelper = function (obj, title) {
+
+    $(obj).tooltip('hide')
+        .attr('data-original-title', langLbl.copied + ": " + title)
+        .tooltip('update')
+        .tooltip('show');
+
+    $(obj).mouseout(function () {
+        console.log('vvv');
+        $(obj).tooltip('hide')
+            .attr('data-original-title', langLbl.clickToCopy)
+            .tooltip('update');
+        $(obj).unbind("mouseout");
+    });
+};
 
 var gCaptcha = false;
 function googleCaptcha() {

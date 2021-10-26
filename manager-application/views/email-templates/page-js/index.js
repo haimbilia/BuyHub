@@ -1,21 +1,22 @@
-// $(document).ready(function () {
-//     searchEtpls(document.frmEtplsSearch);
-// });
-
-(function () {   
+(function () {
 
     editLangForm = function (etplCode, langId, autoFillLangData = 0) {
         $.ykmodal(fcom.getLoader());
         //fcom.resetEditorInstance();
-        fcom.ajax(fcom.makeUrl('EmailTemplates', 'langForm', [etplCode, langId, autoFillLangData]), '', function (t) { 
-            $.ykmodal(t);
+        fcom.ajax(fcom.makeUrl('EmailTemplates', 'langForm', [etplCode, langId, autoFillLangData]), '', function (t) {
+            $.ykmodal(t, '', 'modal-dialog-vertical-md');
             fcom.removeLoader();
             fcom.setEditorLayout(langId);
+            if(!navigator.clipboard){
+                $('[data-toggle="tooltip"]').removeAttr('title');
+            }else{
+                $('[data-toggle="tooltip"]').tooltip();
+            }
+            
         });
     };
 
-    saveLangData = function (frm) {   
-
+    saveLangData = function (frm) {
         if (!$(frm).validate()) { return; }
         $.ykmodal(fcom.getLoader());
 
@@ -28,22 +29,20 @@
                 return false;
             }
             $.ykmsg.success(t.msg);
-            reloadList(); 
+            reloadList();
 
         });
     };
 
     sendTestEmail = function () {
         var data = fcom.frmData(document.frmEtplLang);
-        $.systemMessage(langLbl.processing, 'alert--process', false);
         fcom.ajax(fcom.makeUrl('EmailTemplates', 'sendTestMail'), data, function (res) {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
-                fcom.displaySuccessMessage(ans.msg);
+                $.ykmsg.success(ans.msg);
             } else {
-                fcom.displayErrorMessage(ans.msg);
+                $.ykmsg.error(ans.msg);
             }
-            $(document).trigger('close.facebox');
         });
     };
 
@@ -61,7 +60,7 @@
         var oldStatus = $(obj).attr("data-old-status");
         $('.listingTableJs').prepend(fcom.getLoader());
 
-        if ( '' == etplCode ) {
+        if ('' == etplCode) {
             $(obj).prop('checked', (1 == oldStatus));
             $.ykmsg.error(langLbl.invalidRequest);
             fcom.removeLoader();
@@ -83,57 +82,18 @@
         });
     };
 
-
-
-    // toggleStatus = function (obj) {
-    //     if (!confirm(langLbl.confirmUpdateStatus)) {
-    //         return;
-    //     }
-    //     var etplCode = obj.id;
-    //     if (etplCode == '') {
-    //         fcom.displayErrorMessage(langLbl.invalidRequest);
-    //         return false;
-    //     }
-    //     data = 'etplCode=' + etplCode;
-    //     fcom.displayProcessing();
-    //     fcom.ajax(fcom.makeUrl('EmailTemplates', 'changeStatus'), data, function (res) {
-    //         var ans = $.parseJSON(res);
-    //         if (ans.status == 1) {
-    //             $(obj).toggleClass("active");
-    //             fcom.displaySuccessMessage(ans.msg);
-    //         } else {
-    //             fcom.displayErrorMessage(ans.msg);
-    //         }
-    //     });
-    //     $.systemMessage.close();
-    // };
-
-    // clearSearch = function () {
-    //     document.frmEtplsSearch.reset();
-    //     searchEtpls(document.frmEtplsSearch);
-    // };
-
-    // toggleBulkStatues = function (status) {
-    //     if (!confirm(langLbl.confirmUpdateStatus)) {
-    //         return false;
-    //     }
-    //     $("#frmEmailTempListing input[name='status']").val(status);
-    //     $("#frmEmailTempListing").submit();
-    // };
-
-    settingsForm = function(langId) {
+    settingsForm = function (langId) {
         fcom.resetEditorInstance();
-        $.facebox(function() {
+        $.facebox(function () {
             editSettingsForm(langId);
         });
     };
 
-
-    editSettingsForm = function(langId, autoFillLangData = 0) {
+    editSettingsForm = function (langId, autoFillLangData = 0) {
         fcom.displayProcessing();
         fcom.resetEditorInstance();
 
-        fcom.ajax(fcom.makeUrl('EmailTemplates', 'settingsForm', [langId, autoFillLangData]), '', function(t) {
+        fcom.ajax(fcom.makeUrl('EmailTemplates', 'settingsForm', [langId, autoFillLangData]), '', function (t) {
             fcom.updateFaceboxContent(t);
             fcom.setEditorLayout(langId);
             fcom.resetFaceboxHeight();
@@ -141,12 +101,12 @@
             var validator = $(frm).validation({
                 errordisplay: 3
             });
-            $(frm).submit(function(e) {
+            $(frm).submit(function (e) {
                 e.preventDefault();
                 validator.validate();
                 if (!validator.isValid()) return;
                 var data = fcom.frmData(frm);
-                fcom.updateWithAjax(fcom.makeUrl('EmailTemplates', 'setupSettings'), data, function(t) {
+                fcom.updateWithAjax(fcom.makeUrl('EmailTemplates', 'setupSettings'), data, function (t) {
                     fcom.resetEditorInstance();
                     reloadList();
                     if (t.lang_id > 0) {
@@ -160,62 +120,62 @@
         });
     };
 
-    setupSettings = function(frm) {
+    setupSettings = function (frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('EmailTemplates', 'setupSettings'), data, function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('EmailTemplates', 'setupSettings'), data, function (t) {
             reloadList();
             $(document).trigger('close.facebox');
         });
     };
 
-    resetToDefaultContent =  function(){
-		var agree  = confirm(langLbl.confirmReplaceCurrentToDefault);
-		if( !agree ){ return false; }
-		oUtil.obj.putHTML( $("#editor_default_content").html() );
-	};
+    resetToDefaultContent = function () {
+        var agree = confirm(langLbl.confirmReplaceCurrentToDefault);
+        if (!agree) { return false; }
+        oUtil.obj.putHTML($("#editor_default_content").html());
+    };
 
-    removeEmailLogo = function(lang_id) {
+    removeEmailLogo = function (lang_id) {
         if (!confirm(langLbl.confirmDeleteImage)) {
             return;
         }
-        fcom.updateWithAjax(fcom.makeUrl('EmailTemplates', 'removeEmailLogo', [lang_id]), '', function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('EmailTemplates', 'removeEmailLogo', [lang_id]), '', function (t) {
             settingsForm(lang_id);
         });
     };
 
-    popupImage = function(inputBtn){
-		if (inputBtn.files && inputBtn.files[0]) {
-	        fcom.ajax(fcom.makeUrl('Shops', 'imgCropper'), '', function(t) {
-				$('#cropperBox-js').html(t);
-				$("#mediaForm-js").css("display", "none");
+    popupImage = function (inputBtn) {
+        if (inputBtn.files && inputBtn.files[0]) {
+            fcom.ajax(fcom.makeUrl('Shops', 'imgCropper'), '', function (t) {
+                $('#cropperBox-js').html(t);
+                $("#mediaForm-js").css("display", "none");
                 var file = inputBtn.files[0];
-	            var minWidth = document.frmEtplSettingsForm.logo_min_width.value;
-	            var minHeight = document.frmEtplSettingsForm.logo_min_height.value;
-				if(minWidth == minHeight){
-					var aspectRatio = 1 / 1
-				} else {
-	                var aspectRatio = 16 / 9;
-	            }
-	    		var options = {
-	                aspectRatio: aspectRatio,
-	                data: {
-	                    width: minWidth,
-	                    height: minHeight,
-	                },
-	                minCropBoxWidth: minWidth,
-	                minCropBoxHeight: minHeight,
+                var minWidth = document.frmEtplSettingsForm.logo_min_width.value;
+                var minHeight = document.frmEtplSettingsForm.logo_min_height.value;
+                if (minWidth == minHeight) {
+                    var aspectRatio = 1 / 1
+                } else {
+                    var aspectRatio = 16 / 9;
+                }
+                var options = {
+                    aspectRatio: aspectRatio,
+                    data: {
+                        width: minWidth,
+                        height: minHeight,
+                    },
+                    minCropBoxWidth: minWidth,
+                    minCropBoxHeight: minHeight,
                     toggleDragModeOnDblclick: false,
                     imageSmoothingQuality: 'high',
-					imageSmoothingEnabled: true,
-		        };
-				$(inputBtn).val('');
-    	  		return cropImage(file, options, 'uploadShopImages', inputBtn);
-	    	});
-		}
-	};
+                    imageSmoothingEnabled: true,
+                };
+                $(inputBtn).val('');
+                return cropImage(file, options, 'uploadShopImages', inputBtn);
+            });
+        }
+    };
 
-	uploadShopImages = function(formData){
+    uploadShopImages = function (formData) {
         var frmName = formData.get("frmName");
         var langId = document.frmEtplSettingsForm.lang_id.value;
         var fileType = document.frmEtplSettingsForm.file_type.value;
@@ -232,13 +192,13 @@
             cache: false,
             contentType: false,
             processData: false,
-            beforeSend: function() {
+            beforeSend: function () {
                 $('#loader-js').html(fcom.getLoader());
             },
-            complete: function() {
+            complete: function () {
                 $('#loader-js').html(fcom.getLoader());
             },
-			success: function(ans) {
+            success: function (ans) {
                 if (!ans.status) {
                     $.systemMessage(ans.msg, 'alert--danger');
                     return;
@@ -249,11 +209,11 @@
                 $(".uploaded--image").html('<img src="' + fcom.makeUrl('image', 'emailLogo', [ans.lang_id], SITE_ROOT_URL) + '?' + time + '">');
                 $.systemMessage(ans.msg, 'alert--success');
                 settingsForm(ans.lang_id);
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-			}
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
         });
-	}
+    }
 
 })();
