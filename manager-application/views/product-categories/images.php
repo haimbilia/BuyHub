@@ -1,30 +1,21 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php if (!empty($images)) { ?>
-<ul class="mt-0" id="<?php if ($canEdit) { ?>sortable<?php } ?>">
-    <li id="<?php echo $images['afile_id']; ?>">
-        <div class="logoWrap">
-            <div class="logothumb">
-                <?php $uploadedTime = AttachedFile::setTimeParam($images['afile_updated_at']);?>
-                <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', $imageFunction, array($images['afile_record_id'], $images['afile_lang_id'], "THUMB", $images['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>"
-                    title="<?php echo $images['afile_name']; ?>" alt="<?php echo $images['afile_name']; ?>">
-                <?php if ($canEdit) { ?> <a class="deleteLink white" href="javascript:void(0);"
-                    title="Delete <?php echo $images['afile_name']; ?>"
-                    onclick="deleteImage(<?php echo $images['afile_id']; ?>, <?php echo $images['afile_record_id']; ?>, '<?php echo $imageType; ?>', <?php echo $images['afile_lang_id']; ?>, <?php echo $images['afile_screen']; ?> );"
-                    class="delete"><i class="ion-close-round"></i></a>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) { 
+    ?>
+    <div class="upload__files">
+        <ul class="upload__list">
+            <li class="upload__list-item" id="<?php echo $image['afile_id']; ?>">
+                <div class="media">
+                    <?php $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']); ?>
+                    <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', $imageFunction, array($image['afile_record_id'], $image['afile_lang_id'], "THUMB", $image['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" title="<?php echo $image['afile_name']; ?>" alt="<?php echo $image['afile_name']; ?>">
+                </div>
+                <div class="title"><?php echo $image['afile_name']; ?></div>
+                <?php if ($canEdit) { ?>
+                    <div class="action">
+                        <a href="javascript:0;" onclick="deleteImage(<?php echo $image['afile_id']; ?>, <?php echo $image['afile_record_id']; ?>, '<?php echo $imageType; ?>', <?php echo $image['afile_lang_id']; ?>, <?php echo $image['afile_screen']; ?> );">
+                        </a>
+                    </div>
                 <?php } ?>
-            </div>
-            <?php if (isset($imgTypesArr) && !empty($imgTypesArr[$images['afile_record_subid']])) {
-                    echo '<small class=""><strong>' . Labels::getLabel('LBL_Type', $siteLangId) . ': </strong> ' . $imgTypesArr[$images['afile_record_subid']] . '</small><br/>';
-                }
-
-                $lang_name = Labels::getLabel('LBL_All', $siteLangId);
-                if ($images['afile_lang_id'] > 0) {
-                    $lang_name = $languages[$images['afile_lang_id']]; ?>
-            <?php
-                } ?>
-            <small class="text--small"><?php echo Labels::getLabel('LBL_Language', $siteLangId); ?>:
-                <?php echo $lang_name; ?></small>
-        </div>
-    </li>
-</ul>
-<?php }    ?>
+            </li>
+        </ul>
+    </div>
+<?php } ?>
