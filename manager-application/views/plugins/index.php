@@ -1,4 +1,4 @@
-<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $sortByFld = $frmSearch->getField('sortBy');
 $sortByFld->setFieldTagAttribute('id', 'sortBy');
@@ -34,7 +34,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                         <a class="settings-inner-link" href="javascript:void(0)" onClick="searchRecords(<?php echo $formType; ?>);">
                                             <i class="settings-inner-icn">
                                                 <svg class="svg" width="20" height="20">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-extension">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#<?php echo isset($svgIconNames[$formType]) ? $svgIconNames[$formType] : 'icon-extension'; ?>">
                                                     </use>
                                                 </svg>
                                             </i>
@@ -45,7 +45,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                                     elit. Suscipit est quos </span>
                                             </div>
                                         </a>
-                                    </li>    
+                                    </li>
                                 <?php } ?>
                             </ul>
                         </div>
