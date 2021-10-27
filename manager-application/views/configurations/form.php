@@ -2,7 +2,7 @@
 
 $clearFormFn = isset($clearFormFn) ? $clearFormFn : 'getForm(' . $frmType . ')';
 
-HtmlHelper::formatFormFields($frm);
+HtmlHelper::formatFormFields($frm, 6);
 $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
 $frm->setFormTagAttribute('class', 'form form--settings modalFormJs checkboxSwitchJs layout--' . $formLayout);
 $frm->setFormTagAttribute('data-onclear', $clearFormFn);
@@ -148,15 +148,17 @@ if (!empty($colMd6Arr)) {
         <div class="card-head-toolbar">
             <?php if ($dispLangTab && $frmType != Configurations::FORM_MEDIA && $frmType != Configurations::FORM_SHARING) { ?>
 
-                <nav class="nav nav-tabs navTabsJs">
-                    <a class="nav-link <?php echo ($lang_id == 0) ? 'active' : ''; ?>" href="javascript:void(0)" onClick="getForm(<?php echo $frmType; ?>)">
-                        <?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?>
-                    </a>
+            <nav class="nav nav-tabs navTabsJs">
+                <a class="nav-link <?php echo ($lang_id == 0) ? 'active' : ''; ?>" href="javascript:void(0)"
+                    onClick="getForm(<?php echo $frmType; ?>)">
+                    <?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?>
+                </a>
 
-                    <a class="nav-link <?php echo (0 < $lang_id ? 'active' : '') ?>" href="javascript:void(0);" onClick="getLangForm(<?php echo $frmType; ?>, <?php echo FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1); ?>)">
-                        <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
-                    </a>
-                </nav>
+                <a class="nav-link <?php echo (0 < $lang_id ? 'active' : '') ?>" href="javascript:void(0);"
+                    onClick="getLangForm(<?php echo $frmType; ?>, <?php echo FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1); ?>)">
+                    <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
+                </a>
+            </nav>
 
             <?php } ?>
         </div>
@@ -167,7 +169,7 @@ if (!empty($colMd6Arr)) {
         <div class="formBodyJs">
             <?php echo str_replace('<i class="input-helper"></i>', '<span></span>', $frm->getFormHtml()); ?>
             <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-                <div id="map" style="height:500px"></div>
+            <div id="map" style="height:500px"></div>
             <?php } ?>
         </div>
     </div>
@@ -188,72 +190,72 @@ if (!empty($colMd6Arr)) {
     </div>
 </div>
 <script language="javascript">
-    var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
-    <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-        getStatesByCountryCode($("#geo_country_code").val(),
-            '<?php echo FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1); ?>', '#geo_state_code',
-            'state_code');
-    <?php } ?>
+var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
+<?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
+getStatesByCountryCode($("#geo_country_code").val(),
+    '<?php echo FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1); ?>', '#geo_state_code',
+    'state_code');
+<?php } ?>
 
-    $(document).on('change', '.prefRatio-js', function() {
-        var inputElement = $(this).parents('.list-inline').next('input');
-        var selectedVal = $(this).val();
-        if (selectedVal == ratioTypeSquare) {
-            inputElement.attr('data-min_width', 150)
-            inputElement.attr('data-min_height', 150)
-        } else {
-            inputElement.attr('data-min_width', 150)
-            inputElement.attr('data-min_height', 85)
-        }
-    });
+// $(document).on('change', '.prefRatio-js', function() {
+//     var inputElement = $(this).parents('.list-inline').next('input');
+//     var selectedVal = $(this).val();
+//     if (selectedVal == ratioTypeSquare) {
+//         inputElement.attr('data-min_width', 150)
+//         inputElement.attr('data-min_height', 150)
+//     } else {
+//         inputElement.attr('data-min_width', 150)
+//         inputElement.attr('data-min_height', 85)
+//     }
+// });
 
-    $(document).on('change', '.geoLocation', function() {
-        var geolocVal = $(this).val();
+$(document).on('change', '.geoLocation', function() {
+    var geolocVal = $(this).val();
 
-        $('.listingFilter').removeAttr('disabled');
-        if (geolocVal == <?php echo applicationConstants::BASED_ON_RADIUS; ?>) {
-            $('.listingFilter').attr('disabled', 'disabled');
-            $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', false); // enable
-        } else {
-            $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', true); // enable
-        }
+    $('.listingFilter').removeAttr('disabled');
+    if (geolocVal == <?php echo applicationConstants::BASED_ON_RADIUS; ?>) {
+        $('.listingFilter').attr('disabled', 'disabled');
+        $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', false); // enable
+    } else {
+        $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', true); // enable
+    }
 
-        if (geolocVal == <?php echo applicationConstants::BASED_ON_DELIVERY_LOCATION; ?>) {
-            $('.listingFilter').each(function() {
-                if ($(this).val() == <?php echo applicationConstants::LOCATION_ZIP; ?>) {
-                    $(this).attr('disabled', 'disabled');
-                }
-            });
-        }
-    });
-
-    $(document).on('change', '.defaultLocationGeoFilter', function() {
-        if ($(this).val() == 1) {
-            $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', false); // enable
-            $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', false); // enable
-            $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', false); // enable
-        } else {
-            $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', true); // enable
-            $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', true); // enable
-            $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', true); // enable
-        }
-    });
-    <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-        $(document).ready(function() {
-            var lat = $('#lat').val();
-            var lng = $('#lng').val();
-            initMap(lat, lng);
+    if (geolocVal == <?php echo applicationConstants::BASED_ON_DELIVERY_LOCATION; ?>) {
+        $('.listingFilter').each(function() {
+            if ($(this).val() == <?php echo applicationConstants::LOCATION_ZIP; ?>) {
+                $(this).attr('disabled', 'disabled');
+            }
         });
-    <?php } else { ?>
-        var countryId = $("#user_country_id").val();
-        if ('undefined' != typeof countryId) {
-            getCountryStates(countryId, '<?php echo $stateData; ?>', '#user_state_id');
-        }
-    <?php } ?>
-    $(document).on('keyup', 'form[name="frmConfiguration"]', function(e) {
-        e.stopImmediatePropagation();
-        if (e.keyCode === 13) {
-            $('.formBodyJs form').submit();
-        }
-    });
+    }
+});
+
+$(document).on('change', '.defaultLocationGeoFilter', function() {
+    if ($(this).val() == 1) {
+        $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', false); // enable
+        $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', false); // enable
+        $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', false); // enable
+    } else {
+        $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', true); // enable
+        $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', true); // enable
+        $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', true); // enable
+    }
+});
+<?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
+$(document).ready(function() {
+    var lat = $('#lat').val();
+    var lng = $('#lng').val();
+    initMap(lat, lng);
+});
+<?php } else { ?>
+var countryId = $("#user_country_id").val();
+if ('undefined' != typeof countryId) {
+    getCountryStates(countryId, '<?php echo $stateData; ?>', '#user_state_id');
+}
+<?php } ?>
+$(document).on('keyup', 'form[name="frmConfiguration"]', function(e) {
+    e.stopImmediatePropagation();
+    if (e.keyCode === 13) {
+        $('.formBodyJs form').submit();
+    }
+});
 </script>

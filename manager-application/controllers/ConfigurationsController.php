@@ -720,16 +720,17 @@ class ConfigurationsController extends AdminBaseController
                     'CONF_PRODUCT_GEO_LOCATION',
                     $prodGeoSettingArr,
                     '',
-                    array('class' => 'list-inline')
+                    array('class' => 'list-radio')
                 );
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_DISPLAY_AND_SEARCH_PRODUCTS_BASED_ON_LOCATION", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForRadio($fld);
+                // $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_DISPLAY_AND_SEARCH_PRODUCTS_BASED_ON_LOCATION", $this->siteLangId) . "</span>";
 
                 $fld = $frm->addRadioButtons(
                     Labels::getLabel("LBL_PRODUCT_LISTING_FILTER", $this->siteLangId),
                     'CONF_LOCATION_LEVEL',
                     applicationConstants::getLocationLevels($this->siteLangId),
                     '',
-                    array('class' => 'list-inline')
+                    array('class' => 'list-radio')
                 );
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_DISPLAY_AND_SEARCH_PRODUCTS_BASED_ON_CRITERIA", $this->siteLangId) . "</span>";
 

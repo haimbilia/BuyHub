@@ -204,4 +204,12 @@ class HtmlHelper
             $fld->htmlAfterField = '<span class="form-text text-muted">' . $msg . '</span>';
         }
     }
+
+    public static function configureSwitchForRadio($fld, $msg = '')
+    {        
+        $fld->developerTags['rdLabelAttributes'] = ['class' => 'radio'];   
+        if (!empty($msg)) {
+            $fld->htmlAfterField = '<span class="form-text text-muted">' . $msg . '</span>';
+        }
+    }
 }
