@@ -2,7 +2,7 @@
 
 $clearFormFn = isset($clearFormFn) ? $clearFormFn : 'getForm(' . $frmType . ')';
 
-HtmlHelper::formatFormFields($frm);
+HtmlHelper::formatFormFields($frm, 6);
 $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
 $frm->setFormTagAttribute('class', 'form form--settings modalFormJs checkboxSwitchJs layout--' . $formLayout);
 $frm->setFormTagAttribute('data-onclear', $clearFormFn);
@@ -43,13 +43,6 @@ switch ($frmType) {
         if (1 > $lang_id) {
             $colMd6Arr = ['CONF_TWITTER_USERNAME', 'googleFileVerification', 'google_file_verification', 'bingFileVerification', 'bing_file_verification'];
         }
-        $fld = $frm->getField('CONF_LANG_SPECIFIC_URL');
-        $fld->developerTags['fldWidthValues'] = ['setting-block', null, null, null];
-        $fld->developerTags['cbLabelAttributes'] = ['class' => 'switch switch-sm switch-icon'];
-        $fld->developerTags['cbHtmlAfterCheckbox'] = '<span class="input-helper"></span><span class="form-text text-muted">' . Labels::getLabel("LBL_LANGUAGE_CODE_TO_SITE_URLS_EXAMPLES", $siteLangId) . '</span>';
-
-         
-        
         break;
     case Configurations::FORM_USER_ACCOUNT:
         if (1 > $lang_id) {
@@ -144,7 +137,7 @@ if (!empty($colMd6Arr)) {
 }
 
 ?>
-<div class="card <?php echo $class;?>">
+<div class="card <?php echo $class; ?>">
     <div class="card-head">
         <div class="card-head-label">
             <h3 class="card-head-title">
@@ -174,7 +167,7 @@ if (!empty($colMd6Arr)) {
 
     <div class="card-body">
         <div class="formBodyJs">
-            <?php echo str_replace('<i class="input-helper"></i>','<span></span>',$frm->getFormHtml()); ?>
+            <?php echo str_replace('<i class="input-helper"></i>', '<span></span>', $frm->getFormHtml()); ?>
             <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
             <div id="map" style="height:500px"></div>
             <?php } ?>
@@ -204,17 +197,17 @@ getStatesByCountryCode($("#geo_country_code").val(),
     'state_code');
 <?php } ?>
 
-$(document).on('change', '.prefRatio-js', function() {
-    var inputElement = $(this).parents('.list-inline').next('input');
-    var selectedVal = $(this).val();
-    if (selectedVal == ratioTypeSquare) {
-        inputElement.attr('data-min_width', 150)
-        inputElement.attr('data-min_height', 150)
-    } else {
-        inputElement.attr('data-min_width', 150)
-        inputElement.attr('data-min_height', 85)
-    }
-});
+// $(document).on('change', '.prefRatio-js', function() {
+//     var inputElement = $(this).parents('.list-inline').next('input');
+//     var selectedVal = $(this).val();
+//     if (selectedVal == ratioTypeSquare) {
+//         inputElement.attr('data-min_width', 150)
+//         inputElement.attr('data-min_height', 150)
+//     } else {
+//         inputElement.attr('data-min_width', 150)
+//         inputElement.attr('data-min_height', 85)
+//     }
+// });
 
 $(document).on('change', '.geoLocation', function() {
     var geolocVal = $(this).val();

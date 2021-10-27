@@ -20,22 +20,25 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                 <?php foreach ($tabsArr as $tabMetaType => $metaDetail) {
                                     $tabsId = 'tabJs-' . $tabMetaType; ?>
 
-                                    <li class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $tabMetaType) ? 'is-active' : '' ?>">
-                                        <a class="settings-inner-link" href="javascript:void(0)" onClick='searchRecords("<?php echo $tabMetaType; ?>")'>
-                                            <i class="settings-inner-icn">
-                                                <svg class="svg" width="20" height="20">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-extension">
-                                                    </use>
-                                                </svg>
-                                            </i>
-                                            <div>
-                                                <h6 class="settings-inner-title"><?php echo $metaDetail['name']; ?></h6>
-                                                <span class="settings-inner-desc">Lorem ipsum dolor sit amet
-                                                    consectetur adipisicing
-                                                    elit. Suscipit est quos </span>
-                                            </div>
-                                        </a>
-                                    </li>
+                                <li
+                                    class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $tabMetaType) ? 'is-active' : '' ?>">
+                                    <a class="settings-inner-link" href="javascript:void(0)"
+                                        onClick='searchRecords("<?php echo $tabMetaType; ?>")'>
+                                        <i class="settings-inner-icn">
+                                            <svg class="svg" width="20" height="20">
+                                                <use
+                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-extension">
+                                                </use>
+                                            </svg>
+                                        </i>
+                                        <div>
+                                            <h6 class="settings-inner-title"><?php echo $metaDetail['name']; ?></h6>
+                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                consectetur adipisicing
+                                                elit. Suscipit est quos </span>
+                                        </div>
+                                    </a>
+                                </li>
                                 <?php } ?>
                             </ul>
                         </div>
@@ -52,6 +55,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
 </main>
 
 <script>
-    var controllerName = '<?php echo $controller; ?>';
-    getHelpCenterContent(controllerName);
+var controllerName = '<?php echo $controller; ?>';
+getHelpCenterContent(controllerName);
 </script>

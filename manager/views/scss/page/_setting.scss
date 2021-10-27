@@ -49,17 +49,6 @@
     }
 }
 
-.form {
-    &--settings {
-        label {
-            display: flex;
-            flex-direction: row-reverse;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-    }
-}
-
 .sticky-sidebar {
     position: sticky;
     top: 2rem;
@@ -168,8 +157,20 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+    flex-direction: column;
     padding: 1rem;
     margin: 0;
+    .switch {
+        margin: 0;
+        font-weight: 500;
+        color: $txt-body;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row-reverse;
+        flex: 1;
+        width: 100%;
+    }
     &:hover {
         border-color: $brand-color;
     }

@@ -34,8 +34,9 @@ class PluginsController extends AdminBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
         $frmSearch->fill(['type' => Plugin::TYPE_CURRENCY_CONVERTER]);
-
+        
         $this->set('frmSearch', $frmSearch);
+        $this->set('svgIconNames', Plugin::getSvgIconNames());
         $this->set('activeTab', Plugin::TYPE_CURRENCY_CONVERTER);
         $this->set('includeEditor', true);
         $this->getListingData();
