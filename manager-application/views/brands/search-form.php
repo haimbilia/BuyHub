@@ -28,7 +28,7 @@ HtmlHelper::renderHiddenFields($frmSearch);
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-8">
                 <div class="input-group">
                     <?php echo $frmSearch->getFieldHtml('keyword'); ?>
                     <?php if (null == $userNameFld) { ?>

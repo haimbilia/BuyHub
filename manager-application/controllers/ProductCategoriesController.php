@@ -8,15 +8,24 @@ class ProductCategoriesController extends AdminBaseController
         $this->objPrivilege->canViewProductCategories();
     }
 
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditProductCategories();
+        $this->modelObj = (new ReflectionClass('ProductCategory'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_CATEGORY_SETUP', $this->siteLangId));
+    }
+
     public function index()
     {
         $canEdit = $this->objPrivilege->canEditProductCategories(0, true);
         $this->set("canEdit", $canEdit);
         $srch = new ProductCategorySearch(0, false, false, false, -1);
         $this->set("recordCount", FatApp::getDb()->totalRecords($srch->getResultSet()));
+    
+        $this->_template->addJs(array('js/select2.js','js/jquery-sortable-lists.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
+        $this->_template->addCss(array('css/select2.min.css','css/cropper.css', 'css/tagify.min.css'));
 
-        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/jquery-sortable-lists.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
-        $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css']);
         $this->_template->render();
     }
 
@@ -91,10 +100,7 @@ class ProductCategoriesController extends AdminBaseController
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getCategoryForm($recordId, $productReq);
-        $prodCat = new ProductCategory();
-        $categoriesArr = $prodCat->getCategoriesForSelectBox($this->siteLangId, $recordId, [], false);
-        $categories =  array(0 => Labels::getLabel('LBL_Root_Category', $this->siteLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
-        $data = array('parent_category_name' => $categories[0]);
+        $data = [];
         if (0 < $recordId) {
             $data = ProductCategory::getAttributesById($recordId);
             if ($data === false) {
@@ -127,93 +133,162 @@ class ProductCategoriesController extends AdminBaseController
         $this->set('mediaLanguages', $mediaLanguages);
         $this->set('screenArr', $screenArr);
         $this->set('otherLangData', $langData);
-        $this->set('categories', $categories);
+        //$this->set('categories', $categories);
         $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
+        $this->_template->render(false, false);
+    }
+
+    public function imagesForm($recordId)
+    {
+        $this->objPrivilege->canEditProductCategories();
+
+        $recordId = FatUtility::int($recordId);
+        if (!$recordId) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+        }
+
+        if (!ProductCategory::getAttributesById($recordId)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_NO_RECORD_FOUND', $this->siteLangId), true);
+        }
+        $frm = $this->getImagesFrm($recordId);
+        $this->set('languages', Language::getAllNames());
+        $this->set('recordId', $recordId);
+        $this->set('frm', $frm);
         $this->_template->render(false, false);
     }
 
     private function getCategoryForm($recordId = 0, $productReq = 0)
     {
         $recordId = FatUtility::int($recordId);
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+       
         $frm = new Form('frmProdCategory');
         $frm->addHiddenField('', 'prodcat_id', $recordId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Category_Name', $this->siteLangId), 'prodcat_name[' . $siteDefaultLangId . ']');
-        $frm->addRequiredField(Labels::getLabel('LBL_Category_Identifier', $this->siteLangId), 'prodcat_identifier');
-        /*
+        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'prodcat_name[' . $this->getDefaultFormLangId(). ']');
+        
+        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_IDENTIFIER', $this->siteLangId), 'prodcat_identifier');
+        
+        //$frm->addRequiredField(Labels::getLabel('FRM_Parent_Category', $this->siteLangId), 'parent_category_name');
+
         $prodCat = new ProductCategory();
-        $categoriesArr = $prodCat->getCategoriesForSelectBox($this->siteLangId, $recordId);
-        $categories = array(0 => Labels::getLabel('LBL_Root_Category', $this->siteLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
-        $frm->addSelectBox(Labels::getLabel('LBL_Parent_Category', $this->siteLangId), 'prodcat_parent', $categories, '', array(), '');
-         * 
-         */
+        $categoriesArr = $prodCat->getCategoriesForSelectBox($this->siteLangId, $recordId, [], false);
+        $categories =  array(0 => Labels::getLabel('FRM_ROOT_CATEGORY', $this->siteLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
 
-        $frm->addRequiredField(Labels::getLabel('LBL_Parent_Category', $this->siteLangId), 'parent_category_name');
-        $frm->addHiddenField('', 'prodcat_parent', $recordId);
-
-        $yesNoArr = applicationConstants::getYesNoArr($this->siteLangId);
-        $frm->addRadioButtons(Labels::getLabel('LBL_Publish', $this->siteLangId), 'prodcat_active', $yesNoArr, '1', array());
-
-        if (0 < $productReq) {
-            $frm->addRadioButtons(Labels::getLabel('LBL_STATUS', $this->siteLangId), 'prodcat_status', $yesNoArr, '1', array());
-        }
-
+        $frm->addSelectBox(Labels::getLabel('FRM_PARENT_CATEGORY', $this->siteLangId), 'prodcat_parent', $categories, '', array(), '');
+        //$frm->addHiddenField('', 'prodcat_parent', $recordId);       
+     
+       
         $attr = [];
         if (1 > $recordId) {
             $attr = ['disabled' => 'disabled'];
         }
-        $frm->addTextBox(Labels::getLabel('LBL_RATING_TYPES', $this->siteLangId), 'rating_type', '', $attr);
+        $frm->addTextBox(Labels::getLabel('FRM_RATING_TYPES', $this->siteLangId), 'rating_type', '', $attr);
 
+        $frm->addCheckBox(Labels::getLabel('FRM_PUBLISH', $this->siteLangId), 'prodcat_active', 1, array(), false, 0);
+
+        if (0 < $productReq) {           
+            $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'prodcat_status', 1, array(), false, 0);
+        }
+
+        $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        $langData = Language::getAllNames();
-        unset($langData[$siteDefaultLangId]);
-        if (!empty($translatorSubscriptionKey) && count($langData) > 0) {
-            $frm->addCheckBox(Labels::getLabel('LBL_Translate_To_Other_Languages', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        foreach ($langData as $langId => $data) {
-            $frm->addTextBox(Labels::getLabel('LBL_Category_Name', $this->siteLangId), 'prodcat_name[' . $langId . ']');
-        }
+       
+        // foreach ($langData as $langId => $data) {
+        //     $frm->addTextBox(Labels::getLabel('FRM_Category_Name', $this->siteLangId), 'prodcat_name[' . $langId . ']');
+        // }
+
+        // $mediaLanguages = applicationConstants::bannerTypeArr();
+		
+		// if(count($mediaLanguages) > 1){
+		// 	 $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'icon_lang_id', $mediaLanguages, '', array(), '');
+        // } else  {
+		// 	$langid = array_key_first($mediaLanguages); 
+		// 	$frm->addHiddenField('', 'icon_lang_id', $langid);
+		// }
+
+       
+		
+        // $frm->addHiddenField('', 'icon_file_type', AttachedFile::FILETYPE_CATEGORY_ICON);
+        // $frm->addHiddenField('', 'logo_min_width');
+        // $frm->addHiddenField('', 'logo_min_height');
+        // $frm->addFileUpload(Labels::getLabel('FRM_Upload', $this->siteLangId), 'cat_icon', array('accept' => 'image/*', 'data-frm' => 'frmCategoryIcon'));
+        // foreach ($mediaLanguages as $key => $data) {
+        //     $frm->addHiddenField('', 'cat_icon_image_id[' . $key . ']');
+        // }
+
+       
+		// if(count($mediaLanguages) > 1){
+		// 	  $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'banner_lang_id', $mediaLanguages, '', array(), '');
+        // } else  {
+		// 	$langid = array_key_first($mediaLanguages); 
+		// 	$frm->addHiddenField('', 'banner_lang_id', $langid);
+		// }
+		
+        // $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
+        // $frm->addSelectBox(Labels::getLabel("FRM_Device", $this->siteLangId), 'slide_screen', $screenArr, '', array(), '');
+        // $frm->addHiddenField('', 'banner_file_type', AttachedFile::FILETYPE_CATEGORY_BANNER);
+        // $frm->addHiddenField('', 'banner_min_width');
+        // $frm->addHiddenField('', 'banner_min_height');
+        // $frm->addFileUpload(Labels::getLabel('FRM_Upload', $this->siteLangId), 'cat_banner', array('accept' => 'image/*', 'data-frm' => 'frmCategoryBanner'));
+        // foreach ($mediaLanguages as $key => $data) {
+        //     foreach ($screenArr as $key1 => $screen) {
+        //         $frm->addHiddenField('', 'cat_banner_image_id[' . $key . '_' . $key1 . ']');
+        //     }
+        // }
+        return $frm;
+    }
+
+
+    protected function getLangForm($recordId, $langId = 0)
+    {
+        $frm = new Form('frmEmptyCartItemLang');
+        $frm->addHiddenField('', 'prodcat_id', $recordId);
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'prodcat_name');
+        return $frm;
+    }
+
+    private function getImagesFrm($recordId = 0)
+    {
+
+        $frm = new Form('frmRecordImage', array('id' => 'imageFrm'));
 
         $mediaLanguages = applicationConstants::bannerTypeArr();
 		
 		if(count($mediaLanguages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'icon_lang_id', $mediaLanguages, '', array(), '');
+			 $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'icon_lang_id', $mediaLanguages, '', array(), '');
         } else  {
 			$langid = array_key_first($mediaLanguages); 
 			$frm->addHiddenField('', 'icon_lang_id', $langid);
-		}
-
-       
+		}       
 		
-        $frm->addHiddenField('', 'icon_file_type', AttachedFile::FILETYPE_CATEGORY_ICON);
+       // $frm->addHiddenField('', 'icon_file_type', AttachedFile::FILETYPE_CATEGORY_ICON);
         $frm->addHiddenField('', 'logo_min_width');
         $frm->addHiddenField('', 'logo_min_height');
-        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->siteLangId), 'cat_icon', array('accept' => 'image/*', 'data-frm' => 'frmCategoryIcon'));
-        foreach ($mediaLanguages as $key => $data) {
-            $frm->addHiddenField('', 'cat_icon_image_id[' . $key . ']');
-        }
-
+        $frm->addFileUpload(Labels::getLabel('FRM_Upload', $this->siteLangId), 'cat_icon', array('accept' => 'image/*', 'data-frm' => 'frmCategoryIcon'));
+        
        
 		if(count($mediaLanguages) > 1){
-			  $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'banner_lang_id', $mediaLanguages, '', array(), '');
+			  $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'banner_lang_id', $mediaLanguages, '', array(), '');
         } else  {
 			$langid = array_key_first($mediaLanguages); 
 			$frm->addHiddenField('', 'banner_lang_id', $langid);
 		}
 		
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel("LBL_Device", $this->siteLangId), 'slide_screen', $screenArr, '', array(), '');
-        $frm->addHiddenField('', 'banner_file_type', AttachedFile::FILETYPE_CATEGORY_BANNER);
+        $frm->addSelectBox(Labels::getLabel("FRM_Device", $this->siteLangId), 'slide_screen', $screenArr, '', array(), '');
+        //$frm->addHiddenField('', 'banner_file_type', AttachedFile::FILETYPE_CATEGORY_BANNER);
         $frm->addHiddenField('', 'banner_min_width');
         $frm->addHiddenField('', 'banner_min_height');
-        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->siteLangId), 'cat_banner', array('accept' => 'image/*', 'data-frm' => 'frmCategoryBanner'));
-        foreach ($mediaLanguages as $key => $data) {
-            foreach ($screenArr as $key1 => $screen) {
-                $frm->addHiddenField('', 'cat_banner_image_id[' . $key . '_' . $key1 . ']');
-            }
-        }
+        $frm->addFileUpload(Labels::getLabel('FRM_Upload', $this->siteLangId), 'cat_banner', array('accept' => 'image/*', 'data-frm' => 'frmCategoryBanner'));
+
         return $frm;
     }
+
+
+    
 
     public function setup($prodCatReq = 0)
     {

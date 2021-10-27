@@ -1,4 +1,4 @@
-<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $sortByFld = $frmSearch->getField('sortBy');
 $sortByFld->setFieldTagAttribute('id', 'sortBy');
@@ -39,7 +39,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                         <i class="settings-inner-icn">
                                             <svg class="svg" width="20" height="20">
                                                 <use
-                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-extension">
+                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#<?php echo isset($svgIconNames[$formType]) ? $svgIconNames[$formType] : 'icon-extension'; ?>">
                                                 </use>
                                             </svg>
                                         </i>

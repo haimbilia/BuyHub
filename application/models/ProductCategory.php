@@ -1127,6 +1127,7 @@ class ProductCategory extends MyAppModel
         if (isset($post['auto_update_other_langs_data'])) {
             $autoUpdateOtherLangsData = FatUtility::int($post['auto_update_other_langs_data']);
         }
+        
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         if ($this->mainTableRecordId == 0) {
             $post['prodcat_display_order'] = $this->getMaxOrder($parentCatId);

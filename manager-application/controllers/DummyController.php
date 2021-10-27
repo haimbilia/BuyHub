@@ -81,4 +81,23 @@ class DummyController extends AdminBaseController
 
        echo $qry ;exit;
     }
+
+    public function tt(){
+            $localFile='/files/myfile.zip';
+            $remoteFile='/filesDir/myfile.zip';
+            $host = "Infolink.aramex.net";
+            $port = 22;
+            $user = "Workajans";
+            $pass = "E5tyP13#8We";
+            
+            $connection = ssh2_connect($host, $port);
+            ssh2_auth_password($connection, $user, $pass);
+            $sftp = ssh2_sftp($connection);
+            var_dump($sftp);
+            
+            $stream = fopen("ssh2.sftp://$sftp$remoteFile", 'w');
+            $file = file_get_contents($localFile);
+            fwrite($stream, $file);
+            fclose($stream);
+    }
 }       

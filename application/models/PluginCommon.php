@@ -48,7 +48,7 @@ class PluginCommon extends MyAppModel
         'CashOnDelivery',
         'PayAtStore'
     ];
-    
+
     public const HAVING_SEPARATE_ICON = [
         self::TYPE_SPLIT_PAYMENT_METHOD,
         self::TYPE_REGULAR_PAYMENT_METHOD,
@@ -67,7 +67,7 @@ class PluginCommon extends MyAppModel
         'COALESCE(plg_l.' . self::DB_TBL_PREFIX . 'name, plg.' . self::DB_TBL_PREFIX . 'identifier) as plugin_name',
         self::DB_TBL_PREFIX . 'active',
     ];
-    
+
     /**
      * getTypeArr - Used to get plugin type
      *
@@ -218,7 +218,7 @@ class PluginCommon extends MyAppModel
             self::TYPE_REGULAR_PAYMENT_METHOD
         ];
     }
-        
+
     /**
      * getPluginTypeIconClass
      *
@@ -270,10 +270,35 @@ class PluginCommon extends MyAppModel
             case self::TYPE_DATA_MIGRATION:
                 return 'plugin-data-migration';
                 break;
-            
+
             default:
                 return 'plugin-default';
                 break;
         }
+    }
+
+    /**
+     * getSvgIconNames - Used to get icons in admin plugins settings
+     *     
+     * @return array
+     */
+    public static function getSvgIconNames(): array
+    {
+        return [
+            self::TYPE_CURRENCY_CONVERTER => "currency-converter",
+            self::TYPE_SOCIAL_LOGIN => "social-login",
+            self::TYPE_PUSH_NOTIFICATION => "push-notification",
+            self::TYPE_ADVERTISEMENT_FEED => "advertisement-feed",
+            self::TYPE_SMS_NOTIFICATION => "sms-notification",
+            self::TYPE_PAYOUTS => "payout",
+            // self::TYPE_FULL_TEXT_SEARCH => "full-text-search", /* NOT IN USE */
+            self::TYPE_TAX_SERVICES => "tax",
+            self::TYPE_SPLIT_PAYMENT_METHOD => "payment-methods",
+            self::TYPE_MARKETPLACE_CHANNELS => "marketplace-channels",
+            self::TYPE_REGULAR_PAYMENT_METHOD => "payment-methods",
+            self::TYPE_SHIPPING_SERVICES => "shipping-services",
+            self::TYPE_SHIPMENT_TRACKING => "shipment-tracking",
+            self::TYPE_DATA_MIGRATION => "data-migration",
+        ];
     }
 }
