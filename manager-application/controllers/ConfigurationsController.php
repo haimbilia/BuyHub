@@ -17,6 +17,8 @@ class ConfigurationsController extends AdminBaseController
     {
         $this->setGeneralForm(Configurations::FORM_GENERAL);
 
+        $svgIconNames = Configurations::getSvgIconNames();       
+        $this->set('svgIconNames', $svgIconNames);
         $this->_template->addCss('css/cropper.css');
         $this->_template->addJs('js/cropper.js');
         $this->_template->addJs('js/cropper-main.js');
@@ -606,7 +608,7 @@ class ConfigurationsController extends AdminBaseController
 
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Body_Script", $this->siteLangId), 'CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_code_provided_by_google_tag_manager_for_integration.", $this->siteLangId) . "</span>";
-                $frm->addHtml('','','<div class="separator separator-dashed my-2"></div>');
+                $frm->addHtml('', '', '<div class="separator separator-dashed my-2"></div>');
                 $fld = $frm->addHtml('', 'googleFileVerification', '<h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Webmaster", $this->siteLangId) . '</h3>');
                 $htmlAfterField = '';
                 if (file_exists(CONF_UPLOADS_PATH . '/google-site-verification.html')) {
@@ -625,7 +627,7 @@ class ConfigurationsController extends AdminBaseController
 
                 $frm->addFileUpload(Labels::getLabel('LBL_HTML_file_Verification', $this->siteLangId), 'google_file_verification', array('accept' => '.html', 'onChange' => 'updateVerificationFile(this, "google")'));
                 $frm->addFileUpload(Labels::getLabel('LBL_XML_file_Authentication', $this->siteLangId), 'bing_file_verification', array('accept' => '.xml', 'onChange' => 'updateVerificationFile(this, "bing")'));
-                
+
                 $frm->addHtml('', 'hotjar', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Hotjar", $this->siteLangId) . '</h3>');
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Head_Script", $this->siteLangId), 'CONF_HOTJAR_HEAD_SCRIPT');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_code_provided_by_hotjar_for_integration.", $this->siteLangId) . "</span>";
