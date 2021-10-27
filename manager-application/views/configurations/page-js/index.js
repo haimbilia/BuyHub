@@ -41,9 +41,9 @@ $(document).ready(function () {
     setTabActive = function (type) {
         $('ul.confTypesJs li.is-active').removeClass('is-active');
         $('ul.confTypesJs li.tabJs-' + type).addClass('is-active');
-        $('html, body').animate({
+        /* $('html, body').animate({
             scrollTop: $("#frmBlockJs").offset().top
-        });
+        }); */
     }
 
     getLangForm = function (frmType, langId, autoFillLangData = 0) {

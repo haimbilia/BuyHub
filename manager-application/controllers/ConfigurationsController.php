@@ -17,6 +17,8 @@ class ConfigurationsController extends AdminBaseController
     {
         $this->setGeneralForm(Configurations::FORM_GENERAL);
 
+        $svgIconNames = Configurations::getSvgIconNames();       
+        $this->set('svgIconNames', $svgIconNames);
         $this->_template->addCss('css/cropper.css');
         $this->_template->addJs('js/cropper.js');
         $this->_template->addJs('js/cropper-main.js');
@@ -589,9 +591,8 @@ class ConfigurationsController extends AdminBaseController
                 break;
 
             case Configurations::FORM_SEO:
-                $fld = $frm->addCheckBox(Labels::getLabel('LBL_ENABLE_LANGUAGE_CODE_TO_SITE_URLS_&_LANGUAGE_SPECIFIC_URL_REWRITING', $this->siteLangId), 'CONF_LANG_SPECIFIC_URL', 1, array(), false, 0);
-                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_LANGUAGE_CODE_TO_SITE_URLS_EXAMPLES", $this->siteLangId) . '</span>';
-
+                 $frm->addCheckBox(Labels::getLabel('LBL_ENABLE_LANGUAGE_CODE_TO_SITE_URLS_&_LANGUAGE_SPECIFIC_URL_REWRITING', $this->siteLangId), 'CONF_LANG_SPECIFIC_URL', 1, array(), false, 0);
+                
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Twitter_Username', $this->siteLangId), 'CONF_TWITTER_USERNAME');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_This_is_required_for_Twitter_Card_code_SEO_Update", $this->siteLangId) . '</span>';
 
@@ -607,7 +608,7 @@ class ConfigurationsController extends AdminBaseController
 
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Body_Script", $this->siteLangId), 'CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_code_provided_by_google_tag_manager_for_integration.", $this->siteLangId) . "</span>";
-                $frm->addHtml('','','<div class="separator separator-dashed my-2"></div>');
+                $frm->addHtml('', '', '<div class="separator separator-dashed my-2"></div>');
                 $fld = $frm->addHtml('', 'googleFileVerification', '<h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Webmaster", $this->siteLangId) . '</h3>');
                 $htmlAfterField = '';
                 if (file_exists(CONF_UPLOADS_PATH . '/google-site-verification.html')) {
@@ -626,7 +627,7 @@ class ConfigurationsController extends AdminBaseController
 
                 $frm->addFileUpload(Labels::getLabel('LBL_HTML_file_Verification', $this->siteLangId), 'google_file_verification', array('accept' => '.html', 'onChange' => 'updateVerificationFile(this, "google")'));
                 $frm->addFileUpload(Labels::getLabel('LBL_XML_file_Authentication', $this->siteLangId), 'bing_file_verification', array('accept' => '.xml', 'onChange' => 'updateVerificationFile(this, "bing")'));
-                
+
                 $frm->addHtml('', 'hotjar', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Hotjar", $this->siteLangId) . '</h3>');
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Head_Script", $this->siteLangId), 'CONF_HOTJAR_HEAD_SCRIPT');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_code_provided_by_hotjar_for_integration.", $this->siteLangId) . "</span>";
@@ -1002,51 +1003,51 @@ class ConfigurationsController extends AdminBaseController
 
                 $vendorOrderSelected = (!empty($arrValues['CONF_VENDOR_ORDER_STATUS'])) ? $arrValues['CONF_VENDOR_ORDER_STATUS'] : 0;
 
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Seller_Order_Statuses", $this->siteLangId), 'CONF_VENDOR_ORDER_STATUS', $orderStatusArr, $vendorOrderSelected, array('class' => 'list-switch-inline'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Seller_Order_Statuses", $this->siteLangId), 'CONF_VENDOR_ORDER_STATUS', $orderStatusArr, $vendorOrderSelected, array('class' => 'setting-wizard'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_the_order_starts_displaying_to_Sellers.", $this->siteLangId) . "</span>";
 
                 $buyerOrderSelected = (!empty($arrValues['CONF_BUYER_ORDER_STATUS'])) ? $arrValues['CONF_BUYER_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Buyer_Order_Statuses", $this->siteLangId), 'CONF_BUYER_ORDER_STATUS', $orderStatusArr, $buyerOrderSelected, array('class' => 'list-switch-inline'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Buyer_Order_Statuses", $this->siteLangId), 'CONF_BUYER_ORDER_STATUS', $orderStatusArr, $buyerOrderSelected, array('class' => 'setting-wizard'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_the_order_starts_displaying_to_Buyers.", $this->siteLangId) . "</span>";
 
                 $processingOrderSelected = (!empty($arrValues['CONF_PROCESSING_ORDER_STATUS'])) ? $arrValues['CONF_PROCESSING_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Processing_Order_Status", $this->siteLangId), 'CONF_PROCESSING_ORDER_STATUS', $orderStatusArr, $processingOrderSelected, array('class' => 'list-switch-inline'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Processing_Order_Status", $this->siteLangId), 'CONF_PROCESSING_ORDER_STATUS', $orderStatusArr, $processingOrderSelected, array('class' => 'setting-wizard'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_the_order_starts_stock_subtraction.", $this->siteLangId) . "</span>";
 
                 $completeOrderSelected = (!empty($arrValues['CONF_COMPLETED_ORDER_STATUS'])) ? $arrValues['CONF_COMPLETED_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Completed_Order_Status", $this->siteLangId), 'CONF_COMPLETED_ORDER_STATUS', $orderStatusArr, $completeOrderSelected, array('class' => 'list-switch-inline'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Completed_Order_Status", $this->siteLangId), 'CONF_COMPLETED_ORDER_STATUS', $orderStatusArr, $completeOrderSelected, array('class' => 'setting-wizard'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_considered_completed_and_payment_released_to_Sellers.", $this->siteLangId) . "</span>";
 
                 $feedbackOrderSelected = (!empty($arrValues['CONF_REVIEW_READY_ORDER_STATUS'])) ? $arrValues['CONF_REVIEW_READY_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Feedback_ready_Order_Status", $this->siteLangId), 'CONF_REVIEW_READY_ORDER_STATUS', $orderStatusArr, $feedbackOrderSelected, array('class' => 'list-switch-inline'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Feedback_ready_Order_Status", $this->siteLangId), 'CONF_REVIEW_READY_ORDER_STATUS', $orderStatusArr, $feedbackOrderSelected, array('class' => 'setting-wizard'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_review_the_orders.", $this->siteLangId) . "</span>";
 
                 $allowCancellationOrderSelected = (!empty($arrValues['CONF_ALLOW_CANCELLATION_ORDER_STATUS'])) ? $arrValues['CONF_ALLOW_CANCELLATION_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Order_Cancellation_by_Buyers", $this->siteLangId), 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', $orderStatusArr, $allowCancellationOrderSelected, array('class' => 'list-switch-inline'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Order_Cancellation_by_Buyers", $this->siteLangId), 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', $orderStatusArr, $allowCancellationOrderSelected, array('class' => 'setting-wizard'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_place_cancellation_request_on_orders.", $this->siteLangId) . "</span>";
 
                 $allowCancellationOrderSelected = (!empty($arrValues['CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS'])) ? $arrValues['CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Order_Cancellation_by_Buyers_On_Digital", $this->siteLangId), 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', $orderStatusArr, $allowCancellationOrderSelected, array('class' => 'list-switch-inline'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Order_Cancellation_by_Buyers_On_Digital", $this->siteLangId), 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', $orderStatusArr, $allowCancellationOrderSelected, array('class' => 'setting-wizard'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_place_cancellation_request_on_orders.", $this->siteLangId) . "</span>";
 
                 $returnExchageOrderSelected = (!empty($arrValues['CONF_RETURN_EXCHANGE_READY_ORDER_STATUS'])) ? $arrValues['CONF_RETURN_EXCHANGE_READY_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Return/Exchange", $this->siteLangId), 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', $orderStatusArr, $returnExchageOrderSelected, array('class' => 'list-switch-inline'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Return/Exchange", $this->siteLangId), 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', $orderStatusArr, $returnExchageOrderSelected, array('class' => 'setting-wizard'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_place_return/exchange_request_on_orders.", $this->siteLangId) . "</span>";
 
                 $enableDigitalDownloads = (!empty($arrValues['CONF_ENABLE_DIGITAL_DOWNLOADS'])) ? $arrValues['CONF_ENABLE_DIGITAL_DOWNLOADS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Enable_Digital_Download", $this->siteLangId), 'CONF_ENABLE_DIGITAL_DOWNLOADS', $orderStatusArr, $enableDigitalDownloads, array('class' => 'list-switch-inline'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Enable_Digital_Download", $this->siteLangId), 'CONF_ENABLE_DIGITAL_DOWNLOADS', $orderStatusArr, $enableDigitalDownloads, array('class' => 'setting-wizard'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_access_their_downloadable_Products.", $this->siteLangId) . "</span>";
 
                 $statusesToAttachMoreFiles = (!empty($arrValues['CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES'])) ? $arrValues['CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Order_statuses_to_allow_to_attach_more_files_with_order_product", $this->siteLangId), 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES', $orderStatusArr, $statusesToAttachMoreFiles, array('class' => 'list-switch-inline'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Order_statuses_to_allow_to_attach_more_files_with_order_product", $this->siteLangId), 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES', $orderStatusArr, $statusesToAttachMoreFiles, array('class' => 'setting-wizard'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_order_statuses_to_allow_seller_or_admin_to_attach_more_files_with_order_products", $this->siteLangId) . "</span>";
 
                 $badgeCountOrderSelected = (!empty($arrValues['CONF_BADGE_COUNT_ORDER_STATUS'])) ? $arrValues['CONF_BADGE_COUNT_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Order_Statuses_to_calculate_badge_count_(For_Admin)", $this->siteLangId), 'CONF_BADGE_COUNT_ORDER_STATUS', $orderStatusArr, $badgeCountOrderSelected, array('class' => 'list-switch-inline'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Order_Statuses_to_calculate_badge_count_(For_Admin)", $this->siteLangId), 'CONF_BADGE_COUNT_ORDER_STATUS', $orderStatusArr, $badgeCountOrderSelected, array('class' => 'setting-wizard'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Order_Statuses_to_calculate_badge_count_for_seller_orders_in_admin_left_navigation_panel", $this->siteLangId) . "</span>";
 
                 $productOnOrderStatusesSelected = (!empty($arrValues['CONF_PRODUCT_IS_ON_ORDER_STATUSES'])) ? $arrValues['CONF_PRODUCT_IS_ON_ORDER_STATUSES'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Products_On_Order_Stage(For_Seller_Inventory_Report)", $this->siteLangId), 'CONF_PRODUCT_IS_ON_ORDER_STATUSES', $orderStatusArr, $productOnOrderStatusesSelected, array('class' => 'list-switch-inline'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Products_On_Order_Stage(For_Seller_Inventory_Report)", $this->siteLangId), 'CONF_PRODUCT_IS_ON_ORDER_STATUSES', $orderStatusArr, $productOnOrderStatusesSelected, array('class' => 'setting-wizard'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Products_are_in_On_Order_Used_on_Seller_Dashboard_Products_Inventory_Stock_Status_Report", $this->siteLangId) . "</span>";
 
                 break;
@@ -1650,8 +1651,37 @@ class ConfigurationsController extends AdminBaseController
                 $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
 
                 $ul = $frm->addHtml('', 'MediaGrids', '<div class="row">');
+                $ul->htmlAfterField .= '<div class="col-md-6">';
 
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Admin_Logo', $this->siteLangId) . ' </h3> <div class="logoWrap"><div class="uploaded--image">';
+                $ul->htmlAfterField .= '<h6>Admin Logo</h6><div class="form-group">
+                <label class="label">Aspect ratio</label>
+                <div class="radio-button-group">
+                    <div class="item">
+                        <input type="radio" name="button-group" class="radio-button" value="1" id="button1" checked="">
+                        <label for="button1">1:1</label>
+                    </div>
+                    <div class="item">
+                        <input type="radio" name="button-group" class="radio-button" value="2" id="button2" checked="">
+                        <label for="button2">16:9</label>
+                    </div>
+                    <div class="item">
+                        <input type="radio" name="button-group" class="radio-button" value="3" id="button3" checked="">
+                        <label for="button3">Custom</label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group"> <div class="dropzone">
+            <div class="upload_cover">
+                <div class="file-upload">
+                    <img src="/yokart/manager/images/upload/upload_img.png">
+                </div>
+            </div> <div class="needsclick">
+            <h3 class="dropzone-msg-title">Click here to upload</h3>
+        </div>
+        </div> </div>';
+
+                $ul->htmlAfterField .= '<h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Admin_Logo', $this->siteLangId) . ' </h3> <div class="logoWrap"><div class="uploaded--image">';
 
                 if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $langId)) {
                     $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);

@@ -29,6 +29,15 @@
                      padding: 1.5rem 2rem;
                  }
              }
+             &-sm {
+                 max-width: 250px;
+             }
+             &-md {
+                 max-width: 700px;
+             }
+             &-lg {
+                 max-width: 1000px;
+             }
          }
          &.fade .modal-dialog-vertical {
              transform: translateX(100%);
