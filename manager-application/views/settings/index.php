@@ -59,7 +59,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                             <span class="icon">
                                 <svg class="icon" width="40" height="40">
                                     <use
-                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#general-settings">
                                     </use>
                                 </svg>
                             </span>
