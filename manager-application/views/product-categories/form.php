@@ -23,16 +23,12 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 <script>
  $("document").ready(function(){	 
     $("#prodcat_parent").select2();
-
     addRatingType = function(e) {
-        console.log(e);
         var rt_id = e.detail.tag.id;
         var ratingtype_name = e.detail.tag.title;
-        var prodCatId = $("input[name='prodcat_id']").val();  
-        console.log(rt_id);    
+        var prodCatId = $("input[name='prodcat_id']").val();       
         if (rt_id == '') {
-            console.log('vvv');
-            if (!confirm(langLbl.addNewRatingType)) {
+                     if (!confirm(langLbl.addNewRatingType)) {
                 return;
             }
             var data = 'ratingtype_active=1&ratingtype_id=0&ratingtype_identifier=' + ratingtype_name
@@ -47,8 +43,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
                     });
                 });
             });
-        } else {
-            
+        } else {            
             fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + rt_id, function(t) {});
         }      
     }

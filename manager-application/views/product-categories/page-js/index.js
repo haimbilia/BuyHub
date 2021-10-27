@@ -363,6 +363,15 @@ $(document).ready(function () {
 			});
 		}
 	}
+
+	postImages = function (post_id) {        
+        $.ykmodal(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('ProductCategories', 'imagesForm', [post_id]), '', function (t) {
+            //loadImages(post_id);
+            $.ykmodal(t);
+          
+        });
+    };
 })();
 
 
