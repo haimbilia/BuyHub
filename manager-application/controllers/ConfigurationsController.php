@@ -17,7 +17,7 @@ class ConfigurationsController extends AdminBaseController
     {
         $this->setGeneralForm(Configurations::FORM_GENERAL);
 
-        $svgIconNames = Configurations::getSvgIconNames();       
+        $svgIconNames = Configurations::getSvgIconNames();
         $this->set('svgIconNames', $svgIconNames);
         $this->_template->addCss('css/cropper.css');
         $this->_template->addJs('js/cropper.js');
@@ -539,8 +539,8 @@ class ConfigurationsController extends AdminBaseController
                 $frm->addSelectBox(Labels::getLabel('LBL_GDPR_policy_page', $this->siteLangId), 'CONF_GDPR_POLICY_PAGE', $cpagesArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
 
                 $frm->addSelectBox(Labels::getLabel('LBL_Cookies_Policies_Page', $this->siteLangId), 'CONF_COOKIES_BUTTON_LINK', $cpagesArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
-                $fld1 = $frm->addCheckBox(Labels::getLabel('LBL_Cookies_Policies', $this->siteLangId), 'CONF_ENABLE_COOKIES', 1, array(), false, 0);
-                $fld1->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_cookies_policies_section_will_be_shown_on_frontend", $this->siteLangId) . "</span>";
+                $fld = $frm->addCheckBox(Labels::getLabel('LBL_Cookies_Policies', $this->siteLangId), 'CONF_ENABLE_COOKIES', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_cookies_policies_section_will_be_shown_on_frontend", $this->siteLangId));
 
                 $frm->addCheckBox(Labels::getLabel("LBL_Header_Mega_Menu", $this->siteLangId), 'CONF_LAYOUT_MEGA_MENU', 1, array(), false, 0);
                 $frm->addCheckBox(Labels::getLabel("LBL_Home_page_loader", $this->siteLangId), 'CONF_LOADER', 1, array(), false, 0);
@@ -591,8 +591,9 @@ class ConfigurationsController extends AdminBaseController
                 break;
 
             case Configurations::FORM_SEO:
-                 $frm->addCheckBox(Labels::getLabel('LBL_ENABLE_LANGUAGE_CODE_TO_SITE_URLS_&_LANGUAGE_SPECIFIC_URL_REWRITING', $this->siteLangId), 'CONF_LANG_SPECIFIC_URL', 1, array(), false, 0);
-                
+                $fld = $frm->addCheckBox(Labels::getLabel('LBL_ENABLE_LANGUAGE_CODE_TO_SITE_URLS_&_LANGUAGE_SPECIFIC_URL_REWRITING', $this->siteLangId), 'CONF_LANG_SPECIFIC_URL', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_LANGUAGE_CODE_TO_SITE_URLS_EXAMPLES", $this->siteLangId));
+
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Twitter_Username', $this->siteLangId), 'CONF_TWITTER_USERNAME');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_This_is_required_for_Twitter_Card_code_SEO_Update", $this->siteLangId) . '</span>';
 
@@ -641,7 +642,7 @@ class ConfigurationsController extends AdminBaseController
             case Configurations::FORM_PRODUCT:
                 // $frm->addHtml('', 'Product', '<h3 class="form-section-head">' . Labels::getLabel('LBL_Product', $this->siteLangId) . '</h3>');
 
-                $frm->addCheckBox(
+                $fld = $frm->addCheckBox(
                     Labels::getLabel("LBL_Allow_Sellers_to_add_products", $this->siteLangId),
                     'CONF_ENABLED_SELLER_CUSTOM_PRODUCT',
                     1,
@@ -649,8 +650,9 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
+                HtmlHelper::configureSwitchForCheckbox($fld);
 
-                $frm->addCheckBox(
+                $fld = $frm->addCheckBox(
                     Labels::getLabel("LBL_Enable_Admin_Approval_on_Products_added_by_sellers", $this->siteLangId),
                     'CONF_CUSTOM_PRODUCT_REQUIRE_ADMIN_APPROVAL',
                     1,
@@ -658,8 +660,9 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
+                HtmlHelper::configureSwitchForCheckbox($fld);
 
-                $frm->addCheckBox(
+                $fld = $frm->addCheckBox(
                     Labels::getLabel("LBL_ALLOW_SELLERS_TO_REQUEST_PRODUCTS_WHICH_ARE_AVAILABLE_TO_ALL_SELLERS", $this->siteLangId),
                     'CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT',
                     1,
@@ -667,26 +670,32 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
+                HtmlHelper::configureSwitchForCheckbox($fld);
 
-                $fld1 = $frm->addCheckBox(Labels::getLabel("LBL_Adding_Model_#_for_products_will_be_mandatory", $this->siteLangId), 'CONF_PRODUCT_MODEL_MANDATORY', 1, array(), false, 0);
+                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Adding_Model_#_for_products_will_be_mandatory", $this->siteLangId), 'CONF_PRODUCT_MODEL_MANDATORY', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
 
-                $frm->addCheckBox(Labels::getLabel("LBL_Adding_SKU_for_products_will_be_mandatory", $this->siteLangId), 'CONF_PRODUCT_SKU_MANDATORY', 1, array(), false, 0);
+                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Adding_SKU_for_products_will_be_mandatory", $this->siteLangId), 'CONF_PRODUCT_SKU_MANDATORY', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Enable_linking_shipping_packages_to_products", $this->siteLangId), 'CONF_PRODUCT_DIMENSIONS_ENABLE', 1, array(), false, 0);
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Shipping_packages_are_required_in_case_Shipping_API_is_enabled", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_Shipping_packages_are_required_in_case_Shipping_API_is_enabled", $this->siteLangId));
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Brands_requested_by_sellers_will_require_approval", $this->siteLangId), 'CONF_BRAND_REQUEST_APPROVAL', 1, array(), false, 0);
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_On_Enabling_This_Feature,_Admin_Need_To_Approve_the_brand_requests_(User_Cannot_link_the_requested_brand_with_any_product_until_it_gets_approved_by_Admin)", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_On_Enabling_This_Feature,_Admin_Need_To_Approve_the_brand_requests_(User_Cannot_link_the_requested_brand_with_any_product_until_it_gets_approved_by_Admin)", $this->siteLangId));
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Categories_requested_by_sellers_will_require_approval", $this->siteLangId), 'CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', 1, array(), false, 0);
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_On_Enabling_This_Feature,_Admin_Need_To_Approve_the_Product_category_requests_(User_Cannot_link_the_requested_category_with_any_product_until_it_gets_approved_by_Admin)", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_On_Enabling_This_Feature,_Admin_Need_To_Approve_the_Product_category_requests_(User_Cannot_link_the_requested_category_with_any_product_until_it_gets_approved_by_Admin)", $this->siteLangId));
 
-                $brandFld = $frm->addCheckBox(Labels::getLabel("LBL_Brand_will_be_mandatory_for_products", $this->siteLangId), 'CONF_PRODUCT_BRAND_MANDATORY', 1, array(), false, 0);
 
-                $fld1 = $frm->addCheckBox(Labels::getLabel("LBL_Product_prices_will_be_inclusive_of_tax", $this->siteLangId), 'CONF_PRODUCT_INCLUSIVE_TAX', 1, array(), false, 0);
+                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Brand_will_be_mandatory_for_products", $this->siteLangId), 'CONF_PRODUCT_BRAND_MANDATORY', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
+
+                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Product_prices_will_be_inclusive_of_tax", $this->siteLangId), 'CONF_PRODUCT_INCLUSIVE_TAX', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Enable_tax_code_for_categories", $this->siteLangId), 'CONF_TAX_CATEGORIES_CODE', 1, array(), false, 0);
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_will_enable_tax_categories_code", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_This_will_enable_tax_categories_code", $this->siteLangId));
 
                 $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId);
                 $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->siteLangId), 'CONF_FULFILLMENT_TYPE', $fulFillmentArr, applicationConstants::NO, array(), '');
@@ -698,7 +707,7 @@ class ConfigurationsController extends AdminBaseController
 
                 $frm->addHtml('', 'geolocation', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Location', $this->siteLangId) . '</h3>');
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_ACTIVATE_GEO_LOCATION", $this->siteLangId), 'CONF_ENABLE_GEO_LOCATION', 1, array(), false, 0);
-
+                HtmlHelper::configureSwitchForCheckbox($fld);
 
                 $prodGeoSettingArr = applicationConstants::getProductListingSettings($this->siteLangId);
 
@@ -748,7 +757,7 @@ class ConfigurationsController extends AdminBaseController
                 break;
 
             case Configurations::FORM_USER_ACCOUNT:
-                $fld5 = $frm->addCheckBox(
+                $fld = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_Admin_Approval_After_Registration_(Sign_Up)", $this->siteLangId),
                     'CONF_ADMIN_APPROVAL_REGISTRATION',
                     1,
@@ -756,9 +765,9 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld5->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_On_enabling_this_feature,_admin_need_to_approve_each_user_after_registration_(User_cannot_login_until_admin_approves)", $this->siteLangId) . '</span>';
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_On_enabling_this_feature,_admin_need_to_approve_each_user_after_registration_(User_cannot_login_until_admin_approves)", $this->siteLangId));
 
-                $fld7 = $frm->addCheckBox(
+                $fld = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_Email_Verification_After_Registration", $this->siteLangId),
                     'CONF_EMAIL_VERIFICATION_REGISTRATION',
                     1,
@@ -766,9 +775,10 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld7->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_user_need_to_verify_their_email_address_provided_during_registration", $this->siteLangId) . " </span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_user_need_to_verify_their_email_address_provided_during_registration", $this->siteLangId));
 
-                $fld8 = $frm->addCheckBox(
+
+                $fld = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_Notify_Administrator_on_Each_Registration", $this->siteLangId),
                     'CONF_NOTIFY_ADMIN_REGISTRATION',
                     1,
@@ -776,9 +786,9 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld8->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_On_enabling_this_feature,_notification_mail_will_be_sent_to_administrator_on_each_registration.", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_On_enabling_this_feature,_notification_mail_will_be_sent_to_administrator_on_each_registration.", $this->siteLangId));
 
-                $fld9 = $frm->addCheckBox(
+                $fld = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_Auto_Login_After_Registration", $this->siteLangId),
                     'CONF_AUTO_LOGIN_REGISTRATION',
                     1,
@@ -786,9 +796,9 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld9->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_On_enabling_this_feature,_users_will_be_automatically_logged-in_after_registration", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_On_enabling_this_feature,_users_will_be_automatically_logged-in_after_registration", $this->siteLangId));
 
-                $fld10 = $frm->addCheckBox(
+                $fld = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_Sending_Welcome_Mail_After_Registration", $this->siteLangId),
                     'CONF_WELCOME_EMAIL_REGISTRATION',
                     1,
@@ -796,9 +806,9 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld10->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_On_enabling_this_feature,_users_will_receive_a_welcome_mail_after_registration.", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_On_enabling_this_feature,_users_will_receive_a_welcome_mail_after_registration.", $this->siteLangId));
 
-                $fld11 = $frm->addCheckBox(
+                $fld = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_Separate_Seller_Sign_Up_Form", $this->siteLangId),
                     'CONF_ACTIVATE_SEPARATE_SIGNUP_FORM',
                     1,
@@ -806,9 +816,9 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld11->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_On_enabling_this_feature,_buyers_and_seller_will_have_a_separate_sign_up_form.", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_On_enabling_this_feature,_buyers_and_seller_will_have_a_separate_sign_up_form.", $this->siteLangId));
 
-                $fld6 = $frm->addCheckBox(
+                $fld = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_Administrator_Approval_On_Seller_Request", $this->siteLangId),
                     'CONF_ADMIN_APPROVAL_SUPPLIER_REGISTRATION',
                     1,
@@ -816,9 +826,9 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld6->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_On_enabling_this_feature,_admin_need_to_approve_Seller's_request_after_registration", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_On_enabling_this_feature,_admin_need_to_approve_Seller's_request_after_registration", $this->siteLangId));
 
-                $fld11 = $frm->addCheckBox(
+                $fld = $frm->addCheckBox(
                     Labels::getLabel("LBL_Buyers_can_see_Seller_Tab", $this->siteLangId),
                     'CONF_BUYER_CAN_SEE_SELLER_TAB',
                     1,
@@ -826,7 +836,7 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld11->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_On_enabling_this_feature,_buyers_will_be_able_to_see_Seller_tab", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_On_enabling_this_feature,_buyers_will_be_able_to_see_Seller_tab", $this->siteLangId));
 
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Max_Seller_Request_Attempts", $this->siteLangId), 'CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', '');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Maximum_seller_request_attempts_allowed", $this->siteLangId) . "</span>";
