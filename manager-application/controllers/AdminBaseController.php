@@ -17,6 +17,7 @@ class AdminBaseController extends FatController
     protected array $formLangFields;
     protected bool $isPlugin = false;
     protected int $mainTableRecordId = 0;
+    protected bool $checkMediaExist = false;
 
     public function __construct($action)
     {
@@ -955,6 +956,10 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
                 }
             }
         }
+    
+        if ($this->checkMediaExist == true && $newTabLangId == 0 && !$this->isMediaUploaded($recordId)) {
+            $this->set('openMediaForm', true);
+        }        
 
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);

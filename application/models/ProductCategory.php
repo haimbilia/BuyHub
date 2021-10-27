@@ -1123,11 +1123,7 @@ class ProductCategory extends MyAppModel
         $parentCatId = FatUtility::int($post['prodcat_parent']);
         $prodCatId = FatUtility::int($post['prodcat_id']);
         unset($post['prodcat_id']);
-        $autoUpdateOtherLangsData = 0;
-        if (isset($post['auto_update_other_langs_data'])) {
-            $autoUpdateOtherLangsData = FatUtility::int($post['auto_update_other_langs_data']);
-        }
-        
+
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         if ($this->mainTableRecordId == 0) {
             $post['prodcat_display_order'] = $this->getMaxOrder($parentCatId);
@@ -1181,18 +1177,49 @@ class ProductCategory extends MyAppModel
         $this->saveLangData($siteDefaultLangId, $post['prodcat_name'][$siteDefaultLangId]); // For site default language
         $catNameArr = $post['prodcat_name'];
         unset($catNameArr[$siteDefaultLangId]);
+
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataobj = new TranslateLangData(static::DB_TBL_LANG);
+            if (false === $updateLangDataobj->updateTranslatedData($this->mainTableRecordId)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            }
+        }
+
         foreach ($catNameArr as $langId => $catName) {
-            if (empty($catName) && $autoUpdateOtherLangsData > 0) {
-                $this->saveTranslatedLangData($langId);
-            } elseif (!empty($catName)) {
+            if (!empty($catName)) {
                 $this->saveLangData($langId, $catName);
+            }
+        }
+   
+        if(isset($post['rating_type']) && !empty($post['rating_type'])){
+            $ratingTypeArr = json_decode($post['rating_type'],true);
+            foreach($ratingTypeArr as $rating){
+                if(!isset($rating['id'])){
+                    $ratingObj = new RatingType();
+                    $ratingObj->assignValues(['ratingtype_active' => 1 ,'ratingtype_identifier'=> $rating['value']]);
+                    if (!$ratingObj->save()) {
+                        LibHelper::exitWithError($ratingObj->getError(), true);
+                    }
+                    if (!$ratingObj->updateLangData(FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1), ['ratingtype_name' => $rating['value']])) {
+                        FatUtility::dieJsonError($ratingObj->getError());
+                    }
+                    $ratingId = $ratingObj->getMainTableRecordId();
+                }else{
+                    $ratingId = $rating['id'];
+                }
+
+                if (!$this->addUpdateRatingType($ratingId)) {
+                    LibHelper::exitWithError($this->getError(), true);
+                }                                
+                
             }
         }
 
         if ($prodCatId == 0 && isset($post['cat_icon_image_id']) && isset($post['cat_banner_image_id'])) {
             $this->updateMedia($post['cat_icon_image_id']);
             $this->updateMedia($post['cat_banner_image_id']);
-        }        
+        }
         CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);
         return true;
     }
@@ -1214,7 +1241,7 @@ class ProductCategory extends MyAppModel
             $this->error = $this->getError();
             return false;
         }
-        CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);        
+        CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);
         return true;
     }
 
@@ -1275,7 +1302,7 @@ class ProductCategory extends MyAppModel
         $srch = static::getSearchObject(false, $this->commonLangId, false);
         $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'deleted', '=', 0);
         $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'parent', '=', $this->mainTableRecordId);
-        
+
         if ($includeProductCount === true) {
             $srch->joinTable(self::DB_TBL_PROD_CAT_RELATIONS, 'INNER JOIN', 'cr.pcr_parent_id = m.prodcat_id', 'cr');
             $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT JOIN', 'ptc.ptc_prodcat_id = cr.pcr_prodcat_id', 'ptc');
@@ -1373,7 +1400,8 @@ class ProductCategory extends MyAppModel
     {
         $db = FatApp::getDb();
         if (!$db->query('CALL updateCategoryRelations(' . $recordId . ')')) {
-            echo $db->getError();die;
+            echo $db->getError();
+            die;
             return false;
         }
         CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);
@@ -1433,7 +1461,7 @@ class ProductCategory extends MyAppModel
         CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);
         return true;
     }
-    
+
     public function unDeleteParentCategories(): bool
     {
         $catId = $this->getMainTableRecordId();

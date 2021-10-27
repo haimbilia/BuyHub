@@ -1,6 +1,5 @@
 $(document).ready(function () {
-	searchProductCategories();
-	getTotalBlock();
+	reloadList();
 });
 
 (function () {
@@ -8,15 +7,9 @@ $(document).ready(function () {
 	var runningAjaxReq = false;
 	var dv = "#listing";
 
-	searchProductCategories = function () {
+	reloadList = function () {
 		fcom.ajax(fcom.makeUrl('productCategories', 'search'), '', function (res) {
 			$(dv).html(res);
-		});
-	};
-
-	getTotalBlock = function () {
-		fcom.ajax(fcom.makeUrl('productCategories', 'getTotalBlock'), '', function (res) {
-			$("#total-block").html(res);
 		});
 	};
 
@@ -48,8 +41,7 @@ $(document).ready(function () {
 	};
 
 	discardForm = function () {
-		searchProductCategories();
-		getTotalBlock();
+		reloadList();		
 	}
 
 	deleteRecord = function (id) {
@@ -59,8 +51,7 @@ $(document).ready(function () {
 			var ans = JSON.parse(res);
 			if (ans.status == 1) {
 				$.ykmsg.success(ans.msg);
-				searchProductCategories();
-				getTotalBlock();
+				reloadList();			
 			} else {
 				$.ykmsg.error(ans.msg);
 			}
@@ -98,8 +89,7 @@ $(document).ready(function () {
 			if (ans.status == 1) {
 				$(obj).toggleClass("active");
 				$.ykmsg.success(ans.msg);
-				searchProductCategories();
-				getTotalBlock();
+				reloadList();			
 				setTimeout(function(){
 					goToCategory(prodCatId);
 				}, 1000);
@@ -176,7 +166,7 @@ $(document).ready(function () {
 
 	updateCatOrder = function (data) {
 		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'updateOrder'), data, function (res) {
-			searchProductCategories();
+			reloadList();
 			$("#js-cat-section").removeClass('overlay-blur');
 			setTimeout(function(){
 				data = queryStringToJSON(data);
@@ -185,7 +175,7 @@ $(document).ready(function () {
 		});
 	}
 
-	categoryImages = function (prodCatId, imageType, slide_screen, lang_id) {
+	categoryImages = function (prodCatId, imageType, slide_screen, lang_id = 0) {
 		fcom.ajax(fcom.makeUrl('ProductCategories', 'images', [prodCatId, imageType, lang_id, slide_screen]), '', function (t) {
 			if (imageType == 'icon') {
 				$('#icon-imageListingJs').html(t);
@@ -237,12 +227,14 @@ $(document).ready(function () {
 	}
 
 	bannerPopupImage = function (inputBtn) {
+		loadCropperSkeleton();
 		if (inputBtn.files && inputBtn.files[0]) {
+			console.log(inputBtn);
 			fcom.ajax(fcom.makeUrl('ProductCategories', 'imgCropper'), '', function (t) {
-				$.facebox(t, 'faceboxWidth');
+				$("#modalBoxJs .modal-body").html(t);
 				var file = inputBtn.files[0];
-				var minWidth = document.frmProdCategory.banner_min_width.value;
-				var minHeight = document.frmProdCategory.banner_min_height.value;
+				var minWidth = document.frmRecordImage.banner_min_width.value;
+				var minHeight = document.frmRecordImage.banner_min_height.value;
 				var options = {
 					aspectRatio: aspectRatio,
 					data: {
@@ -262,12 +254,13 @@ $(document).ready(function () {
 	};
 
 	iconPopupImage = function (inputBtn) {
-		if (inputBtn.files && inputBtn.files[0]) {
-			fcom.ajax(fcom.makeUrl('Shops', 'imgCropper'), '', function (t) {
-				$.facebox(t, 'faceboxWidth');
+		loadCropperSkeleton();
+		if (inputBtn.files && inputBtn.files[0]) {			
+			fcom.ajax(fcom.makeUrl('ProductCategories', 'imgCropper'), '', function (t) {
+				$("#modalBoxJs .modal-body").html(t);			
 				var file = inputBtn.files[0];
-				var minWidth = document.frmProdCategory.logo_min_width.value;
-				var minHeight = document.frmProdCategory.logo_min_height.value;
+				var minWidth = document.frmRecordImage.logo_min_width.value;
+				var minHeight = document.frmRecordImage.logo_min_height.value;
 				var options = {
 					aspectRatio: 1 / 1,
 					data: {
@@ -316,19 +309,17 @@ $(document).ready(function () {
 			contentType: false,
 			processData: false,
 			beforeSend: function () {
-				$('#loader-js').html(fcom.getLoader());
-			},
-			complete: function () {
-				$('#loader-js').html(fcom.getLoader());
-			},
+				$.ykmodal(fcom.getLoader());
+			},			
 			success: function (ans) {
-				if (ans.status == 1) {
-					$.ykmsg.success(ans.msg);
-					categoryImages(prodcatId, imageType, slideScreen, langId);
-				} else {
+				fcom.removeLoader();
+				if (ans.status == 0) {				
 					$.ykmsg.error(ans.msg);
+					return;
 				}
-				$(document).trigger('close.facebox');
+				$.ykmsg.success(ans.msg);
+				categoryImages(prodcatId, imageType, slideScreen, langId);
+				$("#modalBoxJs").modal("hide");
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
 				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -364,88 +355,19 @@ $(document).ready(function () {
 		}
 	}
 
-	postImages = function (post_id) {        
+	mediaForm = function (record_id) {        
         $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('ProductCategories', 'imagesForm', [post_id]), '', function (t) {
-            //loadImages(post_id);
-            $.ykmodal(t);
-          
+        fcom.ajax(fcom.makeUrl('ProductCategories', 'imagesForm', [record_id]), '', function (t) {       
+			$.ykmodal(t);  
+			if (record_id > 0) {
+				categoryImages(record_id, 'icon', 1);
+				categoryImages(record_id, 'banner', 1);
+			}           
+			fcom.removeLoader();          
         });
     };
 })();
 
-
-/*
-$(document).on('click','.catFile-Js',function(){
-	var node = this;
-	$('#form-upload').remove();
-	var formName = $(node).attr('data-frm');
-	var slide_screen = 0;
-	if(formName == 'catIcon'){
-		var lang_id = $("[name='icon_lang_id']").val();
-		var prodcat_id = $("[name='prodcat_id']").val();
-		var imageType = 'icon';
-		var afile_id = $("#icon-imageListingJs li").attr('id');
-	}else if(formName == 'catBanner'){
-		var lang_id = $("[name='banner_lang_id']").val();
-		var prodcat_id = $("[name='prodcat_id']").val();
-		var slide_screen = $("[name='slide_screen']").val();
-		var imageType = 'banner';
-		var afile_id = $("#banner-imageListingJs li").attr('id');
-	}
-
-	var fileType = $(node).attr('data-file_type');
-
-
-	var frm = '<form enctype="multipart/form-data" id="form-upload" style="position:absolute; top:-100px;" >';
-	frm = frm.concat('<input type="file" name="file" />');
-	frm = frm.concat('<input type="hidden" name="file_type" value="' + fileType + '">');
-	frm = frm.concat('<input type="hidden" name="prodcat_id" value="' + prodcat_id + '">');
-	frm = frm.concat('<input type="hidden" name="lang_id" value="' + lang_id + '">');
-	frm = frm.concat('<input type="hidden" name="slide_screen" value="' + slide_screen + '">');
-	frm = frm.concat('<input type="hidden" name="afile_id" value="' + afile_id + '">');
-	frm = frm.concat('</form>');
-	$('body').prepend(frm);
-	$('#form-upload input[name=\'file\']').trigger('click');
-	if (typeof timer != 'undefined') {
-		clearInterval(timer);
-	}
-	timer = setInterval(function() {
-		if ($('#form-upload input[name=\'file\']').val() != '') {
-			clearInterval(timer);
-			$val = $(node).val();
-			$.ajax({
-				url: fcom.makeUrl('ProductCategories', 'setUpCatImages'),
-				type: 'post',
-				dataType: 'json',
-				data: new FormData($('#form-upload')[0]),
-				cache: false,
-				contentType: false,
-				processData: false,
-				beforeSend: function() {
-					$(node).val('Loading');
-				},
-				complete: function() {
-					$(node).val($val);
-					fcom.resetFaceboxHeight();
-
-				},
-				success: function(ans) {
-						if(ans.status == 1){
-							$.ykmsg.success(ans.msg);
-							$('#form-upload').remove();
-							categoryImages(prodcat_id,imageType,slide_screen,lang_id);
-						}else{
-							$.ykmsg.error(ans.msg);
-						}
-					},
-					error: function(xhr, ajaxOptions, thrownError) {
-						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-					}
-				});
-		}
-	}, 500);
-});*/
 
 $(document).on('change', '.icon-language-js', function () {
 	var lang_id = $(this).val();

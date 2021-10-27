@@ -327,3 +327,4 @@ $controller = str_replace('Controller', '', FatApp::getController());
         });
     }
 </script>
+

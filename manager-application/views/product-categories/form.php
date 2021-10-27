@@ -6,11 +6,17 @@ HtmlHelper::formatFormFields($frm);
 $fld = $frm->getField('prodcat_parent');
 $fld->setFieldTagAttribute('id', "prodcat_parent");
 
+$fld = $frm->getField('prodcat_active');
+HtmlHelper::configureSwitchForCheckbox($fld, $fld->getCaption());
+
+$fld = $frm->getField('auto_update_other_langs_data');
+HtmlHelper::configureSwitchForCheckbox($fld, $fld->getCaption());
+
 $otherButtons = [
     [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'postImages(' . $recordId . ')',
+            'onclick' => 'mediaForm(' . $recordId . ')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
@@ -21,16 +27,25 @@ $formTitle = Labels::getLabel('LBL_CATEGORY_SETUP', $siteLangId);
 $formClassExtra = 'checkboxSwitchJs';
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 <script>
- $("document").ready(function(){	 
+var canEditRating = <?php echo $canEditRating ? 1 : 0; ?>; 
+var ratingEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_RATING_TYPE', $siteLangId); ?>'; 
+ $("document").ready(function(){	
+   
     $("#prodcat_parent").select2();
     addRatingType = function(e) {
         var rt_id = e.detail.tag.id;
         var ratingtype_name = e.detail.tag.title;
         var prodCatId = $("input[name='prodcat_id']").val();       
         if (rt_id == '') {
-                     if (!confirm(langLbl.addNewRatingType)) {
+            if(1 > canEditRating){
+                $.ykmsg.error(ratingEditErr);
+                e.detail.tag.remove();
                 return;
             }
+            if (!confirm(langLbl.addNewRatingType)) {
+                return;
+            }
+            /*
             var data = 'ratingtype_active=1&ratingtype_id=0&ratingtype_identifier=' + ratingtype_name
             fcom.ajax(fcom.makeUrl('RatingTypes', 'setup'), data, function(t) {
                 var ans = JSON.parse(t);
@@ -43,8 +58,11 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
                     });
                 });
             });
-        } else {            
+            */
+        } else {      
+            /*      
             fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + rt_id, function(t) {});
+            */
         }      
     }
 
@@ -86,7 +104,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
             whitelist: [],
             delimiters: "#",
             editTags: false,
-        }).on('add', addRatingType).on('remove', removeRatingType).on('input', getRatingTypeAutoComplete);
+        }).on('add', addRatingType).on('remove', removeRatingType).on('focus', getRatingTypeAutoComplete);
     };
     tagifyRatingTypes();
 
