@@ -1261,18 +1261,34 @@ class ConfigurationsController extends AdminBaseController
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Required_for_sending_emails", $this->siteLangId) . "</span>";
                 $fld = $frm->addEmailField(Labels::getLabel("LBL_Reply_to_Email_Address", $this->siteLangId), 'CONF_REPLY_TO_EMAIL');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Required_for_email_headers_-_user_can_reply_to_this_email", $this->siteLangId) . "</span>";
-                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Send_Email", $this->siteLangId), 'CONF_SEND_EMAIL', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-inline'));
-                if (FatApp::getConfig('CONF_SEND_EMAIL', FatUtility::VAR_INT, 1)) {
-                    $fld->htmlAfterField = '<a href="javascript:void(0)" id="testMail-js">' . Labels::getLabel("LBL_Click_Here", $this->siteLangId) . '</a> to test email. ' . Labels::getLabel("LBL_This_will_send_Test_Email_to_Site_Owner_Email", $this->siteLangId) . ' - ' . FatApp::getConfig("CONF_SITE_OWNER_EMAIL");
-                }
+
                 $fld = $frm->addEmailField(Labels::getLabel("LBL_Contact_Email_Address", $this->siteLangId), 'CONF_CONTACT_EMAIL');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Email_id_to_contact_site_owner", $this->siteLangId) . "</span>";
-                $frm->addRadioButtons(Labels::getLabel("LBL_Send_SMTP_Email", $this->siteLangId), 'CONF_SEND_SMTP_EMAIL', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-inline'));
+
+                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Send_Email", $this->siteLangId), 'CONF_SEND_EMAIL', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
+
+                /* $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Send_Email", $this->siteLangId), 'CONF_SEND_EMAIL', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-radio')); */
+                HtmlHelper::configureSwitchForRadio($fld);
+                if (FatApp::getConfig('CONF_SEND_EMAIL', FatUtility::VAR_INT, 1)) {
+                    $frm->addHTML('', 'sendmailhtml', '<a href="javascript:void(0)" id="testMail-js">' . Labels::getLabel("LBL_Click_Here", $this->siteLangId) . '</a> to test email. ' . Labels::getLabel("LBL_This_will_send_Test_Email_to_Site_Owner_Email", $this->siteLangId) . ' - ' . FatApp::getConfig("CONF_SITE_OWNER_EMAIL"));
+                    /*  $fld->htmlAfterField = '<a href="javascript:void(0)" id="testMail-js">' . Labels::getLabel("LBL_Click_Here", $this->siteLangId) . '</a> to test email. ' . Labels::getLabel("LBL_This_will_send_Test_Email_to_Site_Owner_Email", $this->siteLangId) . ' - ' . FatApp::getConfig("CONF_SITE_OWNER_EMAIL"); */
+                }
+
+                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Send_SMTP_Email", $this->siteLangId), 'CONF_SEND_SMTP_EMAIL', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
+
+                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_SMTP_Secure", $this->siteLangId), 'CONF_SMTP_SECURE', applicationConstants::getSmtpSecureArr($this->siteLangId), '', array('class' => 'list-radio'));
+                HtmlHelper::configureSwitchForRadio($fld);
+
+                /*   $frm->addRadioButtons(Labels::getLabel("LBL_Send_SMTP_Email", $this->siteLangId), 'CONF_SEND_SMTP_EMAIL', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-inline')); */
+
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_SMTP_Host", $this->siteLangId), 'CONF_SMTP_HOST');
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_SMTP_Port", $this->siteLangId), 'CONF_SMTP_PORT');
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_SMTP_Username", $this->siteLangId), 'CONF_SMTP_USERNAME');
                 $fld = $frm->addPasswordField(Labels::getLabel("LBL_SMTP_Password", $this->siteLangId), 'CONF_SMTP_PASSWORD');
-                $frm->addRadioButtons(Labels::getLabel("LBL_SMTP_Secure", $this->siteLangId), 'CONF_SMTP_SECURE', applicationConstants::getSmtpSecureArr($this->siteLangId), '', array('class' => 'list-inline'));
+
+
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Additional_Alert_E-Mails", $this->siteLangId), 'CONF_ADDITIONAL_ALERT_EMAILS');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Any_additional_emails_you_want_to_receive_the_alert_email", $this->siteLangId) . "</span>";
 
@@ -1295,17 +1311,19 @@ class ConfigurationsController extends AdminBaseController
 
             case Configurations::FORM_THIRD_PARTY_API:
                 $frm->addHtml('', 'GooglePushNotification', '<h3 class="form-section-head">' . Labels::getLabel("LBL_GOOGLE_PUSH_NOTIFICATION", $this->siteLangId) . '</h3>');
+
+                $frm->addHtml('', 'FaceBookPixel', '<h3 class="form-section-head">' . Labels::getLabel("LBL_FACEBOOK_PIXEL", $this->siteLangId) . '</h3>');
+
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Google_Push_Notification_API_KEY", $this->siteLangId), 'CONF_GOOGLE_PUSH_NOTIFICATION_API_KEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_api_key_used_in_push_notifications.", $this->siteLangId) . "</span>";
-
-                $frm->addHtml('', 'FaceBookPixel', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_FACEBOOK_PIXEL", $this->siteLangId) . '</h3>');
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_FACEBOOK_PIXEL_ID", $this->siteLangId), 'CONF_FACEBOOK_PIXEL_ID');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_THIS_IS_THE_FACEBOOK_PIXEL_ID_USED_IN_TRACK_EVENTS.", $this->siteLangId) . "</span>";
 
                 $frm->addHtml('', 'Engagespot', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Engagespot_Push_Notifications_(WEB)", $this->siteLangId) . '</h3>');
 
-                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Enable_Engagespot", $this->siteLangId), 'CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-inline'));
+                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Enable_Engagespot", $this->siteLangId), 'CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-radio'));
+                HtmlHelper::configureSwitchForRadio($fld);
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_API_Key", $this->siteLangId), 'CONF_ENGAGESPOT_API_KEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_API_key_provided_by_Engagespot.", $this->siteLangId) . "</span>";
@@ -1314,17 +1332,17 @@ class ConfigurationsController extends AdminBaseController
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_code_provided_by_the_engagespot_for_integration.", $this->siteLangId) . "</span>";
 
 
-
                 $frm->addHtml('', 'GoogleMap', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Map_API", $this->siteLangId) . '</h3>');
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Google_Map_API_Key", $this->siteLangId), 'CONF_GOOGLEMAP_API_KEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_Google_map_api_key_used_to_get_user_current_location.", $this->siteLangId) . "</span>";
 
                 $frm->addHtml('', 'Newsletter', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Newsletter_Subscription", $this->siteLangId) . '</h3>');
 
-                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Activate_Newsletter_Subscription", $this->siteLangId), 'CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-inline'));
+                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Activate_Newsletter_Subscription", $this->siteLangId), 'CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-radio'));
+                HtmlHelper::configureSwitchForRadio($fld);
 
-                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Email_Marketing_System", $this->siteLangId), 'CONF_NEWSLETTER_SYSTEM', applicationConstants::getNewsLetterSystemArr($this->siteLangId), '', array('class' => 'list-inline'));
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Please_select_the_system_you_wish_to_use_for_email_marketing.", $this->siteLangId) . "</span>";
+                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Email_Marketing_System", $this->siteLangId), 'CONF_NEWSLETTER_SYSTEM', applicationConstants::getNewsLetterSystemArr($this->siteLangId), '', array('class' => 'list-radio'));
+                HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel("LBL_Please_select_the_system_you_wish_to_use_for_email_marketing.", $this->siteLangId));
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Mailchimp_Key", $this->siteLangId), 'CONF_MAILCHIMP_KEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_Mailchimp's_application_key_used_in_subscribe_and_send_newsletters.", $this->siteLangId) . "</span>";
@@ -1345,7 +1363,8 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Analytics_Id", $this->siteLangId), 'CONF_ANALYTICS_ID');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_Google_Analytics_ID._Ex._UA-xxxxxxx-xx.", $this->siteLangId) . "</span>";
 
-                $frm->addRadioButtons(Labels::getLabel("LBL_ADVANCE_ECOMMERCE_TRACKING", $this->siteLangId), 'CONF_ANALYTICS_ADVANCE_ECOMMERCE', applicationConstants::getYesNoArr($this->siteLangId), applicationConstants::NO, array('class' => 'list-inline'));
+                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_ADVANCE_ECOMMERCE_TRACKING", $this->siteLangId), 'CONF_ANALYTICS_ADVANCE_ECOMMERCE', applicationConstants::getYesNoArr($this->siteLangId), applicationConstants::NO, array('class' => 'list-radio'));
+                HtmlHelper::configureSwitchForRadio($fld);
 
                 $accessToken = FatApp::getConfig("CONF_ANALYTICS_ACCESS_TOKEN", FatUtility::VAR_STRING, '');
                 include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';
@@ -1369,22 +1388,29 @@ class ConfigurationsController extends AdminBaseController
                     $fld = $frm->addHTML('', 'accessToken', 'Please configure your settings and then authenticate them', '', 'class="medium"');
                 }
 
-                $frm->addHtml('', 'GoogleReCaptcha', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_GOOGLE_RECAPTCHA_V3", $this->siteLangId) . '</h3>');
+                $frm->addHtml('', 'seperator', '<div class="separator separator-dashed my-2"></div>');
+
+                $frm->addHtml('', 'GoogleReCaptcha', '<h3 class="form-section-head">' . Labels::getLabel("LBL_GOOGLE_RECAPTCHA_V3", $this->siteLangId) . '</h3>');
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Site_Key", $this->siteLangId), 'CONF_RECAPTCHA_SITEKEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_application_Site_key_used_for_Google_Recaptcha.", $this->siteLangId) . "</span>";
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Secret_Key", $this->siteLangId), 'CONF_RECAPTCHA_SECRETKEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_application_Secret_key_used_for_Google_Recaptcha.", $this->siteLangId) . "</span>";
 
-                $frm->addHtml('', 'Microsoft Translator Text API', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Microsoft_Translator_Text_API", $this->siteLangId) . '</h3>');
+                $frm->addHtml('', 'Translatorseperator', '<div class="separator separator-dashed my-2"></div>');
+
+                $frm->addHtml('', 'Microsoft Translator Text API', '<h3 class="form-section-head">' . Labels::getLabel("LBL_Microsoft_Translator_Text_API", $this->siteLangId) . '</h3>');
+
+                $frm->addHtml('', 'GoogleFontsAPI', '<h3 class="form-section-head">' . Labels::getLabel("LBL_GOOGLE_FONTS_API", $this->siteLangId) . '</h3>');
+
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_SUBSCRIPTION_KEY", $this->siteLangId), 'CONF_TRANSLATOR_SUBSCRIPTION_KEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_MICROSOFT_TRANSLATOR_TEXT_API_3.0_SUBSCRIPTION_KEY.", $this->siteLangId) . "</span>";
 
-                $frm->addHtml('', 'GoogleFontsAPI', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_GOOGLE_FONTS_API", $this->siteLangId) . '</h3>');
-                $fld = $frm->addTextBox(Labels::getLabel("LBL_API_KEY", $this->siteLangId), 'CONF_GOOGLE_FONTS_API_KEY');
 
+                $fld = $frm->addTextBox(Labels::getLabel("LBL_API_KEY", $this->siteLangId), 'CONF_GOOGLE_FONTS_API_KEY');
+                $frm->addHtml('', 'JWPlayerseperator', '<div class="separator separator-dashed my-2"></div>');
                 /* JW player Settings */
-                $frm->addHtml('', 'JWPlayerSettings', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_JW_Player_Settings", $this->siteLangId) . '</h3>');
+                $frm->addHtml('', 'JWPlayerSettings', '<h3 class="form-section-head">' . Labels::getLabel("LBL_JW_Player_Settings", $this->siteLangId) . '</h3>');
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_JW_Player_Key", $this->siteLangId), 'CONF_JW_PLAYER_KEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_key_provided_by_JW_PLAYER", $this->siteLangId) . "</span>";
@@ -1681,33 +1707,33 @@ class ConfigurationsController extends AdminBaseController
                 $ul = $frm->addHtml('', 'MediaGrids', '<div class="row">');
                 $ul->htmlAfterField .= '<div class="col-md-6">';
 
-                $ul->htmlAfterField .= '<h6>Admin Logo</h6><div class="form-group">
-                <label class="label">Aspect ratio</label>
-                <div class="radio-button-group">
-                    <div class="item">
-                        <input type="radio" name="button-group" class="radio-button" value="1" id="button1" checked="">
-                        <label for="button1">1:1</label>
+                /* $ul->htmlAfterField .= '<h6>Admin Logo</h6><div class="form-group">
+                    <label class="label">Aspect ratio</label>
+                    <div class="radio-button-group">
+                        <div class="item">
+                            <input type="radio" name="button-group" class="radio-button" value="1" id="button1" checked="">
+                            <label for="button1">1:1</label>
+                        </div>
+                        <div class="item">
+                            <input type="radio" name="button-group" class="radio-button" value="2" id="button2" checked="">
+                            <label for="button2">16:9</label>
+                        </div>
+                        <div class="item">
+                            <input type="radio" name="button-group" class="radio-button" value="3" id="button3" checked="">
+                            <label for="button3">Custom</label>
+                        </div>
                     </div>
-                    <div class="item">
-                        <input type="radio" name="button-group" class="radio-button" value="2" id="button2" checked="">
-                        <label for="button2">16:9</label>
-                    </div>
-                    <div class="item">
-                        <input type="radio" name="button-group" class="radio-button" value="3" id="button3" checked="">
-                        <label for="button3">Custom</label>
-                    </div>
-                </div>
 
-            </div>
-            <div class="form-group"> <div class="dropzone">
-            <div class="upload_cover">
-                <div class="file-upload">
-                    <img src="/yokart/manager/images/upload/upload_img.png">
                 </div>
-            </div> <div class="needsclick">
-            <h3 class="dropzone-msg-title">Click here to upload</h3>
-        </div>
-        </div> </div>';
+                <div class="form-group"> <div class="dropzone">
+                <div class="upload_cover">
+                    <div class="file-upload">
+                        <img src="/yokart/manager/images/upload/upload_img.png">
+                    </div>
+                </div> <div class="needsclick">
+                <h3 class="dropzone-msg-title">Click here to upload</h3>
+            </div>
+            </div> </div>'; */
 
                 $ul->htmlAfterField .= '<h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Admin_Logo', $this->siteLangId) . ' </h3> <div class="logoWrap"><div class="uploaded--image">';
 
