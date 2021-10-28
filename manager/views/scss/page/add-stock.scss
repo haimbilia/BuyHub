@@ -7,7 +7,7 @@
     }
 }
 
-.settings-inner {
+.stock-nav {
     max-height: 600px;
     overflow-y: auto;
     &-item {
@@ -22,7 +22,7 @@
                 background-color: $brand-color;
                 color: $brand-color-inverse;
                 text-decoration: none;
-                .settings-inner-title {
+                .stock-nav-title {
                     color: $brand-color-inverse;
                 }
             }
