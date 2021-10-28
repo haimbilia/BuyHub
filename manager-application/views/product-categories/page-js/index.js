@@ -3,8 +3,6 @@ $(document).ready(function () {
 });
 
 (function () {
-	var currentPage = 1;
-	var runningAjaxReq = false;
 	var dv = "#listing";
 
 	reloadList = function () {
