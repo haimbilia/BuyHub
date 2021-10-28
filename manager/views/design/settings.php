@@ -28,7 +28,7 @@
                                     <div class="maintenance-mode">
                                         <label class="switch switch-sm">
                                             <input type="checkbox">
-                                            <span></span> Maintenance Mode
+                                            <span class="input-helper"></span> Maintenance Mode
                                         </label>
 
                                     </div>
@@ -41,18 +41,18 @@
                                         <div class="row justify-content-center">
                                             <div class="col-md-12">
                                                 <input type="search" class="form-control omni-search" name="search"
-                                                    value="" placeholder="Search">
+                                                    value="addons" placeholder="Search">
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="settings">
-                                    <a class="setting" href="#">
+                                    <a class="setting" href="<?php echo CONF_WEBROOT_URL; ?>configurations">
                                         <div class="setting__icon">
                                             <span class="icon">
                                                 <svg class="icon" width="40" height="40">
                                                     <use
-                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#general-settings">
                                                     </use>
                                                 </svg>
                                             </span>
@@ -62,121 +62,212 @@
                                             <span>Display, Sound, notifications, power</span>
                                         </div>
                                     </a>
-                                    <!--setting-->
-                                    <a class="setting" href="#">
+
+                                    <a class="setting" href="<?php echo CONF_WEBROOT_URL; ?>plugins">
                                         <div class="setting__icon">
                                             <span class="icon">
                                                 <svg class="icon" width="40" height="40">
                                                     <use
-                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#plugins">
                                                     </use>
                                                 </svg>
                                             </span>
                                         </div>
                                         <div class="setting__detail">
                                             <h6>Plugins</h6>
-                                            <span>Display, Sound, notifications, power</span>
+                                            <span><mark>Addons</mark>, Third party services</span>
                                         </div>
                                     </a>
-                                    <!--setting-->
-                                    <a class="setting" href="#">
-                                        <div class="setting__icon">
-                                            <span class="icon">
-                                                <svg class="icon" width="40" height="40">
-                                                    <use
-                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
-                                                    </use>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div class="setting__detail">
-                                            <h6>Theme Settings</h6>
-                                            <span>Display, Sound, notifications, power</span>
-                                        </div>
-                                    </a>
-                                    <!--setting-->
-                                    <a class="setting" href="#">
-                                        <div class="setting__icon">
-                                            <span class="icon">
-                                                <svg class="icon" width="40" height="40">
-                                                    <use
-                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
-                                                    </use>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div class="setting__detail">
-                                            <h6>Currency Management</h6>
-                                            <span>Display, Sound, notifications, power</span>
-                                        </div>
-                                    </a>
-                                    <!--setting-->
-                                    <a class="setting" href="#">
-                                        <div class="setting__icon">
-                                            <span class="icon">
-                                                <svg class="icon" width="40" height="40">
-                                                    <use
-                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
-                                                    </use>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div class="setting__detail">
-                                            <h6>Commission Settings</h6>
-                                            <span>Display, Sound, notifications, power</span>
-                                        </div>
-                                    </a>
-                                    <!--setting-->
-                                    <a class="setting" href="#">
-                                        <div class="setting__icon">
-                                            <span class="icon">
-                                                <svg class="icon" width="40" height="40">
-                                                    <use
-                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
-                                                    </use>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div class="setting__detail">
-                                            <h6>Affiliate Commission Settings</h6>
-                                            <span>Display, Sound, notifications, power</span>
-                                        </div>
-                                    </a>
-                                    <!--setting-->
-                                    <a class="setting" href="#">
-                                        <div class="setting__icon">
-                                            <span class="icon">
-                                                <svg class="icon" width="40" height="40">
-                                                    <use
-                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
-                                                    </use>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div class="setting__detail">
-                                            <h6>Subscription Packages Management</h6>
-                                            <span>Display, Sound, notifications, power</span>
-                                        </div>
-                                    </a>
-                                    <!--setting-->
-                                    <a class="setting" href="#">
-                                        <div class="setting__icon">
-                                            <span class="icon">
-                                                <svg class="icon" width="40" height="40">
-                                                    <use
-                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
-                                                    </use>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div class="setting__detail">
-                                            <h6>System</h6>
-                                            <span>Display, Sound, notifications, power</span>
-                                        </div>
-                                    </a>
-                                    <!--setting-->
 
+                                    <a class="setting" href="<?php echo CONF_WEBROOT_URL; ?>labels">
+                                        <div class="setting__icon">
+                                            <span class="icon">
+                                                <svg class="icon" width="40" height="40">
+                                                    <use
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#labels">
+                                                    </use>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <div class="setting__detail">
+                                            <h6>Labels</h6>
+                                            <span>Manage application labels</span>
+                                        </div>
+                                    </a>
 
+                                    <a class="setting" href="<?php echo CONF_WEBROOT_URL; ?>theme-color">
+                                        <div class="setting__icon">
+                                            <span class="icon">
+                                                <svg class="icon" width="40" height="40">
+                                                    <use
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#theme">
+                                                    </use>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <div class="setting__detail">
+                                            <h6>Theme</h6>
+                                            <span>Fonts, color, styling</span>
+                                        </div>
+                                    </a>
+
+                                    <a class="setting" href="<?php echo CONF_WEBROOT_URL; ?>currency-management">
+                                        <div class="setting__icon">
+                                            <span class="icon">
+                                                <svg class="icon" width="40" height="40">
+                                                    <use
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#currencies">
+                                                    </use>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <div class="setting__detail">
+                                            <h6>Currencies</h6>
+                                            <span>Currency, Symbol, conversions</span>
+                                        </div>
+                                    </a>
+
+                                    <a class="setting" href="<?php echo CONF_WEBROOT_URL; ?>commission">
+                                        <div class="setting__icon">
+                                            <span class="icon">
+                                                <svg class="icon" width="40" height="40">
+                                                    <use
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#site-commission">
+                                                    </use>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <div class="setting__detail">
+                                            <h6>Site Commission</h6>
+                                            <span>Category, Seller, product, commision fees</span>
+                                        </div>
+                                    </a>
+
+                                    <a class="setting" href="<?php echo CONF_WEBROOT_URL; ?>affiliate-commission">
+                                        <div class="setting__icon">
+                                            <span class="icon">
+                                                <svg class="icon" width="40" height="40">
+                                                    <use
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#affiliate-commision">
+                                                    </use>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <div class="setting__detail">
+                                            <h6>Affiliate Commission</h6>
+                                            <span>Category, Users, Commision fees</span>
+                                        </div>
+                                    </a>
+
+                                    <a class="setting" href="<?php echo CONF_WEBROOT_URL; ?>seller-packages">
+                                        <div class="setting__icon">
+                                            <span class="icon">
+                                                <svg class="icon" width="40" height="40">
+                                                    <use
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#subscriptions-packages">
+                                                    </use>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <div class="setting__detail">
+                                            <h6>Seller Packages</h6>
+                                            <span>Subscription, Packages for seller</span>
+                                        </div>
+                                    </a>
+
+                                    <a class="setting" href="<?php echo CONF_WEBROOT_URL; ?>zones">
+                                        <div class="setting__icon">
+                                            <span class="icon">
+                                                <svg class="icon" width="40" height="40">
+                                                    <use
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#zones">
+                                                    </use>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <div class="setting__detail">
+                                            <h6>Zones</h6>
+                                            <span>Manage country zones</span>
+                                        </div>
+                                    </a>
+                                    <a class="setting" href="<?php echo CONF_WEBROOT_URL; ?>countries">
+                                        <div class="setting__icon">
+                                            <span class="icon">
+                                                <svg class="icon" width="40" height="40">
+                                                    <use
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#countries">
+                                                    </use>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <div class="setting__detail">
+                                            <h6>Countries</h6>
+                                            <span>Addresses, Shipping Rates configuration and Tax rates</span>
+                                        </div>
+                                    </a>
+
+                                    <a class="setting" href="<?php echo CONF_WEBROOT_URL; ?>states">
+                                        <div class="setting__icon">
+                                            <span class="icon">
+                                                <svg class="icon" width="40" height="40">
+                                                    <use
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#states">
+                                                    </use>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <div class="setting__detail">
+                                            <h6>States</h6>
+                                            <span>Addresses, Shipping Rates configuration and Tax rates</span>
+                                        </div>
+                                    </a>
+
+                                    <a class="setting" href="<?php echo CONF_WEBROOT_URL; ?>abusive-words">
+                                        <div class="setting__icon">
+                                            <span class="icon">
+                                                <svg class="icon" width="40" height="40">
+                                                    <use
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#abusive-keywords">
+                                                    </use>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <div class="setting__detail">
+                                            <h6>Abusive Keywords</h6>
+                                            <span>Configure Abusive keywords</span>
+                                        </div>
+                                    </a>
+
+                                    <a class="setting" href="<?php echo CONF_WEBROOT_URL; ?>empty-cart-items">
+                                        <div class="setting__icon">
+                                            <span class="icon">
+                                                <svg class="icon" width="40" height="40">
+                                                    <use
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#empty-cart">
+                                                    </use>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <div class="setting__detail">
+                                            <h6>Empty Cart</h6>
+                                            <span>Items for empty cart page</span>
+                                        </div>
+                                    </a>
+                                    <a class="setting" href="<?php echo CONF_WEBROOT_URL; ?>shop-report-reasons">
+                                        <div class="setting__icon">
+                                            <span class="icon">
+                                                <svg class="icon" width="40" height="40">
+                                                    <use
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#shop-reports">
+                                                    </use>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <div class="setting__detail">
+                                            <h6>Shop Report Reasons Management</h6>
+                                            <span>Shop report reasons</span>
+                                        </div>
+                                    </a>
 
                                 </div>
                             </div>

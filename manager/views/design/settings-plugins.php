@@ -530,7 +530,7 @@
                                                                 <div class="">
                                                                     <select
                                                                         data-field-caption="Default Child Order Status"
-                                                                        data-fatreq="{&quot;required&quot;:false}"
+                                                                        
                                                                         name="CONF_DEFAULT_ORDER_STATUS">
                                                                         <option value="1" selected="selected">Payment
                                                                             Pending</option>
@@ -556,7 +556,7 @@
 
                                                                     <select
                                                                         data-field-caption="Default Paid Order Status"
-                                                                        data-fatreq="{&quot;required&quot;:false}"
+                                                                        
                                                                         name="CONF_DEFAULT_PAID_ORDER_STATUS">
                                                                         <option value="1">Payment Pending
                                                                         </option>
@@ -590,7 +590,7 @@
                                                                 <div>
                                                                     <select
                                                                         data-field-caption="Default Approved Order Status"
-                                                                        data-fatreq="{&quot;required&quot;:false}"
+                                                                        
                                                                         name="CONF_DEFAULT_APPROVED_ORDER_STATUS">
                                                                         <option value="1">Payment Pending
                                                                         </option>
@@ -622,7 +622,7 @@
                                                                 <div>
                                                                     <select
                                                                         data-field-caption="Status Used By System To Mark Order As Completed"
-                                                                        data-fatreq="{&quot;required&quot;:false}"
+                                                                        
                                                                         name="CONF_DEFAULT_COMPLETED_ORDER_STATUS">
                                                                         <option value="1" selected="selected">Payment
                                                                             Pending</option>
@@ -660,7 +660,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Default Delivered Order Status"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_DEFAULT_DEIVERED_ORDER_STATUS">
                                                                                 <option value="1">Payment Pending
                                                                                 </option>
@@ -694,7 +694,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Default Cancelled Order Status"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_DEFAULT_CANCEL_ORDER_STATUS">
                                                                                 <option value="1">Payment Pending
                                                                                 </option>
@@ -731,7 +731,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Return Requested Order Status"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_RETURN_REQUEST_ORDER_STATUS">
                                                                                 <option value="1">Payment Pending
                                                                                 </option>
@@ -764,7 +764,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Return Request Withdrawn Order Status"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_RETURN_REQUEST_WITHDRAWN_ORDER_STATUS">
                                                                                 <option value="1">Payment Pending
                                                                                 </option>
@@ -801,7 +801,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Return Request Approved Order Status"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS">
                                                                                 <option value="1">Payment Pending
                                                                                 </option>
@@ -834,7 +834,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Pay At Store Order Status"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_PAY_AT_STORE_ORDER_STATUS">
                                                                                 <option value="1">Payment Pending
                                                                                 </option>
@@ -871,7 +871,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Cash On Delivery Order Status"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_COD_ORDER_STATUS">
                                                                                 <option value="1">Payment Pending
                                                                                 </option>
@@ -905,7 +905,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Ready For Pickup Order Status"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_PICKUP_READY_ORDER_STATUS">
                                                                                 <option value="1">Payment Pending
                                                                                 </option>
@@ -942,7 +942,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Status Used By System To Mark Order As Completed"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_DEFAULT_COMPLETED_ORDER_STATUS">
                                                                                 <option value="1" selected="selected">
                                                                                     Payment Pending</option>

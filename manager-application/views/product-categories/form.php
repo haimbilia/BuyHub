@@ -21,31 +21,38 @@ $formTitle = Labels::getLabel('LBL_CATEGORY_SETUP', $siteLangId);
 $formClassExtra = 'checkboxSwitchJs';
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 <script>
- $("document").ready(function(){	 
+$("document").ready(function() {
     $("#prodcat_parent").select2();
     addRatingType = function(e) {
         var rt_id = e.detail.tag.id;
         var ratingtype_name = e.detail.tag.title;
-        var prodCatId = $("input[name='prodcat_id']").val();       
+        var prodCatId = $("input[name='prodcat_id']").val();
         if (rt_id == '') {
-                     if (!confirm(langLbl.addNewRatingType)) {
+            if (!confirm(langLbl.addNewRatingType)) {
                 return;
             }
             var data = 'ratingtype_active=1&ratingtype_id=0&ratingtype_identifier=' + ratingtype_name
             fcom.ajax(fcom.makeUrl('RatingTypes', 'setup'), data, function(t) {
                 var ans = JSON.parse(t);
                 var newRtId = ans.rtId;
-                var dataLang = 'ratingtypelang_ratingtype_id=' + newRtId + '&ratingtype_name=' + ratingtype_name + '&ratingtypelang_lang_id=<?php echo $siteLangId; ?>';
+                var dataLang = 'ratingtypelang_ratingtype_id=' + newRtId + '&ratingtype_name=' +
+                    ratingtype_name + '&ratingtypelang_lang_id=<?php echo $siteLangId; ?>';
                 fcom.ajax(fcom.makeUrl('RatingTypes', 'langSetup'), dataLang, function(t2) {
                     var ans = JSON.parse(t2);
-                    fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + newRtId, function(t3) {
-                        $('tag[value="' + e.detail.data.value + '"]').attr('id', newRtId);
-                    });
+                    fcom.updateWithAjax(fcom.makeUrl('ProductCategories',
+                            'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId +
+                        '&prt_ratingtype_id=' + newRtId,
+                        function(t3) {
+                            $('tag[value="' + e.detail.data.value + '"]').attr('id',
+                                newRtId);
+                        });
                 });
             });
-        } else {            
-            fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + rt_id, function(t) {});
-        }      
+        } else {
+            fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' +
+                prodCatId + '&prt_ratingtype_id=' + rt_id,
+                function(t) {});
+        }
     }
 
     removeRatingType = function(e) {
@@ -54,8 +61,10 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
         if ('' == rt_id || '' == prodCatId) {
             return;
         }
-        fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'removeRatingType'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + rt_id, function(t) {});
-     
+        fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'removeRatingType'), 'prt_prodcat_id=' +
+            prodCatId + '&prt_ratingtype_id=' + rt_id,
+            function(t) {});
+
     }
 
     getRatingTypeAutoComplete = function(e) {
@@ -86,10 +95,10 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
             whitelist: [],
             delimiters: "#",
             editTags: false,
-        }).on('add', addRatingType).on('remove', removeRatingType).on('input', getRatingTypeAutoComplete);
+        }).on('add', addRatingType).on('remove', removeRatingType).on('input',
+            getRatingTypeAutoComplete);
     };
     tagifyRatingTypes();
 
 });
-
 </script>
