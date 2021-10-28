@@ -21,52 +21,119 @@ if ($lang_id > 0) {
 $stateData = FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 1);
 $displayMap = false;
 $colMd6Arr = [];
+$colMd12Arr = [];
 $class = '';
 switch ($frmType) {
     case Configurations::FORM_GENERAL:
         if (1 > $lang_id) {
+            $colMd12Arr = ['CONF_MAP_IFRAME_CODE'];
+        } else {
+            $colMd12Arr = ['CONF_COOKIES_TEXT_' . $lang_id];
+        }
+        /*  if (1 > $lang_id) {
             $colMd6Arr = ['CONF_SITE_OWNER_EMAIL', 'CONF_SITE_PHONE', 'CONF_SITE_FAX', 'CONF_ABOUT_US_PAGE', 'CONF_PRIVACY_POLICY_PAGE', 'CONF_GDPR_POLICY_PAGE', 'CONF_COOKIES_BUTTON_LINK', 'CONF_TERMS_AND_CONDITIONS_PAGE'];
         } else {
             $colMd6Arr = ['lang_id', 'CONF_WEBSITE_NAME_' . $lang_id, 'CONF_SITE_OWNER_' . $lang_id];
-        }
+        } */
         $class = 'card-tabs';
         break;
     case Configurations::FORM_LOCAL:
-        if (1 > $lang_id) {
+        /* if (1 > $lang_id) {
             $colMd6Arr = ['CONF_DEFAULT_SITE_LANG', 'CONF_TIMEZONE', 'CONF_COUNTRY', 'CONF_ZIP_CODE', 'CONF_STATE', 'CONF_DATE_FORMAT', 'CONF_DEFAULT_CURRENCY_SEPARATOR', 'CONF_FAQ_PAGE_MAIN_CATEGORY', 'CONF_SELLER_PAGE_MAIN_CATEGORY', 'CONF_CURRENCY'];
         } else {
             $colMd6Arr = ['lang_id', 'CONF_CITY_' . $lang_id, 'CONF_ADDRESS_' . $lang_id, 'CONF_ADDRESS_LINE_2_' . $lang_id];
-        }
+        } */
         $class = 'card-tabs';
         break;
     case Configurations::FORM_SEO:
         if (1 > $lang_id) {
-            $colMd6Arr = ['CONF_TWITTER_USERNAME', 'googleFileVerification', 'google_file_verification', 'bingFileVerification', 'bing_file_verification'];
+            $colMd12Arr = ['CONF_LANG_SPECIFIC_URL', 'CONF_SITE_TRACKER_CODE', 'CONF_SITE_ROBOTS_TXT', 'seperatorGoogleTag', 'googleTagManager', 'CONF_GOOGLE_TAG_MANAGER_HEAD_SCRIPT', 'CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT', 'googlewebmaster', 'hotjar', 'CONF_HOTJAR_HEAD_SCRIPT', 'schemacode', 'CONF_DEFAULT_SCHEMA_CODES_SCRIPT'];
         }
+
+        /* if (1 > $lang_id) {
+            $colMd6Arr = ['CONF_TWITTER_USERNAME', 'googleFileVerification', 'google_file_verification', 'bingFileVerification', 'bing_file_verification'];
+        } */
         break;
     case Configurations::FORM_USER_ACCOUNT:
         if (1 > $lang_id) {
-            $colMd6Arr = ['CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', 'CONF_MIN_WITHDRAW_LIMIT', 'CONF_MAX_WITHDRAW_LIMIT', 'CONF_MIN_INTERVAL_WITHDRAW_REQUESTS'];
+            $colMd12Arr = ['Withdrawal'];
         }
+
+        /* if (1 > $lang_id) {
+            $colMd6Arr = ['CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', 'CONF_MIN_WITHDRAW_LIMIT', 'CONF_MAX_WITHDRAW_LIMIT', 'CONF_MIN_INTERVAL_WITHDRAW_REQUESTS'];
+        } */
         break;
     case Configurations::FORM_CART_WISHLIST:
+
         if (1 > $lang_id) {
-            $colMd6Arr = ['CONF_REMINDER_INTERVAL_PRODUCTS_IN_CART', 'CONF_SENT_CART_REMINDER_COUNT', 'CONF_REMINDER_INTERVAL_PRODUCTS_IN_WISHLIST', 'CONF_SENT_WISHLIST_REMINDER_COUNT'];
+            $colMd12Arr = ['Cart', 'Wishlist'];
         }
+        /*  if (1 > $lang_id) {
+            $colMd6Arr = ['CONF_REMINDER_INTERVAL_PRODUCTS_IN_CART', 'CONF_SENT_CART_REMINDER_COUNT', 'CONF_REMINDER_INTERVAL_PRODUCTS_IN_WISHLIST', 'CONF_SENT_WISHLIST_REMINDER_COUNT'];
+        } */
         break;
     case Configurations::FORM_CHECKOUT_PROCESS:
         if (1 > $lang_id) {
+            $colMd12Arr = ['Checkout', 'pickup', 'cprocess', 'CONF_VENDOR_ORDER_STATUS', 'CONF_BUYER_ORDER_STATUS', 'CONF_PROCESSING_ORDER_STATUS', 'CONF_COMPLETED_ORDER_STATUS', 'CONF_REVIEW_READY_ORDER_STATUS', 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', 'CONF_ENABLE_DIGITAL_DOWNLOADS', 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES', 'CONF_BADGE_COUNT_ORDER_STATUS', 'CONF_PRODUCT_IS_ON_ORDER_STATUSES'];
+        }
+        /* if (1 > $lang_id) {
             $colMd6Arr = ['CONF_MIN_COD_ORDER_LIMIT', 'CONF_MAX_COD_ORDER_LIMIT', 'CONF_COD_MIN_WALLET_BALANCE', 'CONF_TIME_SLOT_ADDITION', 'CONF_DEFAULT_ORDER_STATUS', 'CONF_DEFAULT_PAID_ORDER_STATUS', 'CONF_DEFAULT_APPROVED_ORDER_STATUS', 'CONF_DEFAULT_INPROCESS_ORDER_STATUS', 'CONF_DEFAULT_SHIPPING_ORDER_STATUS', 'CONF_DEFAULT_DEIVERED_ORDER_STATUS', 'CONF_DEFAULT_CANCEL_ORDER_STATUS', 'CONF_RETURN_REQUEST_ORDER_STATUS', 'CONF_RETURN_REQUEST_WITHDRAWN_ORDER_STATUS', 'CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS', 'CONF_PAY_AT_STORE_ORDER_STATUS', 'CONF_COD_ORDER_STATUS', 'CONF_PICKUP_READY_ORDER_STATUS', 'CONF_DEFAULT_COMPLETED_ORDER_STATUS', 'CONF_DEFAULT_RETURN_AGE'];
+        } */
+        break;
+    case Configurations::FORM_AFFILIATE:
+        if (1 > $lang_id) {
+            $colMd12Arr = ['CONF_AFFILIATES_REQUIRES_APPROVAL'];
         }
         break;
+    case Configurations::FORM_REWARD_POINTS:
+        if (1 > $lang_id) {
+            $colMd12Arr = ['Birthday_Rewards', 'CONF_ENABLE_BIRTHDAY_DISCOUNT_REWARDS', 'BuyingAnYear'];
+        }
+        break;
+    case Configurations::FORM_LIVE_CHAT:
+        if (1 > $lang_id) {
+            $colMd12Arr = ['CONF_LIVE_CHAT_CODE'];
+        }
+        break;
+
     case Configurations::FORM_EMAIL:
         $class = 'card-tabs';
+        break;
+    case Configurations::FORM_SERVER:
+        if (0 < $lang_id) {
+            $colMd12Arr = ['CONF_MAINTENANCE_TEXT_' . $lang_id];
+        }
+        $class = 'card-tabs';
+        break;
+    case Configurations::FORM_DISCOUNT:
+        if (1 > $lang_id) {
+            $colMd12Arr = ['firstTimeDiscount'];
+        }
+        break;
+    case Configurations::FORM_SHARING:
+        if (1 > $lang_id) {
+            $colMd12Arr = ['ShareAndEarn'];
+        }
+        break;
+    case Configurations::FORM_REFERAL:
+        if (1 > $lang_id) {
+            $colMd12Arr = ['RewardsOnRegistration', 'RewardsonPurchase'];
+        }
+        break;
+    case Configurations::FORM_MEDIA:
+        if (1 > $lang_id) {
+            $colMd12Arr = ['MediaGrids'];
+        }
         break;
 
     case Configurations::FORM_PRODUCT:
         if (1 > $lang_id) {
-            $colMd6Arr = ['CONF_FULFILLMENT_TYPE', 'CONF_ITEMS_PER_PAGE_CATALOG', 'CONF_DEFAULT_GEO_LOCATION', 'CONF_GEO_DEFAULT_COUNTRY', 'CONF_GEO_DEFAULT_STATE', 'CONF_GEO_DEFAULT_ZIPCODE'];
+            $colMd12Arr = ['geolocation', 'CONF_PRODUCT_GEO_LOCATION', 'CONF_LOCATION_LEVEL', 'CONF_DEFAULT_GEO_LOCATION'];
         }
+
+        /*  if (1 > $lang_id) {
+            $colMd6Arr = ['CONF_FULFILLMENT_TYPE', 'CONF_ITEMS_PER_PAGE_CATALOG', 'CONF_DEFAULT_GEO_LOCATION', 'CONF_GEO_DEFAULT_COUNTRY', 'CONF_GEO_DEFAULT_STATE', 'CONF_GEO_DEFAULT_ZIPCODE'];
+        } */
 
         $geoFld = $frm->getField('CONF_PRODUCT_GEO_LOCATION');
         $geoFld->setFieldTagAttribute('class', 'geoLocation');
@@ -124,15 +191,19 @@ switch ($frmType) {
             $stateFld->setFieldTagAttribute('id', 'user_state_id');
         }
         break;
-    case Configurations::FORM_SERVER:
-        $class = 'card-tabs';
-        break;
 }
 
 if (!empty($colMd6Arr)) {
     foreach ($colMd6Arr as $val) {
         $fld = $frm->getField($val);
         $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+    }
+}
+
+if (!empty($colMd12Arr)) {
+    foreach ($colMd12Arr as $val) {
+        $fld = $frm->getField($val);
+        $fld->developerTags['colWidthValues'] = [null, '12', null, null];
     }
 }
 
@@ -148,17 +219,15 @@ if (!empty($colMd6Arr)) {
         <div class="card-head-toolbar">
             <?php if ($dispLangTab && $frmType != Configurations::FORM_MEDIA && $frmType != Configurations::FORM_SHARING) { ?>
 
-            <nav class="nav nav-tabs navTabsJs">
-                <a class="nav-link <?php echo ($lang_id == 0) ? 'active' : ''; ?>" href="javascript:void(0)"
-                    onClick="getForm(<?php echo $frmType; ?>)">
-                    <?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?>
-                </a>
+                <nav class="nav nav-tabs navTabsJs">
+                    <a class="nav-link <?php echo ($lang_id == 0) ? 'active' : ''; ?>" href="javascript:void(0)" onClick="getForm(<?php echo $frmType; ?>)">
+                        <?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?>
+                    </a>
 
-                <a class="nav-link <?php echo (0 < $lang_id ? 'active' : '') ?>" href="javascript:void(0);"
-                    onClick="getLangForm(<?php echo $frmType; ?>, <?php echo FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1); ?>)">
-                    <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
-                </a>
-            </nav>
+                    <a class="nav-link <?php echo (0 < $lang_id ? 'active' : '') ?>" href="javascript:void(0);" onClick="getLangForm(<?php echo $frmType; ?>, <?php echo FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1); ?>)">
+                        <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
+                    </a>
+                </nav>
 
             <?php } ?>
         </div>
@@ -169,7 +238,7 @@ if (!empty($colMd6Arr)) {
         <div class="formBodyJs">
             <?php echo str_replace('<i class="input-helper"></i>', '<span></span>', $frm->getFormHtml()); ?>
             <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-            <div id="map" style="height:500px"></div>
+                <div id="map" style="height:500px"></div>
             <?php } ?>
         </div>
     </div>
@@ -190,72 +259,72 @@ if (!empty($colMd6Arr)) {
     </div>
 </div>
 <script language="javascript">
-var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
-<?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-getStatesByCountryCode($("#geo_country_code").val(),
-    '<?php echo FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1); ?>', '#geo_state_code',
-    'state_code');
-<?php } ?>
+    var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
+    <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
+        getStatesByCountryCode($("#geo_country_code").val(),
+            '<?php echo FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1); ?>', '#geo_state_code',
+            'state_code');
+    <?php } ?>
 
-// $(document).on('change', '.prefRatio-js', function() {
-//     var inputElement = $(this).parents('.list-inline').next('input');
-//     var selectedVal = $(this).val();
-//     if (selectedVal == ratioTypeSquare) {
-//         inputElement.attr('data-min_width', 150)
-//         inputElement.attr('data-min_height', 150)
-//     } else {
-//         inputElement.attr('data-min_width', 150)
-//         inputElement.attr('data-min_height', 85)
-//     }
-// });
+    $(document).on('change', '.prefRatio-js', function() {
+        var inputElement = $(this).parents('.list-inline').next('input');
+        var selectedVal = $(this).val();
+        if (selectedVal == ratioTypeSquare) {
+            inputElement.attr('data-min_width', 150)
+            inputElement.attr('data-min_height', 150)
+        } else {
+            inputElement.attr('data-min_width', 150)
+            inputElement.attr('data-min_height', 85)
+        }
+    });
 
-$(document).on('change', '.geoLocation', function() {
-    var geolocVal = $(this).val();
+    $(document).on('change', '.geoLocation', function() {
+        var geolocVal = $(this).val();
 
-    $('.listingFilter').removeAttr('disabled');
-    if (geolocVal == <?php echo applicationConstants::BASED_ON_RADIUS; ?>) {
-        $('.listingFilter').attr('disabled', 'disabled');
-        $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', false); // enable
-    } else {
-        $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', true); // enable
-    }
+        $('.listingFilter').removeAttr('disabled');
+        if (geolocVal == <?php echo applicationConstants::BASED_ON_RADIUS; ?>) {
+            $('.listingFilter').attr('disabled', 'disabled');
+            $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', false); // enable
+        } else {
+            $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', true); // enable
+        }
 
-    if (geolocVal == <?php echo applicationConstants::BASED_ON_DELIVERY_LOCATION; ?>) {
-        $('.listingFilter').each(function() {
-            if ($(this).val() == <?php echo applicationConstants::LOCATION_ZIP; ?>) {
-                $(this).attr('disabled', 'disabled');
-            }
+        if (geolocVal == <?php echo applicationConstants::BASED_ON_DELIVERY_LOCATION; ?>) {
+            $('.listingFilter').each(function() {
+                if ($(this).val() == <?php echo applicationConstants::LOCATION_ZIP; ?>) {
+                    $(this).attr('disabled', 'disabled');
+                }
+            });
+        }
+    });
+
+    $(document).on('change', '.defaultLocationGeoFilter', function() {
+        if ($(this).val() == 1) {
+            $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', false); // enable
+            $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', false); // enable
+            $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', false); // enable
+        } else {
+            $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', true); // enable
+            $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', true); // enable
+            $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', true); // enable
+        }
+    });
+    <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
+        $(document).ready(function() {
+            var lat = $('#lat').val();
+            var lng = $('#lng').val();
+            initMap(lat, lng);
         });
-    }
-});
-
-$(document).on('change', '.defaultLocationGeoFilter', function() {
-    if ($(this).val() == 1) {
-        $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', false); // enable
-        $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', false); // enable
-        $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', false); // enable
-    } else {
-        $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', true); // enable
-        $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', true); // enable
-        $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', true); // enable
-    }
-});
-<?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-$(document).ready(function() {
-    var lat = $('#lat').val();
-    var lng = $('#lng').val();
-    initMap(lat, lng);
-});
-<?php } else { ?>
-var countryId = $("#user_country_id").val();
-if ('undefined' != typeof countryId) {
-    getCountryStates(countryId, '<?php echo $stateData; ?>', '#user_state_id');
-}
-<?php } ?>
-$(document).on('keyup', 'form[name="frmConfiguration"]', function(e) {
-    e.stopImmediatePropagation();
-    if (e.keyCode === 13) {
-        $('.formBodyJs form').submit();
-    }
-});
+    <?php } else { ?>
+        var countryId = $("#user_country_id").val();
+        if ('undefined' != typeof countryId) {
+            getCountryStates(countryId, '<?php echo $stateData; ?>', '#user_state_id');
+        }
+    <?php } ?>
+    $(document).on('keyup', 'form[name="frmConfiguration"]', function(e) {
+        e.stopImmediatePropagation();
+        if (e.keyCode === 13) {
+            $('.formBodyJs form').submit();
+        }
+    });
 </script>

@@ -1,5 +1,7 @@
 <?php
 
+use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Html;
+
 class ConfigurationsController extends AdminBaseController
 {
     /* these variables must be only those which will store array type data and will saved as serialized array [*/
@@ -539,11 +541,14 @@ class ConfigurationsController extends AdminBaseController
                 $frm->addSelectBox(Labels::getLabel('LBL_GDPR_policy_page', $this->siteLangId), 'CONF_GDPR_POLICY_PAGE', $cpagesArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
 
                 $frm->addSelectBox(Labels::getLabel('LBL_Cookies_Policies_Page', $this->siteLangId), 'CONF_COOKIES_BUTTON_LINK', $cpagesArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+
+                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Header_Mega_Menu", $this->siteLangId), 'CONF_LAYOUT_MEGA_MENU', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
+                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Home_page_loader", $this->siteLangId), 'CONF_LOADER', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
+
                 $fld = $frm->addCheckBox(Labels::getLabel('LBL_Cookies_Policies', $this->siteLangId), 'CONF_ENABLE_COOKIES', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_cookies_policies_section_will_be_shown_on_frontend", $this->siteLangId));
-
-                $frm->addCheckBox(Labels::getLabel("LBL_Header_Mega_Menu", $this->siteLangId), 'CONF_LAYOUT_MEGA_MENU', 1, array(), false, 0);
-                $frm->addCheckBox(Labels::getLabel("LBL_Home_page_loader", $this->siteLangId), 'CONF_LOADER', 1, array(), false, 0);
 
                 /* $fld3 = $frm->addTextBox(Labels::getLabel("LBL_Admin_Default_Items_Per_Page", $this->siteLangId), "CONF_ADMIN_PAGESIZE");
                 $fld3->requirements()->setInt();
@@ -603,13 +608,15 @@ class ConfigurationsController extends AdminBaseController
                 $robotsFld = $frm->addTextarea(Labels::getLabel('LBL_Robots_Txt', $this->siteLangId), 'CONF_SITE_ROBOTS_TXT');
                 $robotsFld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_This_will_update_your_Robots.txt_file._This_is_to_help_search_engines_index_your_site_more_appropriately.", $this->siteLangId) . '</span>';
 
-                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Tag_Manager", $this->siteLangId) . '</h3>');
+                $frm->addHtml('', 'seperatorGoogleTag', '<div class="separator separator-dashed my-2"></div>');
+
+                $frm->addHtml('', 'googleTagManager', '<h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Tag_Manager", $this->siteLangId) . '</h3>');
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Head_Script", $this->siteLangId), 'CONF_GOOGLE_TAG_MANAGER_HEAD_SCRIPT');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_code_provided_by_google_tag_manager_for_integration.", $this->siteLangId) . "</span>";
 
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Body_Script", $this->siteLangId), 'CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_code_provided_by_google_tag_manager_for_integration.", $this->siteLangId) . "</span>";
-                $frm->addHtml('', '', '<div class="separator separator-dashed my-2"></div>');
+                $frm->addHtml('', 'googlewebmaster', '<div class="separator separator-dashed my-2"></div>');
                 $fld = $frm->addHtml('', 'googleFileVerification', '<h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Webmaster", $this->siteLangId) . '</h3>');
                 $htmlAfterField = '';
                 if (file_exists(CONF_UPLOADS_PATH . '/google-site-verification.html')) {
@@ -732,7 +739,7 @@ class ConfigurationsController extends AdminBaseController
                     '',
                     array('class' => 'list-radio')
                 );
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_DISPLAY_AND_SEARCH_PRODUCTS_BASED_ON_CRITERIA", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel("LBL_DISPLAY_AND_SEARCH_PRODUCTS_BASED_ON_CRITERIA", $this->siteLangId));
 
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_RADIUS_MAX_DISTANCE_IN_MILES', $this->siteLangId), 'CONF_RADIUS_DISTANCE_IN_MILES');
                 $fld->requirements()->setInt();
@@ -742,9 +749,9 @@ class ConfigurationsController extends AdminBaseController
                     'CONF_DEFAULT_GEO_LOCATION',
                     applicationConstants::getYesNoArr($this->siteLangId),
                     '0',
-                    array('class' => 'list-inline')
+                    array('class' => 'list-radio')
                 );
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_SET_DEFAULT_LOCATION_FOR_PRODUCT_LISTING", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel("LBL_SET_DEFAULT_LOCATION_FOR_PRODUCT_LISTING", $this->siteLangId));
 
                 $countryObj = new Countries();
                 $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId, true, 'country_code');
@@ -863,19 +870,21 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Minimum_Wallet_Balance', $this->siteLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_COD_MIN_WALLET_BALANCE');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_seller_needs_to_maintain_to_accept_COD_orders._Default_is_-1", $this->siteLangId) . "</span>";
 
-                $frm->addHtml('', 'Checkout', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Pickup', $this->siteLangId) . '</h3>');
+                $frm->addHtml('', 'pickup', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Pickup', $this->siteLangId) . '</h3>');
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Display_Time_Slots_After_Order', $this->siteLangId) . ' [' . Labels::getLabel('LBL_Hours', $this->siteLangId) . ']', 'CONF_TIME_SLOT_ADDITION', 2);
                 $fld->requirements()->setInt();
                 $fld->requirements()->setRange('2', '9999999999');
                 $fld->requirements()->setRequired(true);
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_SHOP_PICKUP_INTERVAL_INFO", $this->siteLangId) . "</span>";
 
-                $frm->addHtml('', 'Checkout', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Checkout_Process', $this->siteLangId) . '</h3>');
-                $fld1 = $frm->addCheckBox(Labels::getLabel('LBL_Activate_Live_Payment_Transaction_Mode', $this->siteLangId), 'CONF_TRANSACTION_MODE', 1, array(), false, 0);
-                $fld1->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_Transaction_Mode_to_live_environment", $this->siteLangId) . "</span>";
+                $frm->addHtml('', 'cprocess', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Checkout_Process', $this->siteLangId) . '</h3>');
+
+                $fld = $frm->addCheckBox(Labels::getLabel('LBL_Activate_Live_Payment_Transaction_Mode', $this->siteLangId), 'CONF_TRANSACTION_MODE', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_Set_Transaction_Mode_to_live_environment", $this->siteLangId));
+
                 $obj = new Plugin();
                 if ($obj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'plugin_active')) {
-                    $fld1 = $frm->addCheckBox(
+                    $fld = $frm->addCheckBox(
                         Labels::getLabel("LBL_USE_MANUAL_SHIPPING_RATES._INSTEAD_OF_THIRD_PARTY.", $this->siteLangId),
                         'CONF_MANUAL_SHIPPING_RATES_ADMIN',
                         1,
@@ -883,25 +892,25 @@ class ConfigurationsController extends AdminBaseController
                         false,
                         0
                     );
-                    $fld1->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_MANUAL_SHIPPING_RATES_WERE_CONSIDERED_FOR_ADMIN_SHIPPING.", $this->siteLangId) . "</span>";
+                    HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_MANUAL_SHIPPING_RATES_WERE_CONSIDERED_FOR_ADMIN_SHIPPING.", $this->siteLangId));
                 }
 
                 $fld = $frm->addCheckBox(Labels::getLabel('LBL_New_Order_Alert_Email', $this->siteLangId), 'CONF_NEW_ORDER_EMAIL', 1, array(), false, 0);
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Send_an_email_to_store_owner_when_new_order_is_placed", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_Send_an_email_to_store_owner_when_new_order_is_placed.", $this->siteLangId));
 
                 $orderStatusArr = Orders::getOrderProductStatusArr($this->siteLangId);
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Tax_Collected_By_Seller", $this->siteLangId), 'CONF_TAX_COLLECTED_BY_SELLER', 1, array(), false, 0);
-                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_On_enabling_this_feature,_seller_will_be_able_to_collect_tax", $this->siteLangId) . '</span>';
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_On_enabling_this_feature,_seller_will_be_able_to_collect_tax.", $this->siteLangId));
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_TAX_AFTER_DISCOUNTS", $this->siteLangId), 'CONF_TAX_AFTER_DISOCUNT', 1, array(), false, 0);
-                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_On_enabling_this_feature,_tax_will_be_applicable_after_discounts", $this->siteLangId) . '</span>';
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_On_enabling_this_feature,_tax_will_be_applicable_after_discounts", $this->siteLangId));
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_Return_Shipping_Charges_to_Customer", $this->siteLangId), 'CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', 1, array(), false, 0);
-                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_On_enabling_return_shipping_charges_to_customer,", $this->siteLangId) . '</span>';
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_On_enabling_return_shipping_charges_to_customer", $this->siteLangId));
 
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_SHIPPED_BY_ADMIN_ONLY", $this->siteLangId), 'CONF_SHIPPED_BY_ADMIN_ONLY', 1, array(), false, 0);
-                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_On_enabling_shipping_charges_manged_by_admin_only,", $this->siteLangId) . '</span>';
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_On_enabling_shipping_charges_manged_by_admin_only", $this->siteLangId));
 
                 $fld = $frm->addSelectBox(
                     Labels::getLabel("LBL_Default_Child_Order_Status", $this->siteLangId),
@@ -1014,65 +1023,66 @@ class ConfigurationsController extends AdminBaseController
 
                 $vendorOrderSelected = (!empty($arrValues['CONF_VENDOR_ORDER_STATUS'])) ? $arrValues['CONF_VENDOR_ORDER_STATUS'] : 0;
 
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Seller_Order_Statuses", $this->siteLangId), 'CONF_VENDOR_ORDER_STATUS', $orderStatusArr, $vendorOrderSelected, array('class' => 'setting-wizard'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Seller_Order_Statuses", $this->siteLangId), 'CONF_VENDOR_ORDER_STATUS', $orderStatusArr, $vendorOrderSelected, array('class' => 'list-checkboxes'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_the_order_starts_displaying_to_Sellers.", $this->siteLangId) . "</span>";
 
                 $buyerOrderSelected = (!empty($arrValues['CONF_BUYER_ORDER_STATUS'])) ? $arrValues['CONF_BUYER_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Buyer_Order_Statuses", $this->siteLangId), 'CONF_BUYER_ORDER_STATUS', $orderStatusArr, $buyerOrderSelected, array('class' => 'setting-wizard'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Buyer_Order_Statuses", $this->siteLangId), 'CONF_BUYER_ORDER_STATUS', $orderStatusArr, $buyerOrderSelected, array('class' => 'list-checkboxes'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_the_order_starts_displaying_to_Buyers.", $this->siteLangId) . "</span>";
 
                 $processingOrderSelected = (!empty($arrValues['CONF_PROCESSING_ORDER_STATUS'])) ? $arrValues['CONF_PROCESSING_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Processing_Order_Status", $this->siteLangId), 'CONF_PROCESSING_ORDER_STATUS', $orderStatusArr, $processingOrderSelected, array('class' => 'setting-wizard'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Processing_Order_Status", $this->siteLangId), 'CONF_PROCESSING_ORDER_STATUS', $orderStatusArr, $processingOrderSelected, array('class' => 'list-checkboxes'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_the_order_starts_stock_subtraction.", $this->siteLangId) . "</span>";
 
                 $completeOrderSelected = (!empty($arrValues['CONF_COMPLETED_ORDER_STATUS'])) ? $arrValues['CONF_COMPLETED_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Completed_Order_Status", $this->siteLangId), 'CONF_COMPLETED_ORDER_STATUS', $orderStatusArr, $completeOrderSelected, array('class' => 'setting-wizard'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Completed_Order_Status", $this->siteLangId), 'CONF_COMPLETED_ORDER_STATUS', $orderStatusArr, $completeOrderSelected, array('class' => 'list-checkboxes'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_considered_completed_and_payment_released_to_Sellers.", $this->siteLangId) . "</span>";
 
                 $feedbackOrderSelected = (!empty($arrValues['CONF_REVIEW_READY_ORDER_STATUS'])) ? $arrValues['CONF_REVIEW_READY_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Feedback_ready_Order_Status", $this->siteLangId), 'CONF_REVIEW_READY_ORDER_STATUS', $orderStatusArr, $feedbackOrderSelected, array('class' => 'setting-wizard'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Feedback_ready_Order_Status", $this->siteLangId), 'CONF_REVIEW_READY_ORDER_STATUS', $orderStatusArr, $feedbackOrderSelected, array('class' => 'list-checkboxes'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_review_the_orders.", $this->siteLangId) . "</span>";
 
                 $allowCancellationOrderSelected = (!empty($arrValues['CONF_ALLOW_CANCELLATION_ORDER_STATUS'])) ? $arrValues['CONF_ALLOW_CANCELLATION_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Order_Cancellation_by_Buyers", $this->siteLangId), 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', $orderStatusArr, $allowCancellationOrderSelected, array('class' => 'setting-wizard'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Order_Cancellation_by_Buyers", $this->siteLangId), 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', $orderStatusArr, $allowCancellationOrderSelected, array('class' => 'list-checkboxes'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_place_cancellation_request_on_orders.", $this->siteLangId) . "</span>";
 
                 $allowCancellationOrderSelected = (!empty($arrValues['CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS'])) ? $arrValues['CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Order_Cancellation_by_Buyers_On_Digital", $this->siteLangId), 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', $orderStatusArr, $allowCancellationOrderSelected, array('class' => 'setting-wizard'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Order_Cancellation_by_Buyers_On_Digital", $this->siteLangId), 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', $orderStatusArr, $allowCancellationOrderSelected, array('class' => 'list-checkboxes'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_place_cancellation_request_on_orders.", $this->siteLangId) . "</span>";
 
                 $returnExchageOrderSelected = (!empty($arrValues['CONF_RETURN_EXCHANGE_READY_ORDER_STATUS'])) ? $arrValues['CONF_RETURN_EXCHANGE_READY_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Return/Exchange", $this->siteLangId), 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', $orderStatusArr, $returnExchageOrderSelected, array('class' => 'setting-wizard'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Return/Exchange", $this->siteLangId), 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', $orderStatusArr, $returnExchageOrderSelected, array('class' => 'list-checkboxes'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_place_return/exchange_request_on_orders.", $this->siteLangId) . "</span>";
 
                 $enableDigitalDownloads = (!empty($arrValues['CONF_ENABLE_DIGITAL_DOWNLOADS'])) ? $arrValues['CONF_ENABLE_DIGITAL_DOWNLOADS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Enable_Digital_Download", $this->siteLangId), 'CONF_ENABLE_DIGITAL_DOWNLOADS', $orderStatusArr, $enableDigitalDownloads, array('class' => 'setting-wizard'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Enable_Digital_Download", $this->siteLangId), 'CONF_ENABLE_DIGITAL_DOWNLOADS', $orderStatusArr, $enableDigitalDownloads, array('class' => 'list-checkboxes'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_access_their_downloadable_Products.", $this->siteLangId) . "</span>";
 
                 $statusesToAttachMoreFiles = (!empty($arrValues['CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES'])) ? $arrValues['CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Order_statuses_to_allow_to_attach_more_files_with_order_product", $this->siteLangId), 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES', $orderStatusArr, $statusesToAttachMoreFiles, array('class' => 'setting-wizard'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Order_statuses_to_allow_to_attach_more_files_with_order_product", $this->siteLangId), 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES', $orderStatusArr, $statusesToAttachMoreFiles, array('class' => 'list-checkboxes'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_order_statuses_to_allow_seller_or_admin_to_attach_more_files_with_order_products", $this->siteLangId) . "</span>";
 
                 $badgeCountOrderSelected = (!empty($arrValues['CONF_BADGE_COUNT_ORDER_STATUS'])) ? $arrValues['CONF_BADGE_COUNT_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Order_Statuses_to_calculate_badge_count_(For_Admin)", $this->siteLangId), 'CONF_BADGE_COUNT_ORDER_STATUS', $orderStatusArr, $badgeCountOrderSelected, array('class' => 'setting-wizard'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Order_Statuses_to_calculate_badge_count_(For_Admin)", $this->siteLangId), 'CONF_BADGE_COUNT_ORDER_STATUS', $orderStatusArr, $badgeCountOrderSelected, array('class' => 'list-checkboxes'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Order_Statuses_to_calculate_badge_count_for_seller_orders_in_admin_left_navigation_panel", $this->siteLangId) . "</span>";
 
                 $productOnOrderStatusesSelected = (!empty($arrValues['CONF_PRODUCT_IS_ON_ORDER_STATUSES'])) ? $arrValues['CONF_PRODUCT_IS_ON_ORDER_STATUSES'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Products_On_Order_Stage(For_Seller_Inventory_Report)", $this->siteLangId), 'CONF_PRODUCT_IS_ON_ORDER_STATUSES', $orderStatusArr, $productOnOrderStatusesSelected, array('class' => 'setting-wizard'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Products_On_Order_Stage(For_Seller_Inventory_Report)", $this->siteLangId), 'CONF_PRODUCT_IS_ON_ORDER_STATUSES', $orderStatusArr, $productOnOrderStatusesSelected, array('class' => 'list-checkboxes'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Products_are_in_On_Order_Used_on_Seller_Dashboard_Products_Inventory_Stock_Status_Report", $this->siteLangId) . "</span>";
 
                 break;
 
             case Configurations::FORM_CART_WISHLIST:
-                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_ADD_PRODUCTS_TO_WISHLIST_OR_FAVORITE?", $this->siteLangId), 'CONF_ADD_FAVORITES_TO_WISHLIST', UserWishList::wishlistOrFavtArr($this->siteLangId), applicationConstants::YES, array('class' => 'list-inline'));
+                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_ADD_PRODUCTS_TO_WISHLIST_OR_FAVORITE?", $this->siteLangId), 'CONF_ADD_FAVORITES_TO_WISHLIST', UserWishList::wishlistOrFavtArr($this->siteLangId), applicationConstants::YES, array('class' => 'list-radio'));
+                HtmlHelper::configureSwitchForRadio($fld);
 
                 $frm->addHtml('', 'Cart', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Cart", $this->siteLangId) . '</h3>');
 
                 $fld = $frm->addCheckBox(Labels::getLabel('LBL_On_Payment_Cancel_Maintain_Cart', $this->siteLangId), 'CONF_MAINTAIN_CART_ON_PAYMENT_CANCEL', 1, array(), false, 0);
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Cart_Items_Will_be_retained_on_Cancelling_the_payment", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_Cart_Items_Will_be_retained_on_Cancelling_the_payment", $this->siteLangId));
 
                 $fld = $frm->addCheckBox(Labels::getLabel('LBL_On_Payment_Failure_Maintain_Cart', $this->siteLangId), 'CONF_MAINTAIN_CART_ON_PAYMENT_FAILURE', 1, array(), false, 0);
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Cart_Items_Will_be_retained_on_payment_failure", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_Cart_Items_Will_be_retained_on_payment_failure", $this->siteLangId));
 
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Reminder_Interval_For_Products_In_Cart_[Days]", $this->siteLangId), 'CONF_REMINDER_INTERVAL_PRODUCTS_IN_CART', '');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_interval_in_days_to_send_auto_notification_alert_to_buyer_for_products_in_cart.", $this->siteLangId) . "</span>";
@@ -1091,29 +1101,30 @@ class ConfigurationsController extends AdminBaseController
                 break;
 
             case Configurations::FORM_COMMISSION:
+
+                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Commission_charged_including_shipping", $this->siteLangId), 'CONF_COMMISSION_INCLUDING_SHIPPING', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_Commission_charged_including_shipping_charges", $this->siteLangId));
+
+                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Commission_charged_including_tax", $this->siteLangId), 'CONF_COMMISSION_INCLUDING_TAX', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_Commission_charged_including_tax_charges", $this->siteLangId));
+
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Maximum_Site_Commission", $this->siteLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_MAX_COMMISSION', '');
                 $fld->requirements()->setFloatPositive();
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_maximum_commission/Fees_that_will_be_charged_on_a_particular_product.", $this->siteLangId) . "</span>";
 
-                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Commission_charged_including_shipping", $this->siteLangId), 'CONF_COMMISSION_INCLUDING_SHIPPING', 1, array(), false, 0);
-                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_Commission_charged_including_shipping_charges", $this->siteLangId) . '</span>';
-
-                $fld = $frm->addCheckBox(Labels::getLabel("LBL_Commission_charged_including_tax", $this->siteLangId), 'CONF_COMMISSION_INCLUDING_TAX', 1, array(), false, 0);
-                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_Commission_charged_including_tax_charges", $this->siteLangId) . '</span>';
                 break;
 
             case Configurations::FORM_AFFILIATE:
                 /* Affiliate Accounts[ */
-                $frm->addHtml('', Labels::getLabel('LBL_Affiliate_Accounts', $this->siteLangId), '<h3 class="form-section-head">' . Labels::getLabel("LBL_Affiliate_Accounts", $this->siteLangId) . '</h3>');
 
                 $fld = $frm->addRadioButtons(
                     Labels::getLabel("LBL_Requires_Approval", $this->siteLangId),
                     'CONF_AFFILIATES_REQUIRES_APPROVAL',
                     applicationConstants::getYesNoArr($this->siteLangId),
                     '',
-                    array('class' => 'list-inline')
+                    array('class' => 'list-radio')
                 );
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Automatically_approve_any_new_affiliates_who_sign_up.", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel("LBL_Automatically_approve_any_new_affiliates_who_sign_up.", $this->siteLangId));
 
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Sign_Up_Commission', $this->siteLangId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_AFFILIATE_SIGNUP_COMMISSION');
                 $fld->requirements()->setInt();
@@ -1131,9 +1142,9 @@ class ConfigurationsController extends AdminBaseController
                     'CONF_NOTIFY_ADMIN_AFFILIATE_REGISTRATION',
                     applicationConstants::getYesNoArr($this->siteLangId),
                     '',
-                    array('class' => 'list-inline')
+                    array('class' => 'list-radio')
                 );
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Send_an_email_to_the_store_owner_when_a_new_affiliate_is_registered.", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel("LBL_Send_an_email_to_the_store_owner_when_a_new_affiliate_is_registered", $this->siteLangId));
 
                 $fld = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_Email_Verification_After_Registration", $this->siteLangId),
@@ -1143,7 +1154,7 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_affiliate_user_need_to_verify_their_email_address", $this->siteLangId) . " </span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_affiliate_user_need_to_verify_their_email_address", $this->siteLangId));
 
                 $fld = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_Sending_Welcome_Mail_After_Registration", $this->siteLangId),
@@ -1153,12 +1164,11 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_On_enabling_this_feature,_affiliate_will_receive_a_welcome_e-mail_after_registration.", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_On_enabling_this_feature,_affiliate_will_receive_a_welcome_e-mail_after_registration.", $this->siteLangId));
 
                 break;
 
             case Configurations::FORM_REWARD_POINTS:
-                $frm->addHtml('', 'Reward', '<h3 class="form-section-head">' . Labels::getLabel("LBL_Reward_Points", $this->siteLangId) . '</h3>');
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Reward_Points_in", $this->siteLangId) . '[' . $this->siteDefaultCurrencyCode . ']', 'CONF_REWARD_POINT');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_how_many_rewards_points_equal_to", $this->siteLangId) . "[" . $this->siteDefaultCurrencyCode . "]</span>";
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Minimum_Reward_Point_Required_To_Use", $this->siteLangId), 'CONF_MIN_REWARD_POINT');
@@ -1167,7 +1177,10 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Maximum_Reward_Point", $this->siteLangId), 'CONF_MAX_REWARD_POINT');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_maximum_reward_points_limit_to_avail_discount_during_checkout", $this->siteLangId) . "</span>";
 
-                $fld11 = $frm->addCheckBox(
+                $fld = $frm->addIntegerField(Labels::getLabel("LBL_Reward_Point_Validity", $this->siteLangId), 'CONF_REWARDS_VALIDITY_ON_PURCHASE');
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Reward_Point_Validity_in_days_from_date_of_credit", $this->siteLangId) . "</span>";
+
+                $fld = $frm->addCheckBox(
                     Labels::getLabel("LBL_Activate_reward_point_on_every_purchase", $this->siteLangId),
                     'CONF_ENABLE_REWARDS_ON_PURCHASE',
                     1,
@@ -1175,10 +1188,8 @@ class ConfigurationsController extends AdminBaseController
                     false,
                     0
                 );
-                $fld11->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("MSG_Buyer_will_reward_point_on_every_purchase_as_defined_settings", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("MSG_Buyer_will_reward_point_on_every_purchase_as_defined_settings", $this->siteLangId));
 
-                $fld = $frm->addIntegerField(Labels::getLabel("LBL_Reward_Point_Validity", $this->siteLangId), 'CONF_REWARDS_VALIDITY_ON_PURCHASE');
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Reward_Point_Validity_in_days_from_date_of_credit", $this->siteLangId) . "</span>";
 
                 $frm->addHtml('', 'Birthday_Rewards', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Birthday_Reward_Points", $this->siteLangId) . '</h3>');
 
@@ -1187,8 +1198,9 @@ class ConfigurationsController extends AdminBaseController
                     'CONF_ENABLE_BIRTHDAY_DISCOUNT_REWARDS',
                     applicationConstants::getYesNoArr($this->siteLangId),
                     '',
-                    array('class' => 'list-inline')
+                    array('class' => 'list-radio')
                 );
+                HtmlHelper::configureSwitchForRadio($fld);
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Birthday_Reward_Points", $this->siteLangId), 'CONF_BIRTHDAY_REWARD_POINTS');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_User_get_this_reward_points_on_his_birthday.", $this->siteLangId) . "</span>";
@@ -1196,21 +1208,16 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_reward_Points_Validity", $this->siteLangId), 'CONF_BIRTHDAY_REWARD_POINTS_VALIDITY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Reward_Points_validity_in_days_from_the_date_of_credit._Please_leave_it_blank_if_you_don't_want_reward_points_to_expire.", $this->siteLangId) . "</span>";
 
-                $frm->addHtml('', 'Buying Year Rewards', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Buying_in_an_Year_Reward_Points", $this->siteLangId) . '</h3>');
+                $frm->addHtml('', 'BuyingAnYear', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Buying_in_an_Year_Reward_Points", $this->siteLangId) . '</h3>');
 
                 $fld = $frm->addRadioButtons(
                     Labels::getLabel("LBL_Enable_Module", $this->siteLangId),
                     'CONF_ENABLE_BUYING_IN_AN_YEAR_REWARDS',
                     applicationConstants::getYesNoArr($this->siteLangId),
                     '',
-                    array('class' => 'list-inline')
+                    array('class' => 'list-radio')
                 );
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Enable_Buying_in_an_year_reward_points_module", $this->siteLangId) . "</span>";
-
-                $orderStatusArr = Orders::getOrderProductStatusArr($this->siteLangId);
-                $buyingInAnYearOrderSelected = (!empty($arrValues['CONF_BUYING_YEAR_REWARD_ORDER_STATUS'])) ? $arrValues['CONF_BUYING_YEAR_REWARD_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Buying_Completion_Order_Status", $this->siteLangId), 'CONF_BUYING_YEAR_REWARD_ORDER_STATUS', $orderStatusArr, $buyingInAnYearOrderSelected, array('class' => 'list-inline'));
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_considered_completed_and_payment_released_to_Sellers.", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel("LBL_Enable_Buying_in_an_year_reward_points_module", $this->siteLangId));
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Minimum_buying_value", $this->siteLangId), 'CONF_BUYING_IN_AN_YEAR_MIN_VALUE');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Min_buying_value_in_an_year_to_get_reward_points", $this->siteLangId) . "</span>";
@@ -1221,10 +1228,20 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Reward_Points_Validity", $this->siteLangId), 'CONF_BUYING_IN_AN_YEAR_REWARD_POINTS_VALIDITY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Reward_Points_validity_in_days_from_the_date_of_credit", $this->siteLangId) . "</span>";
 
+                $orderStatusArr = Orders::getOrderProductStatusArr($this->siteLangId);
+                $buyingInAnYearOrderSelected = (!empty($arrValues['CONF_BUYING_YEAR_REWARD_ORDER_STATUS'])) ? $arrValues['CONF_BUYING_YEAR_REWARD_ORDER_STATUS'] : 0;
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Buying_Completion_Order_Status", $this->siteLangId), 'CONF_BUYING_YEAR_REWARD_ORDER_STATUS', $orderStatusArr, $buyingInAnYearOrderSelected, array('class' => 'list-checkboxes'));
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_considered_completed_and_payment_released_to_Sellers.", $this->siteLangId) . "</span>";
+
                 break;
 
             case Configurations::FORM_REVIEWS:
-                $frm->addHtml('', 'Reviews', '<h3 class="form-section-head">' . Labels::getLabel("LBL_Reviews", $this->siteLangId) . '</h3>');
+
+                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Allow_Reviews", $this->siteLangId), 'CONF_ALLOW_REVIEWS', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-radio'));
+                HtmlHelper::configureSwitchForRadio($fld);
+
+                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_New_Review_Alert_Email", $this->siteLangId), 'CONF_REVIEW_ALERT_EMAIL', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-radio'));
+                HtmlHelper::configureSwitchForRadio($fld);
 
                 $reviewStatusArr = SelProdReview::getReviewStatusArr($this->siteLangId);
                 $fld = $frm->addSelectBox(
@@ -1236,9 +1253,6 @@ class ConfigurationsController extends AdminBaseController
                     ''
                 );
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_default_review_order_status_when_a_new_review_is_placed", $this->siteLangId) . "</span>";
-
-                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Allow_Reviews", $this->siteLangId), 'CONF_ALLOW_REVIEWS', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-inline'));
-                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_New_Review_Alert_Email", $this->siteLangId), 'CONF_REVIEW_ALERT_EMAIL', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-inline'));
 
                 break;
 
@@ -1270,9 +1284,9 @@ class ConfigurationsController extends AdminBaseController
                     'CONF_ENABLE_LIVECHAT',
                     applicationConstants::getYesNoArr($this->siteLangId),
                     '',
-                    array('class' => 'list-inline')
+                    array('class' => 'list-radio')
                 );
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Activate_3rd_Party_Live_Chat.", $this->siteLangId) . "</span>";
+                HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel("LBL_Activate_3rd_Party_Live_Chat.", $this->siteLangId));
 
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Live_Chat_Code", $this->siteLangId), 'CONF_LIVE_CHAT_CODE');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_live_chat_script/code_provided_by_the_3rd_party_API_for_integration.", $this->siteLangId) . "</span>";
@@ -1382,7 +1396,7 @@ class ConfigurationsController extends AdminBaseController
                     'CONF_ENABLE_REFERRER_MODULE',
                     applicationConstants::getYesNoArr($this->siteLangId),
                     '',
-                    array('class' => 'list-inline')
+                    array('class' => 'list-radio')
                 );
 
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Referrer_Url/Link_Validity_Period", $this->siteLangId), 'CONF_REFERRER_URL_VALIDITY');
@@ -1390,7 +1404,7 @@ class ConfigurationsController extends AdminBaseController
                 $string = Labels::getLabel("LBL_Days,_after_which_Referrer_Url_is_Expired.", $this->siteLangId);
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . $string . "</span>";
 
-                $frm->addHtml('', 'Rewards', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Reward_Benefits_on_Registration", $this->siteLangId) . '</h3>');
+                $frm->addHtml('', 'RewardsOnRegistration', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Reward_Benefits_on_Registration", $this->siteLangId) . '</h3>');
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Referrer_Reward_Points", $this->siteLangId), 'CONF_REGISTRATION_REFERRER_REWARD_POINTS');
                 $fld->requirements()->setIntPositive();
@@ -1408,7 +1422,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld->requirements()->setIntPositive();
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Rewards_points_validity_in_days_from_the_date_of_credit", $this->siteLangId) . "</span>";
 
-                $frm->addHtml('', 'Rewards', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Reward_Benefits_on_First_Purchase", $this->siteLangId) . '</h3>');
+                $frm->addHtml('', 'RewardsonPurchase', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Reward_Benefits_on_First_Purchase", $this->siteLangId) . '</h3>');
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Referrer_Reward_Points", $this->siteLangId), 'CONF_SALE_REFERRER_REWARD_POINTS');
                 $fld->requirements()->setIntPositive();
@@ -1429,15 +1443,16 @@ class ConfigurationsController extends AdminBaseController
                 break;
 
             case Configurations::FORM_DISCOUNT:
-                $frm->addHtml('', 'Birthday Discount', '<h3 class="form-section-head">' . Labels::getLabel("LBL_First_time_buyers_discount_coupon", $this->siteLangId) . '</h3>');
+                $frm->addHtml('', 'firstTimeDiscount', '<h3 class="form-section-head">' . Labels::getLabel("LBL_First_time_buyers_discount_coupon", $this->siteLangId) . '</h3>');
 
-                $frm->addRadioButtons(
+                $fld = $frm->addRadioButtons(
                     Labels::getLabel("LBL_Enable_1st_time_buyers_discount", $this->siteLangId),
                     'CONF_ENABLE_FIRST_TIME_BUYER_DISCOUNT',
                     applicationConstants::getYesNoArr($this->siteLangId),
                     '',
-                    array('class' => 'list-inline')
+                    array('class' => 'list-radio')
                 );
+                HtmlHelper::configureSwitchForRadio($fld);
 
                 $percentageFlatArr = applicationConstants::getPercentageFlatArr($this->siteLangId);
                 $disType = $frm->addSelectBox(Labels::getLabel("LBL_Discount_in", $this->siteLangId), 'CONF_FIRST_TIME_BUYER_COUPON_IN_PERCENT', $percentageFlatArr, '', array(), '');
@@ -1458,22 +1473,23 @@ class ConfigurationsController extends AdminBaseController
 
                 break;
             case Configurations::FORM_SUBSCRIPTION:
-                $enable_subscption_module_fld = $frm->addRadioButtons(
+                $fld = $frm->addRadioButtons(
                     Labels::getLabel('LBL_Enable_Subscription_Module', $this->siteLangId),
                     'CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE',
                     applicationConstants::getYesNoArr($this->siteLangId),
                     '',
-                    array('class' => 'list-inline')
+                    array('class' => 'list-radio')
                 );
-                $enable_subscption_module_fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('LBL_Seller_Needs_to_Purchase_the_subscrption_before_listing_products', $this->siteLangId) . '</span>';
-                $enable_subscption_module_fld = $frm->addRadioButtons(
+                HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel('LBL_Seller_Needs_to_Purchase_the_subscrption_before_listing_products', $this->siteLangId));
+
+                $fld = $frm->addRadioButtons(
                     Labels::getLabel('LBL_ENABLE_ADJUST_AMOUNT', $this->siteLangId),
                     'CONF_ENABLE_ADJUST_AMOUNT_CHANGE_PLAN',
                     applicationConstants::getYesNoArr($this->siteLangId),
                     '',
-                    array('class' => 'list-inline')
+                    array('class' => 'list-radio')
                 );
-                $enable_subscption_module_fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('LBL_Subscription_Payment_will_be_adjusted_While_Upgrading/downgrading_plan', $this->siteLangId) . '</span>';
+                HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel('LBL_Subscription_Payment_will_be_adjusted_While_Upgrading/downgrading_plan', $this->siteLangId));
 
                 $orderSubscriptionStatusArr = Orders::getOrderSubscriptionStatusArr($this->siteLangId);
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Reminder_Email_Before_Subscription_Expire_Days", $this->siteLangId), 'CONF_BEFORE_EXIPRE_SUBSCRIPTION_REMINDER_EMAIL_DAYS');
@@ -1489,12 +1505,13 @@ class ConfigurationsController extends AdminBaseController
                 );
 
                 $subscriptionSellerOrderSelected = (!empty($arrValues['CONF_SELLER_SUBSCRIPTION_STATUS'])) ? $arrValues['CONF_SELLER_SUBSCRIPTION_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Seller_Subscription_Statuses", $this->siteLangId), 'CONF_SELLER_SUBSCRIPTION_STATUS', $orderSubscriptionStatusArr, $subscriptionSellerOrderSelected, array('class' => 'list-inline'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Seller_Subscription_Statuses", $this->siteLangId), 'CONF_SELLER_SUBSCRIPTION_STATUS', $orderSubscriptionStatusArr, $subscriptionSellerOrderSelected, array('class' => 'list-checkboxes'));
 
                 break;
 
             case Configurations::FORM_SYSTEM:
-                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Auto_Close_System_Messages", $this->siteLangId), 'CONF_AUTO_CLOSE_SYSTEM_MESSAGES', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-inline'));
+                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Auto_Close_System_Messages", $this->siteLangId), 'CONF_AUTO_CLOSE_SYSTEM_MESSAGES', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-radio'));
+                HtmlHelper::configureSwitchForRadio($fld);
                 $fld->addFieldTagAttribute("onchange", "changedMessageAutoCloseSetting(this.value);");
 
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_TIME_FOR_AUTO_CLOSE_MESSAGES', $this->siteLangId), 'CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES');
@@ -1532,8 +1549,8 @@ class ConfigurationsController extends AdminBaseController
 
                 break;
             case Configurations::FORM_SERVER:
-                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Use_SSL", $this->siteLangId), 'CONF_USE_SSL', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-inline'));
-                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_NOTE:_To_use_SSL,_check_with_your_host_if_a_SSL_certificate_is_installed_and_enable_it_from_here.", $this->siteLangId) . '.</span>';
+                $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Use_SSL", $this->siteLangId), 'CONF_USE_SSL', applicationConstants::getYesNoArr($this->siteLangId), '', array('class' => 'list-radio'));
+                HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel("LBL_NOTE:_To_use_SSL,_check_with_your_host_if_a_SSL_certificate_is_installed_and_enable_it_from_here.", $this->siteLangId));
 
                 $fld = $frm->addSelectBox(Labels::getLabel("LBL_Enable_Maintenance_Mode", $this->siteLangId), 'CONF_MAINTENANCE', applicationConstants::getYesNoArr($this->siteLangId), '', array(), '');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_NOTE:_Enable_Maintenance_Mode_Text", $this->siteLangId) . '.</span>';
