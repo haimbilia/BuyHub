@@ -260,7 +260,7 @@ class ImportExportController extends AdminBaseController
 
         $obj->importMedia($actionType, $post, $langId);
     }
-    
+
     public function importForm($actionType)
     {
         $langId = $this->siteLangId;
@@ -741,30 +741,78 @@ class ImportExportController extends AdminBaseController
     {
         $frm = new Form('frmImportExportSetting', array('id' => 'frmImportExportSetting'));
 
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_brand_id_instead_of_brand_identifier", $this->siteLangId), 'CONF_USE_BRAND_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_category_id_instead_of_category_identifier", $this->siteLangId), 'CONF_USE_CATEGORY_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_catalog_product_id_instead_of_catalog_product_identifier", $this->siteLangId), 'CONF_USE_PRODUCT_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_user_id_instead_of_username", $this->siteLangId), 'CONF_USE_USER_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_option_id_instead_of_option_identifier", $this->siteLangId), 'CONF_USE_OPTION_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_option_value_id_instead_of_option_identifier", $this->siteLangId), 'CONF_OPTION_VALUE_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_tag_id_instead_of_tag_identifier", $this->siteLangId), 'CONF_USE_TAG_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_tax_id_instead_of_tax_identifier", $this->siteLangId), 'CONF_USE_TAX_CATEOGRY_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_product_type_id_instead_of_product_type_identifier", $this->siteLangId), 'CONF_USE_PRODUCT_TYPE_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_dimension_unit_id_instead_of_dimension_unit_identifier", $this->siteLangId), 'CONF_USE_DIMENSION_UNIT_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_weight_unit_id_instead_of_weight_unit_identifier", $this->siteLangId), 'CONF_USE_WEIGHT_UNIT_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_lang_id_instead_of_lang_code", $this->siteLangId), 'CONF_USE_LANG_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_currency_id_instead_of_currency_code", $this->siteLangId), 'CONF_USE_CURRENCY_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_Product_condition_id_instead_of_condition_identifier", $this->siteLangId), 'CONF_USE_PROD_CONDITION_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_persent_or_flat_condition_id_instead_of_identifier", $this->siteLangId), 'CONF_USE_PERSENT_OR_FLAT_CONDITION_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_country_id_instead_of_country_code", $this->siteLangId), 'CONF_USE_COUNTRY_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_state_id_instead_of_state_identifier", $this->siteLangId), 'CONF_USE_STATE_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_policy_point_id_instead_of_policy_point_identifier", $this->siteLangId), 'CONF_USE_POLICY_POINT_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_company_id_instead_of_shipping_company_identifier", $this->siteLangId), 'CONF_USE_SHIPPING_COMPANY_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_policy_point_type_id_instead_of_policy_point_type_identifier", $this->siteLangId), 'CONF_USE_POLICY_POINT_TYPE_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_duration_id_instead_of_shipping_duration_identifier", $this->siteLangId), 'CONF_USE_SHIPPING_DURATION_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_profile_id_instead_of_shipping_profile_identifier", $this->siteLangId), 'CONF_USE_SHIPPING_PROFILE_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_package_id_instead_of_shipping_package_identifier", $this->siteLangId), 'CONF_USE_SHIPPING_PACKAGE_ID', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_Use_1_for_yes_0_for_no", $this->siteLangId), 'CONF_USE_O_OR_1', 1, array(), false, 0);
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_brand_id_instead_of_brand_identifier", $this->siteLangId), 'CONF_USE_BRAND_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_category_id_instead_of_category_identifier", $this->siteLangId), 'CONF_USE_CATEGORY_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_catalog_product_id_instead_of_catalog_product_identifier", $this->siteLangId), 'CONF_USE_PRODUCT_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_user_id_instead_of_username", $this->siteLangId), 'CONF_USE_USER_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_option_id_instead_of_option_identifier", $this->siteLangId), 'CONF_USE_OPTION_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_option_value_id_instead_of_option_identifier", $this->siteLangId), 'CONF_OPTION_VALUE_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_tag_id_instead_of_tag_identifier", $this->siteLangId), 'CONF_USE_TAG_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_tax_id_instead_of_tax_identifier", $this->siteLangId), 'CONF_USE_TAX_CATEOGRY_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_product_type_id_instead_of_product_type_identifier", $this->siteLangId), 'CONF_USE_PRODUCT_TYPE_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_dimension_unit_id_instead_of_dimension_unit_identifier", $this->siteLangId), 'CONF_USE_DIMENSION_UNIT_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_weight_unit_id_instead_of_weight_unit_identifier", $this->siteLangId), 'CONF_USE_WEIGHT_UNIT_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_lang_id_instead_of_lang_code", $this->siteLangId), 'CONF_USE_LANG_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_currency_id_instead_of_currency_code", $this->siteLangId), 'CONF_USE_CURRENCY_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_Product_condition_id_instead_of_condition_identifier", $this->siteLangId), 'CONF_USE_PROD_CONDITION_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_persent_or_flat_condition_id_instead_of_identifier", $this->siteLangId), 'CONF_USE_PERSENT_OR_FLAT_CONDITION_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_country_id_instead_of_country_code", $this->siteLangId), 'CONF_USE_COUNTRY_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_state_id_instead_of_state_identifier", $this->siteLangId), 'CONF_USE_STATE_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_policy_point_id_instead_of_policy_point_identifier", $this->siteLangId), 'CONF_USE_POLICY_POINT_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_company_id_instead_of_shipping_company_identifier", $this->siteLangId), 'CONF_USE_SHIPPING_COMPANY_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_policy_point_type_id_instead_of_policy_point_type_identifier", $this->siteLangId), 'CONF_USE_POLICY_POINT_TYPE_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_duration_id_instead_of_shipping_duration_identifier", $this->siteLangId), 'CONF_USE_SHIPPING_DURATION_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_profile_id_instead_of_shipping_profile_identifier", $this->siteLangId), 'CONF_USE_SHIPPING_PROFILE_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_shipping_package_id_instead_of_shipping_package_identifier", $this->siteLangId), 'CONF_USE_SHIPPING_PACKAGE_ID', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
+        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Use_1_for_yes_0_for_no", $this->siteLangId), 'CONF_USE_O_OR_1', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+
         return $frm;
     }
 
@@ -786,7 +834,7 @@ class ImportExportController extends AdminBaseController
     }
 
     public function bulkMedia()
-    {        
+    {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
         $this->set("frmSearch", $frmSearch);
@@ -805,7 +853,7 @@ class ImportExportController extends AdminBaseController
         }
         return $frm;
     }
-    
+
     /**
      * search : Search Bulk Media
      *
@@ -882,7 +930,7 @@ class ImportExportController extends AdminBaseController
         if (empty($_FILES)) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        
+
         $fileName = $_FILES['file']['name'];
         $tmpName = $_FILES['file']['tmp_name'];
 
@@ -1102,7 +1150,7 @@ class ImportExportController extends AdminBaseController
             'listSerial',
             'user',
             'afile_physical_path',
-            'files'   ,
+            'files',
             'action',
         ];
     }

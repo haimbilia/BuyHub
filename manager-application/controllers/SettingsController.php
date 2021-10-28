@@ -13,5 +13,15 @@ class SettingsController extends AdminBaseController
         $this->set('objPrivilege', $this->objPrivilege);
         $this->_template->render();
     }
-    
+
+    public function getBreadcrumbNodes($action)
+    {
+        $nodes = array();
+        switch ($action) {
+            case 'index':
+                $nodes[] = array('title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId));
+                break;
+        }
+        return $nodes;
+    }
 }

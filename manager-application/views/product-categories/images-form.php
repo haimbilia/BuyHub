@@ -37,7 +37,7 @@ $otherButtons = [
     [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'postImages(' . $recordId . ')',
+            'onclick' => 'mediaForm(' . $recordId . ')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),

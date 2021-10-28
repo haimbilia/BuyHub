@@ -255,17 +255,17 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     });
   };
 
-  editRecord = function (recordId, displayInPopup = false) {
+  editRecord = function (recordId, displayInPopup = false, dialogClass = '') {
     if (false === checkControllerName()) {
       return false;
     }
 
     var modalClass = displayInPopup ? null : "";
 
-    $.ykmodal(fcom.getLoader(), modalClass);
+    $.ykmodal(fcom.getLoader(), modalClass, dialogClass);
     data = "recordId=" + recordId;
     fcom.ajax(fcom.makeUrl(controllerName, "form"), data, function (t) {
-      $.ykmodal(t, modalClass);
+      $.ykmodal(t, modalClass, dialogClass);
       fcom.removeLoader();
     });
   };
@@ -669,7 +669,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
       rect.top >= 0 &&
       rect.left >= 0 &&
       rect.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) &&
+      (window.innerHeight || document.documentElement.clientHeight) &&
       rect.right <= (window.innerWidth || document.documentElement.clientWidth)
     );
   };
