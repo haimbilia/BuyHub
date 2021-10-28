@@ -31,27 +31,27 @@ class ProductCategoriesController extends AdminBaseController
     }
 
     public function search()
-    {
-        $canEdit = $this->objPrivilege->canEditProductCategories(0, true);
+    {       
         $prodCat = new ProductCategory();
         $records = (array) $prodCat->getCategories(true, true);
 
         $this->set("arrListing", $records);
         $this->set("recordCount", count($records));
-        $this->set("canEdit", $canEdit);
+        $this->set("canEdit", $this->objPrivilege->canEditProductCategories(0, true));
         $this->_template->render(false, false);
     }
 
     public function getSubCategories()
-    {
-        $canEdit = $this->objPrivilege->canEditProductCategories(0, true);
+    {  
         $recordId = FatApp::getPostedData('prodCatId', FatUtility::VAR_INT, 0);
         $level = FatApp::getPostedData('level', FatUtility::VAR_INT, 0);
+
         $prodCat = new ProductCategory($recordId);
         $childCategories = $prodCat->getCategories(true, true);
+
         $this->set("childCategories", $childCategories);
         $this->set("level", $level);
-        $this->set("canEdit", $canEdit);
+        $this->set("canEdit", $this->objPrivilege->canEditProductCategories(0, true));
         $this->_template->render(false, false);
     }
 
@@ -71,6 +71,7 @@ class ProductCategoriesController extends AdminBaseController
         if (!$prodCat->updateOrder($catOrderArr)) {
             LibHelper::exitWithError($prodCat->getError(), true);
         }
+
         ProductCategory::updateCatOrderCode();
 
         $changeStatus = ProductCategory::getAttributesById($recordId, 'prodcat_active');
@@ -80,7 +81,7 @@ class ProductCategoriesController extends AdminBaseController
             $prodCat->enableParentCategories();
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Record_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -112,17 +113,11 @@ class ProductCategoriesController extends AdminBaseController
             $ratingTypes = ['rating_type' => json_encode($ratingTypes)];
             $data = array_merge($data, $catNameArr, $ratingTypes);
         }
-        $frm->fill($data);
-        $mediaLanguages = applicationConstants::bannerTypeArr();
-        $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
-        $langData = Language::getAllNames();
-        unset($langData[$siteDefaultLangId]);
+        $frm->fill($data);     
+ 
         $this->set('productReq', $productReq);
         $this->set('recordId', $recordId);
-        $this->set('frm', $frm);
-        $this->set('mediaLanguages', $mediaLanguages);
-        $this->set('screenArr', $screenArr);
-        $this->set('otherLangData', $langData);     
+        $this->set('frm', $frm);     
         $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
         $this->set('canEditRating', $this->objPrivilege->canEditRatingTypes($this->admin_id, true));        
         $this->_template->render(false, false);
@@ -140,8 +135,7 @@ class ProductCategoriesController extends AdminBaseController
         if (!ProductCategory::getAttributesById($recordId)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_NO_RECORD_FOUND', $this->siteLangId), true);
         }
-        $frm = $this->getImagesFrm($recordId);
-        $this->set('languages', Language::getAllNames());
+        $frm = $this->getImagesFrm($recordId);    
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
@@ -154,21 +148,13 @@ class ProductCategoriesController extends AdminBaseController
         $frm = new Form('frmProdCategory');
         $frm->addHiddenField('', 'prodcat_id', $recordId);
         $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'prodcat_name[' . $this->getDefaultFormLangId() . ']');
-
         $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_IDENTIFIER', $this->siteLangId), 'prodcat_identifier');
 
         $prodCat = new ProductCategory();
         $categoriesArr = $prodCat->getCategoriesForSelectBox($this->siteLangId, $recordId, [], false);
         $categories =  array(0 => Labels::getLabel('FRM_ROOT_CATEGORY', $this->siteLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
-
-        $frm->addSelectBox(Labels::getLabel('FRM_PARENT_CATEGORY', $this->siteLangId), 'prodcat_parent', $categories, '', array(), ''); 
-
-        $attr = [];
-        if (1 > $recordId) {
-            $attr = ['disabled' => 'disabled'];
-        }
-        $frm->addTextBox(Labels::getLabel('FRM_RATING_TYPES', $this->siteLangId), 'rating_type', '', $attr);
-
+        $frm->addSelectBox(Labels::getLabel('FRM_PARENT_CATEGORY', $this->siteLangId), 'prodcat_parent', $categories, '', array(), '');
+        $frm->addTextBox(Labels::getLabel('FRM_RATING_TYPES', $this->siteLangId), 'rating_type');
         $frm->addCheckBox(Labels::getLabel('FRM_PUBLISH', $this->siteLangId), 'prodcat_active', 1, array(), false, 0);
 
         if (0 < $productReq) {
@@ -179,8 +165,7 @@ class ProductCategoriesController extends AdminBaseController
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-       
+        }       
         return $frm;
     }
 
@@ -311,8 +296,7 @@ class ProductCategoriesController extends AdminBaseController
         } else {
             $lang_id = array_key_first($languages);
         }
-
-        $catIcons = $catBanners = array();
+ 
         if ($imageType == 'icon') {
             $catIcon = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $prodcat_id, 0, $lang_id, (count($languages) > 1) ? false : true);
             $this->set('image', $catIcon);
@@ -375,7 +359,7 @@ class ProductCategoriesController extends AdminBaseController
         ProductCategory::setImageUpdatedOn($prodcat_id);
         $this->set('file', $_FILES['cropped_image']['name']);
         $this->set('prodcat_id', $prodcat_id);
-        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('LBL_Uploaded_Successfully', $this->siteLangId));
+        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('LBL_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -386,7 +370,7 @@ class ProductCategoriesController extends AdminBaseController
         $recordId = FatUtility::int($recordId);
         $langId = FatUtility::int($langId);
         if (!$afileId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST1', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         if ($imageType == 'icon') {
@@ -401,7 +385,7 @@ class ProductCategoriesController extends AdminBaseController
 
         ProductCategory::setImageUpdatedOn($recordId);
         $this->set('imageType', $imageType);
-        $this->set('msg', Labels::getLabel('MSG_Image_deleted_successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_IMAGE_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -556,13 +540,13 @@ class ProductCategoriesController extends AdminBaseController
     public function getSearchForm($request = false)
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
+        $f1 = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         if ($request) {
-            $frm->addTextBox(Labels::getLabel('LBL_Seller_Name_Or_Email', $this->siteLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+            $frm->addTextBox(Labels::getLabel('FRM_Seller_Name_Or_Email', $this->siteLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off'));
             $frm->addHiddenField('', 'user_id');
         }
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_Search', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('FRM_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'prodcat_id');
         $fld_submit->attachField($fld_cancel);
         return $frm;

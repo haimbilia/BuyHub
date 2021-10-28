@@ -7,10 +7,10 @@ $fld = $frm->getField('prodcat_parent');
 $fld->setFieldTagAttribute('id', "prodcat_parent");
 
 $fld = $frm->getField('prodcat_active');
-HtmlHelper::configureSwitchForCheckbox($fld, $fld->getCaption());
+$fld->developerTags['cbLabelAttributes'] = ['class' => 'switch switch-sm switch-icon'];
 
 $fld = $frm->getField('auto_update_other_langs_data');
-HtmlHelper::configureSwitchForCheckbox($fld, $fld->getCaption());
+$fld->developerTags['cbLabelAttributes'] = ['class' => 'switch switch-sm switch-icon'];
 
 $otherButtons = [
     [
@@ -24,7 +24,6 @@ $otherButtons = [
     ]
 ];
 $formTitle = Labels::getLabel('LBL_CATEGORY_SETUP', $siteLangId);
-$formClassExtra = 'checkboxSwitchJs';
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 <script>
 var canEditRating = <?php echo $canEditRating ? 1 : 0; ?>; 
@@ -32,6 +31,7 @@ var ratingEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_RATI
  $("document").ready(function(){	
    
     $("#prodcat_parent").select2();
+    $("."+$.ykmodal.element).removeAttr('tabindex');
     addRatingType = function(e) {
         var rt_id = e.detail.tag.id;
         var ratingtype_name = e.detail.tag.title;
