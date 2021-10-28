@@ -35,7 +35,7 @@
                                 ?>
                                 <label class="switch switch-sm switch-icon">
                                     <input <?php echo $active; ?> type="checkbox" id="switch<?php echo $row['bpcategory_id']; ?>" value="<?php echo $row['bpcategory_id']; ?>" onclick="<?php echo $statusAct; ?>" <?php echo $statusClass; ?> data-childcount="<?php echo $row['child_count']; ?>" data-hasparent="<?php echo $hasParent; ?>" />
-                                    <span></span>
+                                    <span class="input-helper"></span>
                                 </label>
                                 <?php if ($canEdit) { ?>                                   
                                     <button onClick="editRecord(<?php echo $row['bpcategory_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>" class="btn btn-clean btn-sm btn-icon clickable">
