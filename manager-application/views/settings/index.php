@@ -332,10 +332,6 @@ $(document).on("search", "#settingsSearch", function(e) {
     searhSettings($(this));
 });
 
-$(document).on("keyup", "#settingsSearch", function(e) {
-    searhSettings($(this));
-});
-
 updateMaintenanceModeStatus = function(e, obj, status) {
     $('.settingListJs').prepend(fcom.getLoader());
     e.stopPropagation();

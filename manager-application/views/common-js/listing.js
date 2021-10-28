@@ -74,14 +74,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
   $.ykmodal.show();
 });
 
-$(document).ready(function () {
-  convertCheckboxToSwitch();
-});
-
-$(document).ajaxComplete(function () {
-  convertCheckboxToSwitch();
-});
-
 (function () {
   var dv = ".listingRecordJs";
   var paginationDv = ".listingPaginationJs";
