@@ -87,8 +87,7 @@ class ProductCategoriesController extends AdminBaseController
 
     public function form($productReq = 0)
     {
-        $this->objPrivilege->canEditProductCategories();
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $this->objPrivilege->canEditProductCategories();        
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getCategoryForm($recordId, $productReq);
         $data = [];
@@ -119,7 +118,8 @@ class ProductCategoriesController extends AdminBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);     
         $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
-        $this->set('canEditRating', $this->objPrivilege->canEditRatingTypes($this->admin_id, true));        
+        $this->set('canEditRating', $this->objPrivilege->canEditRatingTypes($this->admin_id, true));
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));        
         $this->_template->render(false, false);
     }
 
@@ -138,6 +138,7 @@ class ProductCategoriesController extends AdminBaseController
         $frm = $this->getImagesFrm($recordId);    
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->_template->render(false, false);
     }
 
