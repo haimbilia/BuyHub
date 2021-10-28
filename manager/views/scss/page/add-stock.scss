@@ -1,0 +1,60 @@
+.add-stock {
+    display: flex;
+    justify-content: space-between;
+    .column-nav {
+        flex: 0 0 30%;
+        max-width: 30%;
+    }
+}
+
+.settings-inner {
+    max-height: 600px;
+    overflow-y: auto;
+    &-item {
+        list-style: none;
+        border-bottom: $border;
+        &:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        &.is-active {
+            a {
+                background-color: $brand-color;
+                color: $brand-color-inverse;
+                text-decoration: none;
+                .settings-inner-title {
+                    color: $brand-color-inverse;
+                }
+            }
+        }
+    }
+    &-link {
+        color: $txt-gray;
+        display: flex;
+        padding: 20px 25px;
+        font-size: 0.8rem;
+        &:hover {
+            color: currentColor;
+            background-color: lighten($bg-gray, 01);
+            text-decoration: none;
+        }
+    }
+    &-icn {
+        margin-#{$end-direction}: 1rem;
+    }
+    &-title {
+        font-size: 1rem;
+        color: $txt-body;
+        font-weight: 500;
+    }
+    &-desc {
+        display: block;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        max-width: 300px;
+    }
+    &-content {
+        flex: 1;
+    }
+}

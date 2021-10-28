@@ -555,7 +555,6 @@
             .tag {
                 background: $bg-gray;
                 font-size: 0.875rem;
-                font-weight: 600;
                 padding: 0.25rem 1rem;
                 border-radius: 0.25rem;
             }
@@ -569,11 +568,10 @@
                 position: absolute;
                 display: block;
                 width: 0.28rem;
-                border-radius: 0.3rem;
                 height: 25px;
                 #{$start-direction}: 100px;
                 top: 0px;
-                content: "";
+                // content: "";
                 background: $brand-color;
             }
             &-time {
@@ -604,17 +602,15 @@
                     padding: 0.15rem 1rem;
                     font-size: 0.875rem;
                     font-weight: 600;
-                    background-color: #0072cf31;
-                    color: $brand-color;
+                    background-color: $brand-color;
+                    color: $brand-color-inverse;
                     border-radius: 0rem 1rem 1rem 0rem;
                     display: inline-flex;
-                    margin-bottom: 0.25rem;
+                    margin-bottom: 0.5rem;
                 }
             }
             &-link {
-                font-size: 0.9rem;
                 text-decoration: none;
-                font-weight: 600;
             }
             &--brand {
                 &:before {

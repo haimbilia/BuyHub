@@ -26,18 +26,18 @@ $otherButtons = [
 $formTitle = Labels::getLabel('LBL_CATEGORY_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 <script>
-var canEditRating = <?php echo $canEditRating ? 1 : 0; ?>; 
-var ratingEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_RATING_TYPE', $siteLangId); ?>'; 
- $("document").ready(function(){	
-   
+var canEditRating = <?php echo $canEditRating ? 1 : 0; ?>;
+var ratingEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_RATING_TYPE', $siteLangId); ?>';
+$("document").ready(function() {
+
     $("#prodcat_parent").select2();
-    $("."+$.ykmodal.element).removeAttr('tabindex');
+    $("." + $.ykmodal.element).removeAttr('tabindex');
     addRatingType = function(e) {
         var rt_id = e.detail.tag.id;
         var ratingtype_name = e.detail.tag.title;
-        var prodCatId = $("input[name='prodcat_id']").val();       
+        var prodCatId = $("input[name='prodcat_id']").val();
         if (rt_id == '') {
-            if(1 > canEditRating){
+            if (1 > canEditRating) {
                 $.ykmsg.error(ratingEditErr);
                 e.detail.tag.remove();
                 return;
@@ -50,20 +50,25 @@ var ratingEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_RATI
             fcom.ajax(fcom.makeUrl('RatingTypes', 'setup'), data, function(t) {
                 var ans = JSON.parse(t);
                 var newRtId = ans.rtId;
-                var dataLang = 'ratingtypelang_ratingtype_id=' + newRtId + '&ratingtype_name=' + ratingtype_name + '&ratingtypelang_lang_id=<?php echo $siteLangId; ?>';
+                var dataLang = 'ratingtypelang_ratingtype_id=' + newRtId + '&ratingtype_name=' +
+                    ratingtype_name + '&ratingtypelang_lang_id=<?php echo $siteLangId; ?>';
                 fcom.ajax(fcom.makeUrl('RatingTypes', 'langSetup'), dataLang, function(t2) {
                     var ans = JSON.parse(t2);
-                    fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + newRtId, function(t3) {
-                        $('tag[value="' + e.detail.data.value + '"]').attr('id', newRtId);
-                    });
+                    fcom.updateWithAjax(fcom.makeUrl('ProductCategories',
+                            'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId +
+                        '&prt_ratingtype_id=' + newRtId,
+                        function(t3) {
+                            $('tag[value="' + e.detail.data.value + '"]').attr('id',
+                                newRtId);
+                        });
                 });
             });
             */
-        } else {      
+        } else {
             /*      
             fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + rt_id, function(t) {});
             */
-        }      
+        }
     }
 
     removeRatingType = function(e) {
@@ -72,8 +77,10 @@ var ratingEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_RATI
         if ('' == rt_id || '' == prodCatId) {
             return;
         }
-        fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'removeRatingType'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + rt_id, function(t) {});
-     
+        fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'removeRatingType'), 'prt_prodcat_id=' +
+            prodCatId + '&prt_ratingtype_id=' + rt_id,
+            function(t) {});
+
     }
 
     getRatingTypeAutoComplete = function(e) {
@@ -104,10 +111,10 @@ var ratingEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_RATI
             whitelist: [],
             delimiters: "#",
             editTags: false,
-        }).on('add', addRatingType).on('remove', removeRatingType).on('focus', getRatingTypeAutoComplete);
+        }).on('add', addRatingType).on('remove', removeRatingType).on('focus',
+            getRatingTypeAutoComplete);
     };
     tagifyRatingTypes();
 
 });
-
 </script>

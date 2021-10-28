@@ -1135,9 +1135,8 @@
                                                 <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label class="label">Keyword</label>
-                                                        <input data-field-caption="Keyword"
-                                                            data-fatreq="{&quot;required&quot;:false}" type="text"
-                                                            name="keyword" value="">
+                                                        <input data-field-caption="Keyword" type="text" name="keyword"
+                                                            value="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -1163,8 +1162,7 @@
                                                 <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label class="label">Status</label>
-                                                        <select data-field-caption="Status"
-                                                            data-fatreq="{&quot;required&quot;:false}" name="status">
+                                                        <select data-field-caption="Status" name="status">
                                                             <option value="-1">Does not matter</option>
                                                             <option value="0">Withdrawal Request Pending
                                                             </option>
@@ -1192,9 +1190,8 @@
                                                         <input readonly="readonly"
                                                             class="field--calender fld-date hasDatepicker"
                                                             data-field-caption="Date From" id="date_from_1630320541_71"
-                                                            data-fatdateformat="yy-mm-dd"
-                                                            data-fatreq="{&quot;required&quot;:false}" type="text"
-                                                            name="date_from" value="">
+                                                            data-fatdateformat="yy-mm-dd" type="text" name="date_from"
+                                                            value="">
 
 
                                                     </div>
@@ -1205,9 +1202,8 @@
                                                         <input readonly="readonly"
                                                             class="field--calender fld-date hasDatepicker"
                                                             data-field-caption="Date To" id="date_to_1630320541_93"
-                                                            data-fatdateformat="yy-mm-dd"
-                                                            data-fatreq="{&quot;required&quot;:false}" type="text"
-                                                            name="date_to" value="">
+                                                            data-fatdateformat="yy-mm-dd" type="text" name="date_to"
+                                                            value="">
 
 
                                                     </div>
@@ -1218,8 +1214,7 @@
                                                     <div class="form-group">
                                                         <label class="label">User
                                                             Type</label>
-                                                        <select data-field-caption="User Type"
-                                                            data-fatreq="{&quot;required&quot;:false}" name="type">
+                                                        <select data-field-caption="User Type" name="type">
                                                             <option value="-1" selected="selected">Does Not
                                                                 Matter</option>
                                                             <option value="1">Buyer</option>
@@ -1791,8 +1786,7 @@
                                                 <div class="form-group">
                                                     <label class="label">Language</label>
                                                     <select onchange="addShopLangForm(5, this.value);"
-                                                        data-field-caption="Language"
-                                                        data-fatreq="{&quot;required&quot;:false}" name="lang_id">
+                                                        data-field-caption="Language" name="lang_id">
                                                         <option value="1" selected="selected">English</option>
                                                         <option value="2">Arabic</option>
                                                     </select>
@@ -1805,9 +1799,8 @@
                                                     <label class="label">Shop
                                                         Name<span class="required">*</span>
                                                     </label>
-                                                    <input data-field-caption="Shop Name"
-                                                        data-fatreq="{&quot;required&quot;:true}" type="text"
-                                                        name="shop_name" value="Jason's Store">
+                                                    <input data-field-caption="Shop Name" type="text" name="shop_name"
+                                                        value="Jason's Store">
                                                 </div>
                                             </div>
                                         </div>
@@ -1816,9 +1809,8 @@
                                                 <div class="form-group">
                                                     <label class="label">Shop City</label>
 
-                                                    <input data-field-caption="Shop City"
-                                                        data-fatreq="{&quot;required&quot;:false}" type="text"
-                                                        name="shop_city" value="phoenix">
+                                                    <input data-field-caption="Shop City" type="text" name="shop_city"
+                                                        value="phoenix">
                                                 </div>
                                             </div>
                                         </div>
@@ -1826,8 +1818,7 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="label">Contact Person</label>
-                                                    <input data-field-caption="Contact Person"
-                                                        data-fatreq="{&quot;required&quot;:false}" type="text"
+                                                    <input data-field-caption="Contact Person" type="text"
                                                         name="shop_contact_person" value="Jason">
                                                 </div>
                                             </div>
@@ -1838,7 +1829,6 @@
                                                     <label class="label">Description</label>
 
                                                     <textarea data-field-caption="Description"
-                                                        data-fatreq="{&quot;required&quot;:false}"
                                                         name="shop_description">Best range of products in the United States</textarea>
 
                                                 </div>
@@ -1855,8 +1845,7 @@
                                                     class="btn btn-outline-brand">Cancel</button>
                                             </div>
                                             <div class="col-auto">
-                                                <button type="submit"
-                                                    class="btn btn-brand  ">Update</button>
+                                                <button type="submit" class="btn btn-brand  ">Update</button>
                                             </div>
                                         </div>
                                     </div>
