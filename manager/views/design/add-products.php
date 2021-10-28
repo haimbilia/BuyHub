@@ -27,9 +27,27 @@
                         <div class="add-stock">
                             <div class="add-stock-column column-nav">
                                 <div class="card">
-                                    <div class="card-body">
+                                    <div class="card-body p-0">
                                         <div class="stock-nav">
                                             <ul>
+                                                <li class="stock-nav-item is-active">
+                                                    <a class="stock-nav-link" href="">
+                                                        <i class="stock-nav-icn">
+                                                            <svg class="svg" width="20" height="20">
+                                                                <use
+                                                                    xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                        <div class="">
+                                                            <h6 class="stock-nav-title">
+                                                                Basic details</h6>
+                                                            <span class="stock-nav-desc"> Add general details about the
+                                                                product
+                                                            </span>
+                                                        </div>
+                                                    </a>
+                                                </li>
                                                 <li class="stock-nav-item">
                                                     <a class="stock-nav-link" href="">
                                                         <i class="stock-nav-icn">
@@ -41,10 +59,60 @@
                                                         </i>
                                                         <div class="">
                                                             <h6 class="stock-nav-title">
-                                                                General Information</h6>
-                                                            <span class="stock-nav-desc">Lorem ipsum dolor sit amet
-                                                                consectetur adipisicing
-                                                                elit. Suscipit est quos </span>
+                                                                Variants and options</h6>
+                                                            <span class="stock-nav-desc"> Add options like Color, size
+                                                                etc for your product</span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="stock-nav-item">
+                                                    <a class="stock-nav-link" href="">
+                                                        <i class="stock-nav-icn">
+                                                            <svg class="svg" width="20" height="20">
+                                                                <use
+                                                                    xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                        <div class="">
+                                                            <h6 class="stock-nav-title">
+                                                                Media</h6>
+                                                            <span class="stock-nav-desc"> Attach media files for the
+                                                                product </span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="stock-nav-item">
+                                                    <a class="stock-nav-link" href="">
+                                                        <i class="stock-nav-icn">
+                                                            <svg class="svg" width="20" height="20">
+                                                                <use
+                                                                    xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                        <div class="">
+                                                            <h6 class="stock-nav-title">
+                                                                Specifications</h6>
+                                                            <span class="stock-nav-desc"> Product Specifications are
+                                                                added in this section </span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="stock-nav-item">
+                                                    <a class="stock-nav-link" href="">
+                                                        <i class="stock-nav-icn">
+                                                            <svg class="svg" width="20" height="20">
+                                                                <use
+                                                                    xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                </use>
+                                                            </svg>
+                                                        </i>
+                                                        <div class="">
+                                                            <h6 class="stock-nav-title">
+                                                                Tax and Shipping</h6>
+                                                            <span class="stock-nav-desc"> Add Tax and Shipping details
+                                                                from this section </span>
                                                         </div>
                                                     </a>
                                                 </li>
@@ -55,10 +123,20 @@
                                 </div>
                             </div>
                             <div class="add-stock-column">
+                                <div>
+                                    <h3> Add Product</h3>
+                                    <span class="text-muted"> When adding products here, do not forget to fll the
+                                        required felds marked with
+                                        asterisk (*).</span>
+
+
+                                </div>
                                 <div class="card">
                                     <div class="card-head">
                                         <div class="card-head-label">
-                                            <h3 class="card-head-title">Head</h3>
+                                            <h3 class="card-head-title">Basic Details
+                                            </h3>
+                                            <span class="text-muted"> Add basic details about your product</span>
                                         </div>
                                     </div>
                                     <div class="card-body">Body</div>
