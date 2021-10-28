@@ -1,6 +1,15 @@
 .add-stock {
     display: flex;
     justify-content: space-between;
+    &-column {
+        &-head {
+            margin-bottom: 1.5rem;
+            h2 {
+                font-size: 1.5rem;
+                color: $txt-body;
+            }
+        }
+    }
     .column-nav {
         flex: 0 0 30%;
         max-width: 30%;

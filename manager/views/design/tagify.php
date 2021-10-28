@@ -211,18 +211,20 @@
             <?php
   include 'includes/footer.php';
 ?>
-            <script src="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.min.js"></script>
-            <script src="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.polyfills.min.js"></script>
 
-            <script>
-            // The DOM element you wish to replace with Tagify
-            var input = document.querySelector('input[name=tags]');
-
-            // initialize Tagify on the above input node reference
-            new Tagify(input);
-            </script>
 
         </div>
+
+        <script src="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.min.js"></script>
+        <script src="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.polyfills.min.js"></script>
+
+        <script>
+        // The DOM element you wish to replace with Tagify
+        var input = document.querySelector('input[name=tags]');
+
+        // initialize Tagify on the above input node reference
+        new Tagify(input);
+        </script>
 
     </body>
 
