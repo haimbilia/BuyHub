@@ -1,4 +1,6 @@
 .settings {
+    margin: 1rem auto;
+    max-width: 900px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     grid-gap: 0.5rem;
@@ -19,9 +21,11 @@
             }
         }
         &__icon {
-            max-width: 60px;
-            flex: 0 0 60px;
+            max-width: 40px;
+            flex: 0 0 40px;
             svg {
+                width: 30px;
+                height: 30px;
                 fill: $brand-color;
             }
         }

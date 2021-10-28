@@ -500,7 +500,7 @@
                                                         <label class="label required">Language </label>
                                                         <select onchange="addShopLangForm(5, this.value);"
                                                             data-field-caption="Language"
-                                                            data-fatreq="{&quot;required&quot;:false}" name="lang_id">
+                                                             name="lang_id">
                                                             <option value="1" selected="selected">English
                                                             </option>
                                                             <option value="2">Arabic</option>
@@ -520,7 +520,7 @@
                                                                 aria-describedby="tooltip849482"></i>
                                                         </label>
                                                         <input data-field-caption="Shop Name"
-                                                            data-fatreq="{&quot;required&quot;:true}" type="text"
+                                                             type="text"
                                                             name="shop_name" value="Jason's Store">
                                                     </div>
                                                 </div>
@@ -531,7 +531,7 @@
                                                         <label class="label">Shop City</label>
 
                                                         <input data-field-caption="Shop City"
-                                                            data-fatreq="{&quot;required&quot;:false}" type="text"
+                                                             type="text"
                                                             name="shop_city" value="phoenix">
                                                     </div>
                                                 </div>
@@ -541,7 +541,7 @@
                                                     <div class="form-group">
                                                         <label class="label">Contact Person</label>
                                                         <input data-field-caption="Contact Person"
-                                                            data-fatreq="{&quot;required&quot;:false}" type="text"
+                                                             type="text"
                                                             name="shop_contact_person" value="Jason">
                                                     </div>
                                                 </div>
@@ -552,7 +552,7 @@
                                                         <label class="label">Description</label>
 
                                                         <textarea data-field-caption="Description"
-                                                            data-fatreq="{&quot;required&quot;:false}"
+                                                            
                                                             name="shop_description">Best range of products in the United States</textarea>
 
                                                     </div>

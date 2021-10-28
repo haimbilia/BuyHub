@@ -115,3 +115,17 @@
         }
     }
 }
+
+.list-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    li {
+        flex: 0 0 30%;
+        max-width: 30%;
+        list-style-type: none;
+        padding-#{$end-direction}: 1.5rem;
+        &:last-child {
+            padding-#{$end-direction}: 0;
+        }
+    }
+}
