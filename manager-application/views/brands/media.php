@@ -5,6 +5,8 @@ HtmlHelper::formatFormFields($logoFrm);
 $logoFld = $logoFrm->getField('logo');
 $logoFrm->setFormTagAttribute('class', 'modal-body form');
 $logoFld->addFieldTagAttribute('onChange', 'logoPopupImage(this)');
+$logoFld->developerTags['colWidthValues'] = [null, '6', null, null];
+$logoFld->htmlAfterField = '<small class="text--small logoPreferredDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '500 x 500') . '</small>';
 
 $logoLangFld = $logoFrm->getField('lang_id');
 $logoLangFld->addFieldTagAttribute('id', 'logoLanguageJs');
@@ -12,10 +14,13 @@ $logoLangFld->addFieldTagAttribute('id', 'logoLanguageJs');
 $ratioFld = $logoFrm->getField('ratio_type');
 $ratioFld->addOptionListTagAttribute('class', 'list-radio');
 $ratioFld->addFieldTagAttribute('class', 'prefRatio-js');
+$ratioFld->developerTags['colWidthValues'] = [null, '6', null, null];
 
-$htmlAfterField = '<small class="text--small logoPreferredDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '500 x 500') . '</small>';
-$htmlAfterField .= '<div id="logoListingJs"></div>';
-$logoFld->htmlAfterField = $htmlAfterField;
+HtmlHelper::configureRadioAsButton($logoFrm,'ratio_type');
+
+$fld = $logoFrm->getField('logo_html');
+$fld->value = '<div id="logoListingJs"></div>';
+
 /* Logo Image */
 
 
