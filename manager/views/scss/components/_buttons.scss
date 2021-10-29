@@ -45,12 +45,6 @@
             color: $brand-color-inverse !important;
         }
     }
-    &-secondary {}
-    &-outline-secondary {
-        background: none;
-        border-color: $secondary-color;
-        color: $secondary-color;
-    }
     &-light {
         background: $bg-gray;
         border-color: $bg-gray;

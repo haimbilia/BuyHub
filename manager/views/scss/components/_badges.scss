@@ -19,8 +19,8 @@
         color: $brand-color-inverse;
     }
     &-secondary {
-        background: $secondary-color;
-        color: $secondary-color-inverse;
+        // background: $secondary-color;
+        // color: $secondary-color-inverse;
     }
     &-success {
         background: lighten($success-color, 50);
