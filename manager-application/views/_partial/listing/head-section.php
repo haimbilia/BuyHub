@@ -4,11 +4,8 @@ $tableId = isset($tableId) ?  $tableId : '';
 
 $disableSelectAll = empty($arrListing) ? 'disabled="disabled"' : '';
 
-$tbl = new HtmlElement(
-    'table',
-    array('width' => '100%', 'class' => 'table table-dashed', 'id' => $tableId)
-);
-$th = $tbl->appendElement('thead', ['class' => 'tableHeadJs'])->appendElement('tr');
+$th = new HtmlElement('thead', ['class'=>'tableHeadJs']);
+$th->appendElement('tr');
 foreach ($fields as $key => $val) {
     $headColumData = HtmlHelper::getListingHeaderColumnHtml($key, $sortBy, $sortOrder);
     $cls = '';
@@ -39,4 +36,4 @@ foreach ($fields as $key => $val) {
             break;
     }
 }
-$tbody = $tbl->appendElement('tbody', ['class' => 'listingRecordJs']);
+echo $th->getHtml();

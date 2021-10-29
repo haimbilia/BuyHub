@@ -420,10 +420,15 @@ class BrandsController extends AdminBaseController
         $this->objPrivilege->canEditBrands();
         $recordId = FatUtility::int($recordId);
         $logoFrm = $this->getBrandLogoForm($recordId);
+        $languages = Language::getAllNames();
+        if (1 == count($languages)) {
+            $langId = array_key_first($languages);
+        } 
+
         $data['lang_id'] = $langId;
         $data['ratio_type'] = AttachedFile::RATIO_TYPE_SQUARE;
         if (0 < $recordId) {
-            $brandLogo = current(AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_LOGO, $recordId, 0, $langId, false));
+            $brandLogo = current(AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_LOGO, $recordId, 0, $langId, false));         
             if (is_array($brandLogo) && count($brandLogo)) {
                 $data['ratio_type'] = $brandLogo['afile_aspect_ratio'];
             }
@@ -517,7 +522,7 @@ class BrandsController extends AdminBaseController
             0,
             $_FILES['cropped_image']['name'],
             -1,
-            $unique_record = false,
+            false,
             $lang_id,
             $slide_screen,
             $aspectRatio
@@ -549,18 +554,18 @@ class BrandsController extends AdminBaseController
         if (count($languagesAssocArr) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_Universal', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
         } else {
-            $lang_id = array_key_first($languagesAssocArr);
+            $lang_id = array_key_first($languagesAssocArr);      
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
-
         $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
-        $frm->addRadioButtons(Labels::getLabel('FRM_Ratio', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
+        $frm->addRadioButtons(Labels::getLabel('FRM_Ratio', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);  
+        
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BRAND_LOGO);
         $frm->addHiddenField('', 'logo_min_width');
         $frm->addHiddenField('', 'logo_min_height');
         $frm->addFileUpload(Labels::getLabel('FRM_BRAND_LOGO', $this->siteLangId), 'logo', array('accept' => 'image/*', 'data-frm' => 'frmBrandLogo'));
-
+        $frm->addHTML('', 'logo_html', '');
         return $frm;
     }
 

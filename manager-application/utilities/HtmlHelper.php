@@ -206,10 +206,34 @@ class HtmlHelper
     }
 
     public static function configureSwitchForRadio($fld, $msg = '')
-    {        
-        $fld->developerTags['rdLabelAttributes'] = ['class' => 'radio'];   
+    {
+        $fld->developerTags['rdLabelAttributes'] = ['class' => 'radio'];
         if (!empty($msg)) {
             $fld->htmlAfterField = '<span class="form-text text-muted">' . $msg . '</span>';
         }
+    }
+
+    public static function configureRadioAsButton(&$frm, $fldName)
+    {
+        $fld = $frm->getField($fldName);
+        $str = '<label class="label">' . $fld->getCaption() . '</label>
+                    <div class="radio-button-group">';
+        $opCount = 1;
+        foreach ($fld->options as $opValue => $opName) {
+            $opId = $fldName . "__" . $opCount;
+            $str .= '<div class="item">
+                    <input type="radio" name="' . $fldName . '" class="radio-button ' . $fld->getFieldTagAttribute('class') . '" id="' . $opId . '"  value="' . $opValue . '"  ' . ($opValue . '" ' . $opValue == $fld->value ? 'checked' : '') . ' >
+                    <label for="' . $opId . '">' . $opName . '</label>
+                </div>';
+            $opCount++;
+        }
+        $str .= '</div>';
+
+        $oldFldPostion = $fld->getFormIndex();
+
+        $frm->removeField($fld);
+        $htmlFld = $frm->addHTML('', $fldName . '_html', $str);
+        $htmlFld->setFormIndex($oldFldPostion);
+        $htmlFld->developerTags = $fld->developerTags;
     }
 }

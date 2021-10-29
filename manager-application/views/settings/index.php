@@ -279,8 +279,8 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('NAV_SHOP_REPORT_REASONS_MANAGEMENT', $siteLangId); ?></h6>
-                                    <span>Shop report reasons</span>
+                                    <h6><?php echo Labels::getLabel('NAV_SHOP_REPORT_REASONS', $siteLangId); ?></h6>
+                                    <span>Shop report reasons management</span>
                                 </div>
                             </a>
                         <?php } ?>

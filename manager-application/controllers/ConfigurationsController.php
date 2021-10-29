@@ -1703,7 +1703,7 @@ class ConfigurationsController extends AdminBaseController
 
             case Configurations::FORM_MEDIA:
                 $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
-
+                
                 $ul = $frm->addHtml('', 'MediaGrids', '<div class="row">');
                 $ul->htmlAfterField .= '<div class="col-md-6">';
 
