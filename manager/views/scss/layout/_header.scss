@@ -802,7 +802,7 @@ $mykart:'mykart';
     align-items: center;
     justify-content: center;
     #{$self}__item {
-        margin-#{$start-direction}: .75rem;
+        // margin-#{$start-direction}: .75rem;
         #{$self}__trigger {
             color: $txt-gray;
             width: 40px;
@@ -810,8 +810,12 @@ $mykart:'mykart';
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: .25rem;
+            border-radius: $radius-common;
             background-color: #fff;
+            .svg {
+                width: 16px;
+                height: 16px;
+            }
             &:hover {
                 background-color: #f8f5ff;
             }

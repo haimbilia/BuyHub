@@ -221,13 +221,7 @@
         ?>
 
             <script src="<?php echo JS_PATH; ?>vendors/dropzone.js"></script>
-            <script>
-            $(document).ready(function() {
-                $(".upload_cover").hover(function() {
-                    $('.file-upload').toggleClass("isactive");
-                });
-            });
-            </script>
+
         </div>
 
     </body>

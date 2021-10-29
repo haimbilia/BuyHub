@@ -27,110 +27,115 @@
                     <div class="container">
                         <div class="add-stock">
                             <div class="add-stock-column column-nav">
-                                <div class="card">
-                                    <div class="card-body p-0">
-                                        <div class="stock-nav">
-                                            <ul>
-                                                <li class="stock-nav-item is-active">
-                                                    <a class="stock-nav-link" href="">
-                                                        <i class="stock-nav-icn">
-                                                            <svg class="svg" width="20" height="20">
-                                                                <use
-                                                                    xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <div class="">
-                                                            <h6 class="stock-nav-title">
-                                                                Basic details</h6>
-                                                            <span class="stock-nav-desc"> Add general details about the
-                                                                product
-                                                            </span>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li class="stock-nav-item">
-                                                    <a class="stock-nav-link" href="">
-                                                        <i class="stock-nav-icn">
-                                                            <svg class="svg" width="20" height="20">
-                                                                <use
-                                                                    xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <div class="">
-                                                            <h6 class="stock-nav-title">
-                                                                Variants and options</h6>
-                                                            <span class="stock-nav-desc"> Add options like Color, size
-                                                                etc for your product</span>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li class="stock-nav-item">
-                                                    <a class="stock-nav-link" href="">
-                                                        <i class="stock-nav-icn">
-                                                            <svg class="svg" width="20" height="20">
-                                                                <use
-                                                                    xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <div class="">
-                                                            <h6 class="stock-nav-title">
-                                                                Media</h6>
-                                                            <span class="stock-nav-desc"> Attach media files for the
-                                                                product </span>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li class="stock-nav-item">
-                                                    <a class="stock-nav-link" href="">
-                                                        <i class="stock-nav-icn">
-                                                            <svg class="svg" width="20" height="20">
-                                                                <use
-                                                                    xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <div class="">
-                                                            <h6 class="stock-nav-title">
-                                                                Specifications</h6>
-                                                            <span class="stock-nav-desc"> Product Specifications are
-                                                                added in this section </span>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li class="stock-nav-item">
-                                                    <a class="stock-nav-link" href="">
-                                                        <i class="stock-nav-icn">
-                                                            <svg class="svg" width="20" height="20">
-                                                                <use
-                                                                    xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
-                                                                </use>
-                                                            </svg>
-                                                        </i>
-                                                        <div class="">
-                                                            <h6 class="stock-nav-title">
-                                                                Tax and Shipping</h6>
-                                                            <span class="stock-nav-desc"> Add Tax and Shipping details
-                                                                from this section </span>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                            </ul>
+                                <div class="sticky-top">
+                                    <div class="card">
+                                        <div class="card-body p-0">
+                                            <div class="stock-nav">
+                                                <ul>
+                                                    <li class="stock-nav-item is-active">
+                                                        <a class="stock-nav-link" href="#basic-details">
+                                                            <i class="stock-nav-icn">
+                                                                <svg class="svg" width="20" height="20">
+                                                                    <use
+                                                                        xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                    </use>
+                                                                </svg>
+                                                            </i>
+                                                            <div class="">
+                                                                <h6 class="stock-nav-title">
+                                                                    Basic details</h6>
+                                                                <span class="stock-nav-desc"> Add general details about
+                                                                    the
+                                                                    product
+                                                                </span>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="stock-nav-item">
+                                                        <a class="stock-nav-link" href="#variants-options">
+                                                            <i class="stock-nav-icn">
+                                                                <svg class="svg" width="20" height="20">
+                                                                    <use
+                                                                        xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                    </use>
+                                                                </svg>
+                                                            </i>
+                                                            <div class="">
+                                                                <h6 class="stock-nav-title">
+                                                                    Variants and options</h6>
+                                                                <span class="stock-nav-desc"> Add options like Color,
+                                                                    size
+                                                                    etc for your product</span>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="stock-nav-item">
+                                                        <a class="stock-nav-link" href="#media">
+                                                            <i class="stock-nav-icn">
+                                                                <svg class="svg" width="20" height="20">
+                                                                    <use
+                                                                        xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                    </use>
+                                                                </svg>
+                                                            </i>
+                                                            <div class="">
+                                                                <h6 class="stock-nav-title">
+                                                                    Media</h6>
+                                                                <span class="stock-nav-desc"> Attach media files for the
+                                                                    product </span>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="stock-nav-item">
+                                                        <a class="stock-nav-link" href="#specifications">
+                                                            <i class="stock-nav-icn">
+                                                                <svg class="svg" width="20" height="20">
+                                                                    <use
+                                                                        xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                    </use>
+                                                                </svg>
+                                                            </i>
+                                                            <div class="">
+                                                                <h6 class="stock-nav-title">
+                                                                    Specifications</h6>
+                                                                <span class="stock-nav-desc"> Product Specifications are
+                                                                    added in this section </span>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="stock-nav-item">
+                                                        <a class="stock-nav-link" href="#tax-shipping">
+                                                            <i class="stock-nav-icn">
+                                                                <svg class="svg" width="20" height="20">
+                                                                    <use
+                                                                        xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                    </use>
+                                                                </svg>
+                                                            </i>
+                                                            <div class="">
+                                                                <h6 class="stock-nav-title">
+                                                                    Tax and Shipping</h6>
+                                                                <span class="stock-nav-desc"> Add Tax and Shipping
+                                                                    details
+                                                                    from this section </span>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
 
+                                    </div>
                                 </div>
                             </div>
                             <div class="add-stock-column column-main">
                                 <div class="add-stock-column-head">
-                                    <h2>Add Product</h2>
+                                    <h2 class="h2">Add Product</h2>
                                     <span class="text-muted"> When adding products here, do not forget to fll the
                                         required felds marked with
                                         asterisk (*).</span>
                                 </div>
-                                <div class="card">
+                                <div class="card" id="basic-details">
                                     <div class="card-head">
                                         <div class="card-head-label">
                                             <h3 class="card-head-title">Basic Details </h3>
@@ -247,7 +252,7 @@
                                     </div>
 
                                 </div>
-                                <div class="card">
+                                <div class="card" id="variants-options">
                                     <div class="card-head dropdown-toggle-custom show" data-toggle="collapse"
                                         data-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
                                         <div class="card-head-label">
@@ -287,7 +292,8 @@
                                                 <tbody>
                                                     <tr>
 
-                                                        <td><select name="optionsSelect" class="form-control">
+                                                        <td width="25%"><select name="optionsSelect"
+                                                                class="form-control">
                                                                 <option disabled="disabled" value="">
                                                                     Select Option</option>
                                                                 <option value="1">Color</option>
@@ -296,9 +302,10 @@
                                                                 <option value="4">Clarity</option>
                                                                 <option value="5">Strap</option>
                                                             </select></td>
-                                                        <td> <input name='tags' value='Red, Green, Blue' autofocus>
+                                                        <td> <input class=" form-tagify" name='tags'
+                                                                value='Red, Green, Blue' autofocus>
                                                         </td>
-                                                        <td>
+                                                        <td class="align-right">
                                                             <ul class="actions">
                                                                 <li>
                                                                     <a href="javascript:void(0)" class="">
@@ -324,10 +331,10 @@
                                                                 <option value="4">Clarity</option>
                                                                 <option value="5">Strap</option>
                                                             </select></td>
-                                                        <td> <input name='tags' value='Small, , Medium, Large, XL, XXL'
-                                                                autofocus>
+                                                        <td> <input class="form-tagify" name='tags'
+                                                                value='Small, , Medium, Large, XL, XXL' autofocus>
                                                         </td>
-                                                        <td>
+                                                        <td class="align-right">
                                                             <ul class="actions">
 
 
@@ -356,9 +363,10 @@
                                                                 <option value="4">Clarity</option>
                                                                 <option value="5">Strap</option>
                                                             </select></td>
-                                                        <td> <input name='tags' value='Lorem, Lorem2, Lorem5' autofocus>
+                                                        <td> <input class=" form-tagify" name='tags'
+                                                                value='Lorem, Lorem2, Lorem5' autofocus>
                                                         </td>
-                                                        <td>
+                                                        <td class="align-right">
                                                             <ul class="actions">
                                                                 <li>
                                                                     <a href="javascript:void(0)" class="">
@@ -523,9 +531,7 @@
                                     </form>
 
                                 </div>
-
-
-                                <div class="card">
+                                <div class="card" id="media">
                                     <div class="card-head dropdown-toggle-custom show" data-toggle="collapse"
                                         data-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                                         <div class="card-head-label">
@@ -534,10 +540,190 @@
                                             <span class="text-muted">Attach media files for the product </span>
                                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                                     </div>
-                                    <div class="card-body show" id="stock-block2">Media</div>
-                                </div>
+                                    <div class="card-body show" id="stock-block2">
 
-                                <div class="card">
+                                        <div class="dropzone">
+                                            <div class="upload_cover">
+                                                <div class="file-upload">
+                                                    <img
+                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
+                                                </div>
+                                                <div class="needsclick">
+                                                    <h3 class="dropzone-msg-title">Click here to upload</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span class="form-text text-muted  pt-2"> File type must be a .jpg, .gif or .png
+                                            smaller than 2MB and at least
+                                            800x800 in 1:1 aspect ratio</span>
+
+                                        <div class="mt-5">
+                                            <h6 class="h6 mb-3">Uploaded media</h6>
+                                            <ul class="uploaded-stocks">
+                                                <li>
+                                                    <div class="uploaded-stocks-item" data-ratio="1:1">
+                                                        <img data-toggle="tooltip" data-placement="top"
+                                                            title="product-1.jpg" class="uploaded-stocks-img"
+                                                            src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg">
+                                                        <div class="uploaded-stocks-actions">
+                                                            <ul class="actions">
+                                                                <li>
+                                                                    <a href="#" title="Edit">
+
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" class="">
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="uploaded-stocks-item" data-ratio="1:1">
+                                                        <img data-toggle="tooltip" data-placement="top"
+                                                            title="product-1.jpg" class="uploaded-stocks-img"
+                                                            src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg">
+                                                        <div class="uploaded-stocks-actions">
+                                                            <ul class="actions">
+                                                                <li>
+                                                                    <a href="#" title="Edit">
+
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" class="">
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="uploaded-stocks-item" data-ratio="1:1">
+                                                        <img data-toggle="tooltip" data-placement="top"
+                                                            title="product-1.jpg" class="uploaded-stocks-img"
+                                                            src="<?php echo CONF_WEBROOT_URL; ?>images/products/product5.jpg">
+                                                        <div class="uploaded-stocks-actions">
+                                                            <ul class="actions">
+                                                                <li>
+                                                                    <a href="#" title="Edit">
+
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" class="">
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="uploaded-stocks-item" data-ratio="1:1">
+                                                        <img data-toggle="tooltip" data-placement="top"
+                                                            title="product-1.jpg" class="uploaded-stocks-img"
+                                                            src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg">
+                                                        <div class="uploaded-stocks-actions">
+                                                            <ul class="actions">
+                                                                <li>
+                                                                    <a href="#" title="Edit">
+
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" class="">
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="uploaded-stocks-item" data-ratio="1:1">
+                                                        <img data-toggle="tooltip" data-placement="top"
+                                                            title="product-1.jpg" class="uploaded-stocks-img"
+                                                            src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg">
+                                                        <div class="uploaded-stocks-actions">
+                                                            <ul class="actions">
+                                                                <li>
+                                                                    <a href="#" title="Edit">
+
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" class="">
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <span class="form-text text-muted pt-2">Pay attention to the quality of
+                                                pictures
+                                                you add, comply with the
+                                                background color standards. Notice that the product shows all the
+                                                details</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card" id="specifications">
                                     <div class="card-head dropdown-toggle-custom show" data-toggle="collapse"
                                         data-target="#stock-block3" aria-expanded="false" aria-controls="stock-block3">
                                         <div class="card-head-label">
@@ -547,10 +733,65 @@
                                                 section</span>
                                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                                     </div>
-                                    <div class="card-body show" id="stock-block3">Specifications</div>
-                                </div>
+                                    <div class="card-body show" id="stock-block3">
+                                        <form class="form" action="">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="label">Label Text</label>
+                                                        <input type="text" value="">
+                                                        <span class="form-text text-muted"> Lorem ipsum dolor sit,
+                                                            amet consectetur adipisicing elit. </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="label"> Value</label>
+                                                        <input type="text" value="">
 
-                                <div class="card">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="label">Group </label>
+                                                        <input type="text" value="">
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="label"></label> <button type="submit"
+                                                            class="btn btn-brand btn-wide">Add</button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+
+                                        <div class="separator separator-dashed my-4"></div>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Label Text</th>
+                                                    <th>Value</th>
+                                                    <th class="align-right">Group</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Lorem ipsum dolor sit amet, consectetur </td>
+                                                    <td>tenetur aspernatur
+                                                        magni voluptas natus maxime quasi</td>
+                                                    <td class="align-right">similique asperiores </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="card" id="tax-shipping">
                                     <div class="card-head dropdown-toggle-custom show" data-toggle="collapse"
                                         data-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
                                         <div class="card-head-label">
@@ -560,23 +801,113 @@
                                                 thissection</span>
                                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                                     </div>
-                                    <div class="card-body show" id="stock-block4">Tax and Shipping</div>
+                                    <div class="card-body show" id="stock-block4">
+                                        <form class="form" action="">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="d-flex justify-content-between">
+                                                            <label class="label">Tax category</label>
+                                                            <a class="link" href="">Add Tax Category</a>
+                                                        </div>
+                                                        <select name="" id=""></select>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="label">Order Fulfllment Method</label>
+                                                        <select name="" id=""></select>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="label">Country of origin </label>
+                                                        <input type="text" value="">
+
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+                                        </form>
+
+                                    </div>
                                 </div>
-
-
-
-
                             </div>
-
                             <div class="add-stock-column column-actions">
-                                <div class="card">
-                                    <div class="card-head">
-                                        <div class="card-head-label">
-                                            <h3 class="card-head-title">Head</h3>
+                                <div class="sticky-top">
+                                    <div class="card">
+
+                                        <div class="card-body">
+                                            <button type="button" class="btn btn-brand btn-block">Save</button>
+
+                                            <div class="mt-3">
+                                                <label class="switch switch-sm switch-icon">
+                                                    <input type="checkbox" checked="checked" name="">
+                                                    <span class="input-helper"></span> Active
+                                                </label>
+                                            </div>
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <ul class="list-featured">
+                                                <li>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox">
+                                                        <span>
+                                                            <strong> Mark this Product as Featured</strong>
+                                                            <span class="text-muted">Checking this option will show this
+                                                                product
+                                                                in Featured products on
+                                                                the website.</span></span>
+
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox">
+                                                        <span> <strong>Cash On Delivery (COD)
+                                                                Available</strong>
+                                                            <span class="text-muted">
+                                                                Check this if option is available for COD. Only allowed
+                                                                if
+                                                                fulfllment method is Shipping.</span> </span>
+
+                                                    </label>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
-                                    <div class="card-body">Body</div>
-                                    <div class="card-foot">Foot</div>
+                                    <div class="card">
+                                        <div class="card-head">
+                                            <div class="card-head-label">
+                                                <h3 class="card-head-title">Tags</h3>
+                                                <span class="text-muted">
+                                                    This will be used by Buyer to search
+                                                    the product. Type the tag and click
+                                                    on enter to add another tag
+
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <input class=" form-tagify" name='tags' value='#bag, #onDemand, #awesome'
+                                                autofocus>
+
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -589,11 +920,9 @@
                 <script src="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.polyfills.min.js"></script>
 
                 <script>
-                // The DOM element you wish to replace with Tagify
-                var input = document.querySelector('input[name=tags]');
-
-                // initialize Tagify on the above input node reference
-                new Tagify(input);
+                document.querySelectorAll('.form-tagify').forEach(function(input) {
+                    new Tagify(input);
+                });
                 </script>
 
 

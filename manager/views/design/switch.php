@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light" dir="ltr">
+
     <head>
         <meta charset="utf-8" />
         <title>FATbit | Dashboard</title>
@@ -11,6 +12,7 @@
 
         <link rel="shortcut icon" href="images/favicon.ico" />
     </head>
+
     <body class="subheader--transparent page--loading">
         <div class="wrapper">
             <?php include 'includes/header.php'; ?>
@@ -88,7 +90,7 @@
                                                     <span class="switch">
                                                         <label>
                                                             <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -97,7 +99,7 @@
                                                     <span class="switch switch-icon">
                                                         <label>
                                                             <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -108,7 +110,7 @@
                                                     <span class="switch">
                                                         <label>
                                                             <input type="checkbox" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -117,7 +119,7 @@
                                                     <span class="switch switch-icon">
                                                         <label>
                                                             <input type="checkbox" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -128,7 +130,7 @@
                                                     <span class="switch">
                                                         <label>
                                                             <input type="checkbox" disabled="" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -137,7 +139,7 @@
                                                     <span class="switch switch-icon">
                                                         <label>
                                                             <input type="checkbox" disabled="" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -169,7 +171,7 @@
                                                             <span class="switch switch-lg">
                                                                 <label>
                                                                     <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </div>
@@ -178,7 +180,7 @@
                                                             <span class="switch switch-lg switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </div>
@@ -189,7 +191,7 @@
                                                             <span class="switch switch-lg">
                                                                 <label>
                                                                     <input type="checkbox" name="">
-                                                                    <span></span>
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </div>
@@ -198,7 +200,7 @@
                                                             <span class="switch switch-lg switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" name="">
-                                                                    <span></span>
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </div>
@@ -209,7 +211,7 @@
                                                             <span class="switch switch-lg">
                                                                 <label>
                                                                     <input type="checkbox" disabled="" name="">
-                                                                    <span></span>
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </div>
@@ -218,7 +220,7 @@
                                                             <span class="switch switch-lg switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" disabled="" name="">
-                                                                    <span></span>
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </div>
@@ -237,7 +239,7 @@
                                                             <span class="switch switch-sm">
                                                                 <label>
                                                                     <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </div>
@@ -246,7 +248,7 @@
                                                             <span class="switch switch-sm switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </div>
@@ -257,7 +259,7 @@
                                                             <span class="switch switch-sm">
                                                                 <label>
                                                                     <input type="checkbox" name="">
-                                                                    <span></span>
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </div>
@@ -266,7 +268,7 @@
                                                             <span class="switch switch-sm switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" name="">
-                                                                    <span></span>
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </div>
@@ -277,7 +279,7 @@
                                                             <span class="switch switch-sm">
                                                                 <label>
                                                                     <input type="checkbox" disabled="" name="">
-                                                                    <span></span>
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </div>
@@ -286,7 +288,7 @@
                                                             <span class="switch switch-sm switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" disabled="" name="">
-                                                                    <span></span>
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </div>
@@ -320,7 +322,7 @@
                                                     <span class="switch switch-success">
                                                         <label>
                                                             <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -329,7 +331,7 @@
                                                     <span class="switch switch-primary">
                                                         <label>
                                                             <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -340,7 +342,7 @@
                                                     <span class="switch switch-info">
                                                         <label>
                                                             <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -349,7 +351,7 @@
                                                     <span class="switch switch-danger">
                                                         <label>
                                                             <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -360,7 +362,7 @@
                                                     <span class="switch switch-brand">
                                                         <label>
                                                             <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -369,7 +371,7 @@
                                                     <span class="switch switch-dark">
                                                         <label>
                                                             <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -398,7 +400,7 @@
                                                     <span class="switch switch-outline switch-icon switch-success">
                                                         <label>
                                                             <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -407,7 +409,7 @@
                                                     <span class="switch switch-outline switch-icon switch-warning">
                                                         <label>
                                                             <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -418,7 +420,7 @@
                                                     <span class="switch switch-outline switch-icon switch-info">
                                                         <label>
                                                             <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -427,7 +429,7 @@
                                                     <span class="switch switch-outline switch-icon switch-danger">
                                                         <label>
                                                             <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -438,7 +440,7 @@
                                                     <span class="switch switch-outline switch-icon switch-primary">
                                                         <label>
                                                             <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -447,7 +449,7 @@
                                                     <span class="switch switch-outline switch-icon switch-brand">
                                                         <label>
                                                             <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -458,7 +460,7 @@
                                                     <span class="switch switch-outline switch-icon switch-dark">
                                                         <label>
                                                             <input type="checkbox" checked="checked" name="">
-                                                            <span></span>
+                                                            <span class="input-helper"></span>
                                                         </label>
                                                     </span>
                                                 </div>
@@ -469,8 +471,8 @@
                                 </div>
                                 <!--end::card-->
 
-                                  <!--begin::card-->
-                                  <div class="card">
+                                <!--begin::card-->
+                                <div class="card">
                                     <div class="card-head">
                                         <div class="card-head-label">
                                             <h3 class="card-head-title">
@@ -481,42 +483,42 @@
                                     <div class="card-body">
                                         <!--begin::Form-->
                                         <form class="form">
-                                                    <div class="form-group row">
-                                                        <label class="col-6 col-form-label">Normal unselected</label>
-                                                        <div class="col-6">
-                                                            <span class="switch switch-dark--outline switch-sm">
-                                                                <label>
-                                                                    <input type="checkbox"  name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-6 col-form-label">Normal selected</label>
-                                                        <div class="col-6">
-                                                            <span class="switch switch-dark--outline switch-sm">
-                                                                <label>
-                                                                    <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
-                                                        </div>
-                                                       
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-6 col-form-label">Disabled</label>
-                                                        <div class="col-6">
-                                                            <span class="switch switch-dark--outline switch-sm">
-                                                                <label>
-                                                                    <input type="checkbox" disabled="" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </form>
+                                            <div class="form-group row">
+                                                <label class="col-6 col-form-label">Normal unselected</label>
+                                                <div class="col-6">
+                                                    <span class="switch switch-dark--outline switch-sm">
+                                                        <label>
+                                                            <input type="checkbox" name="">
+                                                            <span class="input-helper"></span>
+                                                        </label>
+                                                    </span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-6 col-form-label">Normal selected</label>
+                                                <div class="col-6">
+                                                    <span class="switch switch-dark--outline switch-sm">
+                                                        <label>
+                                                            <input type="checkbox" checked="checked" name="">
+                                                            <span class="input-helper"></span>
+                                                        </label>
+                                                    </span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-6 col-form-label">Disabled</label>
+                                                <div class="col-6">
+                                                    <span class="switch switch-dark--outline switch-sm">
+                                                        <label>
+                                                            <input type="checkbox" disabled="" name="">
+                                                            <span class="input-helper"></span>
+                                                        </label>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </form>
                                         <!--end::Form-->
                                     </div>
                                 </div>
