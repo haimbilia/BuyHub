@@ -187,6 +187,13 @@
                                                     </a>
                                                 </li>
                                             <?php } ?>
+                                            <?php if ($objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                                <li class="nav_item">
+                                                    <a href="<?php echo UrlHelper::generateUrl('CatalogReport'); ?>" class="nav_link ">
+                                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCTS', $siteLangId); ?></span>
+                                                    </a>
+                                                </li>
+                                            <?php } ?>
                                         </ul>
                                     </div>
                                 </li>
