@@ -838,7 +838,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         $frm->addHiddenField('', 'sortBy', $sortBy, ['id' => 'sortBy']);
         $frm->addHiddenField('', 'sortOrder', $sortOrder, ['id' => 'sortOrder']);
         $frm->addHiddenField('', 'pageSize', $pageSize);
-        $frm->addHiddenField('', 'reportColumns', '');
+        $frm->addHiddenField('', 'listingColumns', '');
     }
 
     public function getDefaultFormLangId()

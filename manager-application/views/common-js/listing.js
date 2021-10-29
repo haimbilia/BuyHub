@@ -47,6 +47,14 @@ $(document).on("click", ".headerColumnJs", function (e) {
   searchRecords(frm);
 });
 
+$(function () {
+  $("#sortable").sortable({
+    stop: function () {
+      reloadList();
+    }
+  }).disableSelection();
+});
+
 /* Reset result on clear on keyword. */
 $(document).on("search", "input[name='keyword']", function () {
   if ("" == $(this).val()) {
@@ -155,6 +163,12 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     searchRecords(document.frmRecordSearchPaging);
   };
 
+  exportReport = function () {
+    setColumnsData(document.frmRecordSearch);
+    document.frmRecordSearch.action = fcom.makeUrl(controllerName, 'search', ['export']);
+    document.frmRecordSearch.submit();
+  }
+
   searchRecords = function (frm) {
     if (false === checkControllerName()) {
       return false;
@@ -165,10 +179,14 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     if (frm) {
       data = fcom.frmData(frm);
     }
+
     $(listingTableJs).prepend(fcom.getLoader());
 
     fcom.ajax(fcom.makeUrl(controllerName, "search"), data, function (res) {
       var res = JSON.parse(res);
+      if (res.headSection) {
+        $('.tableHeadJs').replaceWith(res.headSection);
+      }
       $(dv).replaceWith(res.listingHtml);
       $(paginationDv).replaceWith(res.paginationHtml);
       fcom.removeLoader();
