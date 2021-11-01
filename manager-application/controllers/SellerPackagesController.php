@@ -8,6 +8,12 @@ class SellerPackagesController extends AdminBaseController
         $this->objPrivilege->canViewSellerPackages();
     }
 
+    /**
+     * setLangTemplateData - This function is use to automate load langform and save it. 
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditSellerPackages();

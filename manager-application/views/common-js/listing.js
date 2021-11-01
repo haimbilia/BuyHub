@@ -299,11 +299,11 @@ $(document).ajaxComplete(function () {
         });
     };
 
-    saveRecord = function (frm) {
+    saveRecord = function (frm, callback = '') {
         if (false === checkControllerName()) {
             return false;
         }
-
+        
         if (!$(frm).validate()) { return; }
         $.ykmodal(fcom.getLoader());
 
@@ -323,6 +323,8 @@ $(document).ajaxComplete(function () {
                 editLangData(t.recordId, t.langId);
             } else if ("openMediaForm" in t) {
                 mediaForm(t.recordId);
+            } else if ('' != callback) {
+                window[callback]();
             }
         });
     };
@@ -632,6 +634,10 @@ $(document).ajaxComplete(function () {
                 }
             });
         }
+    }
+
+    closeForm = function () {
+        $.ykmodal.close();
     }
 })();
 
