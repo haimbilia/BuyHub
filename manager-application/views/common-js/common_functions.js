@@ -153,7 +153,7 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect) {
         closeOnSelect: true,
         dir: layoutDirection,
         //allowClear: true,
-        // placeholder: ele.attr('placeholder') || '',
+        placeholder: ele.attr('placeholder') || '',
         ajax: {
             url: url,
             dataType: 'json',

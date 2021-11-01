@@ -10,6 +10,12 @@ class BrandsController extends AdminBaseController
         $this->rewriteUrl = Brand::REWRITE_URL_PREFIX;
     }
 
+    /**
+     * setLangTemplateData - This function is use to automate load langform and save it. 
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditBrands();
