@@ -124,9 +124,7 @@
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label class="label">Status</label>
-                                                            <select data-field-caption="Status"
-                                                                
-                                                                name="status">
+                                                            <select data-field-caption="Status" name="status">
                                                                 <option value="-1">Does not matter</option>
                                                                 <option value="0">Withdrawal Request Pending
                                                                 </option>
@@ -157,8 +155,7 @@
                                                                 class="field--calender fld-date hasDatepicker"
                                                                 data-field-caption="Date From"
                                                                 id="date_from_1630320541_71"
-                                                                data-fatdateformat="yy-mm-dd"
-                                                                 type="text"
+                                                                data-fatdateformat="yy-mm-dd" type="text"
                                                                 name="date_from" value="">
 
 
@@ -170,9 +167,8 @@
                                                             <input readonly="readonly"
                                                                 class="field--calender fld-date hasDatepicker"
                                                                 data-field-caption="Date To" id="date_to_1630320541_93"
-                                                                data-fatdateformat="yy-mm-dd"
-                                                                 type="text"
-                                                                name="date_to" value="">
+                                                                data-fatdateformat="yy-mm-dd" type="text" name="date_to"
+                                                                value="">
 
 
                                                         </div>
@@ -181,8 +177,7 @@
                                                         <div class="form-group">
                                                             <label class="label">User
                                                                 Type</label>
-                                                            <select data-field-caption="User Type"
-                                                                 name="type">
+                                                            <select data-field-caption="User Type" name="type">
                                                                 <option value="-1" selected="selected">Does Not
                                                                     Matter</option>
                                                                 <option value="1">Buyer</option>
@@ -830,9 +825,7 @@
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label class="label required">Language </label>
-                                                            <select onchange="addShopLangForm(5, this.value);"
-                                                                data-field-caption="Language"
-                                                                
+                                                            <select onchange="" data-field-caption="Language"
                                                                 name="lang_id">
                                                                 <option value="1" selected="selected">English
                                                                 </option>
@@ -852,8 +845,7 @@
                                                                     aria-label="Specify a target priorty"
                                                                     aria-describedby="tooltip849482"></i>
                                                             </label>
-                                                            <input data-field-caption="Shop Name"
-                                                                 type="text"
+                                                            <input data-field-caption="Shop Name" type="text"
                                                                 name="shop_name" value="Jason's Store">
                                                         </div>
                                                     </div>
@@ -863,8 +855,7 @@
                                                         <div class="form-group">
                                                             <label class="label">Shop City</label>
 
-                                                            <input data-field-caption="Shop City"
-                                                                 type="text"
+                                                            <input data-field-caption="Shop City" type="text"
                                                                 name="shop_city" value="phoenix">
                                                         </div>
                                                     </div>
@@ -873,8 +864,7 @@
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label class="label">Contact Person</label>
-                                                            <input data-field-caption="Contact Person"
-                                                                 type="text"
+                                                            <input data-field-caption="Contact Person" type="text"
                                                                 name="shop_contact_person" value="Jason">
                                                         </div>
                                                     </div>
@@ -885,7 +875,6 @@
                                                             <label class="label">Description</label>
 
                                                             <textarea data-field-caption="Description"
-                                                                
                                                                 name="shop_description">Best range of products in the United States</textarea>
 
                                                         </div>

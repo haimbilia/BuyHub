@@ -130,10 +130,32 @@
                             </div>
                             <div class="add-stock-column column-main">
                                 <div class="add-stock-column-head">
-                                    <h2 class="h2">Add Product</h2>
-                                    <span class="text-muted"> When adding products here, do not forget to fll the
-                                        required felds marked with
-                                        asterisk (*).</span>
+                                    <div class="add-stock-column-head-label">
+                                        <h2 class="h2">Add Product</h2>
+                                        <span class="text-muted"> <span class="required"></span> required
+                                            information</span>
+                                    </div>
+                                    <div class="add-stock-column-head-action">
+                                        <div class="input-group">
+                                            <select class="form-control form-select select-language">
+                                                <option value="1" selected="selected">English
+                                                </option>
+                                                <option value="2">Arabic</option>
+                                            </select>
+                                            <div class="input-group-append">
+                                                <a href="javascript:void(0)" class="btn btn-brand">
+                                                    <svg class="svg" width="18" height="18">
+                                                        <use
+                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-translate">
+                                                        </use>
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
                                 </div>
                                 <div class="card" id="basic-details">
                                     <div class="card-head">
@@ -503,7 +525,7 @@
                                             </table>
                                             <div class="separator separator-dashed my-4"></div>
 
-                                            <div class="form-group">
+                                            <div class="form-group mb-0">
                                                 <label class="label">Select Default Product Variant</label>
                                                 <select name="default" data-vv-as="Default" data-vv-validate-on="none"
                                                     class="form-control" aria-required="true" aria-invalid="false">
@@ -541,8 +563,7 @@
                                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                                     </div>
                                     <div class="card-body show" id="stock-block2">
-
-                                        <div class="dropzone">
+                                        <div class="dropzone dropzone-custom">
                                             <div class="upload_cover">
                                                 <div class="file-upload">
                                                     <img
@@ -552,6 +573,7 @@
                                                     <h3 class="dropzone-msg-title">Click here to upload</h3>
                                                 </div>
                                             </div>
+                                            <input class="dropzone-input" type="file">
                                         </div>
                                         <span class="form-text text-muted  pt-2"> File type must be a .jpg, .gif or .png
                                             smaller than 2MB and at least
@@ -730,7 +752,8 @@
                                             <h3 class="card-head-title">Specifications
                                             </h3>
                                             <span class="text-muted">Product Specifications are added in this
-                                                section</span>
+
+                                                <span class="input-helper"></span>section</span>
                                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                                     </div>
                                     <div class="card-body show" id="stock-block3">
@@ -798,7 +821,8 @@
                                             <h3 class="card-head-title">Tax and Shipping
                                             </h3>
                                             <span class="text-muted">Add Tax and Shipping details from
-                                                thissection</span>
+                                                this
+                                                <span class="input-helper"></span>section</span>
                                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                                     </div>
                                     <div class="card-body show" id="stock-block4">
