@@ -8,7 +8,7 @@ $tbl = new HtmlElement(
     'table',
     array('width' => '100%', 'class' => 'table table-dashed', 'id' => $tableId)
 );
-$th = $tbl->appendElement('thead')->appendElement('tr');
+$th = $tbl->appendElement('thead', ['class' => 'tableHeadJs'])->appendElement('tr');
 foreach ($fields as $key => $val) {
     $headColumData = HtmlHelper::getListingHeaderColumnHtml($key, $sortBy, $sortOrder);
     $cls = '';

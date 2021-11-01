@@ -1327,12 +1327,12 @@ class UsersController extends AdminBaseController
 
         $sformfield_id = $post['sformfield_id'];
         $languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $lang_id = $post['sformfieldlang_lang_id'];
-		} else  {
-			$lang_id = array_key_first($languages); 
-		}
-       
+        if (count($languages) > 1) {
+            $lang_id = $post['sformfieldlang_lang_id'];
+        } else {
+            $lang_id = array_key_first($languages);
+        }
+
 
         if ($sformfield_id == 0 || $lang_id == 0) {
             Message::addErrorMessage($this->str_invalid_request_id);
@@ -1676,6 +1676,12 @@ class UsersController extends AdminBaseController
     public function autoComplete()
     {
         $this->objPrivilege->canViewUsers();
+        $pagesize = 20;
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+
         $userObj = new User();
         $srch = $userObj->getUserSearchObj(array('u.user_name', 'u.user_id', 'credential_username', 'credential_email'));
 
@@ -1685,11 +1691,24 @@ class UsersController extends AdminBaseController
             $cnd->attachCondition('uc.credential_username', 'LIKE', '%' . $post['keyword'] . '%');
             /* $cnd->attachCondition('uc.credential_email', 'LIKE', '%' . $post['keyword'] . '%'); */
         }
-
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
-        $this->set('data', $db->fetchAll($rs, 'user_id'));
-        $this->_template->render(false, false);
+
+        $users = $db->fetchAll($rs, 'user_id');
+
+        $json = array(
+            'pageCount' => $srch->pages()
+        );
+        foreach ($users as $key => $user) {
+            $json['results'][] = array(
+                'id' => $key,
+                'text' => strip_tags(html_entity_decode($user['user_name'] . '(' . $user['credential_username'] . ')', ENT_QUOTES, 'UTF-8'))
+            );
+        }
+
+        die(FatUtility::convertToJson($json));
     }
 
     public function autoCompleteJson()
@@ -1789,9 +1808,9 @@ class UsersController extends AdminBaseController
                 'name' => strip_tags(html_entity_decode($name, ENT_QUOTES, 'UTF-8')),
                 'username' => strip_tags(html_entity_decode($user['credential_username'], ENT_QUOTES, 'UTF-8')),
                 'credential_email' => strip_tags(html_entity_decode($user['credential_email'], ENT_QUOTES, 'UTF-8')), 
-                */      
+                */
             );
-        }     
+        }
 
         die(FatUtility::convertToJson($json));
     }
@@ -2105,14 +2124,14 @@ class UsersController extends AdminBaseController
         $frm = new Form('frmSuppilerLang');
         $frm->addHiddenField('', 'sformfield_id', $sformfield_id);
         $languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'sformfieldlang_lang_id', $languages, $lang_id, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'sformfieldlang_lang_id', $lang_id);
-		}
+        if (count($languages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'sformfieldlang_lang_id', $languages, $lang_id, array(), '');
+        } else {
+            $lang_id = array_key_first($languages);
+            $frm->addHiddenField('', 'sformfieldlang_lang_id', $lang_id);
+        }
 
-        
+
         $frm->addRequiredField('Caption', 'sformfield_caption');
 
         $frm->addTextarea(Labels::getLabel('LBL_Comments', $this->siteLangId), 'sformfield_comment');

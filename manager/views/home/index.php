@@ -1785,8 +1785,7 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="label">Language</label>
-                                                    <select onchange="addShopLangForm(5, this.value);"
-                                                        data-field-caption="Language" name="lang_id">
+                                                    <select onchange="" data-field-caption="Language" name="lang_id">
                                                         <option value="1" selected="selected">English</option>
                                                         <option value="2">Arabic</option>
                                                     </select>

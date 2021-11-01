@@ -498,7 +498,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label class="label required">Language </label>
-                                                        <select onchange="addShopLangForm(5, this.value);"
+                                                        <select onchange=""
                                                             data-field-caption="Language"
                                                              name="lang_id">
                                                             <option value="1" selected="selected">English

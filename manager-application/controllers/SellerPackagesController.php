@@ -8,6 +8,12 @@ class SellerPackagesController extends AdminBaseController
         $this->objPrivilege->canViewSellerPackages();
     }
 
+    /**
+     * setLangTemplateData - This function is use to automate load langform and save it. 
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditSellerPackages();
@@ -465,7 +471,7 @@ class SellerPackagesController extends AdminBaseController
         switch ($action) {
             case 'index':
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES', $this->siteLangId)]
                 ];
         }

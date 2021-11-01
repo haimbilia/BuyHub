@@ -5,7 +5,7 @@ class ShopsController extends AdminBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->objPrivilege->canViewShops();   
+        $this->objPrivilege->canViewShops();
     }
 
     public function index()
@@ -128,7 +128,7 @@ class ShopsController extends AdminBaseController
         $this->set('canViewShopReports', $this->objPrivilege->canViewShopReports(0, true));
         $this->set('canViewSellerProducts', $this->objPrivilege->canViewSellerProducts(0, true));
         $this->set("canEdit", $this->objPrivilege->canEditShops(AdminAuthentication::getLoggedAdminId(), true));
-        
+
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -159,7 +159,7 @@ class ShopsController extends AdminBaseController
             $urlSrch->doNotCalculateRecords();
             $urlSrch->setPageSize(1);
             $urlSrch->addFld('urlrewrite_custom');
-            $urlSrch->addCondition('urlrewrite_original', '=', 'shops/view/' . $shop_id);            
+            $urlSrch->addCondition('urlrewrite_original', '=', 'shops/view/' . $shop_id);
             $rs = $urlSrch->getResultSet();
             $urlRow = FatApp::getDb()->fetch($rs);
             if ($urlRow) {
@@ -302,15 +302,15 @@ class ShopsController extends AdminBaseController
         $post = FatApp::getPostedData();
 
         $shop_id = FatUtility::int($post['shop_id']);
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $lang_id = $post['lang_id'];
-		} else  {
-			$lang_id = array_key_first($languages); 
-		}
-		
-		if ($shop_id == 0 || $lang_id == 0) {
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = $post['lang_id'];
+        } else {
+            $lang_id = array_key_first($languages);
+        }
+
+        if ($shop_id == 0 || $lang_id == 0) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieWithError(Message::getHtml());
         }
@@ -369,14 +369,14 @@ class ShopsController extends AdminBaseController
         $this->objPrivilege->canEditShops();
 
         $shop_id = FatUtility::int($shop_id);
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $lang_id = FatUtility::int($lang_id);
-		} else  {
-			$lang_id = array_key_first($languages); 
-		}
-		
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = FatUtility::int($lang_id);
+        } else {
+            $lang_id = array_key_first($languages);
+        }
+
 
         if ($shop_id < 1) {
             Message::addErrorMessage($this->str_invalid_request);
@@ -465,13 +465,13 @@ class ShopsController extends AdminBaseController
     public function images($shop_id, $imageType = '', $lang_id = 0, $slide_screen = 0)
     {
         $shop_id = FatUtility::int($shop_id);
-		
-		$languages = Language::getAllNames();
-		if(count($languages) <= 1){
-			 $lang_id =  array_key_first($languages); 
-		}
-		
-		
+
+        $languages = Language::getAllNames();
+        if (count($languages) <= 1) {
+            $lang_id =  array_key_first($languages);
+        }
+
+
         if (!$shop_id) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
@@ -523,6 +523,12 @@ class ShopsController extends AdminBaseController
 
     public function autoComplete()
     {
+        $pagesize = 20;
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+
         $srch = Shop::getSearchObject(false, $this->siteLangId);
 
         $post = FatApp::getPostedData();
@@ -530,33 +536,37 @@ class ShopsController extends AdminBaseController
             $srch->addCondition('shop_name', 'LIKE', '%' . $post['keyword'] . '%');
         }
 
-        if (isset($post['shop_user_id'])) {
+        /* if (isset($post['shop_user_id'])) {
             $srch->addCondition('shop_user_id', '=', $post['shop_user_id']);
-        }
+        } */
 
-        $srch->setPageSize(FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
         $srch->addMultipleFields(array('shop_id', 'IFNULL(shop_name,shop_identifier) as shop_name'));
 
-        $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
+        /*  $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
         $alreadyAdded = Collections::getRecords($collectionId);
         if (!empty($alreadyAdded) && 0 < count($alreadyAdded)) {
             $srch->addCondition('shop_id', 'NOT IN', array_keys($alreadyAdded));
-        }
+        } */
 
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $products = $db->fetchAll($rs, 'shop_id');
-        $json = array();
+
+        $json = array(
+            'pageCount' => $srch->pages()
+        );
         foreach ($products as $key => $product) {
-            $json[] = array(
+            $json['results'][] = array(
                 'id' => $key,
-                'name' => strip_tags(html_entity_decode($product['shop_name'], ENT_QUOTES, 'UTF-8'))
+                'text' => strip_tags(html_entity_decode($product['shop_name'], ENT_QUOTES, 'UTF-8'))
             );
         }
-        die(json_encode($json));
+        die(FatUtility::convertToJson($json));
     }
 
-    public function getSearchForm()
+    public function getSearchForm($fields = [])
     {
         $frm = new Form('frmShopSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
@@ -620,15 +630,15 @@ class ShopsController extends AdminBaseController
     {
         $frm = new Form('frmShopLang');
         $frm->addHiddenField('', 'shop_id', $shop_id);
-		$languages = Language::getAllNames();
-		
-		if(count($languages) > 1){
-			$frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-		
+        $languages = Language::getAllNames();
+
+        if (count($languages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
+        } else {
+            $lang_id = array_key_first($languages);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+
         $frm->addRequiredField(Labels::getLabel('LBL_Shop_Name', $this->siteLangId), 'shop_name');
         $frm->addTextBox(Labels::getLabel('LBL_Shop_City', $this->siteLangId), 'shop_city');
         $frm->addTextBox(Labels::getLabel('LBL_Contact_person', $this->siteLangId), 'shop_contact_person');
@@ -657,18 +667,18 @@ class ShopsController extends AdminBaseController
         $frm->addHTML('', Labels::getLabel('LBL_Logo', $this->siteLangId), '<h3>' . Labels::getLabel('LBL_Logo', $this->siteLangId) . '</h3>');
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $bannerTypeArr = applicationConstants::bannerTypeArr();
-		
-		
-		if(count($bannerTypeArr) > 1){
-			$frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
-        } else  {
-			$land_id = array_key_first($bannerTypeArr); 
-			$frm->addHiddenField('', 'lang_id', $land_id);
-		}
-		
-		
-		
-		$ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
+
+
+        if (count($bannerTypeArr) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
+        } else {
+            $land_id = array_key_first($bannerTypeArr);
+            $frm->addHiddenField('', 'lang_id', $land_id);
+        }
+
+
+
+        $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
         $frm->addRadioButtons(Labels::getLabel('LBL_Ratio', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_SHOP_LOGO);
         $frm->addHiddenField('', 'logo_min_width');
@@ -684,13 +694,13 @@ class ShopsController extends AdminBaseController
         $frm->addHTML('', Labels::getLabel('LBL_Banners', $this->siteLangId), '<h3>' . Labels::getLabel('LBL_Banners', $this->siteLangId) . '</h3>');
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $bannerTypeArr = applicationConstants::bannerTypeArr();
-		if(count($bannerTypeArr) > 1){
-			$frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
-        } else  {
-			$land_id = array_key_first($bannerTypeArr); 
-			$frm->addHiddenField('', 'lang_id', $land_id);
-		}
-		
+        if (count($bannerTypeArr) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
+        } else {
+            $land_id = array_key_first($bannerTypeArr);
+            $frm->addHiddenField('', 'lang_id', $land_id);
+        }
+
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->siteLangId), 'slide_screen', $screenArr, '', array(), '');
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_SHOP_BANNER);
@@ -707,14 +717,14 @@ class ShopsController extends AdminBaseController
         $frm->addHTML('', Labels::getLabel('Lbl_Background_Image', $this->siteLangId), '<h3>' . Labels::getLabel('Lbl_Background_Image', $this->siteLangId) . '</h3>');
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $bannerTypeArr = applicationConstants::bannerTypeArr();
-		if(count($bannerTypeArr) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
-		} else  {
-			$lang_id = array_key_first($bannerTypeArr); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-		
-		$fld1 = $frm->addButton(Labels::getLabel('Lbl_Background_Image', $land_id), 'shop_background_image', Labels::getLabel('LBL_Upload', $land_id), array('class' => 'shopFile-Js', 'id' => 'shop_background_image', 'data-file_type' => AttachedFile::FILETYPE_SHOP_BACKGROUND_IMAGE, 'data-frm' => 'frmBackgroundImage'));
+        if (count($bannerTypeArr) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
+        } else {
+            $lang_id = array_key_first($bannerTypeArr);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+
+        $fld1 = $frm->addButton(Labels::getLabel('Lbl_Background_Image', $land_id), 'shop_background_image', Labels::getLabel('LBL_Upload', $land_id), array('class' => 'shopFile-Js', 'id' => 'shop_background_image', 'data-file_type' => AttachedFile::FILETYPE_SHOP_BACKGROUND_IMAGE, 'data-frm' => 'frmBackgroundImage'));
         return $frm;
     }
     /* private function getMediaForm( $shop_id ){
@@ -950,30 +960,29 @@ class ShopsController extends AdminBaseController
         $frm->addHiddenField('', 'scollection_id', $scollection_id);
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $bannerTypeArr = applicationConstants::bannerTypeArr();
-		
-		if(count($bannerTypeArr) > 1){
-			 $frm->addSelectBox(Labels::getLabel('Lbl_Language', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array('class' => 'collection-language-js'), '');
-        } else  {
-			$lang_id = array_key_first($bannerTypeArr); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-		
-		$frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->siteLangId), 'collection_image', array('accept' => 'image/*', 'data-frm' => 'frmCollectionMedia'));
+
+        if (count($bannerTypeArr) > 1) {
+            $frm->addSelectBox(Labels::getLabel('Lbl_Language', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array('class' => 'collection-language-js'), '');
+        } else {
+            $lang_id = array_key_first($bannerTypeArr);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+
+        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->siteLangId), 'collection_image', array('accept' => 'image/*', 'data-frm' => 'frmCollectionMedia'));
         return $frm;
     }
 
     public function shopCollectionImages($shop_id, $scollection_id, $lang_id = 0)
     {
         $scollection_id = FatUtility::int($scollection_id);
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			  $lang_id = FatUtility::int($lang_id);
-		} else  {
-			$lang_id = array_key_first($languages); 
-			
-		}
-		
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = FatUtility::int($lang_id);
+        } else {
+            $lang_id = array_key_first($languages);
+        }
+
         $this->commonShopCollection($shop_id);
         if (1 > $scollection_id) {
             FatUtility::dieWithError($this->str_invalid_request);
@@ -994,14 +1003,14 @@ class ShopsController extends AdminBaseController
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
-		
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-		} else  {
-			$lang_id = array_key_first($languages); 
-		}
-		
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+        } else {
+            $lang_id = array_key_first($languages);
+        }
+
         $scollection_id = FatApp::getPostedData('scollection_id', FatUtility::VAR_INT, 0);
 
         if ($scollection_id == 0) {
@@ -1165,15 +1174,15 @@ class ShopsController extends AdminBaseController
     {
         $frm = new Form('frmMetaTagLang');
         $frm->addHiddenField('', 'scollection_id', $scollection_id);
-		$languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-		
-		$frm->addHiddenField('', 'shop_id', $shop_id);
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
+        } else {
+            $lang_id = array_key_first($languages);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+
+        $frm->addHiddenField('', 'shop_id', $shop_id);
         $frm->addRequiredField('Collection Name', 'name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
@@ -1200,12 +1209,12 @@ class ShopsController extends AdminBaseController
         }
         $frm = $this->getCollectionLangForm($scollection_id, $post['shop_id']);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-		
-		$languages = Language::getAllNames();
-		if(count($languages) <= 1){
-			 $post['lang_id'] =  array_key_first($languages); 
-		}
-		
+
+        $languages = Language::getAllNames();
+        if (count($languages) <= 1) {
+            $post['lang_id'] =  array_key_first($languages);
+        }
+
         $record = new ShopCollection($scollection_id);
 
         if (!$record->addUpdateShopCollectionLang($post)) {
@@ -1491,7 +1500,7 @@ class ShopsController extends AdminBaseController
             Message::addErrorMessage($shopCollectionObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
-    }    
+    }
     public function isShopRewriteUrlUnique()
     {
         $shop_id = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);

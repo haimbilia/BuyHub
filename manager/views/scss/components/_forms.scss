@@ -778,3 +778,7 @@ form.custom-form {
         display: flex;
     }
 }
+
+.select-language {
+    background-color: darken($input-bg, 5%);
+}
