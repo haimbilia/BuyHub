@@ -6,13 +6,20 @@
     grid-gap: 2rem;
     &-column {
         &-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 1.5rem;
             .h2 {
                 font-size: 1.5rem;
                 color: $txt-body;
+                margin: 0;
             }
             .text-muted {
                 font-size: 0.8rem;
+            }
+            &-action {
+                min-width: 190px;
             }
         }
     }

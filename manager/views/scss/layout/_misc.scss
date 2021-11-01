@@ -371,6 +371,7 @@
 }
 
 .dropdown-toggle-custom {
+    border: none;
     position: relative;
     &-arrow {
         position: absolute;
@@ -394,6 +395,7 @@
         }
     }
     &:not(.collapsed) {
+        border-bottom: $border;
         .dropdown-toggle-custom-arrow {
             &:before {
                 transform: translate(3px, 0) rotate( 45deg);
