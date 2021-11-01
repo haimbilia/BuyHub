@@ -34,7 +34,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                             </use>
                         </svg>' . Labels::getLabel('LBL_Export', $siteLangId)
                         ]],
-                        'cardHeadTitle' => Labels::getLabel('LBL_Sales_Report', $siteLangId)
+                        'cardHeadTitle' => Labels::getLabel('LBL_SHOPS_REPORT', $siteLangId)
                     ];
                     $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
                     <div class="card-body">
