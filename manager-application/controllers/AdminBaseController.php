@@ -45,9 +45,9 @@ class AdminBaseController extends FatController
     }
 
     /*
-# Function: setCommonValues
-# Description: Function to set the common values.
-*/
+    # Function: setCommonValues
+    # Description: Function to set the common values.
+    */
     private function setCommonValues()
     {
         CommonHelper::initCommonVariables(true);

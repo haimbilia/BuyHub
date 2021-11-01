@@ -7,6 +7,12 @@ class EmptyCartItemsController extends AdminBaseController
         $this->objPrivilege->canViewEmptyCartItems();
     }
 
+    /**
+     * setLangTemplateData - This function is use to automate load langform and save it. 
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditEmptyCartItems();
@@ -78,8 +84,6 @@ class EmptyCartItemsController extends AdminBaseController
             $condition->attachCondition('eci_l.emptycartitem_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
-        $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);

@@ -16,7 +16,7 @@ class CatalogReportController extends AdminBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('formColumns', $formColumns);
         $this->set('formColumns', $formColumns);
-        $this->set('pageTitle', Labels::getLabel('LBL_PRODUCT_REPORTS', $this->siteLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_SALES_REPORT', $this->siteLangId));
         $this->getListingData(false);
         $this->_template->render();
     }
@@ -242,5 +242,18 @@ class CatalogReportController extends AdminBaseController
     private function getDefaultColumns(): array
     {
         return ['product_name', 'product_type', 'prodcat_name', 'netSoldQty', 'grossSales', 'couponDiscount', 'refundedAmount', 'taxTotal', 'shippingTotal', 'orderNetAmount'];
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_PRODUCT_SALES_REPORT', $this->siteLangId)]
+                ];
+        }
+        return $this->nodes;
     }
 }

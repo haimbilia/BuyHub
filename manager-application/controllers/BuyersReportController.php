@@ -10,21 +10,33 @@ class BuyersReportController extends AdminBaseController
 
     public function index()
     {
-        $fields = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($fields);
+        $formColumns = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($formColumns);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('fields', $fields);
-        $this->_template->addJs('js/report.js');
+        $this->set('formColumns', $formColumns);
+        $this->set('pageTitle', Labels::getLabel('LBL_Buyers_Report', $this->siteLangId));
+        $this->getListingData(false);
         $this->_template->render();
     }
 
     public function search($type = false)
     {
+        $this->getListingData($type);
+        $jsonData = [
+            'headSection' => $this->_template->render(false, false, '_partial/listing/head-section.php', true),
+            'listingHtml' => $this->_template->render(false, false, 'buyers-report/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    public function getListingData($type = false)
+    {
         $post = FatApp::getPostedData();
 
         $fields = $this->getFormColumns();
-        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = FatApp::getPostedData('listingColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
@@ -41,7 +53,10 @@ class BuyersReportController extends AdminBaseController
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
 
         $rSrch = new Report(0, array_keys($fields));
         $rSrch->joinOrders();
@@ -135,7 +150,7 @@ class BuyersReportController extends AdminBaseController
         }
 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
         $arrListing = FatApp::getDb()->fetchAll($rs);
 
@@ -143,34 +158,26 @@ class BuyersReportController extends AdminBaseController
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->_template->render(false, false);
+        $this->set('allowedKeysForSorting', array_keys($fields));
     }
 
     public function getSearchForm($fields = [])
     {
-        $frm = new Form('frmReportSearch');
-        $frm->addHiddenField('', 'page');
-        
+        $frm = new Form('frmRecordSearch');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'buyerName', applicationConstants::SORT_ASC);
+        }
+
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        if (!empty($fields)) {
-            $frm->addHiddenField('', 'sortBy', 'buyerName');
-            $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
-            $frm->addHiddenField('', 'reportColumns', '');
-
-            /* $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  ''); */
-        }
-
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
-        $fld_submit->attachField($fld_cancel);
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 

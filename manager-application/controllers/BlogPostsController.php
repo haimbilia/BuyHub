@@ -8,6 +8,12 @@ class BlogPostsController extends AdminBaseController
         $this->objPrivilege->canViewBlogPosts();
     }
 
+    /**
+     * setLangTemplateData - This function is use to automate load langform and save it. 
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditBlogPosts();
@@ -83,8 +89,6 @@ class BlogPostsController extends AdminBaseController
         $srch->addMultipleFields(array('*', 'ifnull(post_title,post_identifier) post_title', 'group_concat(ifnull(bpcategory_name ,bpcategory_identifier)) categories', 'post_id as listSerial'));
         $srch->addGroupby('post_id');
 
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
-        $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);

@@ -16,7 +16,7 @@ class SalesReportController extends AdminBaseController
         $this->set('orderDate', $orderDate);
         $this->set('defaultColumns', $this->getDefaultColumns($orderDate));
         $this->set('formColumns', $formColumns);
-        $this->set('pageTitle', Labels::getLabel('LBL_Sales_Report', $this->siteLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_SALES_REPORT', $this->siteLangId));
         $this->getListingData(false, $orderDate);
         $this->_template->render();
     }
@@ -41,10 +41,10 @@ class SalesReportController extends AdminBaseController
         $frm->addHiddenField('', 'orderDate', $orderDate);
 
         if (empty($orderDate)) {
-            $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-            $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+            $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+            $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         } else {
-            $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+            $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
             $fld->overrideFldType('search');
         }
         HtmlHelper::addSearchButton($frm);
@@ -252,5 +252,18 @@ class SalesReportController extends AdminBaseController
             ] + $arr;
         }
         return $arr;
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_SALES_OVER_TIME', $this->siteLangId)]
+                ];
+        }
+        return $this->nodes;
     }
 }

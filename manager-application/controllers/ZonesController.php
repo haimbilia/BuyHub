@@ -7,6 +7,12 @@ class ZonesController extends AdminBaseController
         $this->objPrivilege->canViewZones();
     }
 
+    /**
+     * setLangTemplateData - This function is use to automate load langform and save it. 
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditZones();
