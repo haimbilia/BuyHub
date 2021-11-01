@@ -81,10 +81,10 @@ class HtmlHelper
             case 3:
             case 4:
                 return CommonHelper::replaceStringData(Labels::getLabel('LBL_{COUNT}_DAYS_AGO', $langId), ['{COUNT}' => $diff]);
-                break;    
+                break;
             default:
                 return date('d-m-Y', $theDate);
-                break; 
+                break;
         }
     }
 
@@ -148,7 +148,7 @@ class HtmlHelper
                     <div class="alert-text">' . $message . '</div>
                 </div>';
     }
-   
+
     public static function getErrorMessageHtml(string $message): string
     {
         return '<div class="alert alert-danger" role="alert">
@@ -156,7 +156,7 @@ class HtmlHelper
                     <div class="alert-text">' . $message . '</div>
                 </div>';
     }
-    
+
     public static function getCssStyleHtml(array $files = [], string $location = 'css'): string
     {
         $htm = '';
@@ -168,7 +168,7 @@ class HtmlHelper
         }
         return $htm;
     }
-    
+
     public static function getJsScriptHtml(array $files = [], string $location = 'js'): string
     {
         $htm = '';
@@ -193,5 +193,47 @@ class HtmlHelper
                     </div>
                 </form>
                 <script>$.initDropZone();</script>';
+    }
+
+    public static function configureSwitchForCheckbox($fld, $msg = '')
+    {
+        $fld->developerTags['fldWidthValues'] = ['setting-block', null, null, null];
+        $fld->developerTags['cbLabelAttributes'] = ['class' => 'switch switch-sm switch-icon'];
+        $fld->developerTags['cbHtmlAfterCheckbox'] = '<span class="input-helper"></span>';
+        if (!empty($msg)) {
+            $fld->htmlAfterField = '<span class="form-text text-muted">' . $msg . '</span>';
+        }
+    }
+
+    public static function configureSwitchForRadio($fld, $msg = '')
+    {
+        $fld->developerTags['rdLabelAttributes'] = ['class' => 'radio'];
+        if (!empty($msg)) {
+            $fld->htmlAfterField = '<span class="form-text text-muted">' . $msg . '</span>';
+        }
+    }
+
+    public static function configureRadioAsButton(&$frm, $fldName)
+    {
+        $fld = $frm->getField($fldName);
+        $str = '<label class="label">' . $fld->getCaption() . '</label>
+                    <div class="radio-button-group">';
+        $opCount = 1;
+        foreach ($fld->options as $opValue => $opName) {
+            $opId = $fldName . "__" . $opCount;
+            $str .= '<div class="item">
+                    <input type="radio" name="' . $fldName . '" class="radio-button ' . $fld->getFieldTagAttribute('class') . '" id="' . $opId . '"  value="' . $opValue . '"  ' . ($opValue . '" ' . $opValue == $fld->value ? 'checked' : '') . ' >
+                    <label for="' . $opId . '">' . $opName . '</label>
+                </div>';
+            $opCount++;
+        }
+        $str .= '</div>';
+
+        $oldFldPostion = $fld->getFormIndex();
+
+        $frm->removeField($fld);
+        $htmlFld = $frm->addHTML('', $fldName . '_html', $str);
+        $htmlFld->setFormIndex($oldFldPostion);
+        $htmlFld->developerTags = $fld->developerTags;
     }
 }

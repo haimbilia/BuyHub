@@ -2027,12 +2027,13 @@ strong {
         flex-shrink: 0;
         position: relative;
         border-radius: .475rem;
+        position: relative;
+        width: 40px;
+        height: 40px;
         >img {
-            width: 40px;
-            height: 40px;
             flex-shrink: 0;
             display: inline-block;
-            border-radius: 50%;
+            background: $bg-placeholder;
         }
     }
     &_data {
@@ -2186,22 +2187,6 @@ strong {
     &-body {
         margin: 2rem 0;
         margin-top: 1rem;
-    }
-}
-
-.sticky-sidebar {
-    position: sticky;
-    top: 0;
-}
-
-.form {
-    &--settings {
-        label {
-            display: flex;
-            flex-direction: row-reverse;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
     }
 }
 

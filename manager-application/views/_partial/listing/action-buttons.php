@@ -7,27 +7,6 @@ if (isset($htmlContent) && $htmlContent != '') {
     $ul->appendElement('li', [], $htmlContent, true);
 }
 
-if (isset($newRecordBtn) && true === $newRecordBtn && $canEdit) {
-    $li = $ul->appendElement('li');
-    $li->appendElement(
-        'a',
-        [
-            'href' => 'javascript:void(0)',
-            'class' => 'btn btn-icon btn-light btn-add',
-            'title' => Labels::getLabel('LBL_NEW', $siteLangId),
-            'onclick' => "addNew()"
-        ],
-        '<i class="icn">
-            <svg class="svg">
-                <use
-                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
-                </use>
-            </svg>
-        </i><span> ' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>',
-        true
-    );
-}
-
 $msg = isset($msg) ? $msg : '';
 if (isset($statusButtons) && true === $statusButtons && $canEdit) {
     $li = $ul->appendElement('li');
@@ -92,4 +71,37 @@ if (isset($otherButtons) && is_array($otherButtons) && $canEdit) {
     }
 }
 
+if (!empty($columnButtons)) {
+    $li = $ul->appendElement('li', ['class' => 'custom-drag-drop']);
+    $li->appendElement(
+        'a',
+        [
+            'href' => 'javascript:void(0)',
+            'class' => 'btn btn-icon btn-link',
+            'title' => Labels::getLabel('LBL_COLUMNS', $siteLangId),
+            'data-toggle' => 'dropdown',
+            'aria-expanded' => false
+        ],
+        '<svg class="svg" width="18" height="18">
+            <use
+                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#columns">
+            </use>
+        </svg>' . Labels::getLabel('LBL_COLUMNS', $siteLangId),
+        true
+    );
+
+    $li->appendElement('div', ['class' => 'dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-anim scroll scroll-y'], $columnButtons, true);
+}
+
+if (isset($newRecordBtn) && true === $newRecordBtn && $canEdit) {
+?>
+    <a href="javascript:void(0)" class="btn btn-icon btn-outline-brand btn-add" onclick="addNew()">
+        <svg class="svg" width="18" height="18">
+            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
+            </use>
+        </svg>
+        <span><?php echo Labels::getLabel('BTN_NEW', $siteLangId); ?></span>
+    </a>
+<?php
+}
 echo $ul->getHtml();

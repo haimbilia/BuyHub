@@ -5,9 +5,9 @@ $controller = str_replace('Controller', '', FatApp::getController());
     <div class="container">
         <div class="card">
             <div class="card-head">
-                <h3 class="card-head-label">
-                    <span class="card-head-title"><?php echo Labels::getLabel('LBL_SETTINGS', $siteLangId); ?></span>
-                </h3>
+                <div class="card-head-label">
+                    <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $siteLangId); ?></h3>
+                </div>
                 <div class="card-toolbar">
                     <div class="maintenance-mode">
                         <label class="switch switch-sm">
@@ -16,7 +16,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                             $checked = applicationConstants::ON == $status ? 'checked' : '';
                             ?>
                             <input type="checkbox" name="CONF_MAINTENANCE" data-old-status="<?php echo $status; ?>" value="<?php echo $status; ?>" onclick="updateMaintenanceModeStatus(event, this, <?php echo ((int) !$status); ?>)" <?php echo $checked; ?>>
-                            <span></span><?php echo Labels::getLabel('FRM_MAINTENANCE_MODE', $siteLangId); ?>
+                            <span class="input-helper"></span><?php echo Labels::getLabel('FRM_MAINTENANCE_MODE', $siteLangId); ?>
                         </label>
                     </div>
                 </div>
@@ -37,7 +37,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                     $objPrivilege->canViewEmptyCartItems(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewAbusiveWords(AdminAuthentication::getLoggedAdminId(), true)   ||
                     $objPrivilege->canViewShopReportReasons(AdminAuthentication::getLoggedAdminId(), true)
-                    
+
                 ) { ?>
                     <div class="setting-search">
                         <form class="form">
@@ -54,14 +54,14 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#general-settings">
                                             </use>
                                         </svg>
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('NAV_GENERAL_SETTINGS', $siteLangId); ?></h6>
-                                    <span>Display, Sound, notifications, power</span>
+                                    <h6><?php echo Labels::getLabel('NAV_SYSTEM_CONFIGURATIONS', $siteLangId); ?></h6>
+                                    <span>Settings, Account, Product, Logos, Affiliate, Commission, Referals</span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -71,7 +71,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#plugins">
                                             </use>
                                         </svg>
                                     </span>
@@ -88,7 +88,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#labels">
                                             </use>
                                         </svg>
                                     </span>
@@ -105,7 +105,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#theme">
                                             </use>
                                         </svg>
                                     </span>
@@ -122,7 +122,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#currencies">
                                             </use>
                                         </svg>
                                     </span>
@@ -139,7 +139,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#site-commission">
                                             </use>
                                         </svg>
                                     </span>
@@ -156,7 +156,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#affiliate-commision">
                                             </use>
                                         </svg>
                                     </span>
@@ -173,7 +173,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#subscriptions-packages">
                                             </use>
                                         </svg>
                                     </span>
@@ -190,7 +190,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#zones">
                                             </use>
                                         </svg>
                                     </span>
@@ -206,7 +206,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#countries">
                                             </use>
                                         </svg>
                                     </span>
@@ -223,7 +223,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#states">
                                             </use>
                                         </svg>
                                     </span>
@@ -240,7 +240,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#abusive-keywords">
                                             </use>
                                         </svg>
                                     </span>
@@ -257,7 +257,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#empty-cart">
                                             </use>
                                         </svg>
                                     </span>
@@ -273,14 +273,14 @@ $controller = str_replace('Controller', '', FatApp::getController());
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-setting-1">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#shop-reports">
                                             </use>
                                         </svg>
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('NAV_SHOP_REPORT_REASONS_MANAGEMENT', $siteLangId); ?></h6>
-                                    <span>Shop report reasons</span>
+                                    <h6><?php echo Labels::getLabel('NAV_SHOP_REPORT_REASONS', $siteLangId); ?></h6>
+                                    <span>Shop report reasons management</span>
                                 </div>
                             </a>
                         <?php } ?>
@@ -298,7 +298,8 @@ $controller = str_replace('Controller', '', FatApp::getController());
     function searhSettings(e) {
         var value = e.val().toLowerCase();
         $(".settingListJs a").each(function() {
-            if ($(this).find('h6').text().toLowerCase().search(value) > -1 || $(this).find('span').text().toLowerCase().search(value) > -1) {
+            if ($(this).find('h6').text().toLowerCase().search(value) > -1 || $(this).find('span').text()
+                .toLowerCase().search(value) > -1) {
                 $(this).show();
                 $('.settingListJs').show();
             } else {
@@ -309,10 +310,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
     };
 
     $(document).on("search", "#settingsSearch", function(e) {
-        searhSettings($(this));
-    });
-
-    $(document).on("keyup", "#settingsSearch", function(e) {
         searhSettings($(this));
     });
 

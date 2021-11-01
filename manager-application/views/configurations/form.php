@@ -2,8 +2,8 @@
 
 $clearFormFn = isset($clearFormFn) ? $clearFormFn : 'getForm(' . $frmType . ')';
 
-HtmlHelper::formatFormFields($frm);
-$frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group mt-3';
+HtmlHelper::formatFormFields($frm, 6);
+$frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
 $frm->setFormTagAttribute('class', 'form form--settings modalFormJs checkboxSwitchJs layout--' . $formLayout);
 $frm->setFormTagAttribute('data-onclear', $clearFormFn);
 $frm->setFormTagAttribute('id', 'frmConfSetting');
@@ -20,46 +20,102 @@ if ($lang_id > 0) {
 
 $stateData = FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 1);
 $displayMap = false;
-$colMd6Arr = [];
+$colMd12Arr = [];
+$class = '';
 switch ($frmType) {
     case Configurations::FORM_GENERAL:
         if (1 > $lang_id) {
-            $colMd6Arr = ['CONF_SITE_OWNER_EMAIL', 'CONF_SITE_PHONE', 'CONF_SITE_FAX', 'CONF_ABOUT_US_PAGE', 'CONF_PRIVACY_POLICY_PAGE', 'CONF_GDPR_POLICY_PAGE', 'CONF_COOKIES_BUTTON_LINK', 'CONF_TERMS_AND_CONDITIONS_PAGE'];
+            $colMd12Arr = ['CONF_MAP_IFRAME_CODE'];
         } else {
-            $colMd6Arr = ['lang_id', 'CONF_WEBSITE_NAME_' . $lang_id, 'CONF_SITE_OWNER_' . $lang_id];
+            $colMd12Arr = ['CONF_COOKIES_TEXT_' . $lang_id];
         }
+        $class = 'card-tabs';
         break;
     case Configurations::FORM_LOCAL:
-        if (1 > $lang_id) {
-            $colMd6Arr = ['CONF_DEFAULT_SITE_LANG', 'CONF_TIMEZONE', 'CONF_COUNTRY', 'CONF_ZIP_CODE', 'CONF_STATE', 'CONF_DATE_FORMAT', 'CONF_DEFAULT_CURRENCY_SEPARATOR', 'CONF_FAQ_PAGE_MAIN_CATEGORY', 'CONF_SELLER_PAGE_MAIN_CATEGORY', 'CONF_CURRENCY'];
-        } else {
-            $colMd6Arr = ['lang_id', 'CONF_CITY_' . $lang_id, 'CONF_ADDRESS_' . $lang_id, 'CONF_ADDRESS_LINE_2_' . $lang_id];
-        }
+        $class = 'card-tabs';
         break;
     case Configurations::FORM_SEO:
         if (1 > $lang_id) {
-            $colMd6Arr = ['CONF_TWITTER_USERNAME', 'googleFileVerification', 'google_file_verification', 'bingFileVerification', 'bing_file_verification'];
+            $colMd12Arr = ['CONF_LANG_SPECIFIC_URL', 'CONF_SITE_TRACKER_CODE', 'CONF_SITE_ROBOTS_TXT', 'seperatorGoogleTag', 'googleTagManager', 'CONF_GOOGLE_TAG_MANAGER_HEAD_SCRIPT', 'CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT', 'googlewebmaster', 'hotjar', 'CONF_HOTJAR_HEAD_SCRIPT', 'schemacode', 'CONF_DEFAULT_SCHEMA_CODES_SCRIPT'];
         }
+
         break;
     case Configurations::FORM_USER_ACCOUNT:
         if (1 > $lang_id) {
-            $colMd6Arr = ['CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', 'CONF_MIN_WITHDRAW_LIMIT', 'CONF_MAX_WITHDRAW_LIMIT', 'CONF_MIN_INTERVAL_WITHDRAW_REQUESTS'];
+            $colMd12Arr = ['Withdrawal'];
         }
         break;
     case Configurations::FORM_CART_WISHLIST:
+
         if (1 > $lang_id) {
-            $colMd6Arr = ['CONF_REMINDER_INTERVAL_PRODUCTS_IN_CART', 'CONF_SENT_CART_REMINDER_COUNT', 'CONF_REMINDER_INTERVAL_PRODUCTS_IN_WISHLIST', 'CONF_SENT_WISHLIST_REMINDER_COUNT'];
+            $colMd12Arr = ['Cart', 'Wishlist'];
         }
         break;
     case Configurations::FORM_CHECKOUT_PROCESS:
         if (1 > $lang_id) {
-            $colMd6Arr = ['CONF_MIN_COD_ORDER_LIMIT', 'CONF_MAX_COD_ORDER_LIMIT', 'CONF_COD_MIN_WALLET_BALANCE', 'CONF_TIME_SLOT_ADDITION', 'CONF_DEFAULT_ORDER_STATUS', 'CONF_DEFAULT_PAID_ORDER_STATUS', 'CONF_DEFAULT_APPROVED_ORDER_STATUS', 'CONF_DEFAULT_INPROCESS_ORDER_STATUS', 'CONF_DEFAULT_SHIPPING_ORDER_STATUS', 'CONF_DEFAULT_DEIVERED_ORDER_STATUS', 'CONF_DEFAULT_CANCEL_ORDER_STATUS', 'CONF_RETURN_REQUEST_ORDER_STATUS', 'CONF_RETURN_REQUEST_WITHDRAWN_ORDER_STATUS', 'CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS', 'CONF_PAY_AT_STORE_ORDER_STATUS', 'CONF_COD_ORDER_STATUS', 'CONF_PICKUP_READY_ORDER_STATUS', 'CONF_DEFAULT_COMPLETED_ORDER_STATUS', 'CONF_DEFAULT_RETURN_AGE'];
+            $colMd12Arr = ['Checkout', 'pickup', 'cprocess', 'CONF_VENDOR_ORDER_STATUS', 'CONF_BUYER_ORDER_STATUS', 'CONF_PROCESSING_ORDER_STATUS', 'CONF_COMPLETED_ORDER_STATUS', 'CONF_REVIEW_READY_ORDER_STATUS', 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', 'CONF_ENABLE_DIGITAL_DOWNLOADS', 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES', 'CONF_BADGE_COUNT_ORDER_STATUS', 'CONF_PRODUCT_IS_ON_ORDER_STATUSES'];
+        }
+
+        break;
+    case Configurations::FORM_AFFILIATE:
+        if (1 > $lang_id) {
+            $colMd12Arr = ['CONF_AFFILIATES_REQUIRES_APPROVAL'];
+        }
+        break;
+    case Configurations::FORM_REWARD_POINTS:
+        if (1 > $lang_id) {
+            $colMd12Arr = ['Birthday_Rewards', 'CONF_ENABLE_BIRTHDAY_DISCOUNT_REWARDS', 'BuyingAnYear'];
+        }
+        break;
+    case Configurations::FORM_LIVE_CHAT:
+        if (1 > $lang_id) {
+            $colMd12Arr = ['CONF_LIVE_CHAT_CODE'];
+        }
+        break;
+
+    case Configurations::FORM_EMAIL:
+        if (1 > $lang_id) {
+            $colMd12Arr = ['sendmailhtml', 'CONF_ADDITIONAL_ALERT_EMAILS'];
+        }
+        $class = 'card-tabs';
+        break;
+    case Configurations::FORM_SERVER:
+        if (0 < $lang_id) {
+            $colMd12Arr = ['CONF_MAINTENANCE_TEXT_' . $lang_id];
+        }
+        $class = 'card-tabs';
+        break;
+    case Configurations::FORM_DISCOUNT:
+        if (1 > $lang_id) {
+            $colMd12Arr = ['firstTimeDiscount'];
+        }
+        break;
+    case Configurations::FORM_SHARING:
+        if (1 > $lang_id) {
+            $colMd12Arr = ['ShareAndEarn'];
+        }
+        break;
+    case Configurations::FORM_THIRD_PARTY_API:
+        if (1 > $lang_id) {
+            $colMd12Arr = ['Engagespot', 'CONF_ENGAGESPOT_PUSH_NOTIFICATION_CODE', 'GoogleMap', 'CONF_GOOGLEMAP_API_KEY', 'Newsletter', 'CONF_AWEBER_SIGNUP_CODE', 'Analytics', 'accessToken', 'seperator', 'GoogleReCaptcha', 'Translatorseperator', 'JWPlayerseperator', 'CONF_JW_PLAYER_KEY'];
+        }
+        break;
+    case Configurations::FORM_REFERAL:
+        if (1 > $lang_id) {
+            $colMd12Arr = ['RewardsOnRegistration', 'RewardsonPurchase'];
+        }
+        break;
+    case Configurations::FORM_MEDIA:
+        if (1 > $lang_id) {
+            $colMd12Arr = ['MediaGrids'];
+        } else {
+            $colMd12Arr = ['MediaGrids'];
         }
         break;
 
     case Configurations::FORM_PRODUCT:
         if (1 > $lang_id) {
-            $colMd6Arr = ['CONF_FULFILLMENT_TYPE', 'CONF_ITEMS_PER_PAGE_CATALOG', 'CONF_DEFAULT_GEO_LOCATION', 'CONF_GEO_DEFAULT_COUNTRY', 'CONF_GEO_DEFAULT_STATE', 'CONF_GEO_DEFAULT_ZIPCODE'];
+            $colMd12Arr = ['geolocation', 'CONF_PRODUCT_GEO_LOCATION', 'CONF_LOCATION_LEVEL', 'CONF_DEFAULT_GEO_LOCATION'];
         }
 
         $geoFld = $frm->getField('CONF_PRODUCT_GEO_LOCATION');
@@ -127,62 +183,70 @@ if (!empty($colMd6Arr)) {
     }
 }
 
+if (!empty($colMd12Arr)) {
+    foreach ($colMd12Arr as $val) {
+        $fld = $frm->getField($val);
+        $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+    }
+}
+
 ?>
-<div class="card-head">
-    <div class="card-head-label flex-grow-1">
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <h3 class="card-head-title">
-                    <?php echo $tabs[$frmType] . ' ' . Labels::getLabel('LBL_SETTINGS', $siteLangId); ?>
-                </h3>
-            </div>
+<div class="card <?php echo $class; ?>">
+    <div class="card-head">
+        <div class="card-head-label">
+            <h3 class="card-head-title">
+                <?php echo $tabs[$frmType] . ' ' . Labels::getLabel('LBL_SETTINGS', $siteLangId); ?>
+            </h3>
+
         </div>
-    </div>
-</div>
-<div class="card-body">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="card-head-toolbar">
             <?php if ($dispLangTab && $frmType != Configurations::FORM_MEDIA && $frmType != Configurations::FORM_SHARING) { ?>
-                <div class="form-section-head mt-0">
-                    <nav class="nav nav-tabs navTabsJs">
-                        <a class="nav-link <?php echo ($lang_id == 0) ? 'active' : ''; ?>" href="javascript:void(0)" onClick="getForm(<?php echo $frmType; ?>)">
-                            <?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?>
-                        </a>
 
-                        <a class="nav-link <?php echo (0 < $lang_id ? 'active' : '') ?>" href="javascript:void(0);" onClick="getLangForm(<?php echo $frmType; ?>, <?php echo FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1); ?>)">
-                            <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
-                        </a>
-                    </nav>
-                </div>
+                <nav class="nav nav-tabs navTabsJs">
+                    <a class="nav-link <?php echo ($lang_id == 0) ? 'active' : ''; ?>" href="javascript:void(0)" onClick="getForm(<?php echo $frmType; ?>)">
+                        <?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?>
+                    </a>
+
+                    <a class="nav-link <?php echo (0 < $lang_id ? 'active' : '') ?>" href="javascript:void(0);" onClick="getLangForm(<?php echo $frmType; ?>, <?php echo FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1); ?>)">
+                        <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
+                    </a>
+                </nav>
+
             <?php } ?>
-            <div class="form-section-body formBodyJs">
-                <?php echo $frm->getFormHtml(); ?>
-                <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-                    <div id="map" style="height:500px"></div>
-                <?php } ?>
-            </div>
         </div>
     </div>
-</div>
-<div class="card-foot">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="row">
-                <div class="col">
-                    <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_RESET', $siteLangId), 'button', 'btn_reset_form', 'btn btn-outline-brand resetModalFormJs'); ?>
-                </div>
-                <div class="col-auto">
-                    <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_SAVE', $siteLangId), 'button', 'btn_save', 'btn btn-brand gb-btn gb-btn-primary submitBtnJs'); ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
+
+    <div class="card-body">
+        <div class="formBodyJs">
+            <?php echo str_replace('<i class="input-helper"></i>', '<span></span>', $frm->getFormHtml()); ?>
+            <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
+                <div id="map" style="height:500px"></div>
+            <?php } ?>
+        </div>
+    </div>
+
+    <div class="card-foot">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col">
+                        <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_RESET', $siteLangId), 'button', 'btn_reset_form', 'btn btn-outline-brand resetModalFormJs'); ?>
+                    </div>
+                    <div class="col-auto">
+                        <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_SAVE', $siteLangId), 'button', 'btn_save', 'btn btn-brand gb-btn gb-btn-primary submitBtnJs'); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script language="javascript">
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-        getStatesByCountryCode($("#geo_country_code").val(), '<?php echo FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1); ?>', '#geo_state_code', 'state_code');
+        getStatesByCountryCode($("#geo_country_code").val(),
+            '<?php echo FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1); ?>', '#geo_state_code',
+            'state_code');
     <?php } ?>
 
     $(document).on('change', '.prefRatio-js', function() {

@@ -125,7 +125,7 @@
                                                         <div class="form-group">
                                                             <label class="label">Status</label>
                                                             <select data-field-caption="Status"
-                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                
                                                                 name="status">
                                                                 <option value="-1">Does not matter</option>
                                                                 <option value="0">Withdrawal Request Pending
@@ -158,7 +158,7 @@
                                                                 data-field-caption="Date From"
                                                                 id="date_from_1630320541_71"
                                                                 data-fatdateformat="yy-mm-dd"
-                                                                data-fatreq="{&quot;required&quot;:false}" type="text"
+                                                                 type="text"
                                                                 name="date_from" value="">
 
 
@@ -171,7 +171,7 @@
                                                                 class="field--calender fld-date hasDatepicker"
                                                                 data-field-caption="Date To" id="date_to_1630320541_93"
                                                                 data-fatdateformat="yy-mm-dd"
-                                                                data-fatreq="{&quot;required&quot;:false}" type="text"
+                                                                 type="text"
                                                                 name="date_to" value="">
 
 
@@ -182,7 +182,7 @@
                                                             <label class="label">User
                                                                 Type</label>
                                                             <select data-field-caption="User Type"
-                                                                data-fatreq="{&quot;required&quot;:false}" name="type">
+                                                                 name="type">
                                                                 <option value="-1" selected="selected">Does Not
                                                                     Matter</option>
                                                                 <option value="1">Buyer</option>
@@ -199,22 +199,21 @@
                                 </form>
                                 <div class="card">
                                     <div class="card-head">
-                                        <h3 class="card-head-label">
-                                            <span class="card-head-title">Catalog Products </span>
+                                        <div class="card-head-label">
+                                            <h3 class="card-head-title">Catalog Products </h3>
                                             <span class="text-muted">Over 500 new products</span>
-                                        </h3>
+                                        </div>
                                         <div class="card-toolbar">
-
+                                            <a href="#" class="btn btn-icon btn-outline-brand btn-add">
+                                                <svg class="svg" width="18" height="18">
+                                                    <use
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
+                                                    </use>
+                                                </svg>
+                                                <span class="">New</span>
+                                            </a>
                                             <ul class="actions">
-                                                <li> <a href="#" class="btn btn-icon btn-light btn-add">
-                                                        <i class="icn">
-                                                            <svg class="svg">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
-                                                                </use>
-                                                            </svg></i>
-                                                        <span>New</span>
-                                                    </a></li>
+                                                <li> </li>
                                                 <li>
                                                     <a class="" href="#" title="">
                                                         <svg class="svg" width="18" height="18">
@@ -833,7 +832,7 @@
                                                             <label class="label required">Language </label>
                                                             <select onchange="addShopLangForm(5, this.value);"
                                                                 data-field-caption="Language"
-                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                
                                                                 name="lang_id">
                                                                 <option value="1" selected="selected">English
                                                                 </option>
@@ -854,7 +853,7 @@
                                                                     aria-describedby="tooltip849482"></i>
                                                             </label>
                                                             <input data-field-caption="Shop Name"
-                                                                data-fatreq="{&quot;required&quot;:true}" type="text"
+                                                                 type="text"
                                                                 name="shop_name" value="Jason's Store">
                                                         </div>
                                                     </div>
@@ -865,7 +864,7 @@
                                                             <label class="label">Shop City</label>
 
                                                             <input data-field-caption="Shop City"
-                                                                data-fatreq="{&quot;required&quot;:false}" type="text"
+                                                                 type="text"
                                                                 name="shop_city" value="phoenix">
                                                         </div>
                                                     </div>
@@ -875,7 +874,7 @@
                                                         <div class="form-group">
                                                             <label class="label">Contact Person</label>
                                                             <input data-field-caption="Contact Person"
-                                                                data-fatreq="{&quot;required&quot;:false}" type="text"
+                                                                 type="text"
                                                                 name="shop_contact_person" value="Jason">
                                                         </div>
                                                     </div>
@@ -886,7 +885,7 @@
                                                             <label class="label">Description</label>
 
                                                             <textarea data-field-caption="Description"
-                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                
                                                                 name="shop_description">Best range of products in the United States</textarea>
 
                                                         </div>

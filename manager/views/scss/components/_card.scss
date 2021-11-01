@@ -54,7 +54,7 @@ $card:'card';
         align-items: center;
         align-content: flex-end;
         .btn-add {
-            margin-#{$end-direction}: 1rem;
+            margin-#{$end-direction}: 2rem;
         }
         >.actions {
             li {
@@ -339,6 +339,7 @@ $card:'card';
     }
     &#{&}-tabs {
         #{$selfHead} {
+            align-items: center;
             padding-top: 0;
             padding-bottom: 0;
             #{$selfHead}-toolbar {

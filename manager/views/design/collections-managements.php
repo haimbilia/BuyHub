@@ -79,18 +79,17 @@
 
                                 <div class="card">
                                     <div class="card-head">
-                                        <h3 class="card-head-label">
-                                            <span class="card-head-title">Collections Managements</span>
-                                        </h3>
+                                        <div class="card-head-label">
+                                            <h3 class="card-head-title">Collections Managements</h3>
+                                        </div>
                                         <div class="card-toolbar">
                                             <ul class="actions">
                                                 <li> <a href="#" class="btn btn-icon btn-light btn-add">
-                                                        <i class="icn">
-                                                            <svg class="svg">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
-                                                                </use>
-                                                            </svg></i>
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
+                                                            </use>
+                                                        </svg>
                                                         <span>New</span>
                                                     </a></li>
                                                 <li>
@@ -826,7 +825,7 @@
                                                                     aria-describedby="tooltip849482"></i>
                                                             </label>
                                                             <input data-field-caption="Shop Name"
-                                                                data-fatreq="{&quot;required&quot;:true}" type="text"
+                                                                 type="text"
                                                                 name="shop_name" value="Jason's Store">
                                                         </div>
                                                     </div>
@@ -837,7 +836,7 @@
                                                             <label class="label">Shop City</label>
 
                                                             <input data-field-caption="Shop City"
-                                                                data-fatreq="{&quot;required&quot;:false}" type="text"
+                                                                 type="text"
                                                                 name="shop_city" value="phoenix">
                                                         </div>
                                                     </div>
@@ -847,7 +846,7 @@
                                                         <div class="form-group">
                                                             <label class="label">Contact Person</label>
                                                             <input data-field-caption="Contact Person"
-                                                                data-fatreq="{&quot;required&quot;:false}" type="text"
+                                                                 type="text"
                                                                 name="shop_contact_person" value="Jason">
                                                         </div>
                                                     </div>
@@ -858,7 +857,7 @@
                                                             <label class="label">Description</label>
 
                                                             <textarea data-field-caption="Description"
-                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                
                                                                 name="shop_description">Best range of products in the United States</textarea>
 
                                                         </div>
@@ -872,8 +871,7 @@
                                                             class="btn btn-outline-brand">Cancel</button>
                                                     </div>
                                                     <div class="col-auto">
-                                                        <button type="submit"
-                                                            class="btn btn-brand  ">Update</button>
+                                                        <button type="submit" class="btn btn-brand  ">Update</button>
                                                     </div>
                                                 </div>
                                             </div>

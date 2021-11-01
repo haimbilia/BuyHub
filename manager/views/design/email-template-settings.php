@@ -111,31 +111,11 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="label d-block">Logo</label>
-                                                <div class="dropzone dropzone-default dz-clickable" id="dropzone_1">
+                                                <div class="dropzone">
                                                     <div class="upload_cover">
-                                                        <!-- <div class="img--container uploded__img">
-                                                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/banners/"
-                                                            title="">
-                                                        <div class="upload__action">
-                                                            <button type="button"><svg>
-                                                                    <use
-                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#delete-icon">
-                                                                    </use>
-                                                                </svg></button>
-                                                            <button type="button">
-                                                                <svg>
-                                                                    <use
-                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#edit-icon">
-                                                                    </use>
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-                                                    </div> -->
-                                                        <div clas="img--container  ">
-                                                            <div class="file-upload">
-                                                                <img
-                                                                    src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
-                                                            </div>
+                                                        <div class="file-upload">
+                                                            <img
+                                                                src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -390,13 +370,7 @@
                     }
                 });
                 </script>
-                <script>
-                $(document).ready(function() {
-                    $(".upload_cover").hover(function() {
-                        $('.file-upload').toggleClass("isactive");
-                    });
-                });
-                </script>
+
             </div>
         </div>
     </body>

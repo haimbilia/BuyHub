@@ -1110,7 +1110,7 @@ class AttachedFile extends MyAppModel
         ];
         //if (!in_array($fileType, $allowedFileTypes) && (!$fileType || !$recordId)) {
         // Remove condition of $recordId for handle all data of add/edit product category in single form
-        if (!in_array($fileType, $allowedFileTypes) || 1 > $fileType) {
+        if (!in_array($fileType, $allowedFileTypes) && !$fileType) {
             $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
             return false;
         }

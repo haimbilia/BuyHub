@@ -319,14 +319,14 @@
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label class="label">
-                                                                        <span class="required">Minimum COD Order Total
+                                                                        <span class="required"> COD Order Total
                                                                         </span>
                                                                         <i class="fas fa-exclamation-circle ms-2 fs-7"
                                                                             data-toggle="tooltip" title=""
                                                                             data-original-title="This Is The
-                                                                        Minimum Cash On Delivery Order
+                                                                         Cash On Delivery Order
                                                                         Total, Eligible For COD Payments." aria-label="This Is The
-                                                                        Minimum Cash On Delivery Order
+                                                                         Cash On Delivery Order
                                                                         Total, Eligible For COD Payments.">
                                                                         </i>
                                                                     </label>
@@ -356,7 +356,7 @@
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                    <label class="label required"> Minimum Wallet
+                                                                    <label class="label required">Wallet
                                                                         Balance
 
                                                                     </label>
@@ -392,105 +392,136 @@
                                                     <h3 class="form-section-head">Checkout Process</h3>
                                                     <div class="form-section-body">
                                                         <div class="row form-group">
-                                                            <div class="col">
-                                                                <label class="label"> Activate Live Payment Transaction
-                                                                    Mode
-                                                                    <i class="fas fa-exclamation-circle ms-2 fs-7"
-                                                                        data-toggle="tooltip"
-                                                                        title="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
-                                                                        data-original-title="Lorem ipsum dolor sit amet consectetur, adipisicing elit.">
-                                                                    </i>
+                                                            <div class="col-md-6">
 
+                                                                <label class="setting-widget">
+                                                                    <div class="setting-widget-data">
+                                                                        <span class="setting-widget-tittle">
+                                                                            Activate
+                                                                            Live
+                                                                            Payment
+                                                                            Transaction
+                                                                            Mode</span>
+                                                                        <span class="form-text text-muted">
+                                                                            Lorem ipsum,
+                                                                            dolor sit amet consectetur adipisicing
+                                                                            elit.
+                                                                        </span>
+                                                                    </div>
+                                                                    <span class="switch switch-sm switch-icon">
+                                                                        <input type="checkbox" name="" checked>
+                                                                        <span></span>
+                                                                    </span>
+                                                                </label>
 
+                                                            </div>
+                                                            <div class="col-md-6">
+
+                                                                <label class="setting-widget">
+                                                                    <div class="setting-widget-data">
+                                                                        <span class="setting-widget-tittle">
+                                                                            Use Manual Shipping Rates. Instead
+                                                                            Of Third Party.</span>
+                                                                        <span class="form-text text-muted">
+                                                                            Lorem ipsum,
+                                                                            dolor sit amet consectetur adipisicing
+                                                                            elit.
+                                                                        </span>
+                                                                    </div>
+                                                                    <span class="switch switch-sm switch-icon">
+                                                                        <input type="checkbox" name="" checked>
+                                                                        <span></span>
+                                                                    </span>
                                                                 </label>
                                                             </div>
-                                                            <div class="col-auto">
-                                                                <label class="switch switch-sm switch-icon">
-                                                                    <input type="checkbox" name="" checked>
-                                                                    <span></span>
-                                                                </label>
 
-                                                            </div>
+
                                                         </div>
-
                                                         <div class="row form-group">
-                                                            <div class="col">
-                                                                <label class="label">Use Manual Shipping Rates. Instead
-                                                                    Of Third Party. <i
-                                                                        class="fas fa-exclamation-circle ms-2 fs-7"
-                                                                        data-toggle="tooltip"
-                                                                        title="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
-                                                                        data-original-title="Lorem ipsum dolor sit amet consectetur, adipisicing elit.">
-                                                                    </i>
+                                                            <div class="col-md-6">
 
+                                                                <label class="setting-widget">
+                                                                    <div class="setting-widget-data">
+                                                                        <span class="setting-widget-tittle">
+                                                                            Shipped By Admin Only
+                                                                        </span>
+                                                                        <span class="form-text text-muted">
+                                                                            Lorem ipsum,
+                                                                            dolor sit amet consectetur adipisicing
+                                                                            elit.
+                                                                        </span>
+                                                                    </div>
+                                                                    <span class="switch switch-sm switch-icon">
+                                                                        <input type="checkbox" name="" checked>
+                                                                        <span></span>
+                                                                    </span>
+                                                                </label>
+
+                                                            </div>
+                                                            <div class="col-md-6">
+
+                                                                <label class="setting-widget">
+                                                                    <div class="setting-widget-data">
+                                                                        <span class="setting-widget-tittle">
+                                                                            Tax After Discounts </span>
+                                                                        <span class="form-text text-muted">
+                                                                            Lorem ipsum,
+                                                                            dolor sit amet consectetur adipisicing
+                                                                            elit.
+                                                                        </span>
+                                                                    </div>
+                                                                    <span class="switch switch-sm switch-icon">
+                                                                        <input type="checkbox" name="" checked>
+                                                                        <span></span>
+                                                                    </span>
                                                                 </label>
                                                             </div>
-                                                            <div class="col-auto">
-                                                                <label class="switch switch-sm switch-icon">
-                                                                    <input type="checkbox" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </div>
+
+
                                                         </div>
-
                                                         <div class="row form-group">
-                                                            <div class="col">
-                                                                <label class="label">Tax Collected By Seller </label>
-                                                            </div>
-                                                            <div class="col-auto">
-                                                                <label class="switch switch-sm switch-icon">
-                                                                    <input type="checkbox" name="" checked>
-                                                                    <span></span>
+                                                            <div class="col-md-6">
+
+                                                                <label class="setting-widget">
+                                                                    <div class="setting-widget-data">
+                                                                        <span class="setting-widget-tittle">
+                                                                            Tax Collected By Seller</span>
+                                                                        <span class="form-text text-muted">
+                                                                            Lorem ipsum,
+                                                                            dolor sit amet consectetur adipisicing
+                                                                            elit.
+                                                                        </span>
+                                                                    </div>
+                                                                    <span class="switch switch-sm switch-icon">
+                                                                        <input type="checkbox" name="" checked>
+                                                                        <span></span>
+                                                                    </span>
                                                                 </label>
+
+                                                            </div>
+                                                            <div class="col-md-6">
+
+                                                                <label class="setting-widget">
+                                                                    <div class="setting-widget-data">
+                                                                        <span class="setting-widget-tittle">
+                                                                            Return Shipping Charges To
+                                                                            Customer</span>
+                                                                        <span class="form-text text-muted">
+                                                                            Lorem ipsum,
+                                                                            dolor sit amet consectetur adipisicing
+                                                                            elit.
+                                                                        </span>
+                                                                    </div>
+                                                                    <span class="switch switch-sm switch-icon">
+                                                                        <input type="checkbox" name="" checked>
+                                                                        <span></span>
+                                                                    </span>
+                                                                </label>
+
+
                                                             </div>
                                                         </div>
-
-
-                                                        <div class="row form-group">
-                                                            <div class="col">
-                                                                <label class="label">Tax After Discounts </label>
-                                                            </div>
-                                                            <div class="col-auto">
-                                                                <label class="switch switch-sm switch-icon">
-                                                                    <input type="checkbox" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-
-
-                                                        <div class="row form-group">
-                                                            <div class="col">
-                                                                <label class="label">Return Shipping Charges To Customer
-                                                                </label>
-                                                            </div>
-                                                            <div class="col-auto">
-                                                                <label class="switch switch-sm switch-icon">
-                                                                    <input type="checkbox" name="" checked>
-                                                                    <span></span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-
-
-                                                        <div class="row form-group">
-                                                            <div class="col">
-                                                                <label class="label"> Shipped By Admin Only
-                                                                </label>
-                                                            </div>
-                                                            <div class="col-auto">
-                                                                <label class="switch switch-sm switch-icon">
-                                                                    <input type="checkbox" name="">
-                                                                    <span></span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-
-
                                                     </div>
-
-
-                                                    <div class="separator separator-dashed my-5"></div>
                                                     <h3 class="form-section-head">Section heading goes here</h3>
                                                     <div class="form-section-body">
                                                         <div class="row form-group">
@@ -499,7 +530,7 @@
                                                                 <div class="">
                                                                     <select
                                                                         data-field-caption="Default Child Order Status"
-                                                                        data-fatreq="{&quot;required&quot;:false}"
+                                                                        
                                                                         name="CONF_DEFAULT_ORDER_STATUS">
                                                                         <option value="1" selected="selected">Payment
                                                                             Pending</option>
@@ -525,7 +556,7 @@
 
                                                                     <select
                                                                         data-field-caption="Default Paid Order Status"
-                                                                        data-fatreq="{&quot;required&quot;:false}"
+                                                                        
                                                                         name="CONF_DEFAULT_PAID_ORDER_STATUS">
                                                                         <option value="1">Payment Pending
                                                                         </option>
@@ -559,7 +590,7 @@
                                                                 <div>
                                                                     <select
                                                                         data-field-caption="Default Approved Order Status"
-                                                                        data-fatreq="{&quot;required&quot;:false}"
+                                                                        
                                                                         name="CONF_DEFAULT_APPROVED_ORDER_STATUS">
                                                                         <option value="1">Payment Pending
                                                                         </option>
@@ -591,7 +622,7 @@
                                                                 <div>
                                                                     <select
                                                                         data-field-caption="Status Used By System To Mark Order As Completed"
-                                                                        data-fatreq="{&quot;required&quot;:false}"
+                                                                        
                                                                         name="CONF_DEFAULT_COMPLETED_ORDER_STATUS">
                                                                         <option value="1" selected="selected">Payment
                                                                             Pending</option>
@@ -621,7 +652,7 @@
                                                         </div>
 
                                                         <div class="row form-group">
-                                                            <div class="col-md-12">
+                                                            <div class="col-md-6">
                                                                 <div class="field-set">
                                                                     <div class="caption-wraper"><label
                                                                             class="label">Default Delivered Order
@@ -629,7 +660,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Default Delivered Order Status"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_DEFAULT_DEIVERED_ORDER_STATUS">
                                                                                 <option value="1">Payment Pending
                                                                                 </option>
@@ -655,9 +686,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row form-group">
-                                                            <div class="col-md-12">
+                                                            <div class="col-md-6">
                                                                 <div class="field-set">
                                                                     <div class="caption-wraper"><label
                                                                             class="label">Default Cancelled Order
@@ -665,7 +694,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Default Cancelled Order Status"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_DEFAULT_CANCEL_ORDER_STATUS">
                                                                                 <option value="1">Payment Pending
                                                                                 </option>
@@ -692,8 +721,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
                                                         <div class="row form-group">
-                                                            <div class="col-md-12">
+                                                            <div class="col-md-6">
                                                                 <div class="field-set">
                                                                     <div class="caption-wraper"><label
                                                                             class="label">Return Requested Order
@@ -701,7 +731,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Return Requested Order Status"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_RETURN_REQUEST_ORDER_STATUS">
                                                                                 <option value="1">Payment Pending
                                                                                 </option>
@@ -726,9 +756,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row form-group">
-                                                            <div class="col-md-12">
+                                                            <div class="col-md-6">
                                                                 <div class="field-set">
                                                                     <div class="caption-wraper"><label
                                                                             class="label">Return Request Withdrawn
@@ -736,7 +764,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Return Request Withdrawn Order Status"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_RETURN_REQUEST_WITHDRAWN_ORDER_STATUS">
                                                                                 <option value="1">Payment Pending
                                                                                 </option>
@@ -763,8 +791,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
                                                         <div class="row form-group">
-                                                            <div class="col-md-12">
+                                                            <div class="col-md-6">
                                                                 <div class="field-set">
                                                                     <div class="caption-wraper"><label
                                                                             class="label">Return Request Approved
@@ -772,7 +801,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Return Request Approved Order Status"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS">
                                                                                 <option value="1">Payment Pending
                                                                                 </option>
@@ -797,9 +826,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row form-group">
-                                                            <div class="col-md-12">
+                                                            <div class="col-md-6">
                                                                 <div class="field-set">
                                                                     <div class="caption-wraper"><label class="label">Pay
                                                                             At Store Order
@@ -807,7 +834,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Pay At Store Order Status"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_PAY_AT_STORE_ORDER_STATUS">
                                                                                 <option value="1">Payment Pending
                                                                                 </option>
@@ -834,8 +861,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
                                                         <div class="row form-group">
-                                                            <div class="col-md-12">
+                                                            <div class="col-md-6">
                                                                 <div class="field-set">
                                                                     <div class="caption-wraper"><label
                                                                             class="label">Cash On Delivery Order
@@ -843,7 +871,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Cash On Delivery Order Status"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_COD_ORDER_STATUS">
                                                                                 <option value="1">Payment Pending
                                                                                 </option>
@@ -869,9 +897,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row form-group">
-                                                            <div class="col-md-12">
+                                                            <div class="col-md-6">
                                                                 <div class="field-set">
                                                                     <div class="caption-wraper"><label
                                                                             class="label">Ready For Pickup Order
@@ -879,7 +905,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Ready For Pickup Order Status"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_PICKUP_READY_ORDER_STATUS">
                                                                                 <option value="1">Payment Pending
                                                                                 </option>
@@ -906,8 +932,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
                                                         <div class="row form-group">
-                                                            <div class="col-md-12">
+                                                            <div class="col-md-6">
                                                                 <div class="field-set">
                                                                     <div class="caption-wraper"><label
                                                                             class="label">Status Used By System To
@@ -915,7 +942,7 @@
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover"><select
                                                                                 data-field-caption="Status Used By System To Mark Order As Completed"
-                                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                                
                                                                                 name="CONF_DEFAULT_COMPLETED_ORDER_STATUS">
                                                                                 <option value="1" selected="selected">
                                                                                     Payment Pending</option>
@@ -942,9 +969,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row form-group">
-                                                            <div class="col-md-12">
+                                                            <div class="col-md-6">
                                                                 <div class="field-set">
                                                                     <div class="caption-wraper"><label
                                                                             class="label">Default Return Age
@@ -964,15 +989,8 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
                                                     </div>
-
-
-
-
-
-
-
-
 
                                                 </form>
 
@@ -988,8 +1006,7 @@
                                                             class="btn btn-outline-brand">Cancel</button>
                                                     </div>
                                                     <div class="col-auto">
-                                                        <button type="submit"
-                                                            class="btn btn-brand  ">Update</button>
+                                                        <button type="submit" class="btn btn-brand  ">Update</button>
                                                     </div>
                                                 </div>
                                             </div>

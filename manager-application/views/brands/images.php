@@ -1,35 +1,21 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php if (!empty($images)) { ?>
-    <ul class="grids--onethird" id="<?php if ($canEdit) { ?>sortable<?php } ?>">
-        <?php
-        $count = 1;
-        foreach ($images as $afile_id => $row) { 
-            $uploadedTime = AttachedFile::setTimeParam($row['afile_updated_at']);
-            ?>
-            <li id="<?php echo $row['afile_id']; ?>">
-                <div class="logoWrap">
-                    <div class="logothumb">
-                        <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', $imageFunction, array($row['afile_record_id'], $row['afile_lang_id'], "THUMB", $row['afile_id'], $row['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" title="<?php echo $row['afile_name']; ?>" alt="<?php echo $row['afile_name']; ?>">
-                        <?php if ($canEdit) { ?>
-                            <a class="deleteLink white" href="javascript:void(0);" title="Delete <?php echo $row['afile_name']; ?>" onclick="deleteMedia(<?php echo $row['afile_record_id']; ?>, '<?php echo $file_type; ?>', <?php echo $row['afile_id']; ?>);" class="delete">
-                                <i class="ion-close-round"></i>
-                            </a>
-                        <?php } ?>
-                    </div>
-                    <?php if (isset($imgTypesArr) && !empty($imgTypesArr[$row['afile_record_subid']])) {
-                        echo '<small class=""><strong>' . Labels::getLabel('LBL_Type', $siteLangId) . ': </strong> ' . $imgTypesArr[$row['afile_record_subid']] . '</small><br/>';
-                    }
-
-                    $lang_name = Labels::getLabel('LBL_All', $siteLangId);
-                    if ($row['afile_lang_id'] > 0) {
-                        $lang_name = $languages[$row['afile_lang_id']]; ?>
-                    <?php } ?>
-                    <small class="">
-                        <strong><?php echo Labels::getLabel('LBL_Language', $siteLangId); ?>:</strong> <?php echo $lang_name; ?>
-                    </small>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
+?>
+    <div class="upload__files">
+        <ul class="upload__list">
+            <li class="upload__list-item" id="<?php echo $image['afile_id']; ?>">
+                <div class="media">
+                    <?php $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']); ?>
+                    <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', $imageFunction, array($image['afile_record_id'], $image['afile_lang_id'], "THUMB", $image['afile_id'], $image['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>">
                 </div>
+                <div class="title"><?php echo $image['afile_name']; ?></div>
+                <?php if ($canEdit) { ?>
+                    <div class="action">
+                        <a href="javascript:0;" onclick="deleteMedia(<?php echo $image['afile_record_id']; ?>, '<?php echo $file_type; ?>', <?php echo $image['afile_id']; ?>,<?php echo $image['afile_lang_id']; ?>, <?php echo $image['afile_screen']; ?>);">
+                        </a>
+                    </div>
+                <?php } ?>
             </li>
-        <?php $count++;
-        } ?>
-    </ul>
+        </ul>
+    </div>
 <?php } ?>

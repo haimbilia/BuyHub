@@ -459,6 +459,11 @@ class ImageController extends FatController
                 $h = 61;
                 AttachedFile::displayImage($image_name, $w, $h, $default_image);
                 break;
+            case 'THUMB':
+                $w = 61;
+                $h = 61;
+                AttachedFile::displayImage($image_name, $w, $h, $default_image);
+                break;    
             case 'COLLECTION_PAGE':
                 AttachedFile::displayOriginalImage($image_name, $default_image);
                 break;
@@ -494,8 +499,8 @@ class ImageController extends FatController
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'THUMB':
-                $w = 61;
-                $h = 61;
+                $w = 250;
+                $h = 100;;
                 AttachedFile::displayImage($image_name, $w, $h, $default_image);
                 break;
             case 'COLLECTION_PAGE':

@@ -1,10 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="card-body">
     <?php
+    HtmlHelper::formatFormFields($frm, 6);
     $frm->setFormTagAttribute('class', 'form form--settings');
-
-    $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-';
-    $frm->developerTags['fld_default_col'] = 12;
+    $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
     echo $frm->getFormHtml();
     ?>
 </div>
@@ -14,11 +13,6 @@
     </button>
 </div>
 <script>
-    $(document).ready(function() {
-        $('#frmImportExportSetting').find('label').addClass('switch switch-sm switch-icon').removeClass('checkbox');
-        $('#frmImportExportSetting i').replaceWith('<span></span>');
-        $('#frmImportExportSetting').find('.caption-wraper').remove();
-    });
     $(document).on('keyup', '#frmImportExportSetting', function(e) {
         e.stopImmediatePropagation();
         if (e.keyCode === 13) {

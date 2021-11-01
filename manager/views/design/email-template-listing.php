@@ -122,7 +122,7 @@
                                                         <div class="form-group">
                                                             <label class="label">Status</label>
                                                             <select data-field-caption="Status"
-                                                                data-fatreq="{&quot;required&quot;:false}"
+                                                                
                                                                 name="status">
                                                                 <option value="-1">Does not matter</option>
                                                                 <option value="0">Withdrawal Request Pending
@@ -155,7 +155,7 @@
                                                                 data-field-caption="Date From"
                                                                 id="date_from_1630320541_71"
                                                                 data-fatdateformat="yy-mm-dd"
-                                                                data-fatreq="{&quot;required&quot;:false}" type="text"
+                                                                 type="text"
                                                                 name="date_from" value="">
 
 
@@ -168,7 +168,7 @@
                                                                 class="field--calender fld-date hasDatepicker"
                                                                 data-field-caption="Date To" id="date_to_1630320541_93"
                                                                 data-fatdateformat="yy-mm-dd"
-                                                                data-fatreq="{&quot;required&quot;:false}" type="text"
+                                                                 type="text"
                                                                 name="date_to" value="">
 
 
@@ -179,7 +179,7 @@
                                                             <label class="label">User
                                                                 Type</label>
                                                             <select data-field-caption="User Type"
-                                                                data-fatreq="{&quot;required&quot;:false}" name="type">
+                                                                 name="type">
                                                                 <option value="-1" selected="selected">Does Not
                                                                     Matter</option>
                                                                 <option value="1">Buyer</option>
@@ -196,19 +196,19 @@
                                 </form>
                                 <div class="card">
                                     <div class="card-head">
-                                        <h3 class="card-head-label">
-                                            <span class="card-head-title">Email Templates </span>
-                                        </h3>
+                                        <div class="card-head-label">
+                                            <h3 class="card-head-title">Email Templates </h3>
+                                        </div>
                                         <div class="card-toolbar">
 
                                             <ul class="actions">
                                                 <li> <a href="#" class="btn btn-icon btn-light btn-add">
-                                                        <i class="icn">
-                                                            <svg class="svg">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
-                                                                </use>
-                                                            </svg></i>
+
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                            </use>
+                                                        </svg>
                                                         <span>New</span>
                                                     </a></li>
                                                 <li>
@@ -760,7 +760,7 @@
                                                         <div class="form-group">
                                                             <label class="label required">Template Name </label>
                                                             <input data-field-caption="template Name"
-                                                                data-fatreq="{&quot;required&quot;:true}" type="text"
+                                                                 type="text"
                                                                 name="template_name"
                                                                 value="Abandoned Cart Deleted Discount Notification">
                                                         </div>
@@ -778,7 +778,7 @@
                                                                     aria-describedby="tooltip849482"></i>
                                                             </label>
                                                             <input data-field-caption="email subject "
-                                                                data-fatreq="{&quot;required&quot;:true}" type="text"
+                                                                 type="text"
                                                                 name="subject_name"
                                                                 value="Verification link for changing your email on {websiteName}">
                                                         </div>

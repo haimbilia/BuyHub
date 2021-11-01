@@ -110,7 +110,7 @@ foreach ($arrListing as $sn => $row) {
                 $htm = '<span class="switch switch-sm switch-icon">
                                     <label>
                                         <input type="checkbox" id="' . $row['plugin_id'] . '" data-old-status="' . $row[$key] . '" value="' . $row['plugin_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
-                                        <span></span>
+                                        <span class="input-helper"></span>
                                     </label>
                                 </span>';
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
@@ -169,11 +169,11 @@ $frm->addHiddenField('', 'plugin_type', $pluginType);
 $frm->addHiddenField('', 'status'); ?>
 
 <div class="card-head">
-    <h3 class="card-head-label">
-        <span class="card-head-title">
+    <div class="card-head-label">
+        <h3 class="card-head-title">
             <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGINS', $siteLangId), ['{PLUGIN-NAME}' =>  $pluginTypes[$type]]); ?>
-        </span>
-    </h3>
+        </h3>
+    </div>
     <div class="card-toolbar">
         <?php
         $data = [

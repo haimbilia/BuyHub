@@ -12,7 +12,7 @@
             position: absolute;
             opacity: 0;
             ~ {
-                span {
+                .input-helper {
                     display: inline-block;
                     position: relative;
                     //float: left;
@@ -64,7 +64,7 @@
         }
         &:checked {
             ~ {
-                span {
+                .input-helper {
                     &:after {
                         margin-#{$start-direction}: 26px;
                         background-color: $brand-color;
@@ -80,7 +80,7 @@
     input[disabled] {
         cursor: not-allowed;
         ~ {
-            span {
+            .input-helper {
                 &:after {
                     cursor: not-allowed;
                     opacity: 0.7;
@@ -96,7 +96,7 @@
         input {
             &:empty {
                 ~ {
-                    span {
+                    .input-helper {
                         &:after {
                             font-family: "LineAwesome";
                             text-decoration: inherit;
@@ -110,7 +110,7 @@
             }
             &:checked {
                 ~ {
-                    span {
+                    .input-helper {
                         &:after {
                             content: '\f17b';
                         }
@@ -123,7 +123,7 @@
         input {
             &:checked {
                 ~ {
-                    span {
+                    .input-helper {
                         &:after {
                             font-family: "LineAwesome";
                             text-decoration: inherit;
@@ -141,7 +141,7 @@
         input {
             &:empty {
                 ~ {
-                    span {
+                    .input-helper {
                         line-height: 40px;
                         margin: 2px 0;
                         height: 40px;
@@ -169,7 +169,7 @@
             }
             &:checked {
                 ~ {
-                    span {
+                    .input-helper {
                         &:after {
                             margin-left: 34px;
                         }
@@ -182,7 +182,7 @@
         input {
             &:empty {
                 ~ {
-                    span {
+                    .input-helper {
                         line-height: 20px;
                         margin: 2px 0;
                         height: 20px;
@@ -211,7 +211,7 @@
             }
             &:checked {
                 ~ {
-                    span {
+                    .input-helper {
                         &:after {
                             margin-#{$start-direction}: 20px;
                         }
@@ -225,7 +225,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $brand-color;
                             }
@@ -239,7 +239,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $brand-color;
                             }
@@ -257,7 +257,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 border: 2px solid #dee3eb;
                                 background-color: #e8ebf1;
@@ -270,7 +270,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $bg-white;
                             }
@@ -289,7 +289,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $bg-white;
                             }
@@ -303,7 +303,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $bg-white;
                             }
@@ -321,7 +321,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 border: 2px solid #dee3eb;
                                 background-color: #e8ebf1;
@@ -334,7 +334,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $dark-color;
                             }
@@ -353,7 +353,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $dark-color;
                             }
@@ -367,7 +367,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $dark-color;
                             }
@@ -383,7 +383,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 border: 2px solid $dark-color;
                                 background-color: transparent;
@@ -409,7 +409,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $brand-color;
                                 border-color: $brand-color;
@@ -433,7 +433,7 @@
                 }
                 &:disabled {
                     ~ {
-                        span {
+                        .input-helper {
                             &:hover {
                                 &:before {
                                     background-color: transparent;
@@ -454,7 +454,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 border: 2px solid #dee3eb;
                                 background-color: #e8ebf1;
@@ -467,7 +467,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $bg-white;
                             }
@@ -486,7 +486,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $primary-color;
                             }
@@ -500,7 +500,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $primary-color;
                             }
@@ -518,7 +518,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 border: 2px solid #dee3eb;
                                 background-color: #e8ebf1;
@@ -531,7 +531,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $bg-white;
                             }
@@ -550,7 +550,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $success-color;
                             }
@@ -564,7 +564,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $success-color;
                             }
@@ -582,7 +582,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 border: 2px solid #dee3eb;
                                 background-color: #e8ebf1;
@@ -595,7 +595,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $bg-white;
                             }
@@ -614,7 +614,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $info-color;
                             }
@@ -628,7 +628,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $info-color;
                             }
@@ -646,7 +646,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 border: 2px solid #dee3eb;
                                 background-color: #e8ebf1;
@@ -659,7 +659,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $bg-white;
                             }
@@ -678,7 +678,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $warning-color;
                             }
@@ -692,7 +692,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $warning-color;
                             }
@@ -710,7 +710,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 border: 2px solid #dee3eb;
                                 background-color: #e8ebf1;
@@ -723,7 +723,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: #111111;
                             }
@@ -742,7 +742,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $danger-color;
                             }
@@ -756,7 +756,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $danger-color;
                             }
@@ -774,7 +774,7 @@
             input {
                 &:empty {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 border: 2px solid #dee3eb;
                                 background-color: #e8ebf1;
@@ -787,7 +787,7 @@
                 }
                 &:checked {
                     ~ {
-                        span {
+                        .input-helper {
                             &:before {
                                 background-color: $bg-white;
                             }

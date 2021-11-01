@@ -109,7 +109,7 @@ class ShopReportReasonsController extends AdminBaseController
 
     public function form()
     {
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);        
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm();
 
         if (0 < $recordId) {
@@ -139,7 +139,7 @@ class ShopReportReasonsController extends AdminBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $recordId = FatUtility::int($post['reportreason_id']);       
+        $recordId = FatUtility::int($post['reportreason_id']);
 
         $recordObj = new ShopReportReason($recordId);
         $post['reportreason_identifier'] = $post['reportreason_title'];
@@ -233,12 +233,12 @@ class ShopReportReasonsController extends AdminBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), 
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'reportreason_title' => Labels::getLabel('LBL_Reason_Title', $this->siteLangId),
             'action' =>  Labels::getLabel('LBL_ACTION', $this->siteLangId),
         ];
         CacheHelper::create('shopReportReasonTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
-        
+
         return $arr;
     }
 
@@ -256,5 +256,20 @@ class ShopReportReasonsController extends AdminBaseController
     private function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
+    }
+
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_SHOP_REPORT_REASONS', $this->siteLangId)]
+                ];
+        }
+        return $this->nodes;
     }
 }

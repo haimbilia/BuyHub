@@ -17,6 +17,8 @@ $frm->setFormTagAttribute('onsubmit', 'updateProfileInfo(this); return(false);')
 $imageFld = $frm->getField('user_profile_image');
 $imageFld->addFieldTagAttribute('onChange','popupImage(this)');
 $imageFld->addFieldTagAttribute('accept','image/*');
+
+$profileImg  = UrlHelper::generateFileUrl('Image','profileImage',array(AdminAuthentication::getLoggedAdminId(),'croped',true));
 ?>
 <div class="card">
     <div class="card-head">
@@ -25,27 +27,42 @@ $imageFld->addFieldTagAttribute('accept','image/*');
         </div>
     </div>
     <?php echo $frm->getFormTag(); ?>
-    <div class="card-body">  
-        <div class="row form-group">
-            <label class="col-lg-4 col-form-label label"><?php echo $imageFld->getCaption(); ?></label>
-            <div class="col-lg-8">
-                <div class="image-input image-input-outline" data-image-input="true" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/media/avatars/blank.png)">
-                    <div class="image-input-wrapper w-125px h-125px" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/media/avatars/150-26.jpg)">
-                    </div>               
-                    <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-image-input-action="change" data-toggle="tooltip" title="" data-original-title="<?php echo $imageFld->getCaption(); ?>">
-                        <i class="bi bi-pencil-fill fs-7"></i>
-                        <?php echo $imageFld->getHTML(); ?>
-                    </label>   
-                    <?php if ($newImage == false) { ?>
-                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-image-input-action="remove" data-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>" onclick="popupImage();">
-                            <i class="bi bi-x fs-2"></i>
+    <div class="card-body">     
+        <!--begin::Input group-->
+        <div class="row form-group justify-content-center">
+            <div class="col-lg-3 text-center">
+                <!--begin::Image input-->
+                <div class="avatar avatar-outline avatar-circle"
+                    id="user_avatar_3">
+                    <div class="avatar__holder" 
+                        style="background-image: url('<?php echo $profileImg."t=?".time();?>')">
+                    </div>                   
+                   
+                     <?php if(!$isNewImage){ ?>   
+                        <label class="avatar__upload" data-toggle="tooltip"
+                            title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>" onClick="popupImage()">
+                            <i class="fa fa-pen"></i>                          
+                        </label>
+                        <span class="avatar__cancel" data-toggle="tooltip"
+                            title="" data-original-title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onClick="removeProfileImage();">
+                            <i class="fa fa-times"></i>
                         </span>
-                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-image-input-action="remove" data-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onclick="removeProfileImage();">
-                            <i class="bi bi-x fs-2"></i>
-                        </span>
+                    <?php }else{ ?>
+                        <label class="avatar__upload" data-toggle="tooltip"
+                        title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>">
+                            <i class="fa fa-pen"></i>
+                            <?php echo $imageFld->getHTML(); ?>
+                        </label>                    
                     <?php } ?>
-                </div> 
+                </div>
+                <!--end::Image input-->
+                <!--begin::Hint-->
+                <!-- <div class="form-text">Allowed file types: png,
+                    jpg,
+                    jpeg.</div> -->
+                <!--end::Hint-->
             </div>
+            <!--end::Col-->
         </div>
         <div class="row">
             <div class="col-md-6">

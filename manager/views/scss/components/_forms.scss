@@ -71,14 +71,11 @@ $input-color: #474747;
 
 .form {
     .form-group {
-        margin-bottom: 1rem;
-    }
-    .field-set {
-        margin: 0.5rem 0;
+        margin-bottom: 1.8rem;
     }
     .label {
         font-size: 0.8rem;
-        color: $txt-gray;
+        color: $txt-body;
         margin: 0;
         margin-bottom: 5px;
         /*for alignment issue where no content in form lebal - form button and input alignment */
@@ -245,6 +242,10 @@ $input-color: #474747;
     @include input;
 }
 
+.form-select {
+    @include select;
+}
+
 .required {
     &:after {
         content: "*";
@@ -254,10 +255,6 @@ $input-color: #474747;
         padding-#{$start-direction}: .25rem;
         font-weight: 700;
     }
-}
-
-.form-select {
-    @include select;
 }
 
 .input-group-text {
@@ -585,7 +582,7 @@ form.custom-form {
 .checkbox input:checked::before,
 .radio input:checked::before {
     height: 9px;
-    width: 6px;
+    width: 5px;
     position: absolute;
     content: '';
     display: inline-block;
@@ -597,7 +594,7 @@ form.custom-form {
     transform: rotate(45deg);
     left: 50%;
     top: 50%;
-    margin: -6px 0 0 -3px;
+    margin: -6px 0 0 -2px;
 }
 
 .checkbox input:checked::after,

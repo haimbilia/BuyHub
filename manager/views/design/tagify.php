@@ -105,7 +105,7 @@
                                             <div class="form-group form-group-last row">
                                                 <label class="col-form-label col-lg-3 col-sm-12">Basic example</label>
                                                 <div class="col-lg-6 col-md-9 col-sm-12">
-                                                    <input name='tags' value='tag1, tag2' autofocus>
+                                                    <input class="form-tagify" name='tags' value='tag1, tag2' autofocus>
                                                     <div class="form-text text-muted">
                                                         In this example, the field is pre-ocupied with 4 tags. The last
                                                         tag (CSS) has the same value as the first tag, and will be
@@ -122,7 +122,7 @@
                                                 <label class="col-form-label col-lg-3 col-sm-12">Whitelist
                                                     examples</label>
                                                 <div class="col-lg-6 col-md-9 col-sm-12">
-                                                    <input name='tags' value='.NET,PHP' autofocus>
+                                                    <input class="form-tagify" name='tags' value='.NET,PHP' autofocus>
 
                                                     <div class="form-text text-muted">
                                                         In this example, the field is pre-ocupied with 3 tags, and last
@@ -139,8 +139,8 @@
                                                 <label class="col-form-label col-lg-3 col-sm-12">Templates
                                                     examples</label>
                                                 <div class="col-lg-6 col-md-9 col-sm-12">
-                                                    <input id="tagify_5" name="tags3" placeholder="Add users"
-                                                        value="Chris Muller, Lina Nilson">
+                                                    <input class="form-tagify" id="tagify_5" name="tags3"
+                                                        placeholder="Add users" value="Chris Muller, Lina Nilson">
 
                                                     <div class="form-text text-muted">
                                                         Dropdown item and tag templates.
@@ -159,7 +159,7 @@
                                                         aria-placeholder="write some tags"
                                                         class="tagify__input form-control" role="textbox"
                                                         aria-multiline="false" placeholder="enter tag..."></span>
-                                                    <input id="tagify_3" name="tags-outside"
+                                                    <input class="form-tagify" id="tagify_3" name="tags-outside"
                                                         class="tagify tagify--outside" value="css, html, javascript"
                                                         placeholder="write some tags">
 
@@ -175,8 +175,8 @@
                                                 <label class="col-form-label col-lg-3 col-sm-12">Advance
                                                     examples</label>
                                                 <div class="col-lg-6 col-md-9 col-sm-12">
-                                                    <input id="tagify_4" name="tags3" placeholder="Write some tags"
-                                                        pattern="^[A-Za-z_✲ ]{1,15}$"
+                                                    <input class="form-tagify" id="tagify_4" name="tags3"
+                                                        placeholder="Write some tags" pattern="^[A-Za-z_✲ ]{1,15}$"
                                                         value="css, html, javascript, angular, vue, react">
 
                                                     <div class="form-text text-muted">
@@ -211,18 +211,18 @@
             <?php
   include 'includes/footer.php';
 ?>
-            <script src="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.min.js"></script>
-            <script src="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.polyfills.min.js"></script>
 
-            <script>
-            // The DOM element you wish to replace with Tagify
-            var input = document.querySelector('input[name=tags]');
-
-            // initialize Tagify on the above input node reference
-            new Tagify(input);
-            </script>
 
         </div>
+
+        <script src="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.min.js"></script>
+        <script src="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.polyfills.min.js"></script>
+
+        <script>
+        document.querySelectorAll('.form-tagify').forEach(function(input) {
+            new Tagify(input);
+        });
+        </script>
 
     </body>
 

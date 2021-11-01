@@ -9,17 +9,47 @@
     //     margin-bottom: 1rem;
     // }
     &__thumbnail {
+        // --aspect-ratio1: 1/1;
+        // --aspect-ratio2: 4/3;
+        // --aspect-ratio3: 3/4;
+        // --aspect-ratio4: 16/9;
+        width: 100%;
+        max-width: 60px;
+        height: 60px;
+        margin-#{$end-direction}: 1rem;
         position: relative;
-        margin-#{$end-direction}: 15px;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        //background: $bg-placeholder;
+        @include placeholder;
+        // &[data-ratio="1:1"] {
+        //     padding-bottom: calc(100%/(var(--aspect-ratio1)));
+        // }
+        // &[data-ratio="4:3"] {
+        //     padding-bottom: calc(100%/(var(--aspect-ratio2)));
+        // }
+        // &[data-ratio="3:4"] {
+        //     padding-bottom: calc(100%/(var(--aspect-ratio3)));
+        // }
+        // &[data-ratio="16:9"] {
+        //     padding-bottom: calc(100%/(var(--aspect-ratio4)));
+        // }
         img {
-            min-width: 30px;
-            max-width: 80px;
-            border-radius: $radius4;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-height: 100%;
+            //mix-blend-mode: multiply;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            border-radius: $radius-common;
             //border: $border;
             border: none;
-            @include media-breakpoint-down(sm) {
-                max-width: 50px;
-            }
         }
         .product-qty {
             font-size: 0.7rem;
@@ -68,17 +98,17 @@
 }
 
 .sold_by {
-    background-color: $bg-light;
-    border: dashed 1px darken($bg-light, 10);
-    border-radius: 20px;
-    padding: 0.5rem 1rem;
+    // background-color: $bg-light;
+    // border: dashed 1px darken($bg-light, 10);
+    // border-radius: 20px;
+    //padding: 0.5rem 1rem;
+    //max-width: 200px;
     font-weight: 500;
     display: inline-flex;
     align-items: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 200px;
     .svg {
         width: 14px;
         height: 14px;

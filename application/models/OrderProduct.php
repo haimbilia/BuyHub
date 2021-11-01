@@ -47,7 +47,7 @@ class OrderProduct extends MyAppModel
             $srch->joinTable(
                 static::DB_TBL_LANG,
                 'LEFT OUTER JOIN',
-                'op_l.oplang_op_id = o.op_id
+                'op_l.oplang_op_id = op.op_id
 			AND op_l.oplang_lang_id = ' . $langId,
                 'op_l'
             );

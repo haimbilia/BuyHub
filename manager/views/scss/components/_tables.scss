@@ -1,13 +1,13 @@
 .table {
+    color: $txt-body;
     width: 100%;
     //margin-bottom: 1rem;
-    color: $gray-900;
     background-color: transparent;
     font-size: 0.85rem;
     thead {
         th {
             white-space: nowrap;
-            color: $txt-gray;
+            color: $txt-body;
             font-weight: 600;
             //text-transform: uppercase;
             border-bottom: $border;
@@ -30,6 +30,7 @@
         padding: 1rem 1.2rem;
         vertical-align: top;
         border-top: $border;
+        color: $txt-gray;
     }
     tr {
         td {
@@ -633,21 +634,17 @@
         }
         a {
             //background: lighten($bg-gray, 0.1); 
-            color: darken($bg-gray, 50);
             //color: $brand-color-inverse; 
-            padding: 10px;
             // width: 30px;
             // height: 30px;
+            color: $txt-gray;
             line-height: 1.4;
             text-align: center;
-            font-size: 0.8rem;
-            //border: solid 1px #dee2e6; 
-            border-radius: 1px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            border: $input-border;
+            //border: $input-border;
             height: $input-height;
             padding: $input-padding;
             font-size: $input-font-size;
@@ -657,8 +654,8 @@
                 background: lighten($bg-gray, 0.20);
             }
             .svg {
-                width: 16px;
-                height: 16px;
+                // width: 16px;
+                // height: 16px;
                 [fill]:not(.permanent):not(g) {
                     transition: fill .3s ease;
                     // fill: $brand-color;

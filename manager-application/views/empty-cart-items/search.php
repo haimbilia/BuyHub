@@ -42,7 +42,7 @@ foreach ($arrListing as $sn => $row) {
                 $htm = '<span class="switch switch-sm switch-icon">
                                     <label>
                                         <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['emptycartitem_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
-                                        <span></span>
+                                        <span class="input-helper"></span>
                                     </label>
                                 </span>';
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
@@ -52,7 +52,7 @@ foreach ($arrListing as $sn => $row) {
                     'siteLangId' => $siteLangId,
                     'recordId' => $row['emptycartitem_id']
                 ];
-                
+
                 if ($canEdit) {
                     $data['editButton'] = [];
                     $data['deleteButton'] = [];
