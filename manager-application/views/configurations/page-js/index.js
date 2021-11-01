@@ -120,106 +120,16 @@ $(document).ready(function () {
         });
     }
 
-    removeSiteAdminLogo = function (lang_id) {
+    removeMediaImage = function (file_type, lang_id) {
         if (!confirm(langLbl.confirmDeleteImage)) {
             return;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeSiteAdminLogo', [lang_id]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeMediaImage', [file_type, lang_id]), '', function (t) {
             $.ykmsg.close();
             getLangForm(document.frmConfiguration.form_type.value, lang_id);
         });
     };
-
-    removeDesktopLogo = function (lang_id) {
-        if (!confirm(langLbl.confirmDeleteImage)) {
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeDesktopLogo', [lang_id]), '', function (t) {
-            $.ykmsg.close();
-            getLangForm(document.frmConfiguration.form_type.value, lang_id);
-        });
-    };
-
-    removeEmailLogo = function (lang_id) {
-        if (!confirm(langLbl.confirmDeleteImage)) {
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeEmailLogo', [lang_id]), '', function (t) {
-            $.ykmsg.close();
-            getLangForm(document.frmConfiguration.form_type.value, lang_id);
-        });
-    };
-
-    removeFavicon = function (lang_id) {
-        if (!confirm(langLbl.confirmDeleteImage)) {
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeFavicon', [lang_id]), '', function (t) {
-            $.ykmsg.close();
-            getLangForm(document.frmConfiguration.form_type.value, lang_id);
-        });
-    };
-
-    removeSocialFeedImage = function (lang_id) {
-        if (!confirm(langLbl.confirmDeleteImage)) {
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeSocialFeedImage', [lang_id]), '', function (t) {
-            $.ykmsg.close();
-            getLangForm(document.frmConfiguration.form_type.value, lang_id);
-        });
-    };
-
-    removePaymentPageLogo = function (lang_id) {
-        if (!confirm(langLbl.confirmDeleteImage)) {
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removePaymentPageLogo', [lang_id]), '', function (t) {
-            $.ykmsg.close();
-            getLangForm(document.frmConfiguration.form_type.value, lang_id);
-        });
-    };
-
-    removeWatermarkImage = function (lang_id) {
-        if (!confirm(langLbl.confirmDeleteImage)) {
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeWatermarkImage', [lang_id]), '', function (t) {
-            $.ykmsg.close();
-            getLangForm(document.frmConfiguration.form_type.value, lang_id);
-        });
-    };
-
-    removeAppleTouchIcon = function (lang_id) {
-        if (!confirm(langLbl.confirmDeleteImage)) {
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeAppleTouchIcon', [lang_id]), '', function (t) {
-            $.ykmsg.close();
-            getLangForm(document.frmConfiguration.form_type.value, lang_id);
-        });
-    };
-
-    removeMobileLogo = function (lang_id) {
-        if (!confirm(langLbl.confirmDeleteImage)) {
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeMobileLogo', [lang_id]), '', function (t) {
-            $.ykmsg.close();
-            getLangForm(document.frmConfiguration.form_type.value, lang_id);
-        });
-    };
-
-    removeInvoiceLogo = function (lang_id) {
-        if (!confirm(langLbl.confirmDeleteImage)) {
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeInvoiceLogo', [lang_id]), '', function (t) {
-            $.ykmsg.close();
-            getLangForm(document.frmConfiguration.form_type.value, lang_id);
-        });
-    };
-
+    
     removeCollectionBgImage = function (lang_id) {
         if (!confirm(langLbl.confirmDeleteImage)) {
             return;
@@ -279,8 +189,9 @@ $(document).ready(function () {
 
     popupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
+            loadCropperSkeleton();
             fcom.ajax(fcom.makeUrl('Configurations', 'imgCropper'), '', function (t) {
-                $.facebox(t, 'faceboxWidth medium-fb-width');
+                $("#modalBoxJs .modal-body").html(t);
                 var file = inputBtn.files[0];
                 var minWidth = $(inputBtn).attr('data-min_width');
                 var minHeight = $(inputBtn).attr('data-min_height');
@@ -330,16 +241,16 @@ $(document).ready(function () {
             },
             complete: function () {
                 $('#loader-js').html(fcom.getLoader());
-            },
+            },           
             success: function (ans) {
+                fcom.removeLoader();
                 if (!ans.status) {
                     $.ykmsg.error(ans.msg);
-                    return false;
-                    return;
+                    return false;                  
                 }
                 $.ykmsg.success(ans.msg);
                 getLangForm(formType, langId);
-                $(document).trigger('close.facebox');
+                $("#modalBoxJs").modal("hide");
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 if (xhr.responseText) {

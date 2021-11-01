@@ -105,12 +105,10 @@ switch ($frmType) {
             $colMd12Arr = ['RewardsOnRegistration', 'RewardsonPurchase'];
         }
         break;
-    case Configurations::FORM_MEDIA:
-        if (1 > $lang_id) {
-            $colMd12Arr = ['MediaGrids'];
-        } else {
-            $colMd12Arr = ['MediaGrids'];
-        }
+    case Configurations::FORM_MEDIA:      
+
+        $colMd12Arr = ['spacer','spacer1','spacer2','spacer3','spacer4','spacer5','spacer6','spacer7','spacer8','spacer9','spacer10'];
+        
         break;
 
     case Configurations::FORM_PRODUCT:
@@ -211,7 +209,6 @@ if (!empty($colMd12Arr)) {
                         <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
                     </a>
                 </nav>
-
             <?php } ?>
         </div>
     </div>

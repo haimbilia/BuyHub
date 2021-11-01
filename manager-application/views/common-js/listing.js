@@ -593,75 +593,77 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     }
   };
 
-  uploadImages = function (formData) {
-    if (false === checkControllerName()) {
-      return false;
-    }
-    var frmName = formData.get("frmName");
-    var frm = document.forms[frmName];
-    var recordId = frm.record_id.value;
-    var langId = frm.lang_id.value;
-    var fileType = frm.file_type.value;
-    var imageType = frm.file_type.value;
-    var callback = "";
-    if ("undefined" != typeof frm.dataset.callback) {
-      var callback = frm.dataset.callback;
-    }
-    var ratio_type = $('input[name="ratio_type"]:checked').val();
+  // uploadImages = function (formData) {
+  //   if (false === checkControllerName()) {
+  //     return false;
+  //   }
 
-    var slideScreen = 0;
-    if ("undefined" != typeof frm.slide_screen) {
-      slideScreen = frm.slide_screen.value;
-    }
-    formData.append("recordId", recordId);
-    formData.append("slide_screen", slideScreen);
-    formData.append("lang_id", langId);
-    formData.append("file_type", fileType);
-    formData.append("ratio_type", ratio_type);
-    $.ajax({
-      url: fcom.makeUrl(controllerName, "uploadMedia"),
-      type: "post",
-      dataType: "json",
-      data: formData,
-      cache: false,
-      contentType: false,
-      processData: false,
-      beforeSend: function () {
-        $.ykmodal(fcom.getLoader());
-      },
-      success: function (ans) {
-        fcom.removeLoader();
-        if (ans.status == 0) {
-          $.ykmsg.error(ans.msg);
-          return;
-        }
-        $.ykmsg.success(ans.msg);
-        if (true === $.ykmodal.isAdded()) {
-          $.ykmodal.show();
-          $("#modalBoxJs").modal("hide").remove();
-          if (
-            0 < $(".navTabsJs").length &&
-            0 < $("." + $.ykmodal.element + " select[name='lang_id']").length
-          ) {
-            $("." + $.ykmodal.element + " select[name='lang_id']")
-              .val(langId)
-              .change();
-          } else if ("" != callback) {
-            window[callback]();
-          }
-        } else {
-          mediaForm(ans.recordId, imageType, langId, slideScreen);
-          reloadList();
-        }
-        fcom.removeLoader();
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-        $.ykmsg.error(
-          thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText
-        );
-      },
-    });
-  };
+  //   console.log('uploadImages');
+  //   var frmName = formData.get("frmName");
+  //   var frm = document.forms[frmName];
+  //   var recordId = frm.record_id.value;
+  //   var langId = frm.lang_id.value;
+  //   var fileType = frm.file_type.value;
+  //   var imageType = frm.file_type.value;
+  //   var callback = "";
+  //   if ("undefined" != typeof frm.dataset.callback) {
+  //     var callback = frm.dataset.callback;
+  //   }
+  //   var ratio_type = $('input[name="ratio_type"]:checked').val();
+
+  //   var slideScreen = 0;
+  //   if ("undefined" != typeof frm.slide_screen) {
+  //     slideScreen = frm.slide_screen.value;
+  //   }
+  //   formData.append("recordId", recordId);
+  //   formData.append("slide_screen", slideScreen);
+  //   formData.append("lang_id", langId);
+  //   formData.append("file_type", fileType);
+  //   formData.append("ratio_type", ratio_type);
+  //   $.ajax({
+  //     url: fcom.makeUrl(controllerName, "uploadMedia"),
+  //     type: "post",
+  //     dataType: "json",
+  //     data: formData,
+  //     cache: false,
+  //     contentType: false,
+  //     processData: false,
+  //     beforeSend: function () {
+  //       $.ykmodal(fcom.getLoader());
+  //     },
+  //     success: function (ans) {
+  //       fcom.removeLoader();
+  //       if (ans.status == 0) {
+  //         $.ykmsg.error(ans.msg);
+  //         return;
+  //       }
+  //       $.ykmsg.success(ans.msg);
+  //       if (true === $.ykmodal.isAdded()) {
+  //         $.ykmodal.show();
+  //         $("#modalBoxJs").modal("hide").remove();
+  //         if (
+  //           0 < $(".navTabsJs").length &&
+  //           0 < $("." + $.ykmodal.element + " select[name='lang_id']").length
+  //         ) {
+  //           $("." + $.ykmodal.element + " select[name='lang_id']")
+  //             .val(langId)
+  //             .change();
+  //         } else if ("" != callback) {
+  //           window[callback]();
+  //         }
+  //       } else {
+  //         mediaForm(ans.recordId, imageType, langId, slideScreen);
+  //         reloadList();
+  //       }
+  //       fcom.removeLoader();
+  //     },
+  //     error: function (xhr, ajaxOptions, thrownError) {
+  //       $.ykmsg.error(
+  //         thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText
+  //       );
+  //     },
+  //   });
+  // };
 
   isInViewport = function (el) {
     const rect = el.getBoundingClientRect();

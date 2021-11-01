@@ -181,9 +181,9 @@ class HtmlHelper
         return $htm;
     }
 
-    public static function getDropZoneHtml()
+    public static function getDropZoneHtml($url, $headerClass = '', $callbackfn = '')
     {
-        return '<form action="' . FatUtility::generateUrl('ImportExport', 'upload') . '" enctype="multipart/form-data" class="dropzone dropzone-default">
+        $str =  '<div class="dropzone ' . $headerClass . '">
                     <div class="upload_cover">
                         <div clas="img--container  ">
                             <div class="file-upload">
@@ -191,8 +191,15 @@ class HtmlHelper
                             </div>
                         </div>
                     </div>
-                </form>
-                <script>$.initDropZone();</script>';
+                </div>
+                <script>
+                $.initDropZone("' . $url . '").on("sending", function(file, xhr, formData){';
+        if (!empty($callbackfn)) {
+            $str .= $callbackfn . '(file, xhr, formData)';;
+        }
+        $str .= '});                
+                </script>';
+        return $str;
     }
 
     public static function configureSwitchForCheckbox($fld, $msg = '')
@@ -235,5 +242,81 @@ class HtmlHelper
         $htmlFld = $frm->addHTML('', $fldName . '_html', $str);
         $htmlFld->setFormIndex($oldFldPostion);
         $htmlFld->developerTags = $fld->developerTags;
+        return $htmlFld;
     }
+
+    /**
+     * options array ex. [1 => 'optionName'];
+     */
+    public static function getRadioAsButtonHtml(string $fldName, string $caption, array $options, $selectedVal = '', $fldClass = '')
+    {
+        $str = '<label class="label">' . $caption . '</label>
+                    <div class="radio-button-group">';
+        $opCount = 1;
+        foreach ($options as $opValue => $opName) {
+            $opId = $fldName . "__" . $opCount;
+            $str .= '<div class="item">
+                    <input type="radio" name="' . $fldName . '" class="radio-button ' . $fldClass . '" id="' . $opId . '"  value="' . $opValue . '"  ' . ($opValue . '" ' . $selectedVal ? 'checked' : '') . ' >
+                    <label for="' . $opId . '">' . $opName . '</label>
+                </div>';
+            $opCount++;
+        }
+        return $str .= '</div>';
+    }
+
+    /**
+     * $imageArr ex. ['name' => 'fav.png','url'=>'imageurl']
+     */
+
+    public static function getfileInputHtml(array $fileInputAttributes,int $langid, string $removeFn, string $editFn = '', $imageArr = [], $headerClass = '')
+    {
+        $str =  '<div class="dropzone ' . $headerClass . '">
+                    <div class="upload_cover">';
+                        if (1 > count($imageArr)) {
+                        $str .= 
+                        '<div clas="img--container ' . (count($imageArr) ? "d-none" : "") . '" >
+                            <div class="file-upload">
+                                <img src="' . CONF_WEBROOT_URL . 'images/upload/upload_img.png">                                
+                            </div>
+                            <div class="needsclick">
+                                <h3 class="dropzone-msg-title">' . Labels::getLabel("LBL_CLICK_HERE_TO_UPLOAD", $langid) . '</h3>
+                                <input type="file"';        
+                                foreach ($fileInputAttributes as $attrName => $attrVal) {
+                                    $str .= ' ' . $attrName . '="' . $attrVal . '"';
+                                }
+                                $str .= '>
+                            </div>                                        
+                        </div>';
+                        } else {
+                        $str .= 
+                            '<div class="img--container uploded__img">
+                                <img  src="' . $imageArr['url'] . '" title="" >    
+                                <div class="upload__action">
+                                <button type="button" onclick="' . $removeFn . '">
+                                    <svg>
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#delete-icon">
+                                        </use>
+                                    </svg>
+                                </button>';
+                                if(!empty($editFn)){
+                                    $str .='
+                                    <button type="button" onclick="' . $editFn . '(this)">
+                                        <svg>
+                                            <use
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#edit-icon">
+                                            </use>
+                                        </svg>
+                                    </button>'; 
+                                }                                
+                                $str .='
+                                </div>
+                            </div>';
+                    }
+                $str .= '
+                    </div>
+                </div>';
+        return   $str;
+    }
+    
 }
