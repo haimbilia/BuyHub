@@ -95,6 +95,25 @@
         margin-top: 5px;
         font-size: 0.8rem;
     }
+    .list-options {
+        display: flex;
+        &--horizontal {
+            flex-direction: row;
+            li {
+                +li {
+                    margin-#{$start-direction}: 0.5rem;
+                    padding-#{$start-direction}: 0.5rem;
+                    border-#{$start-direction}: 1px solid $border-color;
+                }
+            }
+        }
+        &--vertical {
+            flex-direction: column;
+        }
+        li {
+            list-style: none;
+        }
+    }
 }
 
 .sold_by {

@@ -12,8 +12,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                             <h3 class="card-head-title">
                                 <a class="back" href="<?php echo UrlHelper::generateUrl('Settings'); ?>">
                                     <svg class="svg" width="24" height="24">
-                                        <use
-                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
                                         </use>
                                     </svg>
                                 </a>
@@ -59,10 +58,8 @@ $controller = str_replace('Controller', '', FatApp::getController());
 </main>
 
 <script>
-var controllerName = '<?php echo $controller; ?>';
-getHelpCenterContent(controllerName);
-
-var YES = <?php echo applicationConstants::YES; ?>;
-var NO = <?php echo applicationConstants::NO; ?>;
-var FORM_MEDIA = <?php echo Configurations::FORM_MEDIA; ?>;
+    var controllerName = '<?php echo $controller; ?>';
+    var YES = <?php echo applicationConstants::YES; ?>;
+    var NO = <?php echo applicationConstants::NO; ?>;
+    var FORM_MEDIA = <?php echo Configurations::FORM_MEDIA; ?>;
 </script>

@@ -134,9 +134,13 @@
                                                                     </div>
                                                                     <div class="sub_title">
                                                                         Printed Men Round or Crew Blue T-Shirt </div>
-                                                                    <div class="brand">
-                                                                        Brand:
-                                                                        Pepe Jeans </div>
+                                                                        <ul class="list-options list-options--vertical">
+                                                                            <li class="brand">
+                                                                                <span class="label">Brand:</span> <span class="value"> Pepe Jeans </span>
+                                                                            </li>
+                                                                        </ul>
+                                                                    <div >
+                                                                        </div>
 
 
                                                                 </div>
@@ -178,9 +182,11 @@
                                                                     </div>
                                                                     <div class="sub_title">
                                                                         Printed Men Round or Crew Blue T-Shirt </div>
-                                                                    <div class="brand">
-                                                                        Brand:
-                                                                        Pepe Jeans </div>
+                                                                        <ul class="list-options list-options--vertical">
+                                                                            <li class="brand">
+                                                                                <span class="label">Brand:</span> <span class="value"> Pepe Jeans </span>
+                                                                            </li>
+                                                                        </ul>
 
 
                                                                 </div>
@@ -222,10 +228,11 @@
                                                                     </div>
                                                                     <div class="sub_title">
                                                                         Printed Men Round or Crew Blue T-Shirt </div>
-                                                                    <div class="brand">
-                                                                        Brand:
-                                                                        Pepe Jeans </div>
-
+                                                                        <ul class="list-options list-options--vertical">
+                                                                            <li class="brand">
+                                                                                <span class="label">Brand:</span> <span class="value"> Pepe Jeans </span>
+                                                                            </li>
+                                                                        </ul>
 
                                                                 </div>
                                                             </div>

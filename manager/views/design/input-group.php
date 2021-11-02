@@ -7,12 +7,12 @@
 	<title>FATbit | Dashboard</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	
+
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-	
-	
-	<link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-	
+
+
+	<link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
+
 	<link rel="shortcut icon" href="images/favicon.ico" />
 
 </head>
@@ -22,8 +22,8 @@
 <body class="">
 	<div class="wrapper">
 		<?php
-  include 'includes/header.php';
-?>
+		include 'includes/header.php';
+		?>
 		<div class="body " id="body">
 			<div class="content " id="content">
 
@@ -302,41 +302,52 @@
 										</div>
 										<div class="form-group ">
 											<label>Left Icon Input</label>
-											<div class="input-icon input-icon--left">
+											<div class="input-group input-icon--left">
+												<div class="input-group-prepend">
+													<span class="input-group-text">
+														<span><i class="la la-search"></i></span>
+													</span>
+												</div>
 												<input type="text" class="form-control" placeholder="Search..." id="generalSearch">
-												<span class="input-icon__icon input-icon__icon--left">
-													<span><i class="la la-search"></i></span>
-												</span>
+
 											</div>
 											<span class="form-text text-muted">Some help content goes here</span>
 										</div>
 										<div class="form-group ">
 											<label>Right Icon Input</label>
-											<div class="input-icon input-icon--right">
+											<div class="input-group input-icon--right">
 												<input type="text" class="form-control" placeholder="Search..." id="generalSearch">
-												<span class="input-icon__icon input-icon__icon--right">
-													<span><i class="la la-search"></i></span>
-												</span>
+												<div class="input-group-append">
+													<span class="input-group-text">
+														<i class="la la-search"></i>
+													</span>
+												</div>
+
 											</div>
 											<span class="form-text text-muted">Some help content goes here</span>
 										</div>
 										<div class="form-group ">
 											<label>Large Size</label>
-											<div class="input-icon input-icon--left">
+											<div class="input-group input-group--lg">
+												<div class="input-group-prepend">
+													<span class="input-group-text">
+														<span><i class="la la-download"></i></span>
+													</span>
+												</div>
 												<input type="text" class="form-control form-control-lg" placeholder="Search..." id="generalSearch">
-												<span class="input-icon__icon input-icon__icon--left">
-													<span><i class="la la-download"></i></span>
-												</span>
+												
 											</div>
 											<span class="form-text text-muted">Some help content goes here</span>
 										</div>
 										<div class="form-group ">
 											<label>Small Size</label>
-											<div class="input-icon input-icon--left">
+											<div class="input-group input-group--sm">
 												<input type="text" class="form-control form-control-sm" placeholder="Search..." id="generalSearch">
-												<span class="input-icon__icon input-icon__icon--left">
+												<div class="input-group-append">
+													<span class="input-group-text">
 													<span><i class="la la-binoculars"></i></span>
 												</span>
+												</div>
 											</div>
 											<span class="form-text text-muted">Some help content goes here</span>
 										</div>
@@ -694,8 +705,8 @@
 		</div>
 
 		<?php
-  include 'includes/footer.php';
-?>
+		include 'includes/footer.php';
+		?>
 	</div>
 
 </body>

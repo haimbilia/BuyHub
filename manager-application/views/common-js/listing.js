@@ -218,6 +218,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             }
         });
         searchRecords(document.frmRecordSearch, loadRowsOnly);
+        $('.select2-hidden-accessible').val('').trigger('change');
     };
 
     setColumnsData = function (frm) {
@@ -760,5 +761,11 @@ $(document).on("click", ".selectItemJs", function () {
         $(faceboxActionBtns + " .toolbar-btn-js")
             .removeClass("disabled")
             .addClass("selected");
+    }
+});
+
+$(document).ready(function () {
+    if (typeof controllerName != 'undefined') {
+        getHelpCenterContent(controllerName);
     }
 });

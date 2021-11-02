@@ -9,12 +9,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
             rel="stylesheet">
         <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-
         <link rel="shortcut icon" href="images/favicon.ico" />
-
     </head>
-
-
 
     <body class="">
         <div class="wrapper">
@@ -23,7 +19,6 @@
 ?>
             <div class="body " id="body">
                 <div class="content " id="content">
-
                     <!-- begin:: Subheader -->
                     <div class="subheader grid__item" id="subheader">
                         <div class="container ">
@@ -324,6 +319,14 @@
                         </div>
                     </div>
                     <!-- end:: Content -->
+                </div>
+            </div>
+
+
+            <div id="toast-container" class="toast-bottom-center">
+                <div class="toast toast-success" aria-live="polite" style=""><button type="button"
+                        class="toast-close-button" role="button">×</button>
+                    <div class="toast-message">I do not think that means what you think it means.</div>
                 </div>
             </div>
 

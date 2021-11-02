@@ -363,14 +363,16 @@
                                                     </div>
 
                                                     <div class="dropzone">
-                                                        <div class="upload_cover">
+                                                        <div class="dropzone-upload">
                                                             <div class="file-upload">
-                                                                <img src="/yokart/manager/images/upload/upload_img.png">
+                                                                <img
+                                                                    src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
+                                                            </div>
+                                                            <div class="needsclick">
+                                                                <h3 class="dropzone-msg-title">click here to upload</h3>
                                                             </div>
                                                         </div>
-                                                        <div class="needsclick">
-                                                            <h3 class="dropzone-msg-title">Click here to upload</h3>
-                                                        </div>
+                                                        <input class="dropzone-input" type="file">
                                                     </div>
 
 
@@ -412,14 +414,16 @@
                                                     </div>
 
                                                     <div class="dropzone">
-                                                        <div class="upload_cover">
+                                                        <div class="dropzone-upload">
                                                             <div class="file-upload">
-                                                                <img src="/yokart/manager/images/upload/upload_img.png">
+                                                                <img
+                                                                    src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
+                                                            </div>
+                                                            <div class="needsclick">
+                                                                <h3 class="dropzone-msg-title">click here to upload</h3>
                                                             </div>
                                                         </div>
-                                                        <div class="needsclick">
-                                                            <h3 class="dropzone-msg-title">Click here to upload</h3>
-                                                        </div>
+                                                        <input class="dropzone-input" type="file">
                                                     </div>
                                                 </div>
 
@@ -461,14 +465,16 @@
                                                     </div>
 
                                                     <div class="dropzone">
-                                                        <div class="upload_cover">
+                                                        <div class="dropzone-upload">
                                                             <div class="file-upload">
-                                                                <img src="/yokart/manager/images/upload/upload_img.png">
+                                                                <img
+                                                                    src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
+                                                            </div>
+                                                            <div class="needsclick">
+                                                                <h3 class="dropzone-msg-title">click here to upload</h3>
                                                             </div>
                                                         </div>
-                                                        <div class="needsclick">
-                                                            <h3 class="dropzone-msg-title">Click here to upload</h3>
-                                                        </div>
+                                                        <input class="dropzone-input" type="file">
                                                     </div>
 
 
@@ -510,14 +516,16 @@
                                                     </div>
 
                                                     <div class="dropzone">
-                                                        <div class="upload_cover">
+                                                        <div class="dropzone-upload">
                                                             <div class="file-upload">
-                                                                <img src="/yokart/manager/images/upload/upload_img.png">
+                                                                <img
+                                                                    src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
+                                                            </div>
+                                                            <div class="needsclick">
+                                                                <h3 class="dropzone-msg-title">click here to upload</h3>
                                                             </div>
                                                         </div>
-                                                        <div class="needsclick">
-                                                            <h3 class="dropzone-msg-title">Click here to upload</h3>
-                                                        </div>
+                                                        <input class="dropzone-input" type="file">
                                                     </div>
 
 
@@ -558,17 +566,35 @@
 
                                                     </div>
 
-                                                    <div class="dropzone">
-                                                        <div class="upload_cover">
-                                                            <div class="file-upload">
-                                                                <img src="/yokart/manager/images/upload/upload_img.png">
-                                                            </div>
-                                                        </div>
-                                                        <div class="needsclick">
-                                                            <h3 class="dropzone-msg-title">Click here to upload</h3>
-                                                        </div>
-                                                    </div>
+                                                    <div class="dropzone dropzone-custom">
+                                            <div class="dropzone-uploaded">
+                                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/banners/hero-1.jpg"
+                                                    title="">
+                                                <div class="dropzone-uploaded-action">
+                                                    <ul class="actions">
+                                                        <li>
+                                                            <a href="javascript:void(0)">
+                                                                <svg class="svg" width="18" height="18">
+                                                                    <use
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                    </use>
+                                                                </svg>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript:void(0)">
+                                                                <svg class="svg" width="18" height="18">
+                                                                    <use
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                    </use>
+                                                                </svg>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
 
+                                            </div>
+                                        </div>
 
                                                 </div>
                                             </div>

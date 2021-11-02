@@ -2,7 +2,6 @@
 $formOnSubmit = 'saveRecord(this, "closeForm"); return(false);';
 
 $fld = $frm->getField('product_name');
-$fld->addFieldTagAttribute('class', 'selProd--js');
 $fld->addFieldTagAttribute('placeholder', Labels::getLabel('FRM_SELECT_PRODUCT', $siteLangId));
 
 $fld = $frm->getField('products_related[]');
