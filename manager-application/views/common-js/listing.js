@@ -762,3 +762,9 @@ $(document).on("click", ".selectItemJs", function () {
             .addClass("selected");
     }
 });
+
+$(document).ready(function () {
+    if (typeof controllerName != 'undefined') {
+        getHelpCenterContent(controllerName);
+    }
+});

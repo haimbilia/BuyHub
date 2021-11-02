@@ -70,5 +70,4 @@ $controller = str_replace('Controller', '', FatApp::getController());
 
 <script>
     var controllerName = '<?php echo $controller; ?>';
-    getHelpCenterContent(controllerName);
 </script>
