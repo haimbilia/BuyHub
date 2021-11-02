@@ -1096,7 +1096,7 @@ class SellerProduct extends MyAppModel
         return $srch;
     }
 
-    public static function searchVolumeDiscountProducts($langId, $selProdId = 0, $keyword = '', $userId = 0)
+    public static function searchVolumeDiscountProducts($langId, $selProdId = 0, $keyword = '', $userId = 0, $addOrderBy = true)
     {
         $pageSize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
         $srch = static::getSearchObject($langId);
@@ -1127,7 +1127,10 @@ class SellerProduct extends MyAppModel
         $srch->addCondition('selprod_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->setPageSize($pageSize);
-        $srch->addOrder('voldiscount_id', 'DESC');
+        
+        if (true == $addOrderBy) {
+            $srch->addOrder('voldiscount_id', 'DESC');
+        }
         return $srch;
     }
 
