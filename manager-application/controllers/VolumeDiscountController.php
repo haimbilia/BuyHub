@@ -26,7 +26,7 @@ class VolumeDiscountController extends AdminBaseController
     {
         $this->getListingData();
         $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'special-price/search.php', true),
+            'listingHtml' => $this->_template->render(false, false, 'volume-discount/search.php', true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
         LibHelper::exitWithSuccess($jsonData, true);
@@ -69,8 +69,8 @@ class VolumeDiscountController extends AdminBaseController
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $sellerId = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);
 
-        $srch = SellerProduct::searchSpecialPriceProductsObj($this->siteLangId, $selProdId, $keyword, $sellerId, false);
-        $srch->addFld('splprice_id as listSerial');
+        $srch = SellerProduct::searchVolumeDiscountProducts($this->siteLangId, $selProdId, $keyword, $sellerId, false);
+        $srch->addFld('voldiscount_id as listSerial');
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -93,60 +93,78 @@ class VolumeDiscountController extends AdminBaseController
         $this->set('canEdit', $this->objPrivilege->canEditSellerProducts($this->admin_id, true));
     }
 
+    protected function getSearchForm($fields = [])
+    {
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+
+        $frm->addSelectBox(Labels::getLabel('FRM_SELLER', $this->siteLangId), 'product_seller_id', []);
+
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
+        return $frm;
+    }
+
     public function form()
     {
         $this->set('frm', $this->getForm());
         $this->set('includeTabs', false);
-        $this->set('formTitle', Labels::getLabel('LBL_BIND_SPECIAL_PRICE', $this->siteLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_BIND_VOLUME_DISCOUNT', $this->siteLangId));
         $this->_template->render(false, false);
     }
 
     private function getForm()
     {
-        $frm = new Form('frmSellerProductSpecialPrice');
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_Product', $this->siteLangId), 'product_name', []);
+        $frm = new Form('frmSellerProductVolumeDiscount');
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_Product', $this->siteLangId), 'voldiscount_selprod_id', []);
         $fld->requirement->setRequired(true);
-        $fld = $frm->addFloatField(Labels::getLabel('LBL_Special_Price', $this->siteLangId) . CommonHelper::concatCurrencySymbolWithAmtLbl(), 'splprice_price');
-        $fld->requirements()->setPositive();
-        $fld = $frm->addDateField(Labels::getLabel('LBL_Price_Start_Date', $this->siteLangId), 'splprice_start_date', '', array('readonly' => 'readonly'));
-        $fld->requirements()->setRequired();
 
-        $fld = $frm->addDateField(Labels::getLabel('LBL_Price_End_Date', $this->siteLangId), 'splprice_end_date', '', array('readonly' => 'readonly'));
-        $fld->requirements()->setRequired();
-        $fld->requirements()->setCompareWith('splprice_start_date', 'ge', Labels::getLabel('LBL_Price_Start_Date', $this->siteLangId));
+        $frm->addIntegerField(Labels::getLabel("FRM_MINIMUM_QUANTITY", $this->siteLangId), 'voldiscount_min_qty');
+        $discountFld = $frm->addFloatField(Labels::getLabel("FRM_DISCOUNT_IN_(%)", $this->siteLangId), "voldiscount_percentage");
+        $discountFld->requirements()->setPositive();
 
-        $frm->addHiddenField('', 'splprice_selprod_id');
-        $frm->addHiddenField('', 'splprice_id');
+        $frm->addHiddenField('', 'voldiscount_id');
         return $frm;
     }
 
     public function setup()
     {
         $data = FatApp::getPostedData();
+
         if (empty($data)) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
         }
-        $splPriceId = $this->updateSelProdSplPrice($data, true);
-        if (!$splPriceId) {
+
+        $selprod_id = FatUtility::int($data['voldiscount_selprod_id']);
+
+        if (1 > $selprod_id) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
         }
-        // last Param of getProductDisplayTitle function used to get title in html form.
-        $productName = SellerProduct::getProductDisplayTitle($data['splprice_selprod_id'], $this->siteLangId, true);
+
+        $volDiscountId = $this->updateSelProdVolDiscount($selprod_id, 0, $data['voldiscount_min_qty'], $data['voldiscount_percentage']);
+        if (!$volDiscountId) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Response', $this->siteLangId), true);
+        }
+
+        $productName = SellerProduct::getProductDisplayTitle($data['voldiscount_selprod_id'], $this->siteLangId, true);
 
         $srch = SellerProduct::getSearchObject();
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'tuc.credential_user_id = sp.selprod_user_id', 'tuc');
-        $srch->addMultipleFields(array('credential_username', 'selprod_price'));
-        $srch->addCondition('selprod_id', '=', $data['splprice_selprod_id']);
+        $srch->addMultipleFields(array('credential_username'));
+        $srch->addCondition('selprod_id', '=', $data['voldiscount_selprod_id']);
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
         $data['credential_username'] = $row['credential_username'];
-        $data['selprod_price'] = $row['selprod_price'];
         $data['product_name'] = $productName;
-
         $this->set('data', $data);
-        $this->set('splPriceId', $splPriceId);
+        $this->set('volDiscountId', $volDiscountId);
         $json = array(
             'status' => true,
             'msg' => $this->str_update_record,
@@ -156,20 +174,19 @@ class VolumeDiscountController extends AdminBaseController
 
     public function updateColValue()
     {
-        $splPriceId = FatApp::getPostedData('splprice_id', FatUtility::VAR_INT, 0);
-        if (1 > $splPriceId) {
+        $volDiscountId = FatApp::getPostedData('voldiscount_id', FatUtility::VAR_INT, 0);
+        if (1 > $volDiscountId) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
         }
-
         $attribute = FatApp::getPostedData('attribute', FatUtility::VAR_STRING, '');
 
-        $columns = array('splprice_start_date', 'splprice_end_date', 'splprice_price');
+        $columns = array('voldiscount_min_qty', 'voldiscount_percentage');
         if (!in_array($attribute, $columns)) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
         }
 
         $otherColumns = array_values(array_diff($columns, [$attribute]));
-        $otherColumnsValue = SellerProductSpecialPrice::getAttributesById($splPriceId, $otherColumns);
+        $otherColumnsValue = SellerProductVolumeDiscount::getAttributesById($volDiscountId, $otherColumns);
         if (empty($otherColumnsValue)) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
         }
@@ -177,20 +194,17 @@ class VolumeDiscountController extends AdminBaseController
         $selProdId = FatApp::getPostedData('selProdId', FatUtility::VAR_INT, 0);
 
         $dataToUpdate = array(
-            'splprice_selprod_id' => $selProdId,
-            'splprice_id' => $splPriceId,
-            $attribute => $value,
+            'voldiscount_id' => $volDiscountId,
+            'voldiscount_selprod_id' => $selProdId,
+            $attribute => $value
         );
-
         $dataToUpdate += $otherColumnsValue;
 
-        if (!$this->updateSelProdSplPrice($dataToUpdate)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Something_went_wrong._Please_Try_Again.', $this->siteLangId), true);
+        $volDiscountId = $this->updateSelProdVolDiscount($selProdId, $volDiscountId, $dataToUpdate['voldiscount_min_qty'], $dataToUpdate['voldiscount_percentage']);
+        if (!$volDiscountId) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Response', $this->siteLangId), true);
         }
 
-        if ('splprice_price' == $attribute) {
-            $value = CommonHelper::displayMoneyFormat($value, true, true);
-        }
         $json = array(
             'status' => true,
             'msg' => Labels::getLabel('MSG_Success', $this->siteLangId),
@@ -199,75 +213,59 @@ class VolumeDiscountController extends AdminBaseController
         FatUtility::dieJsonSuccess($json);
     }
 
-    private function updateSelProdSplPrice($post, $return = false)
+    private function updateSelProdVolDiscount($selprod_id, $voldiscount_id, $minQty, $perc)
     {
-        $selprod_id = !empty($post['splprice_selprod_id']) ? FatUtility::int($post['splprice_selprod_id']) : 0;
-        $splprice_id = !empty($post['splprice_id']) ? FatUtility::int($post['splprice_id']) : 0;
-
-        if (1 > $selprod_id) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
+        $sellerProductRow = SellerProduct::getAttributesById($selprod_id, array('selprod_user_id', 'selprod_stock', 'selprod_min_order_qty'), false);
+        if ($minQty > $sellerProductRow['selprod_stock']) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_Quantity_cannot_be_more_than_the_Stock', $this->siteLangId), true);
         }
 
-        if (strtotime($post['splprice_start_date']) > strtotime($post['splprice_end_date'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Dates', $this->siteLangId), true);
+        if ($minQty < $sellerProductRow['selprod_min_order_qty']) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_Quantity_cannot_be_less_than_the_Minimum_Order_Quantity', $this->siteLangId) . ': ' . $sellerProductRow['selprod_min_order_qty'], true);
         }
 
-        /* Check if same date already exists [ */
-        $tblRecord = new TableRecord(SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE);
+        if ($perc > 100 || 1 > $perc) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Percentage', $this->siteLangId), true);
+        }
 
-        $smt = 'splprice_selprod_id = ? AND ';
-        $smt .= '(
-                    ((splprice_start_date between ? AND ?) OR (splprice_end_date between ? AND ?))
-                    OR
-                    ((? BETWEEN splprice_start_date AND splprice_end_date) OR (? BETWEEN  splprice_start_date AND splprice_end_date))
-                )';
-        $smtValues = array(
-            $selprod_id,
-            $post['splprice_start_date'],
-            $post['splprice_end_date'],
-            $post['splprice_start_date'],
-            $post['splprice_end_date'],
-            $post['splprice_start_date'],
-            $post['splprice_end_date'],
-        );
+        /* Check if volume discount for same quantity already exists [ */
+        $tblRecord = new TableRecord(SellerProductVolumeDiscount::DB_TBL);
+        $smt = 'voldiscount_selprod_id = ? AND voldiscount_min_qty = ? ';
+        $smtValues = array($selprod_id, $minQty);
 
-        if (0 < $splprice_id) {
-            $smt .= 'AND splprice_id != ?';
-            $smtValues[] = $splprice_id;
+        if (0 < $voldiscount_id) {
+            $smt .= 'AND voldiscount_id != ?';
+            $smtValues[] = $voldiscount_id;
         }
         $condition = array(
             'smt' => $smt,
             'vals' => $smtValues
         );
-        
         if ($tblRecord->loadFromDb($condition)) {
-            $specialPriceRow = $tblRecord->getFlds();
-            if ($specialPriceRow['splprice_id'] != $splprice_id) {
-                LibHelper::exitWithError(Labels::getLabel('MSG_Special_price_for_this_date_already_added', $this->siteLangId), true);
+            $volDiscountRow = $tblRecord->getFlds();
+            if ($volDiscountRow['voldiscount_id'] != $voldiscount_id) {
+                LibHelper::exitWithError(Labels::getLabel('MSG_Volume_discount_for_this_quantity_already_added', $this->siteLangId), true);
             }
         }
         /* ] */
 
         $data_to_save = array(
-            'splprice_selprod_id' => $selprod_id,
-            'splprice_start_date' => $post['splprice_start_date'],
-            'splprice_end_date' => $post['splprice_end_date'],
-            'splprice_price' => $post['splprice_price'],
+            'voldiscount_selprod_id' => $selprod_id,
+            'voldiscount_min_qty' => $minQty,
+            'voldiscount_percentage' => $perc
         );
 
-        if (0 < $splprice_id) {
-            $data_to_save['splprice_id'] = $splprice_id;
+        if ($voldiscount_id > 0) {
+            $data_to_save['voldiscount_id'] = $voldiscount_id;
         }
 
-        $sellerProdObj = new SellerProduct();
-
-        // Return Special Price ID if $return is true else it will return bool value.
-        $splPriceId = $sellerProdObj->addUpdateSellerProductSpecialPrice($data_to_save, $return);
-        if (false === $splPriceId) {
-            LibHelper::exitWithError($sellerProdObj->getError(), true);
+        $record = new TableRecord(SellerProductVolumeDiscount::DB_TBL);
+        $record->assignValues($data_to_save);
+        if (!$record->addNew(array(), $data_to_save)) {
+            LibHelper::exitWithError($record->getError(), true);
         }
 
-        return $splPriceId;
+        return ($voldiscount_id > 0) ? $voldiscount_id : $record->getId();
     }
 
     public function autoCompleteProducts()
@@ -341,7 +339,35 @@ class VolumeDiscountController extends AdminBaseController
             );
         }
         die(json_encode(['pageCount' => $pageCount, 'results' => $json]));
-    }   
+    }
+
+    public function autoCompleteSeller()
+    {
+        $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = (2 > $page) ? 1 : $page;
+
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        $srch = User::getSearchObject(true);
+        $srch->addCondition('user_is_supplier', '=', applicationConstants::YES);
+        $srch->addCondition('credential_active', '=', applicationConstants::ACTIVE);
+
+        $srch->addMultipleFields(
+            [
+                'credential_user_id as id',
+                'CONCAT(credential_username, " (", credential_email, ")") as text'
+            ]
+        );
+        if ('' != $keyword) {
+            $srch->addCondition('credential_username', 'like', '%' . $keyword . '%');
+            $srch->addCondition('credential_email', 'like', '%' . $keyword . '%', 'OR');
+        }
+        $srch->setPageSize($pageSize);
+        $srch->setPageNumber($page);
+        $sellers = FatApp::getDb()->fetchAll($srch->getResultSet());
+
+        die(json_encode(['pageCount' => $srch->pages(), 'results' => $sellers]));
+    }
 
     public function deleteRecord()
     {
@@ -371,6 +397,7 @@ class VolumeDiscountController extends AdminBaseController
             }
             $this->markAsDeleted($recordId);
         }
+
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -381,14 +408,17 @@ class VolumeDiscountController extends AdminBaseController
         if (1 > $recordId) {
             LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
-        $specialPriceRow = SellerProduct::getSellerProductSpecialPriceById($recordId);
-        if (empty($specialPriceRow) || 1 > count($specialPriceRow)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Already_Deleted', $this->siteLangId), true);
-        }
 
-        $sellerProdObj = new SellerProduct($specialPriceRow['selprod_id']);
-        if (!$sellerProdObj->deleteSellerProductSpecialPrice($recordId, $specialPriceRow['selprod_id'])) {
-            LibHelper::exitWithError(Labels::getLabel($sellerProdObj->getError(), $this->siteLangId), true);
+        $volumeDiscountRow = SellerProductVolumeDiscount::getAttributesById($recordId);
+        $sellerProductRow = SellerProduct::getAttributesById($volumeDiscountRow['voldiscount_selprod_id'], array('selprod_user_id'), false);
+        if (!$volumeDiscountRow || !$sellerProductRow) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
+        }
+        $volumeDiscountSelprodId = $volumeDiscountRow['voldiscount_selprod_id'];
+
+        $db = FatApp::getDb();
+        if (!$db->deleteRecords(SellerProductVolumeDiscount::DB_TBL, array('smt' => 'voldiscount_id = ? AND voldiscount_selprod_id = ?', 'vals' => array($recordId, $volumeDiscountSelprodId)))) {
+            LibHelper::exitWithError(Labels::getLabel("LBL_" . $db->getError(), $this->siteLangId), true);
         }
     }
 
@@ -403,11 +433,9 @@ class VolumeDiscountController extends AdminBaseController
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'product_name' => Labels::getLabel('LBL_Name', $this->siteLangId),
-            'selprod_price' => Labels::getLabel('LBL_Original_Price', $this->siteLangId),
             'credential_username' => Labels::getLabel('LBL_Seller', $this->siteLangId),
-            'splprice_start_date' => Labels::getLabel('LBL_Start_Date', $this->siteLangId),
-            'splprice_end_date' => Labels::getLabel('LBL_End_Date', $this->siteLangId),
-            'splprice_price' => Labels::getLabel('LBL_Special_Price', $this->siteLangId),
+            'voldiscount_min_qty' => Labels::getLabel('LBL_Minimum_Quantity', $this->siteLangId),
+            'voldiscount_percentage' => Labels::getLabel('LBL_Discount', $this->siteLangId) . ' (%)',
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('splPriceTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
@@ -421,11 +449,9 @@ class VolumeDiscountController extends AdminBaseController
             'select_all',
             'listSerial',
             'product_name',
-            'selprod_price',
             'credential_username',
-            'splprice_start_date',
-            'splprice_end_date',
-            'splprice_price',
+            'voldiscount_min_qty',
+            'voldiscount_percentage',
             'action',
         ];
     }

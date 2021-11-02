@@ -1,0 +1,56 @@
+<?php defined('SYSTEM_INIT') or die('Invalid Usage');
+
+$frmSearch->setFormTagAttribute('name', 'frmRecordSearch');
+$frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
+$frmSearch->setFormTagAttribute('id', 'frmRecordSearch');
+$frmSearch->setFormTagAttribute('class', 'form');
+
+$keyWordFld = $frmSearch->getField('keyword');
+$keyWordFld->addFieldtagAttribute('class', 'form-control');
+$keyWordFld->setFieldtagAttribute('placeholder', $keywordPlaceholder);
+
+$sortByFld = $frmSearch->getField('sortBy');
+$sortByFld->setFieldTagAttribute('id', 'sortBy');
+
+$sortOrderFld = $frmSearch->getField('sortOrder');
+$sortOrderFld->setFieldTagAttribute('id', 'sortOrder');
+
+/* Extra Field */
+$fld = $frmSearch->getField('product_seller_id');
+$fld->setFieldtagAttribute('id', 'productSellerJs');
+$fld->setFieldtagAttribute('placeholder', Labels::getLabel('FRM_SELECT_SELLER', $siteLangId));
+$col = 6;
+if(null != $fld){
+    $col = 4;
+    $fld->addFieldtagAttribute('class', 'form-control');
+}
+
+/* Extra Field */
+
+echo $frmSearch->getFormTag();
+HtmlHelper::renderHiddenFields($frmSearch);
+?>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-<?php echo $col;?>">
+                <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+            </div>
+            <?php if(null != $fld){ ?>
+                <div class="col-md-<?php echo $col;?>">
+                    <?php echo $frmSearch->getFieldHtml('product_seller_id'); ?>
+                </div>
+            <?php } ?>
+            <div class="col-md-<?php echo $col;?>">
+                <div class="input-group">
+                    <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                    <div class="input-group-append">
+                        <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+<?php echo $frmSearch->getExternalJS(); ?>
