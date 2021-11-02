@@ -293,33 +293,5 @@ $controller = str_replace('Controller', '', FatApp::getController());
 </main>
 <script>
     var controllerName = '<?php echo $controller; ?>';
-    getHelpCenterContent(controllerName);
-
-    function searhSettings(e) {
-        var value = e.val().toLowerCase();
-        $(".settingListJs a").each(function() {
-            if ($(this).find('h6').text().toLowerCase().search(value) > -1 || $(this).find('span').text()
-                .toLowerCase().search(value) > -1) {
-                $(this).show();
-                $('.settingListJs').show();
-            } else {
-                $(this).hide();
-                $('.settingListJs').show();
-            }
-        });
-    };
-
-    $(document).on("search", "#settingsSearch", function(e) {
-        searhSettings($(this));
-    });
-
-    updateMaintenanceModeStatus = function(e, obj, status) {
-        $('.settingListJs').prepend(fcom.getLoader());
-        e.stopPropagation();
-        var oldStatus = $(obj).attr("data-old-status");
-        var data = $(obj).attr('name') + '=' + status + '&form_type=<?php echo Configurations::FORM_SERVER; ?>';
-        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'setup'), data, function(t) {
-            fcom.removeLoader();
-        });
-    }
+    var formType = '<?php echo Configurations::FORM_SERVER; ?>';
 </script>

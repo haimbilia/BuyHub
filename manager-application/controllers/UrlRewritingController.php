@@ -100,6 +100,7 @@ class UrlRewritingController extends AdminBaseController
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
+        $this->set('languages', $languages);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditUrlRewrite($this->admin_id, true));
     }
