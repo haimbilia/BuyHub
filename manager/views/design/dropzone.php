@@ -94,53 +94,34 @@
                                 </div>
                             </div>
                         </div>
-
-
                         <div class="row">
+
                             <div class="col-lg-6">
                                 <div class="card margin-top-30">
                                     <div class="card-head">
                                         <div class="card-head-label">
                                             <h3 class="card-head-title">
-                                                Single File Upload
+                                                File Upload
                                             </h3>
                                         </div>
                                     </div>
-                                    <!--begin::Form-->
                                     <div class="card-body">
-                                        <div class="py-5">
-                                            <div class="dropzone">
-                                                <div class="upload_cover">
-                                                    <div class="img--container uploded__img">
-                                                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/banners/hero-1.jpg"
-                                                            title="">
-                                                        <div class="upload__action">
-                                                            <button type="button"><svg>
-                                                                    <use
-                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#delete-icon">
-                                                                    </use>
-                                                                </svg></button>
-                                                            <button type="button">
-                                                                <svg>
-                                                                    <use
-                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#edit-icon">
-                                                                    </use>
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div clas="img--container  ">
-                                                        <div class="file-upload fileVisiblity">
-                                                            <img
-                                                                src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
-                                                        </div>
-                                                    </div>
+                                        <div class="dropzone">
+                                            <div class="dropzone-upload">
+                                                <div class="file-upload">
+                                                    <img
+                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
+                                                </div>
+                                                <div class="needsclick">
+                                                    <h3 class="dropzone-msg-title">click here to upload</h3>
                                                 </div>
                                             </div>
+                                            <input class="dropzone-input" type="file">
                                         </div>
 
                                     </div>
-                                    <!--end::Form-->
+
+
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -148,66 +129,86 @@
                                     <div class="card-head">
                                         <div class="card-head-label">
                                             <h3 class="card-head-title">
-                                                Multiple File Upload
+                                                File Uploaded
                                             </h3>
                                         </div>
                                     </div>
+                                    <!--begin::Form-->
                                     <div class="card-body">
-                                        <div class="py-5">
-                                            <div class="dropzone">
-                                                <div class="upload_cover">
-                                                    <div class="file-upload">
-                                                        <img
-                                                            src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
-                                                    </div>
-                                                    <div class="needsclick">
-                                                        <h3 class="dropzone-msg-title">click here to upload</h3>
-                                                    </div>
+
+                                        <div class="dropzone dropzone-custom">
+                                            <div class="dropzone-uploaded">
+                                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/banners/hero-1.jpg"
+                                                    title="">
+                                                <div class="dropzone-uploaded-action">
+                                                    <ul class="actions">
+                                                        <li>
+                                                            <a href="javascript:void(0)">
+                                                                <svg class="svg" width="18" height="18">
+                                                                    <use
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                    </use>
+                                                                </svg>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript:void(0)">
+                                                                <svg class="svg" width="18" height="18">
+                                                                    <use
+                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                    </use>
+                                                                </svg>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
                                                 </div>
-                                            </div>
-                                            <div class="upload__files">
-                                                <ul class="upload__list">
-                                                    <li class="upload__list-item">
-                                                        <div class="media">
-                                                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg"
-                                                                title="">
-                                                        </div>
-                                                        <div class="title">image-name.jpg</div>
-                                                        <div class="action">
-                                                            <a href="javascript:0;">
 
-                                                            </a>
-                                                        </div>
-                                                    </li>
-                                                    <li class="upload__list-item">
-                                                        <div class="media">
-                                                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg"
-                                                                title="">
-                                                        </div>
-                                                        <div class="title">image-name.jpg</div>
-                                                        <div class="action">
-                                                            <a href="javascript:0;">
-                                                            </a>
-                                                        </div>
-                                                    </li>
-                                                    <li class="upload__list-item">
-                                                        <div class="media">
-                                                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg"
-                                                                title="">
-                                                        </div>
-                                                        <div class="title">image-name.jpg</div>
-                                                        <div class="action">
-                                                            <a href="javascript:0;">
-
-                                                            </a>
-                                                        </div>
-                                                    </li>
-
-                                                </ul>
                                             </div>
                                         </div>
+                                        <div class="upload__files">
+                                            <ul class="upload__list">
+                                                <li class="upload__list-item">
+                                                    <div class="media">
+                                                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/banners/hero-1.jpg"
+                                                            title="">
+                                                    </div>
+                                                    <div class="title">image-name.jpg</div>
+                                                    <div class="action">
+                                                        <a href="javascript:0;">
 
+                                                        </a>
+                                                    </div>
+                                                </li>
+                                                <li class="upload__list-item">
+                                                    <div class="media">
+                                                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/banners/hero-1.jpg"
+                                                            title="">
+                                                    </div>
+                                                    <div class="title">image-name.jpg</div>
+                                                    <div class="action">
+                                                        <a href="javascript:0;">
+                                                        </a>
+                                                    </div>
+                                                </li>
+                                                <li class="upload__list-item">
+                                                    <div class="media">
+                                                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg"
+                                                            title="">
+                                                    </div>
+                                                    <div class="title">image-name.jpg</div>
+                                                    <div class="action">
+                                                        <a href="javascript:0;">
+
+                                                        </a>
+                                                    </div>
+                                                </li>
+
+                                            </ul>
+                                        </div>
                                     </div>
+
+
+                                    <!--end::Form-->
                                 </div>
                             </div>
                         </div>

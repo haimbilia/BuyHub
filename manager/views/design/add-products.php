@@ -564,17 +564,18 @@
                                     </div>
                                     <div class="card-body show" id="stock-block2">
                                         <div class="dropzone dropzone-custom">
-                                            <div class="upload_cover">
+                                            <div class="dropzone-upload">
                                                 <div class="file-upload">
                                                     <img
                                                         src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
                                                 </div>
                                                 <div class="needsclick">
-                                                    <h3 class="dropzone-msg-title">Click here to upload</h3>
+                                                    <h3 class="dropzone-msg-title">click here to upload</h3>
                                                 </div>
                                             </div>
                                             <input class="dropzone-input" type="file">
                                         </div>
+
                                         <span class="form-text text-muted  pt-2"> File type must be a .jpg, .gif or .png
                                             smaller than 2MB and at least
                                             800x800 in 1:1 aspect ratio</span>

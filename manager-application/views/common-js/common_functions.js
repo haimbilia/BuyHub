@@ -147,12 +147,12 @@ expected response
 
 postdata object like {record:1}
 */
-select2 = function (elmId, url, postdata = {}, callbackOnSelect) {    
+select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOnUnSelect = '') {    
     let ele = $("#" + elmId);
     ele.select2({
         closeOnSelect: true,
         dir: layoutDirection,
-        //allowClear: true,
+        allowClear: true,
         placeholder: ele.attr('placeholder') || '',
         ajax: {
             url: url,
@@ -181,8 +181,12 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect) {
         minimumInputLength: 0,
         dropdownPosition: 'below'
     }).on('select2:selecting', function (e) {
-        if(typeof(callbackOnSelect) == 'function'){
+        if('function' == typeof callbackOnSelect){
             callbackOnSelect(e);
+        }
+    }).on('select2:unselecting', function (e) {
+        if('function' == typeof callbackOnUnSelect){
+            callbackOnUnSelect(e);
         }
     });
 
