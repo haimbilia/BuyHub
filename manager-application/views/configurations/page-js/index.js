@@ -21,22 +21,34 @@ $(document).ready(function () {
     $(document).on("click", ".submitBtnJs", function () {
         $('.formBodyJs form').submit();
     });
+
+    $(document).on('change', '.prefRatio-js', function() {
+        var inputElement = $(this).closest('.form-group').find('input[type="file"]');
+        var selectedVal = $(this).val();
+        if (selectedVal == ratioTypeSquare) {
+            inputElement.attr('data-min_width', 150)
+            inputElement.attr('data-min_height', 150)
+        } else {
+            inputElement.attr('data-min_width', 150)
+            inputElement.attr('data-min_height', 85)
+        }
+    });
 });
 
 (function () {
     var currentPage = 1;
     var runningAjaxReq = false;
     var dv = '#frmBlockJs';
-    getForm = function (frmType) {
+    getForm = function (frmType, langId = 0) {
         fcom.resetEditorInstance();
         $(dv).prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Configurations', 'form', [frmType]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Configurations', 'form', [frmType, langId]), '', function (t) {          
             fcom.removeLoader();
             $.ykmsg.close();
             $(dv).html(t);
             setTabActive(frmType);
         });
-    };
+    };  
 
     setTabActive = function (type) {
         $('ul.confTypesJs li.is-active').removeClass('is-active');
@@ -45,43 +57,6 @@ $(document).ready(function () {
             scrollTop: $("#frmBlockJs").offset().top
         }); */
     }
-
-    getLangForm = function (frmType, langId, autoFillLangData = 0) {
-        fcom.resetEditorInstance();
-        $(dv).prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Configurations', 'confLangForm', [frmType, langId, autoFillLangData]), '', function (t) {
-            $.ykmsg.close();
-            setTabActive(frmType);
-
-            $(dv).html(t);
-            fcom.setEditorLayout(langId);
-            if (frmType == FORM_MEDIA) {
-                $('input[name=btn_submit]').hide();
-            }
-            var frm = $(dv + ' form')[0];
-            var validator = $(frm).validation({
-                errordisplay: 3
-            });
-            $(frm).submit(function (e) {
-                e.preventDefault();
-                if (validator.validate() == false) {
-                    return;
-                }
-                var data = fcom.frmData(frm);
-                fcom.updateWithAjax(fcom.makeUrl('Configurations', 'setupLang'), data, function (t) {
-                    $.ykmsg.close();
-                    runningAjaxReq = false;
-                    fcom.resetEditorInstance();
-                    if (t.langId > 0 && t.shopId > 0) {
-                        shopLangForm(t.shopId, t.langId);
-                        return;
-                    }
-                });
-            });
-            fcom.removeLoader();
-        });
-    }
-
     setup = function (frm) {
         if (!$(frm).validate()) {
             return;
@@ -89,34 +64,6 @@ $(document).ready(function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'setup'), data, function (t) {
             $.ykmsg.close();
-            if (t.langId > 0 && t.frmType > 0) {
-                getLangForm(t.frmType, t.langId);
-                return;
-            }
-            if (t.frmType > 0) {
-                getForm(t.frmType);
-                return;
-            }
-            $(document).trigger('close.facebox');
-        });
-    }
-
-    setupLang = function (frm) {
-        if (!$(frm).validate()) {
-            return;
-        }
-        var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'setupLang'), data, function (t) {
-            $.ykmsg.close();
-            if (t.langId > 0 && t.frmType > 0) {
-                getLangForm(t.frmType, t.langId);
-                return;
-            }
-            if (t.frmType > 0) {
-                getForm(t.frmType);
-                return;
-            }
-            $(document).trigger('close.facebox');
         });
     }
 
@@ -126,27 +73,7 @@ $(document).ready(function () {
         }
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeMediaImage', [file_type, lang_id]), '', function (t) {
             $.ykmsg.close();
-            getLangForm(document.frmConfiguration.form_type.value, lang_id);
-        });
-    };
-    
-    removeCollectionBgImage = function (lang_id) {
-        if (!confirm(langLbl.confirmDeleteImage)) {
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeCollectionBgImage', [lang_id]), '', function (t) {
-            $.ykmsg.close();
-            getLangForm(document.frmConfiguration.form_type.value, lang_id);
-        });
-    };
-
-    removeBrandCollectionBgImage = function (lang_id) {
-        if (!confirm(langLbl.confirmDeleteImage)) {
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeBrandCollectionBgImage', [lang_id]), '', function (t) {
-            $.ykmsg.close();
-            getLangForm(document.frmConfiguration.form_type.value, lang_id);
+            getForm(document.frmConfiguration.form_type.value, lang_id);
         });
     };
 
@@ -157,49 +84,20 @@ $(document).ready(function () {
         if (val == NO) {
             $("input[name='CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES']").val(0);
         }
-    };
-
-    generalInstructions = function (frmType) {
-        fcom.resetEditorInstance();
-        $(dv).prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Configurations', 'generalInstructions', [frmType]), '', function (t) {
-            $(dv).html(t);
-            setTabActive(frmType);
-        });
-    };
-
-    removeAppMainScreenImage = function (lang_id) {
-        if (!confirm(langLbl.confirmDeleteImage)) {
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeAppMainScreenImage', [lang_id]), '', function (t) {
-            $.ykmsg.close();
-            getLangForm(document.frmConfiguration.form_type.value, lang_id);
-        });
-    };
-    removeAppLogo = function (lang_id) {
-        if (!confirm(langLbl.confirmDeleteImage)) {
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeAppLogo', [lang_id]), '', function (t) {
-            $.ykmsg.close();
-            getLangForm(document.frmConfiguration.form_type.value, lang_id);
-        });
-    };
+    };    
 
     popupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
             loadCropperSkeleton();
             fcom.ajax(fcom.makeUrl('Configurations', 'imgCropper'), '', function (t) {
-                $("#modalBoxJs .modal-body").html(t);
+                t = $.parseJSON(t);
+                console.log(t);
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);
+                
                 var file = inputBtn.files[0];
                 var minWidth = $(inputBtn).attr('data-min_width');
-                var minHeight = $(inputBtn).attr('data-min_height');
-                /*if(minWidth == minHeight){
-                    var aspectRatio = 1 / 1
-                } else {
-                    var aspectRatio = 16 / 9;
-                }*/
+                var minHeight = $(inputBtn).attr('data-min_height');              
                 var options = {
                     aspectRatio: minWidth / minHeight,
                     data: {
@@ -214,7 +112,8 @@ $(document).ready(function () {
                     imageSmoothingEnabled: true,
                 };
                 $(inputBtn).val('');
-                return cropImage(file, options, 'uploadConfImages', inputBtn);
+                setTimeout(function(){ cropImage(file, options, 'uploadConfImages', inputBtn) }, 100);
+                return ;
             });
         }
     };
@@ -249,7 +148,7 @@ $(document).ready(function () {
                     return false;                  
                 }
                 $.ykmsg.success(ans.msg);
-                getLangForm(formType, langId);
+                getForm(formType, langId);
                 $("#modalBoxJs").modal("hide");
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -268,7 +167,7 @@ $(document).ready(function () {
         }
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'deleteVerificationFile', [fileType]), '', function (t) {
             $.ykmsg.close();
-            getForm(document.frmConfiguration.form_type.value);
+            getForm(document.frmConfiguration.form_type.value,document.frmConfiguration.lang_id.value);
         });
     };
 

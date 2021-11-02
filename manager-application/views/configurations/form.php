@@ -5,18 +5,11 @@ $clearFormFn = isset($clearFormFn) ? $clearFormFn : 'getForm(' . $frmType . ')';
 HtmlHelper::formatFormFields($frm, 6);
 $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
 $frm->setFormTagAttribute('class', 'form form--settings modalFormJs checkboxSwitchJs layout--' . $formLayout);
+$frm->setFormTagAttribute('dir', $formLayout);
 $frm->setFormTagAttribute('data-onclear', $clearFormFn);
 $frm->setFormTagAttribute('id', 'frmConfSetting');
 
-$tbid = isset($tabId) ? $tabId : 'tabs_' . $frmType;
-
-if ($lang_id > 0) {
-    $frm->setFormTagAttribute('onsubmit', 'setupLang(this); return(false);');
-    $langFld = $frm->getField('lang_id');
-    $langFld->setfieldTagAttribute('onChange', "getLangForm(" . $frmType . ", this.value);");
-} else {
-    $frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
-}
+$frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
 
 $stateData = FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 1);
 $displayMap = false;
@@ -24,97 +17,76 @@ $colMd12Arr = [];
 $class = '';
 switch ($frmType) {
     case Configurations::FORM_GENERAL:
-        if (1 > $lang_id) {
-            $colMd12Arr = ['CONF_MAP_IFRAME_CODE'];
-        } else {
-            $colMd12Arr = ['CONF_COOKIES_TEXT_' . $lang_id];
-        }
+        $colMd12Arr = ['CONF_COOKIES_TEXT_' . $lang_id ,'CONF_MAP_IFRAME_CODE'];
         $class = 'card-tabs';
         break;
     case Configurations::FORM_LOCAL:
         $class = 'card-tabs';
         break;
     case Configurations::FORM_SEO:
-        if (1 > $lang_id) {
-            $colMd12Arr = ['CONF_LANG_SPECIFIC_URL', 'CONF_SITE_TRACKER_CODE', 'CONF_SITE_ROBOTS_TXT', 'seperatorGoogleTag', 'googleTagManager', 'CONF_GOOGLE_TAG_MANAGER_HEAD_SCRIPT', 'CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT', 'googlewebmaster', 'hotjar', 'CONF_HOTJAR_HEAD_SCRIPT', 'schemacode', 'CONF_DEFAULT_SCHEMA_CODES_SCRIPT'];
-        }
+  
+        $colMd12Arr = ['CONF_LANG_SPECIFIC_URL', 'CONF_SITE_TRACKER_CODE', 'CONF_SITE_ROBOTS_TXT', 'seperatorGoogleTag', 'googleTagManager', 'CONF_GOOGLE_TAG_MANAGER_HEAD_SCRIPT', 'CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT', 'googlewebmaster', 'hotjar', 'CONF_HOTJAR_HEAD_SCRIPT', 'schemacode', 'CONF_DEFAULT_SCHEMA_CODES_SCRIPT'];
+       
 
         break;
     case Configurations::FORM_USER_ACCOUNT:
-        if (1 > $lang_id) {
+  
             $colMd12Arr = ['Withdrawal'];
-        }
+       
         break;
     case Configurations::FORM_CART_WISHLIST:
 
-        if (1 > $lang_id) {
+    
             $colMd12Arr = ['Cart', 'Wishlist'];
-        }
+     
         break;
     case Configurations::FORM_CHECKOUT_PROCESS:
-        if (1 > $lang_id) {
+  
             $colMd12Arr = ['Checkout', 'pickup', 'cprocess', 'CONF_VENDOR_ORDER_STATUS', 'CONF_BUYER_ORDER_STATUS', 'CONF_PROCESSING_ORDER_STATUS', 'CONF_COMPLETED_ORDER_STATUS', 'CONF_REVIEW_READY_ORDER_STATUS', 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', 'CONF_ENABLE_DIGITAL_DOWNLOADS', 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES', 'CONF_BADGE_COUNT_ORDER_STATUS', 'CONF_PRODUCT_IS_ON_ORDER_STATUSES'];
-        }
+     
 
         break;
-    case Configurations::FORM_AFFILIATE:
-        if (1 > $lang_id) {
+    case Configurations::FORM_AFFILIATE:      
             $colMd12Arr = ['CONF_AFFILIATES_REQUIRES_APPROVAL'];
-        }
+      
         break;
-    case Configurations::FORM_REWARD_POINTS:
-        if (1 > $lang_id) {
-            $colMd12Arr = ['Birthday_Rewards', 'CONF_ENABLE_BIRTHDAY_DISCOUNT_REWARDS', 'BuyingAnYear'];
-        }
+    case Configurations::FORM_REWARD_POINTS:   
+            $colMd12Arr = ['Birthday_Rewards', 'CONF_ENABLE_BIRTHDAY_DISCOUNT_REWARDS', 'BuyingAnYear'];     
         break;
-    case Configurations::FORM_LIVE_CHAT:
-        if (1 > $lang_id) {
-            $colMd12Arr = ['CONF_LIVE_CHAT_CODE'];
-        }
+    case Configurations::FORM_LIVE_CHAT:       
+        $colMd12Arr = ['CONF_LIVE_CHAT_CODE'];       
         break;
 
-    case Configurations::FORM_EMAIL:
-        if (1 > $lang_id) {
-            $colMd12Arr = ['sendmailhtml', 'CONF_ADDITIONAL_ALERT_EMAILS'];
-        }
+    case Configurations::FORM_EMAIL:        
+            $colMd12Arr = ['sendmailhtml', 'CONF_ADDITIONAL_ALERT_EMAILS'];        
         $class = 'card-tabs';
         break;
-    case Configurations::FORM_SERVER:
-        if (0 < $lang_id) {
+    case Configurations::FORM_SERVER:     
             $colMd12Arr = ['CONF_MAINTENANCE_TEXT_' . $lang_id];
-        }
+        
         $class = 'card-tabs';
         break;
-    case Configurations::FORM_DISCOUNT:
-        if (1 > $lang_id) {
-            $colMd12Arr = ['firstTimeDiscount'];
-        }
+    case Configurations::FORM_DISCOUNT:        
+            $colMd12Arr = ['firstTimeDiscount'];        
         break;
-    case Configurations::FORM_SHARING:
-        if (1 > $lang_id) {
-            $colMd12Arr = ['ShareAndEarn'];
-        }
+    case Configurations::FORM_SHARING:        
+            $colMd12Arr = ['ShareAndEarn'];        
         break;
     case Configurations::FORM_THIRD_PARTY_API:
-        if (1 > $lang_id) {
-            $colMd12Arr = ['Engagespot', 'CONF_ENGAGESPOT_PUSH_NOTIFICATION_CODE', 'GoogleMap', 'CONF_GOOGLEMAP_API_KEY', 'Newsletter', 'CONF_AWEBER_SIGNUP_CODE', 'Analytics', 'accessToken', 'seperator', 'GoogleReCaptcha', 'Translatorseperator', 'JWPlayerseperator', 'CONF_JW_PLAYER_KEY'];
-        }
-        break;
-    case Configurations::FORM_REFERAL:
-        if (1 > $lang_id) {
-            $colMd12Arr = ['RewardsOnRegistration', 'RewardsonPurchase'];
-        }
-        break;
-    case Configurations::FORM_MEDIA:      
-
-        $colMd12Arr = ['spacer','spacer1','spacer2','spacer3','spacer4','spacer5','spacer6','spacer7','spacer8','spacer9','spacer10'];
         
+            $colMd12Arr = ['Engagespot', 'CONF_ENGAGESPOT_PUSH_NOTIFICATION_CODE', 'GoogleMap', 'CONF_GOOGLEMAP_API_KEY', 'Newsletter', 'CONF_AWEBER_SIGNUP_CODE', 'Analytics', 'accessToken', 'seperator', 'GoogleReCaptcha', 'Translatorseperator', 'JWPlayerseperator', 'CONF_JW_PLAYER_KEY'];
+        
+        break;
+    case Configurations::FORM_REFERAL:        
+            $colMd12Arr = ['RewardsOnRegistration', 'RewardsonPurchase'];        
+        break;
+    case Configurations::FORM_MEDIA:
+        $colMd12Arr = ['spacer', 'spacer1', 'spacer2', 'spacer3', 'spacer4', 'spacer5', 'spacer6', 'spacer7', 'spacer8', 'spacer9', 'spacer10'];
         break;
 
     case Configurations::FORM_PRODUCT:
-        if (1 > $lang_id) {
-            $colMd12Arr = ['geolocation', 'CONF_PRODUCT_GEO_LOCATION', 'CONF_LOCATION_LEVEL', 'CONF_DEFAULT_GEO_LOCATION'];
-        }
+       
+        $colMd12Arr = ['geolocation', 'CONF_PRODUCT_GEO_LOCATION', 'CONF_LOCATION_LEVEL', 'CONF_DEFAULT_GEO_LOCATION'];       
 
         $geoFld = $frm->getField('CONF_PRODUCT_GEO_LOCATION');
         $geoFld->setFieldTagAttribute('class', 'geoLocation');
@@ -189,31 +161,25 @@ if (!empty($colMd12Arr)) {
 }
 
 ?>
-<div class="card <?php echo $class; ?>">
+<div class="card">
     <div class="card-head">
         <div class="card-head-label">
             <h3 class="card-head-title">
                 <?php echo $tabs[$frmType] . ' ' . Labels::getLabel('LBL_SETTINGS', $siteLangId); ?>
             </h3>
-
         </div>
-        <div class="card-head-toolbar">
-            <?php if ($dispLangTab && $frmType != Configurations::FORM_MEDIA && $frmType != Configurations::FORM_SHARING) { ?>
-
-                <nav class="nav nav-tabs navTabsJs">
-                    <a class="nav-link <?php echo ($lang_id == 0) ? 'active' : ''; ?>" href="javascript:void(0)" onClick="getForm(<?php echo $frmType; ?>)">
-                        <?php echo Labels::getLabel('LBL_Basic', $siteLangId); ?>
-                    </a>
-
-                    <a class="nav-link <?php echo (0 < $lang_id ? 'active' : '') ?>" href="javascript:void(0);" onClick="getLangForm(<?php echo $frmType; ?>, <?php echo FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1); ?>)">
-                        <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
-                    </a>
-                </nav>
+        <div class="card-head-toolbar">          
+            <?php if ($dispLangTab) { ?>    
+            <div class="input-group">
+                <select class="form-control form-select select-language" onchange="getForm(<?php echo $frmType; ?>, this.value)">
+                    <?php foreach( $languages as $langKey => $langName){ ?>
+                        <option value="<?php echo $langKey;?>" <?php echo $langKey == $lang_id ? "selected":"";?>  ><?php echo $langName;?></option>
+                    <?php } ?>
+                </select>                
+            </div>
             <?php } ?>
         </div>
     </div>
-
-
     <div class="card-body">
         <div class="formBodyJs">
             <?php echo str_replace('<i class="input-helper"></i>', '<span></span>', $frm->getFormHtml()); ?>
@@ -244,23 +210,10 @@ if (!empty($colMd12Arr)) {
         getStatesByCountryCode($("#geo_country_code").val(),
             '<?php echo FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1); ?>', '#geo_state_code',
             'state_code');
-    <?php } ?>
-
-    $(document).on('change', '.prefRatio-js', function() {
-        var inputElement = $(this).parents('.list-inline').next('input');
-        var selectedVal = $(this).val();
-        if (selectedVal == ratioTypeSquare) {
-            inputElement.attr('data-min_width', 150)
-            inputElement.attr('data-min_height', 150)
-        } else {
-            inputElement.attr('data-min_width', 150)
-            inputElement.attr('data-min_height', 85)
-        }
-    });
+    <?php } ?>   
 
     $(document).on('change', '.geoLocation', function() {
         var geolocVal = $(this).val();
-
         $('.listingFilter').removeAttr('disabled');
         if (geolocVal == <?php echo applicationConstants::BASED_ON_RADIUS; ?>) {
             $('.listingFilter').attr('disabled', 'disabled');

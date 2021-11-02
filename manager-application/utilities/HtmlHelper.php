@@ -313,13 +313,13 @@ class HtmlHelper
                                 </ul></div>
                             </div>';
                     }              
-                    if (1 > count($imageArr)) {
-                        $str .= '<input class="dropzone-input" type="file"';        
-                        foreach ($fileInputAttributes as $attrName => $attrVal) {
-                            $str .= ' ' . $attrName . '="' . $attrVal . '"';
-                        }
-                        $str .= '>';
-                     }
+                   
+                    $str .= '<input class="dropzone-input '. (count($imageArr) ? "hide" : "" ).'" type="file"';        
+                    foreach ($fileInputAttributes as $attrName => $attrVal) {
+                        $str .= ' ' . $attrName . '="' . $attrVal . '"';
+                    }
+                    $str .= '>';
+                    
                     
                     $str .= '</div>';
         return   $str;

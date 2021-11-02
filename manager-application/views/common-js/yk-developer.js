@@ -62,7 +62,7 @@ $(document).ready(function () {
         },
 
         getModalBody: function () {
-            return '<div class="modal fade" id="modalBoxJs" tabindex="-1" role="dialog" aria-labelledby="modalBoxJsLabel" aria-hidden="true"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body pd-0"><div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div></div></div></div></div>';
+            return '<div class="modal fade" id="modalBoxJs" tabindex="-1" role="dialog" aria-labelledby="modalBoxJsLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div></div><div class="modal-footer justify-content-center "></div></div></div></div>';
         },
 
         removeLoader: function (cls) {
