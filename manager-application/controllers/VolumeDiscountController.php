@@ -424,9 +424,9 @@ class VolumeDiscountController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $splPriceTblHeadingCols = CacheHelper::get('splPriceTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($splPriceTblHeadingCols) {
-            return json_decode($splPriceTblHeadingCols);
+        $volumeDiscountTblHeadingCols = CacheHelper::get('volumeDiscountTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($volumeDiscountTblHeadingCols) {
+            return json_decode($volumeDiscountTblHeadingCols);
         }
 
         $arr = [
@@ -438,7 +438,7 @@ class VolumeDiscountController extends AdminBaseController
             'voldiscount_percentage' => Labels::getLabel('LBL_Discount', $this->siteLangId) . ' (%)',
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('splPriceTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('volumeDiscountTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
     }
