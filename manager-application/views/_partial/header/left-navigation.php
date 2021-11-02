@@ -111,6 +111,14 @@
                                     </a>
                                 </li>
                             <?php } ?>
+                            
+                            <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a href="<?php echo UrlHelper::generateUrl('VolumeDiscount'); ?>" class="nav_link">
+                                        <?php echo Labels::getLabel('NAV_VOLUME_DISCOUNT', $siteLangId); ?>
+                                    </a>
+                                </li>
+                            <?php } ?>
 
                             <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
