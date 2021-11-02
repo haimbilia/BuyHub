@@ -429,12 +429,12 @@ class BrandsController extends AdminBaseController
         $languages = Language::getAllNames();
         if (1 == count($languages)) {
             $langId = array_key_first($languages);
-        } 
+        }
 
         $data['lang_id'] = $langId;
         $data['ratio_type'] = AttachedFile::RATIO_TYPE_SQUARE;
         if (0 < $recordId) {
-            $brandLogo = current(AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_LOGO, $recordId, 0, $langId, false));         
+            $brandLogo = current(AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_LOGO, $recordId, 0, $langId, false));
             if (is_array($brandLogo) && count($brandLogo)) {
                 $data['ratio_type'] = $brandLogo['afile_aspect_ratio'];
             }
@@ -560,13 +560,13 @@ class BrandsController extends AdminBaseController
         if (count($languagesAssocArr) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_Universal', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
         } else {
-            $lang_id = array_key_first($languagesAssocArr);      
+            $lang_id = array_key_first($languagesAssocArr);
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
         $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
-        $frm->addRadioButtons(Labels::getLabel('FRM_Ratio', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);  
-        
+        $frm->addRadioButtons(Labels::getLabel('FRM_Ratio', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
+
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BRAND_LOGO);
         $frm->addHiddenField('', 'logo_min_width');
         $frm->addHiddenField('', 'logo_min_height');
@@ -731,12 +731,17 @@ class BrandsController extends AdminBaseController
 
     public function autoComplete()
     {
-        $pagesize = 10;
-        $post = FatApp::getPostedData();
         $this->objPrivilege->canViewBrands();
-        $fetchAllRecords = FatApp::getPostedData('fetchAllRecords', FatUtility::VAR_INT, 0);
-        $brandObj = new Brand();
-        $srch = $brandObj->getSearchObject();
+
+        $pagesize = 5;
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+
+        $post = FatApp::getPostedData();
+        $brand = new Brand();
+        $srch = $brand->getSearchObject();
         $srch->joinTable(
             Brand::DB_TBL . '_lang',
             'LEFT OUTER JOIN',
@@ -749,34 +754,30 @@ class BrandsController extends AdminBaseController
                 ->attachCondition('brand_identifier', 'LIKE', '%' . $post['keyword'] . '%');
         }
         $srch->addCondition('brand_active', '=', applicationConstants::YES);
-        $srch->addCondition('brand_deleted', '=', applicationConstants::NO);
-        //$srch->setPageSize($pagesize);
-        if ($fetchAllRecords == 1) {
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
-        } else {
-            $srch->setPageSize($pagesize);
-        }
+        $srch->addCondition('brand_deleted', '=', applicationConstants::NO);        
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
 
-        $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
+        /* $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
         $alreadyAdded = Collections::getRecords($collectionId);
         if (!empty($alreadyAdded) && 0 < count($alreadyAdded)) {
             $srch->addCondition('brand_id', 'NOT IN', array_keys($alreadyAdded));
-        }
+        } */
 
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $brands = $db->fetchAll($rs, 'brand_id');
-        $json = array();
+     
+        $json = array(
+            'pageCount' => $srch->pages()
+        );
         foreach ($brands as $key => $brand) {
-            $json[] = array(
+            $json['results'][] = array(
                 'id' => $key,
-                'name' => strip_tags(html_entity_decode($brand['brand_name'], ENT_QUOTES, 'UTF-8'))
+                'text' => strip_tags(html_entity_decode($brand['brand_name'], ENT_QUOTES, 'UTF-8'))
             );
         }
-        die(json_encode($json));
-        /* $this->set('brands', $db->fetchAll($rs,'brand_id') );
-        $this->_template->render(false,false); */
+        die(FatUtility::convertToJson($json));
     }
 
     public function brandRequests()

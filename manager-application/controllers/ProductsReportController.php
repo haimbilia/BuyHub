@@ -2,9 +2,6 @@
 
 class ProductsReportController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
         parent::__construct($action);
@@ -13,20 +10,35 @@ class ProductsReportController extends AdminBaseController
 
     public function index()
     {
-        $fields = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($fields);
+        $formColumns = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($formColumns);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('frmSearch', $frmSearch);
-        $this->set('fields', $fields);
+        $this->set('formColumns', $formColumns);
+        $this->set('pageTitle', Labels::getLabel('LBL_Products_Report', $this->siteLangId));
+        $this->getListingData(false);
+        $this->_template->addJs(array('js/select2.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
     }
 
     public function search($type = false)
     {
+        $this->getListingData($type);
+        $jsonData = [
+            'headSection' => $this->_template->render(false, false, '_partial/listing/head-section.php', true),
+            'listingHtml' => $this->_template->render(false, false, 'products-report/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    public function getListingData($type = false)
+    {
         $db = FatApp::getDb();
 
         $fields = $this->getFormColumns();
-        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = FatApp::getPostedData('listingColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
@@ -42,7 +54,10 @@ class ProductsReportController extends AdminBaseController
         $srchFrm = $this->getSearchForm($fields);
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
 
         /* get Seller Order Products[ */
         $opSrch = new Report(0, array_keys($fields));
@@ -160,9 +175,9 @@ class ProductsReportController extends AdminBaseController
                 foreach ($fields as $key => $val) {
                     switch ($key) {
                         case 'product_name':
-                            $name =  Labels::getLabel('LBL_Catalog_Name', $this->siteLangId) . ": " . $row['product_name'];
+                            $name =  Labels::getLabel('LBL_CATALOG_NAME', $this->siteLangId) . ": " . $row['product_name'];
                             if ($row['selprod_title'] != '') {
-                                $name .= "\n" . Labels::getLabel('LBL_Custom_Title', $this->siteLangId) . ':' . $row['selprod_title'];
+                                $name .= "\n" . Labels::getLabel('LBL_CUSTOM_TITLE', $this->siteLangId) . ':' . $row['selprod_title'];
                             }
                             if ($row['grouped_option_name'] != '') {
                                 $groupedOptionNameArr = explode(',', $row['grouped_option_name']);
@@ -175,11 +190,11 @@ class ProductsReportController extends AdminBaseController
                             }
 
                             if ($row['brand_name'] != '') {
-                                $name .= "\n" . Labels::getLabel('LBL_Brand', $this->siteLangId) . ": " . $row['brand_name'];
+                                $name .= "\n" . Labels::getLabel('LBL_BRAND', $this->siteLangId) . ": " . $row['brand_name'];
                             }
 
                             if ($row['shop_name'] != '') {
-                                $name .= "\n" . Labels::getLabel('LBL_Sold_By', $this->siteLangId) . ': ' . $row['shop_name'];
+                                $name .= "\n" . Labels::getLabel('LBL_SOLD_BY', $this->siteLangId) . ': ' . $row['shop_name'];
                             }
                             $arr[] = html_entity_decode($name, ENT_QUOTES, 'utf-8');
                             break;
@@ -214,7 +229,7 @@ class ProductsReportController extends AdminBaseController
                 array_push($sheetData, $arr);
             }
 
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Products_Report', $this->siteLangId) . ' ' . date("d-M-Y") . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_PRODUCTS_REPORT', $this->siteLangId) . ' ' . date("d-M-Y") . '.csv', ',');
             exit;
         } else {
             $srch->setPageNumber($page);
@@ -230,7 +245,7 @@ class ProductsReportController extends AdminBaseController
             $this->set('sortBy', $sortBy);
             $this->set('sortOrder', $sortOrder);
             $this->set('fields', $fields);
-            $this->_template->render(false, false);
+            $this->set('allowedKeysForSorting', array_keys($fields));
         }
     }
 
@@ -239,34 +254,27 @@ class ProductsReportController extends AdminBaseController
         $this->search('export');
     }
 
-    public function getSearchForm($fields = [])
+    public function getSearchForm($fields = [], $shopArr = [], $brandArr = [])
     {
-        $frm = new Form('frmProductsReportSearch');
-        $frm->addHiddenField('', 'page', 1);
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
-        $frm->addTextBox(Labels::getLabel('LBL_Shop', $this->siteLangId), 'shop_name');
-        $frm->addTextBox(Labels::getLabel('LBL_Brand', $this->siteLangId), 'brand_name');
-        $frm->addHiddenField('', 'shop_id', 0);
-        $frm->addHiddenField('', 'brand_id', 0);
+        $frm = new Form('frmRecordSearch');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'product_name', applicationConstants::SORT_ASC);
+        }
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+
+        $frm->addSelectBox(Labels::getLabel('FRM_SHOP', $this->siteLangId), 'shop_id', $shopArr, '', [], '');
+        $frm->addSelectBox(Labels::getLabel('FRM_BRAND', $this->siteLangId), 'brand_id', $brandArr, '', [], '');
 
         $prodCatObj = new ProductCategory();
         $categoriesAssocArr = $prodCatObj->getProdCatTreeStructure(0, $this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Category', $this->siteLangId), 'category_id', $categoriesAssocArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'category_id', $categoriesAssocArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
 
-        $frm->addTextBox(Labels::getLabel('LBL_Price_From', $this->siteLangId), 'price_from');
-        $frm->addTextBox(Labels::getLabel('LBL_Price_To', $this->siteLangId), 'price_to');
+        $frm->addTextBox(Labels::getLabel('FRM_PRICE_FROM', $this->siteLangId), 'price_from');
+        $frm->addTextBox(Labels::getLabel('FRM_PRICE_TO', $this->siteLangId), 'price_to');
 
-        if (!empty($fields)) {
-            $frm->addHiddenField('', 'sortBy', 'product_name');
-            $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
-            $frm->addHiddenField('', 'reportColumns', '');
-            /* $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  ''); */
-        }
-
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
-        $fld_submit->attachField($fld_cancel);
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
@@ -275,41 +283,41 @@ class ProductsReportController extends AdminBaseController
         $productReportCacheVar = FatCache::get('productReportCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$productReportCacheVar) {
             $arr = [
-                'product_name'    =>    Labels::getLabel('LBL_Product_name', $this->siteLangId),
-                /* 'selprod_title' =>  Labels::getLabel('LBL_Custom_Title', $this->siteLangId),
-                'brand_name' => Labels::getLabel('LBL_Brand', $this->siteLangId),
-                'shop_name' => Labels::getLabel('LBL_Sold_By', $this->siteLangId), */
-                'followers'    =>    Labels::getLabel('LBL_Favorites', $this->siteLangId),
-                'selprod_price'    =>    Labels::getLabel('LBL_Unit_Price', $this->siteLangId),
-                'totOrders' => Labels::getLabel('LBL_Order_Placed', $this->siteLangId),
-                'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $this->siteLangId),
-                'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $this->siteLangId),
-                'netSoldQty' => Labels::getLabel('LBL_Sold_Qty', $this->siteLangId),
-                'grossSales' => Labels::getLabel('LBL_Gross_Sale', $this->siteLangId),
-                'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->siteLangId),
-                'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $this->siteLangId),
+                'product_name'    =>    Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
+                /* 'selprod_title' =>  Labels::getLabel('LBL_CUSTOM_TITLE', $this->siteLangId),
+                'brand_name' => Labels::getLabel('LBL_BRAND', $this->siteLangId),
+                'shop_name' => Labels::getLabel('LBL_SOLD_BY', $this->siteLangId), */
+                'followers'    =>    Labels::getLabel('LBL_FAVORITES', $this->siteLangId),
+                'selprod_price'    =>    Labels::getLabel('LBL_UNIT_PRICE', $this->siteLangId),
+                'totOrders' => Labels::getLabel('LBL_ORDER_PLACED', $this->siteLangId),
+                'totQtys' => Labels::getLabel('LBL_ORDERED_QTY', $this->siteLangId),
+                'totRefundedQtys' => Labels::getLabel('LBL_REFUNDED_QTY', $this->siteLangId),
+                'netSoldQty' => Labels::getLabel('LBL_SOLD_QTY', $this->siteLangId),
+                'grossSales' => Labels::getLabel('LBL_GROSS_SALE', $this->siteLangId),
+                'transactionAmount' => Labels::getLabel('LBL_TRANSACTION_AMOUNT', $this->siteLangId),
+                'inventoryValue' => Labels::getLabel('LBL_INVENTORY_VALUE', $this->siteLangId),
 
-                'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->siteLangId),
-                'sellerTaxTotal' => Labels::getLabel('LBL_Tax_Charged_By_Seller', $this->siteLangId),
-                'adminTaxTotal' => Labels::getLabel('LBL_Tax_Charged_by_Admin', $this->siteLangId),
+                'taxTotal' => Labels::getLabel('LBL_TAX_CHARGED', $this->siteLangId),
+                'sellerTaxTotal' => Labels::getLabel('LBL_TAX_CHARGED_BY_SELLER', $this->siteLangId),
+                'adminTaxTotal' => Labels::getLabel('LBL_TAX_CHARGED_BY_ADMIN', $this->siteLangId),
 
-                'shippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->siteLangId),
-                'sellerShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_By_Seller', $this->siteLangId),
-                'adminShippingTotal' => Labels::getLabel('LBL_Shipping_Charged_by_Admin', $this->siteLangId),
+                'shippingTotal' => Labels::getLabel('LBL_SHIPPING_CHARGED', $this->siteLangId),
+                'sellerShippingTotal' => Labels::getLabel('LBL_SHIPPING_CHARGED_BY_SELLER', $this->siteLangId),
+                'adminShippingTotal' => Labels::getLabel('LBL_SHIPPING_CHARGED_BY_ADMIN', $this->siteLangId),
 
-                'couponDiscount' => Labels::getLabel('LBL_Coupon_Discount', $this->siteLangId),
-                'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $this->siteLangId),
-                'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $this->siteLangId),
+                'couponDiscount' => Labels::getLabel('LBL_COUPON_DISCOUNT', $this->siteLangId),
+                'volumeDiscount' => Labels::getLabel('LBL_VOLUME_DISCOUNT', $this->siteLangId),
+                'rewardDiscount' => Labels::getLabel('LBL_REWARD_DISCOUNT', $this->siteLangId),
 
-                'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->siteLangId),
-                'refundedShipping' => Labels::getLabel('LBL_Refunded_Shipping', $this->siteLangId),
-                'refundedTax' => Labels::getLabel('LBL_Refunded_Tax', $this->siteLangId),
+                'refundedAmount' => Labels::getLabel('LBL_REFUNDED_AMOUNT', $this->siteLangId),
+                'refundedShipping' => Labels::getLabel('LBL_REFUNDED_SHIPPING', $this->siteLangId),
+                'refundedTax' => Labels::getLabel('LBL_REFUNDED_TAX', $this->siteLangId),
 
-                'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->siteLangId),
+                'orderNetAmount' => Labels::getLabel('LBL_NET_AMOUNT', $this->siteLangId),
 
-                'commissionCharged' => Labels::getLabel('LBL_Commision_Charged', $this->siteLangId),
-                'refundedCommission' => Labels::getLabel('LBL_Refunded_Commision', $this->siteLangId),
-                'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $this->siteLangId)
+                'commissionCharged' => Labels::getLabel('LBL_COMMISION_CHARGED', $this->siteLangId),
+                'refundedCommission' => Labels::getLabel('LBL_REFUNDED_COMMISION', $this->siteLangId),
+                'adminSalesEarnings' => Labels::getLabel('LBL_SALES_EARNINGS', $this->siteLangId)
             ];
             FatCache::set('productReportCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {

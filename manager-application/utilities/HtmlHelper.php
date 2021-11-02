@@ -181,18 +181,25 @@ class HtmlHelper
         return $htm;
     }
 
-    public static function getDropZoneHtml()
+    public static function getDropZoneHtml($url, $headerClass = '', $callbackfn = '')
     {
-        return '<form action="' . FatUtility::generateUrl('ImportExport', 'upload') . '" enctype="multipart/form-data" class="dropzone dropzone-default">
+        $str =  '<div class="dropzone ' . $headerClass . '">
                     <div class="upload_cover">
-                        <div clas="img--container  ">
+                        
                             <div class="file-upload">
                                 <img src="' . CONF_WEBROOT_URL . 'images/upload/upload_img.png">
                             </div>
-                        </div>
+                        
                     </div>
-                </form>
-                <script>$.initDropZone();</script>';
+                </div>
+                <script>
+                $.initDropZone("' . $url . '").on("sending", function(file, xhr, formData){';
+        if (!empty($callbackfn)) {
+            $str .= $callbackfn . '(file, xhr, formData)';;
+        }
+        $str .= '});                
+                </script>';
+        return $str;
     }
 
     public static function configureSwitchForCheckbox($fld, $msg = '')
@@ -235,5 +242,87 @@ class HtmlHelper
         $htmlFld = $frm->addHTML('', $fldName . '_html', $str);
         $htmlFld->setFormIndex($oldFldPostion);
         $htmlFld->developerTags = $fld->developerTags;
+        return $htmlFld;
     }
+
+    /**
+     * options array ex. [1 => 'optionName'];
+     */
+    public static function getRadioAsButtonHtml(string $fldName, string $caption, array $options, $selectedVal = '', $fldClass = '')
+    {
+        $str = '<label class="label">' . $caption . '</label>
+                    <div class="radio-button-group">';
+        $opCount = 1;
+        foreach ($options as $opValue => $opName) {
+            $opId = $fldName . "__" . $opCount;
+            $str .= '<div class="item">
+                    <input type="radio" name="' . $fldName . '" class="radio-button ' . $fldClass . '" id="' . $opId . '"  value="' . $opValue . '"  ' . ($opValue . '" ' . $selectedVal ? 'checked' : '') . ' >
+                    <label for="' . $opId . '">' . $opName . '</label>
+                </div>';
+            $opCount++;
+        }
+        return $str .= '</div>';
+    }
+
+    /**
+     * $imageArr ex. ['name' => 'fav.png','url'=>'imageurl']
+     */
+
+    public static function getfileInputHtml(array $fileInputAttributes,int $langid, string $removeFn, string $editFn = '', $imageArr = [], $headerClass = '')
+    {
+        $str =  '<div class="dropzone ' . $headerClass . '">';
+                        if (1 > count($imageArr)) {
+                        $str .= ' 
+                            <div class="dropzone-upload">                 
+                                <div class="file-upload">
+                                    <img src="' . CONF_WEBROOT_URL . 'images/upload/upload_img.png">                                
+                                </div>
+                                <div class="needsclick">
+                                    <h3 class="dropzone-msg-title">' . Labels::getLabel("LBL_CLICK_HERE_TO_UPLOAD", $langid) . '</h3>                              
+                                </div> 
+                            </div>                                        
+                        ';
+                        } else {
+                        $str .= 
+                            '<div class="dropzone-uploaded">
+                                <img src="' . $imageArr['url'] . '" title="" >    
+                                <div class="dropzone-uploaded-action">
+                                <ul class="actions">                               
+                                    <li>
+                                        <a href="javascript:void(0)"  onclick="' . $removeFn . '">
+                                            <svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                                </use>
+                                            </svg>
+                                            </a>
+                                    </li>';
+                                if(!empty($editFn)){
+                                    $str .='
+                                    <li>
+                                        <a href="javascript:void(0)"  onclick="' . $editFn . '" >
+                                            <svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                                </use>
+                                            </svg>
+                                        </a>
+                                    </li>'; 
+                                }                                
+                                $str .='
+                                </ul></div>
+                            </div>';
+                    }              
+                    if (1 > count($imageArr)) {
+                        $str .= '<input class="dropzone-input" type="file"';        
+                        foreach ($fileInputAttributes as $attrName => $attrVal) {
+                            $str .= ' ' . $attrName . '="' . $attrVal . '"';
+                        }
+                        $str .= '>';
+                     }
+                    
+                    $str .= '</div>';
+        return   $str;
+    }
+    
 }

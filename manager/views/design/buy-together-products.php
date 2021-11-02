@@ -576,13 +576,13 @@
                                                         <div class="form-group">
                                                             <label class="label required">Language </label>
                                                             <div class="d-flex">
-                                                                <select onchange="addShopLangForm(5, this.value);"
-                                                                    data-field-caption="Language" name="lang_id">
+                                                                <select onchange="" data-field-caption="Language"
+                                                                    name="lang_id">
                                                                     <option value="1" selected="selected">English
                                                                     </option>
                                                                     <option value="2">Arabic</option>
                                                                 </select>
-                                                                <a href="javascrip:0;" class="btn">
+                                                                <a href="javascript:void(0)"  class="btn">
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use
                                                                             xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-translate">

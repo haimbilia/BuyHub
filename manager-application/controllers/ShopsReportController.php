@@ -10,21 +10,36 @@ class ShopsReportController extends AdminBaseController
 
     public function index()
     {
-        $fields = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($fields);
+        $formColumns = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($formColumns);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('fields', $fields);
+        $this->set('formColumns', $formColumns);
+        $this->set('pageTitle', Labels::getLabel('LBL_Shops_Report', $this->siteLangId));
+        $this->getListingData(false);
+        $this->_template->addJs(array('js/select2.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
     }
 
     public function search($type = false)
     {
+        $this->getListingData($type);
+        $jsonData = [
+            'headSection' => $this->_template->render(false, false, '_partial/listing/head-section.php', true),
+            'listingHtml' => $this->_template->render(false, false, 'shops-report/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    public function getListingData($type = false)
+    {
         $this->objPrivilege->canViewShopsReport();
         $db = FatApp::getDb();
 
         $fields = $this->getFormColumns();
-        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = FatApp::getPostedData('listingColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
@@ -42,7 +57,10 @@ class ShopsReportController extends AdminBaseController
         if ($page < 2) {
             $page = 1;
         }
-        $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
 
         /* $fields = ['totOrders', 'totQtys', 'totRefundedQtys', 'netSoldQty', 'grossSales', 'transactionAmount', 'inventoryValue', 'taxTotal', 'sellerTaxTotal', 'adminTaxTotal', 'shippingTotal', 'sellerShippingTotal', 'adminShippingTotal', 'couponDiscount', 'volumeDiscount', 'rewardDiscount', 'adminSalesEarnings', 'refundedAmount', 'refundedShipping', 'refundedTax', 'commissionCharged', 'refundedCommission', 'refundedAffiliateCommission', 'orderNetAmount', 'refundedTaxToSeller', 'refundedShippingToSeller']; */
         $opSrch = new Report(0, array_keys($fields), true);
@@ -80,6 +98,16 @@ class ShopsReportController extends AdminBaseController
             default:
                 $srch->addOrder($sortBy, $sortOrder);
                 break;
+        }
+
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING);
+        if (!empty($keyword)) {
+            $cond = $srch->addCondition('shop_name', '=', $keyword);
+            $cond->attachCondition('shop_name', 'like', '%' . $keyword . '%', 'OR');
+            $cond->attachCondition('shop_identifier', 'like', '%' . $keyword . '%');
+            $cond->attachCondition('user_name', '=', '%' . $keyword . '%');
+            $cond->attachCondition('user_name', 'like', '%' . $keyword . '%', 'OR');
+            $cond->attachCondition('credential_email', 'like', '%' . $keyword . '%');
         }
 
         $shop_id = FatApp::getPostedData('shop_id', null, '');
@@ -167,7 +195,7 @@ class ShopsReportController extends AdminBaseController
 
                 array_push($sheetData, $arr);
             }
-            
+
             CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Shops_Report', $this->siteLangId) . ' ' . date("d-M-Y") . '.csv', ',');
             exit;
         } else {
@@ -185,7 +213,7 @@ class ShopsReportController extends AdminBaseController
             $this->set('sortBy', $sortBy);
             $this->set('sortOrder', $sortOrder);
             $this->set('fields', $fields);
-            $this->_template->render(false, false);
+            $this->set('allowedKeysForSorting', array_keys($fields));
         }
     }
 
@@ -196,26 +224,25 @@ class ShopsReportController extends AdminBaseController
 
     public function getSearchForm($fields = [])
     {
-        $frm = new Form('frmShopsReportSearch');
-        $frm->addHiddenField('', 'page', 1);
-        $frm->addTextBox(Labels::getLabel('LBL_Shop', $this->siteLangId), 'shop_name');
-        $frm->addHiddenField('', 'shop_id', 0);
-        $frm->addTextBox(Labels::getLabel('LBL_Shop_Owner', $this->siteLangId), 'user_name');
-        $frm->addHiddenField('', 'shop_user_id', 0);
-        $fld = $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly'));
-        $fld->htmlAfterField = Labels::getLabel('LBL_Shop_Created_date_from', $this->siteLangId);
-        $fld = $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly'));
-        $fld->htmlAfterField = Labels::getLabel('LBL_Shop_Created_Date_To', $this->siteLangId);
+        $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $frm->addHiddenField('', 'sortBy', 'shop_name');
-            $frm->addHiddenField('', 'sortOrder', applicationConstants::SORT_ASC);
-            $frm->addHiddenField('', 'reportColumns', '');
-            /* $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  ''); */
+            $this->addSortingElements($frm, 'product_name', applicationConstants::SORT_ASC);
         }
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
-        $fld_submit->attachField($fld_cancel);
+
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+
+        $frm->addSelectBox(Labels::getLabel('FRM_SHOP', $this->siteLangId), 'shop_id', [], '', [], '');
+        $frm->addSelectBox(Labels::getLabel('FRM_SHOP_OWNER', $this->siteLangId), 'shop_user_id', [], '', [], '');
+
+        $fld = $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly'));
+        $fld->htmlAfterField = Labels::getLabel('FRM_SHOP_CREATED_DATE_FROM', $this->siteLangId);
+
+        $fld = $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly'));
+        $fld->htmlAfterField = Labels::getLabel('FRM_SHOP_CREATED_DATE_TO', $this->siteLangId);
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 

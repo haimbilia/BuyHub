@@ -90,8 +90,9 @@
                                     </div>
                                     <div class="card-body">
                                         <ul class="list-group">
-                                            <li class="list-group-item"><a target="_blank" target="_blank"
-                                                    href="orders-list.php">Orders
+                                            <li class="list-group-item"><a target="_blank" href="add-products.php">Add
+                                                    product</a></li>
+                                            <li class="list-group-item"><a target="_blank" href="orders-list.php">Orders
                                                     list</a></li>
                                             <li class="list-group-item"><a target="_blank" href="order-detail.php">Order
                                                     detail</a></li>

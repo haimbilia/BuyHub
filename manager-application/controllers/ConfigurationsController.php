@@ -369,126 +369,21 @@ class ConfigurationsController extends AdminBaseController
         FatApp::redirectUser(UrlHelper::generateUrl('configurations', 'index'));
     }
 
-    public function removeSiteAdminLogo($lang_id = 0)
+    public function removeMediaImage($file_type, $lang_id = 0)
     {
+        $this->objPrivilege->canEditGeneralSettings();
+
+        $fileType = FatUtility::int($file_type);
         $lang_id = FatUtility::int($lang_id);
 
         $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, 0, $lang_id)) {
+        if (!$fileHandlerObj->deleteFile($fileType, 0, 0, 0, $lang_id)) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function removeDesktopLogo($lang_id = 0)
-    {
-        $lang_id = FatUtility::int($lang_id);
-        $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, 0, $lang_id)) {
-            LibHelper::exitWithError($fileHandlerObj->getError(), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function removeEmailLogo($lang_id = 0)
-    {
-        $lang_id = FatUtility::int($lang_id);
-        $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_EMAIL_LOGO, 0, 0, 0, $lang_id)) {
-            LibHelper::exitWithError($fileHandlerObj->getError(), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function removeFavicon($lang_id = 0)
-    {
-        $lang_id = FatUtility::int($lang_id);
-        $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_FAVICON, 0, 0, 0, $lang_id)) {
-            LibHelper::exitWithError($fileHandlerObj->getError(), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function removeSocialFeedImage($lang_id = 0)
-    {
-        $lang_id = FatUtility::int($lang_id);
-        $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE, 0, 0, 0, $lang_id)) {
-            LibHelper::exitWithError($fileHandlerObj->getError(), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function removePaymentPageLogo($lang_id = 0)
-    {
-        $lang_id = FatUtility::int($lang_id);
-        $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO, 0, 0, 0, $lang_id)) {
-            LibHelper::exitWithError($fileHandlerObj->getError(), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function removeWatermarkImage($lang_id = 0)
-    {
-        $lang_id = FatUtility::int($lang_id);
-        $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_WATERMARK_IMAGE, 0, 0, 0, $lang_id)) {
-            LibHelper::exitWithError($fileHandlerObj->getError(), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function removeAppleTouchIcon($lang_id = 0)
-    {
-        $lang_id = FatUtility::int($lang_id);
-        $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_APPLE_TOUCH_ICON, 0, 0, 0, $lang_id)) {
-            LibHelper::exitWithError($fileHandlerObj->getError(), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function removeMobileLogo($lang_id = 0)
-    {
-        $lang_id = FatUtility::int($lang_id);
-        $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_MOBILE_LOGO, 0, 0, 0, $lang_id)) {
-            LibHelper::exitWithError($fileHandlerObj->getError(), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function removeInvoiceLogo($lang_id = 0)
-    {
-        $lang_id = FatUtility::int($lang_id);
-        $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_INVOICE_LOGO, 0, 0, 0, $lang_id)) {
-            LibHelper::exitWithError($fileHandlerObj->getError(), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
+    }   
 
     public function removeCollectionBgImage($lang_id = 0)
     {
@@ -1703,208 +1598,361 @@ class ConfigurationsController extends AdminBaseController
 
             case Configurations::FORM_MEDIA:
                 $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
-                
-                $ul = $frm->addHtml('', 'MediaGrids', '<div class="row">');
-                $ul->htmlAfterField .= '<div class="col-md-6">';
+                $fld = $frm->addHtml('', 'blank', '');
 
-                /* $ul->htmlAfterField .= '<h6>Admin Logo</h6><div class="form-group">
-                    <label class="label">Aspect ratio</label>
-                    <div class="radio-button-group">
-                        <div class="item">
-                            <input type="radio" name="button-group" class="radio-button" value="1" id="button1" checked="">
-                            <label for="button1">1:1</label>
-                        </div>
-                        <div class="item">
-                            <input type="radio" name="button-group" class="radio-button" value="2" id="button2" checked="">
-                            <label for="button2">16:9</label>
-                        </div>
-                        <div class="item">
-                            <input type="radio" name="button-group" class="radio-button" value="3" id="button3" checked="">
-                            <label for="button3">Custom</label>
-                        </div>
-                    </div>
+                /* block start */
 
-                </div>
-                <div class="form-group"> <div class="dropzone">
-                <div class="upload_cover">
-                    <div class="file-upload">
-                        <img src="/yokart/manager/images/upload/upload_img.png">
-                    </div>
-                </div> <div class="needsclick">
-                <h3 class="dropzone-msg-title">Click here to upload</h3>
-            </div>
-            </div> </div>'; */
+                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("LBL_ADMIN_LOGO", $this->siteLangId) . ' </h6>
+                <span class="form-text text-muted">
+                    <strong> Image Disclaimer:</strong> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry</span>');
 
-                $ul->htmlAfterField .= '<h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Admin_Logo', $this->siteLangId) . ' </h3> <div class="logoWrap"><div class="uploaded--image">';
+                $fileType = AttachedFile::FILETYPE_ADMIN_LOGO;
 
-                if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $langId)) {
-                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteAdminLogo', array($langId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    $ul->htmlAfterField .= '<img src="' . $image . '"> <a  class="remove--img" href="javascript:void(0);" onclick="removeSiteAdminLogo(' . $langId . ')" ><i class="ion-close-round"></i></a>';
+                $imageArr = [];
+                $selectedRadio = array_key_first($ratioArr);
+                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
+                    if (0 < $fileData['afile_id']) {
+                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteAdminLogo', array($langId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
+                        $selectedRadio = $fileData['afile_aspect_ratio'];
+                    }
                 }
 
-                $ul->htmlAfterField .= ' </div></div>';
+                $fld = $frm->addRadioButtons(
+                    Labels::getLabel("LBL_Aspect_ratio", $this->siteLangId),
+                    'ratio_type_' . $fileType,
+                    $ratioArr,
+                    $selectedRadio
+                );
 
-                $ul->htmlAfterField .= '<ul class="list-inline">';
-                foreach ($ratioArr as $key => $data) {
-                    $checked = ($key == $fileData['afile_aspect_ratio']) ? $checked = "checked = checked" : '';
-                    $name = 'ratio_type_' . AttachedFile::FILETYPE_ADMIN_LOGO;
-                    $ul->htmlAfterField .= "<li><label><span class='radio'><input class='prefRatio-js' type='radio' name='" . $name . "' value='" . $key . "' $checked><i class='input-helper'></i></span>" . $data . "</label></li>";
-                }
-                $ul->htmlAfterField .= '</ul>';
+                $fld = HtmlHelper::configureRadioAsButton($frm, 'ratio_type_' . $fileType);
 
-                $ul->htmlAfterField .= '<input type="file" onChange="popupImage(this)" name="admin_logo" id="admin_logo" data-min_width = "150" data-min_height = "150" data-file_type=' . AttachedFile::FILETYPE_ADMIN_LOGO . ' value="Upload file"></div>';
+                $fld1 = $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
+                    ['onChange' => 'popupImage(this)', 'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType],
+                    $langId,
+                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
+                    '',
+                    $imageArr,
+                    'mt-3'
+                ));
+                $fld->attachField($fld1);
+                $frm->addHtml('', 'spacer', '<div class="separator separator-dashed my-5"></div>');
 
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5">  <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Desktop_Logo', $this->siteLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
+                /* block start */
 
+                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("LBL_DESKTOP_LOGO", $this->siteLangId) . ' </h6>
+                <span class="form-text text-muted">
+                    <strong> Image Disclaimer:</strong> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry</span>');
 
-                if ($fileData = attachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $langId)) {
-                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    $ul->htmlAfterField .= '<img src="' . $image . '"> <a  class="remove--img" href="javascript:void(0);" onclick="removeDesktopLogo(' . $langId . ')" ><i class="ion-close-round"></i></a>';
-                }
-
-                $ul->htmlAfterField .= ' </div></div>';
-
-                $ul->htmlAfterField .= '<ul class="list-inline">';
-                foreach ($ratioArr as $key => $data) {
-                    $checked = ($key == $fileData['afile_aspect_ratio']) ? $checked = "checked = checked" : '';
-                    $name = 'ratio_type_' . AttachedFile::FILETYPE_FRONT_LOGO;
-                    $ul->htmlAfterField .= "<li><label><span class='radio'><input class='prefRatio-js' type='radio' name='" . $name . "' value='" . $key . "' $checked><i class='input-helper'></i></span>" . $data . "</label></li>";
-                }
-                $ul->htmlAfterField .= '</ul>';
-
-                $ul->htmlAfterField .= '<input onchange="popupImage(this)" data-frm="frmShopLogo" data-min_height="150" data-min_width="150" data-file_type=' . AttachedFile::FILETYPE_FRONT_LOGO . ' title="Upload" type="file" name="front_logo" value=""></div>';
-
-
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Website_Favicon', $this->siteLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
-
-
-                if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FAVICON, 0, 0, $langId)) {
-                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'favicon', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-
-                    $ul->htmlAfterField .= '<img src="' . $image . '"> <a  class="remove--img" href="javascript:void(0);" onclick="removeFavicon(' . $langId . ')" ><i class="ion-close-round"></i></a>';
+                $fileType = AttachedFile::FILETYPE_FRONT_LOGO;
+                $imageArr = [];
+                $selectedRadio = array_key_first($ratioArr);
+                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
+                    if (0 < $fileData['afile_id']) {
+                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
+                        $selectedRadio = $fileData['afile_aspect_ratio'];
+                    }
                 }
 
-                $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="favicon" id="favicon" data-min_width = "16" data-min_height = "16" data-file_type=' . AttachedFile::FILETYPE_FAVICON . ' value="Upload file"></div>';
+                $fld = $frm->addRadioButtons(
+                    Labels::getLabel("LBL_Aspect_ratio", $this->siteLangId),
+                    'ratio_type_' . $fileType,
+                    $ratioArr,
+                    $selectedRadio
+                );
 
+                $fld = HtmlHelper::configureRadioAsButton($frm, 'ratio_type_' . $fileType);
 
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Social_Feed_Image', $this->siteLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
+                $fld1 = $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
+                    ['onChange' => 'popupImage(this)', 'data-frm' => 'frmShopLogo', 'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType],
+                    $langId,
+                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
+                    '',
+                    $imageArr,
+                    'mt-3'
+                ));
+                $fld->attachField($fld1);
+                $frm->addHtml('', 'spacer1', '<div class="separator separator-dashed my-5"></div>');
 
+                /* block start */
 
-                if ($fileData =  AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE, 0, 0, $langId)) {
-                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'socialFeed', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    $ul->htmlAfterField .= '<img src="' . $image . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeSocialFeedImage(' . $langId . ')" ><i class="ion-close-round"></i></a>';
+                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("LBL_WEBSITE_FAVICON", $this->siteLangId) . ' </h6>
+                <span class="form-text text-muted">
+                    <strong> Image Disclaimer:</strong> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry</span>');
+
+                $fileType = AttachedFile::FILETYPE_FAVICON;
+
+                $imageArr = [];
+                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
+                    if (0 < $fileData['afile_id']) {
+                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'favicon', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
+                    }
+                }
+                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
+                    ['onChange' => 'popupImage(this)', 'data-min_width' => 16, 'data-min_height' => 16, 'data-file_type' => $fileType],
+                    $langId,
+                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
+                    '',
+                    $imageArr,
+                    'mt-3'
+                ));
+                $frm->addHtml('', 'spacer2', '<div class="separator separator-dashed my-5"></div>');
+
+                /* block start */
+
+                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("LBL_SOCIAL_FEED_IMAGE", $this->siteLangId) . ' </h6>
+                <span class="form-text text-muted">
+                    <strong> Image Disclaimer:</strong> ' . Labels::getLabel('LBL_Dimensions', $this->siteLangId) . ' 160*240</span>');
+
+                $fileType = AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE;
+
+                $imageArr = [];
+                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
+                    if (0 < $fileData['afile_id']) {
+                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'socialFeed', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
+                    }
                 }
 
-                $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="social_feed_image" id="social_feed_image" data-min_width = "160" data-min_height = "240" data-file_type=' . AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE . ' value="Upload file"><span class="form-text text-muted">' . Labels::getLabel('LBL_Dimensions', $this->siteLangId) . ' 160*240</span></div>';
+                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
+                    ['onChange' => 'popupImage(this)', 'data-min_width' => 160, 'data-min_height' => 240, 'data-file_type' => $fileType],
+                    $langId,
+                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
+                    '',
+                    $imageArr,
+                    'mt-3'
+                ));
+                $frm->addHtml('', 'spacer3', '<div class="separator separator-dashed my-5"></div>');
 
+                /* block start */
 
+                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("LBL_PAYMENT_PAGE_LOGO", $this->siteLangId) . ' </h6>
+                <span class="form-text text-muted">
+                    <strong> Image Disclaimer:</strong>' . Labels::getLabel("MSG_PLEASE_UPLOAD_WHITE_PNG_IMAGE", $this->siteLangId) . ' </span>');
 
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Payment_Page_Logo', $this->siteLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
-
-
-                if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO, 0, 0, $langId)) {
-                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'paymentPageLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    $ul->htmlAfterField .= '<img src="' . $image . '"><a  class="remove--img" href="javascript:void(0);" onclick="removePaymentPageLogo(' . $langId . ')" ><i class="ion-close-round"></i></a>';
+                $fileType = AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO;
+                $imageArr = [];
+                $selectedRadio = array_key_first($ratioArr);
+                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
+                    if (0 < $fileData['afile_id']) {
+                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'paymentPageLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
+                        $selectedRadio = $fileData['afile_aspect_ratio'];
+                    }
                 }
 
-                $ul->htmlAfterField .= ' </div></div>';
+                $fld = $frm->addRadioButtons(
+                    Labels::getLabel("LBL_Aspect_ratio", $this->siteLangId),
+                    'ratio_type_' . $fileType,
+                    $ratioArr,
+                    $selectedRadio
+                );
 
-                $ul->htmlAfterField .= '<ul class="list-inline">';
-                foreach ($ratioArr as $key => $data) {
-                    $checked = ($key == $fileData['afile_aspect_ratio']) ? $checked = "checked = checked" : '';
-                    $name = 'ratio_type_' . AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO;
-                    $ul->htmlAfterField .= "<li><label><span class='radio'><input class='prefRatio-js' type='radio' name='" . $name . "' value='" . $key . "' $checked><i class='input-helper'></i></span>" . $data . "</label></li>";
-                }
-                $ul->htmlAfterField .= '</ul>';
+                $fld = HtmlHelper::configureRadioAsButton($frm, 'ratio_type_' . $fileType);
 
-                $ul->htmlAfterField .= '<input type="file" onChange="popupImage(this)" name="payment_page_logo" id="payment_page_logo" data-min_width = "150" data-min_height = "150" data-file_type=' . AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO . ' value="Upload file"><span class="form-text text-muted">' . Labels::getLabel('MSG_PLEASE_UPLOAD_WHITE_PNG_IMAGE', $this->siteLangId) . '</span></div>';
-
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Watermark_Image', $this->siteLangId) . '</h3><div class="logoWrap"><div class="uploaded--image">';
-
-
-                if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_WATERMARK_IMAGE, 0, 0, $langId)) {
-                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'watermarkImage', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    $ul->htmlAfterField .= '<img src="' . $image . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeWatermarkImage(' . $langId . ')" ><i class="ion-close-round"></i></a>';
-                }
-
-                $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="watermark_image" id="watermark_image" data-min_width = "168" data-min_height = "37" data-file_type=' . AttachedFile::FILETYPE_WATERMARK_IMAGE . ' value="Upload file"><span class="form-text text-muted">' . Labels::getLabel('LBL_Dimensions', $this->siteLangId) . ' 168*37</span></div>';
+                $fld1 = $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
+                    ['onChange' => 'popupImage(this)',  'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType],
+                    $langId,
+                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
+                    '',
+                    $imageArr,
+                    'mt-3'
+                ));
+                $fld->attachField($fld1);
+                $frm->addHtml('', 'spacer4', '<div class="separator separator-dashed my-5"></div>');
 
 
-                $ul->htmlAfterField .= '<div class="col-md-4  mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Apple_Touch_Icon', $this->siteLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
+                /* block start */
 
+                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("LBL_WATERMARK_IMAGE", $this->siteLangId) . ' </h6>
+                <span class="form-text text-muted">
+                    <strong> Image Disclaimer:</strong> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry</span>');
 
-                if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_APPLE_TOUCH_ICON, 0, 0, $langId)) {
-                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'appleTouchIcon', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    $ul->htmlAfterField .= '<img src="' . $image . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeAppleTouchIcon(' . $langId . ')" ><i class="ion-close-round"></i></a>';
-                }
+                $fileType = AttachedFile::FILETYPE_WATERMARK_IMAGE;
 
-                $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="apple_touch_icon" id="apple_touch_icon" data-min_width = "152" data-min_height = "152" data-file_type=' . AttachedFile::FILETYPE_APPLE_TOUCH_ICON . ' value="Upload file"></div>';
-
-
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Mobile_Logo', $this->siteLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
-
-
-                if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_MOBILE_LOGO, 0, 0, $langId)) {
-                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'mobileLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    $ul->htmlAfterField .= '<img src="' . $image . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeMobileLogo(' . $langId . ')" ><i class="ion-close-round"></i></a>';
+                $imageArr = [];
+                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
+                    if (0 < $fileData['afile_id']) {
+                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'watermarkImage', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
+                    }
                 }
 
-                $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="mobile_logo" id="mobile_logo" data-min_width = "168" data-min_height = "37" data-file_type=' . AttachedFile::FILETYPE_MOBILE_LOGO . ' value="Upload file"><span class="form-text text-muted">' . Labels::getLabel('LBL_Dimensions', $this->siteLangId) . ' 168*37</span></div>';
+                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
+                    ['onChange' => 'popupImage(this)', 'data-min_width' => 168, 'data-min_height' => 37, 'data-file_type' => $fileType],
+                    $langId,
+                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
+                    '',
+                    $imageArr,
+                    'mt-3'
+                ));
+                $frm->addHtml('', 'spacer5', '<div class="separator separator-dashed my-5"></div>');
 
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_Invoice_Logo', $this->siteLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
+                /* block start */
 
+                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("LBL_APPLE_TOUCH_ICON", $this->siteLangId) . ' </h6>
+                 <span class="form-text text-muted">
+                     <strong> Image Disclaimer:</strong> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry</span>');
 
-                if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_INVOICE_LOGO, 0, 0, $langId)) {
-                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'invoiceLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    $ul->htmlAfterField .= '<img src="' . $image . '"><a  class="remove--img" href="javascript:void(0);" onclick="removeInvoiceLogo(' . $langId . ')" ><i class="ion-close-round"></i></a>';
+                $fileType = AttachedFile::FILETYPE_APPLE_TOUCH_ICON;
+
+                $imageArr = [];
+                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
+                    if (0 < $fileData['afile_id']) {
+                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'appleTouchIcon', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
+                    }
                 }
 
-                $ul->htmlAfterField .= ' </div></div>';
+                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
+                    ['onChange' => 'popupImage(this)',  'data-min_width' => 152, 'data-min_height' => 152, 'data-file_type' => $fileType],
+                    $langId,
+                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
+                    '',
+                    $imageArr,
+                    'mt-3'
+                ));
 
-                $ul->htmlAfterField .= '<ul class="list-inline">';
-                foreach ($ratioArr as $key => $data) {
-                    $checked = ($key == $fileData['afile_aspect_ratio']) ? $checked = "checked = checked" : '';
-                    $name = 'ratio_type_' . AttachedFile::FILETYPE_INVOICE_LOGO;
-                    $ul->htmlAfterField .= "<li><label><span class='radio'><input class='prefRatio-js' type='radio' name='" . $name . "' value='" . $key . "' $checked><i class='input-helper'></i></span>" . $data . "</label></li>";
-                }
-                $ul->htmlAfterField .= '</ul>';
+                $frm->addHtml('', 'spacer6', '<div class="separator separator-dashed my-5"></div>');
 
-                $ul->htmlAfterField .= '<input type="file" onChange="popupImage(this)" name="invoice_logo" id="invoice_logo" data-min_width = "150" data-min_height = "150" data-file_type=' . AttachedFile::FILETYPE_INVOICE_LOGO . ' value="Upload file"></div>';
+                /* block start */
 
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Select_First_Purchase_Discount_Image', $this->siteLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
+                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("LBL_MOBILE_LOGO", $this->siteLangId) . ' </h6>
+                  <span class="form-text text-muted">
+                      <strong> Image Disclaimer:</strong> ' . Labels::getLabel('LBL_DIMENSIONS', $this->siteLangId) . ' 168*37</span>');
 
+                $fileType = AttachedFile::FILETYPE_MOBILE_LOGO;
 
-                if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE, 0, 0, $langId)) {
-                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'firstPurchaseCoupon', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-
-                    $ul->htmlAfterField .= '<img src="' . $image . '"> <a  class="remove--img" href="javascript:void(0);" onclick="removeFavicon(' . $langId . ')" ><i class="ion-close-round"></i></a>';
-                }
-
-                $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="purchase_discount" id="purchase_discount" data-min_width = "120" data-min_height = "120" data-file_type=' . AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE . ' value="Upload file"><span class="form-text text-muted">' . Labels::getLabel('LBL_Dimensions', $this->siteLangId) . ' 120*120</span></div>';
-
-                $ul->htmlAfterField .= '<div class="col-md-4 mb-5"> <div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_SELECT_META_IMAGE', $this->siteLangId) . '</h3> <div class="logoWrap"><div class="uploaded--image">';
-
-                if ($fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_META_IMAGE, 0, 0, $langId)) {
-                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                    $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'metaImage', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-
-                    $ul->htmlAfterField .= '<img src="' . $image . '"> <a  class="remove--img" href="javascript:void(0);" onclick="removeFavicon(' . $langId . ')" ><i class="ion-close-round"></i></a>';
+                $imageArr = [];
+                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
+                    if (0 < $fileData['afile_id']) {
+                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'mobileLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
+                    }
                 }
 
-                $ul->htmlAfterField .= ' </div></div><input type="file" onChange="popupImage(this)" name="meta_image" id="meta_image" data-file_type=' . AttachedFile::FILETYPE_META_IMAGE . ' value="Upload file"></div>';
+                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
+                    ['onChange' => 'popupImage(this)',  'data-min_width' => 168, 'data-min_height' => 37, 'data-file_type' => $fileType],
+                    $langId,
+                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
+                    '',
+                    $imageArr,
+                    'mt-3'
+                ));
+                $frm->addHtml('', 'spacer7', '<div class="separator separator-dashed my-5"></div>');
 
-                $ul->htmlAfterField .= '</div>';
+                /* block start */
 
+                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("LBL_INVOICE_LOGO", $this->siteLangId) . ' </h6>
+                <span class="form-text text-muted">
+                    <strong> Image Disclaimer:</strong> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry</span>');
+
+                $fileType = AttachedFile::FILETYPE_INVOICE_LOGO;
+                $imageArr = [];
+                $selectedRadio = array_key_first($ratioArr);
+                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
+                    if (0 < $fileData['afile_id']) {
+                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'invoiceLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
+                        $selectedRadio = $fileData['afile_aspect_ratio'];
+                    }
+                }
+
+                $fld = $frm->addRadioButtons(
+                    Labels::getLabel("LBL_Aspect_ratio", $this->siteLangId),
+                    'ratio_type_' . $fileType,
+                    $ratioArr,
+                    $selectedRadio
+                );
+
+                $fld = HtmlHelper::configureRadioAsButton($frm, 'ratio_type_' . $fileType);
+                $fld1 = $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
+                    ['onChange' => 'popupImage(this)', 'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType],
+                    $langId,
+                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
+                    '',
+                    $imageArr,
+                    'mt-3'
+                ));
+                $fld->attachField($fld1);
+                $frm->addHtml('', 'spacer8', '<div class="separator separator-dashed my-5"></div>');
+
+
+                /* block start */
+
+                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("LBL_First_Purchase_Discount_Image", $this->siteLangId) . ' </h6>
+                <span class="form-text text-muted">
+                    <strong> Image Disclaimer:</strong> ' . Labels::getLabel('LBL_DIMENSIONS', $this->siteLangId) . ' 120*120</span>');
+
+                $fileType = AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE;
+
+                $imageArr = [];
+                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
+                    if (0 < $fileData['afile_id']) {
+                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'firstPurchaseCoupon', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
+                    }
+                }
+
+                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
+                    ['onChange' => 'popupImage(this)',  'data-min_width' => 120, 'data-min_height' => 120, 'data-file_type' => $fileType],
+                    $langId,
+                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
+                    '',
+                    $imageArr,
+                    'mt-3'
+                ));
+                $frm->addHtml('', 'spacer9', '<div class="separator separator-dashed my-5"></div>');
+
+                /* block start */
+
+                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("LBL_META_IMAGE", $this->siteLangId) . ' </h6>
+                <span class="form-text text-muted">
+                   <strong> Image Disclaimer:</strong> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry</span>');
+
+                $fileType = AttachedFile::FILETYPE_META_IMAGE;
+                $imageArr = [];
+                $selectedRadio = array_key_first($ratioArr);
+                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
+                    if (0 < $fileData['afile_id']) {
+                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'metaImage', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
+                        $selectedRadio = $fileData['afile_aspect_ratio'];
+                    }
+                }
+
+                $fld = $frm->addRadioButtons(
+                    Labels::getLabel("LBL_Aspect_ratio", $this->siteLangId),
+                    'ratio_type_' . $fileType,
+                    $ratioArr,
+                    $selectedRadio
+                );
+
+                $fld = HtmlHelper::configureRadioAsButton($frm, 'ratio_type_' . $fileType);
+
+                $fld1 = $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
+                    ['onChange' => 'popupImage(this)',  'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType],
+                    $langId,
+                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
+                    '',
+                    $imageArr,
+                    'mt-3'
+                ));
+                $fld->attachField($fld1);
+                $frm->addHtml('', 'spacer10', '<div class="separator separator-dashed my-5"></div>');
                 break;
 
             case Configurations::FORM_SERVER:

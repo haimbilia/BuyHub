@@ -27,7 +27,7 @@ $tableHeadAttrArr = [
 $controller = str_replace('Controller', '', FatApp::getController());
 ?>
 <div class="card-body">
-    <?php echo HtmlHelper::getDropZoneHtml(); ?>
+    <?php echo HtmlHelper::getDropZoneHtml(FatUtility::generateUrl('ImportExport', 'upload')); ?>
 
     <?php echo $frmSearch->getFormHtml(); ?>
     <div class="table-responsive listingTableJs">
