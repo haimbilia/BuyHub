@@ -218,6 +218,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             }
         });
         searchRecords(document.frmRecordSearch, loadRowsOnly);
+        $('.select2-hidden-accessible').val('').trigger('change');
     };
 
     setColumnsData = function (frm) {

@@ -1,6 +1,6 @@
 <?php
 
-class SpecialPriceController extends AdminBaseController
+class VolumeDiscountController extends AdminBaseController
 {
     public function __construct($action)
     {
@@ -14,7 +14,7 @@ class SpecialPriceController extends AdminBaseController
         $frmSearch = $this->getSearchForm($fields);
 
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_SPECIAL_PRICE', $this->siteLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_VOLUME_DISCOUNT', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->addCss(['css/select2.min.css']);
@@ -91,23 +91,6 @@ class SpecialPriceController extends AdminBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditSellerProducts($this->admin_id, true));
-    }
-
-    protected function getSearchForm($fields = [])
-    {
-        $frm = new Form('frmRecordSearch');
-        $frm->addHiddenField('', 'page');
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
-        $fld->overrideFldType('search');
-
-        $frm->addSelectBox(Labels::getLabel('FRM_SELLER', $this->siteLangId), 'product_seller_id', []);
-
-        if (!empty($fields)) {
-            $this->addSortingElements($frm);
-        }
-        HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
-        return $frm;
     }
 
     public function form()
@@ -340,7 +323,7 @@ class SpecialPriceController extends AdminBaseController
         if ($rs) {
             $products = $db->fetchAll($rs, 'id');
         }
-        
+        $pageCount = $srch->pages();
         $json = array();
         foreach ($products as $key => $option) {
             $options = SellerProduct::getSellerProductOptions($key, true, $this->siteLangId);
@@ -357,36 +340,8 @@ class SpecialPriceController extends AdminBaseController
                 'stock' => $option['selprod_stock']
             );
         }
-        die(json_encode(['pageCount' => $srch->pages(), 'results' => $json]));
-    }
-
-    public function autoCompleteSeller()
-    {
-        $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        $page = (2 > $page) ? 1 : $page;
-
-        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-        $srch = User::getSearchObject(true);
-        $srch->addCondition('user_is_supplier', '=', applicationConstants::YES);
-        $srch->addCondition('credential_active', '=', applicationConstants::ACTIVE);
-
-        $srch->addMultipleFields(
-            [
-                'credential_user_id as id',
-                'CONCAT(credential_username, " (", credential_email, ")") as text'
-            ]
-        );
-        if ('' != $keyword) {
-            $srch->addCondition('credential_username', 'like', '%' . $keyword . '%');
-            $srch->addCondition('credential_email', 'like', '%' . $keyword . '%', 'OR');
-        }
-        $srch->setPageSize($pageSize);
-        $srch->setPageNumber($page);
-        $sellers = FatApp::getDb()->fetchAll($srch->getResultSet());
-
-        die(json_encode(['pageCount' => $srch->pages(), 'results' => $sellers]));
-    }
+        die(json_encode(['pageCount' => $pageCount, 'results' => $json]));
+    }   
 
     public function deleteRecord()
     {

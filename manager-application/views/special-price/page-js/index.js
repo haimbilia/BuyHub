@@ -20,6 +20,10 @@ $(document).on('blur', ".splPriceColJs:not(.dateJs)", function () {
     updateValues($(this));
 });
 
+$(document).ready(function() {
+    select2("productSellerJs", fcom.makeUrl('SpecialPrice', 'autoCompleteSeller'));
+});
+
 (function () {
     bindProductNameSelect2 = function () {
         select2("productNameJs", fcom.makeUrl('SpecialPrice', 'autoCompleteProducts'), {},
@@ -30,7 +34,7 @@ $(document).on('blur', ".splPriceColJs:not(.dateJs)", function () {
                 var parentForm = $("#productNameJs").closest('form').attr('id');
                 $("#" + parentForm + " input[name='splprice_selprod_id']").val('');
             });
-    }   
+    }
 
     updateValues = function (currObj) {
         var value = currObj.val();
