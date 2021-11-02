@@ -26,20 +26,32 @@ HtmlHelper::renderHiddenFields($frmSearch);
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <div class="col-md-4">
-                <?php echo $frmSearch->getFieldHtml('keyword'); ?>
-            </div>
-            <div class="col-md-4">
-                <?php echo $frmSearch->getFieldHtml('lang_id'); ?>
-            </div>
-            <div class="col-md-4">
-                <div class="input-group">
-                    <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                    <div class="input-group-append">
-                        <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+            <?php if (count($languages) > 1) { ?>
+                <div class="col-md-4">
+                    <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+                </div>
+                <div class="col-md-4">
+                    <?php echo $frmSearch->getFieldHtml('lang_id'); ?>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                        <div class="input-group-append">
+                            <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php } else { ?>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+                        <div class="input-group-append">
+                            <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                        </div>
+                    </div>
+                </div>
+
+            <?php } ?>
         </div>
     </div>
 </div>

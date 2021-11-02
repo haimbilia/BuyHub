@@ -54,7 +54,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
 
 <script>
     var controllerName = '<?php echo $controller; ?>';
-    getHelpCenterContent(controllerName);
 
     resetToDefaultContent = function () {
 		var agree = confirm(langLbl.confirmReplaceCurrentToDefault);
