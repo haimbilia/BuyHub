@@ -715,3 +715,16 @@
 .date {
     white-space: nowrap;
 }
+.edit-hover {
+    width: 120px;
+    padding: 2px 10px;
+    text-align: left;
+    border: 1px solid #fff;
+    + input {
+        width: 120px;
+        border: $border;
+        outline: 0;
+        padding: 2px 10px;
+        text-align: left;
+    }
+}

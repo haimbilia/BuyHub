@@ -185,11 +185,11 @@ class HtmlHelper
     {
         $str =  '<div class="dropzone ' . $headerClass . '">
                     <div class="upload_cover">
-                        <div clas="img--container  ">
+                        
                             <div class="file-upload">
                                 <img src="' . CONF_WEBROOT_URL . 'images/upload/upload_img.png">
                             </div>
-                        </div>
+                        
                     </div>
                 </div>
                 <script>
@@ -270,52 +270,58 @@ class HtmlHelper
 
     public static function getfileInputHtml(array $fileInputAttributes,int $langid, string $removeFn, string $editFn = '', $imageArr = [], $headerClass = '')
     {
-        $str =  '<div class="dropzone ' . $headerClass . '">
-                    <div class="upload_cover">';
+        $str =  '<div class="dropzone ' . $headerClass . '">';
                         if (1 > count($imageArr)) {
-                        $str .= 
-                        '<div clas="img--container ' . (count($imageArr) ? "d-none" : "") . '" >
-                            <div class="file-upload">
-                                <img src="' . CONF_WEBROOT_URL . 'images/upload/upload_img.png">                                
-                            </div>
-                            <div class="needsclick">
-                                <h3 class="dropzone-msg-title">' . Labels::getLabel("LBL_CLICK_HERE_TO_UPLOAD", $langid) . '</h3>
-                                <input type="file"';        
-                                foreach ($fileInputAttributes as $attrName => $attrVal) {
-                                    $str .= ' ' . $attrName . '="' . $attrVal . '"';
-                                }
-                                $str .= '>
+                        $str .= ' 
+                            <div class="dropzone-upload">                 
+                                <div class="file-upload">
+                                    <img src="' . CONF_WEBROOT_URL . 'images/upload/upload_img.png">                                
+                                </div>
+                                <div class="needsclick">
+                                    <h3 class="dropzone-msg-title">' . Labels::getLabel("LBL_CLICK_HERE_TO_UPLOAD", $langid) . '</h3>                              
+                                </div> 
                             </div>                                        
-                        </div>';
+                        ';
                         } else {
                         $str .= 
-                            '<div class="img--container uploded__img">
-                                <img  src="' . $imageArr['url'] . '" title="" >    
-                                <div class="upload__action">
-                                <button type="button" onclick="' . $removeFn . '">
-                                    <svg>
-                                        <use
-                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#delete-icon">
-                                        </use>
-                                    </svg>
-                                </button>';
+                            '<div class="dropzone-uploaded">
+                                <img src="' . $imageArr['url'] . '" title="" >    
+                                <div class="dropzone-uploaded-action">
+                                <ul class="actions">                               
+                                    <li>
+                                        <a href="javascript:void(0)"  onclick="' . $removeFn . '">
+                                            <svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                                </use>
+                                            </svg>
+                                            </a>
+                                    </li>';
                                 if(!empty($editFn)){
                                     $str .='
-                                    <button type="button" onclick="' . $editFn . '(this)">
-                                        <svg>
-                                            <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#edit-icon">
-                                            </use>
-                                        </svg>
-                                    </button>'; 
+                                    <li>
+                                        <a href="javascript:void(0)"  onclick="' . $editFn . '" >
+                                            <svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                                </use>
+                                            </svg>
+                                        </a>
+                                    </li>'; 
                                 }                                
                                 $str .='
-                                </div>
+                                </ul></div>
                             </div>';
-                    }
-                $str .= '
-                    </div>
-                </div>';
+                    }              
+                    if (1 > count($imageArr)) {
+                        $str .= '<input class="dropzone-input" type="file"';        
+                        foreach ($fileInputAttributes as $attrName => $attrVal) {
+                            $str .= ' ' . $attrName . '="' . $attrVal . '"';
+                        }
+                        $str .= '>';
+                     }
+                    
+                    $str .= '</div>';
         return   $str;
     }
     

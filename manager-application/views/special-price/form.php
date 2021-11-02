@@ -2,15 +2,10 @@
 $formOnSubmit = 'saveRecord(this, "closeForm"); return(false);';
 
 $fld = $frm->getField('product_name');
+$fld->addFieldTagAttribute('id', 'productNameJs');
 $fld->addFieldTagAttribute('placeholder', Labels::getLabel('FRM_SELECT_PRODUCT', $siteLangId));
-
-$fld = $frm->getField('products_related[]');
-$fld->addFieldTagAttribute('class', 'relatedProductsJs');
-$fld->addFieldTagAttribute('placeholder', Labels::getLabel('FRM_SEARCH_RELATED_PRODUCTS', $siteLangId));
-$fld->addFieldTagAttribute('multiple', 'multiple');
 
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 <script>
     bindProductNameSelect2();
-    bindlRelatedProdSelect2();
 </script>

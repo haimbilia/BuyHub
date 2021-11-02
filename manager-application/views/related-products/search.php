@@ -1,8 +1,4 @@
-<?php
-
-use Google\Service\Script;
-
-defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $printData = false;
 if (!isset($tbody)) {
     $printData = true;
@@ -22,12 +18,10 @@ foreach ($arrListing as $selProdId => $row) {
                 $td->appendElement('plaintext', [], $serialNo);
                 break;
             case 'product_name':
-                // last Param of getProductDisplayTitle function used to get title in html form.
                 $productName = "<span class='js-prod-name'>" . SellerProduct::getProductDisplayTitle($selProdId, $siteLangId, true) . '</span><br>' . Labels::getLabel('LBL_Seller', $siteLangId) . ': <span class="js-seller-name">' . $row['credential_username'] . '</span>';
                 $td->appendElement('plaintext', array(), $productName, true);
                 break;
             case 'related_products':
-                // $ul = $td->appendElement("ul", array("class" => "list-tags"));
                 $userName = $row['credential_username'];
                 unset($row['credential_username']);
                 $data = [];
@@ -44,8 +38,6 @@ foreach ($arrListing as $selProdId => $row) {
                         'value' => htmlentities($productName, ENT_QUOTES),
                         'mainRecord' => $selProdId,
                     ];
-                    /* $li = $ul->appendElement("li");
-                    $li->appendElement('plaintext', array(), '<span>' . $productName . ' <i class="remove_buyTogether remove_param fas fa-times" onClick="deleteSelprodRelatedProduct(' . $selProdId . ', ' . $relatedProd['selprod_id'] . ')"></i></span>', true); */
                 }
                 $td->appendElement('plaintext', array(), "<input class='tagifyJs' data-mainrecord='" . $selProdId . "' value='" . json_encode($data) . "'>", true);
                 break;
