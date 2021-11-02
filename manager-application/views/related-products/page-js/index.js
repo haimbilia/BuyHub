@@ -38,15 +38,6 @@
         }).on('select2:selecting', function (e) {
             var parentForm = $(this).closest('form').attr('id');
             $("#" + parentForm + " input[name='selprod_id']").val(e.params.args.data.id);
-            fcom.ajax(fcom.makeUrl('SellerProducts', 'getRelatedProductsList', [e.params.args.data.id]), '', function (t) {
-                var ans = $.parseJSON(t);
-                $('#related-products').empty();
-                for (var key in ans.relatedProducts) {
-                    $('#related-products').append(
-                        "<li id=productRelated" + ans.relatedProducts[key]['selprod_id'] + "><span>" + ans.relatedProducts[key]['selprod_title'] + " [" + ans.relatedProducts[key]['product_identifier'] + "]<i class=\"remove_related remove_param fas fa-times\"></i><input type=\"hidden\" name=\"selected_products[]\" value=" + ans.relatedProducts[key]['selprod_id'] + " /></span></li>"
-                    );
-                }
-            });
 
         }).on('select2:unselecting', function (e) {
             var parentForm = $(this).closest('form').attr('id');
