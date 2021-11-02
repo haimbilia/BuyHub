@@ -79,6 +79,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            color: $txt-body;
             a {
                 color: $txt-body;
             }
@@ -100,6 +101,7 @@
         &--horizontal {
             flex-direction: row;
             li {
+                line-height: 1;
                 +li {
                     margin-#{$start-direction}: 0.5rem;
                     padding-#{$start-direction}: 0.5rem;
@@ -112,6 +114,7 @@
         }
         li {
             list-style: none;
+            color: $txt-gray;
         }
     }
 }
