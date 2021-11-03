@@ -152,14 +152,20 @@ class AttachedFile extends MyAppModel
 
     public static function getImgAttrTypeArray($langId)
     {
+        $imgAttrTypeCacheVar = CacheHelper::get('imgAttrTypeCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($imgAttrTypeCacheVar) {
+            return json_decode($imgAttrTypeCacheVar);
+        }
+
         return $arr = array(
-            static::FILETYPE_PRODUCT_IMAGE => Labels::getLabel('LBL_Products', $langId),
-            static::FILETYPE_BRAND_LOGO => Labels::getLabel('LBL_Brand_Logo', $langId),
-            static::FILETYPE_BRAND_IMAGE => Labels::getLabel('LBL_Brand_Banner', $langId),
-            /* static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_Categories', $langId), */
-            static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_Category_Banner', $langId),
-            static::FILETYPE_BLOG_POST_IMAGE => Labels::getLabel('LBL_Blogs', $langId),
+            static::FILETYPE_PRODUCT_IMAGE => Labels::getLabel('LBL_PRODUCTS', $langId),
+            static::FILETYPE_BRAND_LOGO => Labels::getLabel('LBL_BRAND_LOGO', $langId),
+            static::FILETYPE_BRAND_IMAGE => Labels::getLabel('LBL_BRAND_BANNER', $langId),
+            /* static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_CATEGORIES', $langId), */
+            static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_CATEGORY_BANNER', $langId),
+            static::FILETYPE_BLOG_POST_IMAGE => Labels::getLabel('LBL_BLOGS', $langId),
         );
+        CacheHelper::create('imgAttrCacheVar' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
@@ -436,7 +442,7 @@ class AttachedFile extends MyAppModel
         }
 
         $this->setRecordModifiedTime($fileType, $recordId);
-        
+
         return $fileLoc;
     }
 
@@ -477,7 +483,8 @@ class AttachedFile extends MyAppModel
         return $this->saveAttachment($fl, $fileType, $recordId, $recordSubid, $name, $displayOrder, $uniqueRecord, $lang_id, $screen, $aspectRatio);
     }
 
-    public static function displayWebpImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true) {
+    public static function displayWebpImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true)
+    {
         ob_end_clean();
         ini_set('memory_limit', '-1');
         $noImage = 'images/defaults/' . $noImage;
@@ -497,7 +504,7 @@ class AttachedFile extends MyAppModel
             $filemtime = filemtime($imagePath);
             $_SERVER['REQUEST_URI'] = rtrim($_SERVER['REQUEST_URI'], '/') . '/?t=' . $filemtime;
         }
-        
+
         static::setHeaders();
         static::checkModifiedHeader($imagePath);
 
@@ -508,9 +515,9 @@ class AttachedFile extends MyAppModel
             $fileContent = FatCache::get($_SERVER['REQUEST_URI'], null, '.webp');
             if ($fileContent) {
                 static::loadImage($fileContent, $imagePath);
-            } 
+            }
         }
-        
+
         static::setLastModified($imagePath);
         static::setContentType($imagePath, 'image/webp');
 
@@ -518,15 +525,15 @@ class AttachedFile extends MyAppModel
         $h = FatUtility::int($h);
         list($width, $height) = getimagesize($imagePath);
         $ratio_orig = $width / $height;
-        
+
         $thumb = imagecreatetruecolor($w, $h);
         $newWidth = $w;
         $newHeight = $h;
-        if ($w/$h > $ratio_orig) {
-            $newWidth = $h*$ratio_orig;
-         } else {
-            $newHeight = $w/$ratio_orig;
-         }
+        if ($w / $h > $ratio_orig) {
+            $newWidth = $h * $ratio_orig;
+        } else {
+            $newHeight = $w / $ratio_orig;
+        }
 
         switch ($fileMimeType) {
             case 'image/png':
@@ -544,17 +551,17 @@ class AttachedFile extends MyAppModel
                 break;
         }
 
-        
+
         $color_fill = imagecolorallocate($thumb, 255, 255, 255);
         imagefill($thumb, 0, 0, $color_fill);
-        
-         if ($apply_watermark && !empty($imagePath)) {
+
+        if ($apply_watermark && !empty($imagePath)) {
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_WATERMARK_IMAGE, 0, 0, CommonHelper::getLangId());
             $wtrmrkFile = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
             if (!empty($wtrmrkFile)) {
                 $wtrmrkFile = $uploadedFilePath . $wtrmrkFile;
                 $stampMimeType = mime_content_type($wtrmrkFile);
-                
+
                 switch ($stampMimeType) {
                     case 'image/png':
                         $stamp = imagecreatefrompng($wtrmrkFile);
@@ -580,14 +587,13 @@ class AttachedFile extends MyAppModel
                 // Copy the stamp image onto our photo using the margin offsets and the photo 
                 // width to calculate positioning of the stamp. 
                 imagecopy($img, $stamp, imagesx($img) - $sx - $marge_right, imagesy($img) - $sy - $marge_bottom, 0, 0, imagesx($stamp), imagesy($stamp));
-                
             }
         }
 
-        $xPosition = ($w - $newWidth)/2;
-        $yPosition = ($h - $newHeight)/2;
+        $xPosition = ($w - $newWidth) / 2;
+        $yPosition = ($h - $newHeight) / 2;
         imagecopyresampled($thumb, $img, $xPosition, $yPosition, 0, 0, $newWidth, $newHeight, $width, $height);
-        
+
         if (CONF_USE_FAT_CACHE && $cache) {
             ob_end_clean();
             ob_start();
@@ -599,7 +605,7 @@ class AttachedFile extends MyAppModel
             FatCache::set($_SERVER['REQUEST_URI'], $imgData, '.jpg');
             static::loadImage($imgData, $imagePath);
         }
-        
+
         imagewebp($thumb, null, $imageQuality);
         imagedestroy($thumb);
         exit;
@@ -608,10 +614,10 @@ class AttachedFile extends MyAppModel
     /* always call this function using image controller and pass relavant arguments. */
     public static function displayImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true)
     {
-        if (substr($imageName, 0, 5) == 'webp/'){
+        if (substr($imageName, 0, 5) == 'webp/') {
             $imageName = substr($imageName, 5);
-            self::displayWebpImage($imageName, $w, $h, $noImage , $uploadedFilePath, $resizeType , $apply_watermark , $cache , $imageCompression);
-        }       
+            self::displayWebpImage($imageName, $w, $h, $noImage, $uploadedFilePath, $resizeType, $apply_watermark, $cache, $imageCompression);
+        }
         ob_end_clean();
         ini_set('memory_limit', '-1');
         $noImage = 'images/defaults/' . $noImage;
@@ -772,7 +778,8 @@ class AttachedFile extends MyAppModel
         return $img = new ImageResize($image_name);
     }
 
-    public static function displayOriginalImageWebp($imageName, $noImage = 'no_image.jpg', $uploadedFilePath = '', $cache = false){
+    public static function displayOriginalImageWebp($imageName, $noImage = 'no_image.jpg', $uploadedFilePath = '', $cache = false)
+    {
         ob_end_clean();
         ini_set('memory_limit', '-1');
         $noImage = 'images/defaults/' . $noImage;
@@ -810,9 +817,9 @@ class AttachedFile extends MyAppModel
         static::setContentType($imagePath, 'image/webp');
 
         list($width, $height) = getimagesize($imagePath);
-        
+
         $thumb = imagecreatetruecolor($width, $height);
-        
+
         switch ($fileMimeType) {
             case 'image/png':
                 $img = imagecreatefrompng($imagePath);
@@ -828,10 +835,10 @@ class AttachedFile extends MyAppModel
                 $img = imagecreatefromjpeg($imagePath);
                 break;
         }
-        
+
         $color_fill = imagecolorallocate($thumb, 255, 255, 255);
         imagefill($thumb, 0, 0, $color_fill);
-        imagecopyresampled($thumb, $img, 0, 0, 0, 0, $width, $height, $width, $height);  
+        imagecopyresampled($thumb, $img, 0, 0, 0, 0, $width, $height, $width, $height);
 
         if (CONF_USE_FAT_CACHE && $cache) {
             ob_end_clean();
@@ -852,10 +859,10 @@ class AttachedFile extends MyAppModel
 
     public static function displayOriginalImage($imageName, $noImage = 'no_image.jpg', $uploadedFilePath = '', $cache = false)
     {
-        if (substr($imageName, 0, 5) == 'webp/'){
+        if (substr($imageName, 0, 5) == 'webp/') {
             $imageName = substr($imageName, 5);
-            self::displayOriginalImageWebp($imageName, $noImage , $uploadedFilePath, $cache );
-        } 
+            self::displayOriginalImageWebp($imageName, $noImage, $uploadedFilePath, $cache);
+        }
         ob_end_clean();
         $noImage = 'images/defaults/' . $noImage;
         $uploadedFilePath = CONF_UPLOADS_PATH . trim($uploadedFilePath);
@@ -922,10 +929,10 @@ class AttachedFile extends MyAppModel
         // die(CONF_UPLOADS_PATH . $image_name);
         if (!empty($image_name) && file_exists(CONF_UPLOADS_PATH . $image_name)) {
             $image_name = CONF_UPLOADS_PATH . $image_name;
-            $mineType=  mime_content_type($image_name);            
+            $mineType =  mime_content_type($image_name);
             header('Content-Description: File Transfer');
-            header("Content-type: $mineType");           
-            if (strpos($_SERVER ['HTTP_USER_AGENT'], "MSIE") > 0) {
+            header("Content-type: $mineType");
+            if (strpos($_SERVER['HTTP_USER_AGENT'], "MSIE") > 0) {
                 header('Content-Disposition: attachment; filename="' . rawurlencode(basename($downloadFileName)) . '"');
             } else {
                 header('Content-Disposition: attachment; filename*=UTF-8\'\'' . rawurlencode(basename($downloadFileName)));
@@ -1090,7 +1097,7 @@ class AttachedFile extends MyAppModel
         $allowedFileTypes = [
             AttachedFile::FILETYPE_ADMIN_LOGO,
             AttachedFile::FILETYPE_ADMIN_PROFILE_CROPED_IMAGE,
-            AttachedFile::FILETYPE_ADMIN_PROFILE_IMAGE,  
+            AttachedFile::FILETYPE_ADMIN_PROFILE_IMAGE,
             AttachedFile::FILETYPE_FRONT_LOGO,
             AttachedFile::FILETYPE_EMAIL_LOGO,
             AttachedFile::FILETYPE_FAVICON,
@@ -1136,7 +1143,7 @@ class AttachedFile extends MyAppModel
             /* delete single file */
             $deleteStatementArr = array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_id=?', 'vals' => array($fileType, $recordId, $fileId));
         }
-        
+
         $db = FatApp::getDb();
         if (!$db->deleteRecords('tbl_attached_files', $deleteStatementArr)) {
             $this->error = $db->getError();
@@ -1257,15 +1264,17 @@ class AttachedFile extends MyAppModel
         return readfile($path);
     }
 
-    public static function setNamePrefix($imageName = '', &$sizeType = ''){
-        if ('' != $sizeType && substr(strtoupper($sizeType), 0, 4) == 'WEBP'){
+    public static function setNamePrefix($imageName = '', &$sizeType = '')
+    {
+        if ('' != $sizeType && substr(strtoupper($sizeType), 0, 4) == 'WEBP') {
             $sizeType = substr($sizeType, 4);
-            return 'webp/'.$imageName;
+            return 'webp/' . $imageName;
         }
         return $imageName;
     }
 
-    public static function setRecordModifiedTime(int $fileType, int $recordId){
+    public static function setRecordModifiedTime(int $fileType, int $recordId)
+    {
         $recordObj = false;
         switch ($fileType) {
             case self::FILETYPE_PRODUCT_IMAGE:
@@ -1275,42 +1284,42 @@ class AttachedFile extends MyAppModel
             case self::FILETYPE_SHOP_BANNER:
             case self::FILETYPE_SHOP_BACKGROUND_IMAGE:
                 $recordObj = new Shop($recordId);
-                break;   
+                break;
             case self::FILETYPE_BRAND_LOGO:
             case self::FILETYPE_BRAND_IMAGE:
                 $recordObj = new Brand($recordId);
-                break; 
+                break;
             case self::FILETYPE_USER_IMAGE:
             case self::FILETYPE_USER_PROFILE_IMAGE:
                 $recordObj = new User($recordId);
-                break;            
+                break;
             case self::FILETYPE_BLOG_POST_IMAGE:
                 $recordObj = new BlogPost($recordId);
-                break;     
+                break;
             case self::FILETYPE_COLLECTION_IMAGE:
             case self::FILETYPE_COLLECTION_BG_IMAGE:
                 $recordObj = new Collections($recordId);
-                break;  
+                break;
             case self::FILETYPE_CATEGORY_ICON:
             case self::FILETYPE_CATEGORY_BANNER:
             case self::FILETYPE_CATEGORY_IMAGE:
-            case self::FILETYPE_PRODCAT_IMAGE:    
+            case self::FILETYPE_PRODCAT_IMAGE:
                 $recordObj = new ProductCategory($recordId);
                 break;
-            case self::FILETYPE_BADGE:    
+            case self::FILETYPE_BADGE:
                 $recordObj = new Badge($recordId);
                 break;
-            case self::FILETYPE_SHOP_COLLECTION_IMAGE:    
+            case self::FILETYPE_SHOP_COLLECTION_IMAGE:
                 $recordObj = new ShopCollection($recordId);
-                break; 
+                break;
             case self::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE:
-            case self::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE: 
-            case self::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE: 
+            case self::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE:
+            case self::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE:
                 $recordObj = new Extrapage($recordId);
-                break;            
+                break;
         }
 
-        if(false != $recordObj){
+        if (false != $recordObj) {
             return $recordObj->updateModifiedTime();
         }
         return false;
