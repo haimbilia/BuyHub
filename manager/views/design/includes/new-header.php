@@ -718,7 +718,7 @@
                         </div>
                     </div>
                     <div class="header-action__item dropdown header-account">
-                        <a class="header-action__trigger dropdown-toggle no-after" data-toggle="dropdown" href="">
+                        <a class=" dropdown-toggle no-after" data-toggle="dropdown" href="">
                             <span class="header-account__img">
                                 <img aria-expanded="false" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg"
                                     alt="">
