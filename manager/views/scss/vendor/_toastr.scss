@@ -3,7 +3,6 @@
 }
 
 .toast-message {
-    -ms-word-wrap: break-word;
     word-wrap: break-word;
 }
 
@@ -25,7 +24,6 @@
     font-size: 20px;
     font-weight: bold;
     color: #FFFFFF;
-    -webkit-text-shadow: 0 1px 0 #ffffff;
     text-shadow: 0 1px 0 #ffffff;
     opacity: 0.8;
     filter: alpha(opacity=80);
@@ -112,8 +110,6 @@ button.toast-close-button {
 }
 
 #toast-container * {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
 
@@ -124,13 +120,9 @@ button.toast-close-button {
     margin: 0 0 6px;
     padding: 15px 15px 15px 50px;
     width: 300px;
-    -moz-border-radius: 3px 3px 3px 3px;
-    -webkit-border-radius: 3px 3px 3px 3px;
     border-radius: 3px 3px 3px 3px;
     background-position: 15px center;
     background-repeat: no-repeat;
-    -moz-box-shadow: 0 0 12px #999999;
-    -webkit-box-shadow: 0 0 12px #999999;
     box-shadow: 0 0 12px #999999;
     color: #FFFFFF;
     opacity: 0.8;
@@ -144,8 +136,6 @@ button.toast-close-button {
 }
 
 #toast-container>div:hover {
-    -moz-box-shadow: 0 0 12px #000000;
-    -webkit-box-shadow: 0 0 12px #000000;
     box-shadow: 0 0 12px #000000;
     opacity: 1;
     filter: alpha(opacity=100);
@@ -183,23 +173,26 @@ button.toast-close-button {
 }
 
 .toast {
+    opacity: 1 !important;
+    box-shadow: none !important;
+    border: none !important;
     background-color: #030303;
 }
 
 .toast-success {
-    background-color: #51A351;
+    background-color: $success-color;
 }
 
 .toast-error {
-    background-color: #BD362F;
+    background-color: $danger-color;
 }
 
 .toast-info {
-    background-color: #2F96B4;
+    background-color: $info-color;
 }
 
 .toast-warning {
-    background-color: #F89406;
+    background-color: $warning-color;
 }
 
 .toast-progress {
