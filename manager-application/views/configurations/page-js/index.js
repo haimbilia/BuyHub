@@ -33,11 +33,26 @@ $(document).ready(function () {
             inputElement.attr('data-min_height', 85)
         }
     });
+    $(document).on('change', '.defaultLocationGeoFilter', function() {
+        if ($(this).val() == 1) {
+            $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', false); // enable
+            $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', false); // enable
+            $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', false); // enable
+        } else {
+            $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', true); // enable
+            $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', true); // enable
+            $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', true); // enable
+        }
+    });
+    $(document).on('keyup', 'form[name="frmConfiguration"]', function(e) {
+        e.stopImmediatePropagation();
+        if (e.keyCode === 13) {
+            $('.formBodyJs form').submit();
+        }
+    });
 });
 
-(function () {
-    var currentPage = 1;
-    var runningAjaxReq = false;
+(function () { 
     var dv = '#frmBlockJs';
     getForm = function (frmType, langId = 0) {
         fcom.resetEditorInstance();
@@ -88,10 +103,10 @@ $(document).ready(function () {
 
     popupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
-            loadCropperSkeleton();
+            loadCropperSkeleton();      
+            $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
             fcom.ajax(fcom.makeUrl('Configurations', 'imgCropper'), '', function (t) {
-                t = $.parseJSON(t);
-                console.log(t);
+                t = $.parseJSON(t);         
                 $("#modalBoxJs .modal-body").html(t.body);
                 $("#modalBoxJs .modal-footer").html(t.footer);
                 

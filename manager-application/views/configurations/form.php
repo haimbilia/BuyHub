@@ -9,156 +9,10 @@ $frm->setFormTagAttribute('dir', $formLayout);
 $frm->setFormTagAttribute('data-onclear', $clearFormFn);
 $frm->setFormTagAttribute('id', 'frmConfSetting');
 
-$frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
+$frm->setFormTagAttribute('onsubmit', 'setup($("#frmConfSetting")); return(false);');
 
-$stateData = FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 1);
-$displayMap = false;
-$colMd12Arr = [];
-$class = '';
-switch ($frmType) {
-    case Configurations::FORM_GENERAL:
-        $colMd12Arr = ['CONF_COOKIES_TEXT_' . $lang_id ,'CONF_MAP_IFRAME_CODE'];
-        $class = 'card-tabs';
-        break;
-    case Configurations::FORM_LOCAL:
-        $class = 'card-tabs';
-        break;
-    case Configurations::FORM_SEO:
-  
-        $colMd12Arr = ['CONF_LANG_SPECIFIC_URL', 'CONF_SITE_TRACKER_CODE', 'CONF_SITE_ROBOTS_TXT', 'seperatorGoogleTag', 'googleTagManager', 'CONF_GOOGLE_TAG_MANAGER_HEAD_SCRIPT', 'CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT', 'googlewebmaster', 'hotjar', 'CONF_HOTJAR_HEAD_SCRIPT', 'schemacode', 'CONF_DEFAULT_SCHEMA_CODES_SCRIPT'];
-       
-
-        break;
-    case Configurations::FORM_USER_ACCOUNT:
-  
-            $colMd12Arr = ['Withdrawal'];
-       
-        break;
-    case Configurations::FORM_CART_WISHLIST:
-
-    
-            $colMd12Arr = ['Cart', 'Wishlist'];
-     
-        break;
-    case Configurations::FORM_CHECKOUT_PROCESS:
-  
-            $colMd12Arr = ['Checkout', 'pickup', 'cprocess', 'CONF_VENDOR_ORDER_STATUS', 'CONF_BUYER_ORDER_STATUS', 'CONF_PROCESSING_ORDER_STATUS', 'CONF_COMPLETED_ORDER_STATUS', 'CONF_REVIEW_READY_ORDER_STATUS', 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', 'CONF_ENABLE_DIGITAL_DOWNLOADS', 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES', 'CONF_BADGE_COUNT_ORDER_STATUS', 'CONF_PRODUCT_IS_ON_ORDER_STATUSES'];
-     
-
-        break;
-    case Configurations::FORM_AFFILIATE:      
-            $colMd12Arr = ['CONF_AFFILIATES_REQUIRES_APPROVAL'];
-      
-        break;
-    case Configurations::FORM_REWARD_POINTS:   
-            $colMd12Arr = ['Birthday_Rewards', 'CONF_ENABLE_BIRTHDAY_DISCOUNT_REWARDS', 'BuyingAnYear'];     
-        break;
-    case Configurations::FORM_LIVE_CHAT:       
-        $colMd12Arr = ['CONF_LIVE_CHAT_CODE'];       
-        break;
-
-    case Configurations::FORM_EMAIL:        
-            $colMd12Arr = ['sendmailhtml', 'CONF_ADDITIONAL_ALERT_EMAILS'];        
-        $class = 'card-tabs';
-        break;
-    case Configurations::FORM_SERVER:     
-            $colMd12Arr = ['CONF_MAINTENANCE_TEXT_' . $lang_id];
-        
-        $class = 'card-tabs';
-        break;
-    case Configurations::FORM_DISCOUNT:        
-            $colMd12Arr = ['firstTimeDiscount'];        
-        break;
-    case Configurations::FORM_SHARING:        
-            $colMd12Arr = ['ShareAndEarn'];        
-        break;
-    case Configurations::FORM_THIRD_PARTY_API:
-        
-            $colMd12Arr = ['Engagespot', 'CONF_ENGAGESPOT_PUSH_NOTIFICATION_CODE', 'GoogleMap', 'CONF_GOOGLEMAP_API_KEY', 'Newsletter', 'CONF_AWEBER_SIGNUP_CODE', 'Analytics', 'accessToken', 'seperator', 'GoogleReCaptcha', 'Translatorseperator', 'JWPlayerseperator', 'CONF_JW_PLAYER_KEY'];
-        
-        break;
-    case Configurations::FORM_REFERAL:        
-            $colMd12Arr = ['RewardsOnRegistration', 'RewardsonPurchase'];        
-        break;
-    case Configurations::FORM_MEDIA:
-        $colMd12Arr = ['spacer', 'spacer1', 'spacer2', 'spacer3', 'spacer4', 'spacer5', 'spacer6', 'spacer7', 'spacer8', 'spacer9', 'spacer10'];
-        break;
-
-    case Configurations::FORM_PRODUCT:
-       
-        $colMd12Arr = ['geolocation', 'CONF_PRODUCT_GEO_LOCATION', 'CONF_LOCATION_LEVEL', 'CONF_DEFAULT_GEO_LOCATION'];       
-
-        $geoFld = $frm->getField('CONF_PRODUCT_GEO_LOCATION');
-        $geoFld->setFieldTagAttribute('class', 'geoLocation');
-
-        $lFld = $frm->getField('CONF_LOCATION_LEVEL');
-        $lFld->setFieldTagAttribute('class', 'listingFilter');
-        if (FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_RADIUS) {
-            $rFld = $frm->getField('CONF_RADIUS_DISTANCE_IN_MILES');
-            $rFld->setFieldTagAttribute('disabled', 'disabled');
-        }
-
-        if (FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) == applicationConstants::BASED_ON_RADIUS) {
-            $lFld->setFieldTagAttribute('disabled', 'disabled');
-        }
-
-        $fld = $frm->getField('CONF_DEFAULT_GEO_LOCATION');
-        $fld->setFieldTagAttribute('class', 'defaultLocationGeoFilter');
-
-        $countryFld = $frm->getField('CONF_GEO_DEFAULT_COUNTRY');
-        $stateFld = $frm->getField('CONF_GEO_DEFAULT_STATE');
-
-        if ($countryFld) {
-            $countryFld->setFieldTagAttribute('id', 'geo_country_code');
-            $countryFld->setFieldTagAttribute('onChange', 'getStatesByCountryCode(this.value,' . FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1) . ',\'#geo_state_code\', \'state_code\')');
-
-            $stateFld->setFieldTagAttribute('id', 'geo_state_code');
-        }
-        $stateData = FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_INT, 1);
-
-        $zipFld = $frm->getField('CONF_GEO_DEFAULT_ZIPCODE');
-        $zipFld->setFieldTagAttribute('id', 'geo_postal_code');
-
-        if (FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::YES) {
-            $countryFld->setFieldTagAttribute('disabled', 'disabled');
-            $stateFld->setFieldTagAttribute('disabled', 'disabled');
-            $zipFld->setFieldTagAttribute('disabled', 'disabled');
-        }
-
-        $latFld = $frm->getField('CONF_GEO_DEFAULT_LAT');
-        $latFld->setFieldTagAttribute('id', "lat");
-        $lngFld = $frm->getField('CONF_GEO_DEFAULT_LNG');
-        $lngFld->setFieldTagAttribute('id', "lng");
-        $lngFld = $frm->getField('CONF_GEO_DEFAULT_ADDR');
-        $lngFld->setFieldTagAttribute('id', "geo_city");
-
-        $displayMap = true;
-        break;
-    case Configurations::FORM_LOCAL:
-        $countryFld = $frm->getField('CONF_COUNTRY');
-        if ($countryFld) {
-            $countryFld->setFieldTagAttribute('id', 'user_country_id');
-            $countryFld->setFieldTagAttribute('onChange', 'getCountryStates(this.value,' . FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 1) . ',\'#user_state_id\')');
-
-            $stateFld = $frm->getField('CONF_STATE');
-            $stateFld->setFieldTagAttribute('id', 'user_state_id');
-        }
-        break;
-}
-
-if (!empty($colMd6Arr)) {
-    foreach ($colMd6Arr as $val) {
-        $fld = $frm->getField($val);
-        $fld->developerTags['colWidthValues'] = [null, '6', null, null];
-    }
-}
-
-if (!empty($colMd12Arr)) {
-    foreach ($colMd12Arr as $val) {
-        $fld = $frm->getField($val);
-        $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-    }
-}
+$stateData =  $frmType == Configurations::FORM_PRODUCT ? $stateData = FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_INT, 1) : FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 1);
+$displayMap = $frmType == Configurations::FORM_PRODUCT;
 
 ?>
 <div class="card">
@@ -230,20 +84,9 @@ if (!empty($colMd12Arr)) {
             });
         }
     });
-
-    $(document).on('change', '.defaultLocationGeoFilter', function() {
-        if ($(this).val() == 1) {
-            $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', false); // enable
-            $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', false); // enable
-            $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', false); // enable
-        } else {
-            $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', true); // enable
-            $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', true); // enable
-            $('input[name="CONF_GEO_DEFAULT_ZIPCODE"]').prop('disabled', true); // enable
-        }
-    });
+   
     <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-        $(document).ready(function() {
+        $(document).ready(function() {   
             var lat = $('#lat').val();
             var lng = $('#lng').val();
             initMap(lat, lng);
@@ -253,11 +96,5 @@ if (!empty($colMd12Arr)) {
         if ('undefined' != typeof countryId) {
             getCountryStates(countryId, '<?php echo $stateData; ?>', '#user_state_id');
         }
-    <?php } ?>
-    $(document).on('keyup', 'form[name="frmConfiguration"]', function(e) {
-        e.stopImmediatePropagation();
-        if (e.keyCode === 13) {
-            $('.formBodyJs form').submit();
-        }
-    });
+    <?php } ?>    
 </script>

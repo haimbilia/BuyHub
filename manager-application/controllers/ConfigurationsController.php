@@ -327,13 +327,13 @@ class ConfigurationsController extends AdminBaseController
     private function getForm($type, $langId)
     {
         $frm = new Form('frmConfiguration');
-        $arrValues = array();
         switch ($type) {
             case Configurations::FORM_GENERAL:
 
                 $frm->addTextBox(Labels::getLabel("LBL_Site_Name", $langId), 'CONF_WEBSITE_NAME_' . $langId);
                 $frm->addTextBox(Labels::getLabel("LBL_Site_Owner", $langId), 'CONF_SITE_OWNER_' . $langId);
-                $frm->addTextarea(Labels::getLabel('LBL_Cookies_Policies_Text', $langId), 'CONF_COOKIES_TEXT_' . $langId);
+                $fld = $frm->addTextarea(Labels::getLabel('LBL_Cookies_Policies_Text', $langId), 'CONF_COOKIES_TEXT_' . $langId);
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $frm->addEmailField(Labels::getLabel('LBL_Store_Owner_Email', $langId), 'CONF_SITE_OWNER_EMAIL');
                 $frm->addHiddenField('', 'CONF_SITE_PHONE_dcode');
@@ -369,6 +369,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld3->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Determines_how_many_items_are_shown_per_page_(user_listing,_categories,_etc)", $langId) . ".</span>"; */
 
                 $iframeFld = $frm->addTextarea(Labels::getLabel('LBL_Google_Map_Iframe', $langId), 'CONF_MAP_IFRAME_CODE');
+                $iframeFld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $iframeFld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_This_is_the_Gogle_Map_Iframe_Script,_used_to_display_google_map_on_contact_us_page", $langId) . '</span>';
 
                 break;
@@ -391,9 +392,9 @@ class ConfigurationsController extends AdminBaseController
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_Current", $langId) . ' <span id="currentDate">' . CommonHelper::currentDateTime(null, true) . '</span></span>';
                 $countryObj = new Countries();
                 $countriesArr = $countryObj->getCountriesAssocArr($langId);
-                $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $langId), 'CONF_COUNTRY', $countriesArr, '', [], Labels::getLabel('LBL_Select', $langId));
+                $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $langId), 'CONF_COUNTRY', $countriesArr, '', ['id' =>'user_country_id','onChange'=>'getCountryStates(this.value,' . FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 1) . ',\'#user_state_id\')'], Labels::getLabel('LBL_Select', $langId));
 
-                $frm->addSelectBox(Labels::getLabel('LBL_State', $langId), 'CONF_STATE', array(), '', [], Labels::getLabel('LBL_Select', $langId));
+                $frm->addSelectBox(Labels::getLabel('LBL_State', $langId), 'CONF_STATE', array(), '', ['id' =>'user_state_id'], Labels::getLabel('LBL_Select', $langId));
                 $frm->addRequiredField(Labels::getLabel("LBL_Postal_Code", $langId), 'CONF_ZIP_CODE');
                 $frm->addSelectBox(Labels::getLabel('LBL_date_Format', $langId), 'CONF_DATE_FORMAT', Configurations::dateFormatPhpArr(), false, array(), '');
 
@@ -414,26 +415,35 @@ class ConfigurationsController extends AdminBaseController
 
             case Configurations::FORM_SEO:
                 $fld = $frm->addCheckBox(Labels::getLabel('LBL_ENABLE_LANGUAGE_CODE_TO_SITE_URLS_&_LANGUAGE_SPECIFIC_URL_REWRITING', $langId), 'CONF_LANG_SPECIFIC_URL', 1, array(), false, 0);
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_LANGUAGE_CODE_TO_SITE_URLS_EXAMPLES", $langId));
+                
 
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Twitter_Username', $langId), 'CONF_TWITTER_USERNAME');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_This_is_required_for_Twitter_Card_code_SEO_Update", $langId) . '</span>';
 
                 $fld2 = $frm->addTextarea(Labels::getLabel('LBL_Site_Tracker_Code', $langId), 'CONF_SITE_TRACKER_CODE');
+                $fld2->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld2->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_This_is_the_site_tracker_script,_used_to_track_and_analyze_data_about_how_people_are_getting_to_your_website._e.g.,_Google_Analytics.", $langId) . ' http://www.google.com/analytics/</span>';
 
                 $robotsFld = $frm->addTextarea(Labels::getLabel('LBL_Robots_Txt', $langId), 'CONF_SITE_ROBOTS_TXT');
+                $robotsFld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $robotsFld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_This_will_update_your_Robots.txt_file._This_is_to_help_search_engines_index_your_site_more_appropriately.", $langId) . '</span>';
 
-                $frm->addHtml('', 'seperatorGoogleTag', '<div class="separator separator-dashed my-2"></div>');
+                $fld = $frm->addHtml('', 'seperatorGoogleTag', '<div class="separator separator-dashed my-2"></div>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
-                $frm->addHtml('', 'googleTagManager', '<h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Tag_Manager", $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'googleTagManager', '<h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Tag_Manager", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Head_Script", $langId), 'CONF_GOOGLE_TAG_MANAGER_HEAD_SCRIPT');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_code_provided_by_google_tag_manager_for_integration.", $langId) . "</span>";
 
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Body_Script", $langId), 'CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_code_provided_by_google_tag_manager_for_integration.", $langId) . "</span>";
-                $frm->addHtml('', 'googlewebmaster', '<div class="separator separator-dashed my-2"></div>');
+                $fld = $frm->addHtml('', 'googlewebmaster', '<div class="separator separator-dashed my-2"></div>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addHtml('', 'googleFileVerification', '<h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Webmaster", $langId) . '</h3>');
                 $htmlAfterField = '';
                 if (file_exists(CONF_UPLOADS_PATH . '/google-site-verification.html')) {
@@ -453,12 +463,17 @@ class ConfigurationsController extends AdminBaseController
                 $frm->addFileUpload(Labels::getLabel('LBL_HTML_file_Verification', $langId), 'google_file_verification', array('accept' => '.html', 'onChange' => 'updateVerificationFile(this, "google")'));
                 $frm->addFileUpload(Labels::getLabel('LBL_XML_file_Authentication', $langId), 'bing_file_verification', array('accept' => '.xml', 'onChange' => 'updateVerificationFile(this, "bing")'));
 
-                $frm->addHtml('', 'hotjar', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Hotjar", $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'hotjar', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Hotjar", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Head_Script", $langId), 'CONF_HOTJAR_HEAD_SCRIPT');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_code_provided_by_hotjar_for_integration.", $langId) . "</span>";
 
-                $frm->addHtml('', 'schemacode', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Schema_COdes", $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'schemacode', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Schema_COdes", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Default_Schema", $langId), 'CONF_DEFAULT_SCHEMA_CODES_SCRIPT');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Update_Schema_code_related_information.", $langId) . "</span>";
 
                 break;
@@ -529,7 +544,8 @@ class ConfigurationsController extends AdminBaseController
                 $fld3->requirements()->setRange('1', '2000');
                 $fld3->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Determines_how_many_catalog_items_are_shown_per_page_(products,_categories,_etc)", $langId) . ".</span>";
 
-                $frm->addHtml('', 'geolocation', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Location', $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'geolocation', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Location', $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addCheckBox(Labels::getLabel("LBL_ACTIVATE_GEO_LOCATION", $langId), 'CONF_ENABLE_GEO_LOCATION', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld);
 
@@ -544,8 +560,9 @@ class ConfigurationsController extends AdminBaseController
                     'CONF_PRODUCT_GEO_LOCATION',
                     $prodGeoSettingArr,
                     '',
-                    array('class' => 'list-radio')
+                    array('class' => 'list-radio geoLocation')
                 );
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 HtmlHelper::configureSwitchForRadio($fld);
                 // $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_DISPLAY_AND_SEARCH_PRODUCTS_BASED_ON_LOCATION", $langId) . "</span>";
 
@@ -554,31 +571,51 @@ class ConfigurationsController extends AdminBaseController
                     'CONF_LOCATION_LEVEL',
                     applicationConstants::getLocationLevels($langId),
                     '',
-                    array('class' => 'list-radio')
-                );
+                    array('class' => 'list-radio listingFilter')
+                );   
+                if (FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) == applicationConstants::BASED_ON_RADIUS) {
+                    $fld->setFieldTagAttribute('disabled', 'disabled');
+                }
+
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel("LBL_DISPLAY_AND_SEARCH_PRODUCTS_BASED_ON_CRITERIA", $langId));
 
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_RADIUS_MAX_DISTANCE_IN_MILES', $langId), 'CONF_RADIUS_DISTANCE_IN_MILES');
                 $fld->requirements()->setInt();
+                if (FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_RADIUS) {                  
+                    $fld->setFieldTagAttribute('disabled', 'disabled');
+                }
 
                 $fld = $frm->addRadioButtons(
                     Labels::getLabel("LBL_SET_DEFAULT_GEO_LOCATION", $langId),
                     'CONF_DEFAULT_GEO_LOCATION',
                     applicationConstants::getYesNoArr($langId),
                     '0',
-                    array('class' => 'list-radio')
+                    array('class' => 'list-radio defaultLocationGeoFilter')
                 );
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel("LBL_SET_DEFAULT_LOCATION_FOR_PRODUCT_LISTING", $langId));
 
                 $countryObj = new Countries();
                 $countriesArr = $countryObj->getCountriesAssocArr($langId, true, 'country_code');
-                $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $langId), 'CONF_GEO_DEFAULT_COUNTRY', $countriesArr, '', [], Labels::getLabel('LBL_Select', $langId));
+                $countryFld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $langId), 'CONF_GEO_DEFAULT_COUNTRY', $countriesArr, '', [], Labels::getLabel('LBL_Select', $langId));
+                $countryFld->setFieldTagAttribute('id', 'geo_country_code');
+                $countryFld->setFieldTagAttribute('onChange', 'getStatesByCountryCode(this.value,' . FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1) . ',\'#geo_state_code\', \'state_code\')');
 
-                $frm->addSelectBox(Labels::getLabel('LBL_State', $langId), 'CONF_GEO_DEFAULT_STATE', array(), '', [], Labels::getLabel('LBL_Select', $langId));
-                $frm->addTextBox(Labels::getLabel("LBL_Postal_Code", $langId), 'CONF_GEO_DEFAULT_ZIPCODE');
-                $frm->addHiddenField('', 'CONF_GEO_DEFAULT_LAT', FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, 40.72));
-                $frm->addHiddenField('', 'CONF_GEO_DEFAULT_LNG', FatApp::getConfig('CONF_GEO_DEFAULT_LNG', FatUtility::VAR_INT, -73.96));
-                $frm->addHiddenField('', 'CONF_GEO_DEFAULT_ADDR', FatApp::getConfig('CONF_GEO_DEFAULT_ADDR', FatUtility::VAR_STRING, ''));
+                $stateFld = $frm->addSelectBox(Labels::getLabel('LBL_State', $langId), 'CONF_GEO_DEFAULT_STATE', array(), '', [], Labels::getLabel('LBL_Select', $langId));
+                $stateFld->setFieldTagAttribute('id', 'geo_state_code');
+
+                $zipFld = $frm->addTextBox(Labels::getLabel("LBL_Postal_Code", $langId), 'CONF_GEO_DEFAULT_ZIPCODE','',['id'=>'geo_postal_code']);
+                $frm->addHiddenField('', 'CONF_GEO_DEFAULT_LAT', FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, 40.72 , ['id' => 'lat']));
+                $frm->addHiddenField('', 'CONF_GEO_DEFAULT_LNG', FatApp::getConfig('CONF_GEO_DEFAULT_LNG', FatUtility::VAR_INT, -73.96, ['id' => 'lng']));
+                $frm->addHiddenField('', 'CONF_GEO_DEFAULT_ADDR', FatApp::getConfig('CONF_GEO_DEFAULT_ADDR', FatUtility::VAR_STRING, '',['id' => 'geo_city']));
+
+                if (FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::YES) {
+                    $countryFld->setFieldTagAttribute('disabled', 'disabled');
+                    $stateFld->setFieldTagAttribute('disabled', 'disabled');
+                    $zipFld->setFieldTagAttribute('disabled', 'disabled');
+                }
+
                 break;
 
             case Configurations::FORM_USER_ACCOUNT:
@@ -666,7 +703,8 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Max_Seller_Request_Attempts", $langId), 'CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', '');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Maximum_seller_request_attempts_allowed", $langId) . "</span>";
 
-                $frm->addHtml('', 'Withdrawal', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Withdrawal", $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'Withdrawal', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Withdrawal", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Minimum_Withdrawal_Amount", $langId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_MIN_WITHDRAW_LIMIT', '');
                 $fld->htmlAfterField = "<span class='form-text text-muted'> " . Labels::getLabel("LBL_This_is_the_minimum_withdrawable_amount.", $langId) . "</span>";
@@ -679,7 +717,9 @@ class ConfigurationsController extends AdminBaseController
                 break;
 
             case Configurations::FORM_CHECKOUT_PROCESS:
-                $frm->addHtml('', 'Checkout', '<h3 class="form-section-head">' . Labels::getLabel('LBL_COD_Payments', $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'Checkout', '<h3 class="form-section-head">' . Labels::getLabel('LBL_COD_Payments', $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Minimum_COD_Order_Total', $langId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_MIN_COD_ORDER_LIMIT');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_minimum_cash_on_delivery_order_total,_eligible_for_COD_payments.", $langId) . "</span>";
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Maximum_COD_Order_Total', $langId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_MAX_COD_ORDER_LIMIT');
@@ -687,14 +727,17 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Minimum_Wallet_Balance', $langId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_COD_MIN_WALLET_BALANCE');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_seller_needs_to_maintain_to_accept_COD_orders._Default_is_-1", $langId) . "</span>";
 
-                $frm->addHtml('', 'pickup', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Pickup', $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'pickup', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Pickup', $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Display_Time_Slots_After_Order', $langId) . ' [' . Labels::getLabel('LBL_Hours', $langId) . ']', 'CONF_TIME_SLOT_ADDITION', 2);
                 $fld->requirements()->setInt();
                 $fld->requirements()->setRange('2', '9999999999');
                 $fld->requirements()->setRequired(true);
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_SHOP_PICKUP_INTERVAL_INFO", $langId) . "</span>";
 
-                $frm->addHtml('', 'cprocess', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Checkout_Process', $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'cprocess', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('LBL_Checkout_Process', $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addCheckBox(Labels::getLabel('LBL_Activate_Live_Payment_Transaction_Mode', $langId), 'CONF_TRANSACTION_MODE', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_Set_Transaction_Mode_to_live_environment", $langId));
@@ -836,54 +879,54 @@ class ConfigurationsController extends AdminBaseController
                 $returnAge = FatApp::getConfig("CONF_DEFAULT_RETURN_AGE", FatUtility::VAR_INT, 7);
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_DEFAULT_RETURN_AGE_[Days]", $langId), 'CONF_DEFAULT_RETURN_AGE', $returnAge);
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_IT_WILL_CONSIDERED_IF_NO_RETURN_AGE_IS_DEFINED_IN_SHOP_OR_SELLER_PRODUCT.", $langId) . "</span>";
-
-                $vendorOrderSelected = (!empty($arrValues['CONF_VENDOR_ORDER_STATUS'])) ? $arrValues['CONF_VENDOR_ORDER_STATUS'] : 0;
-
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Seller_Order_Statuses", $langId), 'CONF_VENDOR_ORDER_STATUS', $orderStatusArr, $vendorOrderSelected, array('class' => 'list-checkboxes'));
+              
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Seller_Order_Statuses", $langId), 'CONF_VENDOR_ORDER_STATUS', $orderStatusArr, 0, array('class' => 'list-checkboxes'));
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_the_order_starts_displaying_to_Sellers.", $langId) . "</span>";
-
-                $buyerOrderSelected = (!empty($arrValues['CONF_BUYER_ORDER_STATUS'])) ? $arrValues['CONF_BUYER_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Buyer_Order_Statuses", $langId), 'CONF_BUYER_ORDER_STATUS', $orderStatusArr, $buyerOrderSelected, array('class' => 'list-checkboxes'));
+                
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Buyer_Order_Statuses", $langId), 'CONF_BUYER_ORDER_STATUS', $orderStatusArr, 0, array('class' => 'list-checkboxes'));
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_the_order_starts_displaying_to_Buyers.", $langId) . "</span>";
 
-                $processingOrderSelected = (!empty($arrValues['CONF_PROCESSING_ORDER_STATUS'])) ? $arrValues['CONF_PROCESSING_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Processing_Order_Status", $langId), 'CONF_PROCESSING_ORDER_STATUS', $orderStatusArr, $processingOrderSelected, array('class' => 'list-checkboxes'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Processing_Order_Status", $langId), 'CONF_PROCESSING_ORDER_STATUS', $orderStatusArr, 0, array('class' => 'list-checkboxes'));
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_the_order_starts_stock_subtraction.", $langId) . "</span>";
-
-                $completeOrderSelected = (!empty($arrValues['CONF_COMPLETED_ORDER_STATUS'])) ? $arrValues['CONF_COMPLETED_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Completed_Order_Status", $langId), 'CONF_COMPLETED_ORDER_STATUS', $orderStatusArr, $completeOrderSelected, array('class' => 'list-checkboxes'));
+              
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Completed_Order_Status", $langId), 'CONF_COMPLETED_ORDER_STATUS', $orderStatusArr, 0, array('class' => 'list-checkboxes'));
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_considered_completed_and_payment_released_to_Sellers.", $langId) . "</span>";
 
-                $feedbackOrderSelected = (!empty($arrValues['CONF_REVIEW_READY_ORDER_STATUS'])) ? $arrValues['CONF_REVIEW_READY_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Feedback_ready_Order_Status", $langId), 'CONF_REVIEW_READY_ORDER_STATUS', $orderStatusArr, $feedbackOrderSelected, array('class' => 'list-checkboxes'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Feedback_ready_Order_Status", $langId), 'CONF_REVIEW_READY_ORDER_STATUS', $orderStatusArr, 0, array('class' => 'list-checkboxes'));
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_review_the_orders.", $langId) . "</span>";
 
-                $allowCancellationOrderSelected = (!empty($arrValues['CONF_ALLOW_CANCELLATION_ORDER_STATUS'])) ? $arrValues['CONF_ALLOW_CANCELLATION_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Order_Cancellation_by_Buyers", $langId), 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', $orderStatusArr, $allowCancellationOrderSelected, array('class' => 'list-checkboxes'));
+               
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Order_Cancellation_by_Buyers", $langId), 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', $orderStatusArr, 0, array('class' => 'list-checkboxes'));
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_place_cancellation_request_on_orders.", $langId) . "</span>";
 
-                $allowCancellationOrderSelected = (!empty($arrValues['CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS'])) ? $arrValues['CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Order_Cancellation_by_Buyers_On_Digital", $langId), 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', $orderStatusArr, $allowCancellationOrderSelected, array('class' => 'list-checkboxes'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Order_Cancellation_by_Buyers_On_Digital", $langId), 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', $orderStatusArr, 0, array('class' => 'list-checkboxes'));
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_place_cancellation_request_on_orders.", $langId) . "</span>";
 
-                $returnExchageOrderSelected = (!empty($arrValues['CONF_RETURN_EXCHANGE_READY_ORDER_STATUS'])) ? $arrValues['CONF_RETURN_EXCHANGE_READY_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Return/Exchange", $langId), 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', $orderStatusArr, $returnExchageOrderSelected, array('class' => 'list-checkboxes'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Allow_Return/Exchange", $langId), 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', $orderStatusArr, 0, array('class' => 'list-checkboxes'));
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_place_return/exchange_request_on_orders.", $langId) . "</span>";
 
-                $enableDigitalDownloads = (!empty($arrValues['CONF_ENABLE_DIGITAL_DOWNLOADS'])) ? $arrValues['CONF_ENABLE_DIGITAL_DOWNLOADS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Enable_Digital_Download", $langId), 'CONF_ENABLE_DIGITAL_DOWNLOADS', $orderStatusArr, $enableDigitalDownloads, array('class' => 'list-checkboxes'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Enable_Digital_Download", $langId), 'CONF_ENABLE_DIGITAL_DOWNLOADS', $orderStatusArr, 0, array('class' => 'list-checkboxes'));
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_allowed_to_access_their_downloadable_Products.", $langId) . "</span>";
 
-                $statusesToAttachMoreFiles = (!empty($arrValues['CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES'])) ? $arrValues['CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Order_statuses_to_allow_to_attach_more_files_with_order_product", $langId), 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES', $orderStatusArr, $statusesToAttachMoreFiles, array('class' => 'list-checkboxes'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Order_statuses_to_allow_to_attach_more_files_with_order_product", $langId), 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES', $orderStatusArr, 0, array('class' => 'list-checkboxes'));
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_order_statuses_to_allow_seller_or_admin_to_attach_more_files_with_order_products", $langId) . "</span>";
 
-                $badgeCountOrderSelected = (!empty($arrValues['CONF_BADGE_COUNT_ORDER_STATUS'])) ? $arrValues['CONF_BADGE_COUNT_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Order_Statuses_to_calculate_badge_count_(For_Admin)", $langId), 'CONF_BADGE_COUNT_ORDER_STATUS', $orderStatusArr, $badgeCountOrderSelected, array('class' => 'list-checkboxes'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Order_Statuses_to_calculate_badge_count_(For_Admin)", $langId), 'CONF_BADGE_COUNT_ORDER_STATUS', $orderStatusArr, 0, array('class' => 'list-checkboxes'));
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Order_Statuses_to_calculate_badge_count_for_seller_orders_in_admin_left_navigation_panel", $langId) . "</span>";
 
-                $productOnOrderStatusesSelected = (!empty($arrValues['CONF_PRODUCT_IS_ON_ORDER_STATUSES'])) ? $arrValues['CONF_PRODUCT_IS_ON_ORDER_STATUSES'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Products_On_Order_Stage(For_Seller_Inventory_Report)", $langId), 'CONF_PRODUCT_IS_ON_ORDER_STATUSES', $orderStatusArr, $productOnOrderStatusesSelected, array('class' => 'list-checkboxes'));
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Products_On_Order_Stage(For_Seller_Inventory_Report)", $langId), 'CONF_PRODUCT_IS_ON_ORDER_STATUSES', $orderStatusArr, 0, array('class' => 'list-checkboxes'));
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Products_are_in_On_Order_Used_on_Seller_Dashboard_Products_Inventory_Stock_Status_Report", $langId) . "</span>";
 
                 break;
@@ -892,7 +935,8 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addRadioButtons(Labels::getLabel("LBL_ADD_PRODUCTS_TO_WISHLIST_OR_FAVORITE?", $langId), 'CONF_ADD_FAVORITES_TO_WISHLIST', UserWishList::wishlistOrFavtArr($langId), applicationConstants::YES, array('class' => 'list-radio'));
                 HtmlHelper::configureSwitchForRadio($fld);
 
-                $frm->addHtml('', 'Cart', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Cart", $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'Cart', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Cart", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addCheckBox(Labels::getLabel('LBL_On_Payment_Cancel_Maintain_Cart', $langId), 'CONF_MAINTAIN_CART_ON_PAYMENT_CANCEL', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("LBL_Cart_Items_Will_be_retained_on_Cancelling_the_payment", $langId));
@@ -907,6 +951,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_how_many_notifications_will_be_sent_to_buyer.", $langId) . "</span>";
 
                 $frm->addHtml('', 'Wishlist', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Wishlist", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addIntegerField(Labels::getLabel("LBL_Reminder_Interval_For_Products_In_Wishlist_[Days]", $langId), 'CONF_REMINDER_INTERVAL_PRODUCTS_IN_WISHLIST', '');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_interval_in_days_to_send_auto_notification_alert_to_buyer_for_products_in_Wishlist.", $langId) . "</span>";
@@ -940,6 +985,7 @@ class ConfigurationsController extends AdminBaseController
                     '',
                     array('class' => 'list-radio')
                 );
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel("LBL_Automatically_approve_any_new_affiliates_who_sign_up.", $langId));
 
                 $fld = $frm->addTextBox(Labels::getLabel('LBL_Sign_Up_Commission', $langId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_AFFILIATE_SIGNUP_COMMISSION');
@@ -1007,15 +1053,16 @@ class ConfigurationsController extends AdminBaseController
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("MSG_Buyer_will_reward_point_on_every_purchase_as_defined_settings", $langId));
 
 
-                $frm->addHtml('', 'Birthday_Rewards', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Birthday_Reward_Points", $langId) . '</h3>');
-
-                $frm->addRadioButtons(
+                $fld = $frm->addHtml('', 'Birthday_Rewards', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Birthday_Reward_Points", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld =  $frm->addRadioButtons(
                     Labels::getLabel("LBL_Enable_birthday_discount", $langId),
                     'CONF_ENABLE_BIRTHDAY_DISCOUNT_REWARDS',
                     applicationConstants::getYesNoArr($langId),
                     '',
                     array('class' => 'list-radio')
                 );
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 HtmlHelper::configureSwitchForRadio($fld);
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Birthday_Reward_Points", $langId), 'CONF_BIRTHDAY_REWARD_POINTS');
@@ -1024,8 +1071,8 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_reward_Points_Validity", $langId), 'CONF_BIRTHDAY_REWARD_POINTS_VALIDITY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Reward_Points_validity_in_days_from_the_date_of_credit._Please_leave_it_blank_if_you_don't_want_reward_points_to_expire.", $langId) . "</span>";
 
-                $frm->addHtml('', 'BuyingAnYear', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Buying_in_an_Year_Reward_Points", $langId) . '</h3>');
-
+                $fld = $frm->addHtml('', 'BuyingAnYear', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Buying_in_an_Year_Reward_Points", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addRadioButtons(
                     Labels::getLabel("LBL_Enable_Module", $langId),
                     'CONF_ENABLE_BUYING_IN_AN_YEAR_REWARDS',
@@ -1044,9 +1091,8 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Reward_Points_Validity", $langId), 'CONF_BUYING_IN_AN_YEAR_REWARD_POINTS_VALIDITY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Reward_Points_validity_in_days_from_the_date_of_credit", $langId) . "</span>";
 
-                $orderStatusArr = Orders::getOrderProductStatusArr($langId);
-                $buyingInAnYearOrderSelected = (!empty($arrValues['CONF_BUYING_YEAR_REWARD_ORDER_STATUS'])) ? $arrValues['CONF_BUYING_YEAR_REWARD_ORDER_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Buying_Completion_Order_Status", $langId), 'CONF_BUYING_YEAR_REWARD_ORDER_STATUS', $orderStatusArr, $buyingInAnYearOrderSelected, array('class' => 'list-checkboxes'));
+                $orderStatusArr = Orders::getOrderProductStatusArr($langId);                
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Buying_Completion_Order_Status", $langId), 'CONF_BUYING_YEAR_REWARD_ORDER_STATUS', $orderStatusArr, 0, array('class' => 'list-checkboxes'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Set_the_order_status_the_customer's_order_must_reach_before_they_are_considered_completed_and_payment_released_to_Sellers.", $langId) . "</span>";
 
                 break;
@@ -1088,7 +1134,8 @@ class ConfigurationsController extends AdminBaseController
                 /* $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Send_Email", $langId), 'CONF_SEND_EMAIL', applicationConstants::getYesNoArr($langId), '', array('class' => 'list-radio')); */
                 HtmlHelper::configureSwitchForRadio($fld);
                 if (FatApp::getConfig('CONF_SEND_EMAIL', FatUtility::VAR_INT, 1)) {
-                    $frm->addHTML('', 'sendmailhtml', '<a href="javascript:void(0)" id="testMail-js">' . Labels::getLabel("LBL_Click_Here", $langId) . '</a> to test email. ' . Labels::getLabel("LBL_This_will_send_Test_Email_to_Site_Owner_Email", $langId) . ' - ' . FatApp::getConfig("CONF_SITE_OWNER_EMAIL"));
+                    $fld = $frm->addHTML('', 'sendmailhtml', '<a href="javascript:void(0)" id="testMail-js">' . Labels::getLabel("LBL_Click_Here", $langId) . '</a> to test email. ' . Labels::getLabel("LBL_This_will_send_Test_Email_to_Site_Owner_Email", $langId) . ' - ' . FatApp::getConfig("CONF_SITE_OWNER_EMAIL"));
+                    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                     /*  $fld->htmlAfterField = '<a href="javascript:void(0)" id="testMail-js">' . Labels::getLabel("LBL_Click_Here", $langId) . '</a> to test email. ' . Labels::getLabel("LBL_This_will_send_Test_Email_to_Site_Owner_Email", $langId) . ' - ' . FatApp::getConfig("CONF_SITE_OWNER_EMAIL"); */
                 }
 
@@ -1107,6 +1154,7 @@ class ConfigurationsController extends AdminBaseController
 
 
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Additional_Alert_E-Mails", $langId), 'CONF_ADDITIONAL_ALERT_EMAILS');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Any_additional_emails_you_want_to_receive_the_alert_email", $langId) . "</span>";
 
                 break;
@@ -1122,6 +1170,7 @@ class ConfigurationsController extends AdminBaseController
                 HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel("LBL_Activate_3rd_Party_Live_Chat.", $langId));
 
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Live_Chat_Code", $langId), 'CONF_LIVE_CHAT_CODE');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_live_chat_script/code_provided_by_the_3rd_party_API_for_integration.", $langId) . "</span>";
 
                 break;
@@ -1137,8 +1186,8 @@ class ConfigurationsController extends AdminBaseController
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_FACEBOOK_PIXEL_ID", $langId), 'CONF_FACEBOOK_PIXEL_ID');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_THIS_IS_THE_FACEBOOK_PIXEL_ID_USED_IN_TRACK_EVENTS.", $langId) . "</span>";
 
-                $frm->addHtml('', 'Engagespot', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Engagespot_Push_Notifications_(WEB)", $langId) . '</h3>');
-
+                $fld = $frm->addHtml('', 'Engagespot', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Engagespot_Push_Notifications_(WEB)", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Enable_Engagespot", $langId), 'CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION', applicationConstants::getYesNoArr($langId), '', array('class' => 'list-radio'));
                 HtmlHelper::configureSwitchForRadio($fld);
 
@@ -1146,14 +1195,18 @@ class ConfigurationsController extends AdminBaseController
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_API_key_provided_by_Engagespot.", $langId) . "</span>";
 
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Engagespot_Code", $langId), 'CONF_ENGAGESPOT_PUSH_NOTIFICATION_CODE');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_code_provided_by_the_engagespot_for_integration.", $langId) . "</span>";
 
 
-                $frm->addHtml('', 'GoogleMap', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Map_API", $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'GoogleMap', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Map_API", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Google_Map_API_Key", $langId), 'CONF_GOOGLEMAP_API_KEY');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_Google_map_api_key_used_to_get_user_current_location.", $langId) . "</span>";
 
-                $frm->addHtml('', 'Newsletter', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Newsletter_Subscription", $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'Newsletter', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Newsletter_Subscription", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Activate_Newsletter_Subscription", $langId), 'CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', applicationConstants::getYesNoArr($langId), '', array('class' => 'list-radio'));
                 HtmlHelper::configureSwitchForRadio($fld);
@@ -1168,9 +1221,11 @@ class ConfigurationsController extends AdminBaseController
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_Mailchimp's_subscribers_List_ID.", $langId) . "</span>";
 
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Aweber_Signup_Form_Code", $langId), 'CONF_AWEBER_SIGNUP_CODE');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Enter_the_newsletter_signup_code_received_from_Aweber", $langId) . "</span>";
 
-                $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Analytics", $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Google_Analytics", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Client_Id", $langId), 'CONF_ANALYTICS_CLIENT_ID');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_application_Client_Id_used_in_Analytics_dashboard.", $langId) . "</span>";
 
@@ -1184,6 +1239,7 @@ class ConfigurationsController extends AdminBaseController
                 HtmlHelper::configureSwitchForRadio($fld);
 
                 $accessToken = FatApp::getConfig("CONF_ANALYTICS_ACCESS_TOKEN", FatUtility::VAR_STRING, '');
+          
                 include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';
                 $analyticArr = array(
                     'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID", FatUtility::VAR_STRING, ''),
@@ -1204,17 +1260,21 @@ class ConfigurationsController extends AdminBaseController
                 } else {
                     $fld = $frm->addHTML('', 'accessToken', 'Please configure your settings and then authenticate them', '', 'class="medium"');
                 }
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
-                $frm->addHtml('', 'seperator', '<div class="separator separator-dashed my-2"></div>');
+                $fld = $frm->addHtml('', 'seperator', '<div class="separator separator-dashed my-2"></div>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
-                $frm->addHtml('', 'GoogleReCaptcha', '<h3 class="form-section-head">' . Labels::getLabel("LBL_GOOGLE_RECAPTCHA_V3", $langId) . '</h3>');
+                $fld =  $frm->addHtml('', 'GoogleReCaptcha', '<h3 class="form-section-head">' . Labels::getLabel("LBL_GOOGLE_RECAPTCHA_V3", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Site_Key", $langId), 'CONF_RECAPTCHA_SITEKEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_application_Site_key_used_for_Google_Recaptcha.", $langId) . "</span>";
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Secret_Key", $langId), 'CONF_RECAPTCHA_SECRETKEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_application_Secret_key_used_for_Google_Recaptcha.", $langId) . "</span>";
 
-                $frm->addHtml('', 'Translatorseperator', '<div class="separator separator-dashed my-2"></div>');
+                $fld =  $frm->addHtml('', 'Translatorseperator', '<div class="separator separator-dashed my-2"></div>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $frm->addHtml('', 'Microsoft Translator Text API', '<h3 class="form-section-head">' . Labels::getLabel("LBL_Microsoft_Translator_Text_API", $langId) . '</h3>');
 
@@ -1225,11 +1285,13 @@ class ConfigurationsController extends AdminBaseController
 
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_API_KEY", $langId), 'CONF_GOOGLE_FONTS_API_KEY');
-                $frm->addHtml('', 'JWPlayerseperator', '<div class="separator separator-dashed my-2"></div>');
+                $fld =  $frm->addHtml('', 'JWPlayerseperator', '<div class="separator separator-dashed my-2"></div>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 /* JW player Settings */
                 $frm->addHtml('', 'JWPlayerSettings', '<h3 class="form-section-head">' . Labels::getLabel("LBL_JW_Player_Settings", $langId) . '</h3>');
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_JW_Player_Key", $langId), 'CONF_JW_PLAYER_KEY');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_key_provided_by_JW_PLAYER", $langId) . "</span>";
                 /* JW player Settings */
                 break;
@@ -1247,7 +1309,8 @@ class ConfigurationsController extends AdminBaseController
                 $string = Labels::getLabel("LBL_Days,_after_which_Referrer_Url_is_Expired.", $langId);
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . $string . "</span>";
 
-                $frm->addHtml('', 'RewardsOnRegistration', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Reward_Benefits_on_Registration", $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'RewardsOnRegistration', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Reward_Benefits_on_Registration", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Referrer_Reward_Points", $langId), 'CONF_REGISTRATION_REFERRER_REWARD_POINTS');
                 $fld->requirements()->setIntPositive();
@@ -1265,7 +1328,8 @@ class ConfigurationsController extends AdminBaseController
                 $fld->requirements()->setIntPositive();
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Rewards_points_validity_in_days_from_the_date_of_credit", $langId) . "</span>";
 
-                $frm->addHtml('', 'RewardsonPurchase', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Reward_Benefits_on_First_Purchase", $langId) . '</h3>');
+                $fld =  $frm->addHtml('', 'RewardsonPurchase', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("LBL_Reward_Benefits_on_First_Purchase", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Referrer_Reward_Points", $langId), 'CONF_SALE_REFERRER_REWARD_POINTS');
                 $fld->requirements()->setIntPositive();
@@ -1286,8 +1350,8 @@ class ConfigurationsController extends AdminBaseController
                 break;
 
             case Configurations::FORM_DISCOUNT:
-                $frm->addHtml('', 'firstTimeDiscount', '<h3 class="form-section-head">' . Labels::getLabel("LBL_First_time_buyers_discount_coupon", $langId) . '</h3>');
-
+                $fld = $frm->addHtml('', 'firstTimeDiscount', '<h3 class="form-section-head">' . Labels::getLabel("LBL_First_time_buyers_discount_coupon", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addRadioButtons(
                     Labels::getLabel("LBL_Enable_1st_time_buyers_discount", $langId),
                     'CONF_ENABLE_FIRST_TIME_BUYER_DISCOUNT',
@@ -1346,9 +1410,8 @@ class ConfigurationsController extends AdminBaseController
                     array(),
                     ''
                 );
-
-                $subscriptionSellerOrderSelected = (!empty($arrValues['CONF_SELLER_SUBSCRIPTION_STATUS'])) ? $arrValues['CONF_SELLER_SUBSCRIPTION_STATUS'] : 0;
-                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Seller_Subscription_Statuses", $langId), 'CONF_SELLER_SUBSCRIPTION_STATUS', $orderSubscriptionStatusArr, $subscriptionSellerOrderSelected, array('class' => 'list-checkboxes'));
+                
+                $fld = $frm->addCheckBoxes(Labels::getLabel("LBL_Seller_Subscription_Statuses", $langId), 'CONF_SELLER_SUBSCRIPTION_STATUS', $orderSubscriptionStatusArr, 0, array('class' => 'list-checkboxes'));
 
                 break;
 
@@ -1391,14 +1454,16 @@ class ConfigurationsController extends AdminBaseController
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_Set_time_interval_to_calculate_no._of_click_from_one_user_for_each_promotion", $langId) . '</span>';
 
                 break;
-            case Configurations::FORM_SERVER:
-                $fld = $frm->addHtmlEditor(Labels::getLabel('LBL_Maintenance_Text', $this->siteLangId), 'CONF_MAINTENANCE_TEXT_' . $langId);
-                $fld->requirements()->setRequired(true);
+            case Configurations::FORM_SERVER:                
                 $fld = $frm->addRadioButtons(Labels::getLabel("LBL_Use_SSL", $langId), 'CONF_USE_SSL', applicationConstants::getYesNoArr($langId), '', array('class' => 'list-radio'));
                 HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel("LBL_NOTE:_To_use_SSL,_check_with_your_host_if_a_SSL_certificate_is_installed_and_enable_it_from_here.", $langId));
 
                 $fld = $frm->addSelectBox(Labels::getLabel("LBL_Enable_Maintenance_Mode", $langId), 'CONF_MAINTENANCE', applicationConstants::getYesNoArr($langId), '', array(), '');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_NOTE:_Enable_Maintenance_Mode_Text", $langId) . '.</span>';
+                
+                $fld = $frm->addHtmlEditor(Labels::getLabel('LBL_Maintenance_Text', $this->siteLangId), 'CONF_MAINTENANCE_TEXT_' . $langId);
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->requirements()->setRequired(true);
 
                 break;            
             case Configurations::FORM_MEDIA:
@@ -1434,7 +1499,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld = HtmlHelper::configureRadioAsButton($frm, 'ratio_type_' . $fileType);
 
                 $fld1 = $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType],
+                    ['onChange' => 'popupImage(this)', 'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType , 'accept'=>'image/*' ,'data-name' => Labels::getLabel("LBL_ADMIN_LOGO", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     '',
@@ -1442,7 +1507,8 @@ class ConfigurationsController extends AdminBaseController
                     'mt-3'
                 ));
                 $fld->attachField($fld1);
-                $frm->addHtml('', 'spacer', '<div class="separator separator-dashed my-5"></div>');
+                $fld = $frm->addHtml('', 'spacer', '<div class="separator separator-dashed my-5"></div>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 /* block start */
 
@@ -1474,7 +1540,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld = HtmlHelper::configureRadioAsButton($frm, 'ratio_type_' . $fileType);
 
                 $fld1 = $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-frm' => 'frmShopLogo', 'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType],
+                    ['onChange' => 'popupImage(this)', 'data-frm' => 'frmShopLogo', 'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType, 'accept'=>'image/*','data-name' => Labels::getLabel("LBL_DESKTOP_LOGO", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     '',
@@ -1482,7 +1548,8 @@ class ConfigurationsController extends AdminBaseController
                     'mt-3'
                 ));
                 $fld->attachField($fld1);
-                $frm->addHtml('', 'spacer1', '<div class="separator separator-dashed my-5"></div>');
+                $fld =  $frm->addHtml('', 'spacer1', '<div class="separator separator-dashed my-5"></div>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 /* block start */
 
@@ -1501,14 +1568,15 @@ class ConfigurationsController extends AdminBaseController
                     }
                 }
                 $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-min_width' => 16, 'data-min_height' => 16, 'data-file_type' => $fileType],
+                    ['onChange' => 'popupImage(this)', 'data-min_width' => 16, 'data-min_height' => 16, 'data-file_type' => $fileType, 'accept'=>'image/*','data-name' => Labels::getLabel("LBL_WEBSITE_FAVICON", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     '',
                     $imageArr,
                     'mt-3'
                 ));
-                $frm->addHtml('', 'spacer2', '<div class="separator separator-dashed my-5"></div>');
+                $fld = $frm->addHtml('', 'spacer2', '<div class="separator separator-dashed my-5"></div>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 /* block start */
 
@@ -1528,15 +1596,15 @@ class ConfigurationsController extends AdminBaseController
                 }
 
                 $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-min_width' => 160, 'data-min_height' => 240, 'data-file_type' => $fileType],
+                    ['onChange' => 'popupImage(this)', 'data-min_width' => 160, 'data-min_height' => 240, 'data-file_type' => $fileType, 'accept'=>'image/*','data-name' => Labels::getLabel("LBL_SOCIAL_FEED_IMAGE", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     '',
                     $imageArr,
                     'mt-3'
                 ));
-                $frm->addHtml('', 'spacer3', '<div class="separator separator-dashed my-5"></div>');
-
+                $fld = $frm->addHtml('', 'spacer3', '<div class="separator separator-dashed my-5"></div>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 /* block start */
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("LBL_PAYMENT_PAGE_LOGO", $langId) . ' </h6>
@@ -1567,7 +1635,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld = HtmlHelper::configureRadioAsButton($frm, 'ratio_type_' . $fileType);
 
                 $fld1 = $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)',  'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType],
+                    ['onChange' => 'popupImage(this)',  'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType, 'accept'=>'image/*','data-name' => Labels::getLabel("LBL_PAYMENT_PAGE_LOGO", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     '',
@@ -1575,7 +1643,8 @@ class ConfigurationsController extends AdminBaseController
                     'mt-3'
                 ));
                 $fld->attachField($fld1);
-                $frm->addHtml('', 'spacer4', '<div class="separator separator-dashed my-5"></div>');
+                $fld =$frm->addHtml('', 'spacer4', '<div class="separator separator-dashed my-5"></div>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
 
                 /* block start */
@@ -1596,14 +1665,15 @@ class ConfigurationsController extends AdminBaseController
                 }
 
                 $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-min_width' => 168, 'data-min_height' => 37, 'data-file_type' => $fileType],
+                    ['onChange' => 'popupImage(this)', 'data-min_width' => 168, 'data-min_height' => 37, 'data-file_type' => $fileType, 'accept'=>'image/*','data-name' => Labels::getLabel("LBL_WATERMARK_IMAGE", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     '',
                     $imageArr,
                     'mt-3'
                 ));
-                $frm->addHtml('', 'spacer5', '<div class="separator separator-dashed my-5"></div>');
+                $fld = $frm->addHtml('', 'spacer5', '<div class="separator separator-dashed my-5"></div>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 /* block start */
 
@@ -1623,7 +1693,7 @@ class ConfigurationsController extends AdminBaseController
                 }
 
                 $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)',  'data-min_width' => 152, 'data-min_height' => 152, 'data-file_type' => $fileType],
+                    ['onChange' => 'popupImage(this)',  'data-min_width' => 152, 'data-min_height' => 152, 'data-file_type' => $fileType, 'accept'=>'image/*','data-name' => Labels::getLabel("LBL_APPLE_TOUCH_ICON", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     '',
@@ -1631,7 +1701,8 @@ class ConfigurationsController extends AdminBaseController
                     'mt-3'
                 ));
 
-                $frm->addHtml('', 'spacer6', '<div class="separator separator-dashed my-5"></div>');
+                $fld = $frm->addHtml('', 'spacer6', '<div class="separator separator-dashed my-5"></div>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 /* block start */
 
@@ -1651,14 +1722,15 @@ class ConfigurationsController extends AdminBaseController
                 }
 
                 $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)',  'data-min_width' => 168, 'data-min_height' => 37, 'data-file_type' => $fileType],
+                    ['onChange' => 'popupImage(this)',  'data-min_width' => 168, 'data-min_height' => 37, 'data-file_type' => $fileType, 'accept'=>'image/*','data-name' => Labels::getLabel("LBL_MOBILE_LOGO", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     '',
                     $imageArr,
                     'mt-3'
                 ));
-                $frm->addHtml('', 'spacer7', '<div class="separator separator-dashed my-5"></div>');
+                $fld = $frm->addHtml('', 'spacer7', '<div class="separator separator-dashed my-5"></div>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 /* block start */
 
@@ -1689,7 +1761,7 @@ class ConfigurationsController extends AdminBaseController
 
                 $fld = HtmlHelper::configureRadioAsButton($frm, 'ratio_type_' . $fileType);
                 $fld1 = $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType],
+                    ['onChange' => 'popupImage(this)', 'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType, 'accept'=>'image/*','data-name' => Labels::getLabel("LBL_INVOICE_LOGO", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     '',
@@ -1697,12 +1769,13 @@ class ConfigurationsController extends AdminBaseController
                     'mt-3'
                 ));
                 $fld->attachField($fld1);
-                $frm->addHtml('', 'spacer8', '<div class="separator separator-dashed my-5"></div>');
+                $fld = $frm->addHtml('', 'spacer8', '<div class="separator separator-dashed my-5"></div>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
 
                 /* block start */
 
-                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("LBL_First_Purchase_Discount_Image", $langId) . ' </h6>
+                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("LBL_FIRST_PURCHASE_DISCOUNT_IMAGE", $langId) . ' </h6>
                     <span class="form-text text-muted">
                         <strong> Image Disclaimer:</strong> ' . Labels::getLabel('LBL_DIMENSIONS', $langId) . ' 120*120</span>');
 
@@ -1718,14 +1791,15 @@ class ConfigurationsController extends AdminBaseController
                 }
 
                 $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)',  'data-min_width' => 120, 'data-min_height' => 120, 'data-file_type' => $fileType],
+                    ['onChange' => 'popupImage(this)',  'data-min_width' => 120, 'data-min_height' => 120, 'data-file_type' => $fileType, 'accept'=>'image/*','data-name' => Labels::getLabel("LBL_FIRST_PURCHASE_DISCOUNT_IMAGE", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     '',
                     $imageArr,
                     'mt-3'
                 ));
-                $frm->addHtml('', 'spacer9', '<div class="separator separator-dashed my-5"></div>');
+                $fld = $frm->addHtml('', 'spacer9', '<div class="separator separator-dashed my-5"></div>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 /* block start */
 
@@ -1757,7 +1831,7 @@ class ConfigurationsController extends AdminBaseController
                 $fld = HtmlHelper::configureRadioAsButton($frm, 'ratio_type_' . $fileType);
 
                 $fld1 = $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)',  'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType],
+                    ['onChange' => 'popupImage(this)',  'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType, 'accept'=>'image/*','data-name' => Labels::getLabel("LBL_META_IMAGE", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     '',
@@ -1765,10 +1839,12 @@ class ConfigurationsController extends AdminBaseController
                     'mt-3'
                 ));
                 $fld->attachField($fld1);
-                $frm->addHtml('', 'spacer10', '<div class="separator separator-dashed my-5"></div>');
+                $fld = $frm->addHtml('', 'spacer10', '<div class="separator separator-dashed my-5"></div>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 break;
             case Configurations::FORM_SHARING:
-                $frm->addHtml('', 'ShareAndEarn', '<h3 class="form-section-head">' . Labels::getLabel('LBL_Share_and_Earn_Settings', $langId) . '</h3>');
+                $fld =  $frm->addHtml('', 'ShareAndEarn', '<h3 class="form-section-head">' . Labels::getLabel('LBL_Share_and_Earn_Settings', $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addTextBox(Labels::getLabel("LBL_Facebook_APP_ID", $langId), 'CONF_FACEBOOK_APP_ID');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_is_the_application_ID_used_in_post.", $langId) . "</span>";
@@ -1791,6 +1867,7 @@ class ConfigurationsController extends AdminBaseController
 
                 $fld = $frm->addTextarea(Labels::getLabel("LBL_Twitter_Post_Description", $langId), 'CONF_SOCIAL_FEED_TWITTER_POST_TITLE' . $langId);
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_This_description_shared_on_twitter", $langId) . "</span>";
+                break;
         }
         $frm->addHiddenField('', 'form_type', $type);
         $frm->addHiddenField('', 'lang_id', $langId);

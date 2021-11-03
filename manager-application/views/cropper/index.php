@@ -2,12 +2,14 @@
 
     $imageUrl = isset($image) ? ($image . "t=" . time()) : '';
     $body = '
-<div class="img-container">
-    <img src="' . $imageUrl . '" alt="Picture" id="new-img" class="img_responsive cropper-hidden">
-    <div class="loader-positon" id="loader-js"></div>
-</div>';
+        <div class="img-container">
+            <img src="' . $imageUrl . '" alt="Picture" id="new-img" class="img_responsive cropper-hidden">
+            <div class="loader-positon" id="loader-js"></div>
+        </div>
+    ';
 
-    $footer = '<div class="rotator-actions" id="actions">
+    $footer = '
+    <div class="rotator-actions" id="actions">
         <div class="docs-buttons">
             <div class="btn-group">
                 <button type="button" class="btn btn-brand" data-method="rotate" data-option="-90" title="' . Labels::getLabel('LBL_Rotate_Left', $siteLangId) . '">
