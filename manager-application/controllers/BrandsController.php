@@ -423,38 +423,32 @@ class BrandsController extends AdminBaseController
         $languages = Language::getAllNames();
         if (1 == count($languages)) {
             $langId = array_key_first($languages);
-        }
+        }       
 
         $data['lang_id'] = $langId;
         $data['ratio_type'] = AttachedFile::RATIO_TYPE_SQUARE;
         if (0 < $recordId) {
-            $brandLogo = current(AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_LOGO, $recordId, 0, $langId, false));
+            $brandLogo = current(AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_LOGO, $recordId, 0, $langId, false));            
             if (is_array($brandLogo) && count($brandLogo)) {
                 $data['ratio_type'] = $brandLogo['afile_aspect_ratio'];
             }
         }
         $logoFrm->fill($data);
-
+      
         $data['slide_screen'] = 1 > $slide_screen ? applicationConstants::SCREEN_DESKTOP : $slide_screen;
         $imageFrm = $this->getBrandImageForm($recordId);
         $imageFrm->fill($data);
-
+      
         $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
         $this->set('logoFrm', $logoFrm);
-        $this->set('imageFrm', $imageFrm);
+        $this->set('imageFrm', $imageFrm);        
         $this->_template->render(false, false);
     }
 
     public function images($brand_id, $file_type, $lang_id = 0, $slide_screen = 0)
     {
         $languages = Language::getAllNames();
-        if (count($languages) > 1) {
-            $lang_id = FatUtility::int($lang_id);
-        } else {
-            $lang_id = array_key_first($languages);
-        }
-
         $slide_screen = FatUtility::int($slide_screen);
         $brand_id = FatUtility::int($brand_id);
         if ($file_type == 'logo') {
@@ -504,7 +498,7 @@ class BrandsController extends AdminBaseController
         $slide_screen = FatApp::getPostedData('slide_screen', FatUtility::VAR_INT, 0);
         $aspectRatio = FatApp::getPostedData('ratio_type', FatUtility::VAR_INT, 0);
 
-        if (!$brand_id) {
+        if (!$brand_id) {       
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
@@ -545,11 +539,11 @@ class BrandsController extends AdminBaseController
         return false;
     }
 
-    public function getBrandLogoForm($bannerId)
+    public function getBrandLogoForm($brandId)
     {
         $frm = new Form('frmBrandLogo');
         $languagesAssocArr = Language::getAllNames();
-        $frm->addHiddenField('', 'banner_id', $bannerId);
+        $frm->addHiddenField('', 'brand_id', $brandId);
 
         if (count($languagesAssocArr) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_Universal', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
@@ -562,18 +556,18 @@ class BrandsController extends AdminBaseController
         $frm->addRadioButtons(Labels::getLabel('FRM_Ratio', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
 
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BRAND_LOGO);
-        $frm->addHiddenField('', 'logo_min_width');
-        $frm->addHiddenField('', 'logo_min_height');
-        $frm->addFileUpload(Labels::getLabel('FRM_BRAND_LOGO', $this->siteLangId), 'logo', array('accept' => 'image/*', 'data-frm' => 'frmBrandLogo'));
-        $frm->addHTML('', 'logo_html', '');
+        $frm->addHiddenField('', 'min_width');
+        $frm->addHiddenField('', 'min_height');
+        //$frm->addFileUpload(Labels::getLabel('FRM_BRAND_LOGO', $this->siteLangId), 'logo', array('accept' => 'image/*', 'data-frm' => 'frmBrandLogo'));
+        $frm->addHTML('', 'logo', '');
         return $frm;
     }
 
-    public function getBrandImageForm($bannerId)
+    public function getBrandImageForm($brandId)
     {
         $frm = new Form('frmBrandImage');
         $languagesAssocArr = Language::getAllNames();
-        $frm->addHiddenField('', 'banner_id', $bannerId);
+        $frm->addHiddenField('', 'brand_id', $brandId);
         if (count($languagesAssocArr) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_UNIVERSAL', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
         } else {
@@ -583,10 +577,9 @@ class BrandsController extends AdminBaseController
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel("FRM_DISPLAY_FOR", $this->siteLangId), 'slide_screen', $screenArr, '', array(), '');
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BRAND_IMAGE);
-        $frm->addHiddenField('', 'banner_min_width');
-        $frm->addHiddenField('', 'banner_min_height');
-        $frm->addFileUpload(Labels::getLabel('FRM_BRAND_BANNER', $this->siteLangId), 'image', array('accept' => 'image/*', 'data-frm' => 'frmBrandImage'));
-
+        $frm->addHiddenField('', 'min_width');
+        $frm->addHiddenField('', 'min_height');        
+        $frm->addHTML('', 'banner', '');
         return $frm;
     }
 
