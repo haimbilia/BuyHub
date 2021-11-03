@@ -274,12 +274,12 @@ class EmptyCartItemsController extends AdminBaseController
         return $frm;
     }
 
-    protected function getLangForm($recordId, $langId = 0)
+    protected function getLangForm($recordId, $langId)
     {
         $frm = new Form('frmEmptyCartItemLang');
         $frm->addHiddenField('', 'emptycartitem_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Empty_Cart_Item_Title', $this->siteLangId), 'emptycartitem_title');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Empty_Cart_Item_Title', $langId), 'emptycartitem_title');
         return $frm;
     }
 

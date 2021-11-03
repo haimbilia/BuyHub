@@ -56,11 +56,11 @@ $otherButtons = [
 $formTitle = Labels::getLabel('LBL_BRAND_SETUP', $siteLangId); ?>
 
 <?php require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
-<div class="form-edit-body loaderContainerJs">
-    <?php echo $logoFrm->getFormHtml(); ?>
-    <div class="separator separator-dashed my-4"></div>
-    <?php echo $imageFrm->getFormHtml(); ?>
-</div>
+    <div class="form-edit-body loaderContainerJs">
+        <?php echo $logoFrm->getFormHtml(); ?>
+        <div class="separator separator-dashed my-4"></div>
+        <?php echo $imageFrm->getFormHtml(); ?>
+    </div>
 </div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->
 
 <script>
