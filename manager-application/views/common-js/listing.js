@@ -585,7 +585,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (inputBtn.files && inputBtn.files[0]) {
             loadCropperSkeleton();
             fcom.ajax(fcom.makeUrl(controllerName, "imgCropper"), "", function (t) {
-                $("#modalBoxJs .modal-body").html(t);
+                t = $.parseJSON(t);  	
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);
                 var file = inputBtn.files[0];
                 var minWidth = document.frmRecordImage.min_width.value;
                 var minHeight = document.frmRecordImage.min_height.value;

@@ -9,12 +9,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
             rel="stylesheet">
         <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-
         <link rel="shortcut icon" href="images/favicon.ico" />
-
     </head>
-
-
 
     <body class="">
         <div class="wrapper">
@@ -23,7 +19,6 @@
 ?>
             <div class="body " id="body">
                 <div class="content " id="content">
-
                     <!-- begin:: Subheader -->
                     <div class="subheader grid__item" id="subheader">
                         <div class="container ">
@@ -326,6 +321,9 @@
                     <!-- end:: Content -->
                 </div>
             </div>
+
+
+
 
             <?php  include 'includes/footer.php';?>
         </div>

@@ -79,6 +79,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            color: $txt-body;
             a {
                 color: $txt-body;
             }
@@ -94,6 +95,27 @@
     &__btn {
         margin-top: 5px;
         font-size: 0.8rem;
+    }
+    .list-options {
+        display: flex;
+        &--horizontal {
+            flex-direction: row;
+            li {
+                line-height: 1;
+                +li {
+                    margin-#{$start-direction}: 0.5rem;
+                    padding-#{$start-direction}: 0.5rem;
+                    border-#{$start-direction}: 1px solid $border-color;
+                }
+            }
+        }
+        &--vertical {
+            flex-direction: column;
+        }
+        li {
+            list-style: none;
+            color: $txt-gray;
+        }
     }
 }
 

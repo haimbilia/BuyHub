@@ -53,8 +53,8 @@ $card:'card';
         display: flex;
         align-items: center;
         align-content: flex-end;
-        .btn-add {
-            margin-#{$end-direction}: 2rem;
+        .btn-add~.actions {
+            margin-#{$start-direction}: 2rem;
         }
         >.actions {
             li {
