@@ -457,6 +457,11 @@ class BrandsController extends AdminBaseController
         $languages = Language::getAllNames();
         $slide_screen = FatUtility::int($slide_screen);
         $brand_id = FatUtility::int($brand_id);
+        if (count($languages) > 1) {
+            $lang_id = FatUtility::int($lang_id);
+        } else {
+            $lang_id = array_key_first($languages);
+        }
         if ($file_type == 'logo') {
             $brandLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, $lang_id, (count($languages) > 1) ? false : true);
             $this->set('image', $brandLogo);
