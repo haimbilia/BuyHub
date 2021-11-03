@@ -2,40 +2,53 @@
 
 class ImageAttributesController extends AdminBaseController
 {
-
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
-        $ajaxCallArray = array('deleteRecord', 'form', 'search', 'setup');
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die($this->str_invalid_Action);
-        }
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewImageAttributes($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditImageAttributes($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewImageAttributes();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewImageAttributes();
-        $srchFrm = $this->getSearchForm();
-        $this->set("srchFrm", $srchFrm);
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $this->set('canEdit', $this->objPrivilege->canEditImageAttributes($this->admin_id, true));
+        $this->set("frmSearch", $frmSearch);
+        $this->set('pageTitle', Labels::getLabel('NAV_MANAGE_IMAGE_ATTRIBUTES', $this->siteLangId));
+        $this->getListingData();
+
         $this->_template->render();
     }
 
     public function search()
     {
-        $this->objPrivilege->canViewImageAttributes();
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'image-attributes/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-
-        $searchForm = $this->getSearchForm();
+    public function getListingData()
+    {
         $data = FatApp::getPostedData();
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+
+        $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
@@ -52,7 +65,7 @@ class ImageAttributesController extends AdminBaseController
                 $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'product_id = afile_record_id', 'p');
                 $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
                 $srch->addMultipleFields(
-                        array('product_id as record_id', 'IFNULL(product_name, product_identifier) as record_name', 'afile_type')
+                    array('product_id as record_id', 'IFNULL(product_name, product_identifier) as record_name', 'afile_type')
                 );
                 if (!empty($post['keyword'])) {
                     $cnd = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
@@ -63,7 +76,7 @@ class ImageAttributesController extends AdminBaseController
                 $srch->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'prodcat_id = afile_record_id', 'pc');
                 $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT OUTER JOIN', 'pc.prodcat_id = pc_l.prodcatlang_prodcat_id AND pc_l.prodcatlang_lang_id = ' . $this->siteLangId, 'pc_l');
                 $srch->addMultipleFields(
-                        array('prodcat_id as record_id', 'IFNULL(prodcat_name, prodcat_identifier) as record_name', 'afile_type')
+                    array('prodcat_id as record_id', 'IFNULL(prodcat_name, prodcat_identifier) as record_name', 'afile_type')
                 );
                 if (!empty($post['keyword'])) {
                     $cnd = $srch->addCondition('prodcat_name', 'like', '%' . $post['keyword'] . '%');
@@ -74,7 +87,7 @@ class ImageAttributesController extends AdminBaseController
                 $srch->joinTable(BlogPost::DB_TBL, 'LEFT OUTER JOIN', 'post_id = afile_record_id', 'bp');
                 $srch->joinTable(BlogPost::DB_TBL_LANG, 'LEFT OUTER JOIN', 'bp.post_id = bp_l.postlang_post_id AND bp_l.postlang_lang_id = ' . $this->siteLangId, 'bp_l');
                 $srch->addMultipleFields(
-                        array('post_id as record_id', 'IFNULL(post_title, post_identifier) as record_name', 'afile_type')
+                    array('post_id as record_id', 'IFNULL(post_title, post_identifier) as record_name', 'afile_type')
                 );
                 if (!empty($post['keyword'])) {
                     $cnd = $srch->addCondition('post_title', 'like', '%' . $post['keyword'] . '%');
@@ -82,20 +95,21 @@ class ImageAttributesController extends AdminBaseController
                 }
                 break;
             default:
-                $srch->joinTable(Brand::DB_TBL, 'LEFT OUTER JOIN', 'brand_id = afile_record_id', 'b');
-                $srch->joinTable(Brand::DB_TBL_LANG, 'LEFT OUTER JOIN', 'b.brand_id = b_l.brandlang_brand_id AND b_l.brandlang_lang_id = ' . $this->siteLangId, 'b_l');
+                $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'product_id = afile_record_id', 'p');
+                $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
                 $srch->addMultipleFields(
-                        array('brand_id as record_id', 'IFNULL(brand_name, brand_identifier) as record_name', 'afile_type')
+                    array('product_id as record_id', 'IFNULL(product_name, product_identifier) as record_name', 'afile_type')
                 );
                 if (!empty($post['keyword'])) {
-                    $cnd = $srch->addCondition('brand_name', 'like', '%' . $post['keyword'] . '%');
-                    $cnd->attachCondition('brand_identifier', 'like', '%' . $post['keyword'] . '%');
+                    $cnd = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
+                    $cnd->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%');
                 }
                 break;
         }
 
         $srch->addGroupBy('record_id');
-        $srch->addOrder('afile_id', 'DESC');
+        $srch->addOrder($sortBy, $sortOrder);
+        $srch->addHaving('record_id', 'is not', 'mysql_func_NULL', 'AND', true);
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         if ($page < 2) {
             $page = 1;
@@ -103,7 +117,6 @@ class ImageAttributesController extends AdminBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
 
-        $srch->addOrder('afile_id', 'DESC');
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
         $this->set("arrListing", $records);
@@ -113,10 +126,15 @@ class ImageAttributesController extends AdminBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditImageAttributes($this->admin_id, true));
     }
 
-    public function attributeForm($recordId, $moduleType, $langId = 0, $optionId = 0)
+    public function form($recordId, $moduleType, $langId = 0, $optionId = 0)
     {
         $recordId = FatUtility::int($recordId);
         $moduleType = FatUtility::int($moduleType);
@@ -199,14 +217,14 @@ class ImageAttributesController extends AdminBaseController
             $imgTypesArr = Product::getSeparateImageOptions($recordId, $this->siteLangId);
             $frm->addSelectBox(Labels::getLabel('LBL_Image_File_Type', $this->siteLangId), 'option_id', $imgTypesArr, $optionId, array(), '');
         }
-        
+
         $languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $langId, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
+        if (count($languages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $langId, array(), '');
+        } else {
+            $lang_id = array_key_first($languages);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
 
         foreach ($images as $afileId => $afileData) {
             $frm->addTextBox(Labels::getLabel('LBL_Image_Title', $this->siteLangId), 'image_title' . $afileId);
@@ -305,7 +323,7 @@ class ImageAttributesController extends AdminBaseController
 
         if (empty($urlrewriteIdsArr)) {
             FatUtility::dieWithError(
-                    Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -324,7 +342,7 @@ class ImageAttributesController extends AdminBaseController
         $urlrewriteId = FatUtility::int($urlrewriteId);
         if (1 > $urlrewriteId) {
             FatUtility::dieWithError(
-                    Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
         $obj = new UrlRewrite($urlrewriteId);
@@ -334,16 +352,22 @@ class ImageAttributesController extends AdminBaseController
         }
     }
 
-    public function getSearchForm()
+    public function getSearchForm($fields = [])
     {
-        $frm = new Form('frmSearch');
+        $frm = new Form('frmRecordSearch');
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+
         $attachedFile = new AttachedFile();
         $attachementArr = $attachedFile->getImgAttrTypeArray($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Select_Type', $this->siteLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE, $attachementArr, Labels::getLabel('LBL_Select', $this->siteLangId));
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
-        $fld_submit->attachField($fld_cancel);
+        $frm->addSelectBox(Labels::getLabel('LBL_SELECT_TYPE', $this->siteLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE);
+
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'record_name');
+        }
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
@@ -359,5 +383,35 @@ class ImageAttributesController extends AdminBaseController
         $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_Example:_Custom_URL_Example', $this->siteLangId) . '</small>';
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
+    }
+
+    private function getFormColumns()
+    {
+        $imgAttrCacheVar = CacheHelper::get('imgAttrCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($imgAttrCacheVar) {
+            return json_decode($imgAttrCacheVar);
+        }
+
+        $arr = [
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'record_name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
+            'action' => ''
+        ];
+        CacheHelper::create('imgAttrCacheVar' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return [
+            'listSerial',
+            'record_name',
+            'action'
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }

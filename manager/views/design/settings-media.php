@@ -567,34 +567,34 @@
                                                     </div>
 
                                                     <div class="dropzone dropzone-custom">
-                                            <div class="dropzone-uploaded">
-                                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/banners/hero-1.jpg"
-                                                    title="">
-                                                <div class="dropzone-uploaded-action">
-                                                    <ul class="actions">
-                                                        <li>
-                                                            <a href="javascript:void(0)">
-                                                                <svg class="svg" width="18" height="18">
-                                                                    <use
-                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
-                                                                    </use>
-                                                                </svg>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0)">
-                                                                <svg class="svg" width="18" height="18">
-                                                                    <use
-                                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                                    </use>
-                                                                </svg>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                        <div class="dropzone-uploaded">
+                                                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/banners/hero-1.jpg"
+                                                                title="">
+                                                            <div class="dropzone-uploaded-action">
+                                                                <ul class="actions">
+                                                                    <li>
+                                                                        <a href="javascript:void(0)">
+                                                                            <svg class="svg" width="18" height="18">
+                                                                                <use
+                                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                                </use>
+                                                                            </svg>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="javascript:void(0)">
+                                                                            <svg class="svg" width="18" height="18">
+                                                                                <use
+                                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                                </use>
+                                                                            </svg>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
 
-                                            </div>
-                                        </div>
+                                                        </div>
+                                                    </div>
 
                                                 </div>
                                             </div>

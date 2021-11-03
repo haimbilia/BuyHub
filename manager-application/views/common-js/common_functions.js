@@ -69,6 +69,10 @@ tooltipCopyHelper = function (obj, title) {
     });
 };
 
+redirectFn = function (href) {
+    window.location = href;
+};
+
 var gCaptcha = false;
 function googleCaptcha() {
     $("body").addClass("captcha");

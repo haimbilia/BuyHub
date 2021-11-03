@@ -24,7 +24,9 @@
         if (inputBtn.files && inputBtn.files[0]) {
 			loadCropperSkeleton();
             fcom.ajax(fcom.makeUrl('Brands', 'imgCropper'), '', function (t) {
-				$("#modalBoxJs .modal-body").html(t);	
+                t = $.parseJSON(t);  	
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);
                 var file = inputBtn.files[0];
                 var minWidth = document.frmBrandLogo.logo_min_width.value;
                 var minHeight = document.frmBrandLogo.logo_min_height.value;
@@ -54,7 +56,9 @@
         if (inputBtn.files && inputBtn.files[0]) {
 			loadCropperSkeleton();
             fcom.ajax(fcom.makeUrl('Brands', 'imgCropper'), '', function (t) {
-				$("#modalBoxJs .modal-body").html(t);	
+				t = $.parseJSON(t);  	
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);	
                 var file = inputBtn.files[0];
                 var minWidth = document.frmBrandImage.banner_min_width.value;
                 var minHeight = document.frmBrandImage.banner_min_height.value;
