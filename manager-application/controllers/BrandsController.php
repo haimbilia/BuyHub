@@ -120,10 +120,9 @@ class BrandsController extends AdminBaseController
         if (!empty($post['brand_id'])) {
             $srch->addCondition('b.brand_id', '=', $post['brand_id']);
         }
-        $srch->addOrder($sortBy, $sortOrder);
-
+        $srch->addOrder($sortBy, $sortOrder); 
         $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $records = FatApp::getDb()->fetchAll($rs); 
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());

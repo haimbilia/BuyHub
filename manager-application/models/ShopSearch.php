@@ -1,0 +1,126 @@
+<?php
+
+class ShopSearch extends SearchBase {
+
+    private $langId;
+
+    public function __construct(int $langId = 0) {
+        parent::__construct(Shop::DB_TBL, 'shop');
+        $this->langId = $langId;
+        if ($this->langId > 0) {
+            $this->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shopLang.shoplang_shop_id = shop.shop_id AND shopLang.shoplang_lang_id = ' . $this->langId, 'shopLang');
+        }
+    }
+
+    public function joinWithUser() {
+        $this->joinTable(User::DB_TBL, 'INNER JOIN', 'users.user_id = shop.shop_user_id', 'users');
+    }
+
+    public function joinWithCredential() {
+        $this->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'users.user_id = cred.credential_user_id', 'cred');
+    }
+
+    public function getListingRecords() {
+        $this->addMultipleFields([
+            'shop.shop_id',
+            'shop.shop_user_id',
+            'shop.shop_active',
+            'shop.shop_created_on',
+            'shop.shop_updated_on',
+            'shop.shop_identifier',
+            'shop.shop_featured',
+            'shop.shop_supplier_display_status',
+            'IFNULL(shopLang.shop_name, shop.shop_identifier) as shop_name',
+            'users.user_name',
+            'cred.credential_username'
+        ]);
+        $this->joinWithUser();
+        $this->joinWithCredential();
+        $results = Fatapp::getDb()->fetchAll($this->getResultSet());
+        if (empty($results)) {
+            return [];
+        }
+        $reports = $this->numOfReports(array_column($results, 'shop_id'));
+        $products = $this->numOfProducts(array_column($results, 'shop_user_id'));
+        $reviews = $this->prodReviewSearch(array_column($results, 'shop_user_id'));
+        foreach ($results as $key => $result) {
+            $results[$key]['numOfReports'] = $reports[$result['shop_id']] ?? 0;
+            $results[$key]['numOfProducts'] = $products[$result['shop_user_id']] ?? 0;
+            $results[$key]['numOfReviews'] = $reviews[$result['shop_user_id']] ?? 0;
+        }
+        return $results;
+    }
+
+    private function numOfReports(array $shopIds) {
+        if (empty($shopIds)) {
+            return [];
+        }
+        $shopReportObj = ShopReport::getSearchObject($this->langId);
+        $shopReportObj->addMultipleFields(array('sreport_shop_id', 'count(*) as numOfReports'));
+        $shopReportObj->addDirectCondition('( sreport_shop_id  IN (' . implode(',', $shopIds) . '))');
+        $shopReportObj->addGroupby('sreport_shop_id');
+        $shopReportObj->doNotCalculateRecords();
+        $shopReportObj->doNotLimitRecords();
+        return Fatapp::getDb()->fetchAllAssoc($shopReportObj->getResultSet());
+    }
+
+    private function numOfProducts(array $shopUserIds) {
+        if (empty($shopUserIds)) {
+            return [];
+        }
+        $prodSrch = new ProductSearch();
+        $prodSrch->joinSellerProducts();
+        $prodSrch->joinSellers();
+        $prodSrch->addMultipleFields(array('selprod_user_id', 'count(*) as numOfProducts'));
+        $prodSrch->addDirectCondition('( selprod_user_id  IN (' . implode(',', $shopUserIds) . '))');
+        $prodSrch->addGroupby('selprod_user_id');
+        $prodSrch->doNotCalculateRecords();
+        $prodSrch->doNotLimitRecords();
+        return Fatapp::getDb()->fetchAllAssoc($prodSrch->getResultSet());
+    }
+
+    private function prodReviewSearch(array $shopUserIds) {
+        if (empty($shopUserIds)) {
+            return [];
+        }
+        $ratingSrch = new SelProdReviewSearch($this->langId);
+        $ratingSrch->joinUser();
+        $ratingSrch->joinSeller();
+        $ratingSrch->joinProducts();
+        $ratingSrch->joinSelProdRatingByType(RatingType::RATING_PRODUCT);
+        $ratingSrch->addMultipleFields(array('spreview_seller_user_id', 'count(*) as numOfReviews'));
+        $ratingSrch->addDirectCondition('( spreview_seller_user_id  IN (' . implode(',', $shopUserIds) . '))');
+        $ratingSrch->addGroupby('spreview_seller_user_id');
+        $ratingSrch->doNotCalculateRecords();
+        $ratingSrch->doNotLimitRecords();
+        return Fatapp::getDb()->fetchAllAssoc($ratingSrch->getResultSet());
+    }
+
+    public function applySearchConditions(array $conditions) {
+        if (empty($conditions)) {
+            return;
+        }
+
+        if (isset($conditions['page']) && !empty($conditions['page'])) {
+            $this->setPageNumber(FatUtility::int($conditions['page']));
+        }
+
+        if (isset($conditions['pageSize']) && !empty($conditions['pageSize'])) {
+            $this->setPageSize($conditions['pageSize']);
+        }
+
+
+        if (!empty($conditions['keyword'])) {
+            $cond = $this->addCondition('shop.shop_identifier', 'like', '%' . $conditions['keyword'] . '%', 'AND');
+            $cond->attachCondition('shopLang.shop_name', 'like', '%' . $conditions['keyword'] . '%', 'OR');
+            $cond->attachCondition('users.user_name', 'like', '%' . $conditions['keyword'] . '%', 'OR');
+            $cond->attachCondition('cred.credential_username', 'like', '%' . $conditions['keyword'] . '%', 'OR');
+            $cond->attachCondition('cred.credential_email', 'like', '%' . $conditions['keyword'] . '%', 'OR');
+        }
+
+        if (!empty($conditions['sortOrder']) && !empty($conditions['sortBy'])) {
+            $this->addOrder($conditions['sortBy'], $conditions['sortOrder']);
+        }
+    }
+
+}
