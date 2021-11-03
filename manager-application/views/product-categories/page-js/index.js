@@ -226,10 +226,11 @@ $(document).ready(function () {
 
 	bannerPopupImage = function (inputBtn) {
 		loadCropperSkeleton();
-		if (inputBtn.files && inputBtn.files[0]) {
-			console.log(inputBtn);
+		if (inputBtn.files && inputBtn.files[0]) {	
 			fcom.ajax(fcom.makeUrl('ProductCategories', 'imgCropper'), '', function (t) {
-				$("#modalBoxJs .modal-body").html(t);
+				t = $.parseJSON(t);  	
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);
 				var file = inputBtn.files[0];
 				var minWidth = document.frmRecordImage.banner_min_width.value;
 				var minHeight = document.frmRecordImage.banner_min_height.value;
@@ -255,7 +256,9 @@ $(document).ready(function () {
 		loadCropperSkeleton();
 		if (inputBtn.files && inputBtn.files[0]) {			
 			fcom.ajax(fcom.makeUrl('ProductCategories', 'imgCropper'), '', function (t) {
-				$("#modalBoxJs .modal-body").html(t);			
+				t = $.parseJSON(t);  	
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);			
 				var file = inputBtn.files[0];
 				var minWidth = document.frmRecordImage.logo_min_width.value;
 				var minHeight = document.frmRecordImage.logo_min_height.value;
