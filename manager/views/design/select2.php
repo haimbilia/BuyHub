@@ -16,9 +16,6 @@
 	<link rel="shortcut icon" href="images/favicon.ico" />
 
 </head>
-
-
-
 <body class="">
 	<div class="wrapper">
 		<?php
@@ -1180,6 +1177,7 @@
   include 'includes/footer.php';
 ?>
 	</div>
+
 
 </body>
 
