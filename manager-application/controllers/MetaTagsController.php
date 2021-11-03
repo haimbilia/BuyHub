@@ -34,10 +34,7 @@ class MetaTagsController extends AdminBaseController
         $db = FatApp::getDb();
         $this->tabsArr = MetaTag::getTabsArr();
 
-        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
-        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
-            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        }
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $metaType = FatApp::getPostedData('metaType', FatUtility::VAR_STRING, MetaTag::META_GROUP_DEFAULT);
         if (empty($metaType)) {
@@ -55,10 +52,7 @@ class MetaTagsController extends AdminBaseController
             $sortBy = current($allowedKeysForSorting);
         }
 
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
-            $sortOrder = applicationConstants::SORT_ASC;
-        }
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
 
         $searchForm = $this->getMetaTagsSearchForm($metaType, $fields);
 

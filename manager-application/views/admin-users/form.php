@@ -15,12 +15,12 @@ $emailFld->addFieldTagAttribute('id','admin_email');
 
 ?>
 <section class="section">
-	<div class="sectionhead">
-		<h4><?php echo Labels::getLabel('LBL_Admin_User_Setup',$siteLangId); ?></h4>
-	</div>
-	<div class="sectionbody space">
-		<div class="border-box border-box--space">
-			<?php echo $frm->getFormHtml(); ?>
-		</div>
-	</div>					
+    <div class="sectionhead">
+        <h4><?php echo Labels::getLabel('LBL_Admin_User_Setup',$siteLangId); ?></h4>
+    </div>
+    <div class="sectionbody space">
+        <div class="border-box border-box--space">
+            <?php echo $frm->getFormHtml(); ?>
+        </div>
+    </div>
 </section>

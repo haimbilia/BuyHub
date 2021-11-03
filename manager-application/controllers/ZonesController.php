@@ -46,10 +46,7 @@ class ZonesController extends AdminBaseController
 
     private function getListingData()
     {
-        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
-        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
-            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        }
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
 
         $fields = $this->getFormColumns();
@@ -63,10 +60,7 @@ class ZonesController extends AdminBaseController
             $sortBy = current($allowedKeysForSorting);
         }
 
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
-            $sortOrder = applicationConstants::SORT_ASC;
-        }
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
 
         $searchForm = $this->getSearchForm($fields);
 

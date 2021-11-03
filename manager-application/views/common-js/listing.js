@@ -584,11 +584,17 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
         if (inputBtn.files && inputBtn.files[0]) {
             loadCropperSkeleton();
+            $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
             fcom.ajax(fcom.makeUrl(controllerName, "imgCropper"), "", function (t) {
-                $("#modalBoxJs .modal-body").html(t);
+                t = $.parseJSON(t);
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);
                 var file = inputBtn.files[0];
-                var minWidth = document.frmRecordImage.min_width.value;
-                var minHeight = document.frmRecordImage.min_height.value;
+
+                var frmName = $(inputBtn).closest('form').attr('name');                               
+                var minWidth = document[frmName].min_width.value;
+                var minHeight = document[frmName].min_height.value;
+               
                 if (minWidth == minHeight) {
                     var aspectRatio = 1 / 1;
                 } else {
@@ -618,25 +624,23 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
         var frmName = formData.get("frmName");
         var frm = document.forms[frmName];
-        var recordId = frm.record_id.value;
         var langId = frm.lang_id.value;
-        var fileType = frm.file_type.value;
         var imageType = frm.file_type.value;
         var callback = "";
         if ("undefined" != typeof frm.dataset.callback) {
             var callback = frm.dataset.callback;
         }
-        var ratio_type = $('input[name="ratio_type"]:checked').val();
 
         var slideScreen = 0;
         if ("undefined" != typeof frm.slide_screen) {
             slideScreen = frm.slide_screen.value;
         }
-        formData.append("recordId", recordId);
-        formData.append("slide_screen", slideScreen);
-        formData.append("lang_id", langId);
-        formData.append("file_type", fileType);
-        formData.append("ratio_type", ratio_type);
+
+        var other_data = $('form[name="' + frmName + '"]').serializeArray();
+        $.each(other_data, function (key, input) {
+            formData.append(input.name, input.value);
+        });
+
         $.ajax({
             url: fcom.makeUrl(controllerName, "uploadMedia"),
             type: "post",
@@ -657,16 +661,16 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 $.ykmsg.success(ans.msg);
                 if (true === $.ykmodal.isAdded()) {
                     $.ykmodal.show();
-                    $("#modalBoxJs").modal("hide").remove();
-                    if (
+                    $("#modalBoxJs").modal("hide");
+                    if ("" != callback) {
+                        window[callback]();
+                    }else if (
                         0 < $(".navTabsJs").length &&
-                        0 < $("." + $.ykmodal.element + " select[name='lang_id']").length
+                        0 < $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='lang_id']").length
                     ) {
-                        $("." + $.ykmodal.element + " select[name='lang_id']")
+                        $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='lang_id']")
                             .val(langId)
                             .change();
-                    } else if ("" != callback) {
-                        window[callback]();
                     }
                 } else {
                     mediaForm(ans.recordId, imageType, langId, slideScreen);

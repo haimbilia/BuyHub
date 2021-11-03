@@ -2,7 +2,7 @@
     color: $txt-body;
     width: 100%;
     //margin-bottom: 1rem;
-    background-color: transparent;
+    background-color: transparent; 
     font-size: 0.85rem;
     thead {
         th {
@@ -637,6 +637,7 @@
             //color: $brand-color-inverse; 
             // width: 30px;
             // height: 30px;
+            position: relative;
             color: $txt-gray;
             line-height: 1.4;
             text-align: center;
@@ -650,10 +651,28 @@
             font-size: $input-font-size;
             line-height: $input-line-height;
             border-radius: $input-border-radius;
-            &:hover {
-                background: lighten($bg-gray, 0.20);
+            &::before {
+                background: lighten($brand-color, 55); 
+                content: "";
+                height: 100%;
+                width: 100%;
+                border-radius: $radius4;
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                transform: scale(0.75);
+                opacity: 0;
+                transition: all 0.2s cubic-bezier(0.2, 0.91, 0.85, 0.96) 0s;
+            }
+            &:hover { color: $brand-color;
+                &::before {
+                    opacity: 1;
+                    transform: scale(1);
+                }
             }
             .svg {
+                position: relative;
+                z-index: 0;
                 // width: 16px;
                 // height: 16px;
                 [fill]:not(.permanent):not(g) {
@@ -715,12 +734,13 @@
 .date {
     white-space: nowrap;
 }
+
 .edit-hover {
     width: 120px;
     padding: 2px 10px;
     text-align: left;
     border: 1px solid #fff;
-    + input {
+    +input {
         width: 120px;
         border: $border;
         outline: 0;

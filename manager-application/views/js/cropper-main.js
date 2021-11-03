@@ -139,7 +139,8 @@ cropImage = function(file, options, callback, inputBtn){
 	                formData.append('cropped_image', blobs, uploadedImageName);
 	                formData.append("action", "avatar");
 					if(inputBtn){
-						var frmName = $(inputBtn).attr('data-frm')
+						/* var frmName = $(inputBtn).attr('data-frm');*/
+						var frmName = $(inputBtn).closest('form').attr('name');
 						formData.append("frmName", frmName);
 					}
                     var fileType = $(inputBtn).attr('data-file_type');
