@@ -506,4 +506,22 @@ class applicationConstants
     {
         return [10, 20, 25, 50, 100];
     }
+
+    public static function getPageSize(int $pageSize)
+    {
+        if (!in_array($pageSize, self::getPageSizeValues())) {
+            return FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
+
+        return $pageSize;
+    }
+
+    public static function getSortOrder(string $sortOrder)
+    {
+        if (!in_array($sortOrder, [self::SORT_ASC, self::SORT_DESC])) {
+            return self::SORT_ASC;
+        }
+
+        return $sortOrder;
+    }
 }
