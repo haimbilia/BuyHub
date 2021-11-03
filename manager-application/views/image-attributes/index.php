@@ -31,10 +31,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                             <?php $data = [
                                 'canEdit' => $canEdit,
                                 'siteLangId' => $siteLangId,
-                                'cardHeadTitle' => Labels::getLabel('LBL_IMAGE_ATTRIBUTES', $siteLangId),
-                                'newRecordBtn' => true,
-                                'statusButtons' => true,
-                                'deleteButton' => true
+                                'cardHeadTitle' => Labels::getLabel('LBL_IMAGE_ATTRIBUTES', $siteLangId),                                
                             ];
 
                             $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>

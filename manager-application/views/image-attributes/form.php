@@ -9,11 +9,11 @@ $langFld = $frm->getField('lang_id');
 $langFld->addFieldTagAttribute('class', 'language-js');
 
 $btn = $frm->getField('btn_submit');
-$btn->setFieldTagAttribute('class', "form-control");
+$btn->setFieldTagAttribute('class', "btn btn-brand");
 
 $btn = $frm->getField('btn_discard');
 $btn->addFieldTagAttribute('onClick', "discardForm()");
-$btn->setFieldTagAttribute('class', "form-control");
+$btn->setFieldTagAttribute('class', "btn btn-outline-brand");
 
 $optionIdFld = $frm->getField('option_id');
 if ($optionIdFld !== null) {
@@ -34,38 +34,27 @@ HtmlHelper::renderHiddenFields($frm);
     <div class="card-body">
         <div class="row">
             <?php if ($optionIdFld !== null) { ?>
-                <div class="col-md-6">
+                <div class="col-md-<?php echo (count($languages) > 1) ? 6 : 12 ?>">
                     <div class="form-group">
                         <label class="label"><?php echo $optionIdFld->getCaption(); ?></label>
                         <div> <?php echo $frm->getFieldHtml('option_id'); ?></div>
                     </div>
                 </div>
+            <?php }
+            if (count($languages) > 1) { ?>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="label"><?php
+                                                $fld = $frm->getField('lang_id');
+                                                echo $fld->getCaption();   ?>
+                        </label>
+                        <div> <?php echo $frm->getFieldHtml('lang_id'); ?></div>
+                    </div>
+                </div>
             <?php } ?>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="label"><?php
-                                            $fld = $frm->getField('lang_id');
-                                            echo $fld->getCaption();   ?>
-                    </label>
-                    <div> <?php echo $frm->getFieldHtml('lang_id'); ?></div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="label">
-                    </label>
-                    <div> <?php echo $frm->getFieldHtml('btn_submit'); ?></div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="label">
-                    </label>
-                    <div> <?php echo $frm->getFieldHtml('btn_discard'); ?></div>
-                </div>
-            </div>
+
         </div>
-        <div class="row mt-4">
+        <div class="row">
             <div class="col-lg-12 col-md-12">
                 <div class="">
                     <?php if (!empty($images)) { ?>
@@ -139,7 +128,25 @@ HtmlHelper::renderHiddenFields($frm);
                 </div>
             </div>
         </div>
-    </div>   
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="label">
+                    </label>
+                    <div> <?php echo $frm->getFieldHtml('btn_discard'); ?></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="label">
+                    </label>
+                    <div> <?php echo $frm->getFieldHtml('btn_submit'); ?></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </form>
 <?php echo $frm->getExternalJS(); ?>
