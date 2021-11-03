@@ -23,33 +23,28 @@ $controller = str_replace('Controller', '', FatApp::getController());
                     <div class="card-body p-0">
                         <div class="settings-inner">
                             <ul class="confTypesJs">
-                                <?php foreach ($tabs as $formType => $tabName) {
-                                    $tabsId = 'tabJs-' . $formType;
-                                    $onclick = 'return false';
-                                    if ($formType == Configurations::FORM_MEDIA || $formType == Configurations::FORM_SHARING) {
-                                        $onclick = "getLangForm(" . $formType . ", " . $siteLangId . ")";
-                                    } elseif ($formType == Configurations::FORM_IMPORT_EXPORT) {
-                                        $onclick = "generalInstructions(" . $formType . ")";
-                                    } else {
-                                        $onclick = "getForm(" . $formType . ")";
-                                    }
+                                <?php foreach ($tabs as $formType => $tabName) {    
+                                    $tabsId = 'tabJs-'.$formType;                   
                                 ?>
-                                    <li class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $formType) ? 'is-active' : '' ?>" data-listType="<?php echo $formType; ?>">
-                                        <a class="settings-inner-link" rel=<?php echo $tabsId; ?> href="javascript:void(0)" onclick="<?php echo $onclick; ?>">
-                                            <i class="settings-inner-icn">
-                                                <svg class="svg" width="20" height="20">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#<?php echo isset($svgIconNames[$formType]) ? $svgIconNames[$formType] : 'icon-system-setting' ?>">
-                                                    </use>
-                                                </svg>
-                                            </i>
-                                            <div>
-                                                <h6 class="settings-inner-title"><?php echo $tabName; ?></h6>
-                                                <span class="settings-inner-desc">Lorem ipsum dolor sit amet
-                                                    consectetur adipisicing
-                                                    elit. Suscipit est quos </span>
-                                            </div>
-                                        </a>
-                                    </li>
+                                <li class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $formType) ? 'is-active' : '' ?>"
+                                    data-listType="<?php echo $formType; ?>">
+                                    <a class="settings-inner-link" rel="<?php echo $tabsId; ?>" href="javascript:void(0)"
+                                        onclick="getForm(<?php echo $formType ?>, <?php echo $defaultLangId ?>);">
+                                        <i class="settings-inner-icn">
+                                            <svg class="svg" width="20" height="20">
+                                                <use
+                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#<?php echo isset($svgIconNames[$formType]) ? $svgIconNames[$formType] : 'icon-system-setting' ?>">
+                                                </use>
+                                            </svg>
+                                        </i>
+                                        <div>
+                                            <h6 class="settings-inner-title"><?php echo $tabName; ?></h6>
+                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                consectetur adipisicing
+                                                elit. Suscipit est quos </span>
+                                        </div>
+                                    </a>
+                                </li>
                                 <?php } ?>
                             </ul>
                         </div>
@@ -57,9 +52,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                 </div>
             </div>
             <div class="col-md-8" id="frmBlockJs">
-
                 <?php require_once(CONF_THEME_PATH . 'configurations/form.php'); ?>
-
             </div>
         </div>
     </div>

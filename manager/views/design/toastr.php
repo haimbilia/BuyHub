@@ -323,12 +323,7 @@
             </div>
 
 
-            <div id="toast-container" class="toast-bottom-center">
-                <div class="toast toast-success" aria-live="polite" style=""><button type="button"
-                        class="toast-close-button" role="button">×</button>
-                    <div class="toast-message">I do not think that means what you think it means.</div>
-                </div>
-            </div>
+
 
             <?php  include 'includes/footer.php';?>
         </div>

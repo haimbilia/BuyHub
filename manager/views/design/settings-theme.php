@@ -92,78 +92,76 @@
                                     </div>
                                     <div class="card-body">
                                         <form class="form">
-                                            <div class="form">
-                                                <div class="form-group">
-                                                    <label class="label">Font Family </label>
-                                                    <input type="search" placeholder="Search fonts">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="label">Select Font Weight </label>
-                                                    <input name='tags-outside' class='form-control tagify--outside'
-                                                        placeholder='write some tags'>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="label">Theme Color </label>
-                                                    <div class="color-data">
-                                                        <div class="color-swatch" title="Selected color">
-                                                            <input type="color" value="#1DB8CE" id="colorPicker">
-                                                        </div>
-                                                        <div class="color-label">
-                                                            <h5>HEX</h5>
-                                                            <span class="hex">#5aff22</span>
-                                                        </div>
-                                                        <div class="color-label">
-                                                            <h5>RGB</h5>
-                                                            <span class="rgb">90, 255,
-                                                                34</span>
-                                                        </div>
-                                                        <div class="color-label">
-                                                            <h5>HSL</h5>
-                                                            <span class="hsl">105, 86%,
-                                                                57%</span>
-                                                        </div>
+                                            <div class="form-group">
+                                                <label class="label">Font Family </label>
+                                                <input type="search" placeholder="Search fonts">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="label">Select Font Weight </label>
+                                                <input name='tags-outside' class='form-control tagify--outside'
+                                                    placeholder='write some tags'>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="label">Theme Color </label>
+                                                <div class="color-data">
+                                                    <div class="color-swatch" title="Selected color">
+                                                        <input type="color" value="#1DB8CE" id="colorPicker">
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="label"> Theme Color Inverse </label>
-                                                    <div class="color-data">
-                                                        <div class="color-swatch" title="Selected color">
-                                                            <input type="color" value="#D4D4D4" id="colorPicker">
-                                                        </div>
-                                                        <div class="color-label">
-                                                            <h5>HEX</h5>
-                                                            <span class="hex">#D4D4D4</span>
-                                                        </div>
-                                                        <div class="color-label">
-                                                            <h5>RGB</h5>
-                                                            <span class="rgb">212, 212,
-                                                                212</span>
-                                                        </div>
-                                                        <div class="color-label">
-                                                            <h5>HSL</h5>
-                                                            <span class="hsl">0, 0%,
-                                                                83%</span>
-                                                        </div>
+                                                    <div class="color-label">
+                                                        <h5>HEX</h5>
+                                                        <span class="hex">#5aff22</span>
                                                     </div>
-                                                </div>
-                                                <div class="alert alert-solid-brand " role="alert">
-                                                    <div class="alert-icon"><i class="flaticon-warning"></i>
+                                                    <div class="color-label">
+                                                        <h5>RGB</h5>
+                                                        <span class="rgb">90, 255,
+                                                            34</span>
                                                     </div>
-                                                    <div class="alert-text text-xs"> Disclaimer: Inverse
-                                                        Color
-                                                        Should Be In Contrast To The Theme Color
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col"><button type="reset"
-                                                            class="btn btn-outline-brand">Reset</button>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <button type="submit"
-                                                            class="btn btn-brand loading">Update</button>
+                                                    <div class="color-label">
+                                                        <h5>HSL</h5>
+                                                        <span class="hsl">105, 86%,
+                                                            57%</span>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="form-group">
+                                                <label class="label"> Theme Color Inverse </label>
+                                                <div class="color-data">
+                                                    <div class="color-swatch" title="Selected color">
+                                                        <input type="color" value="#D4D4D4" id="colorPicker">
+                                                    </div>
+                                                    <div class="color-label">
+                                                        <h5>HEX</h5>
+                                                        <span class="hex">#D4D4D4</span>
+                                                    </div>
+                                                    <div class="color-label">
+                                                        <h5>RGB</h5>
+                                                        <span class="rgb">212, 212,
+                                                            212</span>
+                                                    </div>
+                                                    <div class="color-label">
+                                                        <h5>HSL</h5>
+                                                        <span class="hsl">0, 0%,
+                                                            83%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="alert alert-solid-brand " role="alert">
+                                                <div class="alert-icon"><i class="flaticon-warning"></i>
+                                                </div>
+                                                <div class="alert-text text-xs"> Disclaimer: Inverse
+                                                    Color
+                                                    Should Be In Contrast To The Theme Color
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col"><button type="reset"
+                                                        class="btn btn-outline-brand">Reset</button>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <button type="submit" class="btn btn-brand loading">Update</button>
+                                                </div>
+                                            </div>
+
                                         </form>
                                     </div>
                                 </div>
