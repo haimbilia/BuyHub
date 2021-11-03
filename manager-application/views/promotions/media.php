@@ -2,13 +2,23 @@
 
 HtmlHelper::formatFormFields($mediaFrm);
 
+$mediaFrm->setFormTagAttribute('class', 'modal-body form');
 $langFld = $mediaFrm->getField('lang_id');
 $langFld->addFieldTagAttribute('class', 'language-js');
 $screenFld = $mediaFrm->getField('banner_screen');
 $screenFld->addFieldTagAttribute('class', 'displayJs');
 
 $fld = $mediaFrm->getField('banner_image');
-$fld->htmlAfterField = '<span class="form-text uploadimageInfoJs" > ' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), $bannerWidth . ' * ' . $bannerHeight) . '</span>';
+$imageArr = [];
+$fld->value = HtmlHelper::getfileInputHtml(
+    ['onChange' => 'loadImageCropper(this)', 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_PROMOTION_BANNER", $siteLangId),'data-frm'=> $mediaFrm->getFormTagAttribute('name')],
+    $siteLangId,
+    '',
+    '',
+    $imageArr, 
+);
+
+//$fld->htmlAfterField = '<span class="form-text uploadimageInfoJs" > ' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), $bannerWidth . ' * ' . $bannerHeight) . '</span>';
 
 $otherButtons = [
     [

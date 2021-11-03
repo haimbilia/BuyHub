@@ -2,6 +2,9 @@
 
 class PromotionsController extends AdminBaseController
 {
+    private int $minWidth = 1200;
+    private int $minHeight = 360;
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -75,8 +78,8 @@ class PromotionsController extends AdminBaseController
         $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_PROMOTIONS', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->addCss(['css/select2.min.css']);
-        $this->_template->addJs(['js/select2.js']);
+        $this->_template->addCss(['css/select2.min.css', 'css/cropper.css']);
+        $this->_template->addJs(['js/select2.js', 'js/cropper.js', 'js/cropper-main.js']);
         $this->_template->render();
     }
 
@@ -523,11 +526,11 @@ class PromotionsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function promotionUpload()
+    public function uploadMedia()
     {
         $this->objPrivilege->canEditPromotions();
         $post = FatApp::getPostedData();
-        $recordId = FatUtility::int($post['promotion_id']);
+        $recordId = FatUtility::int($post['record_id']);
 
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
@@ -692,12 +695,15 @@ class PromotionsController extends AdminBaseController
         }
 
         $mediaFrm = $this->getMediaForm($recordId, $promotionType);
-        $bannerWidth = '1200';
-        $bannerHeight = '360';
+        $bannerWidth = $this->minWidth;
+        $bannerHeight = $this->minHeight;
+        $fileType = AttachedFile::FILETYPE_HOME_PAGE_BANNER;
         if ($promotionType == Promotion::TYPE_BANNER) {
+            $fileType = AttachedFile::FILETYPE_BANNER;
             $bannerWidth = FatUtility::convertToType($promotionDetails['blocation_banner_width'], FatUtility::VAR_FLOAT);
             $bannerHeight = FatUtility::convertToType($promotionDetails['blocation_banner_height'], FatUtility::VAR_FLOAT);
         }
+        $mediaFrm->fill(['file_type' => $fileType, 'min_width' => $bannerWidth, 'min_height' => $bannerHeight]);
 
         $this->set('bannerWidth', $bannerWidth);
         $this->set('bannerHeight', $bannerHeight);
@@ -1053,9 +1059,12 @@ class PromotionsController extends AdminBaseController
     private function getMediaForm($recordId = 0, $promotionType = 0)
     {
         $recordId = FatUtility::int($recordId);
-        $frm = new Form('frmPromotionMedia');
+        $frm = new Form('frmRecordImage');
+        $frm->addHiddenField('', 'min_width');
+        $frm->addHiddenField('', 'min_height');
+        $frm->addHiddenField('', 'file_type');
 
-        $frm->addHiddenField('', 'promotion_id', $recordId);
+        $frm->addHiddenField('', 'record_id', $recordId);
         $frm->addHiddenField('', 'promotion_type', $promotionType);
 
         $bannerTypeArr = applicationConstants::bannerTypeArr();
@@ -1067,10 +1076,11 @@ class PromotionsController extends AdminBaseController
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
-
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
-        $fld = $frm->addButton(Labels::getLabel('LBL_Banner_Image', $this->siteLangId), 'banner_image', Labels::getLabel('LBL_Upload_File', $this->siteLangId), array('class' => 'bannerFile-Js', 'id' => 'banner_image'));
+        // $fld = $frm->addButton(Labels::getLabel('LBL_Banner_Image', $this->siteLangId), 'banner_image', Labels::getLabel('LBL_Upload_File', $this->siteLangId), array('class' => 'bannerFile-Js', 'id' => 'banner_image'));
+        $frm->addHtml('','banner_image','');
+
 
         return $frm;
     }

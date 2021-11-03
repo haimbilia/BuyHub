@@ -585,7 +585,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (inputBtn.files && inputBtn.files[0]) {
             loadCropperSkeleton();
             fcom.ajax(fcom.makeUrl(controllerName, "imgCropper"), "", function (t) {
-                t = $.parseJSON(t);  	
+                t = $.parseJSON(t);
                 $("#modalBoxJs .modal-body").html(t.body);
                 $("#modalBoxJs .modal-footer").html(t.footer);
                 var file = inputBtn.files[0];
@@ -620,25 +620,23 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
         var frmName = formData.get("frmName");
         var frm = document.forms[frmName];
-        var recordId = frm.record_id.value;
         var langId = frm.lang_id.value;
-        var fileType = frm.file_type.value;
         var imageType = frm.file_type.value;
         var callback = "";
         if ("undefined" != typeof frm.dataset.callback) {
             var callback = frm.dataset.callback;
         }
-        var ratio_type = $('input[name="ratio_type"]:checked').val();
 
         var slideScreen = 0;
         if ("undefined" != typeof frm.slide_screen) {
             slideScreen = frm.slide_screen.value;
         }
-        formData.append("recordId", recordId);
-        formData.append("slide_screen", slideScreen);
-        formData.append("lang_id", langId);
-        formData.append("file_type", fileType);
-        formData.append("ratio_type", ratio_type);
+
+        var other_data = $('form[name="' + frmName + '"]').serializeArray();
+        $.each(other_data, function (key, input) {
+            formData.append(input.name, input.value);
+        });
+
         $.ajax({
             url: fcom.makeUrl(controllerName, "uploadMedia"),
             type: "post",

@@ -67,10 +67,11 @@ $(document).on('change', "select[name='promotion_type']", function() {
         if (promotionType == PROMOTION_TYPE_SLIDES) {
             $(".slide_url_fld").show();
         }   
-    }
+    };
+    
 })();
 
-$(document).on('click', '.bannerFile-Js', function () {
+/* $(document).on('click', '.bannerFile-Js', function () {
     var node = this;
     $('#form-upload').remove();
     var promotionId = document.frmPromotionMedia.promotion_id.value;
@@ -117,4 +118,4 @@ $(document).on('click', '.bannerFile-Js', function () {
             });
         }
     }, 500);
-});
+}); */
