@@ -65,7 +65,7 @@ $(document).on("search", "input[name='keyword']", function () {
 $(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {
     e.stopImmediatePropagation();
     if (e.keyCode === 13) {
-        $(".submitBtnJs").click();
+        $('.' + $.ykmodal.element + " .submitBtnJs").click();
     }
 });
 

@@ -9,7 +9,7 @@ $logoFld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
 $logoFld->addFieldTagAttribute('onChange', 'logoPopupImage(this)');
 $logoLangFld = $brandLogoFrm->getField('lang_id');
 $logoLangFld->addFieldTagAttribute('class', 'logo-language-js');
-$logoPreferredDimensions = '<small class="text--small logoPreferredDimensions-js">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '500 x 500').'</small>';
+$logoPreferredDimensions = '<span class="form-text text-muted logoPreferredDimensions-js">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '500 x 500').'</span>';
 $htmlAfterField = $logoPreferredDimensions;
 $htmlAfterField .= '<div id="logo-listing"></div>';
 $logoFld->htmlAfterField = $htmlAfterField;
@@ -28,11 +28,7 @@ $screenFld->addFieldTagAttribute('class', 'prefDimensions-js');
 $htmlAfterField = '<div style="margin-top:15px;" class="preferredDimensions-js">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500').'</div>';
 $htmlAfterField .= '<div id="imageListingJs"></div>';
 $imageFld->htmlAfterField = $htmlAfterField;
-
-/*$ImagePreferredDimensions = '<small class="text--small">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), '2000*500').'<br/>'. Labels::getLabel('LBL_This_image_will_be_displayed_for_homepage_brands_collection', $siteLangId) .'</small>';
-$htmlAfterField = $ImagePreferredDimensions;
-$htmlAfterField .= '<div id="imageListingJs"></div>';
-$imageFld->htmlAfterField = $htmlAfterField;*/ ?>
+?>
 <div id="cropperBox-js"></div>
 <section class="section" id="mediaForm-js">
     <div class="sectionhead">

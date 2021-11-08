@@ -12,14 +12,8 @@ class RewardsOnPurchase extends MyAppModel
         $this->db = FatApp::getDb();
     }
 
-    public static function getSearchObject($deleteOnly = true)
+    public static function getSearchObject()
     {
-        $srch = new SearchBase(static::DB_TBL, 'rop');
-
-        /* if($deleteOnly==true){
-        $srch->addCondition('rop.'.static::DB_TBL_PREFIX.'deleted', '=', 0);
-        } */
-
-        return $srch;
+        return new SearchBase(static::DB_TBL, 'rop');
     }
 }

@@ -6,7 +6,7 @@ $imagesFrm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs'
 $imagesFrm->setFormTagAttribute('data-callback', 'postImages(' . $recordId . ')');
 $fld = $imagesFrm->getField('post_image');
 $fld->addFieldTagAttribute('onChange', 'loadImageCropper(this)');
-$htmlAfterField = '<small class="text--small">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), '1000*563') . '</small>';
+$htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), '1000*563') . '</span>';
 $htmlAfterField .= '<div id="imageListingJs"></div>';
 $fld->htmlAfterField = $htmlAfterField;
 

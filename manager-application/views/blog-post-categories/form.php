@@ -24,7 +24,7 @@ $fld->setFieldTagAttribute('id', "bpcategory_id");
 
 $fld = $frm->getField('urlrewrite_custom');
 $fld->setFieldTagAttribute('id', "urlrewrite_custom");
-$fld->htmlAfterField = "<small class='text--small'>" . UrlHelper::generateFullUrl('Blog', 'Category', array($recordId), CONF_WEBROOT_FRONT_URL) . '</small>';
+$fld->htmlAfterField = "<span class='form-text text-muted'>" . UrlHelper::generateFullUrl('Blog', 'Category', array($recordId), CONF_WEBROOT_FRONT_URL) . '</span>';
 $fld->setFieldTagAttribute('onkeyup', "getSlugUrl(this,this.value)");
 
 $formTitle = Labels::getLabel('LBL_BLOG_POST_CATEGORIES_SETUP', $siteLangId);
