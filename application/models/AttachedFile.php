@@ -152,14 +152,20 @@ class AttachedFile extends MyAppModel
 
     public static function getImgAttrTypeArray($langId)
     {
+        $imgAttrTypeCacheVar = CacheHelper::get('imgAttrTypeCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($imgAttrTypeCacheVar) {
+            return json_decode($imgAttrTypeCacheVar);
+        }
+
         return $arr = array(
-            static::FILETYPE_PRODUCT_IMAGE => Labels::getLabel('LBL_Products', $langId),
-            static::FILETYPE_BRAND_LOGO => Labels::getLabel('LBL_Brand_Logo', $langId),
-            static::FILETYPE_BRAND_IMAGE => Labels::getLabel('LBL_Brand_Banner', $langId),
-            /* static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_Categories', $langId), */
-            static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_Category_Banner', $langId),
-            static::FILETYPE_BLOG_POST_IMAGE => Labels::getLabel('LBL_Blogs', $langId),
+            static::FILETYPE_PRODUCT_IMAGE => Labels::getLabel('LBL_PRODUCTS', $langId),
+            static::FILETYPE_BRAND_LOGO => Labels::getLabel('LBL_BRAND_LOGO', $langId),
+            static::FILETYPE_BRAND_IMAGE => Labels::getLabel('LBL_BRAND_BANNER', $langId),
+            /* static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_CATEGORIES', $langId), */
+            static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_CATEGORY_BANNER', $langId),
+            static::FILETYPE_BLOG_POST_IMAGE => Labels::getLabel('LBL_BLOGS', $langId),
         );
+        CacheHelper::create('imgAttrCacheVar' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 

@@ -197,8 +197,8 @@ class ProductCategoriesController extends AdminBaseController
         $frm->addHiddenField('', 'icon_file_type', AttachedFile::FILETYPE_CATEGORY_ICON);
         $frm->addHiddenField('', 'logo_min_width');
         $frm->addHiddenField('', 'logo_min_height');
-        $frm->addFileUpload(Labels::getLabel('FRM_CATEGORY_ICON', $this->siteLangId), 'cat_icon', array('accept' => 'image/*', 'data-frm' => 'frmCategoryIcon'));
-        
+        //$frm->addFileUpload(Labels::getLabel('FRM_CATEGORY_ICON', $this->siteLangId), 'cat_icon', array('accept' => 'image/*', 'data-frm' => 'frmCategoryIcon'));
+        $frm->addHtml('', 'cat_icon', '');
         $frm->addHtml('', 'seperator', '');
 
         if (count($mediaLanguages) > 1) {
@@ -213,8 +213,8 @@ class ProductCategoriesController extends AdminBaseController
         $frm->addHiddenField('', 'banner_file_type', AttachedFile::FILETYPE_CATEGORY_BANNER);
         $frm->addHiddenField('', 'banner_min_width');
         $frm->addHiddenField('', 'banner_min_height');
-        $frm->addFileUpload(Labels::getLabel('FRM_CATEGORY_BANNER', $this->siteLangId), 'cat_banner', array('accept' => 'image/*', 'data-frm' => 'frmCategoryBanner'));
-
+        //$frm->addFileUpload(Labels::getLabel('FRM_CATEGORY_BANNER', $this->siteLangId), 'cat_banner', array('accept' => 'image/*', 'data-frm' => 'frmCategoryBanner'));
+        $frm->addHtml('', 'cat_banner', '');
         return $frm;
     }
 
@@ -350,7 +350,7 @@ class ProductCategoriesController extends AdminBaseController
             0,
             $_FILES['cropped_image']['name'],
             -1,
-            $unique_record = false,
+            false,
             $lang_id,
             $_FILES['cropped_image']['type'],
             $slide_screen
