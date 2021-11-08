@@ -1161,7 +1161,7 @@
 	include 'includes/footer.php';
 	?>
 	</div>
-	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+	<script src="<?php echo JS_PATH; ?>vendors/select2.js"></script>
 	<script>
 		$(document).ready(function() {
 			$('.select2').select2();
