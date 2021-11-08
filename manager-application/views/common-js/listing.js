@@ -714,6 +714,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         $.ykmodal.close();
     }
 
+    editDropZoneImages = function () {
+        $(".dropzoneContainerJs .dropzoneInputJs").click();
+    }
+
     // convertCheckboxToSwitch = function () {
     //   if (0 < $("form.checkboxSwitchJs").length) {
     //     $("form.checkboxSwitchJs")
