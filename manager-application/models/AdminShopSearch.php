@@ -1,6 +1,6 @@
 <?php
 
-class ShopSearch extends SearchBase {
+class AdminShopSearch extends SearchBase {
 
     private $langId;
 
@@ -121,6 +121,19 @@ class ShopSearch extends SearchBase {
         if (!empty($conditions['sortOrder']) && !empty($conditions['sortBy'])) {
             $this->addOrder($conditions['sortBy'], $conditions['sortOrder']);
         }
+    }
+
+    public static function getUrlRewrite($searchId) {
+        $urlSrch = UrlRewrite::getSearchObject();
+        $urlSrch->doNotCalculateRecords();
+        $urlSrch->setPageSize(1);
+        $urlSrch->addFld('urlrewrite_custom');
+        $urlSrch->addCondition('urlrewrite_original', '=', $searchId);
+        $urlRow = FatApp::getDb()->fetch($urlSrch->getResultSet());
+        if ($urlRow) {
+            return $urlRow['urlrewrite_custom'];
+        }
+        return '';
     }
 
 }
