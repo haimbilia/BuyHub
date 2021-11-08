@@ -71,7 +71,7 @@ if ($promotionType == Promotion::TYPE_BANNER || $promotionType == Promotion::TYP
         [
             'attr' => [
                  'href' => 'javascript:void(0)',
-                 'onclick' => 'mediaForm(' . $recordId . ')',
+                 'onclick' => 'promotionMediaForm(' . $recordId . ', 0, ' . applicationConstants::SCREEN_DESKTOP . ')',
                  'title' => Labels::getLabel('LBL_Media', $siteLangId)
              ],
              'label' => Labels::getLabel('LBL_Media', $siteLangId),
