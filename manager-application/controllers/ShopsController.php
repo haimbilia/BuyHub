@@ -1,13 +1,16 @@
 <?php
 
-class ShopsController extends AdminBaseController {
+class ShopsController extends AdminBaseController
+{
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewShops();
     }
 
-    public function index() {
+    public function index()
+    {
         $this->search();
         $this->set('canEdit', $this->objPrivilege->canEditShops($this->admin_id, true));
         $this->set("frmSearch", $this->getSearchForm(false, $this->getFormColumns()));
@@ -17,7 +20,8 @@ class ShopsController extends AdminBaseController {
         $this->_template->render();
     }
 
-    public function search() {
+    public function search()
+    {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
@@ -54,11 +58,12 @@ class ShopsController extends AdminBaseController {
             LibHelper::exitWithSuccess([
                 'listingHtml' => $this->_template->render(false, false, 'shops/search.php', true),
                 'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-                    ], true);
+            ], true);
         }
     }
 
-    public function updateStatus() {
+    public function updateStatus()
+    {
         $this->objPrivilege->canEditShops();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if (0 == $recordId) {
@@ -70,17 +75,16 @@ class ShopsController extends AdminBaseController {
         }
         $shopObj = new Shop($recordId);
         if (!$shopObj->changeStatus($status)) {
-            Message::addErrorMessage($shopObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($shopObj->getError(), true);
         }
         Product::updateMinPrices(0, 0, $recordId);
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
-    
+
     public function toggleBulkStatuses()
     {
-        $this->objPrivilege->canEditShops(); 
+        $this->objPrivilege->canEditShops();
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $shopsArr = FatUtility::int(FatApp::getPostedData('shop_ids'));
         if (empty($shopsArr) || -1 == $status) {
@@ -88,10 +92,11 @@ class ShopsController extends AdminBaseController {
         }
         $shopObj = new Shop(0);
         var_dump($shopObj->bulkStatusUpdate($shopsArr, $status));
-        die('here'); 
+        die('here');
     }
 
-    public function getSearchForm($request = false, $fields = []) {
+    public function getSearchForm($request = false, $fields = [])
+    {
         $frm = new Form('frmRecordSearch');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
@@ -110,7 +115,8 @@ class ShopsController extends AdminBaseController {
         return $frm;
     }
 
-    private function getFormColumns(): array {
+    private function getFormColumns(): array
+    {
         $shopsTblHeadingCols = CacheHelper::get('shopsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
             return json_decode($shopsTblHeadingCols);
@@ -134,7 +140,8 @@ class ShopsController extends AdminBaseController {
         return $arr;
     }
 
-    private function getDefaultColumns(): array {
+    private function getDefaultColumns(): array
+    {
         return [
             'select_all',
             'listSerial',
@@ -151,8 +158,8 @@ class ShopsController extends AdminBaseController {
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array {
+    private function excludeKeysForSort($fields = []): array
+    {
         return array_diff($fields, ['shop_active', 'numOfReports', 'numOfProducts', 'numOfReviews'], Common::excludeKeysForSort());
     }
-
 }

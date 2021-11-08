@@ -414,7 +414,7 @@
                                 </ul>
                             </div>
                         </li>
-                        <?php } ?>
+                        <?php } */?>
                         <?php if ($objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item">
                             <a class="nav_link" data-toggle="collapse" data-parent="#subscriptionReportNav"
@@ -442,7 +442,7 @@
                                 </ul>
                             </div>
                         </li>
-                        <?php } */ ?>
+                        <?php }  ?>
                     </ul>
                 </div>
             </li>

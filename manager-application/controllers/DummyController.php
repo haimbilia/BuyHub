@@ -4,6 +4,8 @@ class DummyController extends AdminBaseController
 {
     public function index()
     {
+        echo ucfirst(strtolower('HellAAAsss Hello hLL'));exit;
+
         $shopIdArr = [];
         /* Shop Rating */
         $srch = new SelProdReviewSearch();
