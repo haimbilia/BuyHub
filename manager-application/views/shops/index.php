@@ -40,8 +40,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         'siteLangId' => $siteLangId,
                         'cardHeadTitle' => Labels::getLabel('LBL_SHOPS', $siteLangId),
                         'newRecordBtn' => true,
-                        'statusButtons' => true,
-                        'deleteButton' => true
+                        'statusButtons' => true
                     ];
 
                     $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
