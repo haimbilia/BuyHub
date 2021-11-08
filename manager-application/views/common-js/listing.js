@@ -65,7 +65,7 @@ $(document).on("search", "input[name='keyword']", function () {
 $(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {
     e.stopImmediatePropagation();
     if (e.keyCode === 13) {
-        $(".submitBtnJs").click();
+        $('.' + $.ykmodal.element + " .submitBtnJs").click();
     }
 });
 
@@ -716,6 +716,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
     closeForm = function () {
         $.ykmodal.close();
+    }
+
+    editDropZoneImages = function () {
+        $(".dropzoneContainerJs .dropzoneInputJs").click();
     }
 
     // convertCheckboxToSwitch = function () {

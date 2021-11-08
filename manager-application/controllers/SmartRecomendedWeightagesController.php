@@ -2,47 +2,73 @@
 
 class SmartRecomendedWeightagesController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewRecomendedWeightages($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditRecomendedWeightages($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewRecomendedWeightages();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewRecomendedWeightages();
-        $searchFrm = $this->getSearchForm();
-        $this->set("searchFrm", $searchFrm);
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $this->set('frmSearch', $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('languages', Language::getAllNames());
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_WEIGHTAGE_SETTINGS', $this->siteLangId));
+        $this->getListingData();
+
         $this->_template->render();
     }
 
     public function search()
     {
-        $this->objPrivilege->canViewRecomendedWeightages();
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $searchForm = $this->getSearchForm();
-        $data = FatApp::getPostedData();
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
-        $post = $searchForm->getFormDataFromArray($data);
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'smart-recomended-weightages/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        $obj = new SmartWeightageSettings();
-        $srch = $obj->getSearchObject();
+    private function getListingData()
+    {
+        $post = FatApp::getPostedData();
 
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+
+        $srchFrm = $this->getSearchForm($fields);
+
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+
+        $srch = SmartWeightageSettings::getSearchObject();
+        $srch->addMultipleFields(['sws.*', 'swsetting_key as listSerial']);
         if (!empty($post['keyword'])) {
             $srch->addCondition('sws.swsetting_name', 'like', '%' . $post['keyword'] . '%');
         }
 
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
-        $page = FatUtility::int($page);
+        $srch->addOrder($sortBy, $sortOrder);
+
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->setPageSize($pageSize);
+
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
@@ -50,28 +76,30 @@ class SmartRecomendedWeightagesController extends AdminBaseController
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditRecomendedWeightages($this->admin_id, true));
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
     }
 
-    public function update($swsetting_key = 0)
+    public function setup()
     {
         $this->objPrivilege->canEditRecomendedWeightages();
-
-        $swsetting_key = FatUtility::int($swsetting_key);
+        $swsetting_key = FatApp::getPostedData('swsetting_key');
         if (1 > $swsetting_key) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $weightage = FatApp::getPostedData('weightage', FatUtility::VAR_FLOAT, 0);
 
-
         $weightageKeyArr = SmartWeightageSettings::getWeightageKeyArr();
         if (!array_key_exists($swsetting_key, $weightageKeyArr)) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $obj = new SmartWeightageSettings($swsetting_key);
@@ -82,21 +110,45 @@ class SmartRecomendedWeightagesController extends AdminBaseController
             SmartWeightageSettings::tblFld('name') => $weightageKeyArr[$swsetting_key])
         );
         if (!$obj->save()) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
 
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function getSearchForm()
+    private function getFormColumns(): array
     {
-        $frm = new Form('frmSearch');
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
+        $smartRecWeightagesTblHeadingCols = CacheHelper::get('smartRecWeightagesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($smartRecWeightagesTblHeadingCols) {
+            return json_decode($smartRecWeightagesTblHeadingCols);
+        }
+
+        $arr = [
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'swsetting_name' => Labels::getLabel('LBL_Event', $this->siteLangId),
+            'swsetting_weightage' => Labels::getLabel('LBL_Weightage', $this->siteLangId),
+        ];
+
+        if(count(Language::getAllNames()) < 2 ){
+            unset($arr['language_name']);
+        }
+
+        CacheHelper::create('smartRecWeightagesTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return [    
+            'listSerial',
+            'swsetting_name',
+            'swsetting_weightage',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }
