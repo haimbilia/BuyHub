@@ -29,8 +29,7 @@ class SmartWeightageSettings extends MyAppModel
 
     public static function getSearchObject()
     {
-        $srch = new SearchBase(static::DB_TBL, 'sws');
-        return $srch;
+        return new SearchBase(static::DB_TBL, 'sws');
     }
 
     public static function getWeightageAssoc()

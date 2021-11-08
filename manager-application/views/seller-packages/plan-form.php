@@ -6,7 +6,7 @@ $spPlanFrm->developerTags['colClassPrefix'] = 'col-md-';
 $spPlanFrm->developerTags['fld_default_col'] = 12;
 
 $fldFreqText=$spPlanFrm->getField(SellerPackagePlans::DB_TBL_PREFIX.'frequency_text');
-$fldFreqText->htmlAfterField='<br/><small class="text--small">'.Labels::getLabel('LBL_PLease_Specify_the_Years_for_unlimited_years',$siteLangId).'</small>';
+$fldFreqText->htmlAfterField='<span class="form-text text-muted">'.Labels::getLabel('LBL_PLease_Specify_the_Years_for_unlimited_years',$siteLangId).'</span>';
 ?>
 <section class="section">
 	<div class="sectionhead">
