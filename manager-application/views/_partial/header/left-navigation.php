@@ -135,6 +135,15 @@
                                     </a>
                                 </li>
                             <?php } ?>
+
+
+                            <?php if ($objPrivilege->canViewRewardsOnPurchase(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link" href="<?php echo UrlHelper::generateUrl('RewardsOnPurchase'); ?>">
+                                        <?php echo Labels::getLabel('NAV_REWARDS_ON_PURCHASE', $siteLangId); ?>
+                                    </a>
+                                </li>
+                            <?php } ?>
                         </ul>
                     </div>
                 </li>
