@@ -33,7 +33,6 @@ class ImageAttributesController extends AdminBaseController
 
     public function getListingData()
     {
-        $data = FatApp::getPostedData();
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
@@ -49,8 +48,10 @@ class ImageAttributesController extends AdminBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $searchForm = $this->getSearchForm($fields);
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
-        $post = $searchForm->getFormDataFromArray($data);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+        
+        $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
 
         $srch = AttachedFile::getSearchObject();
 
@@ -98,7 +99,7 @@ class ImageAttributesController extends AdminBaseController
                 $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'product_id = afile_record_id', 'p');
                 $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
                 $srch->addMultipleFields(
-                    array('product_id as record_id', 'IFNULL(product_name, product_identifier) as record_name', 'afile_type')
+                    array('product_id as record_id', 'IFNULL(product_name, product_identifier) as record_name', 'afile_type', 'afile_id')
                 );
                 if (!empty($post['keyword'])) {
                     $cnd = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
@@ -110,10 +111,6 @@ class ImageAttributesController extends AdminBaseController
         $srch->addGroupBy('record_id');
         $srch->addOrder($sortBy, $sortOrder);
         $srch->addHaving('record_id', 'is not', 'mysql_func_NULL', 'AND', true);
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        if ($page < 2) {
-            $page = 1;
-        }
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
 
@@ -188,7 +185,7 @@ class ImageAttributesController extends AdminBaseController
         }
         $images = AttachedFile::getMultipleAttachments($moduleType, $recordId, $optionId, $langId, false, 0, 0, true);
         $languages = Language::getAllNames();
-        $frm = $this->getImgAttrForm($recordId, $moduleType, $langId, $images, $optionId);
+        $frm = $this->getForm($recordId, $moduleType, $langId, $images, $optionId);
         $this->set('recordId', $recordId);
         $this->set('moduleType', $moduleType);
         $this->set('langId', $langId);
@@ -199,14 +196,12 @@ class ImageAttributesController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    private function getImgAttrForm($recordId, $moduleType, $langId, $images, $optionId = 0)
+    private function getForm($recordId, $moduleType, $langId, $images, $optionId = 0)
     {
         $this->objPrivilege->canViewImageAttributes();
         $recordId = FatUtility::int($recordId);
         $moduleType = FatUtility::int($moduleType);
         $langId = FatUtility::int($langId);
-
-        //$images = AttachedFile::getMultipleAttachments($moduleType, $recordId, 0, $langId, false, 0, 0, true);
 
         $frm = new Form('frmImgAttr');
         $frm->addHiddenField('', 'module_type', $moduleType);
@@ -219,7 +214,7 @@ class ImageAttributesController extends AdminBaseController
 
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $langId, array(), '');
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $langId);
         } else {
             $lang_id = array_key_first($languages);
             $frm->addHiddenField('', 'lang_id', $lang_id);
@@ -229,27 +224,8 @@ class ImageAttributesController extends AdminBaseController
             $frm->addTextBox(Labels::getLabel('LBL_Image_Title', $this->siteLangId), 'image_title' . $afileId);
             $frm->addTextBox(Labels::getLabel('LBL_Image_Alt', $this->siteLangId), 'image_alt' . $afileId);
         }
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->siteLangId));
-        $frm->addButton('', 'btn_discard', Labels::getLabel('LBL_Discard', $this->siteLangId));
         return $frm;
     }
-
-    /* public function images($recordId, $moduleType, $lang_id = 0)
-      {
-      $recordId = FatUtility::int($recordId);
-      $moduleType = FatUtility::int($moduleType);
-      if ($recordId < 1) {
-      Message::addErrorMessage($this->str_invalid_request);
-      FatUtility::dieWithError(Message::getHtml());
-      }
-
-      $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $recordId, 0, $lang_id, false, 0, 0, true);
-
-      $this->set('images', $productImages);
-      $this->set('languages', Language::getAllNames());
-      $this->_template->render(false, false);
-      } */
 
     public function setup()
     {
@@ -261,95 +237,27 @@ class ImageAttributesController extends AdminBaseController
         $langId = FatUtility::int($post['lang_id']);
         $optionId = FatApp::getPostedData('option_id', FatUtility::VAR_INT, 0);
         if (!$recordId || !$moduleType) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $images = AttachedFile::getMultipleAttachments($moduleType, $recordId, $optionId, $langId, false, 0, 0, true);
 
-        $frm = $this->getImgAttrForm($recordId, $moduleType, $langId, $images, $optionId);
+        $frm = $this->getForm($recordId, $moduleType, $langId, $images, $optionId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $db = FatApp::getDb();
-        // $recordSaved = false;
         foreach ($images as $afileId => $afileData) {
-            /* if(empty($post['image_title'.$afileId]) && empty($post['image_alt'.$afileId])) {
-              continue;
-              } */
             $where = array('smt' => 'afile_record_id = ? and afile_id = ?', 'vals' => array($recordId, $afileId));
             if (!$db->updateFromArray(AttachedFile::DB_TBL, array('afile_attribute_title' => $post['image_title' . $afileId], 'afile_attribute_alt' => $post['image_alt' . $afileId]), $where)) {
-                Message::addErrorMessage($db->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($db->getError(), true);
             }
-            // $recordSaved = true;
         }
-        /* if (!$recordSaved) {
-          Message::addErrorMessage(Labels::getLabel('MSG_Please_fill_any_one', $this->siteLangId));
-          FatUtility::dieWithError(Message::getHtml());
-          } */
         $this->set('msg', $this->str_setup_successful);
         $this->set('recordId', $recordId);
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function deleteRecord()
-    {
-        $this->objPrivilege->canEditImageAttributes();
-
-        $urlrewrite_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
-        if ($urlrewrite_id < 1) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
-        }
-
-        $res = UrlRewrite::getAttributesById($urlrewrite_id, array('urlrewrite_id'));
-        if ($res == false) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $this->markAsDeleted($urlrewrite_id);
-
-        FatUtility::dieJsonSuccess($this->str_delete_record);
-    }
-
-    public function deleteSelected()
-    {
-        $this->objPrivilege->canEditImageAttributes();
-        $urlrewriteIdsArr = FatUtility::int(FatApp::getPostedData('urlrewrite_ids'));
-
-        if (empty($urlrewriteIdsArr)) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
-
-        foreach ($urlrewriteIdsArr as $urlrewriteId) {
-            if (1 > $urlrewriteId) {
-                continue;
-            }
-            $this->markAsDeleted($urlrewriteId);
-        }
-        $this->set('msg', $this->str_delete_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    private function markAsDeleted($urlrewriteId)
-    {
-        $urlrewriteId = FatUtility::int($urlrewriteId);
-        if (1 > $urlrewriteId) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
-        $obj = new UrlRewrite($urlrewriteId);
-        if (!$obj->deleteRecord(false)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
     }
 
     public function getSearchForm($fields = [])
@@ -371,20 +279,6 @@ class ImageAttributesController extends AdminBaseController
         return $frm;
     }
 
-    private function getForm($urlrewrite_id = 0)
-    {
-        $this->objPrivilege->canViewImageAttributes();
-        $urlrewrite_id = FatUtility::int($urlrewrite_id);
-
-        $frm = new Form('frmUrlRewrite');
-        $frm->addHiddenField('', 'urlrewrite_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_Original_URL', $this->siteLangId), 'urlrewrite_original');
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Custom_URL', $this->siteLangId), 'urlrewrite_custom');
-        $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_Example:_Custom_URL_Example', $this->siteLangId) . '</small>';
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        return $frm;
-    }
-
     private function getFormColumns()
     {
         $imgAttrCacheVar = CacheHelper::get('imgAttrCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
@@ -395,7 +289,7 @@ class ImageAttributesController extends AdminBaseController
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'record_name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
-            'action' => ''
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('imgAttrCacheVar' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
