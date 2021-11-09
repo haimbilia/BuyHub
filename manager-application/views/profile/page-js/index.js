@@ -75,7 +75,7 @@
                         }
                     };
                     $(inputBtn).val('');  
-                    cropImage(file, options, 'saveProfileImage', inputBtn);
+                    setTimeout(function () { cropImage(file, options, 'saveProfileImage', inputBtn); }, 100);
                     return ;
                 });
             }
@@ -95,7 +95,8 @@
                         var data = e.detail;
                     }
                 };
-                return cropImage(image, options, 'saveProfileImage');
+                setTimeout(function () { cropImage(image, options, 'saveProfileImage'); }, 100);
+                return 
             });
         }
     };
@@ -115,15 +116,9 @@
             complete: function () {
                 $('#loader-js').html(fcom.getLoader());
             },
-<<<<<<< HEAD
             success: function (ans) {   
                 $.ykmsg.success(ans.msg);             
                 $("#modalBoxJs").modal("hide");
-=======
-            success: function (ans) {
-                $.ykmsg.success(ans.msg);
-                $.ykmodal.close()
->>>>>>> 274bc23b5348c8237d57e72ab1397cd0c92a8132
                 profileInfoForm();
             },
             error: function (xhr, ajaxOptions, thrownError) {

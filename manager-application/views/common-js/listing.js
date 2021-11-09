@@ -613,7 +613,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     imageSmoothingEnabled: true,
                 };
                 $(inputBtn).val("");
-                return cropImage(file, options, "uploadImages", inputBtn);
+                setTimeout(function () { cropImage(file, options, "uploadImages", inputBtn) }, 100);
+                return;
             });
         }
     };
