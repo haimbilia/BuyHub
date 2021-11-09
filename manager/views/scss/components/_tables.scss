@@ -10,7 +10,7 @@
             color: $txt-body;
             font-weight: 600;
             //text-transform: uppercase;
-            border-bottom: $border;
+            border-bottom: solid 1px lighten($border-color, 05);
             &:first-child {
                 padding-left: 0;
             }
@@ -29,7 +29,7 @@
     td {
         padding: 1rem 1.2rem;
         vertical-align: top;
-        border-top: $border;
+        border-top: solid 1px lighten($border-color, 05);
         color: $txt-gray;
     }
     tr {
