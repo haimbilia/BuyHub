@@ -54,7 +54,7 @@ $fld->addFieldTagAttribute('class', 'rememberFldJs');
                         <div class="col-12">
                             <label class="switch switch-sm remember-me">
                                 <?php echo $frm->getFieldHTML('rememberme'); ?>
-                                <span></span><?php echo Labels::getlabel('LBL_Remember_me', $siteLangId); ?>
+                                <span class="input-helper"></span><?php echo Labels::getlabel('LBL_Remember_me', $siteLangId); ?>
                             </label>
                         </div>
 
@@ -70,7 +70,6 @@ $fld->addFieldTagAttribute('class', 'rememberFldJs');
                 <div class="card-foot">
                     <ul class="other-links">
                         <li><a href="<?php echo UrlHelper::generateUrl('adminGuest', 'forgotPasswordForm'); ?>" class="link"><?php echo Labels::getLabel('LBL_Forgot_Password?', $siteLangId); ?></a></li>
-
                     </ul>
                 </div>
             </div>

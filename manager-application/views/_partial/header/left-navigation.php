@@ -151,11 +151,11 @@
                                         <?php echo Labels::getLabel('NAV_MANAGE_WEIGHTAGES', $siteLangId); ?>
                                     </a>
                                 </li>
-                                <!-- <li>
-                                    <a href="<?php //echo UrlHelper::generateUrl('RecomendedTagProducts'); ?>">
-                                        <?php //echo Labels::getLabel('LBL_Recommended_Tag_Products_Weightages', $adminLangId); ?>
+                                <li class="nav_item">
+                                    <a class="nav_link" href="<?php echo UrlHelper::generateUrl('RecomendedTagProducts'); ?>">
+                                        <?php echo Labels::getLabel('NAV_RECOMMENDED_TAG_PRODUCTS_WEIGHTAGES', $siteLangId); ?>
                                     </a>
-                              </li> -->
+                                </li>
                             <?php } ?>
                         </ul>
                     </div>
