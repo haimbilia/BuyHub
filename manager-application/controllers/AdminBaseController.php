@@ -930,8 +930,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
 
     protected function setLangData(object $classObj, array $langDataArr, $langId = 0)
     {
-        $recordId = $classObj->getMainTableRecordId();
-
+        $recordId = $classObj->getMainTableRecordId(); 
         if (!$classObj->updateLangData((0 < $langId  ? $langId : $this->getDefaultFormLangId()), $langDataArr)) {
             LibHelper::exitWithError($classObj->getError(), true);
         }

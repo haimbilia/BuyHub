@@ -39,7 +39,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         'canEdit' => $canEdit,
                         'siteLangId' => $siteLangId,
                         'cardHeadTitle' => Labels::getLabel('LBL_SHOPS', $siteLangId),
-                        'newRecordBtn' => true,
+                        'newRecordBtn' => false,
                         'statusButtons' => true
                     ];
 

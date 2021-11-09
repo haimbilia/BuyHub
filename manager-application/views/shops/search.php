@@ -45,6 +45,27 @@ foreach ($arrListing as $sn => $row) {
                                 </span>';
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
+             case 'numOfReports':
+                if ($canViewShopReports) {
+                    $td->appendElement('a', array('target' => '_blank', 'href' => UrlHelper::generateUrl('ShopReports', 'index', array($row['shop_id']))), $row[$key]);
+                } else {
+                    $td->appendElement('plaintext', array(), $row[$key], true);
+                }
+                break;
+            case 'numOfReviews':
+                if ($canViewShopReports) {
+                    $td->appendElement('a', array('target' => '_blank', 'href' => UrlHelper::generateUrl('ProductReviews', 'index', array($row['shop_user_id']))), $row[$key]);
+                } else {
+                    $td->appendElement('plaintext', array(), $row[$key], true);
+                }
+                break;
+            case 'numOfProducts':
+                if ($canViewSellerProducts) {
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('SellerProducts') . '", ' . $row['shop_user_id'] . ')'), $row[$key]);
+                } else {
+                    $td->appendElement('plaintext', array(), $row[$key], true);
+                }
+                break;
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,
