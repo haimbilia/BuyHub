@@ -268,39 +268,30 @@ class HtmlHelper
      * $imageArr ex. ['name' => 'fav.png','url'=>'imageurl']
      */
 
-    public static function getfileInputHtml(array $fileInputAttributes,int $langid, string $removeFn, string $editFn = '', $imageArr = [], $headerClass = '')
+    public static function getfileInputHtml(array $fileInputAttributes,int $langId, string $removeFn, string $editFn = '', $imageArr = [], $headerClass = '')
     {
         $str =  '<div class="dropzone ' . $headerClass . '">';
                         if (1 > count($imageArr)) {
                         $str .= ' 
-                            <div class="dropzone-upload">                 
+                            <div class="dropzone-upload dropzoneUploadJs">                 
                                 <div class="file-upload">
                                     <img src="' . CONF_WEBROOT_URL . 'images/upload/upload_img.png">                                
                                 </div>
                                 <div class="needsclick">
-                                    <h3 class="dropzone-msg-title">' . Labels::getLabel("LBL_CLICK_HERE_TO_UPLOAD", $langid) . '</h3>                              
+                                    <h3 class="dropzone-msg-title">' . Labels::getLabel("FRM_CLICK_HERE_TO_UPLOAD", $langId) . '</h3>                              
                                 </div> 
                             </div>                                        
                         ';
                         } else {
                         $str .= 
-                            '<div class="dropzone-uploaded">
+                            '<div class="dropzone-uploaded dropzoneUploadedJs">
                                 <img src="' . $imageArr['url'] . '" title="" >    
                                 <div class="dropzone-uploaded-action">
-                                <ul class="actions">                               
-                                    <li>
-                                        <a href="javascript:void(0)"  onclick="' . $removeFn . '">
-                                            <svg class="svg" width="18" height="18">
-                                                <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
-                                                </use>
-                                            </svg>
-                                            </a>
-                                    </li>';
+                                <ul class="actions">';
                                 if(!empty($editFn)){
                                     $str .='
                                     <li>
-                                        <a href="javascript:void(0)"  onclick="' . $editFn . '" >
+                                        <a href="javascript:void(0)"  onclick="' . $editFn . '" data-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_EDIT', $langId) . '>
                                             <svg class="svg" width="18" height="18">
                                                 <use
                                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
@@ -309,12 +300,20 @@ class HtmlHelper
                                         </a>
                                     </li>'; 
                                 }                                
-                                $str .='
+                                $str .='<li>
+                                            <a href="javascript:void(0)"  onclick="' . $removeFn . '" data-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_REMOVE', $langId) . '">
+                                                <svg class="svg" width="18" height="18">
+                                                    <use
+                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                                    </use>
+                                                </svg>
+                                                </a>
+                                        </li>
                                 </ul></div>
                             </div>';
                     }              
                    
-                    $str .= '<input class="dropzone-input '. (count($imageArr) ? "hide" : "" ).'" type="file"';        
+                    $str .= '<input class="dropzone-input dropzoneInputJs '. (count($imageArr) ? "hide" : "" ).'" type="file"';        
                     foreach ($fileInputAttributes as $attrName => $attrVal) {
                         $str .= ' ' . $attrName . '="' . $attrVal . '"';
                     }

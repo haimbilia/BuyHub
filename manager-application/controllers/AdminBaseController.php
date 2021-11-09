@@ -41,7 +41,7 @@ class AdminBaseController extends FatController
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
 
         $this->setCommonValues();
-        $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css');
+        $this->_template->addCss([CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css', 'css/jquery.datetimepicker.css']);
     }
 
     /*
@@ -800,12 +800,6 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         $this->_template->render(false, false, 'json-success.php', false, false);
     }
 
-    public function includeDateTimeFiles()
-    {
-        $this->_template->addCss(array('css/1jquery-ui-timepicker-addon.css'), false);
-        $this->_template->addJs(array('js/1jquery-ui-timepicker-addon.js'), false);
-    }
-
     public function translateLangFields($tbl, $data)
     {
         if (!empty($tbl) && !empty($data)) {
@@ -885,7 +879,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-                
+
         $className = get_called_class();
         $directory = (str_replace("-controller", "", strtolower(FatUtility::camel2dashed($className))));
         $renderPath = CONF_THEME_PATH . $directory . DIRECTORY_SEPARATOR . "lang-form.php";
@@ -955,10 +949,10 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
                 }
             }
         }
-    
+
         if ($this->checkMediaExist == true && $newTabLangId == 0 && !$this->isMediaUploaded($recordId)) {
             $this->set('openMediaForm', true);
-        }        
+        }
 
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
@@ -981,13 +975,13 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
     }
 
     public function deleteRecord()
-    {   
-        $this->checkEditPrivilege();       
-        
+    {
+        $this->checkEditPrivilege();
+
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if ($recordId < 1) {
             FatUtility::dieJsonError($this->str_invalid_request_id);
-        }      
+        }
 
         $this->markAsDeleted($recordId);
         $this->set('msg', $this->str_delete_record);

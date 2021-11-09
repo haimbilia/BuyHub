@@ -226,20 +226,19 @@ class AttachedFile extends MyAppModel
             }
             $srch->addCondition('afile_record_subid', '=', $recordSubid);
         }
-
-        if ($recordId == 0) {
-            $srch->addOrder('afile_id', 'desc');
-            $srch->addOrder('afile_display_order');
-        } else {
-            $srch->addOrder('afile_display_order');
-        }
-
+                
         if ($langId > 0) {
             $cnd = $srch->addCondition('afile_lang_id', '=', $langId);
             if ($displayUniversalImage) {
                 $cnd->attachCondition('afile_lang_id', '=', '0');
                 $srch->addOrder('afile_lang_id', 'DESC');
             }
+        }
+
+        $srch->addOrder('afile_display_order');
+
+        if ($recordId == 0) {
+            $srch->addOrder('afile_id', 'desc');
         }
 
         if ($screen > 0) {
@@ -253,6 +252,7 @@ class AttachedFile extends MyAppModel
         if ($size > 0) {
             $srch->setPageSize($size);
         }
+        
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs, 'afile_id');
     }

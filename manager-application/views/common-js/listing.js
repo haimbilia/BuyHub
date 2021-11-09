@@ -65,7 +65,7 @@ $(document).on("search", "input[name='keyword']", function () {
 $(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {
     e.stopImmediatePropagation();
     if (e.keyCode === 13) {
-        $(".submitBtnJs").click();
+        $('.' + $.ykmodal.element + " .submitBtnJs").click();
     }
 });
 
@@ -266,6 +266,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             return false;
         }
         fcom.resetEditorInstance();
+        
+        /* Uncheck all if checked. */
+        $(".selectAllJs, .selectItemJs").prop("checked", false)
 
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(controllerName, "form"), "", function (t) {
@@ -312,10 +315,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
 
         e.stopPropagation();
-        if (!confirm(langLbl.confirmUpdateStatus)) {
+        /* if (!confirm(langLbl.confirmUpdateStatus)) {
             e.preventDefault();
             return false;
-        }
+        } */
 
         var oldStatus = $(obj).attr("data-old-status");
         $(listingTableJs).prepend(fcom.getLoader());
@@ -716,6 +719,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
     closeForm = function () {
         $.ykmodal.close();
+    }
+
+    editDropZoneImages = function () {
+        $(".dropzoneContainerJs .dropzoneInputJs").click();
     }
 
     // convertCheckboxToSwitch = function () {

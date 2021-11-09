@@ -2,7 +2,7 @@
     color: $txt-body;
     width: 100%;
     //margin-bottom: 1rem;
-    background-color: transparent; 
+    background-color: transparent;
     font-size: 0.85rem;
     thead {
         th {
@@ -610,6 +610,7 @@
 }
 
 .data-length {
+    font-size: 0.85rem;
     display: flex;
     align-items: center;
     &-select {
@@ -652,11 +653,12 @@
             line-height: $input-line-height;
             border-radius: $input-border-radius;
             &::before {
-                background: lighten($brand-color, 55); 
+                background: lighten($brand-color, 55);
                 content: "";
                 height: 100%;
                 width: 100%;
-                border-radius: $radius4;
+                // border-radius: $radius4;
+                border-radius: $radius-common;
                 position: absolute;
                 left: 0px;
                 top: 0px;
@@ -664,7 +666,8 @@
                 opacity: 0;
                 transition: all 0.2s cubic-bezier(0.2, 0.91, 0.85, 0.96) 0s;
             }
-            &:hover { color: $brand-color;
+            &:hover {
+                color: $brand-color;
                 &::before {
                     opacity: 1;
                     transform: scale(1);

@@ -2,56 +2,77 @@
 
 class RewardsOnPurchaseController extends AdminBaseController
 {
-    private $canView;
-    private $canEdit;
-
     public function __construct($action)
     {
-        $ajaxCallArray = array('deleteRecord', 'form', 'langForm', 'search', 'setup', 'langSetup');
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die(Labels::getLabel('LBL_Invalid_Action', $this->siteLangId));
-        }
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewRewardsOnPurchase($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditRewardsOnPurchase($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewRewardsOnPurchase();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewRewardsOnPurchase();
-        $frmSearch = $this->getSearchForm();
-        $this->set("frmSearch", $frmSearch);
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $this->set('frmSearch', $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('languages', Language::getAllNames());
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_REWARDS_ON_PURCHASE', $this->siteLangId));
+        $this->getListingData();
+
         $this->_template->render();
     }
 
     public function search()
     {
-        $this->objPrivilege->canViewRewardsOnPurchase();
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'rewards-on-purchase/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $searchForm = $this->getSearchForm();
-        $data = FatApp::getPostedData();
+    private function getListingData()
+    {
+        $post = FatApp::getPostedData();
 
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
-        $post = $searchForm->getFormDataFromArray($data);
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+
+        $srchFrm = $this->getSearchForm($fields);
+
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = RewardsOnPurchase::getSearchObject();
-        $srch->addOrder('rop_purchase_upto', 'asc');
-        /* if(!empty($post['keyword'])){
-        $cond = $srch->addCondition('sd.sduration_identifier','like','%'.$post['keyword'].'%','AND');
-        $cond->attachCondition('sd_l.sduration_name','like','%'.$post['keyword'].'%','OR');
-        $cond->attachCondition('msa.mshipapi_zip','like','%'.$post['keyword'].'%','OR');
-        $cond->attachCondition('msa.mshipapi_cost','like','%'.$post['keyword'].'%','OR');
-        $cond->attachCondition('msa.mshipapi_volume_upto','like','%'.$post['keyword'].'%','OR');
-        $cond->attachCondition('msa.mshipapi_weight_upto','like','%'.$post['keyword'].'%','OR');
-        }  */
-
+        $srch->addMultipleFields(['rop.*', 'rop_id as listSerial']);
+        $srch->addOrder($sortBy, $sortOrder);
 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->setPageSize($pageSize);
+
+        if (!empty($post['keyword'])) {
+            $srch->addCondition('rop.rop_purchase_upto', 'like', '%' . $post['keyword'] . '%');
+        }
+        
+        if (!empty($post['rop_reward_point'])) {
+            $srch->addCondition('rop.rop_reward_point', 'like', '%' . $post['rop_reward_point'] . '%');
+        }
+
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
@@ -59,30 +80,36 @@ class RewardsOnPurchaseController extends AdminBaseController
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditRewardsOnPurchase($this->admin_id, true));
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
     }
 
-    public function form($rop_id = 0)
+    public function form()
     {
-        $this->objPrivilege->canViewRewardsOnPurchase();
-
-        $rop_id = FatUtility::int($rop_id);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm();
 
-        if (0 < $rop_id) {
-            $data = RewardsOnPurchase::getAttributesById($rop_id);
+        if (0 < $recordId) {
+            $data = RewardsOnPurchase::getAttributesById($recordId);
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
 
         $this->set('languages', Language::getAllNames());
-        $this->set('rop_id', $rop_id);
+        $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('includeTabs', false);
+        $this->set('formTitle', Labels::getLabel('LBL_REWARDS_ON_PURCHASE_SETUP', $this->siteLangId));
+        $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
     public function setup()
@@ -91,33 +118,29 @@ class RewardsOnPurchaseController extends AdminBaseController
 
         $post = FatApp::getPostedData();
 
-        $rop_id = 0;
+        $recordId = 0;
         if (isset($post['rop_id'])) {
-            $rop_id = FatUtility::int($post['rop_id']);
+            $recordId = FatUtility::int($post['rop_id']);
         }
 
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray($post);
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $rop_id = $post['rop_id'];
+        $recordId = $post['rop_id'];
         unset($post['rop_id']);
 
-        $record = new RewardsOnPurchase($rop_id);
+        $record = new RewardsOnPurchase($recordId);
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
-
-        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->siteLangId));
-        $this->set('ropId', $rop_id);
+        $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -125,13 +148,12 @@ class RewardsOnPurchaseController extends AdminBaseController
     {
         $this->objPrivilege->canEditRewardsOnPurchase();
 
-        $rop_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
-        if ($rop_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $this->markAsDeleted($rop_id);
+        $this->markAsDeleted($recordId);
 
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
@@ -140,19 +162,17 @@ class RewardsOnPurchaseController extends AdminBaseController
     public function deleteSelected()
     {
         $this->objPrivilege->canEditRewardsOnPurchase();
-        $ropIdsArr = FatUtility::int(FatApp::getPostedData('rop_ids'));
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('rop_ids'));
 
-        if (empty($ropIdsArr)) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
+        if (empty($recordIdsArr)) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
-        foreach ($ropIdsArr as $ropId) {
-            if (1 > $ropId) {
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
                 continue;
             }
-            $this->markAsDeleted($ropId);
+            $this->markAsDeleted($recordId);
         }
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
@@ -162,46 +182,84 @@ class RewardsOnPurchaseController extends AdminBaseController
     {
         $ropId = FatUtility::int($ropId);
         if (1 > $ropId) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
         $obj = new RewardsOnPurchase($ropId);
 
         $data = RewardsOnPurchase::getAttributesById($ropId, array('rop_id'));
         if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         if (!$obj->deleteRecord(false)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
     }
 
-
-    public function getSearchForm()
+    public function getSearchForm($fields = [])
     {
-        $frm = new Form('frmRewardsOnPurchase');
+        $frm = new Form('frmRecordSearch');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
+        }
+        
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_PURCHASE_AMOUNT', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+        
+        $frm->addTextBox(Labels::getLabel('FRM_REWARD_POINTS', $this->siteLangId), 'rop_reward_point');
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
-    private function getForm()
+    private function getForm($recordId = 0)
     {
-        $this->objPrivilege->canViewRewardsOnPurchase();
-
         $frm = new Form('frmRewardsOnPurchase');
-        $frm->addHiddenField('', 'rop_id', 0);
-        $fld = $frm->addFloatField(Labels::getLabel('LBL_Purchase_upto', $this->siteLangId), 'rop_purchase_upto');
+        $frm->addHiddenField('', 'rop_id', $recordId);
+        $fld = $frm->addFloatField(Labels::getLabel('FRM_PURCHASE_UPTO', $this->siteLangId), 'rop_purchase_upto');
         $fld->requirements()->setFloatPositive();
-        $fld = $frm->addFloatField(Labels::getLabel('LBL_Reward_Point', $this->siteLangId), 'rop_reward_point');
+        $fld = $frm->addFloatField(Labels::getLabel('FRM_REWARD_POINT', $this->siteLangId), 'rop_reward_point');
         $fld->requirements()->setFloatPositive();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
+    }
+
+    private function getFormColumns(): array
+    {
+        $rewardsOnPurchaseTblHeadingCols = CacheHelper::get('rewardsOnPurchaseTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($rewardsOnPurchaseTblHeadingCols) {
+            return json_decode($rewardsOnPurchaseTblHeadingCols);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'rop_purchase_upto' => Labels::getLabel('LBL_PURCHAHSE', $this->siteLangId),
+            'rop_reward_point' => Labels::getLabel('LBL_REWARD_POINT', $this->siteLangId),            
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+
+        if(count(Language::getAllNames()) < 2 ){
+            unset($arr['language_name']);
+        }
+
+        CacheHelper::create('rewardsOnPurchaseTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return [    
+            'select_all',
+            'listSerial',
+            'rop_purchase_upto',
+            'rop_reward_point',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }

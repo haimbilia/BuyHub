@@ -8,10 +8,10 @@ if (2 > count($arrListing)) {
 
 $tableHeadAttrArr = [
     'select_all' => [
-        'width' => '5%'
+        'class' => 'col-check'
     ],
     'listSerial' => [
-        'width' => '10%'
+        'class' => 'col-sr'
     ],
     'brand_logo' => [
         'width' => '20%'

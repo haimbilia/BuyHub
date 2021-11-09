@@ -359,8 +359,7 @@ class BadgeLinkConditionsController extends AdminBaseController
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));
         $this->set('frmSearch', $frmSearch);
         $this->_template->addJs(array('js/select2.js'));
-        $this->_template->addCss(array('css/select2.min.css'));
-        $this->includeDateTimeFiles();
+        $this->_template->addCss(array('css/select2.min.css'));       
         $this->_template->render();
     }
 
