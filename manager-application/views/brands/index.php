@@ -13,18 +13,7 @@ $tableHeadAttrArr = [
     'listSerial' => [
         'class' => 'col-sr'
     ],
-    'brand_logo' => [
-        'width' => '20%'
-    ],
-    'brand_identifier' => [
-        'width' => '25%'
-    ],
-    'brand_active' => [
-        'width' => '20%'
-    ],
-    'action' => [
-        'width' => '20%'
-    ],
+    
 ];
 
 $controller = str_replace('Controller', '', FatApp::getController());

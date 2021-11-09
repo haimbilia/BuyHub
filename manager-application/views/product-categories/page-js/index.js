@@ -196,14 +196,8 @@ $(document).ready(function () {
 	deleteImage = function (fileId, prodcatId, imageType, langId, slide_screen) {
 		if (!confirm(langLbl.confirmDeleteImage)) { return; }
 		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'removeImage', [fileId, prodcatId, imageType, langId, slide_screen]), '', function (t) {
-			//categoryImages( prodcatId, imageType, slide_screen, langId );
-			if (imageType == 'icon') {
-				$("#icon-imageListingJs").html('');
-				$("[name='cat_icon_image_id[" + langId + "]']").val('');
-			} else if (imageType == 'banner') {
-				$("#banner-imageListingJs").html('');
-				$("[name='cat_banner_image_id[" + langId + "_" + slide_screen + "]']").val('');
-			}
+			categoryImages( prodcatId, imageType, slide_screen, langId );
+			
 		});
 	};
 
@@ -281,16 +275,15 @@ $(document).ready(function () {
 	};
 
 	uploadCatImages = function (formData) {
-		var frmName = formData.get("frmName");
 		var slideScreen = 0;
 		var prodcatId = $("[name='prodcat_id']").val();
-		if (frmName == 'frmCategoryIcon') {
-			var afileId = $("#icon-imageListingJs li").attr('id');
+		if (formData.get("file_type") == 'icon') {
+			var afileId = $("#icon-imageListingJs img").data('afile_id');
 			var langId = $("[name='icon_lang_id']").val();
 			var fileType = $("[name='icon_file_type']").val();
 			var imageType = 'icon';
-		} else {
-			var afileId = $("#banner-imageListingJs li").attr('id');
+		} else {		
+			var afileId = $("#banner-imageListingJs img").data('afile_id');
 			var langId = $("[name='banner_lang_id']").val();
 			var fileType = $("[name='banner_file_type']").val();
 			slideScreen = $("[name='slide_screen']").val();
