@@ -30,7 +30,7 @@ foreach ($arrListing as $sn => $row) {
                     $attr = [];
                     if (1 > count($languages)) {
                         $attr = [
-                            'onClick' => 'editRecord(' . $row['rop_id'] . ', true)'
+                            'onClick' => 'editRecord(' . $row['rop_id'] . ')'
                         ];
                     }
                     $data['editButton'] = $attr;

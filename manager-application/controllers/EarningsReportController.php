@@ -138,6 +138,7 @@ class EarningsReportController extends AdminBaseController
                         case 'subscriptionCharges':
                         case 'promotionCharged':
                         case 'adminSalesEarnings':
+                        case 'totalEarning':
                             $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
                             break;
                         default:

@@ -285,13 +285,13 @@ class HtmlHelper
                         } else {
                         $str .= 
                             '<div class="dropzone-uploaded dropzoneUploadedJs">
-                                <img src="' . $imageArr['url'] . '" title="" >    
+                                <img src="' . $imageArr['url'] . '" title=""  data-afile_id="' . ($imageArr['afile_id'] ?? 0) . '">    
                                 <div class="dropzone-uploaded-action">
                                 <ul class="actions">';
                                 if(!empty($editFn)){
                                     $str .='
                                     <li>
-                                        <a href="javascript:void(0)"  onclick="' . $editFn . '" data-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_EDIT', $langId) . '>
+                                        <a href="javascript:void(0)"  onclick="' . $editFn . '" data-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_EDIT', $langId) . '">
                                             <svg class="svg" width="18" height="18">
                                                 <use
                                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">

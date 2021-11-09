@@ -523,7 +523,7 @@ class BrandsController extends AdminBaseController
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
-        $this->set('brandId', $brand_id);
+        $this->set('recordId', $brand_id);
         $this->set('file', $_FILES['cropped_image']['name']);
         $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_File_Uploaded_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
@@ -543,6 +543,7 @@ class BrandsController extends AdminBaseController
         $frm = new Form('frmBrandLogo');
         $languagesAssocArr = Language::getAllNames();
         $frm->addHiddenField('', 'brand_id', $brandId);
+        $frm->addHTML('', 'heading', '');
 
         if (count($languagesAssocArr) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_Universal', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
@@ -567,6 +568,7 @@ class BrandsController extends AdminBaseController
         $frm = new Form('frmBrandImage');
         $languagesAssocArr = Language::getAllNames();
         $frm->addHiddenField('', 'brand_id', $brandId);
+        $frm->addHTML('', 'heading', '');
         if (count($languagesAssocArr) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_UNIVERSAL', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
         } else {
