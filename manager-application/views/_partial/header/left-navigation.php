@@ -356,56 +356,44 @@
                                 </ul>
                             </div>
                         </li>
-                        <?php } ?>
-                        <?php if ($objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li class="nav_item">
-                            <a class="nav_link" data-toggle="collapse" data-parent="#financialReportNav"
-                                href="#financialReportNav" aria-expanded="true">
-                                <span
-                                    class="nav_text"><?php echo Labels::getLabel('NAV_FINANCIAL_REPORT', $siteLangId); ?></span>
-                                <i class="nav_arrow"></i>
-                            </a>
-                            <div id="financialReportNav" class="panel-collapse collapse">
-                                <ul class="nav">
-                                    <li class="nav_item">
-                                        <a href="<?php echo UrlHelper::generateUrl('EarningsReport'); ?>"
-                                            class="nav_link ">
-                                            <span
-                                                class="nav_text"><?php echo Labels::getLabel('NAV_EARNINGS', $siteLangId); ?></span>
-                                        </a>
-                                    </li>
-                                    <li class="nav_item">
-                                        <a href="<?php echo UrlHelper::generateUrl('ProductProfitReport'); ?>"
-                                            class="nav_link ">
-                                            <span
-                                                class="nav_text"><?php echo Labels::getLabel('NAV_PROFIT_BY_PRODUCTS', $siteLangId); ?></span>
-                                        </a>
-                                    </li>
-                                    <li class="nav_item">
-                                        <a href="<?php echo UrlHelper::generateUrl('PreferredPaymentMethod'); ?>"
-                                            class="nav_link ">
-                                            <span
-                                                class="nav_text"><?php echo Labels::getLabel('NAV_PREFERRED_PAYMENT_METHOD', $siteLangId); ?></span>
-                                        </a>
-                                    </li>
-                                    <li class="nav_item">
-                                        <a href="<?php echo UrlHelper::generateUrl('payoutReport'); ?>"
-                                            class="nav_link ">
-                                            <span
-                                                class="nav_text"><?php echo Labels::getLabel('NAV_PAYOUT', $siteLangId); ?></span>
-                                        </a>
-                                    </li>
-                                    <li class="nav_item">
-                                        <a href="<?php echo UrlHelper::generateUrl('TransactionReport'); ?>"
-                                            class="nav_link ">
-                                            <span
-                                                class="nav_text"><?php echo Labels::getLabel('NAV_TRANSACTION_REPORT', $siteLangId); ?></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
                         <?php } */ ?>
+                            <?php if ($objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link" data-toggle="collapse" data-parent="#financialReportNav" href="#financialReportNav" aria-expanded="true">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_FINANCIAL_REPORT', $siteLangId); ?></span>
+                                        <i class="nav_arrow"></i>
+                                    </a>
+                                    <div id="financialReportNav" class="panel-collapse collapse">
+                                        <ul class="nav">
+                                            <li class="nav_item">
+                                                <a href="<?php echo UrlHelper::generateUrl('EarningsReport'); ?>" class="nav_link ">
+                                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_EARNINGS', $siteLangId); ?></span>
+                                                </a>
+                                            </li>
+                                            <li class="nav_item">
+                                                <a href="<?php echo UrlHelper::generateUrl('ProductProfitReport'); ?>" class="nav_link ">
+                                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_PROFIT_BY_PRODUCTS', $siteLangId); ?></span>
+                                                </a>
+                                            </li>
+                                            <li class="nav_item">
+                                                <a href="<?php echo UrlHelper::generateUrl('PreferredPaymentMethod'); ?>" class="nav_link ">
+                                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_PREFERRED_PAYMENT_METHOD', $siteLangId); ?></span>
+                                                </a>
+                                            </li>
+                                            <li class="nav_item">
+                                                <a href="<?php echo UrlHelper::generateUrl('payoutReport'); ?>" class="nav_link ">
+                                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_PAYOUT', $siteLangId); ?></span>
+                                                </a>
+                                            </li>
+                                            <li class="nav_item">
+                                                <a href="<?php echo UrlHelper::generateUrl('TransactionReport'); ?>" class="nav_link ">
+                                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_TRANSACTION_REPORT', $siteLangId); ?></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            <?php }  ?>
                             <?php if ($objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
                                     <a class="nav_link" data-toggle="collapse" data-parent="#subscriptionReportNav" href="#subscriptionReportNav" aria-expanded="true">

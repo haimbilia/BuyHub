@@ -266,7 +266,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             return false;
         }
         fcom.resetEditorInstance();
-        
+
         /* Uncheck all if checked. */
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
@@ -281,13 +281,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (false === checkControllerName()) {
             return false;
         }
-
-        var modalClass = displayInPopup ? null : "";
-
-        $.ykmodal(fcom.getLoader(), modalClass, dialogClass);
+        $.ykmodal(fcom.getLoader(), displayInPopup, dialogClass);
         data = "recordId=" + recordId;
         fcom.ajax(fcom.makeUrl(controllerName, "form"), data, function (t) {
-            $.ykmodal(t, modalClass, dialogClass);
+            $.ykmodal(t, displayInPopup, dialogClass);
             fcom.removeLoader();
         });
     };
@@ -594,10 +591,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 $("#modalBoxJs .modal-footer").html(t.footer);
                 var file = inputBtn.files[0];
 
-                var frmName = $(inputBtn).closest('form').attr('name');                               
+                var frmName = $(inputBtn).closest('form').attr('name');
                 var minWidth = document[frmName].min_width.value;
                 var minHeight = document[frmName].min_height.value;
-               
+
                 if (minWidth == minHeight) {
                     var aspectRatio = 1 / 1;
                 } else {
@@ -667,7 +664,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     $("#modalBoxJs").modal("hide");
                     if ("" != callback) {
                         window[callback]();
-                    }else if (
+                    } else if (
                         0 < $(".navTabsJs").length &&
                         0 < $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='lang_id']").length
                     ) {                      

@@ -14,11 +14,11 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $serialNo);
+                $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
 
             case 'buyerName':
-                $td->appendElement('plaintext', array(), $row['buyerName'] . '<br/>(' . $row['buyerEmail'] . ')', true);
+                $td->appendElement('plaintext', $tdAttr, $row['buyerName'] . '<br/>(' . $row['buyerEmail'] . ')', true);
                 break;
             case 'grossSales':
             case 'transactionAmount':
@@ -40,11 +40,11 @@ foreach ($arrListing as $sn => $row) {
             case 'commissionCharged':
             case 'refundedCommission':
             case 'adminSalesEarnings':
-                $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
+                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
 
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
         }
     }

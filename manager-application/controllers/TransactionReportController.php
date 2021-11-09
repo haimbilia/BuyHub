@@ -121,6 +121,7 @@ class TransactionReportController extends AdminBaseController
                             break;
                         case 'utxn_credit':
                         case 'utxn_debit':
+                        case 'transactionAmount':
                             $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         default:

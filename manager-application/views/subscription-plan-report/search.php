@@ -14,10 +14,10 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $serialNo);
+                $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'spplan_price':
-                $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
+                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
             case 'spackage_name':
                 $name = $row['spackage_name'] . ' ';
@@ -25,11 +25,11 @@ foreach ($arrListing as $sn => $row) {
 
                 $name .= " " . (($row['spplan_interval'] > 0) ? $row['spplan_interval'] : '')
                     . "  " . $subcriptionPeriodArr[$row['spplan_frequency']];
-                $td->appendElement('plaintext', array(), $name);
+                $td->appendElement('plaintext', $tdAttr, $name);
                 break;
 
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
         }
     }

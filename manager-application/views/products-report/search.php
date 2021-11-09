@@ -14,7 +14,7 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $serialNo);
+                $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
 
             case 'product_name':
@@ -39,15 +39,15 @@ foreach ($arrListing as $sn => $row) {
                 if ($row['shop_name'] != '') {
                     $name .= '<br/><strong>' . Labels::getLabel('LBL_Sold_By', $siteLangId) . ':  </strong>' . $row['shop_name'];
                 }
-                $td->appendElement('plaintext', array(), $name, true);
+                $td->appendElement('plaintext', $tdAttr, $name, true);
                 break;
 
             case 'price':
-                $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row['selprod_price'], true, true));
+                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row['selprod_price'], true, true));
                 break;
 
             case 'followers':
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
 
             case 'grossSales':
@@ -70,16 +70,16 @@ foreach ($arrListing as $sn => $row) {
             case 'commissionCharged':
             case 'refundedCommission':
             case 'adminSalesEarnings':
-                $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
+                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
 
                 /* case 'order_date':
-                $td->appendElement('plaintext', array(), '<a href="'.UrlHelper::generateUrl('SalesReport','index',array($row[$key])).'">'.FatDate::format($row[$key]).'</a>',true);
+                $td->appendElement('plaintext', $tdAttr, '<a href="'.UrlHelper::generateUrl('SalesReport','index',array($row[$key])).'">'.FatDate::format($row[$key]).'</a>',true);
                 break;
             */
 
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
         }
     }

@@ -801,6 +801,9 @@
             }
         }
     }
+    &#{&}-inline {
+        display: inline-flex;
+    }
 }
 
 .form-group.row {
