@@ -14,18 +14,18 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $serialNo);
+                $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'subscriptionCharges':
-                $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
+                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
             case 'user_name':
                 $name = $row['user_name'];
-                $td->appendElement('plaintext', array(), $name);
+                $td->appendElement('plaintext', $tdAttr, $name);
                 break;
             case 'ossubs_from_date':
             case 'ossubs_till_date':
-                $td->appendElement('plaintext', array(), FatDate::format($row[$key]));
+                $td->appendElement('plaintext', $tdAttr, FatDate::format($row[$key]));
                 break;
             case 'ossubs_subscription_name':
                 $name = $row['ossubs_subscription_name'] . ' ';
@@ -33,10 +33,10 @@ foreach ($arrListing as $sn => $row) {
 
                 $name .= " " . (($row['ossubs_interval'] > 0) ? $row['ossubs_interval'] : '')
                     . "  " . $subcriptionPeriodArr[$row['ossubs_frequency']];
-                $td->appendElement('plaintext', array(), $name);
+                $td->appendElement('plaintext', $tdAttr, $name);
                 break;
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
         }
     }

@@ -55,12 +55,15 @@
         });
     };
 
-    popupImage = function (inputBtn) {
-        $.ykmodal(fcom.getLoader(), " ", "modal-lg");
+    popupImage = function (inputBtn) {   
+        loadCropperSkeleton();
+        $("#modalBoxJs .modal-title").text(cropperHeading);
         if (inputBtn) {
             if (inputBtn.files && inputBtn.files[0]) {
                 fcom.ajax(fcom.makeUrl('Profile', 'imgCropper'), '', function (t) {
-                    $.ykmodal(t, " ", "modal-lg");
+                    t = $.parseJSON(t); 
+                    $("#modalBoxJs .modal-body").html(t.body);
+                    $("#modalBoxJs .modal-footer").html(t.footer);
                     var file = inputBtn.files[0];
                     var options = {
                         aspectRatio: 1 / 1,
@@ -71,13 +74,16 @@
                             var data = e.detail;
                         }
                     };
-                    $(inputBtn).val('');
-                    return cropImage(file, options, 'saveProfileImage', inputBtn);
+                    $(inputBtn).val('');  
+                    setTimeout(function () { cropImage(file, options, 'saveProfileImage', inputBtn); }, 100);
+                    return ;
                 });
             }
         } else {
             fcom.ajax(fcom.makeUrl('Profile', 'imgCropper'), '', function (t) {
-                $.ykmodal(t, " ", "modal-lg");
+                t = $.parseJSON(t); 
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);
                 var container = document.querySelector('.img-container');
                 var image = container.getElementsByTagName('img').item(0);
                 var options = {
@@ -89,7 +95,8 @@
                         var data = e.detail;
                     }
                 };
-                return cropImage(image, options, 'saveProfileImage');
+                setTimeout(function () { cropImage(image, options, 'saveProfileImage'); }, 100);
+                return 
             });
         }
     };
@@ -111,7 +118,7 @@
             },
             success: function (ans) {   
                 $.ykmsg.success(ans.msg);             
-                $.ykmodal.close()
+                $("#modalBoxJs").modal("hide");
                 profileInfoForm();
             },
             error: function (xhr, ajaxOptions, thrownError) {

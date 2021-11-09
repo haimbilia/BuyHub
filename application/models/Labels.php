@@ -110,9 +110,9 @@ class Labels extends MyAppModel
                 return strip_tags($langArray[$key][$langId]);
             }
 
-            $arr = explode(' ', ucfirst(str_replace('_', ' ', strtolower($keyOriginal))));
+            $arr = explode(' ', str_replace('_', ' ', strtolower($keyOriginal)));
             array_shift($arr);
-            return $langArray[$key][$langId] = strip_tags(implode(' ', $arr));
+            return $langArray[$key][$langId] = strip_tags(ucfirst(implode(' ', $arr)));
         }
 
 
@@ -140,15 +140,15 @@ class Labels extends MyAppModel
                 if (isset($lbl[static::DB_TBL_PREFIX . 'caption']) && $lbl[static::DB_TBL_PREFIX . 'caption'] != '') {
                     $str = $lbl[static::DB_TBL_PREFIX . 'caption'];
                 } else {
-                    $arr = explode(' ', ucfirst(str_replace('_', ' ', strtolower($keyOriginal))));
+                    $arr = explode(' ', str_replace('_', ' ', strtolower($keyOriginal)));
                     array_shift($arr);
-                    $str = implode(' ', $arr);
+                    $str = ucfirst(implode(' ', $arr));
                 }
             } else {
-                $arr = explode(' ', ucfirst(str_replace('_', ' ', strtolower($keyOriginal))));
+                $arr = explode(' ', str_replace('_', ' ', strtolower($keyOriginal)));
                 array_shift($arr);
 
-                $str = implode(' ', $arr);
+                $str = ucfirst(implode(' ', $arr));
                 $assignValues = array(
                     static::DB_TBL_PREFIX . 'key' => $key,
                     static::DB_TBL_PREFIX . 'caption' => $str,

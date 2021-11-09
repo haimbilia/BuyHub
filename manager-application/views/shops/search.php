@@ -45,6 +45,27 @@ foreach ($arrListing as $sn => $row) {
                                 </span>';
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
+            case 'numOfReports':
+                if ($canViewShopReports) {
+                    $td->appendElement('a', array('target' => '_blank', 'href' => UrlHelper::generateUrl('ShopReports', 'index', array($row['shop_id']))), $row[$key]);
+                } else {
+                    $td->appendElement('plaintext', array(), $row[$key], true);
+                }
+                break;
+            case 'numOfReviews':
+                if ($canViewShopReports) {
+                    $td->appendElement('a', array('target' => '_blank', 'href' => UrlHelper::generateUrl('ProductReviews', 'index', array($row['shop_user_id']))), $row[$key]);
+                } else {
+                    $td->appendElement('plaintext', array(), $row[$key], true);
+                }
+                break;
+            case 'numOfProducts':
+                if ($canViewSellerProducts) {
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('SellerProducts') . '", ' . $row['shop_user_id'] . ')'), $row[$key]);
+                } else {
+                    $td->appendElement('plaintext', array(), $row[$key], true);
+                }
+                break;
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,
@@ -52,7 +73,7 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = []; 
+                    $data['editButton'] = ['onClick' => 'editRecord(' . $row['shop_id'] . ', false, "modal-dialog-vertical-md")'];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
@@ -67,12 +88,12 @@ foreach ($arrListing as $sn => $row) {
 
 if (count($arrListing) == 0) {
     $tbody->appendElement('tr')->appendElement(
-            'td',
-            array(
-                'colspan' => count($fields),
-                'class' => 'noRecordFoundJs'
-            ),
-            Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
+        'td',
+        array(
+            'colspan' => count($fields),
+            'class' => 'noRecordFoundJs'
+        ),
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );
 }
 

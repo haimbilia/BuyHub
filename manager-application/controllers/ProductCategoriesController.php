@@ -184,7 +184,7 @@ class ProductCategoriesController extends AdminBaseController
     {
         $frm = new Form('frmRecordImage', array('id' => 'imageFrm'));
         $frm->addHiddenField('', 'prodcat_id', $recordId);
-
+        $frm->addHTML('', 'heading_icon', '');
         $mediaLanguages = applicationConstants::bannerTypeArr();
 
         if (count($mediaLanguages) > 1) {
@@ -192,7 +192,7 @@ class ProductCategoriesController extends AdminBaseController
         } else {
             $langid = array_key_first($mediaLanguages);
             $frm->addHiddenField('', 'icon_lang_id', $langid);
-        }
+        }       
 
         $frm->addHiddenField('', 'icon_file_type', AttachedFile::FILETYPE_CATEGORY_ICON);
         $frm->addHiddenField('', 'logo_min_width');
@@ -201,6 +201,7 @@ class ProductCategoriesController extends AdminBaseController
         $frm->addHtml('', 'cat_icon', '');
         $frm->addHtml('', 'seperator', '');
 
+        $frm->addHTML('', 'heading_banner', '');
         if (count($mediaLanguages) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'banner_lang_id', $mediaLanguages, '', array(), '');
         } else {
@@ -299,7 +300,7 @@ class ProductCategoriesController extends AdminBaseController
         }
  
         if ($imageType == 'icon') {
-            $catIcon = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $prodcat_id, 0, $lang_id, (count($languages) > 1) ? false : true);
+            $catIcon = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $prodcat_id, 0, $lang_id, (count($languages) > 1 ? false : true));
             $this->set('image', $catIcon);
             $this->set('imageFunction', 'icon');
         } elseif ($imageType == 'banner') {

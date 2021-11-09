@@ -12,6 +12,9 @@ $ratioFld->addOptionListTagAttribute('class', 'list-radio');
 $ratioFld->addFieldTagAttribute('class', 'prefRatio-js');
 $ratioFld = HtmlHelper::configureRadioAsButton($logoFrm,'ratio_type');
 
+$fld = $logoFrm->getField('heading');
+$fld->value = '<h3 class="h3">'.Labels::getLabel('LBL_LOGO', $siteLangId).'</h3>';
+
 $fld = $logoFrm->getField('logo');
 $fld->htmlAfterField = '<span class="form-text text-muted logoPreferredDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '500 x 500') . '</span>';
 $fld->value = '<span id="logoListingJs"></span>';
@@ -24,6 +27,9 @@ $ratioFld->attachField($fld);
 /* Image Form */
 HtmlHelper::formatFormFields($imageFrm);
 $imageFrm->setFormTagAttribute('class', 'modal-body form');
+
+$fld = $imageFrm->getField('heading');
+$fld->value = '<h3 class="h3">'.Labels::getLabel('LBL_BANNER', $siteLangId).'</h3>';
 
 $fld = $imageFrm->getField('banner');
 $fld->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500') . '</span>';
