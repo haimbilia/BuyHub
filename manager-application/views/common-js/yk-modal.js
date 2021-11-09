@@ -1,11 +1,13 @@
 (function ($) {
-    $.ykmodal = function (data, modalClass = "", dialogClass = "", bodyClass = "") {
-        modalClass = "" === modalClass ? "fixed-right" : modalClass;
-        if (modalClass == 'fixed-right') {
-            dialogClass = 'modal-dialog-vertical';
+    $.ykmodal = function (data, displayInPopup = false, dialogClassParm = "", modalClassParm = "", bodyClass = "") {
+
+        var modalClass = 'fixed-right ' + modalClassParm;
+        var dialogClass = 'modal-dialog-vertical ' + dialogClassParm;
+        var bodyClass = 'pd-0 ' + bodyClass;
+        if (true == displayInPopup) {
+            modalClass = modalClassParm;
+            dialogClass = 'modal-dialog-centered ' + dialogClassParm;
         }
-        dialogClass = "" === dialogClass ? "modal-dialog-centered" : dialogClass;
-        bodyClass = "" === bodyClass ? "pd-0" : bodyClass;
 
         init(modalClass, dialogClass);
         if (data.ajax) fillYKModalFromAjax(data.ajax);

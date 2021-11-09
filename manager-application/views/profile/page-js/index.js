@@ -56,11 +56,11 @@
     };
 
     popupImage = function (inputBtn) {
-        $.ykmodal(fcom.getLoader(), " ", "modal-lg");
+        $.ykmodal(fcom.getLoader(), true, "modal-lg");
         if (inputBtn) {
             if (inputBtn.files && inputBtn.files[0]) {
                 fcom.ajax(fcom.makeUrl('Profile', 'imgCropper'), '', function (t) {
-                    $.ykmodal(t, " ", "modal-lg");
+                    $.ykmodal(t, true, "modal-lg");
                     var file = inputBtn.files[0];
                     var options = {
                         aspectRatio: 1 / 1,
@@ -77,7 +77,7 @@
             }
         } else {
             fcom.ajax(fcom.makeUrl('Profile', 'imgCropper'), '', function (t) {
-                $.ykmodal(t, " ", "modal-lg");
+                $.ykmodal(t, true, "modal-lg");
                 var container = document.querySelector('.img-container');
                 var image = container.getElementsByTagName('img').item(0);
                 var options = {
@@ -109,8 +109,8 @@
             complete: function () {
                 $('#loader-js').html(fcom.getLoader());
             },
-            success: function (ans) {   
-                $.ykmsg.success(ans.msg);             
+            success: function (ans) {
+                $.ykmsg.success(ans.msg);
                 $.ykmodal.close()
                 profileInfoForm();
             },
