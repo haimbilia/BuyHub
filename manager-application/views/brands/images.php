@@ -13,7 +13,7 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
     ['onChange' => 'loadImageCropper(this)', 'accept' => 'image/*', 'data-name' => $file_type == 'logo' ? Labels::getLabel("FRM_BRAND_LOGO", $siteLangId) : Labels::getLabel("FRM_BRAND_BANNER_IMAGE", $siteLangId)],
     $siteLangId,
     ($canEdit ? 'deleteMedia(' . $image['afile_record_id'] . ',\'' . $file_type . '\',' . $image['afile_id'] .',' . $image['afile_lang_id'].',' . $image['afile_screen'] .')' :''),
-    '',
+    ($canEdit ? 'editDropZoneImages(this)': ''),
     $imgArr,
-    'mt-3'
+    'mt-3 dropzone-custom dropzoneContainerJs'
 );
