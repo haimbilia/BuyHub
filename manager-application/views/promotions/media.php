@@ -4,27 +4,31 @@ HtmlHelper::formatFormFields($mediaFrm);
 
 $mediaFrm->setFormTagAttribute('class', 'modal-body form');
 $langFld = $mediaFrm->getField('lang_id');
-$langFld->addFieldTagAttribute('class', 'language-js');
+$langFld->addFieldTagAttribute('class', 'languageJs');
 $screenFld = $mediaFrm->getField('banner_screen');
 $screenFld->addFieldTagAttribute('class', 'displayJs');
 
 $fld = $mediaFrm->getField('banner_image');
 $imageArr = [];
 $fld->value = HtmlHelper::getfileInputHtml(
-    ['onChange' => 'loadImageCropper(this)', 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_PROMOTION_BANNER", $siteLangId),'data-frm'=> $mediaFrm->getFormTagAttribute('name')],
+    [
+        'onChange' => 'loadImageCropper(this)',
+        'accept' => 'image/*',
+        'data-name' => Labels::getLabel("FRM_PROMOTION_BANNER", $siteLangId),
+        'data-frm'=> $mediaFrm->getFormTagAttribute('name')
+    ],
     $siteLangId,
     '',
     '',
-    $imageArr, 
+    $imageArr,
+    'dropzone-custom dropzoneContainerJs'
 );
-
-//$fld->htmlAfterField = '<span class="form-text uploadimageInfoJs" > ' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), $bannerWidth . ' * ' . $bannerHeight) . '</span>';
 
 $otherButtons = [
     [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'mediaForm(' . $recordId . ')',
+            'onclick' => 'promotionMediaForm(' . $recordId . ', 0, ' . applicationConstants::SCREEN_DESKTOP . ')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
@@ -37,7 +41,7 @@ $formTitle = Labels::getLabel('LBL_PROMOTION_SETUP', $siteLangId); ?>
 <?php require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
         <?php echo $mediaFrm->getFormHtml(); ?>
-        <div id="image-listing-js"></div>
+        <div id="imageListingJs"></div>
     </div>
 </div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->
 

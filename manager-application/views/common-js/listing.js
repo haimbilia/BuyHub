@@ -65,7 +65,7 @@ $(document).on("search", "input[name='keyword']", function () {
 $(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {
     e.stopImmediatePropagation();
     if (e.keyCode === 13) {
-        $(".submitBtnJs").click();
+        $('.' + $.ykmodal.element + " .submitBtnJs").click();
     }
 });
 
@@ -584,13 +584,17 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
         if (inputBtn.files && inputBtn.files[0]) {
             loadCropperSkeleton();
+            $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
             fcom.ajax(fcom.makeUrl(controllerName, "imgCropper"), "", function (t) {
                 t = $.parseJSON(t);
                 $("#modalBoxJs .modal-body").html(t.body);
                 $("#modalBoxJs .modal-footer").html(t.footer);
                 var file = inputBtn.files[0];
-                var minWidth = document.frmRecordImage.min_width.value;
-                var minHeight = document.frmRecordImage.min_height.value;
+
+                var frmName = $(inputBtn).closest('form').attr('name');                               
+                var minWidth = document[frmName].min_width.value;
+                var minHeight = document[frmName].min_height.value;
+               
                 if (minWidth == minHeight) {
                     var aspectRatio = 1 / 1;
                 } else {
@@ -657,16 +661,16 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 $.ykmsg.success(ans.msg);
                 if (true === $.ykmodal.isAdded()) {
                     $.ykmodal.show();
-                    $("#modalBoxJs").modal("hide").remove();
-                    if (
+                    $("#modalBoxJs").modal("hide");
+                    if ("" != callback) {
+                        window[callback]();
+                    }else if (
                         0 < $(".navTabsJs").length &&
-                        0 < $("." + $.ykmodal.element + " select[name='lang_id']").length
+                        0 < $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='lang_id']").length
                     ) {
-                        $("." + $.ykmodal.element + " select[name='lang_id']")
+                        $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='lang_id']")
                             .val(langId)
                             .change();
-                    } else if ("" != callback) {
-                        window[callback]();
                     }
                 } else {
                     mediaForm(ans.recordId, imageType, langId, slideScreen);
@@ -712,6 +716,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
     closeForm = function () {
         $.ykmodal.close();
+    }
+
+    editDropZoneImages = function () {
+        $(".dropzoneContainerJs .dropzoneInputJs").click();
     }
 
     // convertCheckboxToSwitch = function () {

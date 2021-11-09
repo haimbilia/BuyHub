@@ -12,16 +12,13 @@ $iconLangFld->addFieldTagAttribute('class', 'icon-language-js');
 
 
 $iconFld = $frm->getField('cat_icon');
-$iconFld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
-$iconFld->addFieldTagAttribute('onChange', 'iconPopupImage(this)');
+$iconFld->value ='<div id="icon-imageListingJs"></div>';
 $iconFld->htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_This_will_be_displayed_in_%s_on_your_store', $siteLangId), '60*60') . '</span>';
-$iconFld->htmlAfterField .='<div id="icon-imageListingJs"></div>';
+
 
 $bannerFld = $frm->getField('cat_banner');
-$bannerFld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
-$bannerFld->addFieldTagAttribute('onChange', 'bannerPopupImage(this)');
+$bannerFld ->value ='<div id="banner-imageListingJs"></div>';
 $bannerFld->htmlAfterField = '<span class="form-text text-muted preferredDimensions-js">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500') . '</span>';
-$bannerFld->htmlAfterField .= '<div id="banner-imageListingJs"></div>';
 
 
 $fld = $frm->getField('seperator');

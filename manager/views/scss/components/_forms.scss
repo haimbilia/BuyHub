@@ -570,7 +570,7 @@ form.custom-form {
     flex: 0 0 1rem;
     max-width: 1rem;
     transition: all 0.15s ease-out 0s;
-    border: solid 1px darken($border, 50);
+    border: solid 1px darken($border-color, 30);
     background: #fff;
     color: #fff;
     cursor: pointer;
@@ -583,7 +583,7 @@ form.custom-form {
     border-radius: $radius-common;
     vertical-align: middle;
     &:hover {
-        border-color: darken($border-color, 20);
+        border-color: darken($border-color, 40);
     }
 }
 

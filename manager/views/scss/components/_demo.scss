@@ -1,0 +1,143 @@
+@keyframes bounceAlpha {
+    0% {opacity: 1; transform: translateX(0px) scale(1);}
+    25%{opacity: 0; transform:translateX(-10px) scale(0.9);}
+    26%{opacity: 0; transform:translateX(10px) scale(0.9);}
+    55% {opacity: 1; transform: translateX(0px) scale(1);}
+  }
+  @keyframes bounceAlpha-one {
+    0% {opacity: 1; transform: translateX(0px) scale(1);}
+    25%{opacity: 0; transform:translateX(10px) scale(0.9);}
+    26%{opacity: 0; transform:translateX(-10px) scale(0.9);}
+    55% {opacity: 1; transform: translateX(0px) scale(1);}
+  }
+.demo {
+    position: fixed;
+    top: calc(30% - 1vw);
+    #{$end-direction}: 0;
+    z-index: 9;
+    display: flex;
+    transform: translateX(calc(100% - 46px));
+    transition: 0.65s all ease ;
+    &.is-visible{
+        transform: translateX(0);
+    }
+    &__toggle {
+        .btn {
+            font-size:0 ;
+            padding: 0;
+            width: 46px;
+            height:46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            &:before, &:after{
+                content: '';
+                display: block;
+                width: 40px;
+                height: 40px;
+                background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='42' height='42'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M10.828 12l4.95 4.95-1.414 1.414L8 12l6.364-6.364 1.414 1.414z' fill='rgba(255,255,255,1)'/%3E%3C/svg%3E");
+                animation-name: bounceAlpha;
+                animation-duration:2.5s;
+                animation-iteration-count:infinite;
+                animation-timing-function:linear;
+            }
+            &:after{
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='42' height='42'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z' fill='rgba(255,255,255,1)'/%3E%3C/svg%3E");
+                animation-name: bounceAlpha-one;
+                display: none;
+
+
+            }
+            &.is-active{
+                &:before{
+                    display: none;
+                }
+                &:after{
+                    display: block;
+
+                }
+            }
+            
+        }
+    }
+    &__content {
+        width: fit-content;
+        padding: 1.5rem;
+        background-color: $bg-white;
+        box-shadow: 0px 0px 6px #00000029;
+        
+        &-restore {
+            margin-bottom: 1rem;
+            .restore {
+                text-align: center;
+                &-icon {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 4rem;
+                    height: 4rem;
+                    margin: 0 auto 0.85rem;
+                    border-radius: 1rem;
+                    background-color: $brand-color;
+                    color: $brand-color-inverse;
+                    svg {
+                        width: 2rem;
+                        height: 2rem;
+                        fill: currentColor;
+                    }
+                }
+                &-title {
+                    font-size: 1rem;
+                    font-weight: 500;
+                    margin-bottom: 0.25rem;
+                }
+                &-counter {
+                    color: $brand-color;
+                    font-size: 2rem;
+                    font-weight: 700;
+                }
+            }
+        }
+        &-switch {
+            border-top: $border;
+            border-bottom: $border;
+            padding: 1rem 0;
+            
+        }
+        &-action{
+            margin-top: 1rem;
+        }
+        .list-items {
+            display: flex;
+            flex-direction: column;
+            .list-item{
+                display: flex;
+                a{
+                    padding: 0.5rem 0;
+                    text-decoration: none;
+                    color: $txt-gray;
+                    font-size: .85rem;
+                    &:hover{
+                        color: $brand-color ;
+                    }
+                }
+            }
+            &--icon{
+                .list-item{
+                    a{
+                        .icon{
+                            margin-#{$end-direction}: 0.5rem;
+                            .svg{
+                                width: 1.75rem;
+                                height: 1.75rem;
+                                fill: currentColor;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+

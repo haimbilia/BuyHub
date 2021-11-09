@@ -25,8 +25,7 @@ class SellerProductsController extends AdminBaseController
             unset($data['id']);
             $srchFrm->fill($data);
         }
-        $this->objPrivilege->canViewSellerProducts();
-        $this->includeDateTimeFiles();
+        $this->objPrivilege->canViewSellerProducts();      
         $this->set('includeEditor', true);
         $this->set("frmSearch", $srchFrm);
         $this->set("product_id", $product_id);

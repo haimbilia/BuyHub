@@ -78,48 +78,49 @@ class Labels extends MyAppModel
         return $srch;
     }
 
-    public static function getLabel(string $lblKey, int $langId = 0, int $type = Labels::TYPE_WEB): string
+    public static function getLabel(string $key, int $langId = 0, int $type = Labels::TYPE_WEB): string
     {
-        if (empty($lblKey)) {
+        if (empty($key)) {
             return '';
         }
 
-        if (preg_match('/\s/', $lblKey)) {
-            return $lblKey;
+        if (preg_match('/\s/', $key)) {
+            return $key;
         }
 
         $type = ($type != static::TYPE_APP) ? static::TYPE_WEB : static::TYPE_APP;
 
         $langId = (0 < $langId) ? $langId : CommonHelper::getLangId();
 
+        $keyOriginal = $key;
+        $key = strtoupper($key);
+
         $cacheAvailable = static::isAPCUcacheAvailable();
         if ($cacheAvailable) {
-            $cacheKey = static::getAPCUcacheKey($lblKey, $langId);
+            $cacheKey = static::getAPCUcacheKey($key, $langId);
             if (apcu_exists($cacheKey)) {
                 return strip_tags(trim(apcu_fetch($cacheKey)));
             }
         }
 
-        global $lang_array;
+        global $langArray;
 
-        if (isset($lang_array[$lblKey][$langId])) {
-            if (!empty($lang_array[$lblKey][$langId])) {
-                return strip_tags($lang_array[$lblKey][$langId]);
+        if (isset($langArray[$key][$langId])) {
+            if (!empty($langArray[$key][$langId])) {
+                return strip_tags($langArray[$key][$langId]);
             }
 
-            $arr = explode(' ', ucwords(str_replace('_', ' ', strtolower($lblKey))));
+            $arr = explode(' ', ucfirst(str_replace('_', ' ', strtolower($keyOriginal))));
             array_shift($arr);
-            return $lang_array[$lblKey][$langId] = strip_tags(implode(' ', $arr));
+            return $langArray[$key][$langId] = strip_tags(implode(' ', $arr));
         }
 
-        $key_original = $lblKey;
-        $key = strtoupper($lblKey);
 
         $str = '';
         if (FatApp::getConfig('CONF_READ_LABELS_FROM_FILE', FatUtility::VAR_INT, 1)) {
             global $langFileData;
             if (!isset($langFileData[$langId][$key])) {
-                $str = $langFileData[$langId][$key] = static::readDataFromFile($langId, $key_original, $type);
+                $str = $langFileData[$langId][$key] = static::readDataFromFile($langId, $keyOriginal, $type);
             } else {
                 if (array_key_exists($key, $langFileData[$langId])) {
                     $str = $langFileData[$langId][$key];
@@ -139,12 +140,12 @@ class Labels extends MyAppModel
                 if (isset($lbl[static::DB_TBL_PREFIX . 'caption']) && $lbl[static::DB_TBL_PREFIX . 'caption'] != '') {
                     $str = $lbl[static::DB_TBL_PREFIX . 'caption'];
                 } else {
-                    $arr = explode(' ', ucwords(str_replace('_', ' ', strtolower($lblKey))));
+                    $arr = explode(' ', ucfirst(str_replace('_', ' ', strtolower($keyOriginal))));
                     array_shift($arr);
                     $str = implode(' ', $arr);
                 }
             } else {
-                $arr = explode(' ', ucwords(str_replace('_', ' ', strtolower($key_original))));
+                $arr = explode(' ', ucfirst(str_replace('_', ' ', strtolower($keyOriginal))));
                 array_shift($arr);
 
                 $str = implode(' ', $arr);
@@ -167,8 +168,8 @@ class Labels extends MyAppModel
             return strip_tags($str);
         }
 
-        global $lang_array;
-        $lang_array[$lblKey][$langId] = $str;
+        global $langArray;
+        $langArray[$key][$langId] = $str;
         return strip_tags($str);
     }
 

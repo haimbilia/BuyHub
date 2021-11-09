@@ -55,13 +55,13 @@ class PromotionsController extends AdminBaseController
             $otherButtons = [
                 [
                     'attr' => [
-                            'href' => 'javascript:void(0)',
-                            'onclick' => 'mediaForm(' . $this->mainTableRecordId . ')',
-                            'title' => Labels::getLabel('LBL_Media', $this->siteLangId)
-                        ],
-                        'label' => Labels::getLabel('LBL_Media', $this->siteLangId),
-                        'isActive' => false
-                    ]
+                        'href' => 'javascript:void(0)',
+                        'onclick' => 'promotionMediaForm(' . $this->mainTableRecordId . ', 0, ' . applicationConstants::SCREEN_DESKTOP . ')',
+                        'title' => Labels::getLabel('LBL_Media', $this->siteLangId)
+                    ],
+                    'label' => Labels::getLabel('LBL_Media', $this->siteLangId),
+                    'isActive' => false
+                ]
             ];
             $this->set('otherButtons', $otherButtons);
         }
@@ -109,10 +109,7 @@ class PromotionsController extends AdminBaseController
             $sortBy = current($allowedKeysForSorting);
         }
 
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_ASC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
-            $sortOrder = applicationConstants::SORT_ASC;
-        }
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
 
         $srchFrm = $this->getSearchForm($fields);
 
@@ -121,10 +118,7 @@ class PromotionsController extends AdminBaseController
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
 
-        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_STRING, FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
-        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
-            $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        }
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = new PromotionSearch($this->siteLangId);
         $srch->joinBannersAndLocation($this->siteLangId, Promotion::TYPE_BANNER, 'b');
@@ -214,63 +208,6 @@ class PromotionsController extends AdminBaseController
         $this->set('canViewShops', $this->objPrivilege->canViewShops($this->admin_id, true));
     }
 
-    public function getTypeData($recordId, $promotionType = 0)
-    {
-        $promotionType = FatUtility::int($promotionType);
-        $recordId = FatUtility::int($recordId);
-
-        $promotionDetails = Promotion::getAttributesById($recordId);
-
-        $userId = $promotionDetails['promotion_user_id'];
-
-        if (1 > $promotionType) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $label = '';
-        $value = 0;
-        switch ($promotionType) {
-            case Promotion::TYPE_SHOP:
-                $srch = Shop::getSearchObject(true, $this->siteLangId);
-                $srch->addCondition('shop_user_id', '=', $userId);
-                $srch->setPageSize(1);
-                $srch->doNotCalculateRecords();
-                $srch->addMultipleFields(array('ifnull(shop_name,shop_identifier) as shop_name', 'shop_id'));
-                $rs = $srch->getResultSet();
-                $row = FatApp::getDb()->fetch($rs);
-                if (empty($row)) {
-                    Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-                    FatUtility::dieJsonError(Message::getHtml());
-                }
-                $label = $row['shop_name'];
-                $value = $row['shop_id'];
-                break;
-
-            case Promotion::TYPE_PRODUCT:
-                if ($recordId > 0) {
-                    $srch = new PromotionSearch($this->siteLangId);
-                    $srch->joinProducts();
-                    $srch->addCondition('selprod_user_id', '=', $userId);
-                    $srch->setPageSize(1);
-                    $srch->doNotCalculateRecords();
-                    $srch->addMultipleFields(array('selprod_id', 'selprod_title', 'ifnull(product_name,product_identifier)as product_name'));
-                    $rs = $srch->getResultSet();
-                    $row = FatApp::getDb()->fetch($rs);
-                    if (!empty($row)) {
-                        $label = $row['selprod_title'] . ' (' . $row['product_name'] . ')';
-                        $value = $row['selprod_id'];
-                    }
-                }
-                break;
-        }
-
-        $this->set('promotionType', $promotionType);
-        $this->set('label', $label);
-        $this->set('value', $value);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
     public function setup()
     {
         $this->objPrivilege->canEditPromotions();
@@ -280,8 +217,7 @@ class PromotionsController extends AdminBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         $promotionDetails = Promotion::getAttributesById($recordId);
         $oldApprovalStatus = applicationConstants::INACTIVE;
@@ -304,8 +240,7 @@ class PromotionsController extends AdminBaseController
                 $rs = $srch->getResultSet();
                 $row = FatApp::getDb()->fetch($rs);
                 if (empty($row)) {
-                    Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-                    FatUtility::dieJsonError(Message::getHtml());
+                    LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId), true);
                 }
                 $promotion_record_id = $row['shop_id'];
                 $minBudget = FatApp::getConfig('CONF_CPC_SHOP', FatUtility::VAR_FLOAT, 0);
@@ -326,8 +261,7 @@ class PromotionsController extends AdminBaseController
                 $row = FatApp::getDb()->fetch($rs);
 
                 if (empty($row)) {
-                    Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-                    FatUtility::dieJsonError(Message::getHtml());
+                    LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId), true);
                 }
                 $promotion_record_id = $row['selprod_id'];
                 $minBudget = FatApp::getConfig('CONF_CPC_PRODUCT', FatUtility::VAR_FLOAT, 0);
@@ -368,15 +302,13 @@ class PromotionsController extends AdminBaseController
                 break;
 
             default:
-                Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-                FatUtility::dieJsonError(Message::getHtml());
+                LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId), true);
                 break;
         }
 
         $promotionBudget = Fatutility::float($post['promotion_budget']);
         if ($minBudget > $promotionBudget) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Budget_should_be_greater_than_CPC", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel("MSG_Budget_should_be_greater_than_CPC", $this->siteLangId), true);
         }
 
         $recordId = $post['promotion_id'];
@@ -403,8 +335,7 @@ class PromotionsController extends AdminBaseController
         $record->assignValues($data);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
         $this->setLangData($record, [$record::tblFld('name') => $post[$record::tblFld('name')]]);
 
@@ -443,8 +374,7 @@ class PromotionsController extends AdminBaseController
                 $bannerRecord->assignValues($bannerData);
 
                 if (!$bannerRecord->save()) {
-                    Message::addErrorMessage($bannerRecord->getError());
-                    FatUtility::dieJsonError(Message::getHtml());
+                    LibHelper::exitWithError($bannerRecord->getError(), true);
                 }
                 break;
 
@@ -467,8 +397,7 @@ class PromotionsController extends AdminBaseController
                 $slideRecord->assignValues($slidesData);
 
                 if (!$slideRecord->save()) {
-                    Message::addErrorMessage($slideRecord->getError());
-                    FatUtility::dieJsonError(Message::getHtml());
+                    LibHelper::exitWithError($slideRecord->getError(), true);
                 }
                 break;
         }
@@ -485,7 +414,7 @@ class PromotionsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function removePromotionBanner()
+    public function removeMedia()
     {
         $this->objPrivilege->canEditPromotions();
         $recordId = FatApp::getPostedData('promotionId', FatUtility::VAR_INT, 0);
@@ -495,8 +424,7 @@ class PromotionsController extends AdminBaseController
 
         $data = Promotion::getAttributesById($recordId, array('promotion_id', 'promotion_type', 'promotion_user_id'));
         if (!$data) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -512,14 +440,12 @@ class PromotionsController extends AdminBaseController
         }
 
         if (1 > $attachedFileType) {
-            Message::addErrorMessage(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
         if (!$fileHandlerObj->deleteFile($attachedFileType, $bannerId, 0, 0, $langId, $screen)) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel('MSG_Deleted_successfully', $this->siteLangId));
@@ -548,16 +474,14 @@ class PromotionsController extends AdminBaseController
         $allowedTypeArr = array(Promotion::TYPE_BANNER, Promotion::TYPE_SLIDES);
 
         if (1 > $recordId || !in_array($promotionType, $allowedTypeArr)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_access', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_access', $this->siteLangId), true);
         }
 
-        if (!is_uploaded_file($_FILES['file']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+        if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId), true);
         }
 
-        $recordId = 0;
+        $promotionRecordId = 0;
         $attachedFileType = 0;
 
         $srch = new PromotionSearch($this->siteLangId);
@@ -571,7 +495,7 @@ class PromotionsController extends AdminBaseController
                 $srch->setPageSize(1);
                 $rs = $srch->getResultSet();
                 $promotionDetails = FatApp::getDb()->fetch($rs);
-                $recordId = $promotionDetails['banner_id'];
+                $promotionRecordId = $promotionDetails['banner_id'];
                 $attachedFileType = AttachedFile::FILETYPE_BANNER;
                 break;
             case Promotion::TYPE_SLIDES:
@@ -580,36 +504,34 @@ class PromotionsController extends AdminBaseController
                 $srch->setPageSize(1);
                 $rs = $srch->getResultSet();
                 $promotionDetails = FatApp::getDb()->fetch($rs);
-                $recordId = $promotionDetails['slide_id'];
+                $promotionRecordId = $promotionDetails['slide_id'];
                 $attachedFileType = AttachedFile::FILETYPE_HOME_PAGE_BANNER;
                 break;
         }
 
-        if (1 > $recordId || 1 > $attachedFileType) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_access', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+        if (1 > $promotionRecordId || 1 > $attachedFileType) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_access', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
 
         if (!$res = $fileHandlerObj->saveAttachment(
-            $_FILES['file']['tmp_name'],
+            $_FILES['cropped_image']['tmp_name'],
             $attachedFileType,
-            $recordId,
+            $promotionRecordId,
             0,
-            $_FILES['file']['name'],
+            $_FILES['cropped_image']['name'],
             -1,
             true,
             $langId,
             $bannerScreen
         )) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
         $this->set('promotionId', $recordId);
-        $this->set('file', $_FILES['file']['name']);
-        $this->set('msg', $_FILES['file']['name'] . Labels::getLabel('MSG_File_uploaded_successfully', $this->siteLangId));
+        $this->set('file', $_FILES['cropped_image']['name']);
+        $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_File_uploaded_successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -620,7 +542,6 @@ class PromotionsController extends AdminBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
         if (0 < $recordId) {
-            // $promotionObj = new Promotion();
             $srch = new PromotionSearch($this->siteLangId);
             $srch->joinBannersAndLocation($this->siteLangId, Promotion::TYPE_BANNER, 'b');
             $srch->joinSlides();
@@ -634,7 +555,7 @@ class PromotionsController extends AdminBaseController
             $promotionDetails = FatApp::getDb()->fetch($rs);
 
             if ($promotionDetails === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $promotionType = $promotionDetails['promotion_type'];
             $frm = $this->getForm($recordId);
@@ -658,7 +579,7 @@ class PromotionsController extends AdminBaseController
         $recordId = FatUtility::int($recordId);
 
         if (1 > $recordId) {
-            FatUtility::dieWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId), true);
         }
 
         $promotionType = 0;
@@ -673,7 +594,7 @@ class PromotionsController extends AdminBaseController
         $rs = $srch->getResultSet();
         $promotionDetails = FatApp::getDb()->fetch($rs);
         if (empty($promotionDetails)) {
-            FatUtility::dieWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId), true);
         }
         $promotionType = $promotionDetails['promotion_type'];
 
@@ -681,15 +602,13 @@ class PromotionsController extends AdminBaseController
             case Promotion::TYPE_BANNER:
                 $imgDetail = Banner::getAttributesById($promotionDetails['banner_id']);
                 if (!false == $imgDetail && ($imgDetail['banner_active'] != applicationConstants::ACTIVE)) {
-                    Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request_Or_Inactive_Record', $this->siteLangId));
-                    FatUtility::dieWithError(Message::getHtml());
+                    LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_request_Or_Inactive_Record', $this->siteLangId), true);
                 }
                 break;
             case Promotion::TYPE_SLIDES:
                 $imgDetail = Slides::getAttributesById($promotionDetails['slide_id']);
                 if (!false == $imgDetail && ($imgDetail['slide_active'] != applicationConstants::ACTIVE)) {
-                    Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request_Or_Inactive_Record', $this->siteLangId));
-                    FatUtility::dieWithError(Message::getHtml());
+                    LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_request_Or_Inactive_Record', $this->siteLangId), true);
                 }
                 break;
         }
@@ -709,7 +628,7 @@ class PromotionsController extends AdminBaseController
         $this->set('bannerHeight', $bannerHeight);
         $this->set('promotionType', $promotionType);
         $this->set('recordId', $recordId);
-        $this->set('language', Language::getAllNames());
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('mediaFrm', $mediaFrm);
         $this->set('screen', applicationConstants::SCREEN_DESKTOP);
         $this->_template->render(false, false);
@@ -720,7 +639,7 @@ class PromotionsController extends AdminBaseController
         $this->objPrivilege->canEditPromotions();
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            FatUtility::dieWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId), true);
         }
 
         $languages = Language::getAllNames();
@@ -738,41 +657,39 @@ class PromotionsController extends AdminBaseController
         $rs = $srch->getResultSet();
         $promotionDetails = FatApp::getDb()->fetch($rs);
         if (empty($promotionDetails)) {
-            FatUtility::dieWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId), true);
         }
         $promotionType = $promotionDetails['promotion_type'];
 
-        $recordId = 0;
+        $promotionRecordId = 0;
         $attachedFileType = 0;
         $imgDetail = false;
         switch ($promotionType) {
             case Promotion::TYPE_BANNER:
                 $imgDetail = Banner::getAttributesById($promotionDetails['banner_id']);
                 if (!false == $imgDetail && ($imgDetail['banner_active'] != applicationConstants::ACTIVE)) {
-                    Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request_Or_Inactive_Record', $this->siteLangId));
-                    FatUtility::dieWithError(Message::getHtml());
+                    LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_request_Or_Inactive_Record', $this->siteLangId), true);
                 }
                 $attachedFileType = AttachedFile::FILETYPE_BANNER;
-                $recordId = $promotionDetails['banner_id'];
+                $promotionRecordId = $promotionDetails['banner_id'];
                 break;
             case Promotion::TYPE_SLIDES:
                 $imgDetail = Slides::getAttributesById($promotionDetails['slide_id']);
                 if (!false == $imgDetail && ($imgDetail['slide_active'] != applicationConstants::ACTIVE)) {
-                    Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request_Or_Inactive_Record', $this->siteLangId));
-                    FatUtility::dieWithError(Message::getHtml());
+                    LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_request_Or_Inactive_Record', $this->siteLangId), true);
                 }
                 $attachedFileType = AttachedFile::FILETYPE_HOME_PAGE_BANNER;
-                $recordId = $promotionDetails['slide_id'];
+                $promotionRecordId = $promotionDetails['slide_id'];
                 break;
         }
 
         if (!false == $imgDetail) {
-
-            $bannerImgArr = AttachedFile::getMultipleAttachments($attachedFileType, $recordId, 0, $lang_id, (count($languages) > 1) ? false : true, $screen);
+            $bannerImgArr = AttachedFile::getMultipleAttachments($attachedFileType, $promotionRecordId, 0, $lang_id, (count($languages) > 1) ? false : true, $screen);
             $this->set('bannerImgArr', $bannerImgArr);
         }
 
         $this->set('promotionType', $promotionType);
+        $this->set("canEdit", $this->objPrivilege->canEditPromotions($this->admin_id, true));
         $this->set('promotionId', $recordId);
         $this->set('bannerTypeArr', applicationConstants::bannerTypeArr());
         $this->set('screenTypeArr', array(0 => '') + applicationConstants::getDisplaysArr($this->siteLangId));
@@ -789,7 +706,7 @@ class PromotionsController extends AdminBaseController
         $db = FatApp::getDb();
         $srch = new ProductSearch($this->siteLangId);
         $srch->joinSellerProducts();
-        
+
         if (0 < $selProdId) {
             $srch->addCondition('selprod_id', '=', $selProdId);
         } else {
@@ -813,7 +730,7 @@ class PromotionsController extends AdminBaseController
         if (true === $return) {
             return FatApp::getDb()->fetch($srch->getResultSet());
         }
-        
+
         $products = FatApp::getDb()->fetchAll($srch->getResultSet());
         die(json_encode(['pageCount' => $srch->pages(), 'results' => $products]));
     }
@@ -825,14 +742,12 @@ class PromotionsController extends AdminBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
         if (1 > $recordId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId), true);
         }
 
         $data = Promotion::getAttributesById($recordId, array('promotion_id', 'promotion_user_id'));
         if (!$data) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId), true);
         }
 
         $this->markAsDeleted($recordId);
@@ -846,9 +761,7 @@ class PromotionsController extends AdminBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('promotion_ids'));
 
         if (empty($recordIdsArr)) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -865,15 +778,12 @@ class PromotionsController extends AdminBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $obj = new Promotion($recordId);
         $obj->assignValues(array(Promotion::tblFld('deleted') => 1));
         if (!$obj->save()) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
     }
 
@@ -882,7 +792,7 @@ class PromotionsController extends AdminBaseController
         $frm = new Form('frmPromotionLang');
         $frm->addHiddenField('', 'promotion_id', $recordId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $langId, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_promotion_name', $langId), 'promotion_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
@@ -1070,17 +980,15 @@ class PromotionsController extends AdminBaseController
         $bannerTypeArr = applicationConstants::bannerTypeArr();
 
         if (count($bannerTypeArr) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
         } else {
             $lang_id = array_key_first($bannerTypeArr);
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
-        // $fld = $frm->addButton(Labels::getLabel('LBL_Banner_Image', $this->siteLangId), 'banner_image', Labels::getLabel('LBL_Upload_File', $this->siteLangId), array('class' => 'bannerFile-Js', 'id' => 'banner_image'));
-        $frm->addHtml('','banner_image','');
-
+        $frm->addSelectBox(Labels::getLabel("FRM_Display_For", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
+        $frm->addHtml('', 'banner_image', '');
 
         return $frm;
     }
@@ -1119,9 +1027,9 @@ class PromotionsController extends AdminBaseController
         }
 
         if ($minBudget > $promotionBudget) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_Budget_should_be_greater_than_CPC", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("MSG_Budget_should_be_greater_than_CPC", $this->siteLangId), true);
         }
-        FatUtility::dieJsonSuccess(Message::getHtml());
+        FatUtility::dieJsonSuccess(Labels::getLabel("MSG_SUCCESS", $this->siteLangId));
     }
 
     public function getBannerLocationDimensions($recordId, $deviceType)

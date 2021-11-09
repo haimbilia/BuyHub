@@ -142,8 +142,7 @@ class ImageAttributesController extends AdminBaseController
         $optionId = FatUtility::int($optionId);
 
         if ($recordId < 1) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, false, false, true);
         }
 
         switch ($moduleType) {
@@ -230,6 +229,7 @@ class ImageAttributesController extends AdminBaseController
             $frm->addTextBox(Labels::getLabel('LBL_Image_Title', $this->siteLangId), 'image_title' . $afileId);
             $frm->addTextBox(Labels::getLabel('LBL_Image_Alt', $this->siteLangId), 'image_alt' . $afileId);
         }
+
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->siteLangId));
         $frm->addButton('', 'btn_discard', Labels::getLabel('LBL_Discard', $this->siteLangId));
         return $frm;
