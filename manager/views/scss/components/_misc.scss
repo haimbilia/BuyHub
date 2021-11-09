@@ -2107,6 +2107,7 @@ strong {
         border-top: $border;
         position: sticky;
         bottom: 0;
+        z-index: 1;
         background-color: $bg-white;
         padding: 1.5rem 2rem;
     }
@@ -2270,4 +2271,32 @@ strong {
     }
 }
 
-
+.rotator-actions {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+    padding: 1rem 0;
+    .actions {
+        border-radius: $radius-common;
+        border: $border;
+        li {
+            a {
+                width: 4rem;
+                line-height: $input-line-height;
+                border-#{$end-direction}: $border;
+                &:before {
+                    content: normal;
+                }
+                &:hover {
+                    background-color: $brand-color;
+                    color: $brand-color-inverse;
+                }
+            }
+            &:last-child {
+                a {
+                    border: none;
+                }
+            }
+        }
+    }
+}

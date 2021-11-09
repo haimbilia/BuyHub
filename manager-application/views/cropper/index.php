@@ -11,49 +11,52 @@
     $footer = '
     <div class="rotator-actions" id="actions">
         <div class="docs-buttons">
-            <div class="btn-group">
-                <button type="button" class="btn btn-brand" data-method="rotate" data-option="-90" title="' . Labels::getLabel('LBL_Rotate_Left', $siteLangId) . '">
-                    <span class="docs-tooltip" data-toggle="tooltip">
+            <ul class="actions">
+                <li>
+                    <a href="javascript:void(0)" class="docs-tooltip"  data-method="rotate" data-option="-90" data-toggle="tooltip"  title="' . Labels::getLabel('LBL_Rotate_Left', $siteLangId) . '">
                         <span class="fa fa-undo-alt"></span>
-                    </span>
-                </button>
-                <button type="button" class="btn btn-brand" data-method="rotate" data-option="90" title="' . Labels::getLabel('LBL_Rotate_Right', $siteLangId) . '">
-                    <span class="docs-tooltip" data-toggle="tooltip">
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" class="docs-tooltip" data-toggle="tooltip" data-method="rotate" data-option="90" title="' . Labels::getLabel('LBL_Rotate_Right', $siteLangId) . '">
                         <span class="fa fa-redo-alt"></span>
-                    </span>
-                </button>
-            </div>
-            <div class="btn-group">
-                <button type="button" class="btn btn-brand" data-method="scaleX" data-option="-1" title="' . Labels::getLabel('LBL_Flip_Horizontal', $siteLangId) . '">
-                    <span class="docs-tooltip" data-toggle="tooltip">
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="javascript:void(0)" class="docs-tooltip" data-toggle="tooltip"  data-method="scaleX" data-option="-1" title="' . Labels::getLabel('LBL_Flip_Horizontal', $siteLangId) . '">
                         <span class="fa fa-arrows-alt-h"></span>
-                    </span>
-                </button>
-                <button type="button" class="btn btn-brand" data-method="scaleY" data-option="-1" title="' . Labels::getLabel('LBL_Flip_Vertical', $siteLangId) . '">
-                    <span class="docs-tooltip" data-toggle="tooltip">
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" class="docs-tooltip" data-toggle="tooltip" data-method="scaleY" data-option="-1" title="' . Labels::getLabel('LBL_Flip_Vertical', $siteLangId) . '">
                         <span class="fa fa-arrows-alt-v"></span>
-                    </span>
-                </button>
-            </div>
-            <div class="btn-group">
-                <label class="btn btn-brand btn-upload m-0" for="inputImage" title="' . Labels::getLabel('LBL_Upload_image_file', $siteLangId) . '">
+                    </a>
+                </li>
+                <li>            
+                <label class="btn-upload m-0" for="inputImage" title="' . Labels::getLabel('LBL_Upload_image_file', $siteLangId) . '">
                     <input type="file" class="sr-only" id="inputImage" name="file" accept="image/*">
-                    <span class="docs-tooltip" data-toggle="tooltip">
-                        <span class="fa fa-upload"></span> ' . Labels::getLabel('LBL_Browse', $siteLangId) . '
-                    </span>
+                    <a class="docs-tooltip" data-toggle="tooltip">
+                        <span class="fa fa-upload"></span>  
+                    </a>
                 </label>
-                <button type="button" class="btn btn-brand" data-method="getCroppedCanvas" title="' . Labels::getLabel('LBL_Update', $siteLangId) . '">
-                    <span class="docs-tooltip" data-toggle="tooltip">
-                        <span class="fa fa-crop-alt"></span> ' . Labels::getLabel('LBL_Crop', $siteLangId) . '
-                    </span>
-                </button>
-                <button type="button" class="btn btn-brand" data-method="reset" title="' . Labels::getLabel('LBL_Upload_image_file', $siteLangId) . '">
-                    <span class="docs-tooltip" data-toggle="tooltip">
-                        <span class="fa fa-sync-alt"></span> ' . Labels::getLabel('LBL_Reset', $siteLangId) . '
-                    </span>
-                </button>
-            </div>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" class="docs-tooltip" data-toggle="tooltip" data-method="getCroppedCanvas" title="' . Labels::getLabel('LBL_Update', $siteLangId) . '">
+                        <span class="fa fa-crop-alt"></span> 
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" class="docs-tooltip" data-toggle="tooltip"  data-method="reset" title="' . Labels::getLabel('LBL_Upload_image_file', $siteLangId) . '">
+                        <span class="fa fa-sync-alt"></span>
+                    </a>
+                </li>
+            </ul>
         </div>
+        <div class="">
+        <button type="button" data-dismiss="modal" class="btn btn-outline-secondary btn-wide dark:border-dark-5 dark:text-gray-300 mr-1">Cancel</button>
+        <button type="button" class="btn btn-brand btn-wide ">Apply</button>
+    </div>
     </div>';
 
     FatUtility::dieJsonSuccess(['body' => $body, 'footer' => $footer]);
