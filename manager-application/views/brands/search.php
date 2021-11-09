@@ -19,21 +19,18 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'brand_identifier':
+            case 'brand_logo':
                 $uploadedTime = AttachedFile::setTimeParam($row['brand_updated_on']);
-                $brandImage = '<figure class="user-profile_photo"><img width="40" height="40" title="' . $row['brand_name'] . '" alt="' . $row['brand_name'] . '" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, 'MINITHUMB'), CONF_WEBROOT_FRONT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '"></figure>';
-
-                if ($row['brand_name'] != '') {
-                    $brandName = '<div class="user-profile_data">
-                                    <span class="user-profile_title">' . $row['brand_name'] . '</span>
-                                    <span class="text-muted fw-bold">' . $row[$key] . '</span>
-                                </div>';
-                } else {
-                    $brandName = '<div class="user-profile_data">
-                                    <span class="user-profile_title">' . $row[$key] . '</span>
-                                </div>';
-                }
-                $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $brandImage . $brandName . '</div>', true);
+                $brandImage = '<img width="40" height="40" title="' . $row['brand_name'] . '" alt="' . $row['brand_name'] . '" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, 'MINITHUMB'), CONF_WEBROOT_FRONT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '">';
+                $td->appendElement('plaintext', $tdAttr, '<div class="brand-logo">' . $brandImage . '</div>', true);
+                break;
+            case 'brand_identifier':
+                $brandName = !empty($row['brand_name']) ? $row['brand_name'] : $row[$key];
+                $td->appendElement('plaintext', $tdAttr, $brandName, true);
+                break;
+            case 'seo_url':
+                $url = UrlHelper::generateFullUrl('Brands', 'View', array($row['brand_id']), CONF_WEBROOT_FRONT_URL);
+                $td->appendElement('plaintext', $tdAttr, '<a href="' . $url . '" target="_blank">' . $url . '</a>', true);
                 break;
             case 'brand_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['brand_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';

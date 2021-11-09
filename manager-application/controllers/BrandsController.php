@@ -904,9 +904,11 @@ class BrandsController extends AdminBaseController
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'brand_identifier' => Labels::getLabel('LBL_BRAND_NAME', $this->siteLangId),
+            'brand_logo' => Labels::getLabel('LBL_LOGO', $this->siteLangId),
+            'brand_identifier' => Labels::getLabel('LBL_BRAND', $this->siteLangId),
+            'seo_url' => Labels::getLabel('LBL_Seo_Friendly_URL', $this->siteLangId),
             'brand_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
-            'action' => '',
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('brandsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
@@ -917,7 +919,9 @@ class BrandsController extends AdminBaseController
         return [
             'select_all',
             'listSerial',
+            'brand_logo',
             'brand_identifier',
+            'seo_url',
             'brand_active',
             'action',
         ];
@@ -925,6 +929,6 @@ class BrandsController extends AdminBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['brand_active'], Common::excludeKeysForSort());
+        return array_diff($fields, ['brand_logo', 'brand_active', 'seo_url'], Common::excludeKeysForSort());
     }
 }
