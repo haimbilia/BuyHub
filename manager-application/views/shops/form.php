@@ -63,7 +63,7 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('shop_cancellation_age');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('shop_featured');
-$fld->developerTags['colWidthValues'] = [null, '12', null, null];
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $formTitle = Labels::getLabel('LBL_SHOP_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 ?>

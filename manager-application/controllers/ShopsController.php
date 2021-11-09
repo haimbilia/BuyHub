@@ -467,22 +467,29 @@ class ShopsController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'shop_state', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
         $frm->addRequiredField(Labels::getLabel('LBL_Postal_Code', $this->siteLangId), 'shop_postalcode');
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'shop_active', $activeInactiveArr, '', array(), '');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Minimum_Wallet_Balance', $this->siteLangId), 'shop_cod_min_wallet_balance');
-        $fld->requirements()->setFloat();
-        $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Seller_needs_to_maintain_to_accept_COD_orders._Default_is_-1", $this->siteLangId) . "</small>";
-        $frm->addCheckBox(Labels::getLabel('LBL_Featured', $this->siteLangId), 'shop_featured', 1, array(), false, 0);
-
-        $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->siteLangId), 'shop_fulfillment_type', $fulFillmentArr, applicationConstants::NO, [], Labels::getLabel('LBL_Select', $this->siteLangId));
-
+        
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_ORDER_CANCELLATION_AGE', $this->siteLangId), 'shop_cancellation_age');
+        $fld->requirements()->setInt();
+        $fld->requirements()->setPositive();
+        
+        
         $fld = $frm->addTextBox(Labels::getLabel('LBL_ORDER_RETURN_AGE', $this->siteLangId), 'shop_return_age');
         $fld->requirements()->setInt();
         $fld->requirements()->setPositive();
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_ORDER_CANCELLATION_AGE', $this->siteLangId), 'shop_cancellation_age');
-        $fld->requirements()->setInt();
-        $fld->requirements()->setPositive();
+        $frm->addCheckBox(Labels::getLabel('LBL_Featured', $this->siteLangId), 'shop_featured', 1, array(), false, 0);
+        
+        
+        
+      
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Minimum_Wallet_Balance', $this->siteLangId), 'shop_cod_min_wallet_balance');
+        $fld->requirements()->setFloat();
+        $fld->htmlAfterField = "<br><small>" . Labels::getLabel("LBL_Seller_needs_to_maintain_to_accept_COD_orders._Default_is_-1", $this->siteLangId) . "</small>";
+         $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->siteLangId), 'shop_fulfillment_type', $fulFillmentArr, applicationConstants::NO, [], Labels::getLabel('LBL_Select', $this->siteLangId));
+
+          $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'shop_active', $activeInactiveArr, '', array(), '');
+       
         $frm->addHiddenField('', 'shop_lat');
         $frm->addHiddenField('', 'shop_lng');
         $frm->addHtml('', 'space','');
