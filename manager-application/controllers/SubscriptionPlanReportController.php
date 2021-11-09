@@ -16,7 +16,7 @@ class SubscriptionPlanReportController extends AdminBaseController
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('formColumns', $formColumns);
-        $this->set('pageTitle', Labels::getLabel('LBL_Subscription_plan_Report', $this->siteLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_SUBSCRIPTION_PLAN_REPORT', $this->siteLangId));
         $this->getListingData(false);
         $this->_template->render();
     }

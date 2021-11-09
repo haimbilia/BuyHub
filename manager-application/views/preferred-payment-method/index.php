@@ -13,7 +13,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . 'subscription-plan-report/search-form.php'); ?>
+                <?php require_once(CONF_THEME_PATH . 'preferred-payment-method/search-form.php'); ?>
                 <div class="card">
                     <?php $data = [
                         'siteLangId' => $siteLangId,
@@ -34,14 +34,14 @@ $controller = str_replace('Controller', '', FatApp::getController());
                             </use>
                         </svg>' . Labels::getLabel('LBL_Export', $siteLangId)
                         ]],
-                        'cardHeadTitle' => Labels::getLabel('LBL_SUBSCRIPTION_PLAN_REPORT', $siteLangId)
+                        'cardHeadTitle' => Labels::getLabel('LBL_PAYMENT_METHODS', $siteLangId)
                     ];
                     $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
                     <div class="card-body">
                         <div class="table-responsive listingTableJs">
                             <?php
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
-                            require_once(CONF_THEME_PATH . 'subscription-plan-report/search.php');
+                            require_once(CONF_THEME_PATH . 'preferred-payment-method/search.php');
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */

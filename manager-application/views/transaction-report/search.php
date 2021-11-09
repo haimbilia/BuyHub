@@ -4,8 +4,9 @@ if (!isset($tbody)) {
     $printData = true;
     $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
 }
-$subcriptionPeriodArr = SellerPackagePlans::getSubscriptionPeriods($siteLangId);
+
 $serialNo = ($page - 1) * $pageSize + 1;
+$statusArr = Transactions::getStatusArr($siteLangId);
 foreach ($arrListing as $sn => $row) {
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
@@ -16,25 +17,26 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'subscriptionCharges':
-                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
+            case 'utxn_date':
+                $td->appendElement('plaintext', $tdAttr, FatDate::format($row[$key], true), true);
+                break;
+            case 'utxn_id':
+                $td->appendElement('plaintext', $tdAttr, Transactions::formatTransactionNumber($row[$key]), true);
                 break;
             case 'user_name':
-                $name = $row['user_name'];
-                $td->appendElement('plaintext', $tdAttr, $name);
+                $name = $row[$key];
+                $name .= !empty($row['credential_email']) ? ' (' . $row['credential_email'] . ')' : '';
+                $td->appendElement('plaintext', $tdAttr, $name, true);
                 break;
-            case 'ossubs_from_date':
-            case 'ossubs_till_date':
-                $td->appendElement('plaintext', $tdAttr, FatDate::format($row[$key]));
+            case 'utxn_status':
+                $td->appendElement('plaintext', $tdAttr, $statusArr[$row[$key]], true);
                 break;
-            case 'ossubs_subscription_name':
-                $name = $row['ossubs_subscription_name'] . ' ';
-                $name .= ($row['ossubs_type'] == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_Per", $siteLangId) : Labels::getLabel("LBL_For", $siteLangId);
+            case 'utxn_credit':
+            case 'utxn_debit':
+            case 'transactionAmount':
+                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
+                break;
 
-                $name .= " " . (($row['ossubs_interval'] > 0) ? $row['ossubs_interval'] : '')
-                    . "  " . $subcriptionPeriodArr[$row['ossubs_frequency']];
-                $td->appendElement('plaintext', $tdAttr, $name);
-                break;
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
