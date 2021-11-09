@@ -9,7 +9,11 @@ $frm->setFormTagAttribute('data-callback', 'mediaForm(' . $recordId . ')');
 $iconLangFld = $frm->getField('icon_lang_id');
 $iconLangFld->addFieldTagAttribute('class', 'icon-language-js');
 
+$fld = $frm->getField('heading_icon');
+$fld->value = '<h3 class="h3">'.Labels::getLabel('LBL_ICON', $siteLangId).'</h3>';
 
+$fld = $frm->getField('heading_banner');
+$fld->value = '<h3 class="h3">'.Labels::getLabel('LBL_BANNER', $siteLangId).'</h3>';
 
 $iconFld = $frm->getField('cat_icon');
 $iconFld->value ='<div id="icon-imageListingJs"></div>';

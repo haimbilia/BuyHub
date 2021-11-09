@@ -17,6 +17,12 @@
             &:last-child {
                 padding-right: 0;
             }
+            &.col-check {
+                width: 20px;
+            }
+            &.col-sr {
+                width: 25px;
+            }
         }
     }
     tbody {

@@ -14,14 +14,14 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $serialNo);
+                $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'orderDate':
-                $td->appendElement('plaintext', array(), '<a href="' . UrlHelper::generateUrl('SalesReport', 'index', array($row[$key])) . '">' . FatDate::format($row[$key]) . '</a>', true);
+                $td->appendElement('plaintext', $tdAttr, '<a href="' . UrlHelper::generateUrl('SalesReport', 'index', array($row[$key])) . '">' . FatDate::format($row[$key]) . '</a>', true);
                 break;
             case 'order_net_amount':
                 $amt = CommonHelper::orderProductAmount($row);
-                $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($amt, true, true));
+                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($amt, true, true));
                 break;
             case 'grossSales':
             case 'transactionAmount':
@@ -43,10 +43,10 @@ foreach ($arrListing as $sn => $row) {
             case 'commissionCharged':
             case 'refundedCommission':
             case 'adminSalesEarnings':
-                $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true));
+                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
         }
     }

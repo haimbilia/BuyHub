@@ -2693,6 +2693,7 @@
      * @returns {Cropper} this
      */
     rotate: function rotate(degree) {
+      console.log(this);
       return this.rotateTo((this.imageData.rotate || 0) + Number(degree));
     },
 

@@ -523,7 +523,7 @@ class BrandsController extends AdminBaseController
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
-        $this->set('brandId', $brand_id);
+        $this->set('recordId', $brand_id);
         $this->set('file', $_FILES['cropped_image']['name']);
         $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_File_Uploaded_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
@@ -543,6 +543,7 @@ class BrandsController extends AdminBaseController
         $frm = new Form('frmBrandLogo');
         $languagesAssocArr = Language::getAllNames();
         $frm->addHiddenField('', 'brand_id', $brandId);
+        $frm->addHTML('', 'heading', '');
 
         if (count($languagesAssocArr) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_Universal', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
@@ -567,6 +568,7 @@ class BrandsController extends AdminBaseController
         $frm = new Form('frmBrandImage');
         $languagesAssocArr = Language::getAllNames();
         $frm->addHiddenField('', 'brand_id', $brandId);
+        $frm->addHTML('', 'heading', '');
         if (count($languagesAssocArr) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_UNIVERSAL', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
         } else {
@@ -902,9 +904,11 @@ class BrandsController extends AdminBaseController
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'brand_identifier' => Labels::getLabel('LBL_BRAND_NAME', $this->siteLangId),
+            'brand_logo' => Labels::getLabel('LBL_LOGO', $this->siteLangId),
+            'brand_identifier' => Labels::getLabel('LBL_BRAND', $this->siteLangId),
+            'seo_url' => Labels::getLabel('LBL_Seo_Friendly_URL', $this->siteLangId),
             'brand_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
-            'action' => '',
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('brandsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
@@ -915,7 +919,9 @@ class BrandsController extends AdminBaseController
         return [
             'select_all',
             'listSerial',
+            'brand_logo',
             'brand_identifier',
+            'seo_url',
             'brand_active',
             'action',
         ];
@@ -923,6 +929,6 @@ class BrandsController extends AdminBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['brand_active'], Common::excludeKeysForSort());
+        return array_diff($fields, ['brand_logo', 'brand_active', 'seo_url'], Common::excludeKeysForSort());
     }
 }

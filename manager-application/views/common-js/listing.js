@@ -267,6 +267,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
         fcom.resetEditorInstance();
 
+        /* Uncheck all if checked. */
+        $(".selectAllJs, .selectItemJs").prop("checked", false)
+
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl(controllerName, "form"), "", function (t) {
             $.ykmodal(t);
@@ -278,13 +281,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (false === checkControllerName()) {
             return false;
         }
-
-        var modalClass = displayInPopup ? null : "";
-
-        $.ykmodal(fcom.getLoader(), modalClass, dialogClass);
+        $.ykmodal(fcom.getLoader(), displayInPopup, dialogClass);
         data = "recordId=" + recordId;
         fcom.ajax(fcom.makeUrl(controllerName, "form"), data, function (t) {
-            $.ykmodal(t, modalClass, dialogClass);
+            $.ykmodal(t, displayInPopup, dialogClass);
             fcom.removeLoader();
         });
     };
@@ -312,10 +312,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
 
         e.stopPropagation();
-        if (!confirm(langLbl.confirmUpdateStatus)) {
+        /* if (!confirm(langLbl.confirmUpdateStatus)) {
             e.preventDefault();
             return false;
-        }
+        } */
 
         var oldStatus = $(obj).attr("data-old-status");
         $(listingTableJs).prepend(fcom.getLoader());
@@ -591,10 +591,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 $("#modalBoxJs .modal-footer").html(t.footer);
                 var file = inputBtn.files[0];
 
-                var frmName = $(inputBtn).closest('form').attr('name');                               
+                var frmName = $(inputBtn).closest('form').attr('name');
                 var minWidth = document[frmName].min_width.value;
                 var minHeight = document[frmName].min_height.value;
-               
+
                 if (minWidth == minHeight) {
                     var aspectRatio = 1 / 1;
                 } else {
@@ -613,7 +613,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     imageSmoothingEnabled: true,
                 };
                 $(inputBtn).val("");
-                return cropImage(file, options, "uploadImages", inputBtn);
+                setTimeout(function () { cropImage(file, options, "uploadImages", inputBtn) }, 100);
+                return;
             });
         }
     };
@@ -659,18 +660,26 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     return;
                 }
                 $.ykmsg.success(ans.msg);
-                if (true === $.ykmodal.isAdded()) {
+                if (true === $.ykmodal.isAdded()) {                 
                     $.ykmodal.show();
                     $("#modalBoxJs").modal("hide");
                     if ("" != callback) {
                         window[callback]();
-                    }else if (
+                    } else if (
                         0 < $(".navTabsJs").length &&
                         0 < $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='lang_id']").length
-                    ) {
+                    ) {                      
                         $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='lang_id']")
                             .val(langId)
                             .change();
+                    }else if (
+                        0 < $(".navTabsJs").length &&
+                        0 < $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='slide_screen']").length
+                    ) {                      
+                        $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='slide_screen']")                      
+                            .change();
+                    }else{
+                        mediaForm(ans.recordId, imageType, langId, slideScreen);
                     }
                 } else {
                     mediaForm(ans.recordId, imageType, langId, slideScreen);
@@ -718,32 +727,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         $.ykmodal.close();
     }
 
-    editDropZoneImages = function () {
-        $(".dropzoneContainerJs .dropzoneInputJs").click();
+    editDropZoneImages = function (obj) {
+        $(obj).closest(".dropzoneContainerJs").find(".dropzoneInputJs").click();
     }
-
-    // convertCheckboxToSwitch = function () {
-    //   if (0 < $("form.checkboxSwitchJs").length) {
-    //     $("form.checkboxSwitchJs")
-    //       .find("label")
-    //       .addClass("switch switch-sm switch-icon switchIconJs")
-    //       .removeClass("checkbox");
-    //     $("form.checkboxSwitchJs .switchIconJs i").replaceWith("<span></span>");
-    //     $("form.checkboxSwitchJs").find(".caption-wraper").remove();
-
-    //     $("form.checkboxSwitchJs .label").each(function () {
-    //       if ("" == $(this).text().trim()) {
-    //         $(this).remove();
-    //       }
-    //     });
-    //     $("form.checkboxSwitchJs ul.list-inline li").each(function () {
-    //       $(this).addClass("list-inline-item");
-    //       if (0 < $(this).find(".radio").length) {
-    //         $(this).find(".radio").parent("label").addClass("radio-list d-block");
-    //       }
-    //     });
-    //   }
-    // };
 })();
 
 $(document).on("click", ".selectItemJs", function () {

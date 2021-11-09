@@ -133,8 +133,7 @@ class AttachedFile extends MyAppModel
 
     public static function getSearchObject()
     {
-        $srch = new SearchBase(static::DB_TBL, 'ta');
-        return $srch;
+        return new SearchBase(static::DB_TBL, 'ta');
     }
 
 

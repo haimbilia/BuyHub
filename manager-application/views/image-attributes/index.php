@@ -25,38 +25,30 @@ $controller = str_replace('Controller', '', FatApp::getController());
         <div class="row">
             <div class="col-md-12">
                 <?php require_once(CONF_THEME_PATH . 'image-attributes/search-form.php'); ?>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <?php $data = [
-                                'canEdit' => $canEdit,
-                                'siteLangId' => $siteLangId,
-                                'cardHeadTitle' => Labels::getLabel('LBL_IMAGE_ATTRIBUTES', $siteLangId),                                
-                            ];
+                    <div class="card">
+                        <?php $data = [
+                            'canEdit' => $canEdit,
+                            'siteLangId' => $siteLangId,
+                            'cardHeadTitle' => Labels::getLabel('LBL_IMAGE_ATTRIBUTES', $siteLangId),
+                        ];
 
-                            $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
-                            <div class="card-body">
-                                <div class="table-responsive listingTableJs">
-                                    <?php
-                                    require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
-                                    require_once(CONF_THEME_PATH . 'image-attributes/search.php');
+                        $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
+                        <div class="card-body">
+                            <div class="table-responsive listingTableJs">
+                                <?php
+                                require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
+                                require_once(CONF_THEME_PATH . 'image-attributes/search.php');
 
-                                    $data = [
-                                        'tbl' => $tbl, /* Received from listing-column-head.php file. */
-                                        'controller' => $controller /* Used in case of performing bulk action. */
-                                    ];
-                                    $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
-                                </div>
+                                $data = [
+                                    'tbl' => $tbl, /* Received from listing-column-head.php file. */
+                                ];
+                                $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
                             </div>
-                            <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-foot.php'); ?>
                         </div>
-                    </div>
-                    <div class="col-md-6 rightSectionJs">
+                        <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-foot.php'); ?>
                     </div>
                 </div>
-
             </div>
-
         </div>
     </div>
 </main>
