@@ -110,8 +110,8 @@
     $(document).on("click", ".submitBtnJs", function () {
         if ($('.' + $.ykmodal.element).hasClass("show")) {
             $('.' + $.ykmodal.element + ' form').submit();
+            // $(this).addClass('loading');
         }
-        $(this).addClass('loading');
     });
 
     $('.' + $.ykmodal.element).on("scroll", function () {

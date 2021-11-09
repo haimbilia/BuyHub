@@ -1,5 +1,5 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_NAME', $siteLangId);
+<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TAG_OR_PRODUCT_NAME', $siteLangId);
 
 /* No sorting functionality required if no record found. */
 if (2 > count($arrListing)) {
@@ -7,23 +7,23 @@ if (2 > count($arrListing)) {
 }
 
 $tableHeadAttrArr = [
-    'select_all' => [
-        'class' => 'col-check'
-    ],
     'listSerial' => [
-        'class' => 'col-sr'
+        'width' => "10%"
     ],
-    'brand_logo' => [
-        'width' => '20%'
+    'tag_name' => [
+        'width' => "15%"
     ],
-    'brand_identifier' => [
-        'width' => '25%'
+    'product_name' => [
+        'width' => "20%"
     ],
-    'brand_active' => [
-        'width' => '20%'
+    'tpr_weightage' => [
+        'width' => "15%"
     ],
-    'action' => [
-        'width' => '20%'
+    'tpr_custom_weightage' => [
+        'width' => "20%"
+    ],
+    'tpr_custom_weightage_valid_till' => [
+        'width' => "20%"
     ],
 ];
 
@@ -33,15 +33,12 @@ $controller = str_replace('Controller', '', FatApp::getController());
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . 'brands/search-form.php'); ?>
+                <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
                         'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_BRANDS', $siteLangId),
-                        'newRecordBtn' => true,
-                        'statusButtons' => true,
-                        'deleteButton' => true
+                        'cardHeadTitle' => Labels::getLabel('LBL_RECOMMENDED_PRODUCTS', $siteLangId)
                     ];
 
                     $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
@@ -49,11 +46,10 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         <div class="table-responsive listingTableJs">
                             <?php
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
-                            require_once(CONF_THEME_PATH . 'brands/search.php');
+                            require_once(CONF_THEME_PATH . 'recomended-tag-products/search.php');
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */
-                                'controller' => $controller /* Used in case of performing bulk action. */
                             ];
                             $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
                         </div>

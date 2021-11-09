@@ -18,10 +18,12 @@
                     <div class="main-header-toolbar">
                         <div class="header-action">
                             <div class="header-action__item">
-                                <a class="header-action__trigger quickSearchMain" href="javascript:void(0);" data-toggle="modal" data-target="#search-main">
+                                <a class="header-action__trigger quickSearchMain" href="javascript:void(0);"
+                                    data-toggle="modal" data-target="#search-main">
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-search">
+                                            <use
+                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-search">
                                             </use>
                                         </svg>
                                     </span>
@@ -50,35 +52,42 @@
                                 </div>
                             </div>
                             <div class="header-action__item">
-                                <a class="header-action__trigger" href="<?php echo CONF_WEBROOT_FRONT_URL; ?>" title="<?php echo Labels::getLabel('LBL_VIEW_STORE', $siteLangId); ?>">
+                                <a class="header-action__trigger" href="<?php echo CONF_WEBROOT_FRONT_URL; ?>"
+                                    title="<?php echo Labels::getLabel('LBL_VIEW_STORE', $siteLangId); ?>">
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-store">
+                                            <use
+                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-store">
                                             </use>
                                         </svg>
                                     </span>
                                 </a>
                             </div>
                             <div class="header-action__item">
-                                <a class="header-action__trigger" href="javascript:void()" onclick="clearCache()" title="<?php echo Labels::getLabel('LBL_CLEAR_CACHE', $siteLangId); ?>">
+                                <a class="header-action__trigger" href="javascript:void()" onclick="clearCache()"
+                                    title="<?php echo Labels::getLabel('LBL_CLEAR_CACHE', $siteLangId); ?>">
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-cache">
+                                            <use
+                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-cache">
                                             </use>
                                         </svg>
                                     </span>
                                 </a>
                             </div>
                             <div class="header-action__item dropdown">
-                                <a class="header-action__trigger dropdown-toggle no-after" data-toggle="dropdown" href="javascript:void();">
+                                <a class="header-action__trigger dropdown-toggle no-after" data-toggle="dropdown"
+                                    href="javascript:void();">
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification">
+                                            <use
+                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification">
                                             </use>
                                         </svg>
                                     </span>
                                 </a>
-                                <div class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim">
+                                <div
+                                    class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim">
                                     <div class="header-notification">
                                         <div class="header-notification__head">
                                             <h5>Notifications <span class="count">24 reports</span></h5>
@@ -96,7 +105,8 @@
                                                             <div class="notification__img">
                                                                 <span class="icon">
                                                                     <svg class="svg" width="20" height="20">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                        <use
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
@@ -112,7 +122,8 @@
                                                             <div class="notification__img">
                                                                 <span class="icon">
                                                                     <svg class="svg" width="20" height="20">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                        <use
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
@@ -128,7 +139,8 @@
                                                             <div class="notification__img">
                                                                 <span class="icon">
                                                                     <svg class="svg" width="20" height="20">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                        <use
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
@@ -144,7 +156,8 @@
                                                             <div class="notification__img">
                                                                 <span class="icon">
                                                                     <svg class="svg" width="20" height="20">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                        <use
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
@@ -160,7 +173,8 @@
                                                             <div class="notification__img">
                                                                 <span class="icon">
                                                                     <svg class="svg" width="20" height="20">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                        <use
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
@@ -176,7 +190,8 @@
                                                             <div class="notification__img">
                                                                 <span class="icon">
                                                                     <svg class="svg" width="20" height="20">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                        <use
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
@@ -192,7 +207,8 @@
                                                             <div class="notification__img">
                                                                 <span class="icon">
                                                                     <svg class="svg" width="20" height="20">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                        <use
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
@@ -208,7 +224,8 @@
                                                             <div class="notification__img">
                                                                 <span class="icon">
                                                                     <svg class="svg" width="20" height="20">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                        <use
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
@@ -228,12 +245,14 @@
                                                     <div class="update text-center">
                                                         <div class="update__content">
                                                             <h5>Get Pro Access</h5>
-                                                            <p>Outlines keep you honest. They stoping you from amazing poorly
+                                                            <p>Outlines keep you honest. They stoping you from amazing
+                                                                poorly
                                                                 about drive</p>
                                                             <a href="#" class="btn btn-sm btn-primary">Upgrade</a>
                                                         </div>
                                                         <div class="update__img">
-                                                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/misc/update-img.png" />
+                                                            <img
+                                                                src="<?php echo CONF_WEBROOT_URL; ?>images/misc/update-img.png" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -348,48 +367,61 @@
                                 </div>
                             </div>
                             <div class="header-action__item dropdown header-account">
-                                <a class=" dropdown-toggle no-after" data-toggle="dropdown" href="">
+                                <a class="dropdown-toggle no-after" data-toggle="dropdown" href="">
                                     <span class="header-account__img">
-                                        <img aria-expanded="false" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), 'croped', true)); ?>" alt="">
+                                        <img aria-expanded="false"
+                                            src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), 'croped', true)); ?>"
+                                            alt="">
                                     </span>
                                 </a>
-                                <div class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim">
+                                <div
+                                    class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim">
                                     <div class="header-account__avtar">
                                         <div class="profile">
                                             <div class="profile__img">
-                                                <img alt="" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), 'croped', true)); ?>">
+                                                <img alt=""
+                                                    src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), 'croped', true)); ?>">
                                             </div>
                                             <div class="profile__detail">
-                                                <h6><?php echo  Labels::getLabel('LBL_HI', $siteLangId); ?>, <?php echo AdminAuthentication::getLoggedAdminAttribute('admin_name', true); ?> <h6>
-                                                        <a href="mailto:<?php echo AdminAuthentication::getLoggedAdminAttribute('admin_email', true); ?>"><?php echo AdminAuthentication::getLoggedAdminAttribute('admin_email', true); ?></a>
+                                                <h6><?php echo  Labels::getLabel('LBL_HI', $siteLangId); ?>,
+                                                    <?php echo AdminAuthentication::getLoggedAdminAttribute('admin_name', true); ?>
+                                                    <h6>
+                                                        <a
+                                                            href="mailto:<?php echo AdminAuthentication::getLoggedAdminAttribute('admin_email', true); ?>"><?php echo AdminAuthentication::getLoggedAdminAttribute('admin_email', true); ?></a>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="separator m-0"></div>
                                     <nav class="nav nav--header-account">
-                                        <a href="<?php echo UrlHelper::generateUrl('profile'); ?>"> <?php echo  Labels::getLabel('LBL_MY_PROFILE', $siteLangId); ?></a>
-                                        <a href="<?php echo UrlHelper::generateUrl('profile', 'index', ['changePassword']); ?>"><?php echo  Labels::getLabel('LBL_CHANGE_PASSWORD', $siteLangId); ?></a>
+                                        <a href="<?php echo UrlHelper::generateUrl('profile'); ?>">
+                                            <?php echo  Labels::getLabel('LBL_MY_PROFILE', $siteLangId); ?></a>
+                                        <a
+                                            href="<?php echo UrlHelper::generateUrl('profile', 'index', ['changePassword']); ?>"><?php echo  Labels::getLabel('LBL_CHANGE_PASSWORD', $siteLangId); ?></a>
                                     </nav>
                                     <div class="separator m-0"></div>
                                     <nav class="nav nav--header-account">
                                         <?php if (1 < count($languages)) {
                                         ?>
-                                            <a href="javascript:void(0)" class="language-selector">
-                                                Language
-                                                <span class="selected-language">
-                                                    <?php echo CommonHelper::getLangCode() ?>
-                                                    <span>
-                                                        <img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/flags/round/<?php echo CommonHelper::getLangCountryCode() ?>.svg"></span>
-                                                </span>
-                                                <div class="languages">
-                                                    <?php foreach ($languages as $langId => $language) { ?>
-                                                        <span <?php echo ($siteLangId == $langId) ? 'class="is--active"' : ''; ?> onClick="setSiteDefaultLang(<?php echo $langId; ?>)"><?php echo $language['language_name']; ?></span>
-                                                    <?php } ?>
-                                                </div>
-                                            </a>
+                                        <a href="javascript:void(0)" class="language-selector">
+                                            Language
+                                            <span class="selected-language">
+                                                <?php echo CommonHelper::getLangCode() ?>
+                                                <span>
+                                                    <img
+                                                        src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/flags/round/<?php echo CommonHelper::getLangCountryCode() ?>.svg"></span>
+                                            </span>
+                                            <div class="languages">
+                                                <?php foreach ($languages as $langId => $language) { ?>
+                                                <span
+                                                    <?php echo ($siteLangId == $langId) ? 'class="is--active"' : ''; ?>
+                                                    onClick="setSiteDefaultLang(<?php echo $langId; ?>)"><?php echo $language['language_name']; ?></span>
+                                                <?php } ?>
+                                            </div>
+                                        </a>
                                         <?php
                                         } ?>
-                                        <a href="<?php echo UrlHelper::generateUrl('profile', 'logout'); ?>"><?php echo  Labels::getLabel('LBL_LOGOUT', $siteLangId); ?></a>
+                                        <a
+                                            href="<?php echo UrlHelper::generateUrl('profile', 'logout'); ?>"><?php echo  Labels::getLabel('LBL_LOGOUT', $siteLangId); ?></a>
                                     </nav>
                                 </div>
                             </div>

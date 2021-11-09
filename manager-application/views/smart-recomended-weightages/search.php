@@ -23,7 +23,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'swsetting_weightage':
                 $editable = $canEdit ? 'contentEditable="true"' : '';
-                $td->appendElement('plaintext', $tdAttr, '<div ' . $editable .' onBlur="updateWeightage(' . $row['swsetting_key'] . ',this.textContent)">' . $row[$key] . '</div>', true);
+                $td->appendElement('plaintext', $tdAttr, '<div ' . $editable .' data-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('LBL_CLICK_HERE_TO_EDIT', $siteLangId) .'" onblur="updateWeightage(' . $row['swsetting_key'] . ',this.textContent)">' . $row[$key] . '</div>', true);
                 break;
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key]);

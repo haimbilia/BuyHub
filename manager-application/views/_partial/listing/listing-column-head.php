@@ -19,12 +19,18 @@ foreach ($fields as $key => $val) {
     }
 
     if ('action' == strtolower($key)) {
+        $cls .= !empty($cls) ? ' ' : '';
         $cls .= 'align-right';
     }
 
     $thWidth = '';
     if (!empty($tableHeadAttrArr) && array_key_exists($key, $tableHeadAttrArr)) {
-        $thWidth = $tableHeadAttrArr[$key]['width'];
+        $thWidth = $tableHeadAttrArr[$key]['width'] ?? '';
+    }
+    
+    if (!empty($tableHeadAttrArr) && array_key_exists($key, $tableHeadAttrArr)) {
+        $cls .= !empty($cls) ? ' ' : '';
+        $cls .= $tableHeadAttrArr[$key]['class'] ?? '';
     }
 
     $td = $th->appendElement('th', ['class' => $cls, 'data-field' => $key, 'width' => $thWidth]);

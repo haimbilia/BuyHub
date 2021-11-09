@@ -814,7 +814,7 @@ $mykart:'mykart';
             background-color: #fff;
             position: relative;
             &::before {
-                background: lighten($brand-color, 55); 
+                background: lighten($brand-color, 55);
                 content: "";
                 height: 100%;
                 width: 100%;
@@ -826,12 +826,14 @@ $mykart:'mykart';
                 opacity: 0;
                 transition: all 0.2s cubic-bezier(0.2, 0.91, 0.85, 0.96) 0s;
             }
-            .svg {position: relative;
+            .svg {
+                position: relative;
                 z-index: 0;
                 width: 16px;
                 height: 16px;
             }
-            &:hover { color: $brand-color; 
+            &:hover {
+                color: $brand-color;
                 &::before {
                     opacity: 1;
                     transform: scale(1);
