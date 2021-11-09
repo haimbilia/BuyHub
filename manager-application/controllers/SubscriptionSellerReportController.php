@@ -139,7 +139,7 @@ class SubscriptionSellerReportController extends AdminBaseController
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->_template->render(false, false);
+        $this->set('allowedKeysForSorting', array_keys($fields));
     }
 
     public function export()

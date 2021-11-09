@@ -247,13 +247,8 @@ class BrandsController extends AdminBaseController
         $this->objPrivilege->canEditBrands();
         $recordId = FatUtility::int($recordId);
 
-        $action = Labels::getLabel('FRM_Add_New', $this->siteLangId);
-        if ($recordId > 0) {
-            $action = Labels::getLabel('FRM_UPDATE', $this->siteLangId);
-        }
-
         $frm = new Form('frmProdBrand', array('id' => 'frmProdBrand'));
-        $frm->addHiddenField('', 'brand_id', 0);
+        $frm->addHiddenField('', 'brand_id', $recordId);
         $frm->addRequiredField(Labels::getLabel('FRM_Brand_Name', $this->siteLangId), 'brand_name');
         //$frm->addRequiredField(Labels::getLabel('FRM_Brand_Identifier', $this->siteLangId), 'brand_identifier');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_BRAND_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');

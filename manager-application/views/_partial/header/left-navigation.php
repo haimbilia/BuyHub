@@ -405,35 +405,29 @@
                                 </ul>
                             </div>
                         </li>
-                        <?php } ?>
-                        <?php if ($objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li class="nav_item">
-                            <a class="nav_link" data-toggle="collapse" data-parent="#subscriptionReportNav"
-                                href="#subscriptionReportNav" aria-expanded="true">
-                                <span
-                                    class="nav_text"><?php echo Labels::getLabel('NAV_SUBSCRIPTION_REPORT', $siteLangId); ?></span>
-                                <i class="nav_arrow"></i>
-                            </a>
-                            <div id="subscriptionReportNav" class="panel-collapse collapse">
-                                <ul class="nav">
-                                    <li class="nav_item">
-                                        <a href="<?php echo UrlHelper::generateUrl('SubscriptionPlanReport'); ?>"
-                                            class="nav_link ">
-                                            <span
-                                                class="nav_text"><?php echo Labels::getLabel('NAV_BY_PLAN', $siteLangId); ?></span>
-                                        </a>
-                                    </li>
-                                    <li class="nav_item">
-                                        <a href="<?php echo UrlHelper::generateUrl('SubscriptionSellerReport'); ?>"
-                                            class="nav_link ">
-                                            <span
-                                                class="nav_text"><?php echo Labels::getLabel('NAV_BY_SELLER', $siteLangId); ?></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
                         <?php } */ ?>
+                            <?php if ($objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link" data-toggle="collapse" data-parent="#subscriptionReportNav" href="#subscriptionReportNav" aria-expanded="true">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_SUBSCRIPTION_REPORT', $siteLangId); ?></span>
+                                        <i class="nav_arrow"></i>
+                                    </a>
+                                    <div id="subscriptionReportNav" class="panel-collapse collapse">
+                                        <ul class="nav">
+                                            <li class="nav_item">
+                                                <a href="<?php echo UrlHelper::generateUrl('SubscriptionPlanReport'); ?>" class="nav_link ">
+                                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_BY_PLAN', $siteLangId); ?></span>
+                                                </a>
+                                            </li>
+                                            <li class="nav_item">
+                                                <a href="<?php echo UrlHelper::generateUrl('SubscriptionSellerReport'); ?>" class="nav_link ">
+                                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_BY_SELLER', $siteLangId); ?></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            <?php }  ?>
                         </ul>
                     </div>
                 </li>
