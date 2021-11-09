@@ -662,7 +662,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     return;
                 }
                 $.ykmsg.success(ans.msg);
-                if (true === $.ykmodal.isAdded()) {
+                if (true === $.ykmodal.isAdded()) {                 
                     $.ykmodal.show();
                     $("#modalBoxJs").modal("hide");
                     if ("" != callback) {
@@ -670,10 +670,18 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     }else if (
                         0 < $(".navTabsJs").length &&
                         0 < $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='lang_id']").length
-                    ) {
+                    ) {                      
                         $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='lang_id']")
                             .val(langId)
                             .change();
+                    }else if (
+                        0 < $(".navTabsJs").length &&
+                        0 < $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='slide_screen']").length
+                    ) {                      
+                        $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='slide_screen']")                      
+                            .change();
+                    }else{
+                        mediaForm(ans.recordId, imageType, langId, slideScreen);
                     }
                 } else {
                     mediaForm(ans.recordId, imageType, langId, slideScreen);
@@ -724,29 +732,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     editDropZoneImages = function (obj) {
         $(obj).closest(".dropzoneContainerJs").find(".dropzoneInputJs").click();
     }
-
-    // convertCheckboxToSwitch = function () {
-    //   if (0 < $("form.checkboxSwitchJs").length) {
-    //     $("form.checkboxSwitchJs")
-    //       .find("label")
-    //       .addClass("switch switch-sm switch-icon switchIconJs")
-    //       .removeClass("checkbox");
-    //     $("form.checkboxSwitchJs .switchIconJs i").replaceWith("<span></span>");
-    //     $("form.checkboxSwitchJs").find(".caption-wraper").remove();
-
-    //     $("form.checkboxSwitchJs .label").each(function () {
-    //       if ("" == $(this).text().trim()) {
-    //         $(this).remove();
-    //       }
-    //     });
-    //     $("form.checkboxSwitchJs ul.list-inline li").each(function () {
-    //       $(this).addClass("list-inline-item");
-    //       if (0 < $(this).find(".radio").length) {
-    //         $(this).find(".radio").parent("label").addClass("radio-list d-block");
-    //       }
-    //     });
-    //   }
-    // };
 })();
 
 $(document).on("click", ".selectItemJs", function () {
