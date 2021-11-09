@@ -10,10 +10,10 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
  } 
 
  echo HtmlHelper::getfileInputHtml(
-    ['onChange' => 'loadImageCropper(this)', 'accept' => 'image/*', 'data-name' => $file_type == 'logo' ? Labels::getLabel("FRM_BRAND_LOGO", $siteLangId) : Labels::getLabel("FRM_BRAND_BANNER_IMAGE", $siteLangId)],
+    ['onChange' => 'loadImageCropper(this)', 'accept' => 'image/*', 'data-name' => $file_type == 'logo' ? Labels::getLabel("FRM_SHOP_LOGO", $siteLangId) : Labels::getLabel("FRM_SHOP_BANNER_IMAGE", $siteLangId)],
     $siteLangId,
     ($canEdit ? 'deleteMedia(' . $image['afile_record_id'] . ',\'' . $file_type . '\',' . $image['afile_id'] .',' . $image['afile_lang_id'].',' . $image['afile_screen'] .')' :''),
-    ($canEdit ? 'editDropZoneImages(this)': ''),
+    '',
     $imgArr,
-    'mt-3 dropzone-custom dropzoneContainerJs'
+    'mt-3'
 );

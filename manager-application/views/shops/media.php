@@ -12,10 +12,7 @@ $ratioFld->addOptionListTagAttribute('class', 'list-radio');
 $ratioFld->addFieldTagAttribute('class', 'prefRatio-js');
 $ratioFld = HtmlHelper::configureRadioAsButton($logoFrm,'ratio_type');
 
-$fld = $logoFrm->getField('heading');
-$fld->value = '<h3 class="h3">'.Labels::getLabel('LBL_LOGO', $siteLangId).'</h3>';
-
-$fld = $logoFrm->getField('logo');
+$fld = $logoFrm->getField('shop_logo');
 $fld->htmlAfterField = '<span class="form-text text-muted logoPreferredDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '500 x 500') . '</span>';
 $fld->value = '<span id="logoListingJs"></span>';
 
@@ -25,21 +22,18 @@ $ratioFld->attachField($fld);
 
 
 /* Image Form */
-HtmlHelper::formatFormFields($imageFrm);
-$imageFrm->setFormTagAttribute('class', 'modal-body form');
+HtmlHelper::formatFormFields($shopBannerFrm);
+$shopBannerFrm->setFormTagAttribute('class', 'modal-body form');
 
-$fld = $imageFrm->getField('heading');
-$fld->value = '<h3 class="h3">'.Labels::getLabel('LBL_BANNER', $siteLangId).'</h3>';
-
-$fld = $imageFrm->getField('banner');
+$fld = $shopBannerFrm->getField('shop_banner');
 $fld->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500') . '</span>';
 $fld->value = '<span id="imageListingJs"></span>';
 
-$imageLangFld = $imageFrm->getField('lang_id');
+$imageLangFld = $shopBannerFrm->getField('lang_id');
 $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
 
 
-$screenFld = $imageFrm->getField('slide_screen');
+$screenFld = $shopBannerFrm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('id', 'slideScreenJs');
 /* Image Form */
 
@@ -55,21 +49,21 @@ $otherButtons = [
     ]
 ];
 
-$formTitle = Labels::getLabel('LBL_BRAND_SETUP', $siteLangId); ?>
+$formTitle = Labels::getLabel('LBL_SHOP_SETUP', $siteLangId); ?>
 
 <?php require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
         <?php echo $logoFrm->getFormHtml(); ?>
         <div class="separator separator-dashed my-4"></div>
-        <?php echo $imageFrm->getFormHtml(); ?>
+        <?php echo $shopBannerFrm->getFormHtml(); ?>
     </div>
 </div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->
 
 <script>
     var minWidthLogoEle = $('#<?php echo $logoFrm->getFormTagAttribute('id');?> input[name=min_width]');
     var minHeightLogoEle = $('#<?php echo $logoFrm->getFormTagAttribute('id');?> input[name=min_height]');
-    var minWidthBaneerEle = $('#<?php echo $imageFrm->getFormTagAttribute('id');?> input[name=min_width]');
-    var minHeightBaneerEle = $('#<?php echo $imageFrm->getFormTagAttribute('id');?> input[name=min_height]');
+    var minWidthBaneerEle = $('#<?php echo $shopBannerFrm->getFormTagAttribute('id');?> input[name=min_width]');
+    var minHeightBaneerEle = $('#<?php echo $shopBannerFrm->getFormTagAttribute('id');?> input[name=min_height]');
 
     $(minWidthBaneerEle).val(2000);
     $(minHeightBaneerEle).val(500);
@@ -100,9 +94,9 @@ $formTitle = Labels::getLabel('LBL_BRAND_SETUP', $siteLangId); ?>
         }
 
         var slide_screen = $(this).val();
-        var brand_id = $(this).closest("form").find('input[name="brand_id"]').val();
+        var shop_id = $(this).closest("form").find('input[name="shop_id"]').val();
         var lang_id = $("#imageLanguageJs").val();
-        brandImages(brand_id, 'image', slide_screen, lang_id);
+        brandImages(shop_id, 'image', slide_screen, lang_id);
     });
 
     $(document).on('change', '.prefRatio-js', function() {     
