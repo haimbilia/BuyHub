@@ -902,8 +902,8 @@ class BrandsController extends AdminBaseController
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'brand_logo' => Labels::getLabel('LBL_BRAND_LOGO', $this->siteLangId),
-            'brand_identifier' => Labels::getLabel('LBL_BRAND_NAME', $this->siteLangId),
+            'brand_logo' => Labels::getLabel('LBL_LOGO', $this->siteLangId),
+            'brand_identifier' => Labels::getLabel('LBL_BRAND', $this->siteLangId),
             'seo_url' => Labels::getLabel('LBL_Seo_Friendly_URL', $this->siteLangId),
             'brand_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
