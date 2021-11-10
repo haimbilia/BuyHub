@@ -6,10 +6,11 @@ if (!isset($tbody)) {
 }
 
 $serialNo = ($page - 1) * $pageSize + 1;
+
 foreach ($arrListing as $sn => $row) {
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
-    if ($row['spackage_active'] != applicationConstants::ACTIVE) {
+    if ($row['spplan_active'] != applicationConstants::ACTIVE) {
         $tr->setAttribute("class", " nodrag nodrop");
     }
     foreach ($fields as $key => $val) {
@@ -17,28 +18,22 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="' . SellerPackages::DB_TBL_PREFIX . 'ids[]" value=' . $row[SellerPackages::DB_TBL_PREFIX . 'id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="' . SellerPackagePlans::DB_TBL_PREFIX . 'ids[]" value=' . $row[SellerPackagePlans::DB_TBL_PREFIX . 'id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'spackage_identifier':
-                if ($row[SellerPackages::DB_TBL_PREFIX . 'name'] != '') {
-                    $td->appendElement('plaintext', $tdAttr, $row[SellerPackages::DB_TBL_PREFIX . 'name'], true);
-                    $td->appendElement('br', $tdAttr);
-                    $td->appendElement('plaintext', $tdAttr, '(' . $row[$key] . ')', true);
-                } else {
-                    $td->appendElement('plaintext', $tdAttr, $row[$key], true);
-                }
+            case SellerPackagePlans::DB_TBL_PREFIX . 'price':
+                $td->appendElement('plaintext', array(), SellerPackagePlans::getPlanPriceWithPeriod($row, $row[SellerPackagePlans::DB_TBL_PREFIX . 'price']), true);
                 break;
-            case 'spackage_active':
-                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row[SellerPackages::DB_TBL_PREFIX . 'id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
+            case 'spplan_active':
+                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row[SellerPackagePlans::DB_TBL_PREFIX . 'id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
                 $statusClass = ($canEdit) ? '' : 'disabled';
                 $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
 
                 $htm = '<span class="switch switch-sm switch-icon">
                                     <label>
-                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row[SellerPackages::DB_TBL_PREFIX . 'id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
+                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row[SellerPackagePlans::DB_TBL_PREFIX . 'id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
                                         <span class="input-helper"></span>
                                     </label>
                                 </span>';
@@ -47,24 +42,11 @@ foreach ($arrListing as $sn => $row) {
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,
-                    'recordId' => $row[SellerPackages::DB_TBL_PREFIX . 'id']
+                    'recordId' => $row[SellerPackagePlans::DB_TBL_PREFIX . 'id']
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = [];
-                    $data['otherButtons'] = [
-                        [
-                            'attr' => [
-                                'href' => UrlHelper::generateUrl('SellerPackagePlans', 'list', array($row[SellerPackages::DB_TBL_PREFIX . 'id'])),                        
-                                'title' => Labels::getLabel('LBL_Settings', $siteLangId)
-                            ],
-                            'label' => '<svg class="svg" width="18" height="18">
-                                            <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-setting">
-                                            </use>
-                                        </svg>'
-                        ]
-                    ];
+                    $data['editButton'] = [];                  
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
