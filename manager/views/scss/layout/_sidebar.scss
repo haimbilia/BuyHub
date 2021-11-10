@@ -27,6 +27,7 @@
     flex-direction: column;
     justify-content: center;
     &-item {
+        transition: all 0.3s ease;
         text-align: center;
     }
     &-link {
@@ -55,7 +56,8 @@
             transition: all 0.2s cubic-bezier(0.2, 0.91, 0.85, 0.96) 0s;
         }
         &:hover,
-        &:focus {
+        &:focus,
+        &.active {
             &::before {
                 opacity: 1;
                 transform: scale(1);
@@ -93,6 +95,9 @@
                 padding: 0.5rem 0;
                 color: $txt-gray;
                 position: relative;
+                &.active {
+                    color: $brand-color;
+                }
                 &::before {
                     content: "";
                     width: 7px;
