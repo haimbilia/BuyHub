@@ -211,6 +211,6 @@ class RewardsController extends AdminBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['user_name', 'urp_comments'], Common::excludeKeysForSort());
+        return array_diff($fields, ['urp_comments'], Common::excludeKeysForSort());
     }
 }

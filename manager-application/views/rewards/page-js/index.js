@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    select2('userIdJs', fcom.makeUrl('Users', 'autoCompleteJson'), {}, '', function () {
+    select2('userIdJs', fcom.makeUrl('Users', 'autoComplete'), {}, '', function () {
         reloadList();
     });
 });
