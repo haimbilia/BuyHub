@@ -12,7 +12,8 @@ $tableHeadAttrArr = [
     ],
     'listSerial' => [
         'class' => 'col-sr'
-    ]
+    ],
+
 ];
 
 $controller = str_replace('Controller', '', FatApp::getController());
@@ -21,14 +22,13 @@ $controller = str_replace('Controller', '', FatApp::getController());
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . 'brands/search-form.php'); ?>
+                <?php require_once(CONF_THEME_PATH . 'seller-products/search-form.php'); ?>
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
                         'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_BRANDS', $siteLangId),
-                        'newRecordBtn' => true,
-                        'statusButtons' => true,
+                        'cardHeadTitle' => Labels::getLabel('LBL_SELLER_INVENTORIES', $siteLangId),
+                        'newRecordBtn' => true,                        
                         'deleteButton' => true
                     ];
 
@@ -37,7 +37,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         <div class="table-responsive listingTableJs">
                             <?php
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
-                            require_once(CONF_THEME_PATH . 'brands/search.php');
+                            require_once(CONF_THEME_PATH . 'seller-products/search.php');
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */

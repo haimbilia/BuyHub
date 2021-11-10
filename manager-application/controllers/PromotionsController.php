@@ -410,7 +410,7 @@ class PromotionsController extends AdminBaseController
 
         $this->set('promotionId', $recordId);
         $this->set('langId', $newTabLangId);
-        $this->set('msg', Labels::getLabel('MSG_SET_UP_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 

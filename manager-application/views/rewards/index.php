@@ -1,5 +1,5 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_NAME', $siteLangId);
+<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_USER', $siteLangId);
 
 /* No sorting functionality required if no record found. */
 if (2 > count($arrListing)) {
@@ -7,9 +7,6 @@ if (2 > count($arrListing)) {
 }
 
 $tableHeadAttrArr = [
-    'select_all' => [
-        'class' => 'col-check'
-    ],
     'listSerial' => [
         'class' => 'col-sr'
     ]
@@ -21,15 +18,13 @@ $controller = str_replace('Controller', '', FatApp::getController());
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . 'brands/search-form.php'); ?>
+                <?php require_once(CONF_THEME_PATH . 'rewards/search-form.php'); ?>
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
                         'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_BRANDS', $siteLangId),
-                        'newRecordBtn' => true,
-                        'statusButtons' => true,
-                        'deleteButton' => true
+                        'cardHeadTitle' => Labels::getLabel('LBL_REWARD_POINTS', $siteLangId),
+                        'newRecordBtn' => true
                     ];
 
                     $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
@@ -37,11 +32,10 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         <div class="table-responsive listingTableJs">
                             <?php
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
-                            require_once(CONF_THEME_PATH . 'brands/search.php');
+                            require_once(CONF_THEME_PATH . 'rewards/search.php');
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */
-                                'controller' => $controller /* Used in case of performing bulk action. */
                             ];
                             $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
                         </div>

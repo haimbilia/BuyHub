@@ -41,7 +41,7 @@ class AdminBaseController extends FatController
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
 
         $this->setCommonValues();
-        $this->_template->addCss([CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css', 'css/jquery.datetimepicker.css']);
+        $this->_template->addCss([CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css']);
     }
 
     /*
