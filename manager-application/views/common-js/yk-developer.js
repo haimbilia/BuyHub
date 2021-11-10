@@ -140,6 +140,10 @@ $(document).ready(function () {
         });
     };
 
+    sortObjectByKeys = function (o) {
+        return Object.keys(o).sort().reduce((r, k) => (r[k] = o[k], r), {});
+    }
+
 })();
 
 var map;

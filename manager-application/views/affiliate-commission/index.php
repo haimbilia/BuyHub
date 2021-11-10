@@ -1,34 +1,5 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_CATEGORY_NAME_AND_AFFILIATE_USER', $siteLangId);
-
-/* No sorting functionality required if no record found. */
-if (2 > count($arrListing)) {
-    $allowedKeysForSorting = [];
-}
-
-$tableHeadAttrArr = [
-    'select_all' => [
-        'width' => '5%'
-    ],
-    'listSerial' => [
-        'width' => '15%'
-    ],
-    'afcommsetting_prodcat_id' => [
-        'width' => '35%'
-    ],
-    'afcommsetting_user_id' => [
-        'width' => '25%'
-    ],
-    'afcommsetting_fees' => [
-        'width' => '10%'
-    ],
-    'action' => [
-        'width' => '10%'
-    ],
-];
-
-$controller = str_replace('Controller', '', FatApp::getController());
-?>
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_CATEGORY_NAME_AND_AFFILIATE_USER', $siteLangId); ?>
 <main class="main mainJs">
     <div class="container">
         <div class="row">
@@ -52,7 +23,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */
-                                'controller' => $controller, /* Used in case of performing bulk action. */
+                                'performBulkAction' => true, /* Used in case of performing bulk action. */
                                 'formAction' => 'deleteSelected'
                             ];
                             $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
@@ -64,7 +35,3 @@ $controller = str_replace('Controller', '', FatApp::getController());
         </div>
     </div>
 </main>
-
-<script>
-    var controllerName = '<?php echo $controller; ?>';
-</script>

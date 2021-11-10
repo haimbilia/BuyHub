@@ -16,12 +16,7 @@
         </div>
     </div>
 </main>
-
-<?php 
-    $controller = str_replace('Controller', '', FatApp::getController());
-?>
 <script>
-    var controllerName = '<?php echo $controller; ?>';
     var cropperHeading = '<?php echo Labels::getLabel('LBL_PROFILE_IMAGE', $siteLangId); ?>';
     $(document).ready(function() {        
         openProfileTab("<?php echo $tab ?>");

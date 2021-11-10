@@ -24,7 +24,7 @@ foreach ($arrListing as $sn => $row) {
     foreach ($fields as $key => $val) {
         $td = $tr->appendElement('td');
         if ($key == 'label_key') {
-            $td->setAttribute('class', 'word-break');
+            $td->setAttribute('class', 'text-break');
         }
         switch ($key) {
             case 'listSerial':

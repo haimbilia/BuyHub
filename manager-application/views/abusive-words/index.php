@@ -1,31 +1,7 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
 $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_ABUSIVE_KEYWORD', $siteLangId);
 
-/* No sorting functionality required if no record found. */
-if (2 > count($arrListing)) {
-    $allowedKeysForSorting = [];
-}
-
-$tableHeadAttrArr = [
-    'select_all' => [
-        'width' => '5%'
-    ],
-    'listSerial' => [
-        'width' => '10%'
-    ],
-    'abusive_keyword' => [
-        'width' => '35%'
-    ],
-    'language_name' => [
-        'width' => '35%'
-    ],
-    'action' => [
-        'width' => '15%'
-    ],
-];
-
 if(count(Language::getAllNames()) < 2 ){
-    $tableHeadAttrArr['abusive_keyword']['width'] = '70%';
     unset($tableHeadAttrArr['language_name']);
 }
 
@@ -33,10 +9,7 @@ $langLayout = [];
 foreach ($languages as $langId => $langName) {
     $layOutDir = Language::getLayoutDirection($langId);
     $langLayout[$langId] = $layOutDir;
-}
-
-$controller = str_replace('Controller', '', FatApp::getController());
-?>
+} ?>
 <main class="main mainJs">
     <div class="container">
         <div class="row">
@@ -60,7 +33,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */
-                                'controller' => $controller, /* Used in case of performing bulk action. */
+                                'performBulkAction' => true, /* Used in case of performing bulk action. */
                                 'formAction' => 'deleteSelected'
                             ];
                             $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
@@ -74,7 +47,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
 </main>
 
 <script>
-    var controllerName = '<?php echo $controller; ?>';
     var langLayOuts = <?php echo json_encode($langLayout); ?>;
     (function() {
         changeFormLayOut = function(el) {

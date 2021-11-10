@@ -83,7 +83,6 @@ class AdminBaseController extends FatController
 
         $jsAdminVariablesCache = FatCache::get('jsAdminVariablesCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$jsAdminVariablesCache) {
-
             $jsVariables = array(
                 'confirmRemove' => Labels::getLabel('LBL_Do_you_want_to_remove', $this->siteLangId),
                 'confirmRemoveOption' => Labels::getLabel('LBL_Do_you_want_to_remove_this_option', $this->siteLangId),

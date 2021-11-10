@@ -95,7 +95,8 @@
                                                             <use
                                                                 xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#export">
                                                             </use>
-                                                        </svg> Export orders
+                                                        </svg>
+                                                        <span class="txt">Export orders</span>
                                                     </a>
                                                 </li>
                                                 <li class="custom-drag-drop">
@@ -106,7 +107,8 @@
                                                             <use
                                                                 xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#columns">
                                                             </use>
-                                                        </svg> Columns
+                                                        </svg>
+                                                        <span class="txt">Columns </span>
 
                                                     </a>
 
@@ -818,9 +820,7 @@
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label class="label required">Language </label>
-                                                            <select onchange=""
-                                                                data-field-caption="Language"
-                                                                
+                                                            <select onchange="" data-field-caption="Language"
                                                                 name="lang_id">
                                                                 <option value="1" selected="selected">English
                                                                 </option>
@@ -840,8 +840,7 @@
                                                                     aria-label="Specify a target priorty"
                                                                     aria-describedby="tooltip849482"></i>
                                                             </label>
-                                                            <input data-field-caption="Shop Name"
-                                                                 type="text"
+                                                            <input data-field-caption="Shop Name" type="text"
                                                                 name="shop_name" value="Jason's Store">
                                                         </div>
                                                     </div>
@@ -851,8 +850,7 @@
                                                         <div class="form-group">
                                                             <label class="label">Shop City</label>
 
-                                                            <input data-field-caption="Shop City"
-                                                                 type="text"
+                                                            <input data-field-caption="Shop City" type="text"
                                                                 name="shop_city" value="phoenix">
                                                         </div>
                                                     </div>
@@ -861,8 +859,7 @@
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label class="label">Contact Person</label>
-                                                            <input data-field-caption="Contact Person"
-                                                                 type="text"
+                                                            <input data-field-caption="Contact Person" type="text"
                                                                 name="shop_contact_person" value="Jason">
                                                         </div>
                                                     </div>
@@ -873,7 +870,6 @@
                                                             <label class="label">Description</label>
 
                                                             <textarea data-field-caption="Description"
-                                                                
                                                                 name="shop_description">Best range of products in the United States</textarea>
 
                                                         </div>

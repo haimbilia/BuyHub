@@ -1,14 +1,5 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
-/* No sorting functionality required if no record found. */
-if (2 > count($arrListing)) {
-    $allowedKeysForSorting = [];
-}
-
-$tableHeadAttrArr = [];
-
-$controller = str_replace('Controller', '', FatApp::getController());
-?>
 <main class="main mainJs">
     <div class="container">
         <div class="row">
@@ -45,7 +36,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */
-                                'controller' => $controller /* Used in case of performing bulk action. */
+                                'performBulkAction' => true /* Used in case of performing bulk action. */
                             ];
                             $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
                         </div>
@@ -56,6 +47,4 @@ $controller = str_replace('Controller', '', FatApp::getController());
         </div>
     </div>
 </main>
-<script>
-    var controllerName = '<?php echo $controller; ?>';
-</script>
+ 

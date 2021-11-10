@@ -1,28 +1,6 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TAX_STRUCTURE_NAME', $siteLangId);
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TAX_STRUCTURE_NAME', $siteLangId); ?>
 
-/* No sorting functionality required if no record found. */
-if (2 > count($arrListing)) {
-    $allowedKeysForSorting = [];
-}
-
-$tableHeadAttrArr = [
-    'listSerial' => [
-        'width' => '5%'
-    ],
-    'taxstr_identifier' => [
-        'width' => '45%'
-    ],
-    'taxstr_is_combined' => [
-        'width' => '35%'
-    ],
-    'action' => [
-        'width' => '15%'
-    ],
-];
-
-$controller = str_replace('Controller', '', FatApp::getController());
-?>
 <main class="main mainJs">
     <div class="container">
         <div class="row">
@@ -57,6 +35,4 @@ $controller = str_replace('Controller', '', FatApp::getController());
     </div>
 </main>
 
-<script>
-    var controllerName = '<?php echo $controller; ?>';
-</script>
+ 

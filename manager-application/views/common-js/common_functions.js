@@ -37,7 +37,7 @@ copyText = function (obj, applyToolTipInfo = true) {
         e.clipboardData.setData('text/plain', copyText);
         e.preventDefault();
     }, true);
-    */   
+    */
 
     if (!navigator.clipboard) {
         // Clipboard API  only works on localhost anf https as per doc
@@ -127,10 +127,10 @@ Slugify = function (str, str_val_id, is_slugify) {
         .replace(/[^\w\-]+/g, '') /* Remove all non-word chars */
         .replace(/\-\-+/g, '-') /* Replace multiple - with single - */
         .replace(/^-+/, '') /*  Trim - from start of text */
-        .replace(/-+$/, '');        
-    if ($("#" + is_slugify).val() == 0){
+        .replace(/-+$/, '');
+    if ($("#" + is_slugify).val() == 0) {
         $("#" + str_val_id).val(str);
-    }        
+    }
 };
 
 /*
@@ -151,7 +151,7 @@ expected response
 
 postdata object like {record:1}
 */
-select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOnUnSelect = '') {    
+select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOnUnSelect = '') {
     let ele = $("#" + elmId);
     ele.select2({
         closeOnSelect: true,
@@ -166,9 +166,9 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOn
             data: function (params) {
                 return $.extend({
                     keyword: params.term, // search term
-                    page: params.page, 
-                    fIsAjax:1          
-                }, postdata);                
+                    page: params.page,
+                    fIsAjax: 1
+                }, postdata);
             },
             processResults: function (data, params) {
                 params.page = params.page || 1;
@@ -185,15 +185,27 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOn
         minimumInputLength: 0,
         dropdownPosition: 'below'
     }).on('select2:selecting', function (e) {
-        if('function' == typeof callbackOnSelect){
+        if ('function' == typeof callbackOnSelect) {
             callbackOnSelect(e);
         }
     }).on('select2:unselecting', function (e) {
-        if('function' == typeof callbackOnUnSelect){
+        if ('function' == typeof callbackOnUnSelect) {
             callbackOnUnSelect(e);
         }
     });
 
-    $("."+$.ykmodal.element).removeAttr('tabindex');
+    $("." + $.ykmodal.element).removeAttr('tabindex');
 };
 
+$(document).ready(function () {
+    /* Active Sidebar Link. */
+    var uri = (window.location.pathname).replace(/^\/|\/$/g, '');
+    $('.sidebarMenuJs .menuItemJs .navLinkJs').each(function () {
+        var href = $(this).attr('href').replace(/^\/|\/$/g, '');
+        if (uri == href) {
+            $(this).parents('li:not(.hasNestedChildJs)').addClass('active');
+            $(this).parents('li.hasNestedChildJs').addClass('show').find('.collapseJs').addClass('show');
+        }
+    });
+    /* Active Sidebar Link. */
+});
