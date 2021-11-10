@@ -1,18 +1,17 @@
-<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TITLE', $siteLangId); ?>
-
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_USER', $siteLangId);
+?>
 <main class="main mainJs">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
+                <?php require_once(CONF_THEME_PATH . 'transactions/search-form.php'); ?>
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
                         'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_ORDER_CANCEL_REASONS', $siteLangId),
-                        'newRecordBtn' => true,
-                        'deleteButton' => true
+                        'cardHeadTitle' => Labels::getLabel('LBL_Transactions', $siteLangId),
+                        'newRecordBtn' => true
                     ];
 
                     $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
@@ -20,12 +19,10 @@ $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TITLE', $siteLangId); ?>
                         <div class="table-responsive listingTableJs">
                             <?php
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
-                            require_once(CONF_THEME_PATH . 'order-cancel-reasons/search.php');
+                            require_once(CONF_THEME_PATH . 'transactions/search.php');
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */
-                                'performBulkAction' => true, /* Used in case of performing bulk action. */
-                                'formAction' => 'deleteSelected'
                             ];
                             $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
                         </div>
@@ -36,5 +33,3 @@ $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TITLE', $siteLangId); ?>
         </div>
     </div>
 </main>
-
- 

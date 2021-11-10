@@ -23,7 +23,7 @@ $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_ORIGINAL_AND_CUSTOM', $sit
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */
-                                'controller' => $controller, /* Used in case of performing bulk action. */
+                                'performBulkAction' => true, /* Used in case of performing bulk action. */
                                 'formAction' => 'deleteSelected'
                             ];
                             $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>

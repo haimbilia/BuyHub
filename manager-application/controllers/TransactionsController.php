@@ -1,6 +1,6 @@
 <?php
 
-class RewardsController extends AdminBaseController
+class TransactionsController extends AdminBaseController
 {
     public function __construct($action)
     {
@@ -16,7 +16,7 @@ class RewardsController extends AdminBaseController
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('languages', Language::getAllNames());
-        $this->set('pageTitle', Labels::getLabel('LBL_Manage_User_Reward_Points', $this->siteLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_Manage_User_Transactions', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->addJs(array('js/select2.js'));
@@ -28,7 +28,7 @@ class RewardsController extends AdminBaseController
     {
         $this->getListingData();
         $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'rewards/search.php', true),
+            'listingHtml' => $this->_template->render(false, false, 'transactions/search.php', true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
         LibHelper::exitWithSuccess($jsonData, true);
@@ -40,33 +40,45 @@ class RewardsController extends AdminBaseController
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
-        
+
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = current($allowedKeysForSorting);
         }
-        
+
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
-        
-        $userId = FatApp::getPostedData('urp_user_id', FatUtility::VAR_INT, 0);
+
+        $userId = FatApp::getPostedData('utxn_user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
-        $post['urp_user_id'] = $userId;
+        $post['utxn_user_id'] = $userId;
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
-        $srch = new UserRewardSearch();
-        $srch->joinUser();
-        $srch->addMultipleFields(['urp.*', 'user_name', 'urp.urp_id as listSerial']);
-
+        $srch = Transactions::getSearchObject();
         if (0 < $userId) {
-            $srch->addCondition('urp.urp_user_id', '=', $userId);
+            $srch->addCondition('utxn.utxn_user_id', '=', $userId);
         }
+
+        $balSrch = Transactions::getSearchObject();
+        $balSrch->doNotCalculateRecords();
+        $balSrch->doNotLimitRecords();
+        $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
+        $balSrch->addMultipleFields(['utxn.*', "utxn_credit - utxn_debit as bal"]);
+        if (0 < $userId) {
+            $balSrch->addCondition('utxn_user_id', '=', $userId);
+        }
+        $balSrch->addCondition('utxn_status', '=', 1);
+        $srch->joinTable('(' . $balSrch->getQuery() . ')', 'JOIN', 'tqupb.utxn_id <= utxn.utxn_id', 'tqupb');
+
+        $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance", 'user_name', 'utxn.utxn_id as listSerial'));
+        $srch->addGroupBy('utxn.utxn_id');
+
 
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
@@ -86,6 +98,7 @@ class RewardsController extends AdminBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('statusArr', Transactions::getStatusArr($this->siteLangId));
         $this->set('canEdit', $this->objPrivilege->canEditUsers($this->admin_id, true));
     }
 
@@ -96,7 +109,7 @@ class RewardsController extends AdminBaseController
             $this->addSortingElements($frm);
         }
 
-        $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'urp_user_id', []);
+        $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'utxn_user_id', []);
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -109,20 +122,20 @@ class RewardsController extends AdminBaseController
         $frm = $this->getForm();
         $this->set('frm', $frm);
         $this->set('includeTabs', false);
-        $this->set('formTitle', Labels::getLabel('LBL_USER_REWARDS_POINT_SETUP', $this->siteLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_USER_TRANSACTIONS_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
     }
 
     private function getForm()
     {
-        $frm = new Form('frmUserRewardPoints');
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'urp_user_id', []);
+        $frm = new Form('frmUserTransaction');
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'utxn_user_id', []);
         $fld->requirements()->setRequired(true);
-        $frm->addRequiredField(Labels::getLabel('FRM_POINTS', $this->siteLangId), 'urp_points')->requirements()->setIntPositive();
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_VALIDITY_IN_DAYS', $this->siteLangId), 'validity');
-        $fld->requirements()->setIntPositive();
-        $frm->addTextArea(Labels::getLabel('FRM_COMMENTS', $this->siteLangId), 'urp_comments')->requirements()->setRequired();
-        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_LEAVE_THIS_FIELD_EMPTY_EVER_VALID_REWARD_POINTS.', $this->siteLangId) . '</span>';
+
+        $typeArr = Transactions::getCreditDebitTypeArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('FRM_Type', $this->siteLangId), 'type', $typeArr, '', [], Labels::getLabel('FRM_Select', $this->siteLangId))->requirements()->setRequired(true);
+        $frm->addRequiredField(Labels::getLabel('FRM_Amount', $this->siteLangId), 'amount')->requirements()->setFloatPositive();
+        $frm->addTextArea(Labels::getLabel('FRM_Description', $this->siteLangId), 'description')->requirements()->setRequired();
         return $frm;
     }
 
@@ -130,39 +143,47 @@ class RewardsController extends AdminBaseController
     {
         $this->objPrivilege->canEditUsers();
         $frm = $this->getForm();
+
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $userId = FatApp::getPostedData('urp_user_id', FatUtility::VAR_INT, 0);
+        $userId = FatApp::getPostedData('utxn_user_id', FatUtility::VAR_INT, 0);
         if (1 > $userId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_USER', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $userObj = new User($userId);
         $user = $userObj->getUserInfo(array('user_parent'), false, false);
+
         if (!$user || 0 < $user['user_parent']) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
+        $tObj = new Transactions();
+        $data = array(
+            'utxn_user_id' => $userId,
+            'utxn_date' => date('Y-m-d H:i:s'),
+            'utxn_comments' => $post['description'],
+            'utxn_status' => Transactions::STATUS_COMPLETED
+        );
 
-        $obj = new UserRewards();
-        $post['urp_date_added'] = date('Y-m-d H:i:s');
-        if (!empty($post['validity']) && $validity = FatUtility::int($post['validity'])) {
-            $post['urp_date_expiry'] = date('Y-m-d H:i:s', strtotime("+$validity days"));
+        if ($post['type'] == Transactions::CREDIT_TYPE) {
+            $data['utxn_credit'] = $post['amount'];
         }
 
-        $post['urp_user_id'] = $userId;
-        $obj->assignValues($post);
-        if (!$obj->save($post)) {
-            LibHelper::exitWithError($obj->getError(), true);
+        if ($post['type'] == Transactions::DEBIT_TYPE) {
+            $data['utxn_debit'] = $post['amount'];
+        }
+
+        if (!$tObj->addTransaction($data)) {
+            LibHelper::exitWithError($tObj->getError(), true);
         }
 
         /* send email to user[ */
-        $urpId = $obj->getMainTableRecordId();
-        $emailObj = new EmailHandler();
-        $emailObj->sendRewardPointsNotification($this->siteLangId, $urpId);
+        $emailNotificationObj = new EmailHandler();
+        $emailNotificationObj->sendTxnNotification($tObj->getMainTableRecordId(), $this->siteLangId);
         /* ] */
 
         $this->set('userId', $userId);
@@ -172,21 +193,24 @@ class RewardsController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $rewardsTblHeadingCols = CacheHelper::get('rewardsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($rewardsTblHeadingCols) {
-            return json_decode($rewardsTblHeadingCols);
+        $transactionsTblHeadingCols = CacheHelper::get('transactionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($transactionsTblHeadingCols) {
+            return json_decode($transactionsTblHeadingCols);
         }
 
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_USER', $this->siteLangId),
-            'urp_date_added' => Labels::getLabel('LBL_Valid_from', $this->siteLangId),
-            'urp_date_expiry' => Labels::getLabel('LBL_Valid_till', $this->siteLangId),
-            'urp_points' => Labels::getLabel('LBL_Points', $this->siteLangId),
-            'urp_comments' => Labels::getLabel('LBL_Comments', $this->siteLangId),
+            'utxn_id' => Labels::getLabel('LBL_Transaction_Id', $this->siteLangId),
+            'utxn_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
+            'utxn_credit' => Labels::getLabel('LBL_Credit', $this->siteLangId),
+            'utxn_debit' => Labels::getLabel('LBL_Debit', $this->siteLangId),
+            'balance' => Labels::getLabel('LBL_Balance', $this->siteLangId),
+            'utxn_comments' => Labels::getLabel('LBL_Description', $this->siteLangId),
+            'utxn_status' => Labels::getLabel('LBL_Status', $this->siteLangId),
         ];
 
-        CacheHelper::create('rewardsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('transactionsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
@@ -195,15 +219,18 @@ class RewardsController extends AdminBaseController
         return [
             'listSerial',
             'user_name',
-            'urp_date_added',
-            'urp_date_expiry',
-            'urp_points',
-            'urp_comments',
+            'utxn_id',
+            'utxn_date',
+            'utxn_credit',
+            'utxn_debit',
+            'balance',
+            'utxn_comments',
+            'utxn_status',
         ];
     }
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['urp_comments'], Common::excludeKeysForSort());
+        return array_diff($fields, ['utxn_comments'], Common::excludeKeysForSort());
     }
 }
