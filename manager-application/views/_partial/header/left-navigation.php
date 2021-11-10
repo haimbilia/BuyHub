@@ -126,6 +126,11 @@
                                         <?php echo Labels::getLabel('NAV_REWARDS', $siteLangId); ?>
                                     </a>
                                 </li>
+                                <li class="nav_item">
+                                    <a class="nav_link" href="<?php echo UrlHelper::generateUrl('Transactions'); ?>">
+                                        <?php echo Labels::getLabel('NAV_Transactions', $siteLangId); ?>
+                                    </a>
+                                </li>
                             <?php } ?>
                             <?php /* if ($objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true) || $objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">

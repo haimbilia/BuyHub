@@ -129,7 +129,7 @@ class TransactionsController extends AdminBaseController
     private function getForm()
     {
         $frm = new Form('frmUserTransaction');
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'urp_user_id', []);
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'utxn_user_id', []);
         $fld->requirements()->setRequired(true);
 
         $typeArr = Transactions::getCreditDebitTypeArr($this->siteLangId);
@@ -150,7 +150,7 @@ class TransactionsController extends AdminBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $userId = FatUtility::int($post['user_id']);
+        $userId = FatApp::getPostedData('utxn_user_id', FatUtility::VAR_INT, 0);
         if (1 > $userId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
