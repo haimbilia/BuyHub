@@ -775,7 +775,3 @@ $(document).ready(function () {
 
     fixTableColumnWidth();
 });
-
-$(document).ajaxComplete(function () {
-    fixTableColumnWidth();
-});

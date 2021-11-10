@@ -40,15 +40,15 @@ class TransactionsController extends AdminBaseController
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
-        
+
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = current($allowedKeysForSorting);
         }
-        
+
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
-        
+
         $userId = FatApp::getPostedData('utxn_user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
 
@@ -66,6 +66,8 @@ class TransactionsController extends AdminBaseController
         }
 
         $balSrch = Transactions::getSearchObject();
+        $balSrch->doNotCalculateRecords();
+        $balSrch->doNotLimitRecords();
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
         $balSrch->addMultipleFields(['utxn.*', "utxn_credit - utxn_debit as bal"]);
         if (0 < $userId) {
@@ -96,6 +98,7 @@ class TransactionsController extends AdminBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('statusArr', Transactions::getStatusArr($this->siteLangId));
         $this->set('canEdit', $this->objPrivilege->canEditUsers($this->admin_id, true));
     }
 
@@ -190,21 +193,24 @@ class TransactionsController extends AdminBaseController
 
     private function getFormColumns(): array
     {
-        $rewardsTblHeadingCols = CacheHelper::get('rewardsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($rewardsTblHeadingCols) {
-            return json_decode($rewardsTblHeadingCols);
+        $transactionsTblHeadingCols = CacheHelper::get('transactionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($transactionsTblHeadingCols) {
+            return json_decode($transactionsTblHeadingCols);
         }
 
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_USER', $this->siteLangId),
-            'urp_date_added' => Labels::getLabel('LBL_Valid_from', $this->siteLangId),
-            'urp_date_expiry' => Labels::getLabel('LBL_Valid_till', $this->siteLangId),
-            'urp_points' => Labels::getLabel('LBL_Points', $this->siteLangId),
-            'urp_comments' => Labels::getLabel('LBL_Comments', $this->siteLangId),
+            'utxn_id' => Labels::getLabel('LBL_Transaction_Id', $this->siteLangId),
+            'utxn_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
+            'utxn_credit' => Labels::getLabel('LBL_Credit', $this->siteLangId),
+            'utxn_debit' => Labels::getLabel('LBL_Debit', $this->siteLangId),
+            'balance' => Labels::getLabel('LBL_Balance', $this->siteLangId),
+            'utxn_comments' => Labels::getLabel('LBL_Description', $this->siteLangId),
+            'utxn_status' => Labels::getLabel('LBL_Status', $this->siteLangId),
         ];
 
-        CacheHelper::create('rewardsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('transactionsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
@@ -213,15 +219,18 @@ class TransactionsController extends AdminBaseController
         return [
             'listSerial',
             'user_name',
-            'urp_date_added',
-            'urp_date_expiry',
-            'urp_points',
-            'urp_comments',
+            'utxn_id',
+            'utxn_date',
+            'utxn_credit',
+            'utxn_debit',
+            'balance',
+            'utxn_comments',
+            'utxn_status',
         ];
     }
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['urp_comments'], Common::excludeKeysForSort());
+        return array_diff($fields, ['utxn_comments'], Common::excludeKeysForSort());
     }
 }

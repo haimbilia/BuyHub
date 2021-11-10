@@ -40,6 +40,7 @@
 
             var res = JSON.parse(res);
             $(dv).html(res.listingHtml);
+            fixTableColumnWidth();
         });
     };
 
