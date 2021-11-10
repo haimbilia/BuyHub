@@ -35,13 +35,11 @@ $otherButtons = [
             'href' => 'javascript:void(0)',
             'onclick' => 'mediaForm(' . $recordId . ')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
-        ],
+        ], 
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         'isActive' => false
     ]
-];
-$fld = $frm->getField('shop_identifier');
-$fld->developerTags['colWidthValues'] = [null, '12', null, null]; 
+]; 
 $fld = $frm->getField('urlrewrite_custom');
 $fld->developerTags['colWidthValues'] = [null, '12', null, null]; 
 $fld = $frm->getField('shop_phone');

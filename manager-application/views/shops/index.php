@@ -11,19 +11,37 @@ $tableHeadAttrArr = [
         'width' => '5%'
     ],
     'listSerial' => [
+        'width' => '5%'
+    ],
+    'user_name' => [
         'width' => '10%'
     ],
-    'brand_logo' => [
-        'width' => '20%'
+    'shop_name' => [
+        'width' => '16%'
     ],
-    'brand_identifier' => [
-        'width' => '25%'
+    'numOfProducts' => [
+        'width' => '10%'
     ],
-    'brand_active' => [
-        'width' => '20%'
+    'numOfReports' => [
+        'width' => '8%'
+    ],
+    'numOfReviews' => [
+        'width' => '8%'
+    ],
+    'shop_featured' => [
+        'width' => '8%'
+    ],
+    'shop_created_on' => [
+        'width' => '10%'
+    ],
+    'shop_supplier_display_status' => [
+        'width' => '10%'
+    ],
+    'shop_active' => [
+        'width' => '5%'
     ],
     'action' => [
-        'width' => '20%'
+        'width' => '5%'
     ],
 ];
 
