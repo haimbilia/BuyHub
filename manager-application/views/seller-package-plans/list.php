@@ -1,5 +1,5 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_NAME', $siteLangId);
+<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_PACKAGE_NAME', $siteLangId);
 
 /* No sorting functionality required if no record found. */
 if (2 > count($arrListing)) {
@@ -8,11 +8,20 @@ if (2 > count($arrListing)) {
 
 $tableHeadAttrArr = [
     'select_all' => [
-        'class' => 'col-check'
+        'width' => '5%'
     ],
     'listSerial' => [
-        'class' => 'col-sr'
-    ]
+        'width' => '15%'
+    ],
+    'spackage_identifier' => [
+        'width' => '40%'
+    ],
+    'spackage_active' => [
+        'width' => '25%'
+    ],
+    'action' => [
+        'width' => '15%'
+    ],
 ];
 
 $controller = str_replace('Controller', '', FatApp::getController());
@@ -20,16 +29,22 @@ $controller = str_replace('Controller', '', FatApp::getController());
 <main class="main mainJs">
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . 'brands/search-form.php'); ?>
+            <div class="col-md-12">              
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
                         'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_BRANDS', $siteLangId),
+                        'cardHeadTitle' => Labels::getLabel('LBL_SUBSCRIPTION_PACKAGE_PLANS', $siteLangId) ." (".$packageName.")",
                         'newRecordBtn' => true,
-                        'statusButtons' => true,
-                        'deleteButton' => true
+                        'newRecordBtnAttrs' => [
+                            'attr' => [
+                                'href' => 'javascript:void(0)',
+                                'onclick' => 'addNewRecord(' . $spackageId . ')',
+                                'title' => Labels::getLabel('BTN_NEW', $siteLangId)
+                            ],
+                            'label' => Labels::getLabel('BTN_NEW', $siteLangId)
+                        ],
+                        'statusButtons' => true
                     ];
 
                     $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
@@ -37,7 +52,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         <div class="table-responsive listingTableJs">
                             <?php
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
-                            require_once(CONF_THEME_PATH . 'brands/search.php');
+                            require_once(CONF_THEME_PATH . 'seller-package-plans/search.php');
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */
@@ -54,5 +69,5 @@ $controller = str_replace('Controller', '', FatApp::getController());
 </main>
 
 <script>
-    var controllerName = '<?php echo $controller; ?>';
+    var controllerName = '<?php echo $controller; ?>';  
 </script>

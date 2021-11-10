@@ -523,7 +523,7 @@ class BrandsController extends AdminBaseController
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
-        $this->set('brandId', $brand_id);
+        $this->set('recordId', $brand_id);
         $this->set('file', $_FILES['cropped_image']['name']);
         $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_File_Uploaded_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');

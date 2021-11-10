@@ -34,9 +34,6 @@ class AbusiveWordsController extends AdminBaseController
 
     private function getListingData()
     {
-        $db = FatApp::getDb();
-        $post = FatApp::getPostedData();
-
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();

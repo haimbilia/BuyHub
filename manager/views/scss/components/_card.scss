@@ -28,6 +28,8 @@ $card:'card';
             font-weight: 500;
             display: flex;
             flex-direction: column;
+            flex: 1;
+            margin-#{$end-direction}: 8rem;
         }
         &-title {
             font-size: 1.1rem;
@@ -70,6 +72,13 @@ $card:'card';
                 .svg {
                     fill: currentColor;
                 }
+            }
+        }
+        ul {
+            display: flex;
+            li {
+                list-style: none;
+                margin-#{$start-direction}: 0.5rem;
             }
         }
     }

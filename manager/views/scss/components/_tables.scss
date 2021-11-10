@@ -10,17 +10,17 @@
             color: $txt-body;
             font-weight: 600;
             //text-transform: uppercase;
-            border-bottom: $border;
+            border-bottom: solid 1px lighten($border-color, 05);
             &:first-child {
                 padding-left: 0;
             }
             &:last-child {
                 padding-right: 0;
             }
-            &.col-check{
+            &.col-check {
                 width: 20px;
             }
-            &.col-sr{
+            &.col-sr {
                 width: 25px;
             }
         }
@@ -35,7 +35,7 @@
     td {
         padding: 1rem 1.2rem;
         vertical-align: top;
-        border-top: $border;
+        border-top: solid 1px lighten($border-color, 05);
         color: $txt-gray;
     }
     tr {

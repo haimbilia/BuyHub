@@ -410,7 +410,7 @@ class PromotionsController extends AdminBaseController
 
         $this->set('promotionId', $recordId);
         $this->set('langId', $newTabLangId);
-        $this->set('msg', Labels::getLabel('MSG_SET_UP_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -541,6 +541,7 @@ class PromotionsController extends AdminBaseController
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
+        $promotionType = 0;
         if (0 < $recordId) {
             $srch = new PromotionSearch($this->siteLangId);
             $srch->joinBannersAndLocation($this->siteLangId, Promotion::TYPE_BANNER, 'b');
@@ -562,11 +563,13 @@ class PromotionsController extends AdminBaseController
 
             $frm->fill($promotionDetails);
         }
-
+        $languages = Language::getDropDownList($this->getDefaultFormLangId());
+        $enableTabs = (in_array($promotionType, [Promotion::TYPE_BANNER, Promotion::TYPE_SLIDES]) || 0 < count($languages));
         $this->set('promotionType', $promotionType);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        $this->set('includeTabs', $enableTabs);
         $this->set('activeTab', 'GENERAL');
         $this->set('formTitle', Labels::getLabel('LBL_PROMOTION_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
@@ -646,7 +649,7 @@ class PromotionsController extends AdminBaseController
         if (count($languages) <= 1) {
             $lang_id =  array_key_first($languages);
         }
-        $promotionType = 0;
+        
         $srch = new PromotionSearch($this->siteLangId);
         $srch->joinBannersAndLocation($this->siteLangId, Promotion::TYPE_BANNER, 'b');
         $srch->joinSlides();

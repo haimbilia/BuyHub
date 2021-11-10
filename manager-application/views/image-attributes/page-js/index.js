@@ -1,10 +1,9 @@
-var rightSectionDv = '.rightSectionJs';
 attributeForm = function (recordId) {
-    $(rightSectionDv).html(fcom.getLoader());
+    $.ykmodal(fcom.getLoader());
     var moduleType = $('select[name=select_module] option').filter(':selected').val();
     data = "recordId=" + recordId;
     fcom.ajax(fcom.makeUrl(controllerName, "form", [recordId, moduleType]), data, function (t) {
-        $(rightSectionDv).html(t);
+        $.ykmodal(t);
         fcom.removeLoader();
     });
 };
@@ -17,29 +16,28 @@ setup = function (frm) {
     });
 };
 
-discardForm = function () {
-    /* $("#dvForm").hide();
-    $("#dvAlert").show(); */
-};
-
-$(document).on('change', '.language-js', function () {
-    var langId = $(this).val();
-    var recordId = $('#frmImgAttribute input[name=record_id]').val();
-    var module = $('#frmImgAttribute input[name=module_type]').val();
-    var option_id = $('.option-js').length ? $('.option-js').val() : 0;
-    fcom.ajax(fcom.makeUrl('ImageAttributes', 'attributeForm', [recordId, module, langId, option_id]), '', function (t) {
-        $(rightSectionDv).html(t);
-        $('#frmImgAttribute input[name=lang_id]').val(langId);
+$(document).on('change', '.languageJs', function () {
+    var langId = $(this).val() || 0;
+    var recordId = $('#frmImgAttributeJs input[name=record_id]').val();
+    var module = $('#frmImgAttributeJs input[name=module_type]').val();
+    var option_id = $('.optionJs').length ? $('.optionJs').val() : 0;
+    $.ykmodal(fcom.getLoader());
+    fcom.ajax(fcom.makeUrl(controllerName, 'form', [recordId, module, langId, option_id]), '', function (t) {
+        $.ykmodal(t);
+        $('#frmImgAttributeJs input[name=lang_id]').val(langId);
+        fcom.removeLoader();
     });
 });
 
-$(document).on('change', '.option-js', function () {
+$(document).on('change', '.optionJs', function () {
     var option_id = $(this).val();
-    var recordId = $('#frmImgAttribute input[name=record_id]').val();
-    var module = $('#frmImgAttribute input[name=module_type]').val();
-    var langId = $('.language-js').val() || 0;
-    fcom.ajax(fcom.makeUrl('ImageAttributes', 'attributeForm', [recordId, module, langId, option_id]), '', function (t) {
-        $(rightSectionDv).html(t);
-        $('#frmImgAttribute input[name=lang_id]').val(langId);
+    var recordId = $('#frmImgAttributeJs input[name=record_id]').val();
+    var module = $('#frmImgAttributeJs input[name=module_type]').val();
+    var langId = $('.languageJs').val() || 0;
+    $.ykmodal(fcom.getLoader());
+    fcom.ajax(fcom.makeUrl(controllerName, 'form', [recordId, module, langId, option_id]), '', function (t) {
+        $.ykmodal(t);
+        $('#frmImgAttributeJs input[name=lang_id]').val(langId);
+        fcom.removeLoader();
     });
 });

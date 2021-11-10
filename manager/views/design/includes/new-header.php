@@ -2,14 +2,11 @@
     <div class="container-fluid">
         <div class="main-header-inner">
             <div class="page-title">
-                <h1>Dashboard</h1>
-                <ul class="breadcrumb">
-                    <li class="breadcrumb-item ">
-                        <a href="" class="">Home</a>
-                    </li>
-                    <li class="breadcrumb-item">Account</li>
-                    <li class="breadcrumb-item">Settings</li>
-                </ul>
+                <h1>Page title goes here</h1>
+                <span class="page-title-sub"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto
+                    repudiandae, nesciunt
+                    veritatis.</span>
+
             </div>
             <div class="main-header-toolbar">
                 <div class="header-action">
@@ -766,6 +763,15 @@
 
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="alert alert-warning fade show" role="alert">
+        <div class="alert-icon"><i class="flaticon-warning"></i></div>
+        <div class="alert-text">A simple warning alert—check it out!</div>
+        <div class="alert-close">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true"><i class="la la-close"></i></span>
+            </button>
         </div>
     </div>
 </header>
