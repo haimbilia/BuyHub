@@ -14,7 +14,7 @@ foreach ($arrListing as $sn => $row) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
         if ($key == 'label_key') {
-            $td->setAttribute('class', 'word-break');
+            $td->setAttribute('class', 'text-break');
         }
         switch ($key) {
             case 'listSerial':
