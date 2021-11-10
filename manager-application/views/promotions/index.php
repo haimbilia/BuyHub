@@ -1,52 +1,6 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_PROMOTION_NAME', $siteLangId);
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_PROMOTION_NAME', $siteLangId); ?>
 
-/* No sorting functionality required if no record found. */
-if (2 > count($arrListing)) {
-    $allowedKeysForSorting = [];
-}
-
-$tableHeadAttrArr = [
-    'select_all' => [
-        'width' => '5%'
-    ],
-    'listSerial' => [
-        'width' => '5%'
-    ],
-    'promotion_name' => [
-        'width' => '10%'
-    ],
-    'user_name' => [
-        'width' => '15%'
-    ],
-    'shop_name' => [
-        'width' => '20%'
-    ],
-    'promotion_type' => [
-        'width' => '5%'
-    ],
-    'blocation_promotion_cost' => [
-        'width' => '5%'
-    ],
-    'promotion_budget' => [
-        'width' => '10%'
-    ],
-    'impressions' => [
-        'width' => '5%'
-    ],
-    'clicks' => [
-        'width' => '5%'
-    ],
-    'promotion_approved' => [
-        'width' => '5%'
-    ],
-    'action' => [
-        'width' => '10%'
-    ],
-];
-
-$controller = str_replace('Controller', '', FatApp::getController());
-?>
 <main class="main mainJs">
     <div class="container">
         <div class="row">
@@ -83,8 +37,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
 </main>
 
 <script>
-    var controllerName = '<?php echo $controller; ?>';
-
     var PROMOTION_TYPE_BANNER = <?php echo Promotion::TYPE_BANNER; ?>;
     var PROMOTION_TYPE_SHOP = <?php echo Promotion::TYPE_SHOP; ?>;
     var PROMOTION_TYPE_PRODUCT = <?php echo Promotion::TYPE_PRODUCT; ?>;

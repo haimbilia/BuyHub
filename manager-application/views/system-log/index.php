@@ -1,37 +1,6 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TITLE_AND_CONTENT', $siteLangId);
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TITLE_AND_CONTENT', $siteLangId); ?>
 
-/* No sorting functionality required if no record found. */
-if (2 > count($arrListing)) {
-    $allowedKeysForSorting = [];
-}
-
-$tableHeadAttrArr = [
-    'listSerial' => [
-        'width' => '5%'
-    ],
-    'slog_title' => [
-        'width' => '15%'
-    ],
-    'slog_content' => [
-        'width' => '15%'
-    ],
-    'slog_response' => [
-        'width' => '40%'
-    ],
-    'slog_type'    => [
-        'width' => '10%'
-    ],
-    'slog_module_type' => [
-        'width' => '10%'
-    ],
-    'action' => [
-        'width' => '5%'
-    ],
-];
-
-$controller = str_replace('Controller', '', FatApp::getController());
-?>
 <main class="main mainJs">
     <div class="container">
         <div class="row">
@@ -64,6 +33,4 @@ $controller = str_replace('Controller', '', FatApp::getController());
     </div>
 </main>
 
-<script>
-    var controllerName = '<?php echo $controller; ?>';
-</script>
+ 

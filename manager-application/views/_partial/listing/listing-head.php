@@ -3,6 +3,7 @@
 $statusButtons = isset($statusButtons) ? $statusButtons : false;
 $deleteButton = isset($deleteButton) ? $deleteButton : false;
 $newRecordBtn = isset($newRecordBtn) ? $newRecordBtn : false;
+$newRecordBtnAttrs = isset($newRecordBtnAttrs) ? $newRecordBtnAttrs : [];
 $otherButtons = isset($otherButtons) ? $otherButtons : [];
 
 $columnButtons = '';
@@ -46,6 +47,7 @@ if (isset($formColumns) && !empty($formColumns)) {
             'canEdit' => isset($canEdit) ? $canEdit : false,
             'siteLangId' => $siteLangId,
             'newRecordBtn' => $newRecordBtn,
+            'newRecordBtnAttrs' => $newRecordBtnAttrs,
             'statusButtons' => $statusButtons,
             'deleteButton' => $deleteButton,
             'columnButtons' => $columnButtons,

@@ -20,7 +20,7 @@ class Notifications extends MyAppModel
     public function addNotification($data, $pushNotification = true)
     {
         $userId = FatUtility::int($data['unotification_user_id']);
-        if ($userId < 1) {
+        if (1 > $userId) {
             trigger_error(Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId), E_USER_ERROR);
             return false;
         }

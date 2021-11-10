@@ -334,4 +334,9 @@ class LibHelper extends FatUtility
 
         CommonHelper::redirectUserReferer();
     }
+
+    public static function getControllerName()
+    {
+        return str_replace('Controller', '', FatApp::getController());
+    }
 }

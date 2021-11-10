@@ -1,15 +1,16 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
 $formFields = isset($formFields) ? $formFields : [];
+$performBulkAction = $performBulkAction ?? false;
 
-if (!isset($controller)) {
+if (false === $performBulkAction) {
     echo $tbl->getHtml();
-} else if (empty($formFields) && isset($controller)) {
+} else if (empty($formFields) && true === $performBulkAction) {
     $formAction = isset($formAction) ? $formAction : 'toggleBulkStatuses';
     $attr = [
         'class' => 'actionButtonsJs',
         'onsubmit' => 'formAction(this, reloadList); return(false);',
-        'action' => UrlHelper::generateUrl($controller, $formAction),
+        'action' => UrlHelper::generateUrl(LibHelper::getControllerName(), $formAction),
     ];
     $frm = new Form('listingForm', $attr);
     $frm->addHiddenField('', 'status');

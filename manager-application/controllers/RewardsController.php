@@ -16,7 +16,7 @@ class RewardsController extends AdminBaseController
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('languages', Language::getAllNames());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_USER_REWARD_POINTS', $this->siteLangId));
+        $this->set('pageTitle', Labels::getLabel('LBL_Manage_User_Reward_Points', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->addJs(array('js/select2.js'));
@@ -36,24 +36,25 @@ class RewardsController extends AdminBaseController
 
     private function getListingData()
     {
-        $userId = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
-
+        
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
-
+        
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = current($allowedKeysForSorting);
         }
-
+        
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
-
+        
+        $userId = FatApp::getPostedData('urp_user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        $post['urp_user_id'] = $userId;
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
@@ -96,7 +97,7 @@ class RewardsController extends AdminBaseController
             $this->addSortingElements($frm);
         }
 
-        $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'user_id', []);
+        $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'urp_user_id', []);
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -106,27 +107,22 @@ class RewardsController extends AdminBaseController
     public function form()
     {
         $this->objPrivilege->canEditUsers();
-
-        $userId = FatApp::getPostedData('urp_user_id', FatUtility::VAR_INT, 0);
-        if (1 > $userId) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_USER', $this->siteLangId));
-        }
-        $frm = $this->getForm($userId);
+        $frm = $this->getForm();
         $this->set('frm', $frm);
-        $this->set('userId', $userId);
         $this->set('includeTabs', false);
         $this->set('formTitle', Labels::getLabel('LBL_USER_REWARDS_POINT_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
     }
 
-    private function getForm(int $userId)
+    private function getForm()
     {
         $frm = new Form('frmUserRewardPoints');
-        $frm->addHiddenField('', 'urp_user_id', $userId);
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'urp_user_id', []);
+        $fld->requirements()->setRequired(true);
         $frm->addRequiredField(Labels::getLabel('FRM_POINTS', $this->siteLangId), 'urp_points')->requirements()->setIntPositive();
-        $frm->addTextArea(Labels::getLabel('FRM_COMMENTS', $this->siteLangId), 'urp_comments')->requirements()->setRequired();
         $fld = $frm->addTextBox(Labels::getLabel('FRM_VALIDITY_IN_DAYS', $this->siteLangId), 'validity');
         $fld->requirements()->setIntPositive();
+        $frm->addTextArea(Labels::getLabel('FRM_COMMENTS', $this->siteLangId), 'urp_comments')->requirements()->setRequired();
         $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_LEAVE_THIS_FIELD_EMPTY_EVER_VALID_REWARD_POINTS.', $this->siteLangId) . '</span>';
         return $frm;
     }
@@ -134,17 +130,17 @@ class RewardsController extends AdminBaseController
     public function setup()
     {
         $this->objPrivilege->canEditUsers();
-        $userId = FatApp::getPostedData('urp_user_id', FatUtility::VAR_INT, 0);
-        if (1 > $userId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_USER', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $frm = $this->getForm($userId);
+        $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+
+        $userId = FatApp::getPostedData('urp_user_id', FatUtility::VAR_INT, 0);
+        if (1 > $userId) {
+            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_USER', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
         }
 
@@ -160,6 +156,8 @@ class RewardsController extends AdminBaseController
         if (!empty($post['validity']) && $validity = FatUtility::int($post['validity'])) {
             $post['urp_date_expiry'] = date('Y-m-d H:i:s', strtotime("+$validity days"));
         }
+
+        $post['urp_user_id'] = $userId;
         $obj->assignValues($post);
         if (!$obj->save($post)) {
             Message::addErrorMessage($obj->getError());
@@ -211,6 +209,6 @@ class RewardsController extends AdminBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['user_name', 'urp_comments'], Common::excludeKeysForSort());
+        return array_diff($fields, ['urp_comments'], Common::excludeKeysForSort());
     }
 }

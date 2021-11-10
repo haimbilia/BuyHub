@@ -1,26 +1,26 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_EMAIL_NAME_AND_SUBJECT', $siteLangId); ?>
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_NAME', $siteLangId); ?>
 
 <main class="main mainJs">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
+                <?php require_once(CONF_THEME_PATH . 'seller-products/search-form.php'); ?>
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
                         'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_EMAIL_TEMPLATES', $siteLangId),
-                        'newRecordBtn' => false,
-                        'statusButtons' => true,
-                        'deleteButton' => false
+                        'cardHeadTitle' => Labels::getLabel('LBL_SELLER_INVENTORIES', $siteLangId),
+                        'newRecordBtn' => true,                        
+                        'deleteButton' => true
                     ];
+
                     $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
                     <div class="card-body">
                         <div class="table-responsive listingTableJs">
                             <?php
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
-                            require_once(CONF_THEME_PATH . 'email-templates/search.php');
+                            require_once(CONF_THEME_PATH . 'seller-products/search.php');
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */

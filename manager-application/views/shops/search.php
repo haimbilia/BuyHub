@@ -21,10 +21,8 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'shop_identifier':
-                $td->appendElement('plaintext', array(), $row['shop_name'], true);
-                $td->appendElement('br', array());
-                $td->appendElement('plaintext', array(), '(' . $row[$key] . ')', true);
+            case 'shop_name':
+                $td->appendElement('plaintext', array(), $row['shop_name'], true); 
                 break;
             case 'shop_featured':
                 $td->appendElement('plaintext', array(), applicationConstants::getYesNoArr($siteLangId)[$row[$key]], true);

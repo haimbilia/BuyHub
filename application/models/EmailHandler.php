@@ -2363,7 +2363,6 @@ class EmailHandler extends FatModel
         $srch->addMultipleFields(array('urp.*', 'u.user_name', 'u.user_phone_dcode', 'u.user_phone', 'uc.credential_email'));
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
-
         if (!$row) {
             $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
             return false;

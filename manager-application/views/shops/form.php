@@ -35,13 +35,11 @@ $otherButtons = [
             'href' => 'javascript:void(0)',
             'onclick' => 'mediaForm(' . $recordId . ')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
-        ],
+        ], 
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         'isActive' => false
     ]
-];
-$fld = $frm->getField('shop_identifier');
-$fld->developerTags['colWidthValues'] = [null, '12', null, null]; 
+]; 
 $fld = $frm->getField('urlrewrite_custom');
 $fld->developerTags['colWidthValues'] = [null, '12', null, null]; 
 $fld = $frm->getField('shop_phone');
@@ -63,7 +61,7 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('shop_cancellation_age');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('shop_featured');
-$fld->developerTags['colWidthValues'] = [null, '12', null, null];
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $formTitle = Labels::getLabel('LBL_SHOP_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 ?>

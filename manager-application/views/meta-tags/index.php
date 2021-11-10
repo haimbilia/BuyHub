@@ -1,7 +1,5 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
-$controller = str_replace('Controller', '', FatApp::getController());
-?>
 <main class="main">
     <div class="container">
         <div class="row">
@@ -53,7 +51,3 @@ $controller = str_replace('Controller', '', FatApp::getController());
         </div>
     </div>
 </main>
-
-<script>
-var controllerName = '<?php echo $controller; ?>';
-</script>

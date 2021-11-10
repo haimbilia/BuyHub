@@ -2,20 +2,22 @@
 
 HtmlHelper::formatFormFields($frm);
 
-$frm->setFormTagAttribute('data-onclear', 'addNewRecord(' . $userId . ')');
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
-$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
+$frm->setFormTagAttribute('data-onclear', 'addNew()');
 
-?>
-<div class="modal-header">
-    <h5 class="modal-title">
-        <?php echo $formTitle; ?>
-    </h5>
-</div>
-<div class="modal-body form-edit">
-    <div class="form-edit-body loaderContainerJs">
-        <?php echo $frm->getFormHtml(); ?>
-    </div>
-    
-    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
-</div>
+$fld = $frm->getField('urp_user_id');
+$fld->addFieldTagAttribute('id', 'userIdJs');
+$fld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_SELECT_USER', $siteLangId));
+
+$fld = $frm->getField('urp_points');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
+$fld = $frm->getField('validity');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
+require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
+
+<script>
+    $(document).ready(function () {
+        bindUserSelect2('userIdJs');
+    });
+</script>
