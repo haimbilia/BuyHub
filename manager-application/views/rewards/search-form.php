@@ -5,12 +5,10 @@ $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);
 $frmSearch->setFormTagAttribute('id', 'frmRecordSearch');
 $frmSearch->setFormTagAttribute('class', 'form');
 
-$keyWordFld = $frmSearch->getField('keyword');
-$keyWordFld->addFieldtagAttribute('class', 'form-control');
-$keyWordFld->setFieldtagAttribute('placeholder', $keywordPlaceholder);
-
-$moduleFld = $frmSearch->getField('select_module');
-$moduleFld->addFieldtagAttribute('class', 'form-control');
+$userFld = $frmSearch->getField('user_id');
+$userFld->addFieldtagAttribute('class', 'form-control');
+$userFld->addFieldtagAttribute('id', 'userIdJs');
+$userFld->setFieldtagAttribute('placeholder', $keywordPlaceholder);
 
 $sortByFld = $frmSearch->getField('sortBy');
 $sortByFld->setFieldTagAttribute('id', 'sortBy');
@@ -24,17 +22,11 @@ echo $frmSearch->getFormTag();
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-4">
-                    <?php echo $frmSearch->getFieldHtml('keyword'); ?>
-                </div>
-                <div class="col-md-4">
-                    <?php echo $frmSearch->getFieldHtml('select_module'); ?>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-8">
                     <div class="input-group">
-                        <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                        <?php echo $frmSearch->getFieldHtml('user_id'); ?>
                         <div class="input-group-append">
-                            <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                            <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
                         </div>
                     </div>
                 </div>

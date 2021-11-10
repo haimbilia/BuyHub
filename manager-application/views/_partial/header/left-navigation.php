@@ -471,6 +471,14 @@
                                 </li>
                             <?php } ?>
 
+                            <?php if ($objPrivilege->canViewImageAttributes(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link" href="<?php echo UrlHelper::generateUrl('ImageAttributes'); ?>">
+                                        <?php echo Labels::getLabel('NAV_Image_Attributes', $siteLangId); ?>
+                                    </a>
+                                </li>
+                            <?php } ?>
+
                             <?php if ($objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
                                     <a class="nav_link" href="<?php echo UrlHelper::generateUrl('sitemap', 'generate'); ?>">
