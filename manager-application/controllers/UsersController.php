@@ -285,110 +285,6 @@ class UsersController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    public function rewards($userId = 0)
-    {
-        $this->objPrivilege->canViewUsers();
-
-        $userId = FatUtility::int($userId);
-        if (1 > $userId) {
-            FatUtility::dieWithError($this->str_invalid_request);
-        }
-
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-
-        $post = FatApp::getPostedData();
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : $post['page'];
-        $page = (empty($page) || $page <= 0) ? 1 : FatUtility::int($page);
-
-        $srch = new UserRewardSearch();
-        $srch->addCondition('urp.urp_user_id', '=', $userId);
-
-        $srch->addMultipleFields(array('urp.*'));
-
-        $srch->addOrder('urp_id', 'DESC');
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-
-        $rs = $srch->getResultSet();
-        $records = array();
-        if ($rs) {
-            $records = FatApp::getDb()->fetchAll($rs);
-        }
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
-        $this->set('postedData', $post);
-        $this->set('userId', $userId);
-        $this->_template->render(false, false);
-    }
-
-    public function addUserRewardPoints($userId = 0)
-    {
-        $this->objPrivilege->canViewUsers();
-        $userId = FatUtility::int($userId);
-
-        if (1 > $userId) {
-            FatUtility::dieWithError($this->str_invalid_request_id);
-        }
-
-        $frm = $this->addUserRewardPointsForm($this->siteLangId);
-        $frm->fill(array('urp_user_id' => $userId));
-
-        $this->set('userId', $userId);
-        $this->set('frm', $frm);
-        $this->_template->render(false, false);
-    }
-
-    public function setupUserRewardPoints()
-    {
-        $this->objPrivilege->canEditUsers();
-        $frm = $this->addUserRewardPointsForm($this->siteLangId);
-
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $userId = FatUtility::int($post['urp_user_id']);
-        if (1 > $userId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $userObj = new User($userId);
-        $user = $userObj->getUserInfo(array('user_parent'), false, false);
-        if (!$user || 0 < $user['user_parent']) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $obj = new UserRewards();
-        $post['urp_date_added'] = date('Y-m-d H:i:s');
-        if (!empty($post['validity']) && $validity = FatUtility::int($post['validity'])) {
-            $post['urp_date_expiry'] = date('Y-m-d H:i:s', strtotime("+$validity days"));
-        }
-        $obj->assignValues($post);
-        if (!$obj->save($post)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        /* send email to user[ */
-        $urpId = $obj->getMainTableRecordId();
-        $emailObj = new EmailHandler();
-        $emailObj->sendRewardPointsNotification($this->siteLangId, $urpId);
-        /* ] */
-
-        $this->set('userId', $userId);
-        $this->set('msg', $this->str_setup_successful);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
     public function transaction($userId = 0)
     {
         $this->objPrivilege->canViewUsers();
@@ -419,8 +315,8 @@ class UsersController extends AdminBaseController
 
         $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance"));
 
-        $srch->addOrder('utxn_id', 'DESC');
         $srch->addGroupBy('utxn.utxn_id');
+        $srch->addOrder('utxn_id', 'DESC');
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
@@ -2257,19 +2153,6 @@ class UsersController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->siteLangId), 'type', $typeArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired(true);
         $frm->addRequiredField(Labels::getLabel('LBL_Amount', $this->siteLangId), 'amount')->requirements()->setFloatPositive();
         $frm->addTextArea(Labels::getLabel('LBL_Description', $this->siteLangId), 'description')->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        return $frm;
-    }
-
-    private function addUserRewardPointsForm($langId)
-    {
-        $frm = new Form('frmUserRewardPoints');
-        $frm->addHiddenField('', 'urp_user_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_Points', $this->siteLangId), 'urp_points')->requirements()->setIntPositive();
-        $frm->addTextArea(Labels::getLabel('LBL_Comments', $this->siteLangId), 'urp_comments')->requirements()->setRequired();
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Validity', $this->siteLangId), 'validity');
-        $fld->requirements()->setIntPositive();
-        $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_Leave_this_field_empty_ever_valid_reward_points.', $this->siteLangId) . '</small>';
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }

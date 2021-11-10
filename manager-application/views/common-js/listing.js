@@ -735,12 +735,12 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     }
 
     /* Fix width of table headings. */
-    fixTableColumnWidth = function() {
+    fixTableColumnWidth = function () {
         var thWidthArr = [];
         $('.listingTableJs .tableHeadJs th').each(function () {
             thWidthArr[$(this).width()] = $(this);
         });
-    
+
         $.each(sortObjectByKeys(thWidthArr), function (index, value) {
             $(value).css({ 'width': $(value).width() });
         });
@@ -772,6 +772,10 @@ $(document).ready(function () {
     if (typeof controllerName != 'undefined') {
         getHelpCenterContent(controllerName);
     }
-    
+
+    fixTableColumnWidth();
+});
+
+$(document).ajaxComplete(function () {
     fixTableColumnWidth();
 });
