@@ -1673,7 +1673,7 @@ class UsersController extends AdminBaseController
         }
     }
 
-    public function autoComplete()
+    /*  public function autoComplete()
     {
         $this->objPrivilege->canViewUsers();
         $pagesize = 20;
@@ -1689,7 +1689,7 @@ class UsersController extends AdminBaseController
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('u.user_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('uc.credential_username', 'LIKE', '%' . $post['keyword'] . '%');
-            /* $cnd->attachCondition('uc.credential_email', 'LIKE', '%' . $post['keyword'] . '%'); */
+            // $cnd->attachCondition('uc.credential_email', 'LIKE', '%' . $post['keyword'] . '%');
         }
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
@@ -1709,9 +1709,9 @@ class UsersController extends AdminBaseController
         }
 
         die(FatUtility::convertToJson($json));
-    }
+    } */
 
-    public function autoCompleteJson()
+    public function autoComplete()
     {
         $pagesize = 20;
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -1720,7 +1720,6 @@ class UsersController extends AdminBaseController
         }
 
         $post = FatApp::getPostedData();
-        $this->objPrivilege->canViewUsers();
 
         $skipDeletedUser = true;
         if (isset($post['deletedUser']) && $post['deletedUser'] == true) {
@@ -1803,12 +1802,7 @@ class UsersController extends AdminBaseController
             $name = (0 < $joinShop) ? $user['user_name'] . ' (' . $user['shop_name'] . ')' : $user['user_name'];
             $json['results'][] = array(
                 'id' => $key,
-                'text' => strip_tags(html_entity_decode($name, ENT_QUOTES, 'UTF-8')),
-                /*
-                'name' => strip_tags(html_entity_decode($name, ENT_QUOTES, 'UTF-8')),
-                'username' => strip_tags(html_entity_decode($user['credential_username'], ENT_QUOTES, 'UTF-8')),
-                'credential_email' => strip_tags(html_entity_decode($user['credential_email'], ENT_QUOTES, 'UTF-8')), 
-                */
+                'text' => strip_tags(html_entity_decode($name, ENT_QUOTES, 'UTF-8'))
             );
         }
 

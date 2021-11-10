@@ -28,7 +28,7 @@ $fld->setfieldTagAttribute('id', "afcommsetting_prodcat_id");
 
 <script type="text/javascript">
 $("document").ready(function(){
-	select2('afcommsetting_user_id',fcom.makeUrl('Users', 'autoCompleteJson'),{
+	select2('afcommsetting_user_id',fcom.makeUrl('Users', 'autoComplete'),{
 		user_is_affiliate: 1, credential_active: 1, credential_verified: 1
 	});
 	select2('afcommsetting_prodcat_id',fcom.makeUrl('productCategories', 'links_autocomplete'),{fIsAjax:1});
