@@ -4,10 +4,8 @@ $sortByFld = $frmSearch->getField('sortBy');
 $sortByFld->setFieldTagAttribute('id', 'sortBy');
 
 $sortOrderFld = $frmSearch->getField('sortOrder');
-$sortOrderFld->setFieldTagAttribute('id', 'sortOrder');
+$sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
 
-$controller = str_replace('Controller', '', FatApp::getController());
-?>
 <main class="main">
     <div class="container">
         <div class="row">
@@ -68,8 +66,6 @@ $controller = str_replace('Controller', '', FatApp::getController());
 </main>
 
 <script>
-var controllerName = '<?php echo $controller; ?>';
-
 $(document).ready(function() {
     bindSortable();
 });

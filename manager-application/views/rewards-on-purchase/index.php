@@ -1,31 +1,6 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_PURCHASE_AMOUNT', $siteLangId);
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_PURCHASE_AMOUNT', $siteLangId); ?>
 
-/* No sorting functionality required if no record found. */
-if (2 > count($arrListing)) {
-    $allowedKeysForSorting = [];
-}
-
-$tableHeadAttrArr = [
-    'select_all' => [
-        'width' => '5%'
-    ],
-    'listSerial' => [
-        'width' => '10%'
-    ],
-    'rop_purchase_upto' => [
-        'width' => '25%'
-    ],
-    'rop_reward_point' => [
-        'width' => '25%'
-    ],
-    'action' => [
-        'width' => '25%'
-    ],
-];
-
-$controller = str_replace('Controller', '', FatApp::getController());
-?>
 <main class="main mainJs">
     <div class="container">
         <div class="row">
@@ -62,6 +37,4 @@ $controller = str_replace('Controller', '', FatApp::getController());
     </div>
 </main>
 
-<script>
-    var controllerName = '<?php echo $controller; ?>';
-</script>
+ 

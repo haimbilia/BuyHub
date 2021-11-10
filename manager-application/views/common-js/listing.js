@@ -663,25 +663,25 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     return;
                 }
                 $.ykmsg.success(ans.msg);
-                if (true === $.ykmodal.isAdded()) {                 
+                if (true === $.ykmodal.isAdded()) {
                     $.ykmodal.show();
                     $("#modalBoxJs").modal("hide");
                     if ("" != callback) {
                         window[callback]();
                     } else if (
                         0 < $(".navTabsJs").length &&
-                        0 < $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='lang_id']").length
-                    ) {                      
-                        $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='lang_id']")
+                        0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").length
+                    ) {
+                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']")
                             .val(langId)
                             .change();
-                    }else if (
+                    } else if (
                         0 < $(".navTabsJs").length &&
-                        0 < $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='slide_screen']").length
-                    ) {                      
-                        $("." + $.ykmodal.element + " form[name='"+ frm['name']+"'] select[name='slide_screen']")                      
+                        0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").length
+                    ) {
+                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']")
                             .change();
-                    }else{
+                    } else {
                         mediaForm(ans.recordId, imageType, langId, slideScreen);
                     }
                 } else {
@@ -733,6 +733,18 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     editDropZoneImages = function (obj) {
         $(obj).closest(".dropzoneContainerJs").find(".dropzoneInputJs").click();
     }
+
+    /* Fix width of table headings. */
+    fixTableColumnWidth = function() {
+        var thWidthArr = [];
+        $('.listingTableJs .tableHeadJs th').each(function () {
+            thWidthArr[$(this).width()] = $(this);
+        });
+    
+        $.each(sortObjectByKeys(thWidthArr), function (index, value) {
+            $(value).css({ 'width': $(value).width() });
+        });
+    }
 })();
 
 $(document).on("click", ".selectItemJs", function () {
@@ -760,4 +772,6 @@ $(document).ready(function () {
     if (typeof controllerName != 'undefined') {
         getHelpCenterContent(controllerName);
     }
+    
+    fixTableColumnWidth();
 });

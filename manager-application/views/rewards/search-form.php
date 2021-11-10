@@ -5,9 +5,9 @@ $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);
 $frmSearch->setFormTagAttribute('id', 'frmRecordSearch');
 $frmSearch->setFormTagAttribute('class', 'form');
 
-$userFld = $frmSearch->getField('user_id');
+$userFld = $frmSearch->getField('urp_user_id');
 $userFld->addFieldtagAttribute('class', 'form-control');
-$userFld->addFieldtagAttribute('id', 'userIdJs');
+$userFld->addFieldtagAttribute('id', 'searchFrmUserIdJs');
 $userFld->setFieldtagAttribute('placeholder', $keywordPlaceholder);
 
 $sortByFld = $frmSearch->getField('sortBy');
@@ -24,7 +24,7 @@ echo $frmSearch->getFormTag();
             <div class="row">
                 <div class="col-md-8">
                     <div class="input-group">
-                        <?php echo $frmSearch->getFieldHtml('user_id'); ?>
+                        <?php echo $frmSearch->getFieldHtml('urp_user_id'); ?>
                         <div class="input-group-append">
                             <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
                         </div>

@@ -1,34 +1,6 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TAG_OR_PRODUCT_NAME', $siteLangId);
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TAG_OR_PRODUCT_NAME', $siteLangId); ?>
 
-/* No sorting functionality required if no record found. */
-if (2 > count($arrListing)) {
-    $allowedKeysForSorting = [];
-}
-
-$tableHeadAttrArr = [
-    'listSerial' => [
-        'width' => "10%"
-    ],
-    'tag_name' => [
-        'width' => "15%"
-    ],
-    'product_name' => [
-        'width' => "20%"
-    ],
-    'tpr_weightage' => [
-        'width' => "15%"
-    ],
-    'tpr_custom_weightage' => [
-        'width' => "20%"
-    ],
-    'tpr_custom_weightage_valid_till' => [
-        'width' => "20%"
-    ],
-];
-
-$controller = str_replace('Controller', '', FatApp::getController());
-?>
 <main class="main mainJs">
     <div class="container">
         <div class="row">
@@ -61,6 +33,4 @@ $controller = str_replace('Controller', '', FatApp::getController());
     </div>
 </main>
 
-<script>
-    var controllerName = '<?php echo $controller; ?>';
-</script>
+ 

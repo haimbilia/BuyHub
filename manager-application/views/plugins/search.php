@@ -1,32 +1,4 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$tableHeadAttrArr = [
-    'dragdrop' => [
-        'width' => '5%'
-    ],
-    'select_all' => [
-        'width' => '10%'
-    ],
-    'listSerial' => [
-        'width' => '10%'
-    ],
-    'plugin_icon' => [
-        'width' => '20%'
-    ],
-    'plugin_identifier' => [
-        'width' => '30%'
-    ],
-    'plugin_active' => [
-        'width' => '15%'
-    ],
-    'action' => [
-        'width' => '10%'
-    ],
-];
-
-/* No sorting functionality required if no record found. */
-if (2 > count($arrListing)) {
-    $allowedKeysForSorting = [];
-}
 
 $allPlugins = $arrListing;
 $pluginType = (!empty($allPlugins)) ? (array_shift($allPlugins))['plugin_type'] : '';

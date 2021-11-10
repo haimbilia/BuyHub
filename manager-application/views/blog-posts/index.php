@@ -1,37 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TITLE', $siteLangId);
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TITLE', $siteLangId); ?>
 
-/* No sorting functionality required if no record found. */
-if (2 > count($arrListing)) {
-    $allowedKeysForSorting = [];
-}
-
-$tableHeadAttrArr = [
-    'select_all' => [
-        'width' => '5%',
-    ],
-    'listSerial' => [
-        'width' => '5%',
-    ],
-    'post_title' => [
-        'width' => '25%',
-    ],
-    'categories' => [
-        'width' => '20%',
-    ],
-    'post_published_on' => [
-        'width' => '15%',
-    ],
-    'post_published' => [
-        'width' => '10%',
-    ],
-    'action' => [
-        'width' => '10%',
-    ],
-];
-
-$controller = str_replace('Controller', '', FatApp::getController());
-?>
 <main class="main mainJs">
     <div class="container">
         <div class="row">
@@ -54,7 +23,7 @@ $controller = str_replace('Controller', '', FatApp::getController());
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */
-                                'controller' => $controller /* Used in case of performing bulk action. */
+                                'performBulkAction' => true /* Used in case of performing bulk action. */
                             ];
                             $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
                         </div>
@@ -66,6 +35,4 @@ $controller = str_replace('Controller', '', FatApp::getController());
     </div>
 </main>
 
-<script>
-    var controllerName = '<?php echo $controller; ?>';
-</script>
+ 

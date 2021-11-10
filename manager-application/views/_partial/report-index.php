@@ -88,6 +88,3 @@ if (!empty($fields)) {
         </div>
     </div>
 </div>
-<script>
-    var controllerName = '<?php echo str_replace('Controller', '', FatApp::getController()); ?>';
-</script>

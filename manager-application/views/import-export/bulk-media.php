@@ -1,31 +1,5 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-// $keywordPlaceholder = Labels::getLabel('LBL_SEARCH_EMPTY_CART_ITEMS', $siteLangId);
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
-/* No sorting functionality required if no record found. */
-if (2 > count($arrListing)) {
-    $allowedKeysForSorting = [];
-}
-
-$tableHeadAttrArr = [
-    'listSerial' => [
-        'width' => '5%'
-    ],
-    'user' => [
-        'width' => '20%'
-    ],
-    'afile_physical_path' => [
-        'width' => '55%'
-    ],
-    'files'    => [
-        'width' => '10%'
-    ],
-    'action' => [
-        'width' => '10%'
-    ],
-];
-
-$controller = str_replace('Controller', '', FatApp::getController());
-?>
 <div class="card-body">
     <?php echo HtmlHelper::getDropZoneHtml(FatUtility::generateUrl('ImportExport', 'upload')); ?>
 
@@ -43,6 +17,4 @@ $controller = str_replace('Controller', '', FatApp::getController());
     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-foot.php'); ?>
 </div>
 
-<script>
-    var controllerName = '<?php echo $controller; ?>';
-</script>
+ 

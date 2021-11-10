@@ -1,6 +1,5 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$controller = str_replace('Controller', '', FatApp::getController());
-?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+
 <main class="main mainJs">
     <div class="container">
         <div class="card">
@@ -292,6 +291,5 @@ $controller = str_replace('Controller', '', FatApp::getController());
     </div>
 </main>
 <script>
-    var controllerName = '<?php echo $controller; ?>';
     var formType = '<?php echo Configurations::FORM_SERVER; ?>';
 </script>

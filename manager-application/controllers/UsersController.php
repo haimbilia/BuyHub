@@ -1673,44 +1673,6 @@ class UsersController extends AdminBaseController
         }
     }
 
-    /*  public function autoComplete()
-    {
-        $this->objPrivilege->canViewUsers();
-        $pagesize = 20;
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        if ($page < 2) {
-            $page = 1;
-        }
-
-        $userObj = new User();
-        $srch = $userObj->getUserSearchObj(array('u.user_name', 'u.user_id', 'credential_username', 'credential_email'));
-
-        $post = FatApp::getPostedData();
-        if (!empty($post['keyword'])) {
-            $cnd = $srch->addCondition('u.user_name', 'LIKE', '%' . $post['keyword'] . '%');
-            $cnd->attachCondition('uc.credential_username', 'LIKE', '%' . $post['keyword'] . '%');
-            // $cnd->attachCondition('uc.credential_email', 'LIKE', '%' . $post['keyword'] . '%');
-        }
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-
-        $users = $db->fetchAll($rs, 'user_id');
-
-        $json = array(
-            'pageCount' => $srch->pages()
-        );
-        foreach ($users as $key => $user) {
-            $json['results'][] = array(
-                'id' => $key,
-                'text' => strip_tags(html_entity_decode($user['user_name'] . '(' . $user['credential_username'] . ')', ENT_QUOTES, 'UTF-8'))
-            );
-        }
-
-        die(FatUtility::convertToJson($json));
-    } */
-
     public function autoComplete()
     {
         $pagesize = 20;

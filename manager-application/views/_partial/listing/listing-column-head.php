@@ -4,6 +4,11 @@ $tableId = isset($tableId) ?  $tableId : '';
 
 $disableSelectAll = empty($arrListing) ? 'disabled="disabled"' : '';
 
+/* No sorting functionality required if no record found. */
+if (2 > count($arrListing)) {
+    $allowedKeysForSorting = [];
+}
+
 $tbl = new HtmlElement(
     'table',
     array('width' => '100%', 'class' => 'table table-dashed', 'id' => $tableId)
@@ -31,6 +36,14 @@ foreach ($fields as $key => $val) {
     if (!empty($tableHeadAttrArr) && array_key_exists($key, $tableHeadAttrArr)) {
         $cls .= !empty($cls) ? ' ' : '';
         $cls .= $tableHeadAttrArr[$key]['class'] ?? '';
+    }
+
+    if ('listSerial' == $key) {
+        $cls .= !empty($cls) ? ' ' : '';
+        $cls .= 'col-sr';
+    } else if ('select_all' == $key) {
+        $cls .= !empty($cls) ? ' ' : '';
+        $cls .= 'col-check';
     }
 
     $td = $th->appendElement('th', ['class' => $cls, 'data-field' => $key, 'width' => $thWidth]);

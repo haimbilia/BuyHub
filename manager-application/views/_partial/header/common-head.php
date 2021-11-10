@@ -29,6 +29,7 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'directi
 		if( CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES <= 0  ){
 			CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES = 3;
 		}
+        var controllerName = "' . LibHelper::getControllerName() . '";
 		</script>' . "\r\n";
 
 
