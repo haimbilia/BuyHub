@@ -488,10 +488,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             $.ykmsg.error(langLbl.actionButtonsClass);
             return false;
         }
-        msg = "" == msg ? langLbl.confirmUpdateStatus : msg;
+        /* msg = "" == msg ? langLbl.confirmUpdateStatus : msg;
         if (!confirm(msg)) {
             return false;
-        }
+        } */
         $(element).attr(
             "action",
             fcom.makeUrl(controllerName, "toggleBulkStatuses")
