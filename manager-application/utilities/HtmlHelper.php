@@ -265,7 +265,7 @@ class HtmlHelper
     }
 
     /**
-     * $imageArr ex. ['name' => 'fav.png','url'=>'imageurl']
+     * $imageArr ex. ['name' => 'fav.png','url'=>'imageurl' ,'afile_id'=> 66]
      */
 
     public static function getfileInputHtml(array $fileInputAttributes,int $langId, string $removeFn, string $editFn = '', $imageArr = [], $headerClass = '')

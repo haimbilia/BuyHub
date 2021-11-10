@@ -6,24 +6,6 @@ if (2 > count($arrListing)) {
     $allowedKeysForSorting = [];
 }
 
-$tableHeadAttrArr = [
-    'select_all' => [
-        'width' => '5%'
-    ],
-    'listSerial' => [
-        'width' => '15%'
-    ],
-    'spackage_identifier' => [
-        'width' => '40%'
-    ],
-    'spackage_active' => [
-        'width' => '25%'
-    ],
-    'action' => [
-        'width' => '15%'
-    ],
-];
-
 $controller = str_replace('Controller', '', FatApp::getController());
 ?>
 <main class="main mainJs">
@@ -35,11 +17,12 @@ $controller = str_replace('Controller', '', FatApp::getController());
                         'canEdit' => $canEdit,
                         'siteLangId' => $siteLangId,
                         'cardHeadTitle' => Labels::getLabel('LBL_SUBSCRIPTION_PACKAGE_PLANS', $siteLangId) ." (".$packageName.")",
+                        'cardHeadBackButtonHref' => UrlHelper::generateUrl('SellerPackages'),
                         'newRecordBtn' => true,
                         'newRecordBtnAttrs' => [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
-                                'onclick' => 'addNewRecord(' . $spackageId . ')',
+                                'onclick' => 'addNewPlan(' . $spackageId . ')',
                                 'title' => Labels::getLabel('BTN_NEW', $siteLangId)
                             ],
                             'label' => Labels::getLabel('BTN_NEW', $siteLangId)

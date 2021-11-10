@@ -35,7 +35,17 @@ if (isset($formColumns) && !empty($formColumns)) {
 <div class="card-head">
     <div class="card-head-label">
         <?php if (isset($cardHeadTitle) && !empty($cardHeadTitle)) { ?>
-            <h3 class="card-head-title"><?php echo $cardHeadTitle; ?></h3>
+            <h3 class="card-head-title">
+                <?php if(isset($cardHeadBackButtonHref)){ ?>
+                    <a class="back" href="<?php echo $cardHeadBackButtonHref; ?>">
+                        <svg class="svg" width="24" height="24">
+                            <use xlink:href="/admin/images/retina/sprite-actions.svg#back">
+                            </use>
+                        </svg>
+                    </a>
+                <?php } ?>   
+                <?php echo $cardHeadTitle; ?>             
+            </h3>
         <?php } ?>
         <?php if (isset($recordsTitle) && !empty($recordsTitle)) { ?>
             <span class="text-muted"><?php echo $recordsTitle; ?></span>
