@@ -1804,11 +1804,6 @@ class UsersController extends AdminBaseController
             $json['results'][] = array(
                 'id' => $key,
                 'text' => strip_tags(html_entity_decode($name, ENT_QUOTES, 'UTF-8')),
-                /*
-                'name' => strip_tags(html_entity_decode($name, ENT_QUOTES, 'UTF-8')),
-                'username' => strip_tags(html_entity_decode($user['credential_username'], ENT_QUOTES, 'UTF-8')),
-                'credential_email' => strip_tags(html_entity_decode($user['credential_email'], ENT_QUOTES, 'UTF-8')), 
-                */
             );
         }
 
