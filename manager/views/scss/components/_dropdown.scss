@@ -244,13 +244,13 @@
 
 .dropdown-menu {
     border: 0 !important;
+    border-radius: $radius-common;
     margin: 0;
     border-radius: 0;
     min-width: 14rem;
-    padding: 0;
+    //padding: 0;
     box-shadow: 0 0 50px 0 rgba(82, 63, 105, .15);
     padding: 1rem 0;
-    border-radius: 4px;
     left: 0;
     &.dropdown-menu-fit {
         padding: 0;
@@ -343,14 +343,12 @@
         width: 380px
     }
     &.dropdown-menu-anim {
-        -webkit-animation: dropdown-menu-fade-in .3s ease 1, dropdown-menu-move-up .3s ease-out 1;
         animation: dropdown-menu-fade-in .3s ease 1, dropdown-menu-move-up .3s ease-out 1
     }
 }
 
 .dropdown-menu .dropdown-menu-anim-down.dropdown-menu-anim,
 .dropup .dropdown-menu.dropdown-menu-anim {
-    -webkit-animation: dropdown-menu-fade-in .3s ease 1, dropdown-menu-move-down .3s ease-out 1;
     animation: dropdown-menu-fade-in .3s ease 1, dropdown-menu-move-down .3s ease-out 1
 }
 

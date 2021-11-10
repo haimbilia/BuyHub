@@ -57,5 +57,5 @@ $controller = str_replace('Controller', '', FatApp::getController());
     </div>
 </main>
 <script>
-    var controllerName = '<?php echo $controller; ?>';
+var controllerName = '<?php echo $controller; ?>';
 </script>
