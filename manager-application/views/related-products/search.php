@@ -18,8 +18,8 @@ foreach ($arrListing as $selProdId => $row) {
                 $td->appendElement('plaintext', [], $serialNo);
                 break;
             case 'product_name':
-                $productName = "<span class='js-prod-name'>" . SellerProduct::getProductDisplayTitle($selProdId, $siteLangId, true) . '</span><br>' . Labels::getLabel('LBL_Seller', $siteLangId) . ': <span class="js-seller-name">' . $row['credential_username'] . '</span>';
-                $td->appendElement('plaintext', array(), $productName, true);
+                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['selProdId' => $selProdId, 'siteLangId' => $siteLangId, 'sellerName' => $row['credential_username']], false, true);
+                $td->appendElement('plaintext', array(), $str, true);
                 break;
             case 'related_products':
                 $userName = $row['credential_username'];

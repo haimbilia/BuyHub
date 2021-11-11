@@ -740,7 +740,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         $('.listingTableJs .tableHeadJs th').each(function () {
             thWidthArr[$(this).width()] = $(this);
         });
-
         $.each(sortObjectByKeys(thWidthArr), function (index, value) {
             $(value).css({ 'width': $(value).width() });
         });
@@ -772,6 +771,8 @@ $(document).ready(function () {
     if (typeof controllerName != 'undefined') {
         getHelpCenterContent(controllerName);
     }
+});
 
+$(window).on("load", function () {
     fixTableColumnWidth();
 });
