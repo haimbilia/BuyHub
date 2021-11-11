@@ -177,7 +177,7 @@ class RewardsController extends AdminBaseController
         }
 
         $arr = [
-            'user_id' => Labels::getLabel('LBL_User_Id', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
             'urp_date_added' => Labels::getLabel('LBL_Valid_from', $this->siteLangId),
             'urp_date_expiry' => Labels::getLabel('LBL_Valid_till', $this->siteLangId),
@@ -192,7 +192,7 @@ class RewardsController extends AdminBaseController
     private function getDefaultColumns(): array
     {
         return [
-            'user_id',
+            'listSerial',
             'user_name',
             'urp_date_added',
             'urp_date_expiry',
