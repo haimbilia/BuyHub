@@ -13,8 +13,8 @@ foreach ($arrListing as $sn => $row) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
-            case 'user_id':
-                $td->appendElement('plaintext', $tdAttr, $row['user_id']);
+            case 'listSerial':
+                $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'user_name':
                 $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId], false, true);

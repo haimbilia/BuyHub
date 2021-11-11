@@ -199,7 +199,7 @@ class TransactionsController extends AdminBaseController
         }
 
         $arr = [
-            'user_id' => Labels::getLabel('LBL_User_Id', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),          
             'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
             'utxn_id' => Labels::getLabel('LBL_Transaction_Id', $this->siteLangId),
             'utxn_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
@@ -217,7 +217,7 @@ class TransactionsController extends AdminBaseController
     private function getDefaultColumns(): array
     {
         return [
-            'user_id',
+            'listSerial',
             'user_name',
             'utxn_id',
             'utxn_date',
