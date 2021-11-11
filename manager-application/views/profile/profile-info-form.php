@@ -15,10 +15,10 @@ $frm->developerTags['fld_default_col'] = 6;
 $frm->setFormTagAttribute('onsubmit', 'updateProfileInfo(this); return(false);');
 
 $imageFld = $frm->getField('user_profile_image');
-$imageFld->addFieldTagAttribute('onChange','popupImage(this)');
-$imageFld->addFieldTagAttribute('accept','image/*');
+$imageFld->addFieldTagAttribute('onChange', 'popupImage(this)');
+$imageFld->addFieldTagAttribute('accept', 'image/*');
 
-$profileImg  = UrlHelper::generateFileUrl('Image','profileImage',array(AdminAuthentication::getLoggedAdminId(),'croped',true));
+$profileImg  = UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), 'croped', true));
 ?>
 <div class="card">
     <div class="card-head">
@@ -27,32 +27,27 @@ $profileImg  = UrlHelper::generateFileUrl('Image','profileImage',array(AdminAuth
         </div>
     </div>
     <?php echo $frm->getFormTag(); ?>
-    <div class="card-body">     
+    <div class="card-body">
         <!--begin::Input group-->
         <div class="row form-group justify-content-center">
             <div class="col-lg-3 text-center">
                 <!--begin::Image input-->
-                <div class="avatar avatar-outline avatar-circle"
-                    id="user_avatar_3">
-                    <div class="avatar__holder" 
-                        style="background-image: url('<?php echo $profileImg."t=?".time();?>')">
-                    </div>                   
-                   
-                     <?php if(!$isNewImage){ ?>   
-                        <label class="avatar__upload" data-toggle="tooltip"
-                            title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>" onClick="popupImage()">
-                            <i class="fa fa-pen"></i>                          
+                <div class="avatar avatar-outline avatar-circle" id="user_avatar_3">
+                    <div class="avatar__holder" style="background-image: url('<?php echo $profileImg . "t=?" . time(); ?>')">
+                    </div>
+
+                    <?php if (!$isNewImage) { ?>
+                        <label class="avatar__upload" data-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>" onClick="popupImage()">
+                            <i class="fa fa-pen"></i>
                         </label>
-                        <span class="avatar__cancel" data-toggle="tooltip"
-                            title="" data-original-title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onClick="removeProfileImage();">
+                        <span class="avatar__cancel" data-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onClick="removeProfileImage();">
                             <i class="fa fa-times"></i>
                         </span>
-                    <?php }else{ ?>
-                        <label class="avatar__upload" data-toggle="tooltip"
-                        title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>">
+                    <?php } else { ?>
+                        <label class="avatar__upload" data-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>">
                             <i class="fa fa-pen"></i>
                             <?php echo $imageFld->getHTML(); ?>
-                        </label>                    
+                        </label>
                     <?php } ?>
                 </div>
                 <!--end::Image input-->
@@ -66,35 +61,35 @@ $profileImg  = UrlHelper::generateFileUrl('Image','profileImage',array(AdminAuth
         </div>
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group">               
+                <div class="form-group">
                     <label class="label <?php echo $userNameFld->requirements()->isRequired() ? 'required ' : '' ?>"><?php echo $userNameFld->getCaption(); ?></label>
-                    <?php echo $userNameFld->getHTML(); ?>                    
+                    <?php echo $userNameFld->getHTML(); ?>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group">                  
+                <div class="form-group">
                     <label class="label <?php echo $emailFld->requirements()->isRequired() ? 'required ' : '' ?>"><?php echo $emailFld->getCaption(); ?></label>
-                    <?php echo $emailFld->getHTML(); ?> 
+                    <?php echo $emailFld->getHTML(); ?>
                 </div>
             </div>
-        </div>  
+        </div>
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group">               
+                <div class="form-group">
                     <label class="label <?php echo $nameFld->requirements()->isRequired() ? 'required ' : '' ?>"><?php echo $nameFld->getCaption(); ?></label>
-                    <?php echo $nameFld->getHTML(); ?>                    
+                    <?php echo $nameFld->getHTML(); ?>
                 </div>
-            </div>                
+            </div>
         </div>
     </div>
     <div class="card-foot">
-        <div class="row">                                    
+        <div class="row">
             <div class="col-auto">
                 <button type="submit" class="btn btn-brand gb-btn gb-btn-primary"><?php echo Labels::getLabel('LBL_UPDATE', $siteLangId); ?></button>
             </div>
         </div>
-    </div> 
+    </div>
     <?php echo $frm->getFieldHTML('admin_id'); ?>
-</form>
-<?php echo $frm->getExternalJS(); ?>
+    </form>
+    <?php echo $frm->getExternalJS(); ?>
 </div>

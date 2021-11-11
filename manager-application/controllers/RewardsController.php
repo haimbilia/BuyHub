@@ -99,7 +99,6 @@ class RewardsController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'urp_user_id', []);
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 

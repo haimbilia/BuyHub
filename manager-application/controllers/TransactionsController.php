@@ -102,7 +102,7 @@ class TransactionsController extends AdminBaseController
         $this->set('canEdit', $this->objPrivilege->canEditUsers($this->admin_id, true));
     }
 
-    public function getSearchForm($fields = [])
+    protected function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
@@ -112,7 +112,6 @@ class TransactionsController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'utxn_user_id', []);
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
