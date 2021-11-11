@@ -68,7 +68,8 @@ class TransactionsController extends AdminBaseController
         $balSrch = Transactions::getSearchObject();
         $balSrch->doNotCalculateRecords();
         $balSrch->doNotLimitRecords();
-        $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
+        $srch->joinTable(User::DB_TBL, 'LEFT JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
+        $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'u.user_id = utxn.utxn_user_id', 'uc');
         $balSrch->addMultipleFields(['utxn.*', "utxn_credit - utxn_debit as bal"]);
         if (0 < $userId) {
             $balSrch->addCondition('utxn_user_id', '=', $userId);
@@ -76,7 +77,7 @@ class TransactionsController extends AdminBaseController
         $balSrch->addCondition('utxn_status', '=', 1);
         $srch->joinTable('(' . $balSrch->getQuery() . ')', 'JOIN', 'tqupb.utxn_id <= utxn.utxn_id', 'tqupb');
 
-        $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance", 'user_name', 'utxn.utxn_id as listSerial'));
+        $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance", 'user_name', 'utxn.utxn_id as listSerial', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));
         $srch->addGroupBy('utxn.utxn_id');
 
 
@@ -198,8 +199,8 @@ class TransactionsController extends AdminBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_USER', $this->siteLangId),
+            'user_id' => Labels::getLabel('LBL_User_Id', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
             'utxn_id' => Labels::getLabel('LBL_Transaction_Id', $this->siteLangId),
             'utxn_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
             'utxn_credit' => Labels::getLabel('LBL_Credit', $this->siteLangId),
@@ -216,7 +217,7 @@ class TransactionsController extends AdminBaseController
     private function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            'user_id',
             'user_name',
             'utxn_id',
             'utxn_date',

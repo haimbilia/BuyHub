@@ -1,6 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_USER', $siteLangId);
-?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <main class="main mainJs">
     <div class="container">
         <div class="row">

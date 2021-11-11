@@ -9,7 +9,6 @@
                         'canEdit' => $canEdit,
                         'siteLangId' => $siteLangId,
                         'cardHeadTitle' => Labels::getLabel('LBL_Deleted_Users_List', $siteLangId),
-                        'newRecordBtn' => true
                     ];
 
                     $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>

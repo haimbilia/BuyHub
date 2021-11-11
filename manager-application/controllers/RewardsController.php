@@ -62,7 +62,7 @@ class RewardsController extends AdminBaseController
 
         $srch = new UserRewardSearch();
         $srch->joinUser();
-        $srch->addMultipleFields(['urp.*', 'user_name', 'urp.urp_id as listSerial']);
+        $srch->addMultipleFields(['urp.*', 'user_name', 'urp.urp_id as listSerial', 'user_updated_on', 'user_id', 'credential_username', 'credential_email']);
 
         if (0 < $userId) {
             $srch->addCondition('urp.urp_user_id', '=', $userId);
@@ -177,8 +177,8 @@ class RewardsController extends AdminBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_USER', $this->siteLangId),
+            'user_id' => Labels::getLabel('LBL_User_Id', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
             'urp_date_added' => Labels::getLabel('LBL_Valid_from', $this->siteLangId),
             'urp_date_expiry' => Labels::getLabel('LBL_Valid_till', $this->siteLangId),
             'urp_points' => Labels::getLabel('LBL_Points', $this->siteLangId),
@@ -192,7 +192,7 @@ class RewardsController extends AdminBaseController
     private function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            'user_id',
             'user_name',
             'urp_date_added',
             'urp_date_expiry',

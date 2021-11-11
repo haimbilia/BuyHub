@@ -46,7 +46,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'credential_verified':
                 $class = (applicationConstants::NO == $row[$key]) ? 'is-verified' : '';
-                $img = '<div class="verified '. $class .'"><svg class="svg">
+                $img = '<div class="verified '. $class .'"><svg class="svg" >
                             <use
                                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-verified">
                             </use>

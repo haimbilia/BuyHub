@@ -130,6 +130,11 @@
                                         <?php echo Labels::getLabel('NAV_Transactions', $siteLangId); ?>
                                     </a>
                                 </li>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('DeletedUsers'); ?>">
+                                        <?php echo Labels::getLabel('NAV_Deleted_Users', $siteLangId); ?>
+                                    </a>
+                                </li>
                             <?php } ?>
                             <?php /* if ($objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true) || $objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">

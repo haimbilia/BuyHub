@@ -8,7 +8,7 @@ $frmSearch->setFormTagAttribute('class', 'form');
 $userFld = $frmSearch->getField('urp_user_id');
 $userFld->addFieldtagAttribute('class', 'form-control');
 $userFld->addFieldtagAttribute('id', 'searchFrmUserIdJs');
-$userFld->setFieldtagAttribute('placeholder', $keywordPlaceholder);
+$userFld->setFieldtagAttribute('placeholder', Labels::getLabel('FRM_SEARCH_BY_USER_NAME', $siteLangId));
 
 $sortByFld = $frmSearch->getField('sortBy');
 $sortByFld->setFieldTagAttribute('id', 'sortBy');
