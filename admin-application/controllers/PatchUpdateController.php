@@ -429,14 +429,7 @@ class PatchUpdateController extends AdminBaseController
                 'tbl_order_product_responses','tbl_order_prod_charges_logs_lang','tbl_order_prod_charges_logs','tbl_order_product_digital_download_links','tbl_coupons_hold_pending_order',
                 'tbl_user_withdrawal_requests_specifics','tbl_user_temp_token_requests','tbl_user_meta','tbl_shop_specifics','tbl_unique_check_failed_attempt','tbl_updated_record_log',
                 'tbl_order_product_specifics'
-                );
-
-            FatApp::getDb()->query("INSERT INTO `tbl_meta_tags`(`meta_controller`, `meta_action`, `meta_record_id`, `meta_subrecord_id`, `meta_default`, `meta_advanced`) VALUES 
-            ('', '', 0, 0, 1, 0),
-            ('Brands', 'index', 0, 0, 1, 0),
-            ('Shops', 'index', 0, 0, 1, 0),
-            ('Blog', 'index', 0, 0, 1, 0),
-            ('Products', 'index', 0, 0, 1, 0)");
+                );            
             FatApp::getDb()->query("DELETE FROM `tbl_attached_files` WHERE `afile_type` in (1,2,3,4,5,7,8,9,10,11,12,13,14,22,23,24,25,26,27,28,29,30,32,33,41,42,43,48,50,52,53)");
 
             /*
@@ -452,6 +445,15 @@ class PatchUpdateController extends AdminBaseController
             } else {
                 echo 'Error in: ' . $table . ' <br>';
             }
+        }
+
+        if($type == 'all'){
+            FatApp::getDb()->query("INSERT INTO `tbl_meta_tags`(`meta_controller`, `meta_action`, `meta_record_id`, `meta_subrecord_id`, `meta_default`, `meta_advanced`) VALUES 
+            ('', '', 0, 0, 1, 0),
+            ('Brands', 'index', 0, 0, 1, 0),
+            ('Shops', 'index', 0, 0, 1, 0),
+            ('Blog', 'index', 0, 0, 1, 0),
+            ('Products', 'index', 0, 0, 1, 0)");
         }
     }
 
