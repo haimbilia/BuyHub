@@ -1,16 +1,6 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
 $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_PACKAGE_NAME', $siteLangId); ?>
 
-<<<<<<< HEAD
-/* No sorting functionality required if no record found. */
-if (2 > count($arrListing)) {
-    $allowedKeysForSorting = [];
-}
-
-$controller = str_replace('Controller', '', FatApp::getController());
-?>
-=======
->>>>>>> 2e4bfbe2fb70222b06d0750fd65fb289b53f1a3d
 <main class="main mainJs">
     <div class="container">
         <div class="row">
