@@ -395,19 +395,18 @@ class ShopsController extends AdminBaseController {
     public function getSearchForm($request = false, $fields = []) {
         $frm = new Form('frmRecordSearch');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
-        $fld->overrideFldType('search');
-
-        if ($request) {
-            $frm->addTextBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off', 'placeholder' => Labels::getLabel('LBL_SELLER_NAME_OR_EMAIL', $this->siteLangId)));
-            $frm->addHiddenField('', 'user_id');
-        }
-
+        $fld->overrideFldType('search'); 
         if (!empty($fields)) {
             $this->addSortingElements($frm);
-        }
-
+        } 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
+        $frm->addHiddenField('', 'shop_id');
+        $frm->addSelectBox(Labels::getLabel('LBL_Featured', $this->siteLangId), 'shop_featured', array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'shop_active', array('-1' => 'Does not Matter') + applicationConstants::getActiveInactiveArr($this->siteLangId), -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Shop_Status_By_Seller', $this->siteLangId), 'shop_supplier_display_status', array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getOnOffArr($this->siteLangId), -1, array(), '');
+        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         return $frm;
     }
 

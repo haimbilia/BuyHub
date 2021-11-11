@@ -424,34 +424,4 @@ class MyAppModel extends FatModel {
         FatApp::getDb()->insertFromArray(UpdatedRecordLog::DB_TBL, $data, false, array(), $data);
     }
 
-    public function bulkStatusUpdate($records, $status)
-    {
-        if (empty($records) || !is_array($records)) {
-            $this->error = 'ERR_INVALID_REQUEST_ID';
-            return false;
-        }
-        
-        $updateDate = date('Y-m-d H:i:s');
-        $status = FatUtility::int($status);
-        $updateQuery = 'UPDATE ' . static::DB_TBL . " SET ";
-        $updateQuery .= static::tblFld('updated_on') . '=? ,' . static::tblFld('active') . '=?';
-        $updateQuery .= ' WHERE  ' . $this->mainTableIdField . ' IN (?)';
-        $updatePreparedSmt = FatApp::getDb()->prepareStatement($updateQuery);
-        $updatePreparedSmt->bindParameters('sii', $updateDate, $status, $record);
-        FatApp::getDb()->startTransaction();
-        foreach ($records as $record) {
-            $record = FatUtility::int($record);
-            if ($updatePreparedSmt->execute() == false) {
-                $this->error = 'ERR_INVALID_REQUEST_ID';
-                FatApp::getDb()->rollbackTransaction();
-                return false;
-            }
-        }
-        if (FatApp::getDb()->commitTransaction() == false) {
-            $this->error = 'ERR_Transaction_Failed';
-            return false;
-        }
-        return true;
-    }
-
 }
