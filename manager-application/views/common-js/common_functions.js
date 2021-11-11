@@ -12,7 +12,7 @@ function getNotifications() {
     });
 }
 
-function getHelpCenterContent(controller, action = "") {
+function getHelpCenterContent(controller, action = "") {    
     fcom.ajax(fcom.makeUrl('HelpCenter', 'getContent', [controller, action]), '', function (t) {
         var res = JSON.parse(t);
         if (0 == res.status) {
