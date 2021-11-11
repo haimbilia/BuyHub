@@ -3,13 +3,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . 'transactions/search-form.php'); ?>
+                <?php require_once(CONF_THEME_PATH . 'deleted-users/search-form.php'); ?>
                 <div class="card">
                     <?php $data = [
                         'canEdit' => $canEdit,
                         'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_Transactions', $siteLangId),
-                        'newRecordBtn' => true
+                        'cardHeadTitle' => Labels::getLabel('LBL_Deleted_Users_List', $siteLangId),
                     ];
 
                     $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
@@ -17,7 +16,7 @@
                         <div class="table-responsive listingTableJs">
                             <?php
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
-                            require_once(CONF_THEME_PATH . 'transactions/search.php');
+                            require_once(CONF_THEME_PATH . 'deleted-users/search.php');
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */

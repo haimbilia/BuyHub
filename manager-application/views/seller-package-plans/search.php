@@ -18,22 +18,22 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="' . SellerPackagePlans::DB_TBL_PREFIX . 'ids[]" value=' . $row[SellerPackagePlans::DB_TBL_PREFIX . 'id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="record_ids[]" value=' . $row['spplan_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case SellerPackagePlans::DB_TBL_PREFIX . 'price':
-                $td->appendElement('plaintext', array(), SellerPackagePlans::getPlanPriceWithPeriod($row, $row[SellerPackagePlans::DB_TBL_PREFIX . 'price']), true);
+            case 'spplan_price':
+                $td->appendElement('plaintext', array(), SellerPackagePlans::getPlanPriceWithPeriod($row, $row['spplan_price']), true);
                 break;
             case 'spplan_active':
-                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row[SellerPackagePlans::DB_TBL_PREFIX . 'id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
+                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['spplan_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
                 $statusClass = ($canEdit) ? '' : 'disabled';
                 $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
 
                 $htm = '<span class="switch switch-sm switch-icon">
                                     <label>
-                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row[SellerPackagePlans::DB_TBL_PREFIX . 'id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
+                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['spplan_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
                                         <span class="input-helper"></span>
                                     </label>
                                 </span>';
@@ -42,11 +42,13 @@ foreach ($arrListing as $sn => $row) {
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,
-                    'recordId' => $row[SellerPackagePlans::DB_TBL_PREFIX . 'id']
+                    'recordId' => $row['spplan_id']
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = [];                  
+                    $data['editButton'] = [
+                        'onClick' => 'editPlanRecord(' . $row['spplan_spackage_id'] . ',' . $row['spplan_id'] . ')'
+                    ];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);

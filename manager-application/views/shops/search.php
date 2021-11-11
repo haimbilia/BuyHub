@@ -16,20 +16,21 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="shop_ids[]" value=' . $row['shop_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="record_ids[]" value=' . $row['shop_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'shop_name':
-                $td->appendElement('plaintext', array(), $row['shop_name'], true); 
+                $str = $this->includeTemplate('_partial/shop/shop-info-card.php', ['shop' => $row, 'siteLangId' => $siteLangId], false, true);
+                $td->appendElement('plaintext', array(), $str, true); 
                 break;
             case 'shop_featured':
                 $td->appendElement('plaintext', array(), applicationConstants::getYesNoArr($siteLangId)[$row[$key]], true);
                 break;
             case 'shop_supplier_display_status':
                 $td->appendElement('plaintext', array(), applicationConstants::getOnOffArr($siteLangId)[$row[$key]], true);
-                break;
+                break;           
             case 'shop_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['shop_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
                 $statusClass = ($canEdit) ? '' : 'disabled';

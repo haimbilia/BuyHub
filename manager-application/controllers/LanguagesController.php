@@ -214,7 +214,7 @@ class LanguagesController extends AdminBaseController
         FatUtility::dieJsonSuccess($this->str_update_record);
     }
 
-    private function changeStatus($recordId, $status)
+    protected function changeStatus($recordId, $status)
     {
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);

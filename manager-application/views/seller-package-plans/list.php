@@ -10,11 +10,12 @@ $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_PACKAGE_NAME', $siteLangId
                         'canEdit' => $canEdit,
                         'siteLangId' => $siteLangId,
                         'cardHeadTitle' => Labels::getLabel('LBL_SUBSCRIPTION_PACKAGE_PLANS', $siteLangId) ." (".$packageName.")",
+                        'cardHeadBackButtonHref' => UrlHelper::generateUrl('SellerPackages'),
                         'newRecordBtn' => true,
                         'newRecordBtnAttrs' => [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
-                                'onclick' => 'addNewRecord(' . $spackageId . ')',
+                                'onclick' => 'addNewPlan(' . $spackageId . ')',
                                 'title' => Labels::getLabel('BTN_NEW', $siteLangId)
                             ],
                             'label' => Labels::getLabel('BTN_NEW', $siteLangId)

@@ -9,6 +9,32 @@ class SellerPackagesController extends AdminBaseController
     }
 
     /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditSellerPackages($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditSellerPackages();
+        }
+    }
+
+    /**
+     * setModel - This function is used to set related model class and used by its parent class.
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
+    protected function setModel(array $constructorArgs = []): void
+    {
+        $this->modelObj = (new ReflectionClass('SellerPackages'))->newInstanceArgs($constructorArgs);
+    }
+
+    /**
      * setLangTemplateData - This function is use to automate load langform and save it. 
      *
      * @param  array $constructorArgs
@@ -16,8 +42,8 @@ class SellerPackagesController extends AdminBaseController
      */
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
-        $this->objPrivilege->canEditSellerPackages();
-        $this->modelObj = (new ReflectionClass('SellerPackages'))->newInstanceArgs($constructorArgs);
+        $this->checkEditPrivilege();      
+        $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->set('formTitle', Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES_SETUP', $this->siteLangId));
     }
@@ -107,8 +133,7 @@ class SellerPackagesController extends AdminBaseController
 
     public function form()
     {
-        $this->objPrivilege->canEditSellerPackages();
-
+        $this->checkEditPrivilege();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
         if (0 < $recordId) {  
@@ -128,8 +153,7 @@ class SellerPackagesController extends AdminBaseController
 
     public function setup()
     {
-        $this->objPrivilege->canEditSellerPackages();
-     
+        $this->checkEditPrivilege();     
         $recordId = FatApp::getPostedData('spackage_id', FatUtility::VAR_INT, 0);
         
         $frm = $this->getForm($recordId);
@@ -193,7 +217,7 @@ class SellerPackagesController extends AdminBaseController
 
     protected function getLangForm($recordId = 0, $lang_id = 0)
     {
-        $this->objPrivilege->canEditSellerPackages();
+        $this->checkEditPrivilege();
         $frm = new Form('frmSellerPackageLang');
         $frm->addHiddenField('', SellerPackages::DB_TBL_PREFIX . 'id', $recordId);
         $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
@@ -242,62 +266,7 @@ class SellerPackagesController extends AdminBaseController
             );
         }
         die(json_encode($json));
-    }
-
-
-    public function updateStatus()
-    {
-        $this->objPrivilege->canEditSellerPackages();
-
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        if (0 >= $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
-        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $this->changeStatus($recordId, $status);
-
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function toggleBulkStatuses()
-    {
-        $this->objPrivilege->canEditSellerPackages();
-
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $recordIdsArr = FatUtility::int(FatApp::getPostedData('spackage_ids'));
-        if (empty($recordIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-        }
-
-        foreach ($recordIdsArr as $recordId) {
-            if (1 > $recordId) {
-                continue;
-            }
-
-            $this->changeStatus($recordId, $status);
-        }
-
-        LibHelper::dieJsonSuccess(['msg' => $this->str_update_record]);
-    }
-
-    private function changeStatus(int $recordId, int $status)
-    {
-        if (1 > $recordId || -1 == $status) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-
-        $obj = new SellerPackages($recordId);
-        if (!$obj->changeStatus($status)) {
-            LibHelper::exitWithError($obj->getError(), true);
-        }
-    }
+    }   
     
     private function getFormColumns(): array
     {

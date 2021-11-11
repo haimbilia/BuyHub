@@ -33,6 +33,11 @@ class ImageController extends FatController
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
+            case 'MINITHUMB':
+                $w = 42;
+                $h = 52;
+                AttachedFile::displayImage($image_name, $w, $h, $default_image);
+                break;
             case 'THUMB':
                 $w = 150;
                 $h = 150;

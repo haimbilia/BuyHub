@@ -12,7 +12,7 @@ function getNotifications() {
     });
 }
 
-function getHelpCenterContent(controller, action = "") {
+function getHelpCenterContent(controller, action = "") {    
     fcom.ajax(fcom.makeUrl('HelpCenter', 'getContent', [controller, action]), '', function (t) {
         var res = JSON.parse(t);
         if (0 == res.status) {
@@ -200,10 +200,11 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOn
 $(document).ready(function () {
     /* Active Sidebar Link. */
     var uri = (window.location.pathname).replace(/^\/|\/$/g, '');
-    $('.sidebarMenuJs .menuItemJs .navLinkJs').each(function () {
+    $('.sidebarMenuJs .navLinkJs').each(function () {
         var href = $(this).attr('href').replace(/^\/|\/$/g, '');
         if (uri == href) {
-            $(this).parents('li:not(.hasNestedChildJs)').addClass('active');
+            $(this).parent('li.navItemJs').addClass('active');
+            $(this).parents('li:not(.hasNestedChildJs)').find('.menuLinkJs').addClass('active');
             $(this).parents('li.hasNestedChildJs').addClass('show').find('.collapseJs').addClass('show');
         }
     });

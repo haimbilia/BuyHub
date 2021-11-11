@@ -1134,12 +1134,23 @@ class SellerProduct extends MyAppModel
         return $srch;
     }
 
-    public static function getSelProdDataById($selProdId, $langId = 0)
+    public static function getSelProdDataById($selProdId, $langId = 0, $joinProduct = false, $attr = [])
     {
         $srch = static::getSearchObject($langId);
         $srch->addCondition('selprod_id', '=', $selProdId);
-        $rs = $srch->getResultSet();
-        return FatApp::getDb()->fetch($rs);
+
+        if (0 < count($attr)) {
+            $srch->addMultipleFields($attr);
+        }
+
+        if ($joinProduct) {
+            $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
+            if (0 < $langId) {
+                $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $langId, 'p_l');
+            }
+        }
+    
+        return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
     public static function searchSellerProducts($langId, $userId, $keyword = '')
