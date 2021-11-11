@@ -62,7 +62,7 @@ class RewardsController extends AdminBaseController
 
         $srch = new UserRewardSearch();
         $srch->joinUser();
-        $srch->addMultipleFields(['urp.*', 'user_name', 'urp.urp_id as listSerial']);
+        $srch->addMultipleFields(['urp.*', 'user_name', 'urp.urp_id as listSerial', 'user_updated_on', 'user_id', 'credential_username', 'credential_email']);
 
         if (0 < $userId) {
             $srch->addCondition('urp.urp_user_id', '=', $userId);
@@ -99,7 +99,6 @@ class RewardsController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'urp_user_id', []);
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
@@ -178,8 +177,8 @@ class RewardsController extends AdminBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_USER', $this->siteLangId),
+            'user_id' => Labels::getLabel('LBL_User_Id', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
             'urp_date_added' => Labels::getLabel('LBL_Valid_from', $this->siteLangId),
             'urp_date_expiry' => Labels::getLabel('LBL_Valid_till', $this->siteLangId),
             'urp_points' => Labels::getLabel('LBL_Points', $this->siteLangId),
@@ -193,7 +192,7 @@ class RewardsController extends AdminBaseController
     private function getDefaultColumns(): array
     {
         return [
-            'listSerial',
+            'user_id',
             'user_name',
             'urp_date_added',
             'urp_date_expiry',
@@ -205,5 +204,19 @@ class RewardsController extends AdminBaseController
     private function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['urp_comments'], Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_USERS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Users')],
+                    ['title' => Labels::getLabel('LBL_REWARDS', $this->siteLangId)]
+                ];
+        }
+        return $this->nodes;
     }
 }

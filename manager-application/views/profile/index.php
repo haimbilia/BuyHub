@@ -8,9 +8,7 @@
             <?php require_once CONF_THEME_PATH . 'profile/leftSideBar.php'; ?>   
             <div class="grid__item grid__item--fluid app__content">
                 <div class="row">
-                    <div class="col-xl-12" id="mainProfileBlockJs">
-                  
-                    </div>
+                    <div class="col-xl-12" id="mainProfileBlockJs"></div>
                 </div>
             </div>      
         </div>

@@ -13,9 +13,13 @@ foreach ($arrListing as $sn => $row) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
-            case 'listSerial':
-                $td->appendElement('plaintext', $tdAttr, $serialNo);
-                break;
+            case 'user_id':
+                $td->appendElement('plaintext', $tdAttr, $row['user_id']);
+                break;                
+            case 'user_name':
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId], false, true);
+                $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
+                break;    
             case 'urp_date_added':
             case 'urp_date_expiry':
                 $td->appendElement('plaintext', $tdAttr, FatDate::format($row[$key]));

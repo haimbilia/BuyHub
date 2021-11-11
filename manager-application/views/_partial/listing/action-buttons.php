@@ -115,4 +115,7 @@ if (isset($newRecordBtn) && true === $newRecordBtn && $canEdit) {
     </a>
 <?php
 }
-echo $ul->getHtml();
+
+if (!empty($htmlContent) || !empty($statusButtons) || !empty($deleteButton) || !empty($otherButtons) || !empty($columnButtons)) {
+    echo $ul->getHtml();
+}
