@@ -260,9 +260,9 @@ class CurrencyManagementController extends AdminBaseController
         }
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
-    }
+    }    
 
-    private function changeStatus($recordId, $status)
+    protected function changeStatus($recordId, $status)
     {
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);

@@ -1,12 +1,38 @@
 <?php
 
 class SellerPackagePlansController extends AdminBaseController
-{   
+{
 
     public function __construct($action)
     {
         parent::__construct($action);
         $this->objPrivilege->canViewSellerPackages();
+    }
+
+    /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditSellerPackages($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditSellerPackages();
+        }
+    }
+
+    /**
+     * setModel - This function is used to set related model class and used by its parent class.
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
+    protected function setModel(array $constructorArgs = []): void
+    {
+        $this->modelObj = (new ReflectionClass('SellerPackagePlans'))->newInstanceArgs($constructorArgs);
     }
 
     public function index()
@@ -17,6 +43,13 @@ class SellerPackagePlansController extends AdminBaseController
 
     public function list(int $spackageId)
     {
+        $packageData =  SellerPackages::getAttributesByLangId($this->siteLangId, $spackageId, ['spackage_name', 'spackage_identifier'], true);
+
+        if ($packageData === false) {
+            Message::addErrorMessage($this->str_invalid_request);
+            FatApp::redirectUser(UrlHelper::generateUrl('SellerPackages'));
+        }
+
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_SUBSCRIPTION_PACKAGE_PLANS', $this->siteLangId));
         $packageData =  SellerPackages::getAttributesByLangId($this->siteLangId, $spackageId, ['spackage_name', 'spackage_identifier'], true);
@@ -25,19 +58,20 @@ class SellerPackagePlansController extends AdminBaseController
         $this->_template->render();
     }
 
-    // public function search()
-    // {
-    //     $this->getListingData();
-    //     $jsonData = [
-    //         'listingHtml' => $this->_template->render(false, false, 'seller-packages/search.php', true),
-    //         'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-    //     ];
-    //     LibHelper::exitWithSuccess($jsonData, true);
-    // }
+    public function search()
+    {
+        $spackageId = FatApp::getPostedData('spackageId', FatUtility::VAR_INT, 0);
+        $this->getListingData($spackageId);
+
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'seller-package-plans/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
     private function getListingData(int $spackageId)
     {
-        $db = FatApp::getDb();
 
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
@@ -55,6 +89,8 @@ class SellerPackagePlansController extends AdminBaseController
         $srchFrm = $this->getSearchForm($fields);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        $post['spackageId'] = $spackageId;
+
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
 
@@ -62,7 +98,7 @@ class SellerPackagePlansController extends AdminBaseController
 
         $srch = SellerPackagePlans::getSearchObject($this->siteLangId);
         $srch->addMultipleFields(array("spp.*", SellerPackagePlans::DB_TBL_PREFIX . 'id as listSerial'));
-        $srch->addCondition(SellerPackagePlans::DB_TBL_PREFIX . 'spackage_id','=',$spackageId);
+        $srch->addCondition(SellerPackagePlans::DB_TBL_PREFIX . 'spackage_id', '=', $spackageId);
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
@@ -71,8 +107,8 @@ class SellerPackagePlansController extends AdminBaseController
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->removeFld(['select_all', 'action']);       
-        $arrListing = $db->fetchAll($srch->getResultSet());
+        $srch->removeFld(['select_all', 'action']);
+        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
@@ -90,18 +126,19 @@ class SellerPackagePlansController extends AdminBaseController
         $this->set('canEdit', $this->objPrivilege->canEditSellerPackages($this->admin_id, true));
     }
 
-    public function form( int $spackageId = 0, int $spPlanId = 0)
+    public function form()
     {
-        $this->objPrivilege->canEditSellerPackages();      
-        $spdata = SellerPackages::getAttributesById($spackageId);
+        $this->checkEditPrivilege();
+
+        $spackageId = FatApp::getPostedData('spackageId', FatUtility::VAR_INT, 0);
+        $spPlanId = FatApp::getPostedData('spPlanId', FatUtility::VAR_INT, 0);
 
         if ($spackageId < 1) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $frm = $this->getForm($spackageId);
-        if (0 < $spPlanId) {        
+        if (0 < $spPlanId) {
             $data = SellerPackagePlans::getAttributesById($spPlanId);
-
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -109,55 +146,55 @@ class SellerPackagePlansController extends AdminBaseController
             $data[SellerPackagePlans::DB_TBL_PREFIX . 'spackage_id'] = $spackageId;
         }
         $frm->fill($data);
-        $this->set('languages', Language::getAllNames());
         $this->set('spackageId', $spackageId);
-        $this->set('spackageType', $spdata['spackage_type']);
         $this->set('spPlanId', $spPlanId);
         $this->set('frm', $frm);
-        $this->set('includeTabs', false);        
+        $this->set('includeTabs', false);
         $this->_template->render(false, false);
     }
 
     private function getForm($spackageId)
-    {  
+    {
         $frm = new Form('frmSellerPackagePlan', array('id' => 'frmSellerPackagePlan'));
         $frm->addHiddenField('', SellerPackagePlans::tblFld('id'));
-        $frm->addHiddenField('', SellerPackagePlans::tblFld('spackage_id'));           
+        $frm->addHiddenField('', SellerPackagePlans::tblFld('spackage_id'));
 
         $subsPeriodOption = SellerPackagePlans::getSubscriptionPeriods($this->siteLangId);
-        $fldFreq = $frm->addSelectBox(Labels::getLabel('LBL_PERIOD', $this->siteLangId), SellerPackagePlans::DB_TBL_PREFIX . 'frequency', $subsPeriodOption, '', array(), '');
-        $fldFreqText = $frm->addHTML('', SellerPackagePlans::tblFld('frequency_text'), '');
-        $fldFreq->attachField($fldFreqText);
-        $fld = $frm->addIntegerField(Labels::getLabel('LBL_Time_Interval_(FREQUENCY)', $this->siteLangId), SellerPackagePlans::DB_TBL_PREFIX . 'interval');
+        $frm->addSelectBox(Labels::getLabel('FRM_PERIOD', $this->siteLangId), 'spplan_frequency', $subsPeriodOption, '', array(), '');
+
+        $fld = $frm->addIntegerField(Labels::getLabel('FRM_TIME_INTERVAL_(FREQUENCY)', $this->siteLangId), 'spplan_interval');
         $fld->requirements()->setIntPositive();
 
-        if (SellerPackages::getAttributesById($spackageId,SellerPackages::tblFld('type'))  != SellerPackages::FREE_TYPE) {
-            $frm->addFloatField(Labels::getLabel('LBL_Price', $this->siteLangId), SellerPackagePlans::DB_TBL_PREFIX . 'price')->requirements()->setRange('0.01', '9999999999');
-            $fldPckPrice = $frm->getField(SellerPackagePlans::DB_TBL_PREFIX . 'price');
+        if (SellerPackages::getAttributesById($spackageId, SellerPackages::tblFld('type'))  != SellerPackages::FREE_TYPE) {
+            $frm->addFloatField(Labels::getLabel('FRM_PRICE', $this->siteLangId), 'spplan_price')->requirements()->setRange('0.01', '9999999999');
+            $fldPckPrice = $frm->getField('spplan_price');
             $fldPckPrice->setWrapperAttribute('class', 'package_price');
         }
 
-        $fld = $frm->addIntegerField(Labels::getLabel('LBL_Plan_Display_Order', $this->siteLangId), SellerPackagePlans::DB_TBL_PREFIX . 'display_order');
+        $fld = $frm->addIntegerField(Labels::getLabel('FRM_PLAN_DISPLAY_ORDER', $this->siteLangId), 'spplan_display_order');
         $fld->requirements()->setIntPositive();
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), SellerPackagePlans::DB_TBL_PREFIX . 'active', applicationConstants::getActiveInactiveArr($this->siteLangId), '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'spplan_active', applicationConstants::getActiveInactiveArr($this->siteLangId), '', array(), '');
 
         return $frm;
     }
 
     public function setup()
     {
-        $this->objPrivilege->canEditSellerPackages();
+        $this->checkEditPrivilege();
         $post = FatApp::getPostedData();
-        $spackageId = FatApp::getPostedData('spplan_spackage_id', FatUtility::VAR_INT,0);
+        $spackageId = FatApp::getPostedData('spplan_spackage_id', FatUtility::VAR_INT, 0);
+
         $frm = $this->getForm($spackageId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        $spPlanId = $post[SellerPackagePlans::DB_TBL_PREFIX . 'id'];
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $packageRow = SellerPackages::getAttributesById($spackageId);
+        $packageRow = SellerPackages::getAttributesById($spackageId, ['spackage_type']);
+        if (false === $packageRow) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
         $data = $post;
 
         if ($packageRow[SellerPackages::DB_TBL_PREFIX . 'type'] == SellerPackages::FREE_TYPE) {
@@ -166,70 +203,15 @@ class SellerPackagePlansController extends AdminBaseController
             $data[SellerPackagePlans::DB_TBL_PREFIX . 'price'] = 0;
         }
 
-        $record = new SellerPackagePlans($spPlanId);
+        $record = new SellerPackagePlans($post['spplan_id']);
         $record->assignValues($data);
         if (!$record->save()) {
             LibHelper::exitWithError($record->getError(), true);
         }
         $this->set('msg', $this->str_setup_successful);
-        $this->set('spackageId', $spackageId);
         $this->_template->render(false, false, 'json-success.php');
     }
-
-    public function updateStatus()
-    {
-        $this->objPrivilege->canEditSellerPackages();
-
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        if (0 >= $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
-        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $this->changeStatus($recordId, $status);
-
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function toggleBulkStatuses()
-    {
-        $this->objPrivilege->canEditSellerPackages();
-
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $recordIdsArr = FatUtility::int(FatApp::getPostedData('spackage_ids'));
-        if (empty($recordIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-        }
-
-        foreach ($recordIdsArr as $recordId) {
-            if (1 > $recordId) {
-                continue;
-            }
-
-            $this->changeStatus($recordId, $status);
-        }
-
-        LibHelper::dieJsonSuccess(['msg' => $this->str_update_record]);
-    }
-
-    private function changeStatus(int $recordId, int $status)
-    {
-        if (1 > $recordId || -1 == $status) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-
-        $obj = new SellerPackages($recordId);
-        if (!$obj->changeStatus($status)) {
-            LibHelper::exitWithError($obj->getError(), true);
-        }
-    }
-
+    
     private function getFormColumns(): array
     {
         $subsPkgTblHeadingCols = CacheHelper::get('subsPkgPlanTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');

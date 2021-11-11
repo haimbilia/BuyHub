@@ -848,8 +848,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $this->setLangTemplateData();
-
+        $this->setLangTemplateData();     
         $langFrm = $this->getLangForm($this->mainTableRecordId, $langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData($this->modelObj::DB_TBL_LANG);
@@ -923,7 +922,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
 
     protected function setLangData(object $classObj, array $langDataArr, $langId = 0)
     {
-        $recordId = $classObj->getMainTableRecordId(); 
+        $recordId = $classObj->getMainTableRecordId();
         if (!$classObj->updateLangData((0 < $langId  ? $langId : $this->getDefaultFormLangId()), $langDataArr)) {
             LibHelper::exitWithError($classObj->getError(), true);
         }
@@ -1033,7 +1032,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function changeStatus($recordId, $status)
+    protected function changeStatus($recordId, $status)
     {
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
@@ -1045,5 +1044,31 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         if (!$this->modelObj->changeStatus($status)) {
             LibHelper::exitWithError($this->modelObj->getError(), true);
         }
+    }
+
+    public function toggleBulkStatuses()
+    {
+        $this->checkEditPrivilege();
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
+        $recordsArr = FatUtility::int(FatApp::getPostedData('record_ids'));
+        if (empty($recordsArr) || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $this->setModel([0]);
+
+        foreach ($recordsArr as $recordId) {
+            if (1 > $recordId) {
+                continue;
+            }
+            $this->changeStatus($recordId, $status);
+        }
+        /*
+        if ($this->modelObj->bulkStatusUpdate($recordsArr, $status) == false) {
+            LibHelper::exitWithError(Labels::getLabel($this->modelObj->getError(), $this->siteLangId), true);
+        }
+        */
+        Product::updateMinPrices();        
+        $this->set('msg', $this->str_update_record);
+        $this->_template->render(false, false, 'json-success.php');
     }
 }

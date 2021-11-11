@@ -424,11 +424,13 @@ class MyAppModel extends FatModel {
         FatApp::getDb()->insertFromArray(UpdatedRecordLog::DB_TBL, $data, false, array(), $data);
     }
 
-    public function bulkStatusUpdate($records, $status) {
+    public function bulkStatusUpdate($records, $status)
+    {
         if (empty($records) || !is_array($records)) {
             $this->error = 'ERR_INVALID_REQUEST_ID';
             return false;
         }
+        
         $updateDate = date('Y-m-d H:i:s');
         $status = FatUtility::int($status);
         $updateQuery = 'UPDATE ' . static::DB_TBL . " SET ";

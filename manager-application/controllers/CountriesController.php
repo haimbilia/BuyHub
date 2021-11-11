@@ -241,7 +241,7 @@ class CountriesController extends AdminBaseController
         LibHelper::dieJsonSuccess(['msg' => $this->str_update_record]);
     }
 
-    private function changeStatus(int $recordId, int $status)
+    protected function changeStatus($recordId, $status)
     {
         if (1 > $recordId || -1 == $status) {
             LibHelper::exitWithError($this->str_invalid_request, true);

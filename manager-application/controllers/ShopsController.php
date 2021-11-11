@@ -7,6 +7,32 @@ class ShopsController extends AdminBaseController {
         $this->objPrivilege->canViewShops();
     }
 
+    /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditShops($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditShops();
+        }
+    }
+
+    /**
+     * setModel - This function is used to set related model class and used by its parent class.
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
+    protected function setModel(array $constructorArgs = []): void
+    {
+        $this->modelObj = (new ReflectionClass('Shop'))->newInstanceArgs($constructorArgs);
+    }
+
     public function index() {
         $this->search();
         $this->set('canEdit', $this->objPrivilege->canEditShops($this->admin_id, true));
@@ -63,7 +89,7 @@ class ShopsController extends AdminBaseController {
     }
 
     public function form() {
-        $this->objPrivilege->canEditShops();
+        $this->checkEditPrivilege();
         $shop_id = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($shop_id);
         $lang = Language::getDropDownList($this->getDefaultFormLangId());
@@ -90,7 +116,7 @@ class ShopsController extends AdminBaseController {
     }
 
     public function setup() {
-        $this->objPrivilege->canEditShops();
+        $this->checkEditPrivilege();
         $shop_id = FatApp::getPostedData('shop_id', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($shop_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -206,7 +232,7 @@ class ShopsController extends AdminBaseController {
     }
 
     public function media($shop_id) {
-        $this->objPrivilege->canEditShops();
+        $this->checkEditPrivilege();
         $shop_id = FatUtility::int($shop_id);
         $shopLogoFrm = $this->getShopLogoForm($shop_id, $this->siteLangId);
         $shopBannerFrm = $this->getShopBannerForm($shop_id, $this->siteLangId);
@@ -227,6 +253,7 @@ class ShopsController extends AdminBaseController {
         $this->set('logoFrm', $shopLogoFrm);
         $this->set('shopBannerFrm', $shopBannerFrm);
         $this->set('bannerTypeArr', applicationConstants::bannerTypeArr());
+        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->_template->render(false, false);
     }
 
@@ -363,42 +390,7 @@ class ShopsController extends AdminBaseController {
         $frm->addHiddenField('', 'min_height');
         $frm->addHTML('', 'shop_banner', '');
         return $frm;
-    }
-
-    public function updateStatus() {
-        $this->objPrivilege->canEditShops();
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        if (0 == $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
-        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-        $shopObj = new Shop($recordId);
-        if (!$shopObj->changeStatus($status)) {
-            LibHelper::exitWithError($shopObj->getError(), true);
-        }
-        Product::updateMinPrices(0, 0, $recordId);
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function toggleBulkStatuses() {
-        $this->objPrivilege->canEditShops();
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $shopsArr = FatUtility::int(FatApp::getPostedData('shop_ids'));
-        if (empty($shopsArr) || -1 == $status) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-        $shopObj = new Shop(0);
-        if ($shopObj->bulkStatusUpdate($shopsArr, $status) == false) {
-            LibHelper::exitWithError(Labels::getLabel($shopObj->getError(), $this->adminLangId), true);
-        }
-        Product::updateMinPrices();
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
+    } 
 
     public function getSearchForm($request = false, $fields = []) {
         $frm = new Form('frmRecordSearch');
@@ -479,7 +471,7 @@ class ShopsController extends AdminBaseController {
         $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->siteLangId), 'shop_fulfillment_type', $fulFillmentArr, applicationConstants::NO, [], Labels::getLabel('LBL_Select', $this->siteLangId));
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'shop_active', $activeInactiveArr, '', array(), '');
-        $this->appendLangFormFields($frm);
+        $this->appendLangFormFields($frm , $this->siteLangId);
         $frm->addHiddenField('', 'shop_lat');
         $frm->addHiddenField('', 'shop_lng');
         $frm->addHtml('', 'space', '');
@@ -491,26 +483,26 @@ class ShopsController extends AdminBaseController {
         $frm = new Form('frmShopLang', array('id' => 'frmShopLang'));
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Shop_Name', $this->siteLangId), 'shop_name');
+        $frm->addRequiredField(Labels::getLabel('LBL_Shop_Name', $lang_id), 'shop_name');
         $this->appendLangFormFields($frm);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
-    private function appendLangFormFields(&$frm) {
-        $frm->addTextBox(Labels::getLabel('LBL_Shop_City', $this->siteLangId), 'shop_city');
-        $frm->addTextBox(Labels::getLabel('LBL_Contact_person', $this->siteLangId), 'shop_contact_person');
-        $frm->addTextarea(Labels::getLabel('LBL_Description', $this->siteLangId), 'shop_description');
-        $frm->addTextarea(Labels::getLabel('LBL_Payment_Policy', $this->siteLangId), 'shop_payment_policy');
-        $frm->addTextarea(Labels::getLabel('LBL_Delivery_Policy', $this->siteLangId), 'shop_delivery_policy');
-        $frm->addTextarea(Labels::getLabel('LBL_Refund_Policy', $this->siteLangId), 'shop_refund_policy');
-        $frm->addTextarea(Labels::getLabel('LBL_Additional_Information', $this->siteLangId), 'shop_additional_info');
-        $frm->addTextarea(Labels::getLabel('LBL_Seller_Information', $this->siteLangId), 'shop_seller_info');
+    private function appendLangFormFields(&$frm, $lang_id = 0) {
+        $frm->addTextBox(Labels::getLabel('LBL_Shop_City', $lang_id), 'shop_city');
+        $frm->addTextBox(Labels::getLabel('LBL_Contact_person', $lang_id), 'shop_contact_person');
+        $frm->addTextarea(Labels::getLabel('LBL_Description', $lang_id), 'shop_description');
+        $frm->addTextarea(Labels::getLabel('LBL_Payment_Policy', $lang_id), 'shop_payment_policy');
+        $frm->addTextarea(Labels::getLabel('LBL_Delivery_Policy', $lang_id), 'shop_delivery_policy');
+        $frm->addTextarea(Labels::getLabel('LBL_Refund_Policy', $lang_id), 'shop_refund_policy');
+        $frm->addTextarea(Labels::getLabel('LBL_Additional_Information', $lang_id), 'shop_additional_info');
+        $frm->addTextarea(Labels::getLabel('LBL_Seller_Information', $lang_id), 'shop_seller_info');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $lang_id), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         return $frm;
     }

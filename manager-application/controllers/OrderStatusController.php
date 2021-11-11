@@ -255,7 +255,7 @@ class OrderStatusController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function changeStatus($recordId, $status)
+    protected function changeStatus($recordId, $status)
     {
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
