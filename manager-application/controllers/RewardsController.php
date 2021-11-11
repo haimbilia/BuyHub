@@ -205,4 +205,18 @@ class RewardsController extends AdminBaseController
     {
         return array_diff($fields, ['urp_comments'], Common::excludeKeysForSort());
     }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_USERS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Users')],
+                    ['title' => Labels::getLabel('LBL_REWARDS', $this->siteLangId)]
+                ];
+        }
+        return $this->nodes;
+    }
 }

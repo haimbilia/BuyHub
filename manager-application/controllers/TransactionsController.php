@@ -233,4 +233,18 @@ class TransactionsController extends AdminBaseController
     {
         return array_diff($fields, ['utxn_comments'], Common::excludeKeysForSort());
     }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_USERS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Users')],
+                    ['title' => Labels::getLabel('LBL_TRANSACTIONS', $this->siteLangId)]
+                ];
+        }
+        return $this->nodes;
+    }
 }

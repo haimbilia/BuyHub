@@ -130,21 +130,18 @@ class DeletedUsersController extends AdminBaseController
         $this->objPrivilege->canEditUsers();
         $post = FatApp::getPostedData();
         if ($post == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $user_id = FatUtility::int($post['user_id']);
         if (1 > $user_id) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $userObj = new User($user_id);
         $userObj->assignValues(array('user_deleted' => applicationConstants::NO));
         if (!$userObj->save()) {
-            Message::addErrorMessage($userObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($userObj->getError(), true);
         }
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
@@ -208,5 +205,19 @@ class DeletedUsersController extends AdminBaseController
     private function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['type'], Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_USERS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Users')],
+                    ['title' => Labels::getLabel('LBL_DELETED_USERS', $this->siteLangId)]
+                ];
+        }
+        return $this->nodes;
     }
 }

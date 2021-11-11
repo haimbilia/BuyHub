@@ -4,10 +4,6 @@ class UsersController extends AdminBaseController
 {
     public function __construct($action)
     {
-        $ajaxCallArray = array();
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die($this->str_invalid_Action);
-        }
         parent::__construct($action);
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
         $this->canView = $this->objPrivilege->canViewUsers($this->admin_id, true);
