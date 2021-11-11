@@ -419,8 +419,7 @@ class ShopsController extends AdminBaseController {
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_OWNER', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),   
             'shop_name' => Labels::getLabel('LBL_SHOP_NAME', $this->siteLangId),
             'numOfProducts' => Labels::getLabel('LBL_Products', $this->siteLangId),
             'numOfReports' => Labels::getLabel('LBL_Reports', $this->siteLangId),
@@ -510,8 +509,7 @@ class ShopsController extends AdminBaseController {
     private function getDefaultColumns(): array {
         return [
             'select_all',
-            'listSerial',
-            'user_name',
+            'listSerial',            
             'shop_name',
             'numOfProducts',
             'numOfReports',

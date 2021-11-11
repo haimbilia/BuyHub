@@ -32,7 +32,8 @@ class AdminShopSearch extends SearchBase {
             'shop.shop_supplier_display_status',
             'IFNULL(shopLang.shop_name, shop.shop_identifier) as shop_name',
             'users.user_name',
-            'cred.credential_username'
+            'cred.credential_username',
+            'shop.shop_updated_on'
         ]);
         $this->joinWithUser();
         $this->joinWithCredential();
