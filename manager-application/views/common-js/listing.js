@@ -18,7 +18,6 @@ $(document).on("click", ".headerColumnJs", function (e) {
         $(frm.page).val(1);
     }
 
-    $(".sortingIconJs").remove();
     $(".headerColumnJs").removeClass("sorting_asc sorting_desc");
     if (document.getElementById("sortOrder").value == "ASC") {
         if ("undefined" != typeof frm) {
@@ -36,13 +35,6 @@ $(document).on("click", ".headerColumnJs", function (e) {
         sortcls = "sorting_desc";
     }
 
-    if (0 < $(this).find(".icn").length) {
-        $(this).find(".icn").html(sortIcn);
-    } else {
-        $(this)
-            .find("span")
-            .append('<i class="icn sortingIconJs">' + sortIcn + "</i>");
-    }
     $(this).addClass(sortcls);
     searchRecords(frm);
 });

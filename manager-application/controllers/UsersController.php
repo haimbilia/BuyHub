@@ -131,6 +131,7 @@ class UsersController extends AdminBaseController
         $srch->setPageSize($pageSize);
 
         $rs = $srch->getResultSet();
+        echo $srch->getQuery();
         $records = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arrListing", $records);
