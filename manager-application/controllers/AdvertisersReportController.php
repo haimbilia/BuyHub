@@ -174,7 +174,7 @@ class AdvertisersReportController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns()
+    protected function getFormColumns()
     {
         $avdertiserUserReportsCacheVar = FatCache::get('avdertiserUserReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$avdertiserUserReportsCacheVar) {
@@ -195,7 +195,7 @@ class AdvertisersReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['name', 'user_regdate', 'user_is_supplier', 'promotionsCount', 'activePromotions', 'promotionCharged', 'availableBalance'];
     }

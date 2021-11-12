@@ -72,7 +72,7 @@ class BlogContributionsController extends AdminBaseController
         if (isset($post['bcontributions_id']) && $post['bcontributions_id'] != '') {
             $srch->addCondition('bcontributions_id', '=', $post['bcontributions_id']);
         }
-        $srch->addMultipleFields(array('*', 'concat(bcontributions_author_first_name," ",bcontributions_author_last_name) author_name', 'bcontributions_id as listSerial'));
+        $srch->addMultipleFields(array('*', 'concat(bcontributions_author_first_name," ",bcontributions_author_last_name) author_name'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         
@@ -239,7 +239,7 @@ class BlogContributionsController extends AdminBaseController
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'bcontributions_id');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'author_name');
         }
 
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
@@ -253,7 +253,7 @@ class BlogContributionsController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $blogContributionTblHeadingCols = CacheHelper::get('blogContributionTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($blogContributionTblHeadingCols) {
@@ -274,7 +274,7 @@ class BlogContributionsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -288,7 +288,7 @@ class BlogContributionsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

@@ -30,7 +30,7 @@ class PluginsController extends AdminBaseController
         $frm->addHiddenField('', 'type');
         $frm->addHiddenField('', 'page', 1);
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'plugin_name');
         }
         return $frm;
     }
@@ -83,8 +83,7 @@ class PluginsController extends AdminBaseController
         $attr = array(
             'plg.*',
             'plg_l.*',
-            'conf.*',
-            'plugin_id as listSerial'
+            'conf.*'
         );
         $srch = Plugin::getSearchObject($this->siteLangId, false);
         $srch->joinTable(Configurations::DB_TBL, 'LEFT JOIN', "conf_val = plugin_id AND conf_name = 'CONF_DEFAULT_PLUGIN_" . $type . "'", 'conf');
@@ -450,7 +449,7 @@ class PluginsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $pluginsTblHeadingCols = CacheHelper::get('pluginsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($pluginsTblHeadingCols) {
@@ -470,7 +469,7 @@ class PluginsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'dragdrop',
@@ -483,7 +482,7 @@ class PluginsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['dragdrop', 'plugin_icon', 'plugin_active'], Common::excludeKeysForSort());
     }

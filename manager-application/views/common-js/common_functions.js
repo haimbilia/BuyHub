@@ -197,13 +197,37 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOn
     $("." + $.ykmodal.element).removeAttr('tabindex');
 };
 
+redirectfunc = function (url, id, nid, newTab) {
+    newTab = (typeof newTab != "undefined") ? newTab : true;
+    if (nid > 0) {
+        fcom.displayProcessing();      
+        markRead(nid, url, id);
+    } else {
+        var target = (newTab) ? ' target="_blank" ' : ' ';
+        var form = '<input type="hidden" name="id" value="' + id + '">';
+        $('<form' + target + 'action="' + url + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
+    }
+};
+
+markRead = function (nid, url, id) {
+    if (nid.length < 1) {
+        return false;
+    }
+    var data = 'record_ids=' + nid + '&status=' + 1 + '&markread=1';
+    fcom.updateWithAjax(fcom.makeUrl('Notifications', 'changeStatus'), data, function (t) {
+        var form = '<input type="hidden" name="id" value="' + id + '">';
+        $('<form action="' + url + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
+    });
+};
+
 $(document).ready(function () {
     /* Active Sidebar Link. */
     var uri = (window.location.pathname).replace(/^\/|\/$/g, '');
-    $('.sidebarMenuJs .menuItemJs .navLinkJs').each(function () {
+    $('.sidebarMenuJs .navLinkJs').each(function () {
         var href = $(this).attr('href').replace(/^\/|\/$/g, '');
         if (uri == href) {
-            $(this).parents('li:not(.hasNestedChildJs)').addClass('active');
+            $(this).parent('li.navItemJs').addClass('active');
+            $(this).parents('li:not(.hasNestedChildJs)').find('.menuLinkJs').addClass('active');
             $(this).parents('li.hasNestedChildJs').addClass('show').find('.collapseJs').addClass('show');
         }
     });

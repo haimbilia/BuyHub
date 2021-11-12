@@ -41,6 +41,30 @@
     }
     tr {
         td {
+            .checkmark {
+                filter: grayscale(1);
+                &.is-check {
+                    filter: none;
+                }
+                img {
+                    width: 40px;
+                    height: 40px;
+                }
+            }
+            .verified {
+                color: $brand-color;
+                filter: grayscale(1);
+                opacity: 0.5;
+                &.is-verified {
+                    filter: none;
+                    opacity: 1;
+                }
+                svg {
+                    width: 20px;
+                    height: 20px;
+                    fill: currentColor;
+                }
+            }
             &:first-child {
                 padding-left: 0;
             }
@@ -705,18 +729,49 @@
     cursor: pointer;
     position: relative;
     >span {
-        display: flex;
+        position: relative;
+        display: inline-flex;
         align-items: center;
         .svg {
             margin-#{$start-direction}: 4px;
             width: 12px;
             height: 12px;
         }
+        &:before,
+        &:after {
+            position: absolute;
+            display: block;
+            opacity: .5;
+        }
+        &:before {
+            content: "\2191";
+            right: -10px;
+        }
+        &:after {
+            content: "\2193";
+            right: -17px;
+        }
     }
-    &:hover,
-    &_asc,
+    &_asc {
+        >span {
+            color: $brand-color;
+            &:before {
+                opacity: 1;
+            }
+        }
+    }
     &_desc {
-        color: $brand-color !important;
+        >span {
+            color: $brand-color;
+            &:after {
+                opacity: 1;
+            }
+        }
+    }
+    &:hover {
+        >span {
+            color: $brand-color;
+        }
     }
 }
 
@@ -748,16 +803,11 @@
     white-space: nowrap;
 }
 
-.edit-hover {
-    width: 120px;
-    padding: 2px 10px;
-    text-align: left;
-    border: 1px solid #fff;
-    +input {
-        width: 120px;
-        border: $border;
-        outline: 0;
-        padding: 2px 10px;
-        text-align: left;
+.contenteditable {
+    display: inline-block;
+    border-bottom: dashed 2px $brand-color;
+    &:focus,
+    &:active {
+        border: solid 2px $brand-color;
     }
 }

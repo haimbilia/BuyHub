@@ -738,11 +738,20 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     fixTableColumnWidth = function () {
         var thWidthArr = [];
         $('.listingTableJs .tableHeadJs th').each(function () {
-            thWidthArr[$(this).width()] = $(this);
+            var arr = {
+                'width': $(this).width(),
+                'element': $(this)
+            };
+            thWidthArr.push(arr);
         });
+        /* Sort By width */
+        thWidthArr.sort((a, b) => (a.width > b.width) ? 1 : -1)
+        /* Sort By width */
 
-        $.each(sortObjectByKeys(thWidthArr), function (index, value) {
-            $(value).css({ 'width': $(value).width() });
+        $.each(thWidthArr, function (index, value) {
+            var width = value.width;
+            var element = value.element;
+            $(element).css({ 'width': width });
         });
     }
 })();
@@ -772,6 +781,8 @@ $(document).ready(function () {
     if (typeof controllerName != 'undefined') {
         getHelpCenterContent(controllerName);
     }
+});
 
+$(window).on('load', function () {
     fixTableColumnWidth();
 });

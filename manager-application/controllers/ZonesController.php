@@ -70,7 +70,7 @@ class ZonesController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         $srch = Zone::getSearchObject(false, $this->siteLangId);
-        $srch->addFld('zone.* , z_l.zone_name, zone.zone_id as listSerial');
+        $srch->addFld('zone.* , z_l.zone_name');
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('zone.zone_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('z_l.zone_name', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -223,7 +223,7 @@ class ZonesController extends AdminBaseController
         }
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $zoneTblHeadingCols = CacheHelper::get('zoneTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($zoneTblHeadingCols) {
@@ -243,7 +243,7 @@ class ZonesController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -255,7 +255,7 @@ class ZonesController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['zone_active'], Common::excludeKeysForSort());
     }

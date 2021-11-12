@@ -16,6 +16,10 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
+            case 'user_name':
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId], false, true);
+                $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
+                break;    
             case 'utxn_id':
                 $td->appendElement('plaintext', $tdAttr, Transactions::formatTransactionNumber($row[$key]) );
             break;

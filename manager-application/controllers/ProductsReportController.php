@@ -279,7 +279,7 @@ class ProductsReportController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns()
+    protected function getFormColumns()
     {
         $productReportCacheVar = FatCache::get('productReportCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$productReportCacheVar) {
@@ -328,7 +328,7 @@ class ProductsReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['product_name', 'netSoldQty', 'grossSales', 'couponDiscount', 'refundedAmount', 'taxTotal', 'shippingTotal', 'orderNetAmount'];
     }

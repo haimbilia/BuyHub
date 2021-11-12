@@ -59,7 +59,7 @@ class RewardsOnPurchaseController extends AdminBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = RewardsOnPurchase::getSearchObject();
-        $srch->addMultipleFields(['rop.*', 'rop_id as listSerial']);
+        $srch->addMultipleFields(['rop.*']);
         $srch->addOrder($sortBy, $sortOrder);
 
         $srch->setPageNumber($page);
@@ -200,7 +200,7 @@ class RewardsOnPurchaseController extends AdminBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'rop_purchase_upto');
         }
         
         $fld = $frm->addTextBox(Labels::getLabel('FRM_PURCHASE_AMOUNT', $this->siteLangId), 'keyword');
@@ -224,7 +224,7 @@ class RewardsOnPurchaseController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $rewardsOnPurchaseTblHeadingCols = CacheHelper::get('rewardsOnPurchaseTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($rewardsOnPurchaseTblHeadingCols) {
@@ -247,7 +247,7 @@ class RewardsOnPurchaseController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [    
             'select_all',
@@ -258,7 +258,7 @@ class RewardsOnPurchaseController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

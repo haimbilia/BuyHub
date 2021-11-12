@@ -92,4 +92,6 @@ if (!empty($columnButtons)) {
 
     $li->appendElement('div', ['class' => 'dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-anim scroll scroll-y'], $columnButtons, true);
 }
-echo $ul->getHtml();
+if (!empty($htmlContent) || !empty($statusButtons) || !empty($deleteButton) || !empty($otherButtons) || !empty($columnButtons)) {
+    echo $ul->getHtml();
+}

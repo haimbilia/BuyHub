@@ -1,0 +1,15 @@
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
+$uploadedTime = AttachedFile::setTimeParam($user['user_updated_on']);
+$userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', array($user['user_id'], $siteLangId, 'MINITHUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+$username = !empty($user['user_name']) ? $user['user_name'] . ' ( ' . $user['credential_username'] . ')' : $user['credential_username']; 
+?>
+<div class="user-profile">
+    <figure class="user-profile_photo">
+        <img width="40" height="40" title="<?php echo $user['user_name']; ?>" alt="<?php echo $user['user_name']; ?>" src="<?php echo $userImageUrl; ?>">
+    </figure>
+    <div class="user-profile_data">
+        <a class="user-profile_title" href="javascript:void(0)"><?php echo $username; ?></a>
+        <span class="text-muted fw-bold"><?php echo $user['credential_email']; ?></span>
+    </div>
+</div>

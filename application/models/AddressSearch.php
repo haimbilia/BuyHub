@@ -39,10 +39,10 @@ class AddressSearch extends SearchBase
     {
         $langId = $this->getLangId($langId);
 
-        $this->joinTable(Countries::DB_TBL, 'LEFT OUTER JOIN', 'c.country_id = addr.addr_country_id', 'c');
+        $this->joinTable(Countries::DB_TBL, 'LEFT JOIN', 'c.country_id = addr.addr_country_id', 'c');
 
         if (0 < $langId) {
-            $this->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'c.country_id = c_l.countrylang_country_id AND countrylang_lang_id = ' . $langId, 'c_l');
+            $this->joinTable(Countries::DB_TBL_LANG, 'LEFT JOIN', 'c.country_id = c_l.countrylang_country_id AND countrylang_lang_id = ' . $langId, 'c_l');
         }
     }
     
@@ -56,16 +56,17 @@ class AddressSearch extends SearchBase
     {
         $langId = $this->getLangId($langId);
 
-        $this->joinTable(States::DB_TBL, 'LEFT OUTER JOIN', 's.state_id = addr.addr_state_id', 's');
+        $this->joinTable(States::DB_TBL, 'LEFT JOIN', 's.state_id = addr.addr_state_id', 's');
 
         if (0 < $langId) {
-            $this->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 's.state_id = s_l.statelang_state_id AND s_l.statelang_lang_id = ' . $langId, 's_l');
+            $this->joinTable(States::DB_TBL_LANG, 'LEFT JOIN', 's.state_id = s_l.statelang_state_id AND s_l.statelang_lang_id = ' . $langId, 's_l');
         }
     }
 
-    public function joinUser(int $langId)
+    public function joinUser()
     {
+        $this->joinTable(User::DB_TBL, 'LEFT JOIN', 'addr.addr_record_id = u.user_id AND addr_type = ' . Address::TYPE_USER, 'u');
+        $this->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'u.user_id = uc.credential_user_id', 'uc');
     }
-
     
 }

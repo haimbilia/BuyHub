@@ -17,32 +17,18 @@ if (count($childCategories) > 0) {
             </div>
             <div class="sorting-actions">
                 <?php
-                        $active = "";
-                        $changeStatus = applicationConstants::ACTIVE;
-                        if ($row['prodcat_active']) {
-                            $active = 'checked';
-                            $changeStatus = applicationConstants::INACTIVE;
-                        }
-                        $statusAct = ($canEdit === true) ? 'toggleStatus(event,this,' . applicationConstants::YES . ',' . $changeStatus . ')' : 'toggleStatus(event,this,' . applicationConstants::NO . ',' . $changeStatus . ')';
-                        $statusClass = ($canEdit === false) ? 'disabled' : '';
-                        $hasParent = 0 < $row['prodcat_parent'] ? applicationConstants::YES : applicationConstants::NO;
-                        ?>
-                <label class="switch switch-sm switch-icon">
-                    <input <?php echo $active; ?> type="checkbox" id="switch<?php echo $row['prodcat_id']; ?>"
-                        value="<?php echo $row['prodcat_id']; ?>" onclick="<?php echo $statusAct; ?>"
-                        data-childcount="<?php echo $row['subcategory_count']; ?>"
-                        data-hasparent="<?php echo $hasParent; ?>" />
-                    <span></span>
-                </label>
-                <?php if ($canEdit) { ?>
-                <button onClick="goToProduct(<?php echo $row['prodcat_id']; ?>)"
-                    title="<?php echo  Labels::getLabel('LBL_Add_Product', $siteLangId); ?>"
-                    class="btn btn-clean btn-sm btn-icon clickable">
-                    <svg class="svg clickable" width="18" height="18">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
-                        </use>
-                    </svg></button>
-                <button onClick="categoryForm(<?php echo $row['prodcat_id']; ?>)"
+                    $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['prodcat_id'] . ', ' . ((int) !$row['prodcat_active']) . ')' : 'return false;';
+                    $statusClass = ($canEdit) ? '' : 'disabled';
+                    $checked = applicationConstants::ACTIVE == $row['prodcat_active'] ? 'checked' : '';                      
+                ?>
+                <span class="switch switch-sm switch-icon clickable" >
+                    <label>
+                        <input type="checkbox" data-old-status="<?php echo $row['prodcat_active'];?>" value="<?php echo $row['prodcat_id']; ?>" <?php echo $checked; ?> onclick="<?php echo $statusAct; ?>" ' . $statusClass . '>
+                        <span class="input-helper clickable"></span>
+                    </label>
+                </span> 
+                <?php if ($canEdit) { ?>               
+                <button onClick="editRecord<?php echo $row['prodcat_id']; ?>)"
                     title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>"
                     class="btn btn-clean btn-sm btn-icon clickable">
                     <svg class="svg clickable" width="18" height="18">

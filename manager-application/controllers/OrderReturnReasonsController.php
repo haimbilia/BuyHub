@@ -72,7 +72,7 @@ class OrderReturnReasonsController extends AdminBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = OrderReturnReason::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('orreason.*', 'orreason_l.orreason_title', 'orreason_id as listSerial'));
+        $srch->addMultipleFields(array('orreason.*', 'orreason_l.orreason_title'));
 
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('orreason_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
@@ -214,7 +214,7 @@ class OrderReturnReasonsController extends AdminBaseController
         }
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $orderRetReasonTblHeadingCols = CacheHelper::get('orderRetReasonTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($orderRetReasonTblHeadingCols) {
@@ -233,7 +233,7 @@ class OrderReturnReasonsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -244,7 +244,7 @@ class OrderReturnReasonsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

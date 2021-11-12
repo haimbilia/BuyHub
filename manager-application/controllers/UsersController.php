@@ -4,10 +4,6 @@ class UsersController extends AdminBaseController
 {
     public function __construct($action)
     {
-        $ajaxCallArray = array();
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die($this->str_invalid_Action);
-        }
         parent::__construct($action);
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
         $this->canView = $this->objPrivilege->canViewUsers($this->admin_id, true);
@@ -1532,7 +1528,8 @@ class UsersController extends AdminBaseController
             'pageCount' => $srch->pages()
         );
         foreach ($users as $key => $user) {
-            $name = (0 < $joinShop) ? $user['user_name'] . ' (' . $user['shop_name'] . ')' : $user['user_name'];
+            $userName = (0 < $joinShop) ? $user['shop_name'] : $user['credential_username'];
+            $name = !empty($user['user_name']) ? $user['user_name'] . ' (' . $userName . ')' : $userName;
             $json['results'][] = array(
                 'id' => $key,
                 'text' => strip_tags(html_entity_decode($name, ENT_QUOTES, 'UTF-8'))
@@ -1559,23 +1556,22 @@ class UsersController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function changeStatus()
+    public function changeStatus($recordId, $status)
     {
         $this->objPrivilege->canEditUsers();
-        $userId = FatApp::getPostedData('userId', FatUtility::VAR_INT, 0);
-        if (0 == $userId) {
+        $recordId = FatApp::getPostedData('userId', FatUtility::VAR_INT, 0);
+        if (0 == $recordId) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $userObj = new User($userId);
+        $userObj = new User($recordId);
         $srch = $userObj->getUserSearchObj();
         $rs = $srch->getResultSet();
         $data = FatApp::getDb()->fetch($rs);
-        $status = ($data['credential_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
 
-        $this->updateUserStatus($userId, $status);
-        $shopId = Shop::getAttributesByUserId($userId, 'shop_id');
+        $this->updateUserStatus($recordId, $status);
+        $shopId = Shop::getAttributesByUserId($recordId, 'shop_id');
         if (0 < $shopId) {
             Product::updateMinPrices(0, $shopId);
         }
@@ -1873,29 +1869,6 @@ class UsersController extends AdminBaseController
         $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
-
-    /* private function getUserSearchForm() {
-    $frm = new Form('frmUserSearch');
-    $keyword = $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email',$this->siteLangId), 'keyword','',array('id'=>'keyword','autocomplete'=>'off'));
-    $keyword->setFieldTagAttribute('onKeyUp','usersAutocomplete(this)');
-
-    $arr_options = array('-1'=>Labels::getLabel('LBL_Does_Not_Matter',$this->siteLangId))+applicationConstants::getActiveInactiveArr($this->siteLangId);
-    $arr_options1 = array('-1'=>Labels::getLabel('LBL_Does_Not_Matter',$this->siteLangId))+applicationConstants::getYesNoArr($this->siteLangId);
-    $arr_options2 = array('-1'=>Labels::getLabel('LBL_Does_Not_Matter',$this->siteLangId))+User::getUserTypesArr($this->siteLangId);
-
-    $frm->addSelectBox(Labels::getLabel('LBL_Active_Users',$this->siteLangId), 'user_active', $arr_options, -1, array(),'');
-    $frm->addSelectBox(Labels::getLabel('LBL_Email_Verified',$this->siteLangId), 'user_verified', $arr_options1, -1, array(), '');
-    $frm->addSelectBox(Labels::getLabel('LBL_User_Type',$this->siteLangId), 'type', $arr_options2, -1, array(),'');
-
-    $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From',$this->siteLangId), 'user_regdate_from');
-    $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To',$this->siteLangId), 'user_regdate_to');
-
-    $frm->addHiddenField('','page',1);
-    $fld_submit=$frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search',$this->siteLangId));
-    $fld_cancel = $frm->addButton("","btn_clear",Labels::getLabel('LBL_CLEAR',$this->siteLangId));
-    $fld_submit->attachField($fld_cancel);
-    return $frm;
-    } */
 
     private function getForm($user_id = 0)
     {
