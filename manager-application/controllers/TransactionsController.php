@@ -77,7 +77,7 @@ class TransactionsController extends AdminBaseController
         $balSrch->addCondition('utxn_status', '=', 1);
         $srch->joinTable('(' . $balSrch->getQuery() . ')', 'JOIN', 'tqupb.utxn_id <= utxn.utxn_id', 'tqupb');
 
-        $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance", 'user_name', 'utxn.utxn_id as listSerial', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));
+        $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance", 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));
         $srch->addGroupBy('utxn.utxn_id');
 
 
@@ -107,7 +107,7 @@ class TransactionsController extends AdminBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'user_name');
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'utxn_user_id', []);
@@ -191,7 +191,7 @@ class TransactionsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $transactionsTblHeadingCols = CacheHelper::get('transactionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($transactionsTblHeadingCols) {
@@ -214,7 +214,7 @@ class TransactionsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'listSerial',
@@ -229,7 +229,7 @@ class TransactionsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['utxn_comments'], Common::excludeKeysForSort());
     }

@@ -191,7 +191,7 @@ class EarningsReportController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns()
+    protected function getFormColumns()
     {
         $earningsReportsCacheVar = FatCache::get('earningsReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$earningsReportsCacheVar) {
@@ -210,7 +210,7 @@ class EarningsReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['date', 'subscriptionCharges', 'promotionCharged', 'adminSalesEarnings', 'totalEarning'];
     }

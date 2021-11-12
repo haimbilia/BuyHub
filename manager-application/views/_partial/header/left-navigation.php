@@ -36,10 +36,17 @@
                                     </a>
                                 </li>
                             <?php } ?>
+                                <?php if ($objPrivilege->canViewShops(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('brandRequests'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_Brand_Request', $siteLangId); ?></span>
+                                    </a>
+                                </li> 
+                            <?php } ?>
                             <?php if ($objPrivilege->canViewShops(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Shops'); ?>">
-                                        <span class="nav_text"><?php echo Labels::getLabel('LBL_Shops', $siteLangId); ?></span>
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_Shops', $siteLangId); ?></span>
                                     </a>
                                 </li> 
                             <?php } ?>
@@ -127,12 +134,17 @@
                                 </li>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Transactions'); ?>">
-                                        <?php echo Labels::getLabel('NAV_Transactions', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_TRANSACTIONS', $siteLangId); ?>
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('DeletedUsers'); ?>">
-                                        <?php echo Labels::getLabel('NAV_Deleted_Users', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_DELETED_USERS', $siteLangId); ?>
+                                    </a>
+                                </li>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('UsersAddresses'); ?>">
+                                        <?php echo Labels::getLabel('NAV_USERS_ADDRESSES', $siteLangId); ?>
                                     </a>
                                 </li>
                             <?php } ?>

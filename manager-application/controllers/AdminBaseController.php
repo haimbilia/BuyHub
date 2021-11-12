@@ -823,7 +823,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         $this->_template->render(false, false, '_partial/record-info-section.php');
     }
 
-    protected function addSortingElements(Form $frm, string $sortBy = 'listSerial', string $sortOrder = applicationConstants::SORT_ASC, int $pageSize = 0): void
+    protected function addSortingElements(Form $frm, string $sortBy, string $sortOrder = applicationConstants::SORT_ASC, int $pageSize = 0): void
     {
         $sortOrder = ($sortOrder != applicationConstants::SORT_ASC) ? applicationConstants::SORT_DESC : $sortOrder;
         $pageSize = empty($pageSize) ? FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10) : $pageSize;
@@ -959,13 +959,16 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
 
     protected function getSearchForm($fields = [])
     {
+        $fields = $this->getFormColumns();
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($this->getFormColumns()));
+        
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, current($allowedKeysForSorting));
         }
 
         HtmlHelper::addSearchButton($frm);

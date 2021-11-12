@@ -243,7 +243,7 @@ class ShopsReportController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns()
+    protected function getFormColumns()
     {
         $shopsReportCacheVar = FatCache::get('shopsReportCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$shopsReportCacheVar) {
@@ -292,7 +292,7 @@ class ShopsReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['shop_name', 'owner_name', 'netSoldQty', 'grossSales', 'refundedAmount', 'sellerTaxTotal', 'sellerShippingTotal', 'volumeDiscount', 'adminSalesEarnings'];
     }

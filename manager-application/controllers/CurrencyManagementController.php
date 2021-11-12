@@ -80,7 +80,7 @@ class CurrencyManagementController extends AdminBaseController
             $srch->addCondition('curr_l.currency_name', 'like', '%' . $post['keyword'] . '%');
         }
 
-        $srch->addMultipleFields(['curr.*', 'curr_l.*', 'curr.currency_id as listSerial']);
+        $srch->addMultipleFields(['curr.*', 'curr_l.*']);
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -276,7 +276,7 @@ class CurrencyManagementController extends AdminBaseController
         }
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $currencyTblHeadingCols = CacheHelper::get('currencyTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($currencyTblHeadingCols) {
@@ -298,7 +298,7 @@ class CurrencyManagementController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'dragdrop',
@@ -312,7 +312,7 @@ class CurrencyManagementController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, [
             'dragdrop',

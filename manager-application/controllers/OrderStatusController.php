@@ -40,7 +40,7 @@ class OrderStatusController extends AdminBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'orderstatus_name');
         }
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
@@ -88,7 +88,7 @@ class OrderStatusController extends AdminBaseController
 
         $srch = OrderStatus::getSearchObject(false, $this->siteLangId);
 
-        $srch->addFld(array('ostatus.*', 'IFNULL(ostatus_l.orderstatus_name,ostatus.orderstatus_identifier) as orderstatus_name', 'ostatus.orderstatus_id as listSerial'));
+        $srch->addFld(array('ostatus.*', 'IFNULL(ostatus_l.orderstatus_name,ostatus.orderstatus_identifier) as orderstatus_name'));
 
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('ostatus.orderstatus_identifier', 'like', '%' . $post['keyword'] . '%');
@@ -286,7 +286,7 @@ class OrderStatusController extends AdminBaseController
         }
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $orderStatusTblHeadingCols = CacheHelper::get('orderStatusTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($orderStatusTblHeadingCols) {
@@ -306,7 +306,7 @@ class OrderStatusController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'dragdrop',
@@ -318,7 +318,7 @@ class OrderStatusController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['dragdrop', 'orderstatus_is_active'], Common::excludeKeysForSort());
     }

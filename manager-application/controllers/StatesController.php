@@ -39,7 +39,7 @@ class StatesController extends AdminBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'state_identifier');
         }
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
@@ -101,7 +101,7 @@ class StatesController extends AdminBaseController
             'c'
         );
 
-        $srch->addMultipleFields(array('st.*', 'st_l.state_name', 'c.country_name', 'st.state_id as listSerial'));
+        $srch->addMultipleFields(array('st.*', 'st_l.state_name', 'c.country_name'));
 
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('st.state_identifier', 'like', '%' . $post['keyword'] . '%');
@@ -272,7 +272,7 @@ class StatesController extends AdminBaseController
         CacheHelper::clear(CacheHelper::TYPE_ZONE);
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $statesTblHeadingCols = CacheHelper::get('statesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($statesTblHeadingCols) {
@@ -281,7 +281,7 @@ class StatesController extends AdminBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),          
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'state_name' => Labels::getLabel('LBL_State_Name', $this->siteLangId),
             'state_code' => Labels::getLabel('LBL_State_Code', $this->siteLangId),
             'country_name' => Labels::getLabel('LBL_Country_Name', $this->siteLangId),
@@ -293,7 +293,7 @@ class StatesController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -307,7 +307,7 @@ class StatesController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['state_active'], Common::excludeKeysForSort());
     }

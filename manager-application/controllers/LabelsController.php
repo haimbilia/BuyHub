@@ -57,8 +57,7 @@ class LabelsController extends AdminBaseController
 
         $attr = [
             'lbl.*',
-            'lng.*',
-            'lbl.label_id as listSerial'
+            'lng.*'
         ];
 
         $srch = Labels::getSearchObject(0, $attr, false);
@@ -230,7 +229,7 @@ class LabelsController extends AdminBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'label_key');
         }
 
         $fld = $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'keyword');
@@ -271,7 +270,7 @@ class LabelsController extends AdminBaseController
         FatUtility::dieJsonSuccess($message);
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $labelsTblHeadingCols = CacheHelper::get('labelsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($labelsTblHeadingCols) {
@@ -290,7 +289,7 @@ class LabelsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'listSerial',
@@ -301,7 +300,7 @@ class LabelsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

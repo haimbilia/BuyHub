@@ -147,7 +147,7 @@ class PayoutReportController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns()
+    protected function getFormColumns()
     {
         $payoutReportsCacheVar = FatCache::get('payoutReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$payoutReportsCacheVar) {
@@ -166,7 +166,7 @@ class PayoutReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['orderDate', 'rewardDiscount', 'affiliateCommissionCharged', 'discountTotal', 'totalAmount'];
     }

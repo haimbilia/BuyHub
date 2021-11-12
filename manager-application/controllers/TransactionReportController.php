@@ -178,7 +178,7 @@ class TransactionReportController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns()
+    protected function getFormColumns()
     {
         $transcationReportsCacheVar = FatCache::get('transcationReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$transcationReportsCacheVar) {
@@ -200,7 +200,7 @@ class TransactionReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['utxn_date', 'utxn_id', 'user_name', 'utxn_status', 'utxn_order_id', 'transactionAmount'];
     }

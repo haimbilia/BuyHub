@@ -33,7 +33,7 @@ $(document).ready(function () {
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'setup'), data, function (t) {
 			if (t.status == 1) {
-				categoryForm(t.categoryId);
+				editRecord(t.categoryId);
 			}
 		});
 	};
@@ -42,64 +42,54 @@ $(document).ready(function () {
 		reloadList();		
 	}
 
-	deleteRecord = function (id) {
-		if (!confirm(langLbl.confirmDelete)) { return; }
-		data = 'id=' + id;
-		fcom.ajax(fcom.makeUrl('productCategories', 'deleteRecord'), data, function (res) {
-			var ans = JSON.parse(res);
-			if (ans.status == 1) {
-				$.ykmsg.success(ans.msg);
-				reloadList();			
-			} else {
-				$.ykmsg.error(ans.msg);
-			}
-		});
-	};
-
-	toggleStatus = function (e, obj, canEdit, status) {
-		if (canEdit == 0) {
-			e.preventDefault();
-			return;
-		}
-
-		var childCount = $(obj).data('childcount');
-		if (0 == status && 0 < childCount && !confirm(langLbl.disableChildCategories)) {
-			e.preventDefault();
-			return;
-		}
-
-		var hasParent = $(obj).data('hasparent');
-		if (1 == status && 1 == hasParent && !confirm(langLbl.enableParentCategories)) {
-			e.preventDefault();
-			return;
-		}
-
-		var prodCatId = parseInt(obj.value);
-		if (prodCatId < 1) {
-			$.ykmsg.error(langLbl.invalidRequest);
-			return false;
-		}
-		data = 'prodCatId=' + prodCatId + '&prodcat_active=' + status;
-		fcom.displayProcessing();
-		fcom.ajax(fcom.makeUrl('productCategories', 'changeStatus'), data, function (res) {
-            $.ykmsg.close();
-			var ans = JSON.parse(res);
-			if (ans.status == 1) {
-				$(obj).toggleClass("active");
-				$.ykmsg.success(ans.msg);
-				reloadList();			
-				setTimeout(function(){
-					goToCategory(prodCatId);
-				}, 1000);
-			} else {
-				$.ykmsg.error(ans.msg);
-			}
-		});
-	};
-
 	goToProduct = function (prodCatId) {
 		window.location.href = fcom.makeUrl('Products', 'form', [0, prodCatId]);
 	};
+
+	updateStatus = function (e, obj, recordId, status) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
+        e.stopPropagation();
+        /* if (!confirm(langLbl.confirmUpdateStatus)) {
+            e.preventDefault();
+            return false;
+        } */
+
+        var oldStatus = $(obj).attr("data-old-status");
+        $('.listingTableJs').prepend(fcom.getLoader());
+
+        if (1 > recordId) {
+            $(obj).prop("checked", 1 == oldStatus);
+            $.ykmsg.error(langLbl.invalidRequest);
+            fcom.removeLoader();
+            return false;
+        }
+
+        data = "recordId=" + recordId + "&status=" + status;
+        fcom.ajax(
+            fcom.makeUrl(controllerName, "updateStatus"),
+            data,
+            function (res) {
+                $(obj).prop("checked", 1 == status);
+                var ans = JSON.parse(res);
+                if (ans.status == 1) {
+                    $.ykmsg.success(ans.msg);
+                    $(obj).attr({
+                        onclick:
+                            "updateStatus(event, this, " + recordId + ", " + oldStatus + ")",
+                        "data-old-status": status,
+                    });
+					reloadList();
+                } else {
+                    $(obj).prop("checked", 1 == oldStatus);
+                    $.ykmsg.error(ans.msg);
+                }
+                fcom.removeLoader();
+            }
+        );
+    };
 
 	displaySubCategories = function (obj, catId = 0, data, callable = '') {
 		$(obj).removeClass('clickable');

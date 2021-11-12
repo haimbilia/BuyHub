@@ -161,7 +161,7 @@ class PreferredPaymentMethodController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns()
+    protected function getFormColumns()
     {
         $prefPayMethodReportsCacheVar = FatCache::get('prefPayMethodReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$prefPayMethodReportsCacheVar) {
@@ -182,7 +182,7 @@ class PreferredPaymentMethodController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['orderDate', 'pluginName', 'billingAddress', 'transactionAmount'];
     }
