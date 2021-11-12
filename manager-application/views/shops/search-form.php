@@ -26,70 +26,72 @@ if (null != $userNameFld) {
 echo $frmSearch->getFormTag();
 HtmlHelper::renderHiddenFields($frmSearch);
 ?>
-<div class="card">
-    <div class="card-body">
+<div class="card-head">
+    <div class="card-head-title">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="input-group">
                     <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+                    <a class="btn advanced-trigger ml-2" data-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
+                        <svg class="svg" width="22" height="22">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
+                            </use>
+                        </svg>
+                    </a>
                     <div class="input-group-append">
                         <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                    </div>
-                </div>
-            </div> 
-            <div class="col-md-4">
-                <a class="btn btn-link collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Advanced
-                    Search</a>
-            </div> 
-        </div>
-        <div class="collapse" id="collapseExample">
-            <div class="separator separator-dashed my-4"></div>
-            <div class="row">
-
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="label"><?php echo Labels::getLabel('LBL_Featured', $siteLangId); ?></label>
-                        <?php echo $frmSearch->getFieldHtml('shop_featured'); ?>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="label"><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?></label>
-                        <?php echo $frmSearch->getFieldHtml('shop_active'); ?>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-
-                        <label class="label"><?php echo Labels::getLabel('LBL_Shop_Status_By_Seller', $siteLangId); ?></label>
-                        <?php echo $frmSearch->getFieldHtml('shop_supplier_display_status'); ?>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="label"><?php echo Labels::getLabel('LBL_Date_From', $siteLangId); ?></label>
-                        <?php echo $frmSearch->getFieldHtml('date_from'); ?>
-
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="label"><?php echo Labels::getLabel('LBL_Date_To', $siteLangId); ?></label>
-                        <?php echo $frmSearch->getFieldHtml('date_to'); ?>
-
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="label"></label>
-                        <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-head.php'); ?>
+</div>
+<div class="advanced-search collapse" id="collapseKeyword">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="label"><?php echo Labels::getLabel('LBL_Featured', $siteLangId); ?></label>
+                <?php echo $frmSearch->getFieldHtml('shop_featured'); ?>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="label"><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?></label>
+                <?php echo $frmSearch->getFieldHtml('shop_active'); ?>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+
+                <label class="label"><?php echo Labels::getLabel('LBL_Shop_Status_By_Seller', $siteLangId); ?></label>
+                <?php echo $frmSearch->getFieldHtml('shop_supplier_display_status'); ?>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="label"><?php echo Labels::getLabel('LBL_Date_From', $siteLangId); ?></label>
+                <?php echo $frmSearch->getFieldHtml('date_from'); ?>
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="label"><?php echo Labels::getLabel('LBL_Date_To', $siteLangId); ?></label>
+                <?php echo $frmSearch->getFieldHtml('date_to'); ?>
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="label"></label>
+                <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+            </div>
+        </div>
+    </div>
+    <div class="separator separator-dashed my-2"></div>
 </div>
 </form>
 <?php echo $frmSearch->getExternalJS(); ?>

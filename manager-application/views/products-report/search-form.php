@@ -35,22 +35,26 @@ HtmlHelper::renderHiddenFields($frmSearch);
 <div class="card-head">
     <div class="card-head-label">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="input-group">
                     <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+                    <a class="btn advanced-trigger ml-2" data-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
+                        <svg class="svg" width="22" height="22">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
+                            </use>
+                        </svg>
+                    </a>
                     <div class="input-group-append">
                         <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <a class="btn btn-link collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><?php echo Labels::getLabel('FRM_ADVANCE_SEARCH', $siteLangId); ?></a>
-            </div>
+
         </div>
     </div>
     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-head.php'); ?>
 </div>
-<div class="advanced-search collapse" id="collapseExample">
+<div class="advanced-search collapse" id="collapseKeyword">
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">
