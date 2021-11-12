@@ -66,7 +66,8 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'addr_is_default':
                 $str = ($row['addr_is_default'] == 1) ? Labels::getLabel('LBL_Yes', $siteLangId) : Labels::getLabel('LBL_No', $siteLangId);
-                $td->appendElement('plaintext', array(), $str, true);
+                $statusHtm = Address::getStatusHtml($siteLangId, $row[$key]);
+                $td->appendElement('plaintext', $tdAttr, $statusHtm, true);
                 break;
             case 'action':
                 $data = [
@@ -75,7 +76,10 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = [];
+                    $attr = [
+                        'onClick' => 'editAddress(' . $row['addr_id'] . ', ' . $row['addr_record_id'] . ')'
+                    ];
+                    $data['editButton'] = $attr;
                     $data['deleteButton'] = [];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);

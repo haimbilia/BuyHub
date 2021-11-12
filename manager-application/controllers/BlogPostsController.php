@@ -80,7 +80,7 @@ class BlogPostsController extends AdminBaseController
         if (isset($post['post_published']) && $post['post_published'] != '') {
             $srch->addCondition('bp.post_published', '=', $post['post_published']);
         }
-        $srch->addMultipleFields(array('*', 'ifnull(post_title,post_identifier) post_title', 'group_concat(ifnull(bpcategory_name ,bpcategory_identifier)) categories', 'post_id as listSerial'));
+        $srch->addMultipleFields(array('*', 'ifnull(post_title,post_identifier) post_title', 'group_concat(ifnull(bpcategory_name ,bpcategory_identifier)) categories'));
         $srch->addGroupby('post_id');
 
         $srch->setPageNumber($page);
@@ -470,7 +470,7 @@ class BlogPostsController extends AdminBaseController
         $frm->addHiddenField('', 'page');
 
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'post_title');
         }
 
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
@@ -534,7 +534,7 @@ class BlogPostsController extends AdminBaseController
         die(json_encode($json));
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $blogPostsItemsTblHeadingCols = CacheHelper::get('blogPostsItemsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($blogPostsItemsTblHeadingCols) {
@@ -555,7 +555,7 @@ class BlogPostsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -568,7 +568,7 @@ class BlogPostsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['post_published'], Common::excludeKeysForSort());
     }

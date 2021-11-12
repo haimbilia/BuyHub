@@ -58,7 +58,7 @@ class AffiliateCommissionController extends AdminBaseController
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
-        $attr = array('afcs.*', 'affiliate_cred.credential_username', 'IFNULL(prd_cat_l.prodcat_name, prod_cat.prodcat_identifier) as prodcat_name', 'afcommsetting_id as listSerial');
+        $attr = array('afcs.*', 'affiliate_cred.credential_username', 'IFNULL(prd_cat_l.prodcat_name, prod_cat.prodcat_identifier) as prodcat_name');
         $srch = AffiliateCommission::getSearchObject($this->siteLangId);
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'afcs.afcommsetting_user_id = affiliate_user.user_id', 'affiliate_user');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'affiliate_cred.credential_user_id = affiliate_user.user_id', 'affiliate_cred');
@@ -320,7 +320,7 @@ class AffiliateCommissionController extends AdminBaseController
         return $this->nodes;
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $affCommissionTblHeadingCols = CacheHelper::get('affCommissionTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($affCommissionTblHeadingCols) {
@@ -339,7 +339,7 @@ class AffiliateCommissionController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -351,7 +351,7 @@ class AffiliateCommissionController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

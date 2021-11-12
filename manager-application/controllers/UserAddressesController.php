@@ -80,7 +80,7 @@ class UserAddressesController extends AdminBaseController
             $srch->addCondition(Address::tblFld('title'), 'LIKE', '%'. $title . '%');
         }
         
-        $srch->addMultipleFields(array('addr.*', 'addr_id as listSerial', 'state_code', 'country_code', 'country_code_alpha3', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));
+        $srch->addMultipleFields(array('addr.*', 'state_code', 'country_code', 'country_code_alpha3', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));
 
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
@@ -109,18 +109,13 @@ class UserAddressesController extends AdminBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $userId = FatApp::getPostedData('addr_record_id', FatUtility::VAR_INT, 0);
 
-        if (1 > $userId) {
-            FatUtility::dieWithError($this->str_invalid_request);
-        }
-
-        $frm = $this->getForm();
-
+        $frm = $this->getForm($userId);
         $stateId = 0;
         if ($recordId > 0) {
             $address =  new Address($recordId, $this->siteLangId);
             $data = $address->getData(Address::TYPE_USER, $userId);
             if (empty($data)) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $stateId = $data['addr_state_id'];
             $frm->fill($data);
@@ -130,9 +125,9 @@ class UserAddressesController extends AdminBaseController
         $this->set('frm', $frm);
         $this->set('stateId', $stateId);
         $this->set('user_id', $userId);
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->set('includeTabs', false);
+        $this->_template->render(false, false);
     }
-
 
     public function setup()
     {
@@ -140,18 +135,15 @@ class UserAddressesController extends AdminBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $post['addr_state_id'] = FatUtility::int($post['addr_state_id']);
-
-        $user_id = FatUtility::int($post['addr_record_id']);
-        $addr_id = FatUtility::int($post['addr_id']);
+        $stateId = FatApp::getPostedData('addr_state_id', FatUtility::VAR_INT, 0);
+        $addr_id = FatApp::getPostedData('addr_id', FatUtility::VAR_INT, 0);
+        $user_id = FatApp::getPostedData('addr_record_id', FatUtility::VAR_INT, 0);
 
         if (1 > $user_id) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $userObj = new User($user_id);
@@ -160,20 +152,19 @@ class UserAddressesController extends AdminBaseController
         $data = FatApp::getDb()->fetch($rs, 'user_id');
 
         if ($data === false || 0 < $data['user_parent']) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $addressObj = new Address($addr_id);
 
         $data_to_be_save = $post;
         $data_to_be_save['addr_record_id'] = $user_id;
+        $data_to_be_save['addr_state_id'] = $stateId;
         $data_to_be_save['addr_type'] = Address::TYPE_USER;
         $data_to_be_save['addr_lang_id'] = $this->siteLangId;
         $addressObj->assignValues($data_to_be_save, true);
         if (!$addressObj->save()) {
-            Message::addErrorMessage($addressObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($addressObj->getError(), true);
         }
 
         $this->set('msg', $this->str_setup_successful);
@@ -186,8 +177,7 @@ class UserAddressesController extends AdminBaseController
 
         $post = FatApp::getPostedData();
         if ($post == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
@@ -233,23 +223,25 @@ class UserAddressesController extends AdminBaseController
 
         $address = new Address($recordId, $this->siteLangId);
         if (!$address->deleteRecord()) {
-            Message::addErrorMessage($address->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($address->getError(), true);
         }
     }
 
-    private function getForm()
+    private function getForm(int $userId = 0)
     {
         $frm = new Form('frmAddress');
         $frm->addHiddenField('', 'addr_id');
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'addr_record_id', []);
-        $fld->requirements()->setRequired(true);
+        if (0 < $userId) {
+            $frm->addHiddenField('', 'addr_record_id', $userId);
+        } else {
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'addr_record_id', []);
+            $fld->requirements()->setRequired(true);
+        }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Address_Label', $this->siteLangId), 'addr_title');
         $fld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_E.g:_My_Office_Address', $this->siteLangId));
-        $frm->addRequiredField(Labels::getLabel('FRM_Name', $this->siteLangId), 'addr_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_Contact_Person_Name', $this->siteLangId), 'addr_name');
         $frm->addRequiredField(Labels::getLabel('FRM_Address_Line1', $this->siteLangId), 'addr_address1');
         $frm->addTextBox(Labels::getLabel('FRM_Address_Line2', $this->siteLangId), 'addr_address2');
-        $frm->addRequiredField(Labels::getLabel('FRM_City', $this->siteLangId), 'addr_city');
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
@@ -257,9 +249,10 @@ class UserAddressesController extends AdminBaseController
         $fld->requirement->setRequired(true);
 
         $frm->addSelectBox(Labels::getLabel('FRM_State', $this->siteLangId), 'addr_state_id', array(), '', [], Labels::getLabel('FRM_Select', $this->siteLangId))->requirement->setRequired(true);
+        $frm->addRequiredField(Labels::getLabel('FRM_City', $this->siteLangId), 'addr_city');
         $frm->addTextBox(Labels::getLabel('FRM_Postal_Code', $this->siteLangId), 'addr_zip');
         $frm->addHiddenField('', 'addr_phone_dcode');
-        $phnFld = $frm->addTextBox(Labels::getLabel('FRM_Phone', $this->siteLangId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+        $phnFld = $frm->addTextBox(Labels::getLabel('FRM_Phone', $this->siteLangId), 'addr_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         
         return $frm;
@@ -269,7 +262,7 @@ class UserAddressesController extends AdminBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'user_name');
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER_NAME', $this->siteLangId), 'addr_record_id', []);
@@ -281,7 +274,7 @@ class UserAddressesController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $userAddressesTblHeadingCols = CacheHelper::get('userAddressesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($userAddressesTblHeadingCols) {
@@ -302,7 +295,7 @@ class UserAddressesController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -315,9 +308,9 @@ class UserAddressesController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['user_address', 'addr_is_default'], Common::excludeKeysForSort());
+        return array_diff($fields, ['user_address'], Common::excludeKeysForSort());
     }
 
     public function getBreadcrumbNodes($action)

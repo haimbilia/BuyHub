@@ -849,7 +849,7 @@ class ImportExportController extends AdminBaseController
         $frm->addHiddenField('', 'page');
 
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'user');
         }
         return $frm;
     }
@@ -1119,7 +1119,7 @@ class ImportExportController extends AdminBaseController
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_LABELS_DATA_IMPORTED_SUCCESSFULLY', $this->siteLangId), true);
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $bulkMediaTblHeadingCols = CacheHelper::get('bulkMediaTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($bulkMediaTblHeadingCols) {
@@ -1138,7 +1138,7 @@ class ImportExportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'listSerial',
@@ -1149,7 +1149,7 @@ class ImportExportController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['files'], Common::excludeKeysForSort());
     }

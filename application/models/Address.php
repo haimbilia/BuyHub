@@ -343,4 +343,24 @@ class Address extends MyAppModel
             'oua_zip' => $addrArr['addr_zip'],
         ];
     }
+
+    public static function getStatusHtml(int $langId, int $status): string
+    {
+        switch ($status) {
+            case applicationConstants::NO:
+                $status = HtmlHelper::DANGER;
+                $msg = Labels::getLabel('LBL_NO', $langId);
+                break;
+            case applicationConstants::YES:
+                $status = HtmlHelper::SUCCESS;
+                $msg = Labels::getLabel('LBL_YES', $langId);
+                break;
+
+            default:
+                $status = HtmlHelper::DANGER;
+                $msg = Labels::getLabel('LBL_NO', $langId);
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, $msg);
+    }
 }

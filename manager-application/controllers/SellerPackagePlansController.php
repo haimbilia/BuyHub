@@ -97,7 +97,7 @@ class SellerPackagePlansController extends AdminBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = SellerPackagePlans::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array("spp.*", SellerPackagePlans::DB_TBL_PREFIX . 'id as listSerial'));
+        $srch->addMultipleFields(array("spp.*"));
         $srch->addCondition(SellerPackagePlans::DB_TBL_PREFIX . 'spackage_id', '=', $spackageId);
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
@@ -212,7 +212,7 @@ class SellerPackagePlansController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
     
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $subsPkgTblHeadingCols = CacheHelper::get('subsPkgPlanTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($subsPkgTblHeadingCols) {
@@ -230,7 +230,7 @@ class SellerPackagePlansController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -241,7 +241,7 @@ class SellerPackagePlansController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['spplan_active'], Common::excludeKeysForSort());
     }

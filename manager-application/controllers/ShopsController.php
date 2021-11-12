@@ -403,7 +403,7 @@ class ShopsController extends AdminBaseController {
         }
 
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'shop_name');
         }
 
         HtmlHelper::addSearchButton($frm);
@@ -411,7 +411,7 @@ class ShopsController extends AdminBaseController {
         return $frm;
     }
 
-    private function getFormColumns(): array {
+    protected function getFormColumns(): array {
         $shopsTblHeadingCols = CacheHelper::get('shopsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
             return json_decode($shopsTblHeadingCols);
@@ -506,7 +506,7 @@ class ShopsController extends AdminBaseController {
         return $frm;
     }
 
-    private function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array {
         return [
             'select_all',
             'listSerial',            
@@ -522,7 +522,7 @@ class ShopsController extends AdminBaseController {
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array {
+    protected function excludeKeysForSort($fields = []): array {
         return array_diff($fields, ['shop_active', 'numOfReports', 'numOfProducts', 'numOfReviews'], Common::excludeKeysForSort());
     }
 

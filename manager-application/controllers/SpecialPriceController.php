@@ -47,10 +47,6 @@ class SpecialPriceController extends AdminBaseController
             $sortBy = current($allowedKeysForSorting);
         }
 
-        if ('product_name' == $sortBy) {
-            $sortBy = 'selprod_title';
-        }
-
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
 
         $searchForm = $this->getSearchForm($fields);
@@ -64,12 +60,11 @@ class SpecialPriceController extends AdminBaseController
         $sellerId = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);
 
         $srch = SellerProduct::searchSpecialPriceProductsObj($this->siteLangId, $selProdId, $keyword, $sellerId, false);
-        $srch->addFld('splprice_id as listSerial');
-
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
 
-        $srch->addOrder($sortBy, $sortOrder);
+        $sortByCol = ('product_name' == $sortBy) ? 'selprod_title' : $sortBy;
+        $srch->addOrder($sortByCol, $sortOrder);
         $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $this->set("arrListing", $arrListing);
@@ -97,7 +92,7 @@ class SpecialPriceController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_SELLER', $this->siteLangId), 'product_seller_id', []);
 
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'product_name');
         }
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -431,7 +426,7 @@ class SpecialPriceController extends AdminBaseController
         }
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $splPriceTblHeadingCols = CacheHelper::get('splPriceTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($splPriceTblHeadingCols) {
@@ -441,7 +436,7 @@ class SpecialPriceController extends AdminBaseController
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'product_name' => Labels::getLabel('LBL_Name', $this->siteLangId),
+            'product_name' => Labels::getLabel('LBL_Product_Name', $this->siteLangId),
             'selprod_price' => Labels::getLabel('LBL_Original_Price', $this->siteLangId),
             'credential_username' => Labels::getLabel('LBL_Seller', $this->siteLangId),
             'splprice_start_date' => Labels::getLabel('LBL_Start_Date', $this->siteLangId),
@@ -454,7 +449,7 @@ class SpecialPriceController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -469,7 +464,7 @@ class SpecialPriceController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

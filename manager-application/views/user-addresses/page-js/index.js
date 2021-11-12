@@ -1,7 +1,5 @@
 $(document).ready(function () {
-    select2('searchFrmUserIdJs', fcom.makeUrl('Users', 'autoComplete'), {}, '', function () {
-        clearSearch();
-    }); 
+    bindUserSelect2('searchFrmUserIdJs');
 });
 
 (function () {
@@ -10,4 +8,16 @@ $(document).ready(function () {
             clearSearch();
         }); 
     }
+
+    editAddress = function (recordId, addrRecordId) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+        $.ykmodal(fcom.getLoader());
+        data = "recordId=" + recordId + "&addr_record_id=" + addrRecordId;
+        fcom.ajax(fcom.makeUrl(controllerName, "form"), data, function (t) {
+            $.ykmodal(t);
+            fcom.removeLoader();
+        });
+    };
 })();

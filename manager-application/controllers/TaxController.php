@@ -28,7 +28,7 @@ class TaxController extends AdminBaseController
         $fld->overrideFldType('search');        
 
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'taxcat_identifier');
         }
 
         HtmlHelper::addSearchButton($frm);
@@ -798,7 +798,7 @@ class TaxController extends AdminBaseController
         $this->_template->render(false, false);
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $taxTblHeadingCols = CacheHelper::get('taxTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($taxTblHeadingCols) {
@@ -817,7 +817,7 @@ class TaxController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -828,7 +828,7 @@ class TaxController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['taxcat_active'], Common::excludeKeysForSort());
     }

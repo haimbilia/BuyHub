@@ -18,7 +18,7 @@ $userFld->setFieldtagAttribute('placeholder', Labels::getLabel('FRM_SEARCH_BY_US
 
 $fld = $frmSearch->getField('addr_title');
 $fld->addFieldtagAttribute('class', 'form-control');
-$fld->setFieldtagAttribute('placeholder', Labels::getLabel('FRM_Address_Label', $siteLangId));
+$fld->setFieldtagAttribute('placeholder', Labels::getLabel('FRM_Address_Title', $siteLangId));
 
 echo $frmSearch->getFormTag();
 HtmlHelper::renderHiddenFields($frmSearch);

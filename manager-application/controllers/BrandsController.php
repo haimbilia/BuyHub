@@ -53,7 +53,7 @@ class BrandsController extends AdminBaseController
         }
 
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'brand_identifier');
         }
 
         HtmlHelper::addSearchButton($frm);
@@ -97,7 +97,7 @@ class BrandsController extends AdminBaseController
 
         $prodBrandObj = new Brand();
         $srch = $prodBrandObj->getSearchObject($this->siteLangId, true, false, false);
-        $srch->addFld('b.*, brand_id as listSerial');
+        $srch->addFld('b.*');
 
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('b.brand_identifier', 'like', '%' . $post['keyword'] . '%');
@@ -894,7 +894,7 @@ class BrandsController extends AdminBaseController
         }
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $brandsTblHeadingCols = CacheHelper::get('brandsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($brandsTblHeadingCols) {
@@ -914,7 +914,7 @@ class BrandsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -927,7 +927,7 @@ class BrandsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['brand_logo', 'brand_active', 'seo_url'], Common::excludeKeysForSort());
     }

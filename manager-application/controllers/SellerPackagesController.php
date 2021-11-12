@@ -96,8 +96,7 @@ class SellerPackagesController extends AdminBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = SellerPackages::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array("sp.*", "IFNULL( spl." . SellerPackages::DB_TBL_PREFIX . "name, sp." . SellerPackages::DB_TBL_PREFIX . "identifier ) as " . SellerPackages::DB_TBL_PREFIX . "name", 
-        SellerPackages::DB_TBL_PREFIX . 'id as listSerial'));
+        $srch->addMultipleFields(array("sp.*", "IFNULL( spl." . SellerPackages::DB_TBL_PREFIX . "name, sp." . SellerPackages::DB_TBL_PREFIX . "identifier ) as " . SellerPackages::DB_TBL_PREFIX . "name"));
 
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition("sp." . SellerPackages::DB_TBL_PREFIX . "identifier", 'like', '%' . $post['keyword'] . '%');
@@ -268,7 +267,7 @@ class SellerPackagesController extends AdminBaseController
         die(json_encode($json));
     }   
     
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $subsPkgTblHeadingCols = CacheHelper::get('subsPkgTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($subsPkgTblHeadingCols) {
@@ -286,7 +285,7 @@ class SellerPackagesController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -297,7 +296,7 @@ class SellerPackagesController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['spackage_active'], Common::excludeKeysForSort());
     }
