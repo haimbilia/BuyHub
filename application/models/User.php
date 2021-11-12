@@ -167,13 +167,13 @@ class User extends MyAppModel
                 $status = HtmlHelper::SUCCESS;
                 break;
             case static::USER_TYPE_SELLER:
-                $status = HtmlHelper::PRIMARY;
+                $status = HtmlHelper::INFO;
                 break;
             case static::USER_TYPE_ADVERTISER:
                 $status = HtmlHelper::WARNING;
                 break;
             case static::USER_TYPE_AFFILIATE:
-                $status = HtmlHelper::INFO;
+                $status = HtmlHelper::DANGER;
                 break;
             default:
                 $status = HtmlHelper::INFO;
@@ -3164,20 +3164,5 @@ class User extends MyAppModel
     public static function getLastName(string $name): string
     {
         return (false !== strpos($name, ' ') ? (explode(' ', $name))[1] : $name);
-    }
-
-    public static function getStatusHtml(int $langId, int $status): string
-    {
-        $arr = applicationConstants::getYesNoArr($langId);
-        $msg = $arr[$status];
-        switch ($status) {
-            case applicationConstants::YES:
-                $status = HtmlHelper::SUCCESS;
-                break;
-            default:
-                $status = HtmlHelper::DANGER;
-                break;
-        }
-        return HtmlHelper::getStatusHtml($status, $msg);
     }
 }

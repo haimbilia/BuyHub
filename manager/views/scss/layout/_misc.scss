@@ -57,7 +57,10 @@
     .alert {
         width: 100%;
         margin: 0;
-        padding: 0 2rem;
+        padding: 10px 2rem;
+        .alert-icon i {
+            font-size: 1.4rem;
+        }
     }
 }
 

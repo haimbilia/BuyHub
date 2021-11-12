@@ -14,32 +14,13 @@ class HtmlHelper
                 </div>';
     }
 
-    public static function getListingHeaderColumnHtml($key, $sortBy, $sortOrder)
+    public static function getDefaultSortingClass($key, $sortBy, $sortOrder)
     {
-        if ($key == $sortBy) {
-            $class = 'sorting_desc';
-            $selectorId = '#arrow-up';
-
-            if ($sortOrder == applicationConstants::SORT_ASC) {
-                $class = 'sorting_asc';
-                $selectorId = '#arrow-down';
-            }
-
-            return [
-                'class' => $class,
-                'html' => '<i class="icn sortingIconJs">
-                                <svg class="svg" width="18" height="18">
-                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . $selectorId . '">
-                                    </use>
-                                </svg>
-                            </i>'
-            ];
+        if ($key != $sortBy) {
+            return '';
         }
-
-        return [
-            'class' => '',
-            'html' => ''
-        ];
+        
+        return (($sortOrder == applicationConstants::SORT_ASC) ? 'sorting_desc' : 'sorting_asc');
     }
 
     public static function formatFormFields(Form &$frm, $col = 12)

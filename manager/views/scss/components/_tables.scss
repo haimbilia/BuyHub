@@ -47,9 +47,9 @@
                     filter: none;
                 }
                 img {
-                    width: 40px;
-                    height: 40px;
-                }
+                    width: 24px;
+                    height: 24px;
+                } 
             }
             .verified {
                 color: $brand-color;
@@ -660,14 +660,14 @@
     vertical-align: top;
     white-space: nowrap;
     margin: 0;
-    li {
+    >li {
         display: inline-block;
         vertical-align: top;
         //margin-#{$end-direction}: 10px;
         &:last-child {
             margin-#{$end-direction}: 0;
         }
-        a {
+        >a {
             //background: lighten($bg-gray, 0.1); 
             //color: $brand-color-inverse; 
             // width: 30px;

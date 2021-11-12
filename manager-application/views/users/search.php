@@ -49,12 +49,14 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'user_regdate':
-                $td->appendElement('plaintext', $tdAttr, FatDate::format(
+                $date = FatDate::format(
                     $row[$key],
                     true,
                     true,
                     FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())
-                ));
+                );
+                $htm = '<p class="date">' . $date . '</p>';
+                $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'user_is_buyer':
                 $class = ($row['user_is_buyer']) ? 'is-check' : '';
@@ -80,12 +82,16 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $statusHtm, true);
                 break;
             case 'credential_verified':
-                $statusHtm = User::getStatusHtml($siteLangId, $row[$key]);
-                $td->appendElement('plaintext', $tdAttr, $statusHtm, true);
+                $class = (applicationConstants::NO == $row[$key]) ? 'is-verified' : '';
+                $img = '<div class="verified ' . $class . '"><svg class="svg" >
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-verified">
+                            </use>
+                        </svg>';
+                $td->appendElement('plaintext', $tdAttr, $img, true);
                 break;
-
             case 'action':
-                $data = [
+                /* $data = [
                     'siteLangId' => $siteLangId,
                     'recordId' => $row['user_id']
                 ];
@@ -149,29 +155,87 @@ foreach ($arrListing as $sn => $row) {
                                         </svg>'
                         ];
                     }
+                } */
+                $btnHtml = '<ul class="actions">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="/admin/images/retina/sprite.yokart.svg#more-dots">
+                                            </use>
+                                        </svg>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim">
+                                        <a class="dropdown-item" href="#">
+                                            <i class="icn"><svg class="svg" width="18" height="18">
+                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                                    </use>
+                                                </svg>
+                                            </i> New Report</a> 
+                                            
+                                            <a class="dropdown-item" href="#">
+                                            <i class="icn"><svg class="svg" width="18" height="18">
+                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                                    </use>
+                                                </svg>
+                                            </i> New Report</a> 
+                                            
+                                            <a class="dropdown-item" href="#">
+                                            <i class="icn"><svg class="svg" width="18" height="18">
+                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#password">
+                                                    </use>
+                                                </svg>
+                                            </i> New Report</a>
+
+                                            <a class="dropdown-item" href="#">
+                                            <i class="icn"><svg class="svg" width="18" height="18">
+                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#password-email">
+                                                    </use>
+                                                </svg>
+                                            </i> New Report</a>
+                                            
+                                             <a class="dropdown-item" href="#">
+                                            <i class="icn"><svg class="svg" width="18" height="18">
+                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#send-email">
+                                                    </use>
+                                                </svg>
+                                            </i> New Report</a>
+
+                                        <div class="dropdown-divider"></div>
+
+                                        <a class="dropdown-item" href="#">
+                                            <i class="icn"><svg class="svg" width="18" height="18">
+                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#login">
+                                                    </use>
+                                                </svg>
+                                            </i> login to user</a>
+
+                                       
+                                    </div>
+
+                                </li>
+                            </ul>';
+                        // $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
+                        $td->appendElement('plaintext', $tdAttr, $btnHtml, true);
+                        break;
+                    default:
+                        $td->appendElement('plaintext', $tdAttr, $row[$key], true);
+                        break;
                 }
-                $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
-                $td->appendElement('plaintext', $tdAttr, $actionItems, true);
-                break;
-            default:
-                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
-                break;
+            }
+            $serialNo--;
         }
-    }
-    $serialNo--;
-}
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+        if (count($arrListing) == 0) {
+            $tbody->appendElement('tr')->appendElement(
+                'td',
+                array(
+                    'colspan' => count($fields),
+                    'class' => 'noRecordFoundJs'
+                ),
+                Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
+            );
+        }
 
-if ($printData) {
-    echo $tbody->getHtml();
-}
+        if ($printData) {
+            echo $tbody->getHtml();
+        }
