@@ -358,14 +358,7 @@
                                                         <td>432</td>
                                                         <td>
                                                             <div class="media-group">
-                                                                <a href="#" class="media media-sm media-circle"
-                                                                    data-toggle="tooltip" data-skin="brand"
-                                                                    data-placement="top" title=""
-                                                                    data-original-title="avocado">
-                                                                    <img data-aspect-ratio="1:1"
-                                                                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
-                                                                        alt="image">
-                                                                </a>
+                                                                
                                                                 <a href="#" class="media media-sm media-circle"
                                                                     data-toggle="tooltip" data-skin="brand"
                                                                     data-placement="top" title=""
