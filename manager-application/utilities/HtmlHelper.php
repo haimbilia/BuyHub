@@ -323,5 +323,66 @@ class HtmlHelper
                     $str .= '</div>';
         return   $str;
     }
+
+    public static function imageListCard(int $type,  int $recordId, int $recordSubid = 0, $updatedOn = NULL) 
+    {       
+
+        switch ($type) {
+            case AttachedFile::FILETYPE_PRODUCT_IMAGE:
+                $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, "SMALL", 0, 0, $siteLangId), CONF_WEBROOT_FRONTEND);
+                break;         
+            default:    
+        }
+
+
+        $images = AttachedFile::getMultipleAttachments($imageType, $recordId, $recordSubid, 0,  true,  0, 4);
+        print_r($images);
+        die();
+        $str = '<div class="media-group">';
+        foreach ($images as $key => $image) {
+
+            
+            if ($key > 2) {
+                $str .= ' 
+                <a href="javascript:void(0)" class="media media-sm media-circle"
+                    data-toggle="tooltip" data-skin="brand"
+                    data-placement="top" title="">
+                    <span>3+</span>
+                </a>';
+                break;
+            } 
+            $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], "SMALL", $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND);         
+            if($updatedOn){
+                $uploadedTime = AttachedFile::setTimeParam($updatedOn);
+                $imgSrc  = UrlHelper::getCachedUrl($imgSrc .$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
+            }
+            
+            $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], "SMALL", $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $str .= '
+                <a href="javascript:void(0)" class="media media-sm media-circle"
+                    data-toggle="tooltip" data-skin="brand"
+                    data-placement="top" title=""
+                    data-original-title="avocado">
+                    <img data-aspect-ratio="1:1"
+                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
+                        alt="image">
+                </a>';
+        }
+        if (!count($images)) {
+            $str .= '
+            <a href="javascript:void(0)" class="media media-sm media-circle"
+                data-toggle="tooltip" data-skin="brand"
+                data-placement="top" title=""
+                data-original-title="avocado">
+                <img data-aspect-ratio="1:1"
+                    src="'.CONF_WEBROOT_URL.'images/products/product_default_image.jpg"
+                    alt="image">
+            </a>';
+        }
+
+        $str .= '</div>';
+        return  $str;
+    }
     
 }

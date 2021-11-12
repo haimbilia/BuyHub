@@ -5,7 +5,7 @@ if(!isset($product)){
 }
 
 $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-$prodUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']), CONF_WEBROOT_FRONTEND);
+//$prodUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']), CONF_WEBROOT_FRONTEND);
 $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], "SMALL", $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $product['product_identifier'] ;
 

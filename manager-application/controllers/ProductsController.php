@@ -8,43 +8,81 @@ class ProductsController extends AdminBaseController
         $this->objPrivilege->canViewProducts();
     }
 
-    public function index($prodCatId = 0)
-    {
-        $data = FatApp::getPostedData();
-        $srchFrm = $this->getSearchForm();
-        if ($data) {
-            $data['product_id'] = $data['id'];
-            unset($data['id']);
-            $srchFrm->fill($data);
-        }
-        $prodCatId = FatUtility::int($prodCatId);
-        if ($prodCatId > 0) {
-            $srchFrm->fill(array('prodcat_id' => $prodCatId));
-        }
 
-        $this->set("frmSearch", $srchFrm);
-        $this->set('canEdit', $this->objPrivilege->canEditProducts(0, true));
+    public function index()
+    {
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $this->set("frmSearch", $frmSearch);
+        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_EMPTY_CART_ITEMS', $this->siteLangId));
+        $this->getListingData();
         $this->_template->render();
     }
 
+
+
     public function search()
     {
-        $db = FatApp::getDb();
-        $srchFrm = $this->getSearchForm();
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'products/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+    // public function index($prodCatId = 0)
+    // {
+    //     $data = FatApp::getPostedData();
+    //     $srchFrm = $this->getSearchForm();
+    //     if ($data) {
+    //         $data['product_id'] = $data['id'];
+    //         unset($data['id']);
+    //         $srchFrm->fill($data);
+    //     }
+    //     $prodCatId = FatUtility::int($prodCatId);
+    //     if ($prodCatId > 0) {
+    //         $srchFrm->fill(array('prodcat_id' => $prodCatId));
+    //     }
+
+    //     $this->set("frmSearch", $srchFrm);
+    //     $this->set('canEdit', $this->objPrivilege->canEditProducts(0, true));
+    //     $this->_template->render();
+    // }
+
+    private function getListingData()
+    {
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+
+        $searchForm = $this->getSearchForm($fields);
+
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
+
+
 
         $srch = Product::getSearchObject($this->siteLangId);
         $srch->joinTable(AttributeGroup::DB_TBL, 'LEFT OUTER JOIN', 'product_attrgrp_id = attrgrp_id', 'attrgrp');
-        $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'product_seller_id = user_id', 'tu');
-        $keyword = FatApp::getPostedData('keyword', null, '');
-        if (!empty($keyword)) {
-            $cnd = $srch->addCondition('product_name', 'like', '%' . $keyword . '%');
-            $cnd->attachCondition('product_model', 'like', '%' . $keyword . '%', 'OR');
-            $cnd->attachCondition('product_identifier', 'like', '%' . $keyword . '%', 'OR');
+        $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'product_seller_id = user_id', 'tu');      
+        if (!empty($post['keyword'])) {
+            $cnd = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
+            $cnd->attachCondition('product_model', 'like', '%' . $post['keyword'] . '%', 'OR');
+            $cnd->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
         $active = FatApp::getPostedData('active', FatUtility::VAR_INT, -1);
@@ -120,26 +158,28 @@ class ProductsController extends AdminBaseController
                 'product_name', 'attrgrp_name', 'user_name'
             )
         );
-
-        $srch->addOrder('product_added_on', 'DESC');
-
+        
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->setPageSize($pageSize);
+        $srch->addOrder($sortBy, $sortOrder);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
-        $rs = $srch->getResultSet();
-
-        $arrListing = $db->fetchAll($rs);
-
-        $this->set("arrListing", $arrListing);
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
+
+        $this->set('frmSearch', $searchForm);
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditEmptyCartItems($this->admin_id, true));
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
-        $this->set('canEdit', $this->objPrivilege->canEditProducts(AdminAuthentication::getLoggedAdminId(), true));
-        $this->_template->render(false, false);
-    }
+    }    
 
     public function productAttributeGroupForm()
     {
@@ -417,41 +457,55 @@ class ProductsController extends AdminBaseController
         }
         die(json_encode($json));
     }
-
-    public function getSearchForm()
+    protected function getSearchForm($fields = [])
     {
-        $frm = new Form('frmSearch', array('id' => 'frmSearch'));
-        $frm->setRequiredStarWith('caption');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
 
-        if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {
-            $frm->addSelectBox(Labels::getLabel('LBL_Product', $this->siteLangId), 'is_custom_or_catalog', array(-1 => Labels::getLabel('LBL_All', $this->siteLangId)) + applicationConstants::getCatalogTypeArr($this->siteLangId), -1, array(), '');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm);
         }
 
-        $frm->addTextBox(Labels::getLabel('LBL_User', $this->siteLangId), 'product_seller', '');
-        $prodCatObj = new ProductCategory();
-        $arrCategories = $prodCatObj->getCategoriesForSelectBox($this->siteLangId);
-        $categories = $prodCatObj->makeAssociativeArray($arrCategories);
-
-        $frm->addSelectBox(Labels::getLabel('LBL_category', $this->siteLangId), 'prodcat_id', array(-1 => Labels::getLabel('LBL_Does_not_Matter', $this->siteLangId)) + $categories, '', array(), '');
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Active', $this->siteLangId), 'active', array(-1 => Labels::getLabel('LBL_Does_not_Matter', $this->siteLangId)) + $activeInactiveArr, '', array(), '');
-
-        $approveUnApproveArr = Product::getApproveUnApproveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Approval_Status', $this->siteLangId), 'product_approved', array(-1 => Labels::getLabel('LBL_Does_not_Matter', $this->siteLangId)) + $approveUnApproveArr, '', array(), '');
-
-        $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->siteLangId), 'product_type', Product::getProductTypes($this->siteLangId), array(), [], Labels::getLabel('LBL_Select', $this->siteLangId));
-
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addHiddenField('', 'page');
-        $frm->addHiddenField('', 'product_id');
-        $frm->addHiddenField('', 'product_seller_id');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
-        $fld_submit->attachField($fld_cancel);
+        HtmlHelper::addSearchButton($frm);
         return $frm;
     }
+
+    // public function getSearchForm()
+    // {
+    //     $frm = new Form('frmSearch', array('id' => 'frmSearch'));
+    //     $frm->setRequiredStarWith('caption');
+    //     $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+
+    //     if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {
+    //         $frm->addSelectBox(Labels::getLabel('LBL_Product', $this->siteLangId), 'is_custom_or_catalog', array(-1 => Labels::getLabel('LBL_All', $this->siteLangId)) + applicationConstants::getCatalogTypeArr($this->siteLangId), -1, array(), '');
+    //     }
+
+    //     $frm->addTextBox(Labels::getLabel('LBL_User', $this->siteLangId), 'product_seller', '');
+    //     $prodCatObj = new ProductCategory();
+    //     $arrCategories = $prodCatObj->getCategoriesForSelectBox($this->siteLangId);
+    //     $categories = $prodCatObj->makeAssociativeArray($arrCategories);
+
+    //     $frm->addSelectBox(Labels::getLabel('LBL_category', $this->siteLangId), 'prodcat_id', array(-1 => Labels::getLabel('LBL_Does_not_Matter', $this->siteLangId)) + $categories, '', array(), '');
+    //     $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+    //     $frm->addSelectBox(Labels::getLabel('LBL_Active', $this->siteLangId), 'active', array(-1 => Labels::getLabel('LBL_Does_not_Matter', $this->siteLangId)) + $activeInactiveArr, '', array(), '');
+
+    //     $approveUnApproveArr = Product::getApproveUnApproveArr($this->siteLangId);
+    //     $frm->addSelectBox(Labels::getLabel('LBL_Approval_Status', $this->siteLangId), 'product_approved', array(-1 => Labels::getLabel('LBL_Does_not_Matter', $this->siteLangId)) + $approveUnApproveArr, '', array(), '');
+
+    //     $frm->addSelectBox(Labels::getLabel('LBL_Product_Type', $this->siteLangId), 'product_type', Product::getProductTypes($this->siteLangId), array(), [], Labels::getLabel('LBL_Select', $this->siteLangId));
+
+    //     $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+    //     $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+    //     $frm->addHiddenField('', 'page');
+    //     $frm->addHiddenField('', 'product_id');
+    //     $frm->addHiddenField('', 'product_seller_id');
+    //     $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+    //     $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
+    //     $fld_submit->attachField($fld_cancel);
+    //     return $frm;
+    // }
 
     public function sellerCatalog()
     {
@@ -533,69 +587,69 @@ class ProductsController extends AdminBaseController
         return Product::addUpdateProductSellerShipping($product_id, $data_to_be_save, $userId);
     }
 
-    public function changeStatus()
-    {
-        $this->objPrivilege->canEditProducts();
-        $productId = FatApp::getPostedData('productId', FatUtility::VAR_INT, 0);
-        if (0 >= $productId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
+    // public function changeStatus()
+    // {
+    //     $this->objPrivilege->canEditProducts();
+    //     $productId = FatApp::getPostedData('productId', FatUtility::VAR_INT, 0);
+    //     if (0 >= $productId) {
+    //         Message::addErrorMessage($this->str_invalid_request_id);
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
 
-        $productData = Product::getAttributesById($productId, array('product_active'));
-        if (false == $productData) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
+    //     $productData = Product::getAttributesById($productId, array('product_active'));
+    //     if (false == $productData) {
+    //         Message::addErrorMessage($this->str_invalid_request_id);
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
 
-        $status = ($productData['product_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
+    //     $status = ($productData['product_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
 
-        $this->updateProductStatus($productId, $status);
-        Product::updateMinPrices($productId);
-        $this->set("msg", $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
+    //     $this->updateProductStatus($productId, $status);
+    //     Product::updateMinPrices($productId);
+    //     $this->set("msg", $this->str_update_record);
+    //     $this->_template->render(false, false, 'json-success.php');
+    // }
 
-    public function toggleBulkStatuses()
-    {
-        $this->objPrivilege->canEditProducts();
+    // public function toggleBulkStatuses()
+    // {
+    //     $this->objPrivilege->canEditProducts();
 
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $productIdsArr = FatUtility::int(FatApp::getPostedData('product_ids'));
-        if (empty($productIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
+    //     $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
+    //     $productIdsArr = FatUtility::int(FatApp::getPostedData('product_ids'));
+    //     if (empty($productIdsArr) || -1 == $status) {
+    //         FatUtility::dieWithError(
+    //             Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+    //         );
+    //     }
 
-        foreach ($productIdsArr as $productId) {
-            if (1 > $productId) {
-                continue;
-            }
+    //     foreach ($productIdsArr as $productId) {
+    //         if (1 > $productId) {
+    //             continue;
+    //         }
 
-            $this->updateProductStatus($productId, $status);
-        }
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
+    //         $this->updateProductStatus($productId, $status);
+    //     }
+    //     $this->set('msg', $this->str_update_record);
+    //     $this->_template->render(false, false, 'json-success.php');
+    // }
 
-    private function updateProductStatus($productId, $status)
-    {
-        $status = FatUtility::int($status);
-        $productId = FatUtility::int($productId);
-        if (1 > $productId || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
+    // private function updateProductStatus($productId, $status)
+    // {
+    //     $status = FatUtility::int($status);
+    //     $productId = FatUtility::int($productId);
+    //     if (1 > $productId || -1 == $status) {
+    //         FatUtility::dieWithError(
+    //             Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+    //         );
+    //     }
 
-        $productObj = new Product($productId);
+    //     $productObj = new Product($productId);
 
-        if (!$productObj->changeStatus($status)) {
-            Message::addErrorMessage($productObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-    }
+    //     if (!$productObj->changeStatus($status)) {
+    //         Message::addErrorMessage($productObj->getError());
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    // }
 
     public function deleteProduct()
     {
@@ -2062,5 +2116,61 @@ class ProductsController extends AdminBaseController
         $this->set('productOptions', $productOptions);
         $json['html'] = $this->_template->render(false, false, 'products/prod-options.php', true);
         FatUtility::dieJsonSuccess($json);
+    }
+
+    private function getFormColumns(): array
+    {
+        $emptyCartItemsTblHeadingCols = CacheHelper::get('productsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($emptyCartItemsTblHeadingCols) {
+            return json_decode($emptyCartItemsTblHeadingCols);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'images' => Labels::getLabel('LBL_IMAGES', $this->siteLangId),
+            'product_identifier' => Labels::getLabel('LBL_NAME', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_USER', $this->siteLangId),
+            'product_added_on' => Labels::getLabel('LBL_CREATED_ON', $this->siteLangId),
+            'product_approved' => Labels::getLabel('LBL_APPROVED', $this->siteLangId),
+            'product_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+        CacheHelper::create('productsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array
+    {
+        return [
+            'select_all',
+            'listSerial',
+            'images',
+            'product_identifier',
+            'user_name',
+            'product_added_on',
+            'product_approved',
+            'product_active',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['product_active','images'], Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [                    
+                    ['title' => Labels::getLabel('LBL_PRODUCTS', $this->siteLangId)]
+                ];
+        }
+        return $this->nodes;
     }
 }
