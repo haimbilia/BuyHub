@@ -158,6 +158,30 @@ class User extends MyAppModel
         );
     }
 
+    public static function getUserTypeHtml(int $langId, int $status): string
+    {
+        $arr = static::getUserTypesArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case static::USER_TYPE_BUYER:
+                $status = HtmlHelper::SUCCESS;
+                break;
+            case static::USER_TYPE_SELLER:
+                $status = HtmlHelper::PRIMARY;
+                break;
+            case static::USER_TYPE_ADVERTISER:
+                $status = HtmlHelper::WARNING;
+                break;
+            case static::USER_TYPE_AFFILIATE:
+                $status = HtmlHelper::INFO;
+                break;
+            default:
+                $status = HtmlHelper::INFO;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, $msg);
+    }
+
     public static function getDeviceTypeArr($langId)
     {
         return [
@@ -3140,5 +3164,20 @@ class User extends MyAppModel
     public static function getLastName(string $name): string
     {
         return (false !== strpos($name, ' ') ? (explode(' ', $name))[1] : $name);
+    }
+
+    public static function getStatusHtml(int $langId, int $status): string
+    {
+        $arr = applicationConstants::getYesNoArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case applicationConstants::YES:
+                $status = HtmlHelper::SUCCESS;
+                break;
+            default:
+                $status = HtmlHelper::DANGER;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, $msg);
     }
 }

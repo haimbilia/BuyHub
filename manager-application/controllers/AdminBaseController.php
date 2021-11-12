@@ -180,6 +180,7 @@ class AdminBaseController extends FatController
                 'invalidUploadFileType' => Labels::getLabel('MSG_INVALID_FILE_TYPE._ONLY_{FILE-TYPE}_FILE_CAN_BE_UPLOADED', $this->siteLangId),
                 'clickToCopy' => Labels::getLabel('LBL_CLICK_TO_COPY', $this->siteLangId),
                 'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
+                'confirmSellerAsBuyer' => Labels::getLabel('LBL_DO_YOU_WANT_TO_MAKE_SELLER_AS_BUYER', $this->siteLangId),
             );
             $languages = Language::getAllNames(false);
             foreach ($languages as $val) {
@@ -320,11 +321,15 @@ class AdminBaseController extends FatController
         $this->getStates($countryId, $stateCode, $this->siteLangId, $idCol);
     }
 
-    protected function getUserSearchForm()
+    protected function getUserSearchForm($fields = [])
     {
-        $frm = new Form('frmUserSearch');
-        $keyword = $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-        //$keyword->setFieldTagAttribute('onKeyUp','usersAutocomplete(this)');
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page', 1);
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'user_name');
+        }
+
+        $frm->addSelectBox(Labels::getLabel('LBL_Name_Or_Email', $this->siteLangId), 'user_id', []);
 
         $arr_options = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getActiveInactiveArr($this->siteLangId);
         $arr_options1 = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId);
@@ -340,11 +345,8 @@ class AdminBaseController extends FatController
         $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->siteLangId), 'user_regdate_from', '', array('readonly' => 'readonly'));
         $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->siteLangId), 'user_regdate_to', '', array('readonly' => 'readonly'));
 
-        $frm->addHiddenField('', 'page', 1);
-        $frm->addHiddenField('', 'user_id', '');
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
