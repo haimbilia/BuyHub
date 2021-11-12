@@ -36,10 +36,17 @@
                                     </a>
                                 </li>
                             <?php } ?>
+                                <?php if ($objPrivilege->canViewShops(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('brandRequests'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_Brand_Request', $siteLangId); ?></span>
+                                    </a>
+                                </li> 
+                            <?php } ?>
                             <?php if ($objPrivilege->canViewShops(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Shops'); ?>">
-                                        <span class="nav_text"><?php echo Labels::getLabel('LBL_Shops', $siteLangId); ?></span>
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_Shops', $siteLangId); ?></span>
                                     </a>
                                 </li> 
                             <?php } ?>

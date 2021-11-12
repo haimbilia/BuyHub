@@ -36,7 +36,7 @@ class ShopsController extends AdminBaseController {
     public function index() {
         $this->search();
         $this->set('canEdit', $this->objPrivilege->canEditShops($this->admin_id, true));
-        $this->set("frmSearch", $this->getSearchForm(false, $this->getFormColumns()));
+        $this->set("frmSearch", $this->getSearchForm($this->getFormColumns()));
         $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_SHOPS', $this->siteLangId));
         $this->set('canViewShopReports', $this->objPrivilege->canViewShopReports(0, true));
         $this->set('canViewSellerProducts', $this->objPrivilege->canViewSellerProducts(0, true));
@@ -57,7 +57,7 @@ class ShopsController extends AdminBaseController {
         if (!array_key_exists($sortBy, $fields) || $sortBy == 'listSerial') {
             $sortBy = current($allowedKeysForSorting);
         }
-        $searchForm = $this->getSearchForm(false, $fields);
+        $searchForm = $this->getSearchForm($fields);
         $data = FatApp::getPostedData();
         $post = $searchForm->getFormDataFromArray($data);
         $post['sortOrder'] = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
@@ -392,7 +392,7 @@ class ShopsController extends AdminBaseController {
         return $frm;
     } 
 
-    public function getSearchForm($request = false, $fields = []) {
+    public function getSearchForm($fields = []) {
         $frm = new Form('frmRecordSearch');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search'); 
