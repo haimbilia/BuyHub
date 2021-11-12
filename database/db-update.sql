@@ -1345,3 +1345,7 @@ CREATE TABLE `tbl_pages_language_data` (`plang_key` VARCHAR(100) NOT NULL ,  `pl
 ALTER TABLE `tbl_pages_language_data` ADD UNIQUE KEY( `plang_key`, `plang_lang_id`);
 ALTER TABLE `tbl_pages_language_data` ADD `plang_id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`plang_id`);
 ALTER TABLE `tbl_pages_language_data` ADD `plang_replacements` MEDIUMTEXT NOT NULL AFTER `plang_recommendations`;
+
+INSERT INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES
+(1, 'MANAGE_SHIPPING_ZONES', -1, 'Manage shipping zones', 'Shipping zones are the geographic areas where you offer shipping services', 'Zone must be linked with countries before setting shipping profiles', '', '{countriesPage}'),
+(2, 'MANAGE_STATES', -1, 'Manage states', 'Manage states of active countries where you want to do business', 'Note: For example, If USA is an active country, and California and Arizona are active states then you will be able to do business only in these two states within USA.', '', '');
