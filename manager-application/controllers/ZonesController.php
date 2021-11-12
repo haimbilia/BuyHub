@@ -29,7 +29,7 @@ class ZonesController extends AdminBaseController
         $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHIPPING_ZONES', $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName();
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
@@ -264,7 +264,7 @@ class ZonesController extends AdminBaseController
     {
         parent::getBreadcrumbNodes($action);
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHIPPING_ZONES', $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName();
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         switch ($action) {
             case 'index':

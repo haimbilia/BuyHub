@@ -26,10 +26,13 @@ class OrderStatusController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_ORDER_STATUS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ORDER_STATUS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->addJs('js/jquery.tablednd.js');

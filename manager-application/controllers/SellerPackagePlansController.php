@@ -51,7 +51,11 @@ class SellerPackagePlansController extends AdminBaseController
         }
 
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_SUBSCRIPTION_PACKAGE_PLANS', $this->siteLangId));
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SUBSCRIPTION_PACKAGE_PLANS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $packageData =  SellerPackages::getAttributesByLangId($this->siteLangId, $spackageId, ['spackage_name', 'spackage_identifier'], true);
         $this->set('packageName', $packageData['spackage_name']  ??  $packageData['spackage_identifier']);
         $this->getListingData($spackageId);

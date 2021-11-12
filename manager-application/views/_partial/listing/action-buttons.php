@@ -64,7 +64,7 @@ if (isset($deleteButton) && true === $deleteButton && $canEdit) {
     );
 }
 
-if (isset($otherButtons) && is_array($otherButtons) && $canEdit) {
+if (isset($otherButtons) && is_array($otherButtons)) {
     foreach ($otherButtons as $attr) {
         $li = $ul->appendElement('li');
         $li->appendElement('a', $attr['attr'], (string) $attr['label'], true);

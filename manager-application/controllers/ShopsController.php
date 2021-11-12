@@ -33,9 +33,13 @@ class ShopsController extends AdminBaseController {
 
     public function index() {
         $this->search();
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHOPS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('canEdit', $this->objPrivilege->canEditShops($this->admin_id, true));
         $this->set("frmSearch", $this->getSearchForm($this->getFormColumns()));
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_SHOPS', $this->siteLangId));
         $this->set('canViewShopReports', $this->objPrivilege->canViewShopReports(0, true));
         $this->set('canViewSellerProducts', $this->objPrivilege->canViewSellerProducts(0, true));
         $this->_template->addCss('css/cropper.css');
