@@ -76,14 +76,14 @@ class UsersController extends AdminBaseController
             $srch->addCondition('user_id', '=', $recordId);
         }
 
-        $user_active = FatApp::getPostedData('user_active', FatUtility::VAR_INT, -1);
-        if ($user_active > -1) {
-            $srch->addCondition('uc.credential_active', '=', $user_active);
+        $userActive = FatApp::getPostedData('user_active');
+        if ('' != $userActive) {
+            $srch->addCondition('uc.credential_active', '=', $userActive);
         }
 
-        $user_verified = FatApp::getPostedData('user_verified', FatUtility::VAR_INT, -1);
-        if ($user_verified > -1) {
-            $srch->addCondition('uc.credential_verified', '=', $user_verified);
+        $userVerified = FatApp::getPostedData('user_verified');
+        if ('' != $userVerified) {
+            $srch->addCondition('uc.credential_verified', '=', $userVerified);
         }
 
         $type = FatApp::getPostedData('type', FatUtility::VAR_STRING, 0);
@@ -131,7 +131,6 @@ class UsersController extends AdminBaseController
         $srch->setPageSize($pageSize);
 
         $rs = $srch->getResultSet();
-        echo $srch->getQuery();
         $records = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arrListing", $records);
@@ -585,8 +584,7 @@ class UsersController extends AdminBaseController
         }
 
         if (isset($post['credential_active'])) {
-            $credential_active = $post['credential_active'];
-            $srch->addCondition('uc.credential_active', '=', $credential_active);
+            $srch->addCondition('uc.credential_active', '=', $post['credential_active']);
         }
 
         if (isset($post['credential_verified'])) {
@@ -886,8 +884,8 @@ class UsersController extends AdminBaseController
             'user_is_advertiser' => Labels::getLabel('LBL_ADVERTISER', $this->siteLangId),
             'user_is_affiliate' => Labels::getLabel('LBL_AFFILIATE', $this->siteLangId),
             'user_regdate' => Labels::getLabel('LBL_REG._Date', $this->siteLangId),
-            'credential_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'credential_verified' => Labels::getLabel('LBL_VERIFIED', $this->siteLangId),
+            'credential_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
 
@@ -908,8 +906,8 @@ class UsersController extends AdminBaseController
             'user_is_advertiser',
             'user_is_affiliate',
             'user_regdate',
-            'credential_active',
             'credential_verified',
+            'credential_active',
             'action',
         ];
     }
