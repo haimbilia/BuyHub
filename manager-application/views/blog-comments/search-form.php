@@ -32,13 +32,11 @@ HtmlHelper::renderHiddenFields($frmSearch);
             <div class="col-md-4">
                 <?php echo $frmSearch->getFieldHtml('bpcomment_approved'); ?>
             </div>
-            <div class="col-md-4">
-                <div class="input-group">
-                    <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                    <div class="input-group-append">
-                        <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
-                    </div>
-                </div>
+            <div class="col-md-2">
+                <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+            </div>
+            <div class="col-md-2">
+                <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
             </div>
         </div>
     </div>

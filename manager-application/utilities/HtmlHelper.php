@@ -129,7 +129,8 @@ class HtmlHelper
     public static function addClearButton(Form &$frm, string $lbl = '')
     {
         $lbl = empty($lbl) ? Labels::getLabel('FRM_CLEAR', CommonHelper::getLangId()) : $lbl;
-        $frm->addHtml('', 'btn_clear', self::addButtonHtml($lbl, 'button', 'btn_clear', 'btn btn-light', 'clearSearch()'));
+        // $frm->addHtml('', 'btn_clear', '<a class="btn btn-link" onClick="clearSearch()">' . $lbl . '</a>');
+        $frm->addHtml('', 'btn_clear', self::addButtonHtml($lbl, 'button', 'btn_clear', 'btn btn-link', 'clearSearch()'));
     }
 
     public static function renderHiddenFields(Form $frmSearch)
@@ -268,11 +269,11 @@ class HtmlHelper
      * $imageArr ex. ['name' => 'fav.png','url'=>'imageurl' ,'afile_id'=> 66]
      */
 
-    public static function getfileInputHtml(array $fileInputAttributes,int $langId, string $removeFn, string $editFn = '', $imageArr = [], $headerClass = '')
+    public static function getfileInputHtml(array $fileInputAttributes, int $langId, string $removeFn, string $editFn = '', $imageArr = [], $headerClass = '')
     {
         $str =  '<div class="dropzone ' . $headerClass . '">';
-                        if (1 > count($imageArr)) {
-                        $str .= ' 
+        if (1 > count($imageArr)) {
+            $str .= ' 
                             <div class="dropzone-upload dropzoneUploadJs">                 
                                 <div class="file-upload">
                                     <img src="' . CONF_WEBROOT_URL . 'images/upload/upload_img.png">                                
@@ -282,14 +283,14 @@ class HtmlHelper
                                 </div> 
                             </div>                                        
                         ';
-                        } else {
-                        $str .= 
-                            '<div class="dropzone-uploaded dropzoneUploadedJs">
+        } else {
+            $str .=
+                '<div class="dropzone-uploaded dropzoneUploadedJs">
                                 <img src="' . $imageArr['url'] . '" title=""  data-afile_id="' . ($imageArr['afile_id'] ?? 0) . '">    
                                 <div class="dropzone-uploaded-action">
                                 <ul class="actions">';
-                                if(!empty($editFn)){
-                                    $str .='
+            if (!empty($editFn)) {
+                $str .= '
                                     <li>
                                         <a href="javascript:void(0)"  onclick="' . $editFn . '" data-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_EDIT', $langId) . '">
                                             <svg class="svg" width="18" height="18">
@@ -298,9 +299,9 @@ class HtmlHelper
                                                 </use>
                                             </svg>
                                         </a>
-                                    </li>'; 
-                                }                                
-                                $str .='<li>
+                                    </li>';
+            }
+            $str .= '<li>
                                             <a href="javascript:void(0)"  onclick="' . $removeFn . '" data-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_REMOVE', $langId) . '">
                                                 <svg class="svg" width="18" height="18">
                                                     <use
@@ -311,17 +312,16 @@ class HtmlHelper
                                         </li>
                                 </ul></div>
                             </div>';
-                    }              
-                   
-                    $str .= '<input class="dropzone-input dropzoneInputJs '. (count($imageArr) ? "hide" : "" ).'" type="file"';        
-                    foreach ($fileInputAttributes as $attrName => $attrVal) {
-                        $str .= ' ' . $attrName . '="' . $attrVal . '"';
-                    }
-                    $str .= '>';
-                    
-                    
-                    $str .= '</div>';
+        }
+
+        $str .= '<input class="dropzone-input dropzoneInputJs ' . (count($imageArr) ? "hide" : "") . '" type="file"';
+        foreach ($fileInputAttributes as $attrName => $attrVal) {
+            $str .= ' ' . $attrName . '="' . $attrVal . '"';
+        }
+        $str .= '>';
+
+
+        $str .= '</div>';
         return   $str;
     }
-    
 }

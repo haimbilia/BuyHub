@@ -1341,3 +1341,7 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 
 
 ALTER TABLE `tbl_blog_post_categories` ADD UNIQUE( `bpcategory_identifier`);
+CREATE TABLE `tbl_pages_language_data` (`plang_key` VARCHAR(100) NOT NULL ,  `plang_lang_id` INT NOT NULL ,  `plang_title` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,  `plang_summary` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,  `plang_warring_msg` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,  `plang_recommendations` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL) DEFAULT CHARSET=utf8mb4;
+ALTER TABLE `tbl_pages_language_data` ADD UNIQUE KEY( `plang_key`, `plang_lang_id`);
+ALTER TABLE `tbl_pages_language_data` ADD `plang_id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`plang_id`);
+ALTER TABLE `tbl_pages_language_data` ADD `plang_replacements` MEDIUMTEXT NOT NULL AFTER `plang_recommendations`;
