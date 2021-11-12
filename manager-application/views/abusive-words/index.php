@@ -1,10 +1,6 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
 $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_ABUSIVE_KEYWORD', $siteLangId);
 
-if(count(Language::getAllNames()) < 2 ){
-    unset($tableHeadAttrArr['language_name']);
-}
-
 $langLayout = [];
 foreach ($languages as $langId => $langName) {
     $layOutDir = Language::getLayoutDirection($langId);

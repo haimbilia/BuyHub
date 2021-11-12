@@ -72,7 +72,7 @@ class ShopReportReasonsController extends AdminBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = ShopReportReason::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('reportreason.*', 'reportreason_l.reportreason_title', 'reportreason_id as listSerial'));
+        $srch->addMultipleFields(array('reportreason.*', 'reportreason_l.reportreason_title'));
 
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('reportreason_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
@@ -218,7 +218,7 @@ class ShopReportReasonsController extends AdminBaseController
         }
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $shopReportReasonTblHeadingCols = CacheHelper::get('shopReportReasonTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopReportReasonTblHeadingCols) {
@@ -236,7 +236,7 @@ class ShopReportReasonsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -247,7 +247,7 @@ class ShopReportReasonsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

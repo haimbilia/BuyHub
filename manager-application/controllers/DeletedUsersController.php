@@ -4,62 +4,68 @@ class DeletedUsersController extends AdminBaseController
 {
     public function __construct($action)
     {
-        $ajaxCallArray = array();
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die($this->str_invalid_Action);
-        }
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewUsers($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditUsers($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewUsers();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewUsers();
-        $frmSearch = $this->getDeletedUserSearchForm();
-        $data = FatApp::getPostedData();
-        if ($data) {
-            $data['user_id'] = $data['id'];
-            unset($data['id']);
-            $frmSearch->fill($data);
-        }
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
         $this->set('frmSearch', $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('languages', Language::getAllNames());
+        $this->set('pageTitle', Labels::getLabel('LBL_Manage_Deleted_Users', $this->siteLangId));
+        $this->getListingData();
+
+        $this->_template->addJs(array('js/select2.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
     }
 
     public function search()
     {
-        $this->objPrivilege->canViewUsers();
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $frmSearch = $this->getDeletedUserSearchForm();
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'deleted-users/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        $data = FatApp::getPostedData();
-        $post = $frmSearch->getFormDataFromArray($data);
+    private function getListingData()
+    {
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+
+        $userId = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
+        $srchFrm = $this->getSearchForm($fields);
+
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        $post['user_id'] = $userId;
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        if ($page < 2) {
-            $page = 1;
-        }
+        $page = ($page <= 0) ? 1 : $page;
+
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $userObj = new User();
         $srch = $userObj->getUserSearchObj(null, true, false);
         $srch->addCondition('user_deleted', '=', applicationConstants::YES);
-        $srch->addOrder('u.user_id', 'DESC');
-        $srch->addOrder('credential_active', 'DESC');
 
-        $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, -1);
-        if ($user_id > 0) {
-            $srch->addCondition('user_id', '=', $user_id);
-        } else {
-            $keyword = FatApp::getPostedData('keyword', null, '');
-            if (!empty($keyword)) {
-                $cond = $srch->addCondition('uc.credential_username', '=', $keyword);
-                $cond->attachCondition('uc.credential_email', 'like', '%' . $keyword . '%', 'OR');
-                $cond->attachCondition('u.user_name', 'like', '%' . $keyword . '%');
-            }
+        if (0 < $userId) {
+            $srch->addCondition('user_id', '=', $userId);
         }
 
         $type = FatApp::getPostedData('type', FatUtility::VAR_STRING, 0);
@@ -95,25 +101,28 @@ class DeletedUsersController extends AdminBaseController
             $srch->addCondition('user_regdate', '<=', $user_regdate_to . ' 23:59:59');
         }
 
-        $srch->addMultipleFields(array('user_is_buyer', 'user_is_supplier', 'user_is_advertiser', 'user_is_affiliate', 'user_registered_initially_for'));
+        $srch->addMultipleFields(array('user_is_buyer', 'user_is_supplier', 'user_is_advertiser', 'user_is_affiliate', 'user_registered_initially_for', 'user_updated_on'));
 
-        /* $srch->addMultipleFields( array('user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'user_profile_info', 'user_regdate', 'user_is_buyer', 'credential_username', 'credential_email', 'credential_active', 'credential_verified') ); */
-
+        $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->setPageSize($pageSize);
 
-        // echo $srch->getQuery();
         $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs, 'user_id');
+        $records = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
-        $this->set('postedData', $post);
         $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('postedData', $post);
+
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditUsers($this->admin_id, true));
         $this->set('canVerify', $this->objPrivilege->canVerifyUsers($this->admin_id, true));
-        $this->_template->render(false, false);
     }
 
     public function restore()
@@ -121,40 +130,94 @@ class DeletedUsersController extends AdminBaseController
         $this->objPrivilege->canEditUsers();
         $post = FatApp::getPostedData();
         if ($post == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $user_id = FatUtility::int($post['user_id']);
         if (1 > $user_id) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $userObj = new User($user_id);
         $userObj->assignValues(array('user_deleted' => applicationConstants::NO));
         if (!$userObj->save()) {
-            Message::addErrorMessage($userObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($userObj->getError(), true);
         }
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getDeletedUserSearchForm()
+    protected function getSearchForm($fields = [])
     {
-        $frm = new Form('frmDeletedUserSearch');
-        $keyword = $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-        $keyword->setFieldTagAttribute('onKeyUp', 'usersAutocomplete(this)');
+        $frm = new Form('frmRecordSearch');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'user_id');
+        }
 
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->siteLangId), 'user_regdate_from', '', array( 'readonly' => 'readonly'));
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->siteLangId), 'user_regdate_to', '', array( 'readonly' => 'readonly'));
+        $frm->addSelectBox(Labels::getLabel('FRM_USER_NAME', $this->siteLangId), 'user_id', []);
 
-        $frm->addHiddenField('', 'page', 1);
-        $frm->addHiddenField('', 'user_id');
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
+        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->siteLangId), 'user_regdate_from', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->siteLangId), 'user_regdate_to', '', array('readonly' => 'readonly'));
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
+    }
+
+    protected function getFormColumns(): array
+    {
+        $deletedUsersTblHeadingCols = CacheHelper::get('deletedUsersTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($deletedUsersTblHeadingCols) {
+            return json_decode($deletedUsersTblHeadingCols);
+        }
+
+        $arr = [
+            'user_id' => Labels::getLabel('LBL_User_Id', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
+            'user_is_buyer' => Labels::getLabel('LBL_Buyer', $this->siteLangId),
+            'user_is_supplier' => Labels::getLabel('LBL_Seller', $this->siteLangId),
+            'user_is_advertiser' => Labels::getLabel('LBL_Advertiser', $this->siteLangId),
+            'user_is_affiliate' => Labels::getLabel('LBL_Affiliate', $this->siteLangId),
+            'user_regdate' => Labels::getLabel('LBL_Reg._Date', $this->siteLangId),
+            'credential_verified' => Labels::getLabel('LBL_verified', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+
+        CacheHelper::create('deletedUsersTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    protected function getDefaultColumns(): array
+    {
+        return [
+            'user_id',
+            'user_name',
+            'user_is_buyer',
+            'user_is_supplier',
+            'user_is_advertiser',
+            'user_is_affiliate',
+            'user_regdate',
+            'credential_verified',
+            'action',
+        ];
+    }
+
+    protected function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['type'], Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_USERS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Users')],
+                    ['title' => Labels::getLabel('LBL_DELETED_USERS', $this->siteLangId)]
+                ];
+        }
+        return $this->nodes;
     }
 }

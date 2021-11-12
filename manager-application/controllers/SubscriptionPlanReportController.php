@@ -154,7 +154,7 @@ class SubscriptionPlanReportController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns()
+    protected function getFormColumns()
     {
         $spackageReportsCacheVar = FatCache::get('spackageReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$spackageReportsCacheVar) {
@@ -175,7 +175,7 @@ class SubscriptionPlanReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['spackage_name', 'spackageSold', 'activeSubscribers', 'spRenewalPendings', 'spRenewals', 'spackageCancelled', 'spplan_price'];
     }

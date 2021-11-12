@@ -42,7 +42,7 @@ class BrandsController extends AdminBaseController {
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'brand_identifier');
         }
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -83,7 +83,7 @@ class BrandsController extends AdminBaseController {
 
         $prodBrandObj = new Brand();
         $srch = $prodBrandObj->getSearchObject($this->siteLangId, true, false, false);
-        $srch->addFld('b.*, brand_id as listSerial');
+        $srch->addFld('b.*');
 
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('b.brand_identifier', 'like', '%' . $post['keyword'] . '%');

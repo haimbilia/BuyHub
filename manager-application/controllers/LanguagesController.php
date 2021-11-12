@@ -56,7 +56,7 @@ class LanguagesController extends AdminBaseController
 
         $srch = Language::getSearchObject(false, $this->siteLangId);
 
-        $srch->addFld('l.*, l.language_id as listSerial');
+        $srch->addFld('l.*');
 
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('l.language_code', 'like', '%' . $post['keyword'] . '%');
@@ -253,7 +253,7 @@ class LanguagesController extends AdminBaseController
         }
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $languagesTblHeadingCols = CacheHelper::get('languagesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($languagesTblHeadingCols) {
@@ -273,7 +273,7 @@ class LanguagesController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -285,7 +285,7 @@ class LanguagesController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['language_active'], Common::excludeKeysForSort());
     }

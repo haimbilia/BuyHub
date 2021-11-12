@@ -51,7 +51,7 @@ class SellerProductsController extends AdminBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'active', array(-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + $activeInactiveArr, '', array(), ''); */
 
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'selprod_title');
         }
 
         HtmlHelper::addSearchButton($frm);
@@ -3285,7 +3285,7 @@ class SellerProductsController extends AdminBaseController
         FatUtility::dieJsonError(Labels::getLabel('MSG_NOT_AVAILABLE._PLEASE_TRY_USING_ANOTHER_KEYWORD', $this->siteLangId));
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $inventoryHeadingCols = CacheHelper::get('inventoryHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($inventoryHeadingCols) {
@@ -3307,7 +3307,7 @@ class SellerProductsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -3322,7 +3322,7 @@ class SellerProductsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

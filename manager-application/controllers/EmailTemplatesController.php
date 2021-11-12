@@ -57,7 +57,6 @@ class EmailTemplatesController extends AdminBaseController
         $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
 
         $srch = EmailTemplates::getSearchObject();
-        $srch->addFld('etpl_code as listSerial');
         $srch->addOrder(EmailTemplates::DB_TBL_PREFIX . 'lang_id', 'ASC');
         $srch->addGroupBy(EmailTemplates::DB_TBL_PREFIX . 'code');
 
@@ -405,7 +404,7 @@ class EmailTemplatesController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $emptyCartItemsTblHeadingCols = CacheHelper::get('emptyCartItemsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($emptyCartItemsTblHeadingCols) {
@@ -424,7 +423,7 @@ class EmailTemplatesController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -435,7 +434,7 @@ class EmailTemplatesController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['etpl_status'], Common::excludeKeysForSort());
     }

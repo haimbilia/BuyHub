@@ -187,7 +187,7 @@ class SalesReportController extends AdminBaseController
         $this->set('allowedKeysForSorting', array_keys($fields));
     }
 
-    private function getFormColumns($orderDate = '')
+    protected function getFormColumns($orderDate = '')
     {
         $salesReportCacheVar = FatCache::get('salesReportCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$salesReportCacheVar) {
@@ -238,7 +238,7 @@ class SalesReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns($orderDate = ''): array
+    protected function getDefaultColumns($orderDate = ''): array
     {
         $arr = ['orderDate', 'totQtys', 'grossSales', 'couponDiscount', 'refundedAmount', 'shippingTotal', 'taxTotal', 'orderNetAmount'];
         if (!empty($orderDate)) {
