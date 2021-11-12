@@ -5,17 +5,13 @@ class UsersController extends AdminBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewUsers($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditUsers($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewUsers();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewUsers();
-        $frmSearch = $this->getUserSearchForm();
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getUserSearchForm($fields);
         $data = FatApp::getPostedData();
         if (is_array($data) && isset($data['id'])) {
             $data['user_id'] = $data['id'];
@@ -23,52 +19,71 @@ class UsersController extends AdminBaseController
             $frmSearch->fill($data);
         }
         $this->set('frmSearch', $frmSearch);
-        $this->_template->addJs('js/import-export.js');
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('languages', Language::getAllNames());
+        $this->set('pageTitle', Labels::getLabel('LBL_Manage_Users_Addresses', $this->siteLangId));
+        $this->getListingData();
+
+        $this->_template->addJs(array('js/select2.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
     }
 
     public function search()
     {
-        $this->objPrivilege->canViewUsers();
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $frmSearch = $this->getUserSearchForm();
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'users/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        $data = FatApp::getPostedData();
-        $post = $frmSearch->getFormDataFromArray($data);
+    private function getListingData()
+    {
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        if ($page < 2) {
-            $page = 1;
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
         }
 
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+
+        $recordId = FatApp::getPostedData('addr_record_id', FatUtility::VAR_INT, 0);
+        $srchFrm = $this->getUserSearchForm($fields);
+
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        $post['addr_record_id'] = $recordId;
+
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+        
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+        
         $userObj = new User();
         $srch = $userObj->getUserSearchObj(null, true);
         $srch->addFld(User::DB_TBL_CRED_PREFIX . 'password');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'user_id = shop.shop_user_id OR user_parent = shop.shop_user_id', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
-        $srch->addOrder('u.user_id', 'DESC');
-        $srch->addOrder('credential_active', 'DESC');
 
-        $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, -1);
-        if ($user_id > 0) {
-            $srch->addCondition('user_id', '=', $user_id);
-        } else {
-            $keyword = FatApp::getPostedData('keyword', null, '');
-            if (!empty($keyword)) {
-                $cond = $srch->addCondition('uc.credential_username', 'like', '%' . $keyword . '%');
-                $cond->attachCondition('uc.credential_email', 'like', '%' . $keyword . '%', 'OR');
-                $cond->attachCondition('u.user_name', 'like', '%' . $keyword . '%');
-            }
+        $recordId = FatApp::getPostedData('user_id', FatUtility::VAR_INT, -1);
+        if ($recordId > 0) {
+            $srch->addCondition('user_id', '=', $recordId);
         }
 
-        $user_active = FatApp::getPostedData('user_active', FatUtility::VAR_INT, -1);
-        if ($user_active > -1) {
-            $srch->addCondition('uc.credential_active', '=', $user_active);
+        $userActive = FatApp::getPostedData('user_active');
+        if ('' != $userActive) {
+            $srch->addCondition('uc.credential_active', '=', $userActive);
         }
 
-        $user_verified = FatApp::getPostedData('user_verified', FatUtility::VAR_INT, -1);
-        if ($user_verified > -1) {
-            $srch->addCondition('uc.credential_verified', '=', $user_verified);
+        $userVerified = FatApp::getPostedData('user_verified');
+        if ('' != $userVerified) {
+            $srch->addCondition('uc.credential_verified', '=', $userVerified);
         }
 
         $type = FatApp::getPostedData('type', FatUtility::VAR_STRING, 0);
@@ -109,43 +124,64 @@ class UsersController extends AdminBaseController
             $srch->addCondition('user_regdate', '<=', $user_regdate_to . ' 23:59:59');
         }
 
-        $srch->addFld(array('user_is_buyer', 'user_is_supplier', 'user_is_advertiser', 'user_is_affiliate', 'user_registered_initially_for'));
+        $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'user_profile_info', 'user_regdate', 'user_is_buyer', 'user_parent', 'credential_username', 'credential_email', 'credential_active', 'credential_verified', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'user_is_buyer', 'user_is_supplier', 'user_is_advertiser', 'user_is_affiliate', 'user_registered_initially_for', 'user_updated_on'));
 
-        $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'user_profile_info', 'user_regdate', 'user_is_buyer', 'user_parent', 'credential_username', 'credential_email', 'credential_active', 'credential_verified', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name'));
-
+        $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->setPageSize($pageSize);
 
-        //echo $srch->getQuery();
         $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs, 'user_id');
+        $records = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
-        $this->set('postedData', $post);
         $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('postedData', $post);
+
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditUsers($this->admin_id, true));
         $this->set('canVerify', $this->objPrivilege->canVerifyUsers($this->admin_id, true));
         $this->set('canViewShops', $this->objPrivilege->canViewShops($this->admin_id, true));
-        $this->_template->render(false, false);
     }
 
-    public function login($userId)
+    public function form()
     {
         $this->objPrivilege->canEditUsers();
-        $userObj = new User($userId);
-        $user = $userObj->getUserInfo(array('credential_username', 'if(credential_password != "", credential_password, credential_password_old) as credential_password', 'user_preferred_dashboard'), false, false);
-        if (!$user) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatApp::redirectUser(UrlHelper::generateUrl('Users'));
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $frm = $this->getForm($recordId);
+        $userParent = 0;
+        $stateId = 0;
+        if (0 < $recordId) {
+            $userObj = new User($recordId);
+            $srch = $userObj->getUserSearchObj();
+            $srch->addMultipleFields(array('u.*'));
+            $rs = $srch->getResultSet();
+
+            if (!$rs) {
+                LibHelper::exitWithError($this->str_invalid_request, true);
+            }
+
+            $data = FatApp::getDb()->fetch($rs, 'user_id');
+
+            if ($data === false) {
+                LibHelper::exitWithError($this->str_invalid_request, true);
+            }
+
+            $stateId = $data['user_state_id'];
+            $frm->fill($data);
+            $userParent = $data['user_parent'];
+            $this->set('data', $data);
         }
-        $userAuthObj = new UserAuthentication();
-        if (!$userAuthObj->login($user['credential_username'], $user['credential_password'], $_SERVER['REMOTE_ADDR'], false, true) === true) {
-            Message::addErrorMessage($userAuthObj->getError());
-            FatApp::redirectUser(UrlHelper::generateUrl('Users'));
-        }
-        FatApp::redirectUser(UrlHelper::generateUrl('account', '', array(), CONF_WEBROOT_DASHBOARD));
+        $this->set('userParent', $userParent);
+        $this->set('recordId', $recordId);
+        $this->set('stateId', $stateId);
+        $this->set('frm', $frm);
+        $this->_template->render(false, false);
     }
 
     public function setup()
@@ -163,16 +199,15 @@ class UsersController extends AdminBaseController
         }
         $post = $frm->getFormDataFromArray($post);
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         $post['user_state_id'] = $user_state_id;
 
         $post['user_phone_dcode'] = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
 
-        $user_id = FatUtility::int($post['user_id']);
+        $recordId = FatUtility::int($post['user_id']);
         unset($post['user_id']);
-        if (0 < $user_id) {
+        if (0 < $recordId) {
             unset($post['credential_username']);
             unset($post['credential_email']);
             if ($post['user_dob'] == "0000-00-00" || $post['user_dob'] == "" || strtotime($post['user_dob']) == 0) {
@@ -181,7 +216,7 @@ class UsersController extends AdminBaseController
         }
 
         /* [ new user    */
-        if (1 > $user_id) {
+        if (1 > $recordId) {
             $post['user_verify'] = FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1) ? 0 : 1;
             if ($post['user_type'] == User::USER_TYPE_BUYER) {
                 $post['user_is_buyer'] = 1;
@@ -211,15 +246,14 @@ class UsersController extends AdminBaseController
 
         $db = FatApp::getDb();
         $db->startTransaction();
-        $userObj = new User($user_id);
+        $userObj = new User($recordId);
         $userObj->assignValues($post);
         if (!$userObj->save()) {
             $db->rollbackTransaction();
-            Message::addErrorMessage($userObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($userObj->getError(), true);
         }
         /* [ new user    */
-        if (1 > $user_id) {
+        if (1 > $recordId) {
             if (!$userObj->setLoginCredentials($post['credential_username'], $post['credential_email'], null, applicationConstants::ACTIVE)) {
                 $db->rollbackTransaction();
                 return false;
@@ -234,7 +268,7 @@ class UsersController extends AdminBaseController
 
             if (!$userObj->sendAdminNewUserCreationEmail($userData, $this->admin_id)) {
                 $db->rollbackTransaction();
-                $message = Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $this->admin_id);
+                LibHelper::exitWithError(Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $this->admin_id), true);
                 return false;
             }
         }
@@ -246,257 +280,20 @@ class UsersController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function form($user_id = 0)
-    {
-        $this->objPrivilege->canEditUsers();
-        $user_id = FatUtility::int($user_id);
-        $frmUser = $this->getForm($user_id);
-        $userParent = 0;
-        $stateId = 0;
-        if (0 < $user_id) {
-            $userObj = new User($user_id);
-            $srch = $userObj->getUserSearchObj();
-            $srch->addMultipleFields(array('u.*'));
-            $rs = $srch->getResultSet();
-
-            if (!$rs) {
-                FatUtility::dieWithError($this->str_invalid_request);
-            }
-
-            $data = FatApp::getDb()->fetch($rs, 'user_id');
-
-            if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
-            }
-
-            $stateId = $data['user_state_id'];
-            $frmUser->fill($data);
-            $userParent = $data['user_parent'];
-            $this->set('data', $data);
-        }
-        $this->set('userParent', $userParent);
-        $this->set('user_id', $user_id);
-        $this->set('stateId', $stateId);
-        $this->set('frmUser', $frmUser);
-        $this->_template->render(false, false);
-    }
-
-    public function bankInfoForm($user_id)
-    {
-        $this->objPrivilege->canViewUsers();
-        $user_id = FatUtility::int($user_id);
-
-        if (1 > $user_id) {
-            FatUtility::dieWithError($this->str_invalid_request);
-        }
-
-        $frm = $this->getBankInfoForm();
-
-        $userObj = new User($user_id);
-        $data = $userObj->getUserBankInfo();
-
-        $data['user_id'] = $user_id;
-
-        if ($data != false) {
-            $frm->fill($data);
-        }
-        $this->set('userParent', User::getAttributesById($user_id, 'user_parent'));
-        $this->set('frm', $frm);
-        $this->set('user_id', $user_id);
-        $this->_template->render(false, false);
-    }
-
-    public function setupBankInfo()
-    {
-        $this->objPrivilege->canEditUsers();
-        $frm = $this->getBankInfoForm();
-
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $user_id = FatUtility::int($post['user_id']);
-        unset($post['user_id']);
-
-        if (1 > $user_id) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $userObj = new User($user_id);
-        $srch = $userObj->getUserSearchObj(array('user_parent'));
-        $rs = $srch->getResultSet();
-        $data = FatApp::getDb()->fetch($rs, 'user_id');
-
-        if ($data === false || 0 < $data['user_parent']) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        if (!$userObj->updateBankInfo($post)) {
-            Message::addErrorMessage($userObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $this->set('userId', $user_id);
-        $this->set('msg', $this->str_setup_successful);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function addresses($userId)
-    {
-        $this->objPrivilege->canViewUsers();
-        $userId = FatUtility::int($userId);
-        if (1 > $userId) {
-            FatUtility::dieWithError($this->str_invalid_request);
-        }
-
-        $this->set('userParent', User::getAttributesById($userId, 'user_parent'));
-        $this->set('user_id', $userId);
-        $address =  new Address(0, $this->siteLangId);
-        $addresses = $address->getData(Address::TYPE_USER, $userId);
-        $this->set('addresses', $addresses);
-        $this->_template->render(false, false);
-    }
-
-    public function addressForm($userId, $addr_id = 0)
-    {
-        $this->objPrivilege->canViewUsers();
-        $userId = FatUtility::int($userId);
-        $addr_id = FatUtility::int($addr_id);
-
-        if (1 > $userId) {
-            FatUtility::dieWithError($this->str_invalid_request);
-        }
-
-        $addressFrm = $this->getUserAddressForm($this->siteLangId);
-
-        $stateId = 0;
-        if ($addr_id > 0) {
-            $address =  new Address($addr_id, $this->siteLangId);
-            $data = $address->getData(Address::TYPE_USER, $userId);
-            if (empty($data)) {
-                FatUtility::dieWithError($this->str_invalid_request);
-            }
-            $stateId = $data['addr_state_id'];
-            $addressFrm->fill($data);
-        } else {
-            $addressFrm->fill(array('addr_record_id' => $userId));
-        }
-
-        $this->set('userParent', User::getAttributesById($userId, 'user_parent'));
-        $this->set('addressFrm', $addressFrm);
-        $this->set('stateId', $stateId);
-        $this->set('user_id', $userId);
-        $this->_template->render(false, false);
-    }
-
-    public function setupAddress()
-    {
-        $frm = $this->getUserAddressForm($this->siteLangId);
-        $post = FatApp::getPostedData();
-
-        if ($post == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $addr_state_id = FatUtility::int($post['addr_state_id']);
-        $post = $frm->getFormDataFromArray($post);
-
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $post['addr_state_id'] = $addr_state_id;
-
-        $user_id = FatUtility::int($post['addr_record_id']);
-        $addr_id = FatUtility::int($post['addr_id']);
-
-        if (1 > $user_id) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $userObj = new User($user_id);
-        $srch = $userObj->getUserSearchObj(array('user_parent'));
-        $rs = $srch->getResultSet();
-        $data = FatApp::getDb()->fetch($rs, 'user_id');
-
-        if ($data === false || 0 < $data['user_parent']) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $addressObj = new Address($addr_id);
-
-        $data_to_be_save = $post;
-        $data_to_be_save['addr_record_id'] = $user_id;
-        $data_to_be_save['addr_type'] = Address::TYPE_USER;
-        $data_to_be_save['addr_lang_id'] = $this->siteLangId;
-        $addressObj->assignValues($data_to_be_save, true);
-        if (!$addressObj->save()) {
-            Message::addErrorMessage($addressObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $this->set('userId', $user_id);
-        $this->set('msg', $this->str_setup_successful);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function deleteAddress()
-    {
-        $post = FatApp::getPostedData();
-        if ($post == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $addrId = FatUtility::int($post['id']);
-        $user_id = FatUtility::int($post['user_id']);
-
-        if (1 > $addrId || 1 > $user_id) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-        $address = new Address($addrId, $this->siteLangId);
-        $data = $address->getData(Address::TYPE_USER, $user_id);
-        if (empty($data)) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        if (!$address->deleteRecord()) {
-            Message::addErrorMessage($address->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $this->set('userId', $user_id);
-        $this->set('msg', Labels::getLabel('LBL_Deleted_Successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function deleteAccount()
+    public function deleteRecord()
     {
         $this->objPrivilege->canEditUsers();
         $post = FatApp::getPostedData();
         if ($post == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $user_id = FatUtility::int($post['user_id']);
-        if (1 > $user_id) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+        $recordId = FatUtility::int($post['recordId']);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        $this->markAsDeleted($user_id);
-        $shopId = Shop::getAttributesByUserId($user_id, 'shop_id');
+        $this->markAsDeleted($recordId);
+        $shopId = Shop::getAttributesByUserId($recordId, 'shop_id');
         if (0 < $shopId) {
             Product::updateMinPrices(0, $shopId);
         }
@@ -508,46 +305,159 @@ class UsersController extends AdminBaseController
     public function deleteSelected()
     {
         $this->objPrivilege->canEditUsers();
-        $userIdsArr = FatUtility::int(FatApp::getPostedData('user_ids'));
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('user_ids'));
 
-        if (empty($userIdsArr)) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
+        if (empty($recordIdsArr)) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
-        foreach ($userIdsArr as $user_id) {
-            if (1 > $user_id) {
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
                 continue;
             }
-            $this->markAsDeleted($user_id);
+            $this->markAsDeleted($recordId);
         }
         Product::updateMinPrices();
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($user_id)
+    private function markAsDeleted($recordId)
     {
-        $user_id = FatUtility::int($user_id);
-        if (1 > $user_id) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
-        $userObj = new User($user_id);
+        $userObj = new User($recordId);
         $userObj->assignValues(array('user_deleted' => applicationConstants::YES));
         if (!$userObj->save()) {
-            Message::addErrorMessage($userObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($userObj->getError(), true);
         }
     }
 
-    public function changePasswordForm($user_id)
+    private function getForm(int $recordId = 0)
+    {
+        $frm = new Form('frmUser');
+        $frm->addHiddenField('', 'user_id', $recordId);
+
+        if (1 > $recordId) {
+            $userTypesArr = User::getUserTypesArr($this->siteLangId);
+            $fld = $frm->addSelectBox(Labels::getLabel('LBL_User_Type', $this->siteLangId), 'user_type', $userTypesArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+            $fld->requirement->setRequired(true);
+        }
+
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'credential_username', '');
+        if (1 > $recordId) {
+            $fld->setUnique('tbl_user_credentials', 'credential_username', 'credential_user_id', 'user_id', 'user_id');
+            $fld->requirements()->setRequired();
+            $fld->requirements()->setUsername();
+        }
+        $frm->addRequiredField(Labels::getLabel('LBL_Customer_Name', $this->siteLangId), 'user_name');
+        $frm->addDateField(Labels::getLabel('LBL_Date_Of_Birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly'));
+        $frm->addHiddenField('', 'user_phone_dcode');
+        $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+        $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
+
+        $fld = $frm->addTextBox(Labels::getLabel('LBL_Email', $this->siteLangId), 'credential_email', '');
+        if (1 > $recordId) {
+            $fld->setUnique('tbl_user_credentials', 'credential_email', 'credential_user_id', 'user_id', 'user_id');
+            $fld->requirements()->setRequired();
+        }
+
+        $countryObj = new Countries();
+        $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), [], Labels::getLabel('LBL_Select', $this->siteLangId));
+        //$fld->requirement->setRequired(true);
+
+        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+        $frm->addTextBox(Labels::getLabel('LBL_City', $this->siteLangId), 'user_city');
+
+        return $frm;
+    }
+
+    public function login($recordId)
     {
         $this->objPrivilege->canEditUsers();
-        $user_id = FatUtility::int($user_id);
-        $frm = $this->getChangePasswordForm($user_id);
+        $userObj = new User($recordId);
+        $user = $userObj->getUserInfo(array('credential_username', 'if(credential_password != "", credential_password, credential_password_old) as credential_password', 'user_preferred_dashboard'), false, false);
+        if (!$user) {
+            Message::addErrorMessage($this->str_invalid_request);
+            FatApp::redirectUser(UrlHelper::generateUrl('Users'));
+        }
+        $userAuthObj = new UserAuthentication();
+        if (!$userAuthObj->login($user['credential_username'], $user['credential_password'], $_SERVER['REMOTE_ADDR'], false, true) === true) {
+            Message::addErrorMessage($userAuthObj->getError());
+            FatApp::redirectUser(UrlHelper::generateUrl('Users'));
+        }
+        FatApp::redirectUser(UrlHelper::generateUrl('account', '', array(), CONF_WEBROOT_DASHBOARD));
+    }
+
+    public function bankInfoForm($recordId)
+    {
+        $this->objPrivilege->canViewUsers();
+        $recordId = FatUtility::int($recordId);
+
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $frm = $this->getBankInfoForm();
+
+        $userObj = new User($recordId);
+        $data = $userObj->getUserBankInfo();
+
+        $data['user_id'] = $recordId;
+
+        if ($data != false) {
+            $frm->fill($data);
+        }
+        $this->set('userParent', User::getAttributesById($recordId, 'user_parent'));
+        $this->set('frm', $frm);
+        $this->set('user_id', $recordId);
+        $this->_template->render(false, false);
+    }
+
+    public function setupBankInfo()
+    {
+        $this->objPrivilege->canEditUsers();
+        $frm = $this->getBankInfoForm();
+
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+
+        if (false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
+
+        $recordId = FatUtility::int($post['user_id']);
+        unset($post['user_id']);
+
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $userObj = new User($recordId);
+        $srch = $userObj->getUserSearchObj(array('user_parent'));
+        $rs = $srch->getResultSet();
+        $data = FatApp::getDb()->fetch($rs, 'user_id');
+
+        if ($data === false || 0 < $data['user_parent']) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        if (!$userObj->updateBankInfo($post)) {
+            LibHelper::exitWithError($userObj->getError(), true);
+        }
+
+        $this->set('userId', $recordId);
+        $this->set('msg', $this->str_setup_successful);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function changePasswordForm($recordId)
+    {
+        $this->objPrivilege->canEditUsers();
+        $recordId = FatUtility::int($recordId);
+        $frm = $this->getChangePasswordForm($recordId);
 
         $this->set('frm', $frm);
         $this->_template->render(false, false);
@@ -559,885 +469,49 @@ class UsersController extends AdminBaseController
         $post = $pwdFrm->getFormDataFromArray(FatApp::getPostedData());
 
         if (!$pwdFrm->validate($post)) {
-            Message::addErrorMessage($pwdFrm->getValidationErrors());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($pwdFrm->getValidationErrors(), true);
         }
 
         if ($post['new_password'] != $post['conf_new_password']) {
-            Message::addErrorMessage(Labels::getLabel('LBL_New_Password_and_Confirm_new_password_does_not_match', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('LBL_New_Password_and_Confirm_new_password_does_not_match', $this->siteLangId), true);
         }
 
         if (!ValidateElement::password($post['new_password'])) {
-            Message::addErrorMessage(
-                Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId)
-            );
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId), true);
         }
 
-        $user_id = FatUtility::int($post['user_id']);
-        if ($user_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+        $recordId = FatUtility::int($post['user_id']);
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         /* Restrict to change password for demo user on demo URL. */
-        if (CommonHelper::demoUrl() && 4 == $user_id) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->siteLangId));
+        if (CommonHelper::demoUrl() && 4 == $recordId) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->siteLangId), true);
         }
 
-        $userObj = new User($user_id);
+        $userObj = new User($recordId);
         $srch = $userObj->getUserSearchObj(array('user_id'));
         $rs = $srch->getResultSet();
 
         if (!$rs) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $data = FatApp::getDb()->fetch($rs, 'user_id');
 
         if ($data === false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         if (!$userObj->setLoginPassword($post['new_password'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Password_could_not_be_set ', $this->siteLangId) . ' ' . $userObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('LBL_Password_could_not_be_set ', $this->siteLangId) . ' ' . $userObj->getError(), true);
         }
 
         // TODo:: Can send change password notification using configuration
 
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function sellerApprovalRequests()
-    {
-        $this->objPrivilege->canViewSellerApprovalRequests();
-
-        $frmSearch = $this->supplierRequestSearchForm();
-        $this->set('frmSearch', $frmSearch);
-
-        $this->_template->render();
-    }
-
-    public function sellerApprovalRequestSearch()
-    {
-        $this->objPrivilege->canViewSellerApprovalRequests();
-
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $srchForm = $this->supplierRequestSearchForm();
-
-        $data = FatApp::getPostedData();
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
-        $page = FatUtility::int($page);
-        $post = $srchForm->getFormDataFromArray($data);
-
-        $userObj = new User();
-        $srch = $userObj->getUserSupplierRequestsObj();
-        $srch->addFld('tusr.*');
-        $srch->addOrder('usuprequest_id', 'desc');
-
-        if (!empty($post['keyword'])) {
-            $cond = $srch->addCondition('tusr.usuprequest_reference', '=', '%' . $post['keyword'] . '%', 'AND');
-            $cond->attachCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'OR');
-            $cond->attachCondition('uc.credential_email', 'like', '%' . $post['keyword'] . '%', 'OR');
-            $cond->attachCondition('uc.credential_username', 'like', '%' . $post['keyword'] . '%', 'OR');
-            $cond->attachCondition('tusr.usuprequest_reference', 'like', '%' . $post['keyword'] . '%', 'OR');
-        }
-
-        if (!empty($post['date_from'])) {
-            $srch->addCondition('tusr.usuprequest_date', '>=', $post['date_from'] . ' 00:00:00');
-        }
-
-        if ($post['status'] > -1) {
-            $srch->addCondition('tusr.usuprequest_status', '=', $post['status']);
-        }
-
-        if (!empty($post['date_to'])) {
-            $srch->addCondition('tusr.usuprequest_date', '<=', $post['date_to'] . ' 23:59:59');
-        }
-
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-
-        $rs = $srch->getResultSet();
-        $records = array();
-        if ($rs) {
-            $records = FatApp::getDb()->fetchAll($rs);
-        }
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
-        $this->set('postedData', $post);
-        $this->set('reqStatusArr', User::getSupplierReqStatusArr($this->siteLangId));
-        $this->set('canViewSellerApprovalRequests', $this->objPrivilege->canViewSellerApprovalRequests($this->admin_id, true));
-        $this->set('canEditSellerApprovalRequests', $this->objPrivilege->canEditSellerApprovalRequests($this->admin_id, true));
-        $this->_template->render(false, false);
-    }
-
-    public function viewSellerRequest($requestId)
-    {
-        $this->objPrivilege->canViewSellerApprovalRequests();
-        $requestId = FatUtility::int($requestId);
-
-        if (1 > $requestId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $userObj = new User();
-        $srch = $userObj->getUserSupplierRequestsObj($requestId);
-        $srch->addFld('tusr.*');
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-        if (!$rs) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $supplierRequest = FatApp::getDb()->fetch($rs);
-        if ($supplierRequest == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $supplierRequest["field_values"] = $userObj->getSupplierRequestFieldsValueArr($requestId, $this->siteLangId);
-
-        $this->set('reqStatusArr', User::getSupplierReqStatusArr($this->siteLangId));
-        $this->set('supplierRequest', $supplierRequest);
-        $this->_template->render(false, false);
-    }
-
-    public function updateSellerRequestForm($requestId)
-    {
-        $this->objPrivilege->canEditSellerApprovalRequests();
-        $requestId = FatUtility::int($requestId);
-
-        if (1 > $requestId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $data = array('requestId' => $requestId);
-        $frm = $this->supplierRequestForm();
-        $frm->fill($data);
-        $this->set('frm', $frm);
-        $this->_template->render(false, false);
-    }
-
-    public function updateSellerRequest()
-    {
-        $this->objPrivilege->canEditSellerApprovalRequests();
-
-        $frm = $this->supplierRequestForm();
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $srequest_id = $post['requestId'];
-        unset($post['requestId']);
-
-        $userObj = new User();
-        $srch = $userObj->getUserSupplierRequestsObj($srequest_id);
-        $srch->addFld('tusr.*');
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-
-        $supplierRequest = FatApp::getDb()->fetch($srch->getResultSet());
-
-        if ($supplierRequest == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $statusArr = array(User::SUPPLIER_REQUEST_APPROVED, User::SUPPLIER_REQUEST_CANCELLED);
-
-        if (!in_array($post['status'], $statusArr)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Status_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        if (in_array($post['status'], $statusArr) && in_array($supplierRequest['usuprequest_status'], $statusArr)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Status_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $db = FatApp::getDb();
-        $db->startTransaction();
-
-        if (!in_array($supplierRequest['usuprequest_status'], $statusArr) && in_array($post['status'], $statusArr)) {
-            $post['request_id'] = $supplierRequest['usuprequest_id'];
-            if (!$userObj->updateSupplierRequest($post)) {
-                $db->rollbackTransaction();
-                Message::addErrorMessage($userObj->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-        }
-
-        if ($post['status'] == User::SUPPLIER_REQUEST_APPROVED && $supplierRequest['usuprequest_status'] != User::SUPPLIER_REQUEST_APPROVED) {
-            $userObj->setMainTableRecordId($supplierRequest['usuprequest_user_id']);
-            if (!$userObj->activateSupplier(applicationConstants::ACTIVE)) {
-                $db->rollbackTransaction();
-                Message::addErrorMessage($userObj->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-        }
-
-        $email = new EmailHandler();
-        $supplierRequest['usuprequest_status'] = $post['status'];
-        $supplierRequest['usuprequest_comments'] = $post['comments'];
-
-        if (!$email->sendSupplierRequestStatusChangeNotification($this->siteLangId, $supplierRequest)) {
-            $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $db->commitTransaction();
-        $this->set('msg', Labels::getLabel('LBL_Status_Updated_Successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function downloadAttachment($recordId, $recordSubid)
-    {
-        $this->objPrivilege->canViewSellerApprovalRequests();
-
-        $recordId = FatUtility::int($recordId);
-        $recordSubid = FatUtility::int($recordSubid);
-
-        if (1 > $recordId || 1 > $recordSubid) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SELLER_APPROVAL_FILE, $recordId, $recordSubid);
-
-        if (false == $file_row) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-        AttachedFile::downloadAttachment($image_name, $file_row['afile_name']);
-    }
-
-    public function sellerCatalogRequestMsgForm($requestId = 0)
-    {
-        $this->objPrivilege->canEditSellerApprovalRequests();
-        $requestId = FatUtility::int($requestId);
-        $frm = $this->getCatalogRequestMessageForm($requestId);
-
-        if (0 >= $requestId) {
-            FatUtility::dieWithError($this->str_invalid_request_id);
-        }
-        $userObj = new User();
-        $srch = $userObj->getUserSupplierRequestsObj($requestId);
-        $srch->addFld('tusr.*');
-
-        $rs = $srch->getResultSet();
-
-        if (!$rs || FatApp::getDb()->fetch($rs) === false) {
-            FatUtility::dieWithError($this->str_invalid_request);
-        }
-
-        $this->set('requestId', $requestId);
-
-        $this->set('frm', $frm);
-
-
-
-        $searchFrm = $this->getCatalogRequestMessageSearchForm();
-        $searchFrm->getField('requestId')->value = $requestId;
-        $this->set('searchFrm', $searchFrm);
-
-        $this->_template->render(false, false);
-    }
-
-    public function setUpCatalogRequestMessage()
-    {
-        $this->objPrivilege->canEditSellerCatalogRequests();
-        $requestId = FatApp::getPostedData('requestId', null, '0');
-
-        $frm = $this->getCatalogRequestMessageForm($requestId);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $requestId = FatUtility::int($requestId);
-        $admin_id = AdminAuthentication::getLoggedAdminId();
-
-        $srch = new CatalogRequestSearch($this->siteLangId);
-        $srch->addCondition('scatrequest_id', '=', $requestId);
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addMultipleFields(array('scatrequest_id', 'scatrequest_status'));
-        // die( $srch->getQuery());
-        $rs = $srch->getResultSet();
-        $requestRow = FatApp::getDb()->fetch($rs);
-        if (!$requestRow) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        /* save catalog request message[ */
-        $dataToSave = array(
-            'scatrequestmsg_scatrequest_id' => $requestRow['scatrequest_id'],
-            'scatrequestmsg_from_user_id' => 0,
-            'scatrequestmsg_from_admin_id' => $admin_id,
-            'scatrequestmsg_msg' => $post['message'],
-            'scatrequestmsg_date' => date('Y-m-d H:i:s'),
-        );
-        $catRequestMsgObj = new CatalogRequestMessage();
-        $catRequestMsgObj->assignValues($dataToSave, true);
-        if (!$catRequestMsgObj->save()) {
-            Message::addErrorMessage($catRequestMsgObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $scatrequestmsg_id = $catRequestMsgObj->getMainTableRecordId();
-        if (!$scatrequestmsg_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Something_went_wrong,_please_contact_Technical_team', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        /* ] */
-
-        /* sending of email notification[ */
-        $emailNotificationObj = new EmailHandler();
-        if (!$emailNotificationObj->sendCatalogRequestMessageNotification($scatrequestmsg_id, $this->siteLangId)) {
-            Message::addErrorMessage($emailNotificationObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        /* ] */
-
-        $this->set('scatrequestmsg_scatrequest_id', $requestId);
-        $this->set('msg', Labels::getLabel('MSG_Message_Submitted_Successfully!', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function catalogRequestMessageSearch()
-    {
-        $frm = $this->getCatalogRequestMessageSearchForm();
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
-        $pageSize = 1; //FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-
-        $requestId = isset($post['requestId']) ? FatUtility::int($post['requestId']) : 0;
-
-        $srch = new CatalogRequestMessageSearch();
-        $srch->joinCatalogRequests();
-        $srch->joinMessageUser();
-        $srch->joinMessageAdmin();
-        $srch->addCondition('scatrequestmsg_scatrequest_id', '=', $requestId);
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $srch->addOrder('scatrequestmsg_id', 'DESC');
-        $srch->addMultipleFields(
-            array(
-                'scatrequestmsg_id', 'scatrequestmsg_from_user_id', 'scatrequestmsg_from_admin_id',
-                'admin_name', 'admin_username', 'admin_email', 'scatrequestmsg_msg',
-                'scatrequestmsg_date', 'msg_user.user_name as msg_user_name', 'msg_user_cred.credential_username as msg_username',
-                'msg_user_cred.credential_email as msg_user_email',
-                'scatrequest_status'
-            )
-        );
-
-        //echo $srch->getQuery();die;
-        $rs = $srch->getResultSet();
-        $messagesList = FatApp::getDb()->fetchAll($rs, 'scatrequestmsg_id');
-        ksort($messagesList);
-
-
-
-        $this->set('messagesList', $messagesList);
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('pageCount', $srch->pages());
-        $this->set('postedData', $post);
-
-        $startRecord = ($page - 1) * $pageSize + 1;
-        $endRecord = $page * $pageSize;
-        $totalRecords = $srch->recordCount();
-        if ($totalRecords < $endRecord) {
-            $endRecord = $totalRecords;
-        }
-        $json['totalRecords'] = $totalRecords;
-        $json['startRecord'] = $startRecord;
-        $json['endRecord'] = $endRecord;
-
-        $json['html'] = $this->_template->render(false, false, 'users/catalog-request-messages-list.php', true);
-        $json['loadMoreBtnHtml'] = $this->_template->render(false, false, 'users/catalog-request-messages-list-load-more-btn.php', true);
-        FatUtility::dieJsonSuccess($json);
-    }
-
-    public function sellerFormFieldsList()
-    {
-        $this->objPrivilege->canViewSellerApprovalForm();
-
-        $obj = new User();
-        $records = $obj->getSupplierFormFields($this->siteLangId);
-
-        $this->set("arrListing", $records);
-        $this->set("yesNoArr", applicationConstants::getYesNoArr($this->siteLangId));
-        $this->set("fieldTypeArr", User::getFieldTypes($this->siteLangId));
-        $this->set("canEdit", $this->objPrivilege->canEditSellerApprovalForm($this->admin_id, true));
-        $this->_template->render(false, false);
-    }
-
-    public function setupSellerForm()
-    {
-        $this->objPrivilege->canEditSellerApprovalForm();
-
-        $frm = $this->getSupplierApprovalForm();
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $srch = SupplierFormFields::getSearchObject();
-        $srch->addCondition('sf.sformfield_identifier', '=', $post['sformfield_identifier']);
-        if (0 < $post['sformfield_id']) {
-            $srch->addCondition('sf.sformfield_id', '!=', $post['sformfield_id']);
-        }
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        if (!empty($row)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_choose_unique_identifier', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-        $sformfield_id = $post['sformfield_id'];
-        unset($post['sformfield_id']);
-
-        $record = new SupplierFormFields($sformfield_id);
-
-        if ($sformfield_id == 0) {
-            $display_order = $record->getMaxOrder();
-            $post['sformfield_display_order'] = $display_order;
-        }
-
-        $record->assignValues($post);
-        if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $newTabLangId = 0;
-        if ($sformfield_id > 0) {
-            $languages = Language::getAllNames();
-            foreach ($languages as $langId => $langName) {
-                if (!$row = SupplierFormFields::getAttributesByLangId($langId, $sformfield_id)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        } else {
-            $sformfield_id = $record->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
-        }
-
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('sformfieldId', $sformfield_id);
-        $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function sellerForm()
-    {
-        $this->objPrivilege->canViewSellerApprovalForm();
-
-        $this->set("canEditSellerApprovalForm", $this->objPrivilege->canEditSellerApprovalForm($this->admin_id, true));
-        $this->_template->render();
-    }
-
-    public function sellerApprovalForm($sformfield_id = 0)
-    {
-        $this->objPrivilege->canEditSellerApprovalForm();
-
-        $sformfield_id = FatUtility::int($sformfield_id);
-
-        $frm = $this->getSupplierApprovalForm();
-
-        if (0 < $sformfield_id) {
-            $attr = array('sformfield_id', 'sformfield_identifier', 'sformfield_type', 'sformfield_required');
-            $data = SupplierFormFields::getAttributesById($sformfield_id, $attr);
-
-            if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
-            }
-            $frm->fill($data);
-        }
-
-        $this->set('frm', $frm);
-        $this->set('sformfield_id', $sformfield_id);
-        $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
-    }
-
-    public function setupSellerLangForm()
-    {
-        $this->objPrivilege->canEditSellerApprovalForm();
-        $post = FatApp::getPostedData();
-
-        $sformfield_id = $post['sformfield_id'];
-        $languages = Language::getAllNames();
-        if (count($languages) > 1) {
-            $lang_id = $post['sformfieldlang_lang_id'];
-        } else {
-            $lang_id = array_key_first($languages);
-        }
-
-
-        if ($sformfield_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $frm = $this->getSupplierApprovalLangForm($sformfield_id, $lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        unset($post['sformfield_id']);
-        unset($post['lang_id']);
-        $data = array(
-            'sformfieldlang_lang_id' => $lang_id,
-            'sformfieldlang_sformfield_id' => $sformfield_id,
-            'sformfield_caption' => $post['sformfield_caption'],
-            'sformfield_comment' => $post['sformfield_comment'],
-        );
-
-        $obj = new SupplierFormFields($sformfield_id);
-        if (!$obj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(SupplierFormFields::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($sformfield_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = SupplierFormFields::getAttributesByLangId($langId, $sformfield_id)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('sformfieldId', $sformfield_id);
-        $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function langSellerApprovalForm($sformfield_id = 0, $lang_id = 0, $autoFillLangData = 0)
-    {
-        $this->objPrivilege->canEditSellerApprovalForm();
-
-        $sformfield_id = FatUtility::int($sformfield_id);
-        $lang_id = FatUtility::int($lang_id);
-
-        if ($sformfield_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
-        }
-
-        $langFrm = $this->getSupplierApprovalLangForm($sformfield_id, $lang_id);
-        if (0 < $autoFillLangData) {
-            $updateLangDataobj = new TranslateLangData(SupplierFormFields::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($sformfield_id, $lang_id);
-            if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-            $langData = current($translatedData);
-        } else {
-            $langData = SupplierFormFields::getAttributesByLangId($lang_id, $sformfield_id);
-        }
-        if ($langData) {
-            $langFrm->fill($langData);
-        }
-
-        $this->set('languages', Language::getAllNames());
-        $this->set('sformfield_id', $sformfield_id);
-        $this->set('sformfield_lang_id', $lang_id);
-        $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
-    }
-
-    public function sellerCatalogRequests()
-    {
-        $this->objPrivilege->canViewSellerCatalogRequests();
-
-        $frmSearch = $this->catalogRequestSearchForm();
-        $this->set('frmSearch', $frmSearch);
-        $this->_template->render();
-    }
-
-    public function sellerCatalogRequestSearch()
-    {
-        $this->objPrivilege->canViewSellerCatalogRequests();
-
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $srchForm = $this->catalogRequestSearchForm();
-
-        $data = FatApp::getPostedData();
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
-        $page = FatUtility::int($page);
-        $post = $srchForm->getFormDataFromArray($data);
-
-        $userObj = new User();
-        $srch = $userObj->getUserCatalogRequestsObj();
-        $srch->addFld('tucr.*');
-        $srch->addOrder('scatrequest_date', 'desc');
-
-        if (!empty($post['keyword'])) {
-            $cond = $srch->addCondition('tucr.scatrequest_reference', '=', $post['keyword'], 'AND');
-            $cond = $srch->addCondition('tucr.scatrequest_title', '=', '%' . $post['keyword'] . '%', 'OR');
-            $cond->attachCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'OR');
-            $cond->attachCondition('uc.credential_email', 'like', '%' . $post['keyword'] . '%', 'OR');
-            $cond->attachCondition('uc.credential_username', 'like', '%' . $post['keyword'] . '%', 'OR');
-        }
-
-        if (!empty($post['date_from'])) {
-            $srch->addCondition('tucr.scatrequest_date', '>=', $post['date_from'] . ' 00:00:00');
-        }
-
-        if ($post['status'] > -1) {
-            $srch->addCondition('tucr.scatrequest_status', '=', $post['status']);
-        }
-
-        if (!empty($post['date_to'])) {
-            $srch->addCondition('tucr.scatrequest_date', '<=', $post['date_to'] . ' 23:59:59');
-        }
-
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-
-        $rs = $srch->getResultSet();
-        $records = array();
-        if ($rs) {
-            $records = FatApp::getDb()->fetchAll($rs);
-        }
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
-        $this->set('postedData', $post);
-        $this->set('reqStatusArr', User::getCatalogReqStatusArr($this->siteLangId));
-        $this->set('reqStatusClassArr', User::getCatalogRequestClassArr());
-        $this->set('canViewSellerCatalogRequests', $this->objPrivilege->canViewSellerCatalogRequests($this->admin_id, true));
-        $this->set('canEditSellerCatalogRequests', $this->objPrivilege->canEditSellerCatalogRequests($this->admin_id, true));
-        $this->_template->render(false, false);
-    }
-
-    public function downloadAttachedFileForCatalogRequest($recordId, $recordSubid = 0)
-    {
-        $recordId = FatUtility::int($recordId);
-
-        if (1 > $recordId) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SELLER_CATALOG_REQUEST, $recordId, $recordSubid);
-
-        if (false == $file_row) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $fileName = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-        AttachedFile::downloadAttachment($fileName, $file_row['afile_name']);
-    }
-
-    public function viewCatalogRequest($requestId)
-    {
-        $this->objPrivilege->canViewSellerCatalogRequests();
-        $requestId = FatUtility::int($requestId);
-
-        if (1 > $requestId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $userObj = new User();
-        $srch = $userObj->getUserCatalogRequestsObj($requestId);
-        $srch->addFld('tucr.*');
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-        if (!$rs) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $catalogRequest = FatApp::getDb()->fetch($rs);
-        if ($catalogRequest == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        if ($attachedFile = AttachedFile::getAttachment(AttachedFile::FILETYPE_SELLER_CATALOG_REQUEST, $requestId)) {
-            $this->set('attachedFile', $attachedFile['afile_name']);
-        }
-
-        $this->set('reqStatusArr', User::getCatalogReqStatusArr($this->siteLangId));
-        $this->set('catalogRequest', $catalogRequest);
-        $this->_template->render(false, false);
-    }
-
-    public function updateCatalogRequestForm($requestId)
-    {
-        $this->objPrivilege->canViewSellerCatalogRequests();
-        $requestId = FatUtility::int($requestId);
-
-        if (1 > $requestId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $data = array('requestId' => $requestId);
-        $frm = $this->catalogRequestForm();
-        $frm->fill($data);
-        $this->set('frm', $frm);
-        $this->_template->render(false, false);
-    }
-
-    public function updateCatalogRequest()
-    {
-        $this->objPrivilege->canEditSellerCatalogRequests();
-        $frm = $this->catalogRequestForm();
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $scatrequest_id = $post['requestId'];
-        unset($post['requestId']);
-
-        $userObj = new User();
-        $srch = $userObj->getUserCatalogRequestsObj($scatrequest_id);
-        $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', Shop::DB_TBL_PREFIX . 'user_id = tucr.' . User::DB_TBL_USR_CATALOG_REQ_PREFIX . 'user_id', 'shop');
-        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
-        $srch->addFld('tucr.*');
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-
-        $rs = $srch->getResultSet();
-        if (!$rs) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $catalogRequest = FatApp::getDb()->fetch($rs);
-
-        if ($catalogRequest == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $statusArr = array(User::CATALOG_REQUEST_APPROVED, User::CATALOG_REQUEST_CANCELLED);
-
-        if (!in_array($post['status'], $statusArr)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Status_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        if (in_array($post['status'], $statusArr) && in_array($catalogRequest['scatrequest_status'], $statusArr)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Status_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $db = FatApp::getDb();
-        $db->startTransaction();
-
-        if (!in_array($catalogRequest['scatrequest_status'], $statusArr) && in_array($post['status'], $statusArr)) {
-            $post['request_id'] = $catalogRequest['scatrequest_id'];
-            if (!$userObj->updateCatalogRequest($post)) {
-                $db->rollbackTransaction();
-                Message::addErrorMessage($userObj->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-        }
-
-        $email = new EmailHandler();
-        $catalogRequest['scatrequest_status'] = $post['status'];
-        $catalogRequest['scatrequest_comments'] = $post['comments'];
-
-        if (!$email->sendCatalogRequestStatusChangeNotification($this->siteLangId, $catalogRequest)) {
-            $db->rollbackTransaction();
-            Message::addErrorMessage(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $db->commitTransaction();
-        $this->set('msg', Labels::getLabel('LBL_Status_Updated_Successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function deleteFormField()
-    {
-        $this->objPrivilege->canEditSellerApprovalForm();
-
-        $sformfield_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
-        if ($sformfield_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $obj = new SupplierFormFields($sformfield_id);
-        if (!$obj->canDeleteRecord()) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        if (!$obj->deleteRecord(true)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        FatUtility::dieJsonSuccess($this->str_delete_record);
-    }
-
-    public function setFieldsOrder()
-    {
-        $this->objPrivilege->canEditSellerApprovalForm();
-
-        $post = FatApp::getPostedData();
-
-        if (!empty($post)) {
-            $obj = new SupplierFormFields();
-            if (!$obj->updateOrder($post['formFields'])) {
-                Message::addErrorMessage($obj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-
-            $this->set('msg', Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
-            $this->_template->render(false, false, 'json-success.php');
-        }
     }
 
     public function autoComplete()
@@ -1510,8 +584,7 @@ class UsersController extends AdminBaseController
         }
 
         if (isset($post['credential_active'])) {
-            $credential_active = $post['credential_active'];
-            $srch->addCondition('uc.credential_active', '=', $credential_active);
+            $srch->addCondition('uc.credential_active', '=', $post['credential_active']);
         }
 
         if (isset($post['credential_verified'])) {
@@ -1539,30 +612,12 @@ class UsersController extends AdminBaseController
         die(FatUtility::convertToJson($json));
     }
 
-    public function verify()
-    {
-        $this->objPrivilege->canVerifyUsers();
-
-        $userId = FatApp::getPostedData('userId', FatUtility::VAR_INT);
-        $v = FatApp::getPostedData('v', FatUtility::VAR_INT);
-
-        $userObj = new User($userId);
-        if (!$userObj->verifyAccount($v)) {
-            Message::addErrorMessage($userObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $this->set('msg', ((1 == $v) ? Labels::getLabel('MSG_Account_Unverified', $this->siteLangId) : Labels::getLabel('MSG_Account_Verified', $this->siteLangId)));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
     public function changeStatus($recordId, $status)
     {
         $this->objPrivilege->canEditUsers();
         $recordId = FatApp::getPostedData('userId', FatUtility::VAR_INT, 0);
         if (0 == $recordId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $userObj = new User($recordId);
@@ -1584,70 +639,47 @@ class UsersController extends AdminBaseController
         $this->objPrivilege->canEditUsers();
 
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $userIdsArr = FatUtility::int(FatApp::getPostedData('user_ids'));
-        if (empty($userIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('user_ids'));
+        if (empty($recordIdsArr) || -1 == $status) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
-        foreach ($userIdsArr as $userId) {
-            if (1 > $userId) {
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
                 continue;
             }
 
-            $this->updateUserStatus($userId, $status);
+            $this->updateUserStatus($recordId, $status);
         }
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function updateUserStatus($userId, $status)
+    private function updateUserStatus($recordId, $status)
     {
         $status = FatUtility::int($status);
-        $userId = FatUtility::int($userId);
-        if (1 > $userId || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
-        $userObj = new User($userId);
+        $userObj = new User($recordId);
 
         if (!$userObj->activateAccount($status)) {
-            Message::addErrorMessage($userObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($userObj->getError(), true);
         }
     }
 
-    public function activate()
+    public function sendMailForm($recordId)
     {
         $this->objPrivilege->canEditUsers();
-
-        $userId = FatApp::getPostedData('userId', FatUtility::VAR_INT);
-        $v = FatApp::getPostedData('v', FatUtility::VAR_INT);
-
-        $userObj = new User($userId);
-
-        if (!$userObj->activateAccount($v)) {
-            Message::addErrorMessage($userObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $this->set('msg', ((1 == $v) ? Labels::getLabel('MSG_Account_Deactivated', $this->siteLangId) : Labels::getLabel('MSG_Account_Activated', $this->siteLangId)));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function sendMailForm($user_id)
-    {
-        $this->objPrivilege->canEditUsers();
-        $user_id = FatUtility::int($user_id);
-        $userObj = new User($user_id);
+        $recordId = FatUtility::int($recordId);
+        $userObj = new User($recordId);
         $user = $userObj->getUserInfo(null, false, false);
         if (!$user) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        $frm = $this->getSendMailForm($user_id);
+        $frm = $this->getSendMailForm($recordId);
 
         $this->set('frm', $frm);
         $this->_template->render(false, false);
@@ -1661,16 +693,14 @@ class UsersController extends AdminBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $user_id = FatUtility::int($post['user_id']);
-        $userObj = new User($user_id);
+        $recordId = FatUtility::int($post['user_id']);
+        $userObj = new User($recordId);
         $user = $userObj->getUserInfo(null, false, false);
         if (!$user || empty($user['credential_email'])) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $data = array(
             'user_name' => trim($user['user_name']),
@@ -1683,8 +713,7 @@ class UsersController extends AdminBaseController
 
         $email = new EmailHandler();
         if (!$email->sendEmailToUser($this->siteLangId, $data)) {
-            Message::addErrorMessage($email->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($email->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel('LBL_Your_Message_Sent_To', $this->siteLangId) . ' - ' . $user["credential_email"]);
@@ -1694,22 +723,19 @@ class UsersController extends AdminBaseController
     public function markSellerAsBuyer()
     {
         $this->objPrivilege->canEditUsers();
-        $userId = FatApp::getPostedData('userId', FatUtility::VAR_INT, 0);
-        if (1 > $userId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+        $recordId = FatApp::getPostedData('userId', FatUtility::VAR_INT, 0);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $userObj = new User($userId);
+        $userObj = new User($recordId);
         $user = $userObj->getUserInfo(null, false, false);
         if (!$user) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $userObj->assignValues(['user_is_buyer' => User::USER_TYPE_BUYER]);
         if (!$userObj->save()) {
-            Message::addErrorMessage($userObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($userObj->getError(), true);
         }
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
@@ -1718,15 +744,15 @@ class UsersController extends AdminBaseController
     public function resendSetPasswordEmail()
     {
         $this->objPrivilege->canEditUsers();
-        $userId = FatApp::getPostedData('userId', FatUtility::VAR_INT, 0);
-        if (1 > $userId) {
-            FatUtility::dieWithError($this->str_invalid_request_id);
+        $recordId = FatApp::getPostedData('userId', FatUtility::VAR_INT, 0);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $userObj = new User($userId);
+        $userObj = new User($recordId);
         $user = $userObj->getUserInfo(['user_name', 'credential_email', 'user_is_supplier', 'user_is_affiliate', 'user_is_advertiser'], true, false);
         if (!$user) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $userType = User::USER_TYPE_BUYER;
@@ -1741,181 +767,22 @@ class UsersController extends AdminBaseController
         $userData = [
             'user_name' => $user['user_name'],
             'user_email' => $user['credential_email'],
-            'user_id' => $userId,
+            'user_id' => $recordId,
             'account_type' => User::getUserTypesArr($this->siteLangId)[$userType]
         ];
 
         if (!$userObj->sendAdminNewUserCreationEmail($userData, $this->admin_id)) {
-            FatUtility::dieJsonError(Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $this->admin_id));
+            LibHelper::exitWithError(Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $this->admin_id), true);
         }
         $this->set('msg', Labels::getLabel("MSG_Email_Sent_Successful", $this->admin_id));
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    /* public function image($userId, $sizeType = '', $afile_id = 0){
-    $default_image = 'user_deafult_image.jpg';
-    $userId = FatUtility::int($userId);
-    $afile_id = FatUtility::int($afile_id);
-    if( $afile_id > 0 ){
-    $res = AttachedFile::getAttributesById($afile_id);
-    if(!false == $res && $res['afile_type'] == AttachedFile::FILETYPE_USER_PROFILE_CROPED_IMAGE){
-                $file_row = $res;
-    }
-    } else {
-    $file_row = AttachedFile::getAttachment( AttachedFile::FILETYPE_USER_PROFILE_CROPED_IMAGE, $userId );
-    }
-    $image_name = isset($file_row['afile_physical_path']) ?  $file_row['afile_physical_path'] : '';
-
-    switch( strtoupper($sizeType) ){
-    case 'THUMB':
-                $w = 100;
-                $h = 100;
-                AttachedFile::displayImage( $image_name, $w, $h, $default_image );
-    break;
-    default:
-                $h = 400;
-                $w = 400;
-                AttachedFile::displayImage( $image_name, $w, $h, $default_image );
-    break;
-    }
-    } */
-
-    private function getCatalogRequestMessageSearchForm()
+    private function getChangePasswordForm($recordId = 0)
     {
-        $frm = new Form('frmCatalogRequestMsgsSrch');
-        $frm->addHiddenField('', 'page');
-        $frm->addHiddenField('', 'requestId');
-        return $frm;
-    }
-
-    private function supplierRequestForm()
-    {
-        $frm = new Form('supplierRequestForm');
-
-        $statusArr = User::getSupplierReqStatusArr($this->siteLangId);
-        unset($statusArr[User::SUPPLIER_REQUEST_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
-        $frm->addHiddenField('', 'requestId', 0);
-        $frm->addTextArea('', 'comments', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
-        return $frm;
-    }
-
-    private function getCatalogRequestMessageForm($requestId)
-    {
-        $frm = new Form('catalogRequestMsgForm');
-
-        $frm->addHiddenField('', 'requestId', $requestId);
-        $frm->addTextArea(Labels::getLabel('LBL_Message', $this->siteLangId), 'message')->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send', $this->siteLangId));
-        return $frm;
-    }
-
-    private function supplierRequestSearchForm()
-    {
-        $frm = new Form('frmSupplierReqSrch', array('id' => 'frmSupplierReqSrch'));
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
-
-        $statusArr = array('-1' => Labels::getLabel('LBL_All', $this->siteLangId)) + User::getSupplierReqStatusArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', $statusArr, '', array(), '');
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
-    }
-
-    private function getSupplierApprovalForm()
-    {
-        $frm = new Form('frmSuppiler');
-        $frm->addHiddenField('', 'sformfield_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->siteLangId), 'sformfield_identifier');
-        $frm->addSelectBox(Labels::getLabel('LBL_Required', $this->siteLangId), 'sformfield_required', applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_Field_Type', $this->siteLangId), 'sformfield_type', User::getFieldTypes($this->siteLangId), -1, array(), '');
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        return $frm;
-    }
-
-    private function getSupplierApprovalLangForm($sformfield_id, $lang_id)
-    {
-        if (0 < $sformfield_id) {
-            $attr = array('sformfield_id', 'sformfield_type');
-            $data = SupplierFormFields::getAttributesById($sformfield_id, $attr);
-        }
-
-        $frm = new Form('frmSuppilerLang');
-        $frm->addHiddenField('', 'sformfield_id', $sformfield_id);
-        $languages = Language::getAllNames();
-        if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'sformfieldlang_lang_id', $languages, $lang_id, array(), '');
-        } else {
-            $lang_id = array_key_first($languages);
-            $frm->addHiddenField('', 'sformfieldlang_lang_id', $lang_id);
-        }
-
-
-        $frm->addRequiredField('Caption', 'sformfield_caption');
-
-        $frm->addTextarea(Labels::getLabel('LBL_Comments', $this->siteLangId), 'sformfield_comment');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        return $frm;
-    }
-
-    private function getForm($user_id = 0)
-    {
-        $user_id = FatUtility::int($user_id);
-        $frm = new Form('frmUser', array('id' => 'frmUser'));
-        $frm->addHiddenField('', 'user_id', $user_id);
-        if (1 > $user_id) {
-            $userTypesArr = User::getUserTypesArr($this->siteLangId);
-            $fld = $frm->addSelectBox(Labels::getLabel('LBL_User_Type', $this->siteLangId), 'user_type', $userTypesArr, [], [], Labels::getLabel('LBL_Select', $this->siteLangId));
-            $fld->requirement->setRequired(true);
-        }
-
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'credential_username', '');
-        if (1 > $user_id) {
-            $fld->setUnique('tbl_user_credentials', 'credential_username', 'credential_user_id', 'user_id', 'user_id');
-            $fld->requirements()->setRequired();
-            $fld->requirements()->setUsername();
-        }
-        $frm->addRequiredField(Labels::getLabel('LBL_Customer_Name', $this->siteLangId), 'user_name');
-        $frm->addDateField(Labels::getLabel('LBL_Date_Of_Birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly'));
-        $frm->addHiddenField('', 'user_phone_dcode');
-        $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
-        $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Email', $this->siteLangId), 'credential_email', '');
-        if (1 > $user_id) {
-            $fld->setUnique('tbl_user_credentials', 'credential_email', 'credential_user_id', 'user_id', 'user_id');
-            $fld->requirements()->setRequired();
-        }
-
-        $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), [], Labels::getLabel('LBL_Select', $this->siteLangId));
-        //$fld->requirement->setRequired(true);
-
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
-        $frm->addTextBox(Labels::getLabel('LBL_City', $this->siteLangId), 'user_city');
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        return $frm;
-    }
-
-    private function getChangePasswordForm($user_id = 0)
-    {
-        $user_id = FatUtility::int($user_id);
+        $recordId = FatUtility::int($recordId);
         $frm = new Form('changePwdFrm');
-        $frm->addHiddenField('', 'user_id', $user_id);
+        $frm->addHiddenField('', 'user_id', $recordId);
 
         $newPwd = $frm->addPasswordField(
             Labels::getLabel('LBL_New_Password', $this->siteLangId),
@@ -1939,11 +806,11 @@ class UsersController extends AdminBaseController
         return $frm;
     }
 
-    private function getSendMailForm($user_id = 0)
+    private function getSendMailForm($recordId = 0)
     {
-        $user_id = FatUtility::int($user_id);
+        $recordId = FatUtility::int($recordId);
         $frm = new Form('sendMailFrm');
-        $frm->addHiddenField('', 'user_id', $user_id);
+        $frm->addHiddenField('', 'user_id', $recordId);
 
         $frm->addTextBox(Labels::getLabel('LBL_Subject', $this->siteLangId), 'mail_subject')->requirements()->setRequired(true);
         $frm->addTextArea(Labels::getLabel('LBL_Message', $this->siteLangId), 'mail_message')->requirements()->setRequired(true);
@@ -1952,33 +819,6 @@ class UsersController extends AdminBaseController
         return $frm;
     }
 
-    private function catalogRequestSearchForm()
-    {
-        $frm = new Form('frmCatalogReqSrch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
-
-        $statusArr = array('-1' => Labels::getLabel('LBL_All', $this->siteLangId)) + User::getCatalogReqStatusArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', $statusArr, '', array(), '');
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
-    }
-
-    private function catalogRequestForm()
-    {
-        $frm = new Form('catalogRequestForm');
-
-        $statusArr = User::getCatalogReqStatusArr($this->siteLangId);
-        unset($statusArr[User::CATALOG_REQUEST_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
-        $frm->addHiddenField('', 'requestId', 0);
-        $frm->addTextArea('', 'comments', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
-        return $frm;
-    }
 
     private function getBankInfoForm()
     {
@@ -1993,51 +833,24 @@ class UsersController extends AdminBaseController
         return $frm;
     }
 
-    private function getUserAddressForm($langId)
-    {
-        $langId = FatUtility::int($langId);
-        $frm = new Form('frmAddress');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Address_Label', $this->siteLangId), 'addr_title');
-        $fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_E.g:_My_Office_Address', $langId));
-        $frm->addRequiredField(Labels::getLabel('LBL_Name', $this->siteLangId), 'addr_name');
-        $frm->addRequiredField(Labels::getLabel('LBL_Address_Line1', $this->siteLangId), 'addr_address1');
-        $frm->addTextBox(Labels::getLabel('LBL_Address_Line2', $this->siteLangId), 'addr_address2');
-        $frm->addRequiredField(Labels::getLabel('LBL_City', $this->siteLangId), 'addr_city');
-
-        $countryObj = new Countries();
-        $countriesArr = $countryObj->getCountriesAssocArr($langId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'addr_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY'), [], Labels::getLabel('LBL_Select', $this->siteLangId));
-        $fld->requirement->setRequired(true);
-
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'addr_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
-        $frm->addTextBox(Labels::getLabel('LBL_Postal_Code', $this->siteLangId), 'addr_zip');
-        $frm->addHiddenField('', 'addr_phone_dcode');
-        $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
-        $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        $frm->addHiddenField('', 'addr_record_id');
-        $frm->addHiddenField('', 'addr_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        return $frm;
-    }
-
-    public function cookiesPreferencesForm($userId)
+    public function cookiesPreferencesForm($recordId)
     {
         $this->objPrivilege->canViewUsers();
-        $userId = FatUtility::int($userId);
-        if (1 > $userId) {
-            FatUtility::dieWithError($this->str_invalid_request);
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $frm = $this->getCookiesPreferencesForm();
-        $userObj = new User($userId);
+        $userObj = new User($recordId);
         $data = $userObj->getUserSelectedCookies();
         if ($data != false) {
             $frm->fill($data);
         }
 
-        $this->set('userParent', User::getAttributesById($userId, 'user_parent'));
+        $this->set('userParent', User::getAttributesById($recordId, 'user_parent'));
         $this->set('frm', $frm);
-        $this->set('user_id', $userId);
+        $this->set('user_id', $recordId);
         $this->_template->render(false, false);
     }
 
@@ -2051,5 +864,56 @@ class UsersController extends AdminBaseController
         $fld = $frm->addCheckBox(Labels::getLabel("LBL_Personalise_Experience", $this->siteLangId), 'ucp_personalized', 1, array(), false, 0);
         $fld->htmlAfterField = '<div>' . Labels::getLabel('LBL_Personalise_Cookies_Information', $this->siteLangId) . '</div>';
         return $frm;
+    }
+
+    protected function getFormColumns(): array
+    {
+        $usersTblHeadingCols = CacheHelper::get('usersTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($usersTblHeadingCols) {
+            return json_decode($usersTblHeadingCols);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+            'user_id' => Labels::getLabel('LBL_USER_ID', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_USER_NAME', $this->siteLangId),
+            'shop_name' => Labels::getLabel('LBL_SHOP', $this->siteLangId),
+            'user_registered_initially_for' => Labels::getLabel('LBL_INITIALLY_REGISTERED_AS', $this->siteLangId),
+            'user_is_buyer' => Labels::getLabel('LBL_BUYER', $this->siteLangId),
+            'user_is_supplier' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
+            'user_is_advertiser' => Labels::getLabel('LBL_ADVERTISER', $this->siteLangId),
+            'user_is_affiliate' => Labels::getLabel('LBL_AFFILIATE', $this->siteLangId),
+            'user_regdate' => Labels::getLabel('LBL_REG._Date', $this->siteLangId),
+            'credential_verified' => Labels::getLabel('LBL_VERIFIED', $this->siteLangId),
+            'credential_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+
+        CacheHelper::create('usersTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    protected function getDefaultColumns(): array
+    {
+        return [
+            'select_all',
+            'user_id',
+            'user_name',
+            'shop_name',
+            'user_registered_initially_for',
+            'user_is_buyer',
+            'user_is_supplier',
+            'user_is_advertiser',
+            'user_is_affiliate',
+            'user_regdate',
+            'credential_verified',
+            'credential_active',
+            'action',
+        ];
+    }
+
+    protected function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }

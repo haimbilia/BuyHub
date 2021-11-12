@@ -158,6 +158,30 @@ class User extends MyAppModel
         );
     }
 
+    public static function getUserTypeHtml(int $langId, int $status): string
+    {
+        $arr = static::getUserTypesArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case static::USER_TYPE_BUYER:
+                $status = HtmlHelper::SUCCESS;
+                break;
+            case static::USER_TYPE_SELLER:
+                $status = HtmlHelper::INFO;
+                break;
+            case static::USER_TYPE_ADVERTISER:
+                $status = HtmlHelper::WARNING;
+                break;
+            case static::USER_TYPE_AFFILIATE:
+                $status = HtmlHelper::DANGER;
+                break;
+            default:
+                $status = HtmlHelper::INFO;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, $msg);
+    }
+
     public static function getDeviceTypeArr($langId)
     {
         return [
