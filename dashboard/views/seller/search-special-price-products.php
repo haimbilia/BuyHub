@@ -62,12 +62,12 @@
                     );
                     $editListingFrm->addDateField($lblTitle, $column, $date, $attr);
 
-                    $td->appendElement('div', array("class" => 'js--editCol edit-hover', "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), $date, true);
+                    $td->appendElement('div', array("class" => 'js--editCol contenteditable', "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), $date, true);
                     $td->appendElement('plaintext', array(), $editListingFrm->getFieldHtml($column), true);
                     break;
                 case 'splprice_price':
                     $input = '<input type="text" data-id="' . $splPriceId . '" value="' . $row[$column] . '" data-selprodid="' . $selProdId . '" name="' . $column . '" data-oldval="' . $row[$column] . '" data-displayoldval="' . CommonHelper::displayMoneyFormat($row[$column], true, true) . '" class="js--splPriceCol hidden sp-input"/>';
-                    $td->appendElement('div', array("class" => 'js--editCol edit-hover', "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), CommonHelper::displayMoneyFormat($row[$column], true, true), true);
+                    $td->appendElement('div', array("class" => 'js--editCol contenteditable', "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), CommonHelper::displayMoneyFormat($row[$column], true, true), true);
                     $td->appendElement('plaintext', array(), $input, true);
                     if ($row['selprod_price'] > $row[$column]) {
                         $discountPrice = $row['selprod_price'] - $row[$column];

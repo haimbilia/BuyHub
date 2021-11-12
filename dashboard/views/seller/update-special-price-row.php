@@ -11,7 +11,7 @@
     </td>
     <td>
         <?php $startDate = date('Y-m-d', strtotime($data['splprice_start_date'])); ?>
-        <div class="js--editCol edit-hover"><?php echo $startDate; ?></div>
+        <div class="js--editCol contenteditable"><?php echo $startDate; ?></div>
         <?php
         $lbl = Labels::getLabel('LBL_Start_Date', $siteLangId);
         $attr = array(
@@ -29,7 +29,7 @@
     </td>
     <td>
         <?php $endDate = date('Y-m-d', strtotime($data['splprice_end_date'])); ?>
-        <div class="js--editCol edit-hover"><?php echo $endDate; ?></div>
+        <div class="js--editCol contenteditable"><?php echo $endDate; ?></div>
         <?php
         $lbl = Labels::getLabel('LBL_End_Date', $siteLangId);
         $attr = array(
@@ -46,7 +46,7 @@
         ?>
     </td>
     <td>
-        <div class="js--editCol edit-hover"><?php echo CommonHelper::displayMoneyFormat($data['splprice_price'], true, true); ?></div>
+        <div class="js--editCol contenteditable"><?php echo CommonHelper::displayMoneyFormat($data['splprice_price'], true, true); ?></div>
         <input type="text" data-displayoldval="<?php echo CommonHelper::displayMoneyFormat($data['splprice_price'], true, true); ?>"  data-id="<?php echo $splPriceId; ?>" value="<?php echo $data['splprice_price']; ?>" data-selprodid="<?php echo $data['splprice_selprod_id']; ?>" data-oldval="<?php echo $data['splprice_price']; ?>" name="splprice_price" class="js--splPriceCol hidden sp-input"/>
     </td>
     <td>
