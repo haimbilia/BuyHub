@@ -1,5 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+if (0 < $user_id) {
+    $frm->setFormTagAttribute('data-onclear', 'editAddress(' . $recordId . ', ' . $user_id . ')');
+} else {
+    $frm->setFormTagAttribute('data-onclear', 'addNew()');
+}
+
 $fld = $frm->getField('addr_title');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 

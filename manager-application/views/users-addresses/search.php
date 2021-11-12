@@ -38,7 +38,7 @@ foreach ($arrListing as $sn => $row) {
                     $addrPhone = ValidateElement::formatDialCode($row['addr_phone_dcode']) . $addrPhone;
                 }
 
-                $address = '<ul class="list-text user-addresses">
+                $address = '<ul class="list-text users-addresses">
                                 <li class="full">
                                     <span class="lable">' . Labels::getLabel('LBL_Name_&_Address', $siteLangId) . ':</span>
                                     <span class="value">' . 

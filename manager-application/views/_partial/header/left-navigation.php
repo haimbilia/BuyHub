@@ -127,12 +127,17 @@
                                 </li>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Transactions'); ?>">
-                                        <?php echo Labels::getLabel('NAV_Transactions', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_TRANSACTIONS', $siteLangId); ?>
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('DeletedUsers'); ?>">
-                                        <?php echo Labels::getLabel('NAV_Deleted_Users', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_DELETED_USERS', $siteLangId); ?>
+                                    </a>
+                                </li>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('UsersAddresses'); ?>">
+                                        <?php echo Labels::getLabel('NAV_USERS_ADDRESSES', $siteLangId); ?>
                                     </a>
                                 </li>
                             <?php } ?>

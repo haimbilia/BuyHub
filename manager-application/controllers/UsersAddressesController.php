@@ -1,6 +1,6 @@
 <?php
 
-class UserAddressesController extends AdminBaseController
+class UsersAddressesController extends AdminBaseController
 {
     public function __construct($action)
     {
@@ -28,7 +28,7 @@ class UserAddressesController extends AdminBaseController
     {
         $this->getListingData();
         $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'user-addresses/search.php', true),
+            'listingHtml' => $this->_template->render(false, false, 'users-addresses/search.php', true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
         LibHelper::exitWithSuccess($jsonData, true);
@@ -321,7 +321,7 @@ class UserAddressesController extends AdminBaseController
             case 'index':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_USERS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Users')],
-                    ['title' => Labels::getLabel('LBL_User_Addresses', $this->siteLangId)]
+                    ['title' => Labels::getLabel('LBL_USERS_ADDRESSES', $this->siteLangId)]
                 ];
         }
         return $this->nodes;
