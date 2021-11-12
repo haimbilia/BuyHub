@@ -57,7 +57,7 @@ class AbusiveWordsController extends AdminBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = Abusive::getSearchObject();
-        $srch->addMultipleFields(['aw.*', 'tl.*', 'abusive_id as listSerial']);
+        $srch->addMultipleFields(['aw.*', 'tl.*']);
         $srch->joinTable('tbl_languages', 'inner join', 'abusive_lang_id = language_id and language_active = ' . applicationConstants::ACTIVE, 'tl');
         
         $srch->addOrder($sortBy, $sortOrder);
@@ -203,7 +203,7 @@ class AbusiveWordsController extends AdminBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'abusive_keyword');
         }
         
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
@@ -234,7 +234,7 @@ class AbusiveWordsController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $abusiveWordsTblHeadingCols = CacheHelper::get('abusiveWordsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($abusiveWordsTblHeadingCols) {
@@ -257,7 +257,7 @@ class AbusiveWordsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [    
             'select_all',
@@ -268,7 +268,7 @@ class AbusiveWordsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

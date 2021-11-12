@@ -60,8 +60,7 @@ class ImportInstructionsController extends AdminBaseController
         $srch->addCondition('epage_content_for', '=', Extrapage::CONTENT_IMPORT_INSTRUCTION);
         $srch->addMultipleFields([
             'ep.*',
-            'ep_l.*',
-            'ep.epage_id as listSerial'
+            'ep_l.*'
         ]);
 
         if (!empty($post['keyword'])) {
@@ -216,7 +215,7 @@ class ImportInstructionsController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $importInstructionsTblHeadingCols = CacheHelper::get('importInstructionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($importInstructionsTblHeadingCols) {
@@ -233,7 +232,7 @@ class ImportInstructionsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'listSerial',
@@ -242,7 +241,7 @@ class ImportInstructionsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

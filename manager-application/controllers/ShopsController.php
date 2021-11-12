@@ -13,8 +13,7 @@ class ShopsController extends AdminBaseController {
      * @param  bool $setVariable
      * @return void
      */
-    protected function checkEditPrivilege(bool $setVariable = false): void
-    {
+    protected function checkEditPrivilege(bool $setVariable = false): void {
         if (true === $setVariable) {
             $this->set("canEdit", $this->objPrivilege->canEditShops($this->admin_id, true));
         } else {
@@ -28,15 +27,14 @@ class ShopsController extends AdminBaseController {
      * @param  array $constructorArgs
      * @return void
      */
-    protected function setModel(array $constructorArgs = []): void
-    {
+    protected function setModel(array $constructorArgs = []): void {
         $this->modelObj = (new ReflectionClass('Shop'))->newInstanceArgs($constructorArgs);
     }
 
     public function index() {
         $this->search();
         $this->set('canEdit', $this->objPrivilege->canEditShops($this->admin_id, true));
-        $this->set("frmSearch", $this->getSearchForm(false, $this->getFormColumns()));
+        $this->set("frmSearch", $this->getSearchForm($this->getFormColumns()));
         $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_SHOPS', $this->siteLangId));
         $this->set('canViewShopReports', $this->objPrivilege->canViewShopReports(0, true));
         $this->set('canViewSellerProducts', $this->objPrivilege->canViewSellerProducts(0, true));
@@ -57,7 +55,7 @@ class ShopsController extends AdminBaseController {
         if (!array_key_exists($sortBy, $fields) || $sortBy == 'listSerial') {
             $sortBy = current($allowedKeysForSorting);
         }
-        $searchForm = $this->getSearchForm(false, $fields);
+        $searchForm = $this->getSearchForm($fields);
         $data = FatApp::getPostedData();
         $post = $searchForm->getFormDataFromArray($data);
         $post['sortOrder'] = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
@@ -390,28 +388,27 @@ class ShopsController extends AdminBaseController {
         $frm->addHiddenField('', 'min_height');
         $frm->addHTML('', 'shop_banner', '');
         return $frm;
-    } 
+    }
 
-    public function getSearchForm($request = false, $fields = []) {
+    public function getSearchForm($fields = []) {
         $frm = new Form('frmRecordSearch');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
-
-        if ($request) {
-            $frm->addTextBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off', 'placeholder' => Labels::getLabel('LBL_SELLER_NAME_OR_EMAIL', $this->siteLangId)));
-            $frm->addHiddenField('', 'user_id');
-        }
-
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'shop_name');
         }
-
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
+        $frm->addHiddenField('', 'shop_id');
+        $frm->addSelectBox(Labels::getLabel('LBL_Featured', $this->siteLangId), 'shop_featured', array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'shop_active', array('-1' => 'Does not Matter') + applicationConstants::getActiveInactiveArr($this->siteLangId), -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Shop_Status_By_Seller', $this->siteLangId), 'shop_supplier_display_status', array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getOnOffArr($this->siteLangId), -1, array(), '');
+        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         return $frm;
     }
 
-    private function getFormColumns(): array {
+    protected function getFormColumns(): array {
         $shopsTblHeadingCols = CacheHelper::get('shopsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
             return json_decode($shopsTblHeadingCols);
@@ -419,7 +416,7 @@ class ShopsController extends AdminBaseController {
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),   
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'shop_name' => Labels::getLabel('LBL_SHOP_NAME', $this->siteLangId),
             'numOfProducts' => Labels::getLabel('LBL_Products', $this->siteLangId),
             'numOfReports' => Labels::getLabel('LBL_Reports', $this->siteLangId),
@@ -438,7 +435,7 @@ class ShopsController extends AdminBaseController {
         $shop_id = FatUtility::int($shop_id);
         $frm = new Form('frmShop');
         $action = ($shop_id > 0) ? Labels::getLabel('FRM_Add_New', $this->siteLangId) : Labels::getLabel('FRM_UPDATE', $this->siteLangId);
-        $frm->addHiddenField('', 'shop_id', $shop_id); 
+        $frm->addHiddenField('', 'shop_id', $shop_id);
         $frm->addRequiredField(Labels::getLabel('LBL_Shop_Name', $this->siteLangId), 'shop_name');
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Shop_SEO_Friendly_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
@@ -470,7 +467,7 @@ class ShopsController extends AdminBaseController {
         $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->siteLangId), 'shop_fulfillment_type', $fulFillmentArr, applicationConstants::NO, [], Labels::getLabel('LBL_Select', $this->siteLangId));
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'shop_active', $activeInactiveArr, '', array(), '');
-        $this->appendLangFormFields($frm , $this->siteLangId);
+        $this->appendLangFormFields($frm, $this->siteLangId);
         $frm->addHiddenField('', 'shop_lat');
         $frm->addHiddenField('', 'shop_lng');
         $frm->addHtml('', 'space', '');
@@ -506,10 +503,10 @@ class ShopsController extends AdminBaseController {
         return $frm;
     }
 
-    private function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array {
         return [
             'select_all',
-            'listSerial',            
+            'listSerial',
             'shop_name',
             'numOfProducts',
             'numOfReports',
@@ -522,7 +519,7 @@ class ShopsController extends AdminBaseController {
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array {
+    protected function excludeKeysForSort($fields = []): array {
         return array_diff($fields, ['shop_active', 'numOfReports', 'numOfProducts', 'numOfReviews'], Common::excludeKeysForSort());
     }
 

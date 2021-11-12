@@ -36,7 +36,7 @@ class AdminShopSearch extends SearchBase {
             'shop.shop_updated_on'
         ]);
         $this->joinWithUser();
-        $this->joinWithCredential();
+        $this->joinWithCredential(); 
         $results = Fatapp::getDb()->fetchAll($this->getResultSet());
         if (empty($results)) {
             return [];
@@ -102,6 +102,11 @@ class AdminShopSearch extends SearchBase {
             return;
         }
 
+        if (!empty($conditions['sortOrder']) && !empty($conditions['sortBy'])) {
+            $this->addOrder($conditions['sortBy'], $conditions['sortOrder']);
+        }
+
+
         if (isset($conditions['page']) && !empty($conditions['page'])) {
             $this->setPageNumber(FatUtility::int($conditions['page']));
         }
@@ -118,9 +123,32 @@ class AdminShopSearch extends SearchBase {
             $cond->attachCondition('cred.credential_username', 'like', '%' . $conditions['keyword'] . '%', 'OR');
             $cond->attachCondition('cred.credential_email', 'like', '%' . $conditions['keyword'] . '%', 'OR');
         }
+        $shopFeatured = FatUtility::convertToType($conditions['shop_featured'], FatUtility::VAR_INT, -1);
+        if ($shopFeatured > -1 && $conditions['shop_featured'] != '') {
+            $this->addCondition('shop_featured', '=', $shopFeatured);
+        }
 
-        if (!empty($conditions['sortOrder']) && !empty($conditions['sortBy'])) {
-            $this->addOrder($conditions['sortBy'], $conditions['sortOrder']);
+        $shopActive = FatUtility::convertToType($conditions['shop_active'], FatUtility::VAR_INT, -1);
+        if ($shopActive > -1 && $conditions['shop_active'] != '') {
+            $this->addCondition('shop_active', '=', $shopActive);
+        }
+        $shopDisplayStatus = FatUtility::convertToType($conditions['shop_supplier_display_status'], FatUtility::VAR_INT, -1);
+        if ($shopDisplayStatus > -1 && $conditions['shop_supplier_display_status'] != '') {
+            $this->addCondition('shop_supplier_display_status', '=', $shopDisplayStatus);
+        }
+
+        $date_from = FatUtility::convertToType($conditions['date_from'], FatUtility::VAR_DATE, '');
+        if (!empty($date_from)) {
+            $this->addCondition('shop_created_on', '>=', $date_from . ' 00:00:00');
+        }
+
+        $date_to = FatUtility::convertToType($conditions['date_to'], FatUtility::VAR_DATE, '');
+        if (!empty($date_to)) {
+            $this->addCondition('shop_created_on', '<=', $date_to . ' 23:59:59');
+        }
+
+        if (!empty($conditions['shop_id'])) {
+            $this->addCondition('shop_id', '=', $conditions['shop_id']);
         }
     }
 

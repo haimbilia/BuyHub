@@ -57,12 +57,8 @@ class SystemLogController extends AdminBaseController
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
-        $attr = array(
-            'sylog.*',
-            'slog_id as listSerial'
-        );
         $srch = SystemLog::getSearchObject();
-        $srch->addMultipleFields($attr);
+        $srch->addMultipleFields(array('sylog.*'));
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('slog_content', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('slog_title', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -112,7 +108,7 @@ class SystemLogController extends AdminBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'slog_title');
         }
         
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
@@ -148,7 +144,7 @@ class SystemLogController extends AdminBaseController
         $this->_template->render(false, false, null, false, false);
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $systemLogTblHeadingCols = CacheHelper::get('systemLogTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($systemLogTblHeadingCols) {
@@ -168,7 +164,7 @@ class SystemLogController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'listSerial',
@@ -181,7 +177,7 @@ class SystemLogController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

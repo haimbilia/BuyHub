@@ -279,7 +279,7 @@ class ImageAttributesController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns()
+    protected function getFormColumns()
     {
         $imgAttrCacheVar = CacheHelper::get('imgAttrCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($imgAttrCacheVar) {
@@ -295,7 +295,7 @@ class ImageAttributesController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'listSerial',
@@ -304,7 +304,7 @@ class ImageAttributesController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

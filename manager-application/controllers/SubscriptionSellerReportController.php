@@ -161,7 +161,7 @@ class SubscriptionSellerReportController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns()
+    protected function getFormColumns()
     {
         $spackageSReportsCacheVar = FatCache::get('spackageSReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$spackageSReportsCacheVar) {
@@ -182,7 +182,7 @@ class SubscriptionSellerReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['user_name', 'ossubs_subscription_name', 'ossubs_from_date', 'ossubs_till_date', 'spRenewals', 'spackageCancelled', 'subscriptionCharges'];
     }
