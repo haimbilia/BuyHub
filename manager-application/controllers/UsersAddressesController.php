@@ -276,9 +276,9 @@ class UsersAddressesController extends AdminBaseController
 
     protected function getFormColumns(): array
     {
-        $userAddressesTblHeadingCols = CacheHelper::get('userAddressesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($userAddressesTblHeadingCols) {
-            return json_decode($userAddressesTblHeadingCols);
+        $usersAddressesTblHeadingCols = CacheHelper::get('usersAddressesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($usersAddressesTblHeadingCols) {
+            return json_decode($usersAddressesTblHeadingCols);
         }
 
         $arr = [
@@ -291,7 +291,7 @@ class UsersAddressesController extends AdminBaseController
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
 
-        CacheHelper::create('userAddressesTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('usersAddressesTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
