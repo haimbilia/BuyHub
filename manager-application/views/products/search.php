@@ -14,15 +14,14 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="product_ids[]" value=' . $row['product_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="record_ids[]" value=' . $row['product_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'images':
-
-                HtmlHelper::imageListCard(AttachedFile::FILETYPE_PRODUCT_IMAGE, $row['product_id'],0,$row['product_updated_on']);
-                $td->appendElement('plaintext', $tdAttr, '');
+            case 'images':            
+                $str = HtmlHelper::imageListCard(AttachedFile::FILETYPE_PRODUCT_IMAGE,$row['product_name'], $row['product_id'],0,$row['product_updated_on']);
+                $td->appendElement('plaintext', $tdAttr, $str ,true);
                 break;
             case 'product_identifier':
                 $str ='<div class="user-profile">
@@ -35,7 +34,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'user_name':
                 if ($canViewUsers) {
-                    !empty($row[$key]) ? $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('Users') . '",' . $row['product_seller_id'] . ')'), $row[$key]) : $td->appendElement('plaintext', $tdAttr, (!empty($row[$key]) ? $row[$key] : 'Admin'), true);
+                    !empty($row[$key]) ? $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('Users') . '",{user_id:'.$row['product_seller_id'].'})'), $row[$key]) : $td->appendElement('plaintext', $tdAttr, (!empty($row[$key]) ? $row[$key] : 'Admin'), true);
                 } else {
                     $td->appendElement('plaintext', $tdAttr, (!empty($row[$key]) ? $row[$key] : 'Admin'), true);
                 }

@@ -28,7 +28,7 @@
                                 </label>
                             
                                 <?php if ($canEdit) { ?>                            
-                                    <button onClick="editRecord(<?php echo $row['prodcat_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>" class="btn btn-clean btn-sm clickable">
+                                    <button onClick="editRecord('<?php echo $row['prodcat_id']; ?>')" title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>" class="btn btn-clean btn-sm clickable">
                                         <svg class="svg clickable" width="18" height="18">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                                             </use>

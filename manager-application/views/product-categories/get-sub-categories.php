@@ -28,7 +28,7 @@ if (count($childCategories) > 0) {
                     </label>
                 </span> 
                 <?php if ($canEdit) { ?>               
-                <button onClick="editRecord<?php echo $row['prodcat_id']; ?>)"
+                <button onClick="editRecord(<?php echo $row['prodcat_id']; ?>)"
                     title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>"
                     class="btn btn-clean btn-sm btn-icon clickable">
                     <svg class="svg clickable" width="18" height="18">
