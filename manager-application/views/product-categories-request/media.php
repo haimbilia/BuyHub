@@ -55,7 +55,7 @@ $otherButtons = [
     ]
 ];
 
-$formTitle = Labels::getLabel('LBL_BRAND_SETUP', $siteLangId); ?>
+$formTitle = Labels::getLabel('LBL_Category_SETUP', $siteLangId); ?>
 
 <?php require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
@@ -100,9 +100,9 @@ $formTitle = Labels::getLabel('LBL_BRAND_SETUP', $siteLangId); ?>
         }
 
         var slide_screen = $(this).val();
-        var brand_id = $(this).closest("form").find('input[name="brand_id"]').val();
+        var mediaRecordId = $(this).closest("form").find('input[name="prodcat_id"]').val();
         var lang_id = $("#imageLanguageJs").val();
-        brandImages(brand_id, 'image', slide_screen, lang_id);
+        images(mediaRecordId, 'image', slide_screen, lang_id);
     });
 
     $(document).on('change', '.prefRatio-js', function() {     
