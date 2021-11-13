@@ -30,8 +30,8 @@ HtmlHelper::renderHiddenFields($frmSearch);
             <div class="col-md-4"> 
                 <?php echo $frmSearch->getFieldHtml('keyword'); ?>  
             </div>
-            <div class="col-md-4">
-                <?php echo $frmSearch->getFieldHtml('user_id'); ?> 
+            <div class="col-md-4"> 
+                <?php echo $frmSearch->getFieldHtml('user_id'); ?>
             </div>
             <div class="col-md-4">
                 <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
