@@ -1,6 +1,6 @@
 <?php
 
-class NavigationsController extends AdminBaseController
+class NavigationsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

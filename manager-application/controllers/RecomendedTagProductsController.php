@@ -1,5 +1,5 @@
 <?php
-class RecomendedTagProductsController extends AdminBaseController
+class RecomendedTagProductsController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -34,7 +34,7 @@ class RecomendedTagProductsController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $post = FatApp::getPostedData();
 

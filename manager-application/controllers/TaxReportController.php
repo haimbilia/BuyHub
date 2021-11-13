@@ -1,6 +1,6 @@
 <?php
 
-class TaxReportController extends AdminBaseController
+class TaxReportController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

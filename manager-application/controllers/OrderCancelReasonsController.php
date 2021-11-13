@@ -1,6 +1,6 @@
 <?php
 
-class OrderCancelReasonsController extends AdminBaseController
+class OrderCancelReasonsController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -48,7 +48,7 @@ class OrderCancelReasonsController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();

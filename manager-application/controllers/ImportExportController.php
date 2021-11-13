@@ -1,6 +1,6 @@
 <?php
 
-class ImportExportController extends AdminBaseController
+class ImportExportController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -869,7 +869,7 @@ class ImportExportController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 

@@ -1,6 +1,6 @@
 <?php
 
-class PreferredPaymentMethodController extends AdminBaseController
+class PreferredPaymentMethodController extends ListingBaseController
 {
 
     public function __construct($action)

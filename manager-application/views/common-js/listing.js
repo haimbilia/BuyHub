@@ -367,7 +367,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             } else if ("openMediaForm" in t) {
                 mediaForm(t.recordId);
             } else if ('' != callback) {
-                window[callback]();
+                window[callback](t.recordId);
             }
         });
     };

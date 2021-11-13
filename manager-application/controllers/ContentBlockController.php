@@ -1,6 +1,6 @@
 <?php
 
-class ContentBlockController extends AdminBaseController
+class ContentBlockController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

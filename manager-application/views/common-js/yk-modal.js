@@ -1,10 +1,11 @@
 (function ($) {
-    $.ykmodal = function (data, displayInPopup = false, dialogClassParm = "", modalClassParm = "", bodyClass = "") {
-
-        var modalClass = 'fixed-right ' + modalClassParm;
+    var displayInPopup = false;
+    $.ykmodal = function (data, popupView = false, dialogClassParm = "", modalClassParm = "", bodyClass = "") {
+        modalClass = 'fixed-right ' + modalClassParm;
         var dialogClass = 'modal-dialog-vertical ' + dialogClassParm;
         var bodyClass = 'pd-0 ' + bodyClass;
-        if (true == displayInPopup) {
+        displayInPopup = popupView;
+        if (true == popupView) {
             modalClass = modalClassParm;
             dialogClass = 'modal-dialog-centered ' + dialogClassParm;
         }
@@ -45,6 +46,7 @@
             if ("undefined" != typeof bodyClass && 0 == $(data).find(bodyClass).length) {
                 $(contentBody + " .modal-body").addClass(bodyClass)
             }
+
             $.ykmodal.show();
         },
         close: function () {
@@ -57,6 +59,9 @@
         },
         isAdded: function () {
             return (0 < $("." + $.ykmodal.element).length);
+        },
+        remove: function () {
+            $("." + $.ykmodal.element + ', .modal-backdrop').remove();
         }
     });
 
@@ -65,6 +70,10 @@
             var content = '<div class="modal-dialog ' + dialogClass + ' " role="document"><div class="modal-content contentBody--js"></div></div>';
             var htm = '<div class="modal ' + modalClass + ' fade ' + $.ykmodal.element + '" tabindex="-1" role="dialog">' + content + "</div>";
             $("body").append(htm)
+        } else if (true === displayInPopup && true === $("." + $.ykmodal.element).hasClass('fixed-right')) {
+            $("." + $.ykmodal.element).removeClass('fixed-right');
+        } else if (false === displayInPopup && false === $("." + $.ykmodal.element).hasClass('fixed-right')) {
+            $("." + $.ykmodal.element).addClass('fixed-right');
         }
 
         if (dialogClass != '' && !$("body ." + $.ykmodal.element + " .modal-dialog").hasClass(dialogClass)) {

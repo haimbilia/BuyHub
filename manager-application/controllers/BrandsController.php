@@ -1,28 +1,17 @@
 <?php
 
-class BrandsController extends AdminBaseController {
+class BrandsController extends ListingBaseController
+{
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewBrands();
         $this->rewriteUrl = Brand::REWRITE_URL_PREFIX;
     }
 
-    /**
-     * setLangTemplateData - This function is use to automate load langform and save it. 
-     *
-     * @param  array $constructorArgs
-     * @return void
-     */
-    protected function setLangTemplateData(array $constructorArgs = []): void {
-        $this->objPrivilege->canEditBrands();
-        $this->modelObj = (new ReflectionClass('Brand'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_BRAND_SETUP', $this->siteLangId));
-        $this->checkMediaExist = true;
-    }
-
-    public function index() {
+    public function index()
+    {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_BRANDS', $this->siteLangId);
@@ -40,19 +29,8 @@ class BrandsController extends AdminBaseController {
         $this->_template->render();
     }
 
-    public function getSearchForm($fields = []) {
-        $frm = new Form('frmRecordSearch');
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
-        $fld->overrideFldType('search');
-        if (!empty($fields)) {
-            $this->addSortingElements($frm, 'brand_identifier');
-        }
-        HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
-        return $frm;
-    }
-
-    public function search() {
+    public function search()
+    {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'brands/search.php', true),
@@ -61,7 +39,8 @@ class BrandsController extends AdminBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData() {
+    protected function getListingData()
+    {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $data = FatApp::getPostedData();
@@ -120,7 +99,8 @@ class BrandsController extends AdminBaseController {
         $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));
     }
 
-    public function form() {
+    public function form()
+    {
         $this->objPrivilege->canEditBrands();
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
@@ -152,7 +132,8 @@ class BrandsController extends AdminBaseController {
         $this->_template->render(false, false);
     }
 
-    public function setup() {
+    public function setup()
+    {
         $this->objPrivilege->canEditBrands();
 
         $frm = $this->getForm();
@@ -229,7 +210,8 @@ class BrandsController extends AdminBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getForm($recordId = 0) {
+    private function getForm($recordId = 0)
+    {
         $this->objPrivilege->canEditBrands();
         $recordId = FatUtility::int($recordId);
 
@@ -253,7 +235,8 @@ class BrandsController extends AdminBaseController {
         return $frm;
     }
 
-    protected function getLangForm($recordId = 0, $lang_id = 0) {
+    protected function getLangForm($recordId = 0, $lang_id = 0)
+    {
         $frm = new Form('frmProdBrandLang', array('id' => 'frmProdBrandLang'));
         $frm->addHiddenField('', 'brand_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
@@ -261,7 +244,8 @@ class BrandsController extends AdminBaseController {
         return $frm;
     }
 
-    public function media($recordId = 0, $langId = 0, $slide_screen = 0) {
+    public function media($recordId = 0, $langId = 0, $slide_screen = 0)
+    {
         $this->objPrivilege->canEditBrands();
         $recordId = FatUtility::int($recordId);
         $logoFrm = $this->getBrandLogoForm($recordId);
@@ -291,7 +275,8 @@ class BrandsController extends AdminBaseController {
         $this->_template->render(false, false);
     }
 
-    public function images($brand_id, $file_type, $lang_id = 0, $slide_screen = 0) {
+    public function images($brand_id, $file_type, $lang_id = 0, $slide_screen = 0)
+    {
         $languages = Language::getAllNames();
         $slide_screen = FatUtility::int($slide_screen);
         $brand_id = FatUtility::int($brand_id);
@@ -316,7 +301,8 @@ class BrandsController extends AdminBaseController {
         $this->_template->render(false, false);
     }
 
-    public function requestMedia($brand_id = 0) {
+    public function requestMedia($brand_id = 0)
+    {
         $this->objPrivilege->canEditBrands();
         $brand_id = FatUtility::int($brand_id);
         $brandLogoFrm = $this->getBrandLogoForm($brand_id);
@@ -328,7 +314,8 @@ class BrandsController extends AdminBaseController {
         $this->_template->render(false, false);
     }
 
-    public function uploadMedia() {
+    public function uploadMedia()
+    {
         $this->objPrivilege->canEditBrands();
         $post = FatApp::getPostedData();
         if (empty($post)) {
@@ -357,17 +344,17 @@ class BrandsController extends AdminBaseController {
         $fileHandlerObj->deleteFile($file_type, $brand_id, 0, 0, $lang_id, $slide_screen);
 
         if (!$fileHandlerObj->saveAttachment(
-                        $_FILES['cropped_image']['tmp_name'],
-                        $file_type,
-                        $brand_id,
-                        0,
-                        $_FILES['cropped_image']['name'],
-                        -1,
-                        false,
-                        $lang_id,
-                        $slide_screen,
-                        $aspectRatio
-                )) {
+            $_FILES['cropped_image']['tmp_name'],
+            $file_type,
+            $brand_id,
+            0,
+            $_FILES['cropped_image']['name'],
+            -1,
+            false,
+            $lang_id,
+            $slide_screen,
+            $aspectRatio
+        )) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
@@ -377,7 +364,8 @@ class BrandsController extends AdminBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function isMediaUploaded($brandId) {
+    protected function isMediaUploaded($brandId)
+    {
         $attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brandId, 0);
         if (false !== $attachment && 0 < $attachment['afile_id']) {
             return true;
@@ -385,7 +373,8 @@ class BrandsController extends AdminBaseController {
         return false;
     }
 
-    public function getBrandLogoForm($brandId) {
+    public function getBrandLogoForm($brandId)
+    {
         $frm = new Form('frmBrandLogo');
         $languagesAssocArr = Language::getAllNames();
         $frm->addHiddenField('', 'brand_id', $brandId);
@@ -409,7 +398,8 @@ class BrandsController extends AdminBaseController {
         return $frm;
     }
 
-    public function getBrandImageForm($brandId) {
+    public function getBrandImageForm($brandId)
+    {
         $frm = new Form('frmBrandImage');
         $languagesAssocArr = Language::getAllNames();
         $frm->addHiddenField('', 'brand_id', $brandId);
@@ -429,7 +419,8 @@ class BrandsController extends AdminBaseController {
         return $frm;
     }
 
-    public function requestLangForm($brand_id = 0, $lang_id = 0, $autoFillLangData = 0) {
+    public function requestLangForm($brand_id = 0, $lang_id = 0, $autoFillLangData = 0)
+    {
         $this->objPrivilege->canEditBrands();
 
         $brand_id = FatUtility::int($brand_id);
@@ -463,7 +454,8 @@ class BrandsController extends AdminBaseController {
         $this->_template->render(false, false);
     }
 
-    public function removeBrandMedia($brand_id, $imageType = '', $afileId = 0) {
+    public function removeBrandMedia($brand_id, $imageType = '', $afileId = 0)
+    {
         $brand_id = FatUtility::int($brand_id);
         if (!$brand_id) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -483,7 +475,8 @@ class BrandsController extends AdminBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteRecord() {
+    public function deleteRecord()
+    {
         $this->objPrivilege->canEditBrands();
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
@@ -497,7 +490,8 @@ class BrandsController extends AdminBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteSelected() {
+    public function deleteSelected()
+    {
         $this->objPrivilege->canEditBrands();
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('brandIds'));
 
@@ -515,7 +509,8 @@ class BrandsController extends AdminBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($recordId) {
+    private function markAsDeleted($recordId)
+    {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -531,7 +526,8 @@ class BrandsController extends AdminBaseController {
         }
     }
 
-    public function autoComplete() {
+    public function autoComplete()
+    {
         $this->objPrivilege->canViewBrands();
 
         $pagesize = 5;
@@ -544,15 +540,15 @@ class BrandsController extends AdminBaseController {
         $brand = new Brand();
         $srch = $brand->getSearchObject();
         $srch->joinTable(
-                Brand::DB_TBL . '_lang',
-                'LEFT OUTER JOIN',
-                'brandlang_brand_id = brand_id AND brandlang_lang_id = ' . $this->siteLangId
+            Brand::DB_TBL . '_lang',
+            'LEFT OUTER JOIN',
+            'brandlang_brand_id = brand_id AND brandlang_lang_id = ' . $this->siteLangId
         );
         $srch->addMultipleFields(array('brand_id, IFNULL(brand_name, brand_identifier) as brand_name'));
 
         if (!empty($post['keyword'])) {
             $srch->addCondition('brand_name', 'LIKE', '%' . $post['keyword'] . '%')
-                    ->attachCondition('brand_identifier', 'LIKE', '%' . $post['keyword'] . '%');
+                ->attachCondition('brand_identifier', 'LIKE', '%' . $post['keyword'] . '%');
         }
         $srch->addCondition('brand_active', '=', applicationConstants::YES);
         $srch->addCondition('brand_deleted', '=', applicationConstants::NO);
@@ -581,7 +577,8 @@ class BrandsController extends AdminBaseController {
         die(FatUtility::convertToJson($json));
     }
 
-    public function updateStatus() {
+    public function updateStatus()
+    {
         $this->objPrivilege->canEditBrands();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if (0 == $recordId) {
@@ -598,7 +595,8 @@ class BrandsController extends AdminBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function toggleBulkStatuses() {
+    public function toggleBulkStatuses()
+    {
         $this->objPrivilege->canEditBrands();
 
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
@@ -619,7 +617,23 @@ class BrandsController extends AdminBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function changeStatus($recordId, $status) {
+    /**
+     * setLangTemplateData - This function is use to automate load langform and save it. 
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->objPrivilege->canEditBrands();
+        $this->modelObj = (new ReflectionClass('Brand'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_BRAND_SETUP', $this->siteLangId));
+        $this->checkMediaExist = true;
+    }
+
+    protected function changeStatus($recordId, $status)
+    {
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId || -1 == $status) {
@@ -632,7 +646,8 @@ class BrandsController extends AdminBaseController {
         }
     }
 
-    private function getFormColumns(): array {
+    protected function getFormColumns(): array
+    {
         $brandsTblHeadingCols = CacheHelper::get('brandsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($brandsTblHeadingCols) {
             return json_decode($brandsTblHeadingCols);
@@ -651,7 +666,8 @@ class BrandsController extends AdminBaseController {
         return $arr;
     }
 
-    private function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array
+    {
         return [
             'select_all',
             'listSerial',
@@ -663,8 +679,8 @@ class BrandsController extends AdminBaseController {
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array {
+    protected function excludeKeysForSort($fields = []): array
+    {
         return array_diff($fields, ['brand_logo', 'brand_active', 'seo_url'], Common::excludeKeysForSort());
     }
-
 }

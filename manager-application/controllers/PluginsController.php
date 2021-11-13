@@ -1,6 +1,6 @@
 <?php
 
-class PluginsController extends AdminBaseController
+class PluginsController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -59,7 +59,7 @@ class PluginsController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $db = FatApp::getDb();
 

@@ -1,6 +1,6 @@
 <?php
 
-class OrdersController extends AdminBaseController
+class OrdersController extends ListingBaseController
 {
     private $shippingService;
     public function __construct($action)

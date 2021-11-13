@@ -1,6 +1,6 @@
 <?php
 
-class ProductTempImagesController extends AdminBaseController
+class ProductTempImagesController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

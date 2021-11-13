@@ -1,6 +1,6 @@
 <?php
 
-class BrandRequestsController extends AdminBaseController
+class BrandRequestsController extends ListingBaseController
 {
 
     public function __construct($action)
@@ -48,10 +48,9 @@ class BrandRequestsController extends AdminBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm,'brand_name');
         }
-        $frm->addSelectBox(Labels::getLabel('LBL_Seller_Name_Or_Email', $this->siteLangId), 'user_name', []);
-        $frm->addHiddenField('', 'user_id');
+        $frm->addSelectBox(Labels::getLabel('LBL_Seller_Name_Or_Email', $this->siteLangId), 'user_id', []); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -67,7 +66,7 @@ class BrandRequestsController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $this->objPrivilege->canViewBrandRequests();
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));

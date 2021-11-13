@@ -1,7 +1,11 @@
 <?php
 
-class StatesController extends AdminBaseController
+class StatesController extends ListingBaseController
 {
+    protected $modelClass = 'States';
+    protected $pageKey = 'MANAGE_STATES';
+    protected $keyworldFldPlaceholder = 'FRM_SEARCH_STATES';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -17,27 +21,9 @@ class StatesController extends AdminBaseController
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditStates();
-        $this->modelObj = (new ReflectionClass('States'))->newInstanceArgs($constructorArgs);
+        $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->set('formTitle', Labels::getLabel('LBL_STATE_SETUP', $this->siteLangId));
-    }
-
-    public function index()
-    {
-        $fields = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($fields);
-
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_STATES', $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-
-        $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
-        $this->set("frmSearch", $frmSearch);
-
-        $this->set('pageData', $pageData);
-        $this->set('pageTitle', $pageTitle);
-        $this->getListingData();
-
-        $this->_template->render();
     }
 
     public function getSearchForm($fields = [])
@@ -69,7 +55,7 @@ class StatesController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 

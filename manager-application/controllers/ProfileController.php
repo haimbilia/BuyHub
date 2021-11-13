@@ -1,6 +1,6 @@
 <?php
 
-class ProfileController extends AdminBaseController
+class ProfileController extends ListingBaseController
 {
     public $_adminId = 0;
     public function __construct($action)

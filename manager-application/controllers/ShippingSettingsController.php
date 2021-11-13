@@ -1,6 +1,6 @@
 <?php
 
-class ShippingSettingsController extends AdminBaseController
+class ShippingSettingsController extends ListingBaseController
 {
     public function getShippingSettings($keyName)
     {

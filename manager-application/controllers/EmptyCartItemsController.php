@@ -1,5 +1,5 @@
 <?php
-class EmptyCartItemsController extends AdminBaseController
+class EmptyCartItemsController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -46,7 +46,7 @@ class EmptyCartItemsController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 

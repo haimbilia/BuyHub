@@ -1,6 +1,6 @@
 <?php
 
-class PushNotificationsController extends AdminBaseController
+class PushNotificationsController extends ListingBaseController
 {
     public function __construct($action)
     {

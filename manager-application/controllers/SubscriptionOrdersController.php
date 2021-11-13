@@ -1,6 +1,6 @@
 <?php
 
-class SubscriptionOrdersController extends AdminBaseController
+class SubscriptionOrdersController extends ListingBaseController
 {
     public function __construct($action)
     {

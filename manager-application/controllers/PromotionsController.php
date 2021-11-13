@@ -1,6 +1,6 @@
 <?php
 
-class PromotionsController extends AdminBaseController
+class PromotionsController extends ListingBaseController
 {
     private int $minWidth = 1200;
     private int $minHeight = 360;
@@ -96,7 +96,7 @@ class PromotionsController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();

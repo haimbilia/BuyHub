@@ -1,6 +1,6 @@
 <?php
 
-class DiscountCouponsReportController extends AdminBaseController
+class DiscountCouponsReportController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

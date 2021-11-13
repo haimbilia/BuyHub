@@ -1,6 +1,6 @@
 <?php
 
-class UrlRewritingController extends AdminBaseController
+class UrlRewritingController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -34,7 +34,7 @@ class UrlRewritingController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $db = FatApp::getDb();
 

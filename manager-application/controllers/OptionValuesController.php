@@ -1,6 +1,6 @@
 <?php
 
-class OptionValuesController extends AdminBaseController
+class OptionValuesController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

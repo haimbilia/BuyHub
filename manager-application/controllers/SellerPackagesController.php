@@ -1,6 +1,6 @@
 <?php
 
-class SellerPackagesController extends AdminBaseController
+class SellerPackagesController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -73,7 +73,7 @@ class SellerPackagesController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $db = FatApp::getDb();
 

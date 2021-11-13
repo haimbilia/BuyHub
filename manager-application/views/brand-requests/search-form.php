@@ -10,7 +10,7 @@ $keyWordFld = $frmSearch->getField('keyword');
 $keyWordFld->addFieldtagAttribute('class', 'form-control');
 $keyWordFld->setFieldtagAttribute('placeholder', $keywordPlaceholder);
 
-$userFld = $frmSearch->getField('user_name');
+$userFld = $frmSearch->getField('user_id');
 $userFld->addFieldtagAttribute('id', 'searchFrmUserIdJs');
 $userFld->addFieldtagAttribute('class', 'form-control');
 $userFld->addFieldtagAttribute('placeholder', Labels::getLabel('LBL_Seller_Name_Or_Email', $siteLangId));
@@ -31,8 +31,7 @@ HtmlHelper::renderHiddenFields($frmSearch);
                 <?php echo $frmSearch->getFieldHtml('keyword'); ?>
             </div>
             <div class="col-md-4">
-                <?php echo $frmSearch->getFieldHtml('user_name'); ?>
-                <?php echo $frmSearch->getFieldHtml('user_id'); ?>
+                <?php echo $frmSearch->getFieldHtml('user_id'); ?> 
             </div>
             <div class="col-md-4">
                 <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>

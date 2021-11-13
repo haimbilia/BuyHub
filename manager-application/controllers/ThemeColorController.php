@@ -5,7 +5,7 @@ require_once CONF_INSTALLATION_PATH . 'library/GoogleFonts.class.php';
 
 use Curl\Curl;
 
-class ThemeColorController extends AdminBaseController
+class ThemeColorController extends ListingBaseController
 {
     private $apiKey;
 

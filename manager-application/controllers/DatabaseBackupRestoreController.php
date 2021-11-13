@@ -1,6 +1,6 @@
 <?php
 
-class DatabaseBackupRestoreController extends AdminBaseController
+class DatabaseBackupRestoreController extends ListingBaseController
 {
     public function __construct($action)
     {

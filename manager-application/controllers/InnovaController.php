@@ -1,6 +1,6 @@
 <?php
 
-class InnovaController extends AdminBaseController
+class InnovaController extends ListingBaseController
 {
     public function assetmanager()
     {

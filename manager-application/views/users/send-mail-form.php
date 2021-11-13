@@ -1,16 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('class', 'web_form form_horizontal');
+
 $frm->setFormTagAttribute('onsubmit', 'sendMail(this); return(false);');
-$frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 12;	
-?>
-<section class="section">
-	<div class="sectionhead">
-		<h4><?php echo Labels::getLabel('LBL_Send_Mail',$adminLangId); ?></h4>
-	</div>
-	<div class="sectionbody space">
-		<div class="border-box border-box--space">
-			<?php echo $frm->getFormHtml(); ?>
-		</div>
-	</div>											
-</section>	
+$frm->setFormTagAttribute('data-onclear', 'sendMailToUser(' . $recordId . ');');
+$formTitle = Labels::getLabel('LBL_Send_Mail', $siteLangId);
+
+require_once(CONF_THEME_PATH . '_partial/listing/form.php');
