@@ -7,6 +7,11 @@ class ListingBaseController extends AdminBaseController
     protected array $formLangFields;
     protected bool $checkMediaExist = false;
 
+    public function __construct($action)
+    {
+        parent::__construct($action);
+    }
+
     public function index()
     {
         $fields = $this->getFormColumns();
