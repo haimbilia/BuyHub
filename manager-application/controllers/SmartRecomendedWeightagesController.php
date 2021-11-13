@@ -1,6 +1,6 @@
 <?php
 
-class SmartRecomendedWeightagesController extends AdminBaseController
+class SmartRecomendedWeightagesController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -35,7 +35,7 @@ class SmartRecomendedWeightagesController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $post = FatApp::getPostedData();
 

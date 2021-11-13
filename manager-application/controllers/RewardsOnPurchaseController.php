@@ -1,6 +1,6 @@
 <?php
 
-class RewardsOnPurchaseController extends AdminBaseController
+class RewardsOnPurchaseController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -35,7 +35,7 @@ class RewardsOnPurchaseController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $post = FatApp::getPostedData();
 

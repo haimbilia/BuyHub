@@ -1,6 +1,6 @@
 <?php
 
-class HomeController extends AdminBaseController
+class HomeController extends ListingBaseController
 {
     public function __construct($action)
     {

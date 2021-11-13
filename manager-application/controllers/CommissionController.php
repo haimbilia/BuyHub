@@ -1,6 +1,6 @@
 <?php
 
-class CommissionController extends AdminBaseController
+class CommissionController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -36,7 +36,7 @@ class CommissionController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();

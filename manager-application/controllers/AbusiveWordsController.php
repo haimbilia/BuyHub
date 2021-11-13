@@ -1,6 +1,6 @@
 <?php
 
-class AbusiveWordsController extends AdminBaseController
+class AbusiveWordsController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -35,7 +35,7 @@ class AbusiveWordsController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');

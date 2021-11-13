@@ -1,6 +1,6 @@
 <?php
 
-class EarningsReportController extends AdminBaseController
+class EarningsReportController extends ListingBaseController
 {
 
     public function __construct($action)

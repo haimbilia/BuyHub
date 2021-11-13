@@ -1,6 +1,6 @@
 <?php
 
-class ProductCategoriesRequestController extends AdminBaseController {
+class ProductCategoriesRequestController extends ListingBaseController {
 
     public function __construct($action) {
         parent::__construct($action);
@@ -55,7 +55,7 @@ class ProductCategoriesRequestController extends AdminBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData() {
+    protected function getListingData() {
         $this->objPrivilege->canEditProductCategories();
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();

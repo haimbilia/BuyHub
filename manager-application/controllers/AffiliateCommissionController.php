@@ -1,6 +1,6 @@
 <?php
 
-class AffiliateCommissionController extends AdminBaseController
+class AffiliateCommissionController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -35,7 +35,7 @@ class AffiliateCommissionController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();

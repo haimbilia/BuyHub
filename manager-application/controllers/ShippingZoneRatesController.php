@@ -1,5 +1,5 @@
 <?php
-class ShippingZoneRatesController extends AdminBaseController
+class ShippingZoneRatesController extends ListingBaseController
 {
     public function __construct($action)
     {

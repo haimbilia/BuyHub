@@ -1,6 +1,6 @@
 <?php
 
-class TransactionsController extends AdminBaseController
+class TransactionsController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -37,7 +37,7 @@ class TransactionsController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');

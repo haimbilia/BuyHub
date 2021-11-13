@@ -1,6 +1,6 @@
 <?php
 
-class PickupAddressesController extends AdminBaseController
+class PickupAddressesController extends ListingBaseController
 {
     public function __construct($action)
     {

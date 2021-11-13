@@ -1,6 +1,6 @@
 <?php
 
-class BadgesController extends AdminBaseController
+class BadgesController extends ListingBaseController
 {
     public function __construct($action)
     {

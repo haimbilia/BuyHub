@@ -23,6 +23,7 @@ class HtmlHelper
         $actionBtnArr = [
             'newRecordBtn' => true,
             'deleteButton' => false,
+            'columnButtons' => false,
             'performBulkAction' => false,
             'formAction' => 'toggleBulkStatuses',
             'siteLangId' => $langId,

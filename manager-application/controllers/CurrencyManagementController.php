@@ -1,6 +1,6 @@
 <?php
 
-class CurrencyManagementController extends AdminBaseController
+class CurrencyManagementController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -54,7 +54,7 @@ class CurrencyManagementController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 

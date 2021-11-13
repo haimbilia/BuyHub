@@ -1,6 +1,6 @@
 <?php
 
-class OrderStatusController extends AdminBaseController
+class OrderStatusController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -66,7 +66,7 @@ class OrderStatusController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 

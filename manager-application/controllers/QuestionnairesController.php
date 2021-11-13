@@ -1,6 +1,6 @@
 <?php
 
-class QuestionnairesController extends AdminBaseController
+class QuestionnairesController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

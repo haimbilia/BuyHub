@@ -1,6 +1,6 @@
 <?php
 
-class ShopsReportController extends AdminBaseController
+class ShopsReportController extends ListingBaseController
 {
     public function __construct($action)
     {

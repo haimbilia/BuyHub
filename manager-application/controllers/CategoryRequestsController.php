@@ -1,6 +1,6 @@
 <?php
 
-class CategoryRequestsController extends AdminBaseController
+class CategoryRequestsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

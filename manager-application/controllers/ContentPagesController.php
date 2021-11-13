@@ -1,6 +1,6 @@
 <?php
 
-class ContentPagesController extends AdminBaseController
+class ContentPagesController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -48,7 +48,7 @@ class ContentPagesController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 

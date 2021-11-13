@@ -1,6 +1,6 @@
 <?php
 
-class TagsController extends AdminBaseController
+class TagsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

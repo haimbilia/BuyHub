@@ -1,5 +1,5 @@
 <?php
-class MetaTagsController extends AdminBaseController
+class MetaTagsController extends ListingBaseController
 {
     private array $tabsArr = [];
     private array $postedData = [];
@@ -29,7 +29,7 @@ class MetaTagsController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $db = FatApp::getDb();
         $this->tabsArr = MetaTag::getTabsArr();

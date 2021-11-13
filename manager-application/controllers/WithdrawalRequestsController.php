@@ -1,6 +1,6 @@
 <?php
 
-class WithdrawalRequestsController extends AdminBaseController
+class WithdrawalRequestsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

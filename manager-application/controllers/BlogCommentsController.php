@@ -1,6 +1,6 @@
 <?php
 
-class BlogCommentsController extends AdminBaseController
+class BlogCommentsController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -33,7 +33,7 @@ class BlogCommentsController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $db = FatApp::getDb();
 

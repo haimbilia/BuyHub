@@ -1,6 +1,6 @@
 <?php
 
-class ShopsController extends AdminBaseController {
+class ShopsController extends ListingBaseController {
 
     public function __construct($action) {
         parent::__construct($action);

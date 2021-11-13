@@ -1,6 +1,6 @@
 <?php
 
-class SubscriptionPlanReportController extends AdminBaseController
+class SubscriptionPlanReportController extends ListingBaseController
 {
 
     public function __construct($action)

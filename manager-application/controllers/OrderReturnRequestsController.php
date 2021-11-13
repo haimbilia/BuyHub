@@ -1,6 +1,6 @@
 <?php
 
-class OrderReturnRequestsController extends AdminBaseController
+class OrderReturnRequestsController extends ListingBaseController
 {
     use ShippingServices;
 

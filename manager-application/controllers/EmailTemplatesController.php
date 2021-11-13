@@ -1,6 +1,6 @@
 <?php
 
-class EmailTemplatesController extends AdminBaseController
+class EmailTemplatesController extends ListingBaseController
 {
 
     public function __construct($action)
@@ -37,7 +37,7 @@ class EmailTemplatesController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 

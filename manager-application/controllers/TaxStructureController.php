@@ -1,6 +1,6 @@
 <?php
 
-class TaxStructureController extends AdminBaseController
+class TaxStructureController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -34,7 +34,7 @@ class TaxStructureController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();

@@ -1,6 +1,6 @@
 <?php
 
-class ShopReportReasonsController extends AdminBaseController
+class ShopReportReasonsController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -48,7 +48,7 @@ class ShopReportReasonsController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();

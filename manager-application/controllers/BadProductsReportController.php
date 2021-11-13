@@ -1,6 +1,6 @@
 <?php
 
-class BadProductsReportController extends AdminBaseController
+class BadProductsReportController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

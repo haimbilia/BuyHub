@@ -1,6 +1,6 @@
 <?php
 
-class SocialPlatformController extends AdminBaseController
+class SocialPlatformController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

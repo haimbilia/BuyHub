@@ -1,6 +1,6 @@
 <?php
 
-class BrandsController extends AdminBaseController
+class BrandsController extends ListingBaseController
 {
 
     public function __construct($action)
@@ -39,7 +39,7 @@ class BrandsController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 

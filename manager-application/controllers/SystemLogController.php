@@ -1,6 +1,6 @@
 <?php
 
-class SystemLogController extends AdminBaseController
+class SystemLogController extends ListingBaseController
 {
     public function __construct($action)
     {   
@@ -34,7 +34,7 @@ class SystemLogController extends AdminBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    protected function getListingData()
     {
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();

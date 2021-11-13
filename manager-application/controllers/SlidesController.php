@@ -1,6 +1,6 @@
 <?php
 
-class SlidesController extends AdminBaseController
+class SlidesController extends ListingBaseController
 {
     private $canView;
     private $canEdit;
