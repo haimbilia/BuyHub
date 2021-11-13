@@ -32,67 +32,69 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder');
 echo $frmSearch->getFormTag();
 HtmlHelper::renderHiddenFields($frmSearch);
 ?>
-<div class="card">
-    <div class="card-body">
+<div class="card-head">
+    <div class="card-head-label">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="input-group">
                     <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+                    <a class="btn advanced-trigger ml-2" data-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
+                        <svg class="svg" width="22" height="22">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
+                            </use>
+                        </svg>
+                    </a>
                     <div class="input-group-append">
                         <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <a class="btn btn-link collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Advanced
-                    Search</a>
+
+        </div>
+    </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-head.php'); ?>
+</div>
+<div class="advanced-search collapse" id="collapseKeyword">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="label"><?php echo Labels::getLabel('FRM_PRICE_FROM', $siteLangId); ?></label>
+                <?php echo $frmSearch->getFieldHtml('price_from'); ?>
             </div>
         </div>
-        <div class="collapse" id="collapseExample">
-            <div class="separator separator-dashed my-4"></div>
-            <div class="row">
-
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="label"><?php echo Labels::getLabel('FRM_PRICE_FROM', $siteLangId); ?></label>
-                        <?php echo $frmSearch->getFieldHtml('price_from'); ?>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="label"><?php echo Labels::getLabel('FRM_PRICE_TO', $siteLangId); ?></label>
-                        <?php echo $frmSearch->getFieldHtml('price_to'); ?>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-
-                        <label class="label"><?php echo Labels::getLabel('FRM_CATEGORY', $siteLangId); ?></label>
-                        <?php echo $frmSearch->getFieldHtml('category_id'); ?>
-                    </div>
-                </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="label"><?php echo Labels::getLabel('FRM_PRICE_TO', $siteLangId); ?></label>
+                <?php echo $frmSearch->getFieldHtml('price_to'); ?>
             </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="label"><?php echo Labels::getLabel('FRM_BRAND', $siteLangId); ?></label>
-                        <?php echo $frmSearch->getFieldHtml('brand_id'); ?>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
 
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="label"><?php echo Labels::getLabel('FRM_SHOP', $siteLangId); ?></label>
-                        <?php echo $frmSearch->getFieldHtml('shop_id'); ?>
+                <label class="label"><?php echo Labels::getLabel('FRM_CATEGORY', $siteLangId); ?></label>
+                <?php echo $frmSearch->getFieldHtml('category_id'); ?>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="label"><?php echo Labels::getLabel('FRM_BRAND', $siteLangId); ?></label>
+                <?php echo $frmSearch->getFieldHtml('brand_id'); ?>
 
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="label"></label>
-                        <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
-                    </div>
-                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="label"><?php echo Labels::getLabel('FRM_SHOP', $siteLangId); ?></label>
+                <?php echo $frmSearch->getFieldHtml('shop_id'); ?>
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="label"></label>
+                <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
             </div>
         </div>
     </div>

@@ -12,9 +12,12 @@ class RelatedProductsController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_RELATED_PRODUCTS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_RELATED_PRODUCTS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->addCss(['css/select2.min.css', 'css/tagify.min.css']);

@@ -5,34 +5,44 @@
     @include media-breakpoint-down(md) {
         align-items: inherit;
     }
+    /* Maximum height */
+    @media (max-height: 40rem) {
+        align-items: inherit;
+    }
 }
 
 .login-1 {
     .login-block {
         max-width: 450px;
-        min-width: 300px;
-        margin: 0 auto;
+        min-width: 300px; 
+        margin: 2rem auto;
     }
     .logo {
         margin: 0 auto;
-        padding-top: 1.5rem;
         img {
             max-width: 120px;
         }
     }
     .card {
+        padding: 2rem 3rem;
         &-head {
-            padding-bottom: 0;
+            border: none;
+            padding:0;
+            padding-bottom: 1rem;
         }
-        &-body {
-            padding: 2rem;
+        &-body {padding: 0;
+            // padding: 2rem;
             .title {
-                margin: 1.5rem 0;
+                margin-bottom: 0.5rem;
                 h2 {
                     font-size: 1.5rem;
                     color: $txt-body;
                 }
             }
+        }
+        &-foot {
+            border: none;
+            padding: 0;
         }
     }
     .other-links {

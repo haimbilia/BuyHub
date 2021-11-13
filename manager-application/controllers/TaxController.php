@@ -7,16 +7,19 @@ class TaxController extends AdminBaseController
         parent::__construct($action);
         $this->objPrivilege->canViewTax();
         $this->rewriteUrl = Brand::REWRITE_URL_PREFIX;
-    } 
+    }
 
     public function index()
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm(false, $fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_TAX_CATEGORIES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('canEdit', $this->objPrivilege->canEditTax($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_TAX_CATEGORIES', $this->siteLangId));
         $this->getListingData();
         $this->_template->render();
     }
@@ -25,7 +28,7 @@ class TaxController extends AdminBaseController
     {
         $frm = new Form('frmRecordSearch');
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
-        $fld->overrideFldType('search');        
+        $fld->overrideFldType('search');
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'taxcat_identifier');
@@ -75,8 +78,8 @@ class TaxController extends AdminBaseController
         $activatedTaxServiceId = Tax::getActivatedServiceId();
         $srch->addCondition('taxcat_plugin_id', '=', $activatedTaxServiceId);
         $srch->addMultipleFields([
-            't.*','t_l.taxcat_name'     
-        ]);       
+            't.*', 't_l.taxcat_name'
+        ]);
 
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('t.taxcat_identifier', 'like', '%' . $post['keyword'] . '%');
@@ -294,7 +297,7 @@ class TaxController extends AdminBaseController
 
         if (empty($taxcatIdsArr)) {
             FatUtility::dieWithError(
-                    Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -313,7 +316,7 @@ class TaxController extends AdminBaseController
         $taxcat_id = FatUtility::int($taxcat_id);
         if (1 > $taxcat_id) {
             FatUtility::dieWithError(
-                    Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
         $taxtObj = new Tax($taxcat_id);
@@ -335,7 +338,7 @@ class TaxController extends AdminBaseController
         }
     }
 
-    public function changeStatus()
+    /*  public function changeStatus()
     {
         $this->objPrivilege->canEditTax();
         $taxcatId = FatApp::getPostedData('taxcatId', FatUtility::VAR_INT, 0);
@@ -357,7 +360,7 @@ class TaxController extends AdminBaseController
 
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
-    }
+    } */
 
     public function toggleBulkStatuses()
     {
@@ -367,7 +370,7 @@ class TaxController extends AdminBaseController
         $taxcatIdsArr = FatUtility::int(FatApp::getPostedData('taxcat_ids'));
         if (empty($taxcatIdsArr) || -1 == $status) {
             FatUtility::dieWithError(
-                    Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -388,7 +391,7 @@ class TaxController extends AdminBaseController
         $taxcatId = FatUtility::int($taxcatId);
         if (1 > $taxcatId || -1 == $status) {
             FatUtility::dieWithError(
-                    Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
 
@@ -461,8 +464,8 @@ class TaxController extends AdminBaseController
 
         if (!empty($post['keyword'])) {
             $srch->addCondition('taxcat_name', 'LIKE', '%' . $post['keyword'] . '%')
-                    ->attachCondition('taxcat_identifier', 'LIKE', '%' . $post['keyword'] . '%')
-                    ->attachCondition('taxcat_code', 'LIKE', '%' . $post['keyword'] . '%');
+                ->attachCondition('taxcat_identifier', 'LIKE', '%' . $post['keyword'] . '%')
+                ->attachCondition('taxcat_code', 'LIKE', '%' . $post['keyword'] . '%');
         }
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
@@ -503,13 +506,13 @@ class TaxController extends AdminBaseController
     {
         $this->objPrivilege->canViewTax();
 
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);  
-        $searchForm = $this->getRuleListSearchForm();           
+        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $searchForm = $this->getRuleListSearchForm();
         $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
-        }       
+        }
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : $post['page'];
 
         $srch = TaxRule::getSearchObject();
@@ -530,7 +533,7 @@ class TaxController extends AdminBaseController
         $srch->addOrder('taxrule_name', 'ASC');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("arrListing", $records);
-        
+
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -832,5 +835,4 @@ class TaxController extends AdminBaseController
     {
         return array_diff($fields, ['taxcat_active'], Common::excludeKeysForSort());
     }
-
 }

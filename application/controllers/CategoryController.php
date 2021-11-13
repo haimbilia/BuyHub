@@ -229,7 +229,7 @@ class CategoryController extends MyAppController
         }
     }
 
-    public function banner($prodCatId, $langId = 0, $sizeType = '', $screen = 0, $displayUniversalImage = true, $afileId = 0)
+    public function banner($prodCatId, $langId = 0, $sizeType = '',$afileId = 0, $screen = 0, $displayUniversalImage = true)
     {
         $default_image = 'product_default_image.jpg';
         $prodCatId = FatUtility::int($prodCatId);

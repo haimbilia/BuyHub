@@ -38,12 +38,11 @@ cropImage = function(file, options, callback, inputBtn){
 		window.alert('Please choose an image file.');
  	}
 
-  var actions = document.getElementById('actions');
   var cropper = new Cropper(image, options);
   var originalImageURL = image.src;
   var uploadedImageURL;
 
-  actions.querySelector('.docs-buttons').onclick = function (event) {
+  document.querySelector('.mediaCropButtonsJs').onclick = function (event) {
 	var e = event || window.event;
 	var target = e.target || e.srcElement;
 	var cropped;

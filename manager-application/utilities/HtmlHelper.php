@@ -14,12 +14,38 @@ class HtmlHelper
                 </div>';
     }
 
+    public static function setActionItemsData(object $obj, array $fields, int $langId = 0)
+    {
+        if (1 > $langId) {
+            $langId = CommonHelper::getLangId();
+        }
+
+        $actionBtnArr = [
+            'newRecordBtn' => true,
+            'deleteButton' => false,
+            'performBulkAction' => false,
+            'formAction' => 'toggleBulkStatuses',
+            'siteLangId' => $langId,
+            'otherButtons' => [],
+            'searchFrmTemplate' => '_partial/listing/listing-search-form.php',
+            'searchListingPage' => FatUtility::camel2dashed(LibHelper::getControllerName()) . '/search.php'
+        ];
+        if (array_key_exists($obj::tblFld('active'), $fields)) {
+            $actionBtnArr = array_merge($actionBtnArr, ['performBulkAction' => true, 'statusButtons' => true]);
+        }
+
+        if (array_key_exists($obj::tblFld('deleted'), $fields)) {
+            $actionBtnArr = array_merge($actionBtnArr, ['performBulkAction' => true, 'deleteButton' => true]);
+        }
+        return $actionBtnArr;
+    }
+
     public static function getDefaultSortingClass($key, $sortBy, $sortOrder)
     {
         if ($key != $sortBy) {
             return '';
         }
-        
+
         return (($sortOrder == applicationConstants::SORT_ASC) ? 'sorting_desc' : 'sorting_asc');
     }
 
@@ -110,7 +136,8 @@ class HtmlHelper
     public static function addClearButton(Form &$frm, string $lbl = '')
     {
         $lbl = empty($lbl) ? Labels::getLabel('FRM_CLEAR', CommonHelper::getLangId()) : $lbl;
-        $frm->addHtml('', 'btn_clear', self::addButtonHtml($lbl, 'button', 'btn_clear', 'btn btn-light', 'clearSearch()'));
+        // $frm->addHtml('', 'btn_clear', '<a class="btn btn-link" onClick="clearSearch()">' . $lbl . '</a>');
+        $frm->addHtml('', 'btn_clear', self::addButtonHtml($lbl, 'button', 'btn_clear', 'btn btn-link', 'clearSearch()'));
     }
 
     public static function renderHiddenFields(Form $frmSearch)
@@ -249,11 +276,11 @@ class HtmlHelper
      * $imageArr ex. ['name' => 'fav.png','url'=>'imageurl' ,'afile_id'=> 66]
      */
 
-    public static function getfileInputHtml(array $fileInputAttributes,int $langId, string $removeFn, string $editFn = '', $imageArr = [], $headerClass = '')
+    public static function getfileInputHtml(array $fileInputAttributes, int $langId, string $removeFn, string $editFn = '', $imageArr = [], $headerClass = '')
     {
         $str =  '<div class="dropzone ' . $headerClass . '">';
-                        if (1 > count($imageArr)) {
-                        $str .= ' 
+        if (1 > count($imageArr)) {
+            $str .= ' 
                             <div class="dropzone-upload dropzoneUploadJs">                 
                                 <div class="file-upload">
                                     <img src="' . CONF_WEBROOT_URL . 'images/upload/upload_img.png">                                
@@ -263,14 +290,14 @@ class HtmlHelper
                                 </div> 
                             </div>                                        
                         ';
-                        } else {
-                        $str .= 
-                            '<div class="dropzone-uploaded dropzoneUploadedJs">
+        } else {
+            $str .=
+                '<div class="dropzone-uploaded dropzoneUploadedJs">
                                 <img src="' . $imageArr['url'] . '" title=""  data-afile_id="' . ($imageArr['afile_id'] ?? 0) . '">    
                                 <div class="dropzone-uploaded-action">
                                 <ul class="actions">';
-                                if(!empty($editFn)){
-                                    $str .='
+            if (!empty($editFn)) {
+                $str .= '
                                     <li>
                                         <a href="javascript:void(0)"  onclick="' . $editFn . '" data-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_EDIT', $langId) . '">
                                             <svg class="svg" width="18" height="18">
@@ -279,9 +306,9 @@ class HtmlHelper
                                                 </use>
                                             </svg>
                                         </a>
-                                    </li>'; 
-                                }                                
-                                $str .='<li>
+                                    </li>';
+            }
+            $str .= '<li>
                                             <a href="javascript:void(0)"  onclick="' . $removeFn . '" data-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_REMOVE', $langId) . '">
                                                 <svg class="svg" width="18" height="18">
                                                     <use
@@ -292,38 +319,33 @@ class HtmlHelper
                                         </li>
                                 </ul></div>
                             </div>';
-                    }              
-                   
-                    $str .= '<input class="dropzone-input dropzoneInputJs '. (count($imageArr) ? "hide" : "" ).'" type="file"';        
-                    foreach ($fileInputAttributes as $attrName => $attrVal) {
-                        $str .= ' ' . $attrName . '="' . $attrVal . '"';
-                    }
-                    $str .= '>';
-                    
-                    
-                    $str .= '</div>';
+        }
+
+        $str .= '<input class="dropzone-input dropzoneInputJs ' . (count($imageArr) ? "hide" : "") . '" type="file"';
+        foreach ($fileInputAttributes as $attrName => $attrVal) {
+            $str .= ' ' . $attrName . '="' . $attrVal . '"';
+        }
+        $str .= '>';
+
+
+        $str .= '</div>';
         return   $str;
     }
 
-    public static function imageListCard(int $type,  int $recordId, int $recordSubid = 0, $updatedOn = NULL) 
-    {       
-
-        switch ($type) {
-            case AttachedFile::FILETYPE_PRODUCT_IMAGE:
-                $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, "SMALL", 0, 0, $siteLangId), CONF_WEBROOT_FRONTEND);
-                break;         
-            default:    
-        }
-
-
+    public static function imageListCard(int $imageType, string $defaultImageName, int $recordId, int $recordSubid = 0, $updatedOn = NULL)
+    {
         $images = AttachedFile::getMultipleAttachments($imageType, $recordId, $recordSubid, 0,  true,  0, 4);
-        print_r($images);
-        die();
         $str = '<div class="media-group">';
+        $count  = 0;
         foreach ($images as $key => $image) {
+            switch ($imageType) {
+                case AttachedFile::FILETYPE_PRODUCT_IMAGE:
+                    $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, "SMALL", 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
+                    break;
+                default:
+            }
 
-            
-            if ($key > 2) {
+            if ($count > 2) {
                 $str .= ' 
                 <a href="javascript:void(0)" class="media media-sm media-circle"
                     data-toggle="tooltip" data-skin="brand"
@@ -331,39 +353,35 @@ class HtmlHelper
                     <span>3+</span>
                 </a>';
                 break;
-            } 
-            $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], "SMALL", $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND);         
-            if($updatedOn){
-                $uploadedTime = AttachedFile::setTimeParam($updatedOn);
-                $imgSrc  = UrlHelper::getCachedUrl($imgSrc .$uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-
             }
-            
-            $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], "SMALL", $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            if ($updatedOn) {
+                $uploadedTime = AttachedFile::setTimeParam($updatedOn);
+                $imgSrc  = UrlHelper::getCachedUrl($imgSrc . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            }
             $str .= '
                 <a href="javascript:void(0)" class="media media-sm media-circle"
                     data-toggle="tooltip" data-skin="brand"
-                    data-placement="top" title=""
-                    data-original-title="avocado">
+                    data-placement="top" title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '"
+                    data-original-title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '">
                     <img data-aspect-ratio="1:1"
-                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
-                        alt="image">
+                        src="' . $imgSrc . '"
+                        alt="' . ($image['afile_attribute_alt'] ?? $defaultImageName) . '">
                 </a>';
+            $count++;
         }
         if (!count($images)) {
             $str .= '
             <a href="javascript:void(0)" class="media media-sm media-circle"
                 data-toggle="tooltip" data-skin="brand"
-                data-placement="top" title=""
-                data-original-title="avocado">
+                data-placement="top" 
+                data-original-title="' . $defaultImageName . '">
                 <img data-aspect-ratio="1:1"
-                    src="'.CONF_WEBROOT_URL.'images/products/product_default_image.jpg"
-                    alt="image">
+                    src="' . CONF_WEBROOT_FRONTEND . 'images/defaults/product_default_image.jpg"
+                    alt="' . $defaultImageName . '">
             </a>';
         }
 
         $str .= '</div>';
         return  $str;
     }
-    
 }

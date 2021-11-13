@@ -206,6 +206,7 @@ class AttachedFile extends MyAppModel
         return true;
     }
 
+    
     public static function getMultipleAttachments($fileType, $recordId, $recordSubid = 0, $langId = 0, $displayUniversalImage = true, $screen = 0, $size = 0, $haveSubIdZero = false)
     {
         $fileType = FatUtility::int($fileType);

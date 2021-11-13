@@ -71,11 +71,14 @@ class PromotionsController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_PROMOTIONS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('languages', Language::getAllNames());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_PROMOTIONS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->addCss(['css/select2.min.css', 'css/cropper.css']);
@@ -649,7 +652,7 @@ class PromotionsController extends AdminBaseController
         if (count($languages) <= 1) {
             $lang_id =  array_key_first($languages);
         }
-        
+
         $srch = new PromotionSearch($this->siteLangId);
         $srch->joinBannersAndLocation($this->siteLangId, Promotion::TYPE_BANNER, 'b');
         $srch->joinSlides();

@@ -1,20 +1,19 @@
-<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_CATEGORY_NAME_AND_AFFILIATE_USER', $siteLangId); ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_CATEGORY_NAME_AND_AFFILIATE_USER', $siteLangId);
+$deleteButton = true;
+?>
 <main class="main mainJs">
     <div class="container">
+        <?php $data = [
+            'canEdit' => $canEdit,
+            'siteLangId' => $siteLangId,
+            'newRecordBtn' => true
+        ];
+        $this->includeTemplate('_partial/header/header-breadcrumb.php', $data, false); ?>
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                 <div class="card">
-                    <?php $data = [
-                        'canEdit' => $canEdit,
-                        'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_AFFILIATE_COMMISSION_SETTINGS', $siteLangId),
-                        'newRecordBtn' => true,
-                        'deleteButton' => true
-                    ];
-
-                    $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
+                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                     <div class="card-body">
                         <div class="table-responsive listingTableJs">
                             <?php

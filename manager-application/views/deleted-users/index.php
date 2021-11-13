@@ -1,17 +1,15 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <main class="main mainJs">
     <div class="container">
+        <?php $data = [
+            'siteLangId' => $siteLangId,
+            'canEdit' => $canEdit
+        ];
+        $this->includeTemplate('_partial/header/header-breadcrumb.php', $data, false); ?>
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . 'deleted-users/search-form.php'); ?>
                 <div class="card">
-                    <?php $data = [
-                        'canEdit' => $canEdit,
-                        'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_Deleted_Users_List', $siteLangId),
-                    ];
-
-                    $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
+                    <?php require_once(CONF_THEME_PATH . 'deleted-users/search-form.php'); ?>
                     <div class="card-body">
                         <div class="table-responsive listingTableJs">
                             <?php

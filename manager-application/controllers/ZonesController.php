@@ -1,6 +1,8 @@
 <?php
 class ZonesController extends AdminBaseController
 {
+    protected $modelClass = 'Zone';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -16,7 +18,7 @@ class ZonesController extends AdminBaseController
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditZones();
-        $this->modelObj = (new ReflectionClass('Zone'))->newInstanceArgs($constructorArgs);
+        $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->set('formTitle', Labels::getLabel('LBL_ZONE_SETUP', $this->siteLangId));
     }
@@ -26,12 +28,20 @@ class ZonesController extends AdminBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHIPPING_ZONES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->setModel();
+        $actionItemsData = HtmlHelper::setActionItemsData($this->modelObj, $fields);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
         $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ZONES', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_ZONE_NAME', $this->siteLangId));
         $this->getListingData();
-
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -129,7 +139,7 @@ class ZonesController extends AdminBaseController
 
         $recordId = FatUtility::int($post['zone_id']);
         unset($post['zone_id']);
- 
+
         $recordObj = new Zone($recordId);
         $post['zone_identifier'] = $post['zone_name'];
         $recordObj->assignValues($post);
@@ -137,9 +147,9 @@ class ZonesController extends AdminBaseController
         if (!$recordObj->save()) {
             LibHelper::exitWithError($recordObj->getError(), true);
         }
-        
+
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
-         
+
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -260,12 +270,14 @@ class ZonesController extends AdminBaseController
     public function getBreadcrumbNodes($action)
     {
         parent::getBreadcrumbNodes($action);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHIPPING_ZONES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         switch ($action) {
             case 'index':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_ZONES', $this->siteLangId)]
+                    ['title' => $pageTitle]
                 ];
         }
         return $this->nodes;

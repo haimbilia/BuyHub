@@ -1,17 +1,22 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
 $keywordPlaceholder = isset($keywordPlaceholder) ? $keywordPlaceholder : Labels::getLabel('FRM_SEARCH', $siteLangId);
-$onSubmit = $onSubmit ?? 'searchRecords(this); return(false);';
 
 $frmSearch->setFormTagAttribute('name', 'frmRecordSearch');
-$frmSearch->setFormTagAttribute('onsubmit', $onSubmit);
+
+if (!$frmSearch->getFormTagAttribute('onsubmit')) {
+    $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
+}
 $frmSearch->setFormTagAttribute('id', 'frmRecordSearch');
 $frmSearch->setFormTagAttribute('class', 'form');
 
 $keyWordFld = $frmSearch->getField('keyword');
 if (null != $keyWordFld) {
     $keyWordFld->addFieldtagAttribute('class', 'form-control');
-    $keyWordFld->setFieldtagAttribute('placeholder', $keywordPlaceholder);
+    /* if (!$keyWordFld->getFieldTagAttribute('placeholder')) {
+        $keyWordFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_SEARCH', $siteLangId));
+    } */
+    $keyWordFld->setFieldTagAttribute('placeholder', $keywordPlaceholder);
 }
 
 $frmFields = [
@@ -22,6 +27,7 @@ $frmFields = [
 $i = $x = 0;
 $haveExtraFlds = false;
 $firstElement = [];
+
 foreach ($frmSearch->getAllFields() as $key => $frmFld) {
     if ('btn_submit' == $frmFld->getName() || 'keyword' == $frmFld->getName()) {
         continue;
@@ -37,7 +43,7 @@ foreach ($frmSearch->getAllFields() as $key => $frmFld) {
             if ('btn_clear' != $frmFld->getName() && false === $haveExtraFlds) {
                 $haveExtraFlds = true;
             }
-            
+
             $frmFields['advSrchFlds'][$x][] = [
                 'name' => $frmFld->getName(),
                 'caption' => $frmFld->getCaption()
@@ -53,67 +59,76 @@ foreach ($frmSearch->getAllFields() as $key => $frmFld) {
 }
 
 echo $frmSearch->getFormTag();
-    foreach ($frmFields['hidden'] as $fldName) {
-        echo $frmSearch->getFieldHtml($fldName);
-    }
+foreach ($frmFields['hidden'] as $fldName) {
+    echo $frmSearch->getFieldHtml($fldName);
+}
+if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
 
-    if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) { ?>
-        <div class="card">
-            <div class="card-body">
+    $colnumber = (count($frmFields['advSrchFlds']) == 1) ? 6 : 12;
+?>
+    <div class="card-head">
+        <div class="card-head-label">
+            <div class="row">
+                <?php if (count($frmFields['advSrchFlds']) == 1) { ?>
+                    <div class="col-md-4">
+                        <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+                    </div>
+                    <div class="col-md-4">
+                        <?php
+                        $flds = current($frmFields['advSrchFlds'][0]);
+                        echo $frmSearch->getFieldHtml($flds['name']); ?>
+                    </div>
+                    <div class="col-md-2">
+                        <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                    </div>
+                    <div class="col-md-2">
+                        <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                    </div>
+                <?php } else { ?>
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <?php if (null != $keyWordFld) {
+                                echo $frmSearch->getFieldHtml('keyword');
+                            } else {
+                                echo $frmSearch->getFieldHtml($firstElement['name']);
+                            }
+                            ?>
+                            <?php if ($haveExtraFlds && count($frmFields['advSrchFlds']) > 1) { ?>
+                                <a class="btn advanced-trigger ml-2" data-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
+                                    <svg class="svg" width="22" height="22">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
+                                        </use>
+                                    </svg>
+                                </a>
+                            <?php } ?>
+                            <div class="input-group-append">
+                                <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+
+            </div>
+        </div>
+        <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-head.php'); ?>
+    </div>
+    <?php if ($haveExtraFlds && count($frmFields['advSrchFlds']) > 1) { ?>
+        <div class="advanced-search collapse" id="collapseKeyword">
+            <?php
+            foreach ($frmFields['advSrchFlds'] as $itr => $fldsGroup) { ?>
                 <div class="row">
-                    <?php if (null != $keyWordFld) { ?>
-                        <div class="col-md-8">
-                            <div class="input-group">
-                                <?php echo $frmSearch->getFieldHtml('keyword'); ?>
-                                <div class="input-group-append">
-                                    <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                                </div>
+                    <?php foreach ($fldsGroup as $frmFld) { ?>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="label"><?php echo $frmFld['caption']; ?></label>
+                                <?php echo $frmSearch->getFieldHtml($frmFld['name']); ?>
                             </div>
-                        </div>
-                    <?php } else { ?>
-                        <div class="col-md-8">
-                            <div class="input-group">
-                                <?php 
-                                    $fld = $frmSearch->getField($firstElement['name']);
-                                    $fld->addFieldTagAttribute('class', 'form-control');
-                                    $fld->addFieldTagAttribute('title', $firstElement['caption']);
-                                    echo $frmSearch->getFieldHtml($firstElement['name']); ?>
-                                <div class="input-group-append">
-                                    <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    <?php } ?>
-
-                    <?php if ($haveExtraFlds) { ?>
-                        <div class="col-md-3">
-                            <a class="btn btn-link" data-toggle="collapse" href="#advanceSearch" aria-expanded="false" aria-controls="advanceSearch">
-                                <?php echo Labels::getLabel('BTN_ADVANCE_SEARCH', $siteLangId); ?>
-                            </a>
                         </div>
                     <?php } ?>
                 </div>
-
-                <?php if ($haveExtraFlds) { ?>
-                    <div class="collapse" id="advanceSearch">
-                        <div class="separator separator-dashed my-4"></div>
-                        <?php
-                        foreach ($frmFields['advSrchFlds'] as $itr => $fldsGroup) { ?>
-                            <div class="row">
-                                <?php foreach ($fldsGroup as $frmFld) { ?>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="label"><?php echo $frmFld['caption']; ?></label>
-                                            <?php echo $frmSearch->getFieldHtml($frmFld['name']); ?>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-                            </div>
-                        <?php } ?>
-                    </div>
-                <?php } ?>
-            </div>
+            <?php } ?>
         </div>
-    <?php } ?>
+<?php }
+} ?>
 </form>
 <?php echo $frmSearch->getExternalJS(); ?>

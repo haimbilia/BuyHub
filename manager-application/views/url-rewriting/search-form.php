@@ -23,8 +23,8 @@ $fld->addFieldtagAttribute('class', 'form-control');
 echo $frmSearch->getFormTag();
 HtmlHelper::renderHiddenFields($frmSearch);
 ?>
-<div class="card">
-    <div class="card-body">
+<div class="card-head">
+    <div class="card-head-label">
         <div class="row">
             <?php if (count($languages) > 1) { ?>
                 <div class="col-md-4">
@@ -33,13 +33,11 @@ HtmlHelper::renderHiddenFields($frmSearch);
                 <div class="col-md-4">
                     <?php echo $frmSearch->getFieldHtml('lang_id'); ?>
                 </div>
-                <div class="col-md-4">
-                    <div class="input-group">
-                        <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                        <div class="input-group-append">
-                            <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
-                        </div>
-                    </div>
+                <div class="col-md-2">
+                    <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                </div>
+                <div class="col-md-2">
+                    <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
                 </div>
             <?php } else { ?>
                 <div class="col-md-8">
@@ -54,6 +52,7 @@ HtmlHelper::renderHiddenFields($frmSearch);
             <?php } ?>
         </div>
     </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-head.php'); ?>
 </div>
 </form>
 <?php echo $frmSearch->getExternalJS(); ?>

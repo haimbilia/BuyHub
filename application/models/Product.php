@@ -113,7 +113,7 @@ class Product extends MyAppModel
             );
         }
 
-        $srch->addOrder(static::DB_TBL_PREFIX . 'active', 'DESC');
+        //$srch->addOrder(static::DB_TBL_PREFIX . 'active', 'DESC');
         return $srch;
     }
 
