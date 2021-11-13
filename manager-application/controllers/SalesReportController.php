@@ -15,6 +15,7 @@ class SalesReportController extends AdminBaseController
         $pageData = PageLanguageData::getAttributesByKey('SALES_REPORT', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);

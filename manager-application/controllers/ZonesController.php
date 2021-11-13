@@ -32,7 +32,7 @@ class ZonesController extends AdminBaseController
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
-        $actionItemsData = HtmlHelper::getDefaultActionItems($this->modelObj, $fields);
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
         
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);

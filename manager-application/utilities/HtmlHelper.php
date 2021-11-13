@@ -14,7 +14,7 @@ class HtmlHelper
                 </div>';
     }
 
-    public static function getDefaultActionItems(object $obj, array $fields, int $langId = 0)
+    public static function getDefaultActionItems(array $fields, object $obj = null, int $langId = 0)
     {
         if (1 > $langId) {
             $langId = CommonHelper::getLangId();
@@ -30,6 +30,11 @@ class HtmlHelper
             'searchFrmTemplate' => '_partial/listing/listing-search-form.php',
             'searchListingPage' => FatUtility::camel2dashed(LibHelper::getControllerName()) . '/search.php'
         ];
+
+        if (null == $obj) {
+            return $actionBtnArr;
+        }
+
         if (array_key_exists($obj::tblFld('active'), $fields)) {
             $actionBtnArr = array_merge($actionBtnArr, ['performBulkAction' => true, 'statusButtons' => true]);
         }
