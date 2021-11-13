@@ -1,36 +1,38 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_SYSTEM_CODE_AND_CAPTION', $siteLangId); ?>
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_SYSTEM_CODE_AND_CAPTION', $siteLangId);
+
+$otherButtons = [
+    [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'updateFile()',
+            'title' => Labels::getLabel('LBL_UPDATE_WEB_LABEL_FILE', $siteLangId)
+        ],
+        'label' => '<i class="fas fa-laptop-code"></i>'
+    ],
+    [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => "updateFile(" . Labels::TYPE_APP . ")",
+            'title' => Labels::getLabel('LBL_UPDATE_APP_LABEL_FILE', $siteLangId)
+        ],
+        'label' => '<i class="fas fa-mobile-alt"></i>'
+    ],
+]
+?>
 
 <main class="main mainJs">
     <div class="container">
+        <?php $data = [
+            'siteLangId' => $siteLangId,
+            'newRecordBtn' => false,
+            'canEdit' => $canEdit
+        ];
+        $this->includeTemplate('_partial/header/header-breadcrumb.php', $data, false); ?>
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . 'labels/search-form.php'); ?>
                 <div class="card">
-                    <?php $data = [
-                        'canEdit' => $canEdit,
-                        'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_LABELS', $siteLangId),
-                        'otherButtons' => [
-                            [
-                                'attr' => [
-                                    'href' => 'javascript:void(0)',
-                                    'onclick' => 'updateFile()',
-                                    'title' => Labels::getLabel('LBL_UPDATE_WEB_LABEL_FILE', $siteLangId)
-                                ],
-                                'label' => '<i class="fas fa-laptop-code"></i>'
-                            ],
-                            [
-                                'attr' => [
-                                    'href' => 'javascript:void(0)',
-                                    'onclick' => "updateFile(" . Labels::TYPE_APP . ")",
-                                    'title' => Labels::getLabel('LBL_UPDATE_APP_LABEL_FILE', $siteLangId)
-                                ],
-                                'label' => '<i class="fas fa-mobile-alt"></i>'
-                            ],
-                        ]
-                    ];
-                    $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
+                    <?php require_once(CONF_THEME_PATH . 'labels/search-form.php'); ?>
                     <div class="card-body">
                         <div class="table-responsive listingTableJs">
                             <?php
@@ -50,5 +52,3 @@ $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_SYSTEM_CODE_AND_CAPTION', 
         </div>
     </div>
 </main>
-
- 

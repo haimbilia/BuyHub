@@ -12,10 +12,14 @@ class ProductsReportController extends AdminBaseController
     {
         $formColumns = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($formColumns);
+
+        $pageData = PageLanguageData::getAttributesByKey('PRODUCTS_REPORTS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('frmSearch', $frmSearch);
         $this->set('formColumns', $formColumns);
-        $this->set('pageTitle', Labels::getLabel('LBL_Products_Report', $this->siteLangId));
+        $this->set('pageTitle', $pageTitle);
         $this->getListingData(false);
         $this->_template->addJs(array('js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));
@@ -275,7 +279,7 @@ class ProductsReportController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns()
+    protected function getFormColumns()
     {
         $productReportCacheVar = FatCache::get('productReportCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$productReportCacheVar) {
@@ -324,7 +328,7 @@ class ProductsReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['product_name', 'netSoldQty', 'grossSales', 'couponDiscount', 'refundedAmount', 'taxTotal', 'shippingTotal', 'orderNetAmount'];
     }

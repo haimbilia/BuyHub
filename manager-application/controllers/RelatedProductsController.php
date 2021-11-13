@@ -12,9 +12,12 @@ class RelatedProductsController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_RELATED_PRODUCTS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_RELATED_PRODUCTS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->addCss(['css/select2.min.css', 'css/tagify.min.css']);
@@ -74,7 +77,7 @@ class RelatedProductsController extends AdminBaseController
         }
 
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'tuc.credential_user_id = selprod_user_id', 'tuc');
-        $srch->addFld('related_sellerproduct_id, credential_username, related_sellerproduct_id as listSerial');
+        $srch->addFld('related_sellerproduct_id, credential_username');
         $srch->addGroupBy('related_sellerproduct_id');
         
         $srch->setPageNumber($page);
@@ -89,7 +92,7 @@ class RelatedProductsController extends AdminBaseController
         foreach ($records as $relatedProd) {
             $productId = $relatedProd['related_sellerproduct_id'];
             $relProdSrch = SellerProduct::searchRelatedProducts($this->siteLangId);
-            $relProdSrch->addFld('if(related_sellerproduct_id = ' . $selProdId . ', 1 , 0) as priority, selprod_id as listSerial');
+            $relProdSrch->addFld('if(related_sellerproduct_id = ' . $selProdId . ', 1 , 0) as priority');
             $relProdSrch->addOrder('priority', 'DESC');
             $relProdSrch->addCondition('related_sellerproduct_id', '=', $productId);
             $relProdSrch->doNotCalculateRecords();
@@ -287,7 +290,7 @@ class RelatedProductsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $relatedProdsTblHeadingCols = CacheHelper::get('relatedProdsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($relatedProdsTblHeadingCols) {
@@ -304,7 +307,7 @@ class RelatedProductsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'listSerial',
@@ -313,7 +316,7 @@ class RelatedProductsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['related_products'],Common::excludeKeysForSort());
     }

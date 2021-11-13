@@ -28,9 +28,12 @@ class ZonesController extends AdminBaseController
 
         $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ZONES', $this->siteLangId));
-        $this->getListingData();
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHIPPING_ZONES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->getListingData();
         $this->_template->render();
     }
 
@@ -67,7 +70,7 @@ class ZonesController extends AdminBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         $srch = Zone::getSearchObject(false, $this->siteLangId);
-        $srch->addFld('zone.* , z_l.zone_name, zone.zone_id as listSerial');
+        $srch->addFld('zone.* , z_l.zone_name');
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('zone.zone_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('z_l.zone_name', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -129,7 +132,7 @@ class ZonesController extends AdminBaseController
 
         $recordId = FatUtility::int($post['zone_id']);
         unset($post['zone_id']);
- 
+
         $recordObj = new Zone($recordId);
         $post['zone_identifier'] = $post['zone_name'];
         $recordObj->assignValues($post);
@@ -137,9 +140,9 @@ class ZonesController extends AdminBaseController
         if (!$recordObj->save()) {
             LibHelper::exitWithError($recordObj->getError(), true);
         }
-        
+
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
-         
+
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -220,7 +223,7 @@ class ZonesController extends AdminBaseController
         }
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $zoneTblHeadingCols = CacheHelper::get('zoneTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($zoneTblHeadingCols) {
@@ -240,7 +243,7 @@ class ZonesController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -252,7 +255,7 @@ class ZonesController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['zone_active'], Common::excludeKeysForSort());
     }
@@ -260,12 +263,14 @@ class ZonesController extends AdminBaseController
     public function getBreadcrumbNodes($action)
     {
         parent::getBreadcrumbNodes($action);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHIPPING_ZONES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         switch ($action) {
             case 'index':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_ZONES', $this->siteLangId)]
+                    ['title' => $pageTitle]
                 ];
         }
         return $this->nodes;

@@ -100,7 +100,6 @@ class MetaTagsController extends AdminBaseController
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
-        $srch->addFld('meta_id as listSerial');
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -350,7 +349,7 @@ class MetaTagsController extends AdminBaseController
         $frm->addHiddenField(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'metaType', $metaType);
         $frm->addHiddenField('', 'page');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'meta_title');
         }
         HtmlHelper::addSearchButton($frm);
         return $frm;
@@ -362,7 +361,7 @@ class MetaTagsController extends AdminBaseController
         $frm->addHiddenField(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'metaType', $metaType);
         $frm->addHiddenField('', 'page');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'meta_title');
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
@@ -378,7 +377,7 @@ class MetaTagsController extends AdminBaseController
         $frm->addHiddenField(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'metaType', $metaType);
         $frm->addHiddenField('', 'page');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'meta_title');
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
@@ -716,7 +715,7 @@ class MetaTagsController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns(string $metaType): array
+    protected function getFormColumns(string $metaType): array
     {
         $metaTagsTblHeadingCols = CacheHelper::get('metaTagsTblHeadingCols'. $metaType . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($metaTagsTblHeadingCols) {
@@ -757,7 +756,7 @@ class MetaTagsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'listSerial',
@@ -773,7 +772,7 @@ class MetaTagsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

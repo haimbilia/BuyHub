@@ -7,7 +7,7 @@ class CountriesController extends AdminBaseController
         parent::__construct($action);
         $this->objPrivilege->canViewCountries();
     }
-    
+
     /**
      * setLangTemplateData - This function is use to automate load langform and save it. 
      *
@@ -26,10 +26,13 @@ class CountriesController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_COUNTRIES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_COUNTRIES', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -64,14 +67,14 @@ class CountriesController extends AdminBaseController
 
         $srchFrm = $this->getSearchForm($fields);
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
-        
+
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = Countries::getSearchObject(false, $this->siteLangId);
-        $srch->addMultipleFields(['c.* , COALESCE(c_l.country_name, c.country_code) as country_name', 'c.country_id as listSerial']);
+        $srch->addMultipleFields(['c.* , COALESCE(c_l.country_name, c.country_code) as country_name']);
 
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('c.country_code', 'like', '%' . $post['keyword'] . '%');
@@ -89,7 +92,7 @@ class CountriesController extends AdminBaseController
         $srch->removeFld(['select_all', 'action']);
         $rs = $srch->getResultSet();
         $arrListing = $db->fetchAll($rs);
-        
+
         $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -113,7 +116,7 @@ class CountriesController extends AdminBaseController
 
         $frm = $this->getForm();
 
-        if (0 < $recordId) {     
+        if (0 < $recordId) {
             $data = Countries::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, null, true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
@@ -123,7 +126,7 @@ class CountriesController extends AdminBaseController
 
         $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $recordId);
-        $this->set('frm', $frm);     
+        $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_COUNTRY_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
     }
@@ -138,7 +141,7 @@ class CountriesController extends AdminBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-                
+
         $recordId = $post['country_id'];
         unset($post['country_id']);
 
@@ -150,13 +153,13 @@ class CountriesController extends AdminBaseController
         }
 
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
-        
-        Product::updateMinPrices(0, 0, 0, $recordId);       
+
+        Product::updateMinPrices(0, 0, 0, $recordId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
     private function getForm()
-    {        
+    {
         $frm = new Form('frmCountry');
         $frm->addHiddenField('', 'country_id');
 
@@ -174,21 +177,21 @@ class CountriesController extends AdminBaseController
 
         $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_CODE', $this->siteLangId), 'country_code');
         $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->siteLangId), 'country_code_alpha3');
-        
+
         $languageArr = Language::getDropDownList();
         if (1 < count($languageArr)) {
             $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'country_language_id', $languageArr, '', array(), '');
         } else {
             $frm->addHiddenField('', 'country_language_id', FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
-        }    
+        }
 
-        $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->siteLangId), 'country_active', applicationConstants::getActiveInactiveArr($this->siteLangId), '', array(), '');    
-        
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, ''); 
+        $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->siteLangId), 'country_active', applicationConstants::getActiveInactiveArr($this->siteLangId), '', array(), '');
+
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        } 
-        
+        }
+
         return $frm;
     }
 
@@ -253,7 +256,7 @@ class CountriesController extends AdminBaseController
         }
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $countriesTblHeadingCols = CacheHelper::get('countriesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($countriesTblHeadingCols) {
@@ -273,12 +276,12 @@ class CountriesController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['select_all', 'listSerial', 'country_name', 'country_code', 'country_code_alpha3',  'country_active', 'action'];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['country_active'], Common::excludeKeysForSort());
     }

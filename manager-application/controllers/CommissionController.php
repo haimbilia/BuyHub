@@ -12,10 +12,14 @@ class CommissionController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_COMMISSION', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
 
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_COMMISSION', $this->siteLangId));
         $this->getListingData();
         $this->_template->addJs(array('js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));
@@ -62,8 +66,7 @@ class CommissionController extends AdminBaseController
             'tcs.*',
             'IFNULL(tp_l.product_name,tp.product_identifier)as product_name',
             'IFNULL(tpc_l.prodcat_name,tpc.prodcat_identifier)as prodcat_name',
-            'CONCAT(COALESCE(s_l.shop_name, shop.shop_identifier), " ( ", tuc.credential_username, " )") as vendor',
-            'commsetting_id as listSerial'
+            'CONCAT(COALESCE(s_l.shop_name, shop.shop_identifier), " ( ", tuc.credential_username, " )") as vendor'
         );
         $srch = Commission::getCommissionSettingsObj($this->siteLangId, 0, $attr);
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(tu.user_parent > 0, user_parent, tu.user_id)', 'shop');
@@ -382,7 +385,7 @@ class CommissionController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $commissionTblHeadingCols = CacheHelper::get('commissionTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($commissionTblHeadingCols) {
@@ -402,7 +405,7 @@ class CommissionController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -415,7 +418,7 @@ class CommissionController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

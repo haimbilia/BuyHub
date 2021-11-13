@@ -13,10 +13,14 @@ class PreferredPaymentMethodController extends AdminBaseController
     {
         $formColumns = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($formColumns);
+        $pageData = PageLanguageData::getAttributesByKey('PREFERRED_PAYMENT_METHOD_REPORT', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('formColumns', $formColumns);
-        $this->set('pageTitle', Labels::getLabel('LBL_Preferred_Payment_Method_Report', $this->siteLangId));
         $this->getListingData(false);
         $this->_template->render();
     }
@@ -161,7 +165,7 @@ class PreferredPaymentMethodController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns()
+    protected function getFormColumns()
     {
         $prefPayMethodReportsCacheVar = FatCache::get('prefPayMethodReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$prefPayMethodReportsCacheVar) {
@@ -182,7 +186,7 @@ class PreferredPaymentMethodController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['orderDate', 'pluginName', 'billingAddress', 'transactionAmount'];
     }

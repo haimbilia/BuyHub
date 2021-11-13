@@ -26,10 +26,13 @@ class OrderCancelReasonsController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_ORDER_CANCEL_REASONS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ORDER_CANCEL_REASONS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -72,7 +75,7 @@ class OrderCancelReasonsController extends AdminBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = OrderCancelReason::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('ocreason.*', 'ocreason_l.ocreason_title', 'ocreason_id as listSerial'));
+        $srch->addMultipleFields(array('ocreason.*', 'ocreason_l.ocreason_title'));
 
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('ocreason_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
@@ -220,7 +223,7 @@ class OrderCancelReasonsController extends AdminBaseController
         }
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $ordercancelReasonTblHeadingCols = CacheHelper::get('ordercancelReasonTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($ordercancelReasonTblHeadingCols) {
@@ -238,7 +241,7 @@ class OrderCancelReasonsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -249,7 +252,7 @@ class OrderCancelReasonsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

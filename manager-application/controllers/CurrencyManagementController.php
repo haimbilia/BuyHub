@@ -26,10 +26,18 @@ class CurrencyManagementController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_CURRENCIES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $currencyPlugins = Plugin::getNamesByType(Plugin::TYPE_CURRENCY_CONVERTER, $this->siteLangId);
+        $currency = new Currency();
+
+        $this->set('currencyPlugins', $currencyPlugins);
+        $this->set('currencyConverter', $currency->getCurrencyConverterApi());
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('canEdit', $this->objPrivilege->canEditCurrencyManagement($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_CURRENCIES', $this->siteLangId));
         $this->_template->addJs('js/jquery.tablednd.js');
         $this->getListingData();
 
@@ -80,7 +88,7 @@ class CurrencyManagementController extends AdminBaseController
             $srch->addCondition('curr_l.currency_name', 'like', '%' . $post['keyword'] . '%');
         }
 
-        $srch->addMultipleFields(['curr.*', 'curr_l.*', 'curr.currency_id as listSerial']);
+        $srch->addMultipleFields(['curr.*', 'curr_l.*']);
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -112,26 +120,26 @@ class CurrencyManagementController extends AdminBaseController
         if (0 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        
+
         $data = [];
         $defaultCurrency = 0;
         if ($recordId > 0) {
             $data = Currency::getAttributesByLangId(
-                    $this->getDefaultFormLangId(),
-                    $recordId,
-                    array('currency_id', 'currency_code', 'currency_active', 'currency_symbol_left', 'currency_symbol_right', 'currency_value','currency_name'),
-                    true
-                );
+                $this->getDefaultFormLangId(),
+                $recordId,
+                array('currency_id', 'currency_code', 'currency_active', 'currency_symbol_left', 'currency_symbol_right', 'currency_value', 'currency_name'),
+                true
+            );
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $defaultCurrency = ($data['currency_id'] == FatApp::getConfig("CONF_CURRENCY", FatUtility::VAR_INT, 1)) ? 1 : 0;
         }
         $frm = $this->getForm($defaultCurrency);
-        $frm->fill($data);        
-    
+        $frm->fill($data);
+
         $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
-        $this->set('recordId', $recordId);    
+        $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_CURRENCY_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
@@ -157,15 +165,15 @@ class CurrencyManagementController extends AdminBaseController
             }
         }
         $recordObj = new Currency($recordId);
-        $post['currency_date_modified'] = date('Y-m-d H:i:s');    
+        $post['currency_date_modified'] = date('Y-m-d H:i:s');
         $recordObj->assignValues($post);
 
         if (!$recordObj->save()) {
             LibHelper::exitWithError($recordObj->getError(), true);
         }
 
-        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]); 
-        
+        $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
+
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -185,7 +193,7 @@ class CurrencyManagementController extends AdminBaseController
         }
     }
 
-    private function getForm( int $defaultCurrency = 0)
+    private function getForm(int $defaultCurrency = 0)
     {
         $frm = new Form('frmCurrency');
         $frm->addHiddenField('', 'currency_id');
@@ -201,11 +209,11 @@ class CurrencyManagementController extends AdminBaseController
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'currency_active', $activeInactiveArr, '', array(), '');
 
-        $languageArr = Language::getDropDownList();        
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, ''); 
+        $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        } 
+        }
 
         return $frm;
     }
@@ -260,7 +268,7 @@ class CurrencyManagementController extends AdminBaseController
         }
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
-    }    
+    }
 
     protected function changeStatus($recordId, $status)
     {
@@ -276,7 +284,7 @@ class CurrencyManagementController extends AdminBaseController
         }
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $currencyTblHeadingCols = CacheHelper::get('currencyTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($currencyTblHeadingCols) {
@@ -298,7 +306,7 @@ class CurrencyManagementController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'dragdrop',
@@ -312,7 +320,7 @@ class CurrencyManagementController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, [
             'dragdrop',

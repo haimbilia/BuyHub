@@ -12,11 +12,14 @@ class RewardsController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_USER_REWARD_POINTS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('languages', Language::getAllNames());
-        $this->set('pageTitle', Labels::getLabel('LBL_Manage_User_Reward_Points', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->addJs(array('js/select2.js'));
@@ -62,7 +65,7 @@ class RewardsController extends AdminBaseController
 
         $srch = new UserRewardSearch();
         $srch->joinUser();
-        $srch->addMultipleFields(['urp.*', 'user_name', 'urp.urp_id as listSerial']);
+        $srch->addMultipleFields(['urp.*', 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email']);
 
         if (0 < $userId) {
             $srch->addCondition('urp.urp_user_id', '=', $userId);
@@ -93,13 +96,12 @@ class RewardsController extends AdminBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'user_name');
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'urp_user_id', []);
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
@@ -170,7 +172,7 @@ class RewardsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $rewardsTblHeadingCols = CacheHelper::get('rewardsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($rewardsTblHeadingCols) {
@@ -179,7 +181,7 @@ class RewardsController extends AdminBaseController
 
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_USER', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
             'urp_date_added' => Labels::getLabel('LBL_Valid_from', $this->siteLangId),
             'urp_date_expiry' => Labels::getLabel('LBL_Valid_till', $this->siteLangId),
             'urp_points' => Labels::getLabel('LBL_Points', $this->siteLangId),
@@ -190,7 +192,7 @@ class RewardsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'listSerial',
@@ -202,8 +204,22 @@ class RewardsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['urp_comments'], Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_USERS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Users')],
+                    ['title' => Labels::getLabel('LBL_REWARDS', $this->siteLangId)]
+                ];
+        }
+        return $this->nodes;
     }
 }

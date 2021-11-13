@@ -25,9 +25,12 @@ class EmptyCartItemsController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_EMPTY_CART_ITEMS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_EMPTY_CART_ITEMS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -69,8 +72,7 @@ class EmptyCartItemsController extends AdminBaseController
         $srch = EmptyCartItems::getSearchObject($this->siteLangId, false, false);
         $srch->addMultipleFields([
             'eci.*',
-            'eci_l.*',
-            'eci.emptycartitem_id as listSerial'
+            'eci_l.*'
         ]);
 
         if (!empty($post['keyword'])) {
@@ -277,7 +279,7 @@ class EmptyCartItemsController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $emptyCartItemsTblHeadingCols = CacheHelper::get('emptyCartItemsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($emptyCartItemsTblHeadingCols) {
@@ -297,7 +299,7 @@ class EmptyCartItemsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -309,7 +311,7 @@ class EmptyCartItemsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['emptycartitem_active'], Common::excludeKeysForSort());
     }

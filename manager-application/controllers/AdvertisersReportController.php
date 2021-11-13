@@ -13,10 +13,14 @@ class AdvertisersReportController extends AdminBaseController
     {
         $formColumns = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($formColumns);
+        $pageData = PageLanguageData::getAttributesByKey('ADVERTISERS_REPORT', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('formColumns', $formColumns);
-        $this->set('pageTitle', Labels::getLabel('LBL_Advertisers_Report', $this->siteLangId));
         $this->getListingData(false);
         $this->_template->render();
     }
@@ -174,7 +178,7 @@ class AdvertisersReportController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns()
+    protected function getFormColumns()
     {
         $avdertiserUserReportsCacheVar = FatCache::get('avdertiserUserReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$avdertiserUserReportsCacheVar) {
@@ -195,7 +199,7 @@ class AdvertisersReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['name', 'user_regdate', 'user_is_supplier', 'promotionsCount', 'activePromotions', 'promotionCharged', 'availableBalance'];
     }

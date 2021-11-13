@@ -2093,4 +2093,19 @@ END,   special_price_found ) as special_price_found'
         
         return FatApp::getDb()->fetchAll($moreSellerSrch->getResultSet());
     }
+
+    public static function getStatusHtml(int $langId, int $status): string
+    {
+        $arr = self::getApproveUnApproveArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case static::APPROVED:
+                $status = HtmlHelper::SUCCESS;
+                break;
+            default:
+                $status = HtmlHelper::DANGER;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, $msg);
+    }
 }

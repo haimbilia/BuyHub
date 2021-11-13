@@ -8,19 +8,44 @@ class ProductCategoriesController extends AdminBaseController
         $this->objPrivilege->canViewProductCategories();
     }
 
+    /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditProductCategories($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditProductCategories();
+        }
+    }
+
+    /**
+     * setModel - This function is used to set related model class and used by its parent class.
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
+    protected function setModel(array $constructorArgs = []): void
+    {
+        $this->modelObj = (new ReflectionClass('ProductCategory'))->newInstanceArgs($constructorArgs);
+    }
+
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
-        $this->objPrivilege->canEditProductCategories();
-        $this->modelObj = (new ReflectionClass('ProductCategory'))->newInstanceArgs($constructorArgs);
+        $this->checkEditPrivilege();
+        $this->setModel($constructorArgs);      
         $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->checkMediaExist = true;
         $this->set('formTitle', Labels::getLabel('LBL_CATEGORY_SETUP', $this->siteLangId));        
     }
 
     public function index()
-    {
-        $canEdit = $this->objPrivilege->canEditProductCategories(0, true);
-        $this->set("canEdit", $canEdit);
+    {        
+        $this->checkEditPrivilege(true);
         $srch = new ProductCategorySearch(0, false, false, false, -1);
         $this->set("recordCount", FatApp::getDb()->totalRecords($srch->getResultSet()));
 
@@ -57,7 +82,7 @@ class ProductCategoriesController extends AdminBaseController
 
     public function updateOrder()
     {
-        $this->objPrivilege->canEditProductCategories();
+        $this->checkEditPrivilege();
         $recordId = FatApp::getPostedData('catId', FatUtility::VAR_INT, 0);
         $parentCatId = FatApp::getPostedData('parentCatId', FatUtility::VAR_INT, 0);
         $catOrderArr = json_decode(FatApp::getPostedData('catOrder'));
@@ -87,7 +112,7 @@ class ProductCategoriesController extends AdminBaseController
 
     public function form($productReq = 0)
     {
-        $this->objPrivilege->canEditProductCategories();        
+        $this->checkEditPrivilege();        
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getCategoryForm($recordId, $productReq);
         $data = [];
@@ -125,7 +150,7 @@ class ProductCategoriesController extends AdminBaseController
 
     public function imagesForm($recordId)
     {
-        $this->objPrivilege->canEditProductCategories();
+        $this->checkEditPrivilege();
 
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
@@ -221,7 +246,7 @@ class ProductCategoriesController extends AdminBaseController
 
     public function setup($prodCatReq = 0)
     {
-        $this->objPrivilege->canEditProductCategories();
+        $this->checkEditPrivilege();
         $frm = $this->getCategoryForm(0, $prodCatReq);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
@@ -316,7 +341,7 @@ class ProductCategoriesController extends AdminBaseController
 
     public function setUpCatImages()
     {
-        $this->objPrivilege->canEditProductCategories();
+        $this->checkEditPrivilege();
         $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
         $prodcat_id = FatApp::getPostedData('prodcat_id', FatUtility::VAR_INT, 0);
         $languages = Language::getAllNames();
@@ -367,7 +392,7 @@ class ProductCategoriesController extends AdminBaseController
 
     public function removeImage($afileId, $recordId, $imageType = '', $langId = 0, $slide_screen = 0)
     {
-        $this->objPrivilege->canEditProductCategories();
+        $this->checkEditPrivilege();
         $afileId = FatUtility::int($afileId);
         $recordId = FatUtility::int($recordId);
         $langId = FatUtility::int($langId);
@@ -391,34 +416,31 @@ class ProductCategoriesController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function changeStatus()
+    protected function changeStatus($recordId, $status)
     {
-        $this->objPrivilege->canEditProductCategories();
-        $recordId = FatApp::getPostedData('prodCatId', FatUtility::VAR_INT, 0);
-        $changeStatus = FatApp::getPostedData('prodcat_active', FatUtility::VAR_INT, 0);
-        if ($recordId < 1) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-        $catData = ProductCategory::getAttributesById($recordId, array('prodcat_active'));
-        if (!$catData) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        $status = FatUtility::int($status);
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $prodCatObj = new ProductCategory($recordId);
-        if (applicationConstants::INACTIVE == $changeStatus) {
+        if (applicationConstants::INACTIVE == $status) {
             $prodCatObj->disableChildCategories();
         } else {
             $prodCatObj->enableParentCategories();
         }
 
+        $this->setModel([$recordId]);
+        if (!$this->modelObj->changeStatus($status)) {
+            LibHelper::exitWithError($this->modelObj->getError(), true);
+        }
         Product::updateMinPrices();
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
+    }    
 
     public function changeRequestStatus()
     {
-        $this->objPrivilege->canEditProductCategories();
+        $this->checkEditPrivilege();
         $recordId = FatApp::getPostedData('prodCatId', FatUtility::VAR_INT, 0);
 
         if ($recordId < 1) {
@@ -449,8 +471,8 @@ class ProductCategoriesController extends AdminBaseController
 
     public function deleteRecord()
     {
-        $this->objPrivilege->canEditProductCategories();
-        $prodcat_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
+        $this->checkEditPrivilege();
+        $prodcat_id = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if ($prodcat_id < 1) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
@@ -607,7 +629,7 @@ class ProductCategoriesController extends AdminBaseController
 
     public function updateRatingTypes()
     {
-        $this->objPrivilege->canEditProductCategories();
+        $this->checkEditPrivilege();
         $recordId = FatApp::getPostedData('prt_prodcat_id', FatUtility::VAR_INT, 0);
         $rtId = FatApp::getPostedData('prt_ratingtype_id', FatUtility::VAR_INT, 0);
         if ($recordId < 1 || $rtId < 1) {
@@ -624,7 +646,7 @@ class ProductCategoriesController extends AdminBaseController
 
     public function removeRatingType()
     {
-        $this->objPrivilege->canEditProductCategories();
+        $this->checkEditPrivilege();
         $recordId = FatApp::getPostedData('prt_prodcat_id', FatUtility::VAR_INT, 0);
         $rtId = FatApp::getPostedData('prt_ratingtype_id', FatUtility::VAR_INT, 0);
         if ($recordId < 1 || $rtId < 1) {
@@ -642,7 +664,7 @@ class ProductCategoriesController extends AdminBaseController
 
     public function ratingTypeAutoComplete()
     {
-        $this->objPrivilege->canEditProductCategories();
+        $this->checkEditPrivilege();
         /* $pagesize = 10; */
         $post = FatApp::getPostedData();
 

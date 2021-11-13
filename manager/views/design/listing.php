@@ -348,7 +348,7 @@
                                                             <span class="switch switch-sm switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </td>
@@ -410,8 +410,8 @@
                                                         <td>
                                                             <span class="switch switch-sm switch-icon">
                                                                 <label>
-                                                                    <input type="checkbox" name="">
-                                                                    <span></span>
+                                                                    <input type="checkbox" checked="checked" name="">
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </td>
@@ -475,15 +475,14 @@
                                                         <td>
                                                             <span class="switch switch-sm switch-icon">
                                                                 <label>
-                                                                    <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
+                                                                    <input type="checkbox" name="">
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </td>
                                                         <td class="align-right">
                                                             <ul class="actions">
                                                                 <li>
-
                                                                     <a href="#" data-toggle="modal" data-target="#edit"
                                                                         title="Edit">
 
@@ -540,7 +539,7 @@
                                                             <span class="switch switch-sm switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </td>
@@ -604,7 +603,7 @@
                                                             <span class="switch switch-sm switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" name="">
-                                                                    <span></span>
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </td>
@@ -667,8 +666,8 @@
                                                         <td>
                                                             <span class="switch switch-sm switch-icon">
                                                                 <label>
-                                                                    <input type="checkbox" name="">
-                                                                    <span></span>
+                                                                    <input type="checkbox" checked="checked" name="">
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </td>
@@ -732,7 +731,7 @@
                                                             <span class="switch switch-sm switch-icon">
                                                                 <label>
                                                                     <input type="checkbox" checked="checked" name="">
-                                                                    <span></span>
+                                                                    <span class="input-helper"></span>
                                                                 </label>
                                                             </span>
                                                         </td>

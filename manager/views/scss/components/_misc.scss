@@ -1993,6 +1993,7 @@ strong {
         width: 40px;
         height: 40px;
         >img {
+            border-radius: 50%;
             flex-shrink: 0;
             display: inline-block;
             background: $bg-placeholder;
@@ -2010,6 +2011,8 @@ strong {
     }
     &-sm {
         .user-profile_photo {
+            width: 20px;
+            height: 20px;
             margin-#{$end-direction}: 0.5rem;
             >img {
                 width: 20px;
@@ -2064,6 +2067,10 @@ strong {
     &-body {
         flex: 1 1 auto;
         padding: 1.5rem 2rem;
+        .h3 {
+            font-size: 1rem;
+            color: $txt-body;
+        }
     }
     &-foot {
         border-top: $border;

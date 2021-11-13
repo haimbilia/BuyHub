@@ -12,11 +12,15 @@ class SalesReportController extends AdminBaseController
     {
         $formColumns = $this->getFormColumns($orderDate);
         $frmSearch = $this->getSearchForm($formColumns, $orderDate);
+        $pageData = PageLanguageData::getAttributesByKey('SALES_REPORT', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('orderDate', $orderDate);
         $this->set('defaultColumns', $this->getDefaultColumns($orderDate));
         $this->set('formColumns', $formColumns);
-        $this->set('pageTitle', Labels::getLabel('LBL_SALES_REPORT', $this->siteLangId));
         $this->getListingData(false, $orderDate);
         $this->_template->render();
     }
@@ -187,7 +191,7 @@ class SalesReportController extends AdminBaseController
         $this->set('allowedKeysForSorting', array_keys($fields));
     }
 
-    private function getFormColumns($orderDate = '')
+    protected function getFormColumns($orderDate = '')
     {
         $salesReportCacheVar = FatCache::get('salesReportCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$salesReportCacheVar) {
@@ -238,7 +242,7 @@ class SalesReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns($orderDate = ''): array
+    protected function getDefaultColumns($orderDate = ''): array
     {
         $arr = ['orderDate', 'totQtys', 'grossSales', 'couponDiscount', 'refundedAmount', 'shippingTotal', 'taxTotal', 'orderNetAmount'];
         if (!empty($orderDate)) {

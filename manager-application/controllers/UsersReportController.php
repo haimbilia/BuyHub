@@ -189,7 +189,7 @@ class UsersReportController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns($userType = User::USER_TYPE_BUYER)
+    protected function getFormColumns($userType = User::USER_TYPE_BUYER)
     {
         $buyerUserReportsCacheVar = FatCache::get('buyerUserReportsCacheVar' . $userType . '-' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$buyerUserReportsCacheVar) {

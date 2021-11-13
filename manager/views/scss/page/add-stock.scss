@@ -160,6 +160,9 @@
         .checkbox {
             line-height: 1.5;
             display: flex;
+            input {
+                top: 4px;
+            }
         }
         strong {
             color: $txt-body;

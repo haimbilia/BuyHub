@@ -11,11 +11,14 @@ class RecomendedTagProductsController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_RECOMENDATIONS_TAG_PRODUCTS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('languages', Language::getAllNames());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_RECOMENDATIONS_TAG_PRODUCTS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -62,7 +65,7 @@ class RecomendedTagProductsController extends AdminBaseController
         $srch->joinTable(Tag::DB_TBL_LANG, 'LEFT OUTER JOIN', 't_l.taglang_tag_id = t.tag_id and t_l.taglang_lang_id = ' . $this->siteLangId, 't_l');
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = tpr.tpr_product_id', 'p');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p_l.productlang_product_id = p.product_id and p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
-        $srch->addMultipleFields(array('tpr.*', 'tpr_tag_id as listSerial', 'IFNULL(t_l.tag_name,t.tag_identifier) as tag_name', 'IFNULL(p_l.product_name,p.product_identifier) as product_name'));
+        $srch->addMultipleFields(array('tpr.*', 'IFNULL(t_l.tag_name,t.tag_identifier) as tag_name', 'IFNULL(p_l.product_name,p.product_identifier) as product_name'));
 
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING);
         if (!empty($keyword)) {
@@ -117,7 +120,7 @@ class RecomendedTagProductsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $recTagProdsTblHeadingCols = CacheHelper::get('recTagProdsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($recTagProdsTblHeadingCols) {
@@ -141,7 +144,7 @@ class RecomendedTagProductsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'listSerial',
@@ -153,7 +156,7 @@ class RecomendedTagProductsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

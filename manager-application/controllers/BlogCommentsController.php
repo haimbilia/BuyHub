@@ -12,12 +12,14 @@ class BlogCommentsController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_BLOG_COMMENTS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
-        $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_BLOG_COMMENTS', $this->siteLangId));
+        $this->set('defaultColumns', $this->getDefaultColumns());        
         $this->getListingData();
-
         $this->_template->render();
     }
 
@@ -70,7 +72,7 @@ class BlogCommentsController extends AdminBaseController
         if (isset($post['bpcomment_id']) && $post['bpcomment_id'] != '') {
             $srch->addCondition('bpcomment_id', '=', $post['bpcomment_id']);
         }
-        $srch->addMultipleFields(array('bpcomment_id', 'bpcomment_author_name', 'bpcomment_author_email', 'bpcomment_approved', 'bpcomment_added_on', 'post_id', 'ifnull(post_title,post_identifier) post_title', 'bpcomment_id as listSerial'));
+        $srch->addMultipleFields(array('bpcomment_id', 'bpcomment_author_name', 'bpcomment_author_email', 'bpcomment_approved', 'bpcomment_added_on', 'post_id', 'ifnull(post_title,post_identifier) post_title'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
@@ -229,7 +231,7 @@ class BlogCommentsController extends AdminBaseController
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'bpcomment_id');        
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'bpcomment_author_name');
         }
 
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
@@ -243,7 +245,7 @@ class BlogCommentsController extends AdminBaseController
         return $frm;
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $blogCommentsTblHeadingCols = CacheHelper::get('blogCommentsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($blogCommentsTblHeadingCols) {
@@ -264,7 +266,7 @@ class BlogCommentsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',
@@ -278,7 +280,7 @@ class BlogCommentsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

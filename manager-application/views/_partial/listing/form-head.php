@@ -5,6 +5,7 @@ $disabled = !empty($disabled) ? ' disabled' : '';
 $formTitle = !empty($formTitle) ? $formTitle : Labels::getLabel('LBL_SETUP', $siteLangId);
 $formSubTitle = !empty($formSubTitle) ? $formSubTitle : '';
 $includeTabs = $includeTabs ?? true;
+$languages = $languages ?? [];
 ?>
 
 <div class="modal-header">

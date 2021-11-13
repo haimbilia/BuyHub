@@ -12,10 +12,13 @@ class UrlRewritingController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_URL_REWRITING', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_URL_REWRITING', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -65,7 +68,7 @@ class UrlRewritingController extends AdminBaseController
         }
 
         $srch = UrlRewrite::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(['ur.*', 'lng.*', 'ur.urlrewrite_id as listSerial']);
+        $srch->addMultipleFields(['ur.*', 'lng.*']);
         $srch->joinTable(Language::DB_TBL, 'LEFT OUTER JOIN', 'lng.language_id = ur.urlrewrite_lang_id', 'lng');
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('ur.urlrewrite_original', 'like', '%' . $post['keyword'] . '%');
@@ -244,7 +247,7 @@ class UrlRewritingController extends AdminBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'urlrewrite_original');
         }
 
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
@@ -294,7 +297,7 @@ class UrlRewritingController extends AdminBaseController
         return $frm;
     }
     
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $urlRewritingTblHeadingCols = CacheHelper::get('urlRewritingTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($urlRewritingTblHeadingCols) {
@@ -313,7 +316,7 @@ class UrlRewritingController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [    
             'select_all',
@@ -325,7 +328,7 @@ class UrlRewritingController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

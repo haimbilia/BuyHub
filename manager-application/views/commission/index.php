@@ -1,21 +1,19 @@
-<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$deleteButton = true;
 $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_CATEGORY,_SELLER_AND_PRODUCT', $siteLangId); ?>
 
 <main class="main mainJs">
     <div class="container">
+        <?php $data = [
+            'siteLangId' => $siteLangId,
+            'newRecordBtn' => true,
+            'canEdit' => $canEdit
+        ];
+        $this->includeTemplate('_partial/header/header-breadcrumb.php', $data, false); ?>
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                 <div class="card">
-                    <?php $data = [
-                        'canEdit' => $canEdit,
-                        'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_COMMISSION_SETTINGS', $siteLangId),
-                        'newRecordBtn' => true,
-                        'deleteButton' => true
-                    ];
-
-                    $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
+                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                     <div class="card-body">
                         <div class="table-responsive listingTableJs">
                             <?php
@@ -36,5 +34,3 @@ $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_CATEGORY,_SELLER_AND_PRODU
         </div>
     </div>
 </main>
-
- 

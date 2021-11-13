@@ -12,11 +12,14 @@ class SmartRecomendedWeightagesController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_WEIGHTAGE_SETTINGS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('languages', Language::getAllNames());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_WEIGHTAGE_SETTINGS', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -59,7 +62,7 @@ class SmartRecomendedWeightagesController extends AdminBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = SmartWeightageSettings::getSearchObject();
-        $srch->addMultipleFields(['sws.*', 'swsetting_key as listSerial']);
+        $srch->addMultipleFields(['sws.*']);
         if (!empty($post['keyword'])) {
             $srch->addCondition('sws.swsetting_name', 'like', '%' . $post['keyword'] . '%');
         }
@@ -117,7 +120,7 @@ class SmartRecomendedWeightagesController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $smartRecWeightagesTblHeadingCols = CacheHelper::get('smartRecWeightagesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($smartRecWeightagesTblHeadingCols) {
@@ -138,7 +141,7 @@ class SmartRecomendedWeightagesController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [    
             'listSerial',
@@ -147,7 +150,7 @@ class SmartRecomendedWeightagesController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
     }

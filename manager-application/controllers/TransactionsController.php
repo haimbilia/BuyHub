@@ -12,11 +12,14 @@ class TransactionsController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_USER_TRANSACTIONS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('languages', Language::getAllNames());
-        $this->set('pageTitle', Labels::getLabel('LBL_Manage_User_Transactions', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->addJs(array('js/select2.js'));
@@ -68,7 +71,8 @@ class TransactionsController extends AdminBaseController
         $balSrch = Transactions::getSearchObject();
         $balSrch->doNotCalculateRecords();
         $balSrch->doNotLimitRecords();
-        $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
+        $srch->joinTable(User::DB_TBL, 'LEFT JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
+        $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'u.user_id = utxn.utxn_user_id', 'uc');
         $balSrch->addMultipleFields(['utxn.*', "utxn_credit - utxn_debit as bal"]);
         if (0 < $userId) {
             $balSrch->addCondition('utxn_user_id', '=', $userId);
@@ -76,7 +80,7 @@ class TransactionsController extends AdminBaseController
         $balSrch->addCondition('utxn_status', '=', 1);
         $srch->joinTable('(' . $balSrch->getQuery() . ')', 'JOIN', 'tqupb.utxn_id <= utxn.utxn_id', 'tqupb');
 
-        $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance", 'user_name', 'utxn.utxn_id as listSerial'));
+        $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance", 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));
         $srch->addGroupBy('utxn.utxn_id');
 
 
@@ -102,17 +106,16 @@ class TransactionsController extends AdminBaseController
         $this->set('canEdit', $this->objPrivilege->canEditUsers($this->admin_id, true));
     }
 
-    public function getSearchForm($fields = [])
+    protected function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm);
+            $this->addSortingElements($frm, 'user_name');
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'utxn_user_id', []);
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
@@ -191,7 +194,7 @@ class TransactionsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $transactionsTblHeadingCols = CacheHelper::get('transactionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($transactionsTblHeadingCols) {
@@ -199,8 +202,8 @@ class TransactionsController extends AdminBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_USER', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),          
+            'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
             'utxn_id' => Labels::getLabel('LBL_Transaction_Id', $this->siteLangId),
             'utxn_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
             'utxn_credit' => Labels::getLabel('LBL_Credit', $this->siteLangId),
@@ -214,7 +217,7 @@ class TransactionsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'listSerial',
@@ -229,8 +232,22 @@ class TransactionsController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['utxn_comments'], Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        parent::getBreadcrumbNodes($action);
+
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_USERS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Users')],
+                    ['title' => Labels::getLabel('LBL_TRANSACTIONS', $this->siteLangId)]
+                ];
+        }
+        return $this->nodes;
     }
 }

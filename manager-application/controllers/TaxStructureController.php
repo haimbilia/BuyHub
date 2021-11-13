@@ -12,10 +12,13 @@ class TaxStructureController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_TAX_STRUCTURE', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_TAX_STRUCTURE', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -59,7 +62,7 @@ class TaxStructureController extends AdminBaseController
 
         $srch = TaxStructure::getSearchObject($this->siteLangId);
         $srch->addCondition('taxstr_parent', '=', 0);
-        $srch->addMultipleFields(array('ts.*', 'ts_l.*', 'taxstr_id as listSerial'));
+        $srch->addMultipleFields(array('ts.*', 'ts_l.*'));
 
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('taxstr_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
@@ -167,7 +170,7 @@ class TaxStructureController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getFormColumns(): array
+    protected function getFormColumns(): array
     {
         $taxStructureTblHeadingCols = CacheHelper::get('taxStructureTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($taxStructureTblHeadingCols) {
@@ -185,7 +188,7 @@ class TaxStructureController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'listSerial',
@@ -195,7 +198,7 @@ class TaxStructureController extends AdminBaseController
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array
+    protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, ['taxstr_is_combined'],Common::excludeKeysForSort());
     }

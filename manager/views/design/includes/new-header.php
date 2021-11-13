@@ -757,15 +757,13 @@
                                 <a href="#">Account Setting</a>
                                 <a href="#">Sign out</a>
                             </nav>
-
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-    <div class="alert alert-warning fade show" role="alert">
+    <div class="alert alert-solid-warning fade show" role="alert">
         <div class="alert-icon"><i class="flaticon-warning"></i></div>
         <div class="alert-text">A simple warning alert—check it out!</div>
         <div class="alert-close">
@@ -774,4 +772,14 @@
             </button>
         </div>
     </div>
+    <div class="alert alert-solid-success  fade show" role="alert">
+        <div class="alert-icon"><i class="flaticon-warning"></i></div>
+        <div class="alert-text">A simple warning alert—check it out!</div>
+        <div class="alert-close">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true"><i class="la la-close"></i></span>
+            </button>
+        </div>
+    </div>
+
 </header>
