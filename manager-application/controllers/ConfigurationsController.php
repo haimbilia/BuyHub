@@ -337,12 +337,12 @@ class ConfigurationsController extends AdminBaseController
 
                 $frm->addEmailField(Labels::getLabel('FRM_STORE_OWNER_EMAIL', $langId), 'CONF_SITE_OWNER_EMAIL');
                 $frm->addHiddenField('', 'CONF_SITE_PHONE_dcode');
-                $phnFld = $frm->addTextBox(Labels::getLabel('FRM_TELEPHONE', $langId), 'CONF_SITE_PHONE', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+                $phnFld = $frm->addTextBox(Labels::getLabel('FRM_TELEPHONE', $langId), 'CONF_SITE_PHONE', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
                 $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
                 $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_FORMAT.', $langId));
 
                 $frm->addHiddenField('', 'CONF_SITE_FAX_dcode');
-                $faxFld = $frm->addTextBox(Labels::getLabel('FRM_FAX', $langId), 'CONF_SITE_FAX', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+                $faxFld = $frm->addTextBox(Labels::getLabel('FRM_FAX', $langId), 'CONF_SITE_FAX', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
                 $faxFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
                 $faxFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_FORMAT.', $langId));
 

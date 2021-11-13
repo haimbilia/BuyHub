@@ -1,6 +1,5 @@
 <?php 
-$formOnSubmit = 'saveRecord(this, "closeForm"); return(false);';
-
+$frm->setFormTagAttribute('onsubmit', 'saveRecord(this, "closeForm"); return(false);');
 $fld = $frm->getField('splprice_start_date');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 

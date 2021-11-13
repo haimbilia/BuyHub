@@ -12,12 +12,6 @@ class UsersController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getUserSearchForm($fields);
-        $data = FatApp::getPostedData();
-        if (is_array($data) && isset($data['id'])) {
-            $data['user_id'] = $data['id'];
-            unset($data['id']);
-            $frmSearch->fill($data);
-        }
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_USERS', $this->siteLangId);
@@ -58,17 +52,11 @@ class UsersController extends AdminBaseController
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
 
-        $recordId = FatApp::getPostedData('addr_record_id', FatUtility::VAR_INT, 0);
-        $srchFrm = $this->getUserSearchForm($fields);
-
-        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
-        $post['addr_record_id'] = $recordId;
-
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
-        
+
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
-        
+
         $userObj = new User();
         $srch = $userObj->getUserSearchObj(null, true);
         $srch->addFld(User::DB_TBL_CRED_PREFIX . 'password');
@@ -81,12 +69,12 @@ class UsersController extends AdminBaseController
         }
 
         $userActive = FatApp::getPostedData('user_active');
-        if ('' != $userActive) {
+        if ('' != $userActive && -1 < $userActive) {
             $srch->addCondition('uc.credential_active', '=', $userActive);
         }
 
         $userVerified = FatApp::getPostedData('user_verified');
-        if ('' != $userVerified) {
+        if ('' != $userVerified && -1 < $userVerified) {
             $srch->addCondition('uc.credential_verified', '=', $userVerified);
         }
 
@@ -142,7 +130,7 @@ class UsersController extends AdminBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
+        $this->set('postedData', FatApp::getPostedData());
 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -184,6 +172,7 @@ class UsersController extends AdminBaseController
         $this->set('userParent', $userParent);
         $this->set('recordId', $recordId);
         $this->set('stateId', $stateId);
+        $this->set('displayLangTab', false);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
     }
@@ -280,6 +269,7 @@ class UsersController extends AdminBaseController
 
         $db->commitTransaction();
 
+        $this->set('recordId', $userObj->getMainTableRecordId());
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -346,23 +336,23 @@ class UsersController extends AdminBaseController
 
         if (1 > $recordId) {
             $userTypesArr = User::getUserTypesArr($this->siteLangId);
-            $fld = $frm->addSelectBox(Labels::getLabel('LBL_User_Type', $this->siteLangId), 'user_type', $userTypesArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_User_Type', $this->siteLangId), 'user_type', $userTypesArr, '', [], Labels::getLabel('FRM_Select', $this->siteLangId));
             $fld->requirement->setRequired(true);
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'credential_username', '');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_Username', $this->siteLangId), 'credential_username', '');
         if (1 > $recordId) {
             $fld->setUnique('tbl_user_credentials', 'credential_username', 'credential_user_id', 'user_id', 'user_id');
             $fld->requirements()->setRequired();
             $fld->requirements()->setUsername();
         }
-        $frm->addRequiredField(Labels::getLabel('LBL_Customer_Name', $this->siteLangId), 'user_name');
-        $frm->addDateField(Labels::getLabel('LBL_Date_Of_Birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly'));
+        $frm->addRequiredField(Labels::getLabel('FRM_Customer_Name', $this->siteLangId), 'user_name');
+        $frm->addDateField(Labels::getLabel('FRM_Date_Of_Birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly'));
         $frm->addHiddenField('', 'user_phone_dcode');
-        $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+        $phnFld = $frm->addTextBox(Labels::getLabel('FRM_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Email', $this->siteLangId), 'credential_email', '');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_Email', $this->siteLangId), 'credential_email', '');
         if (1 > $recordId) {
             $fld->setUnique('tbl_user_credentials', 'credential_email', 'credential_user_id', 'user_id', 'user_id');
             $fld->requirements()->setRequired();
@@ -370,11 +360,10 @@ class UsersController extends AdminBaseController
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), [], Labels::getLabel('LBL_Select', $this->siteLangId));
-        //$fld->requirement->setRequired(true);
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_Country', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), [], Labels::getLabel('FRM_Select', $this->siteLangId));
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
-        $frm->addTextBox(Labels::getLabel('LBL_City', $this->siteLangId), 'user_city');
+        $frm->addSelectBox(Labels::getLabel('FRM_State', $this->siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('FRM_Select', $this->siteLangId));
+        $frm->addTextBox(Labels::getLabel('FRM_City', $this->siteLangId), 'user_city');
 
         return $frm;
     }
@@ -417,7 +406,8 @@ class UsersController extends AdminBaseController
         }
         $this->set('userParent', User::getAttributesById($recordId, 'user_parent'));
         $this->set('frm', $frm);
-        $this->set('user_id', $recordId);
+        $this->set('recordId', $recordId);
+        $this->set('displayLangTab', false);
         $this->_template->render(false, false);
     }
 
@@ -464,6 +454,8 @@ class UsersController extends AdminBaseController
         $frm = $this->getChangePasswordForm($recordId);
 
         $this->set('frm', $frm);
+        $this->set('recordId', $recordId);
+        $this->set('includeTabs', false);
         $this->_template->render(false, false);
     }
 
@@ -616,20 +608,21 @@ class UsersController extends AdminBaseController
         die(FatUtility::convertToJson($json));
     }
 
-    public function changeStatus($recordId, $status)
+    public function updateStatus()
     {
         $this->objPrivilege->canEditUsers();
-        $recordId = FatApp::getPostedData('userId', FatUtility::VAR_INT, 0);
-        if (0 == $recordId) {
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (0 >= $recordId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $userObj = new User($recordId);
-        $srch = $userObj->getUserSearchObj();
-        $rs = $srch->getResultSet();
-        $data = FatApp::getDb()->fetch($rs);
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
 
-        $this->updateUserStatus($recordId, $status);
+        $this->changeStatus($recordId, $status);
         $shopId = Shop::getAttributesByUserId($recordId, 'shop_id');
         if (0 < $shopId) {
             Product::updateMinPrices(0, $shopId);
@@ -653,13 +646,13 @@ class UsersController extends AdminBaseController
                 continue;
             }
 
-            $this->updateUserStatus($recordId, $status);
+            $this->changeStatus($recordId, $status);
         }
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function updateUserStatus($recordId, $status)
+    protected function changeStatus($recordId, $status)
     {
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
@@ -686,6 +679,8 @@ class UsersController extends AdminBaseController
         $frm = $this->getSendMailForm($recordId);
 
         $this->set('frm', $frm);
+        $this->set('recordId', $recordId);
+        $this->set('includeTabs', false);
         $this->_template->render(false, false);
     }
 
@@ -806,7 +801,6 @@ class UsersController extends AdminBaseController
         $conNewPwdReq->setRequired();
         $conNewPwdReq->setCompareWith('new_password', 'eq');
         $conNewPwdReq->setCustomErrorMessage(Labels::getLabel('LBL_Confirm_Password_Not_Matched!', $this->siteLangId));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId), array('id' => 'btn_submit'));
         return $frm;
     }
 
@@ -816,10 +810,9 @@ class UsersController extends AdminBaseController
         $frm = new Form('sendMailFrm');
         $frm->addHiddenField('', 'user_id', $recordId);
 
-        $frm->addTextBox(Labels::getLabel('LBL_Subject', $this->siteLangId), 'mail_subject')->requirements()->setRequired(true);
-        $frm->addTextArea(Labels::getLabel('LBL_Message', $this->siteLangId), 'mail_message')->requirements()->setRequired(true);
+        $frm->addTextBox(Labels::getLabel('FRM_Subject', $this->siteLangId), 'mail_subject')->requirements()->setRequired(true);
+        $frm->addTextArea(Labels::getLabel('FRM_Message', $this->siteLangId), 'mail_message')->requirements()->setRequired(true);
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Send', $this->siteLangId), array('id' => 'btn_submit'));
         return $frm;
     }
 
@@ -827,13 +820,12 @@ class UsersController extends AdminBaseController
     private function getBankInfoForm()
     {
         $frm = new Form('frmBankInfo');
-        $frm->addRequiredField(Labels::getLabel('LBL_Bank_Name', $this->siteLangId), 'ub_bank_name', '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Account_Holder_Name', $this->siteLangId), 'ub_account_holder_name', '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Account_Number', $this->siteLangId), 'ub_account_number', '');
-        $frm->addRequiredField(Labels::getLabel('LBL_IFSC_Swift_Code', $this->siteLangId), 'ub_ifsc_swift_code', '');
-        $frm->addTextArea(Labels::getLabel('LBL_Bank_Address', $this->siteLangId), 'ub_bank_address', '');
         $frm->addHiddenField('', 'user_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addRequiredField(Labels::getLabel('FRM_Bank_Name', $this->siteLangId), 'ub_bank_name', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_Account_Holder_Name', $this->siteLangId), 'ub_account_holder_name', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_Account_Number', $this->siteLangId), 'ub_account_number', '');
+        $frm->addRequiredField(Labels::getLabel('FRM_IFSC_Swift_Code', $this->siteLangId), 'ub_ifsc_swift_code', '');
+        $frm->addTextArea(Labels::getLabel('FRM_Bank_Address', $this->siteLangId), 'ub_bank_address', '');
         return $frm;
     }
 
@@ -854,19 +846,20 @@ class UsersController extends AdminBaseController
 
         $this->set('userParent', User::getAttributesById($recordId, 'user_parent'));
         $this->set('frm', $frm);
-        $this->set('user_id', $recordId);
+        $this->set('recordId', $recordId);
+        $this->set('displayLangTab', false);
         $this->_template->render(false, false);
     }
 
     private function getCookiesPreferencesForm()
     {
         $frm = new Form('frmCookiesPreferences');
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Functional", $this->siteLangId), 'ucp_functional', 1, array(), true, 0);
-        $fld->htmlAfterField = '<div>' . Labels::getLabel('LBL_Functional_Cookies_Information', $this->siteLangId) . '</div>';
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Statistical_Analysis", $this->siteLangId), 'ucp_statistical', 1, array(), false, 0);
-        $fld->htmlAfterField = '<div>' . Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $this->siteLangId) . '</div>';
-        $fld = $frm->addCheckBox(Labels::getLabel("LBL_Personalise_Experience", $this->siteLangId), 'ucp_personalized', 1, array(), false, 0);
-        $fld->htmlAfterField = '<div>' . Labels::getLabel('LBL_Personalise_Cookies_Information', $this->siteLangId) . '</div>';
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_FUNCTIONAL", $this->siteLangId), 'ucp_functional', 1, array(), true, 0);
+        $fld->htmlAfterField = '<div>' . Labels::getLabel('FRM_FUNCTIONAL_COOKIES_INFORMATION', $this->siteLangId) . '</div>';
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_STATISTICAL_ANALYSIS", $this->siteLangId), 'ucp_statistical', 1, array(), false, 0);
+        $fld->htmlAfterField = '<div>' . Labels::getLabel('FRM_STATISTICAL_ANALYSIS_COOKIES_INFORMATION', $this->siteLangId) . '</div>';
+        $fld = $frm->addCheckBox(Labels::getLabel("FRM_PERSONALISE_EXPERIENCE", $this->siteLangId), 'ucp_personalized', 1, array(), false, 0);
+        $fld->htmlAfterField = '<div>' . Labels::getLabel('FRM_PERSONALISE_COOKIES_INFORMATION', $this->siteLangId) . '</div>';
         return $frm;
     }
 
