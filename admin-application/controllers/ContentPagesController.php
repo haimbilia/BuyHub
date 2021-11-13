@@ -256,7 +256,7 @@ class ContentPagesController extends AdminBaseController
 
         if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
             $data['cpage_image_title'] = $post['cpage_image_title'];
-            $data['cpage_image_content'] = $post['cpage_image_content'];
+            // $data['cpage_image_content'] = isset($post['cpage_image_content'])? $post['cpage_image_content'] : '';
         } else {
             $data['cpage_content'] = $post['cpage_content'];
         }
