@@ -248,12 +248,11 @@ $input-color: #474747;
   @include select;
 }
 
-.required {
+.required, .spn_must_field { color:$danger-color;
   &:after {
-    content: "*";
+    //content: "*";
     position: relative;
-    font-size: inherit;
-    color: #f1416c;
+    font-size: inherit;   
     padding-#{$start-direction}: 0.25rem;
     font-weight: 700;
   }

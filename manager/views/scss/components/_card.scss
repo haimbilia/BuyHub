@@ -1,6 +1,6 @@
 $card:'card';
 .#{$card} {
-    $selfHead: '';
+    $selfHead: ''; 
     $selfBody: '';
     $selfFoot: '';
     display: flex;
@@ -13,7 +13,7 @@ $card:'card';
     margin-bottom: 20px;
     +.#{$card} {
         //margin-top: 20px;
-    }
+    } 
     &-head {
         $selfHead: &;
         display: flex;
@@ -29,7 +29,7 @@ $card:'card';
             display: flex;
             flex-direction: column;
             flex: 1;
-            margin-#{$end-direction}: 8rem;
+            //margin-#{$end-direction}: 8rem;
         }
         &-title {
             font-size: 1.1rem;
